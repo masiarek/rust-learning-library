@@ -1,0 +1,68 @@
+
+──── Step 1: The empty arm you did not want to write
+  match  -> The first element is 10
+  if let -> The first element is 10
+      Nothing printed for the empty list — `if let` just does not run.
+      Same behaviour, same cost, one fewer arm to read.
+
+──── Step 2: It is a `match`, so any pattern works — and it can take an `else`
+  struct pattern  -> Ada scored 5
+  literal in it   -> Ada gave a maximum score
+  tuple pattern   -> rank 1 is the first
+  else            -> nothing there, and this arm says so
+
+──── Step 3: The trade: `if let` is not exhaustive
+  match  -> 3 scored, 1 blank, 1 spoiled = 5 of 5 marks
+  if let -> 3 scored, and 2 marks silently unaccounted for
+      The day `Spoiled` was added to the enum, the `match` stopped
+      compiling and someone had to decide what to do about it.
+      The `if let` compiled fine and quietly went on under-counting.
+      That is the price of the deleted arm — pay it deliberately.
+
+──── Step 4: `let … else`: bind, or leave — the guard clause
+  populated -> Ada leads with 12
+  empty     -> no candidates at all
+      `if let` indents the happy path; `let … else` keeps it flat and
+      sends the failure out of the function. The `else` block must
+      diverge — return, break, continue, or panic — so what follows it
+      can rely on the binding existing.
+
+──── Step 5: `while let`: keep going until the pattern stops matching
+  popped 30, 2 left
+  popped 20, 1 left
+  popped 10, 0 left
+      `pop()` is a partial function returning Option, so the loop's
+      exit condition IS the None — no length check, no index, no
+      off-by-one available to get wrong.
+
+──── Step 6: When you only want a bool: `matches!` and `is_some_and`
+  matches!(mark, Mark::Score(_))        -> true
+  matches!(mark, Mark::Score(n) if n>4) -> false
+  score.is_some_and(|n| n > 3)          -> true
+      `if let` with an empty body and a flag set inside it is a smell.
+      If the answer is a bool, ask for a bool.
+
+──── Step 7: Edition 2024: `if let` chains
+  chained -> runoff between Ada and Ben
+  chained -> no runoff: one of the two is absent
+      Two `if let`s and a condition in one head, each binding visible
+      to the next. Stable since Rust 1.88, and only in edition 2024 —
+      before that this was a staircase of nested `if let`s.
+
+──── Step 8: It binds by MOVING, unless you ask otherwise
+  &name        -> borrowed Ada
+  name after   -> Some("Ada")   (still ours)
+  as_deref()   -> Ada as a &str, no clone
+  moved        -> took ownership of Ada
+      Reaching for `.clone()` here is the usual reflex and the usual
+      mistake: `&opt`, `.as_ref()`, or `.as_deref()` cost nothing.
+
+──── Step 9: Edition 2024 moved when the scrutinee's temporary dies
+  dropped the temporary the scrutinee built
+  the else block runs — and the temporary is already gone
+      In edition 2021 the drop line came AFTER the else block: the
+      temporary lived to the end of the whole `if let`. If that
+      temporary is a lock guard, the else block that tries to take
+      the same lock deadlocks. Edition 2024 fixed it by dropping
+      before the else — one of the edition's few behaviour changes.
+

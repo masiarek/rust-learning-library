@@ -54,7 +54,9 @@ NAV_ORDER: dict[str, list[str]] = {
     ],
     "01_Foundations": [
         "README.md",
+        "some_and_none",
         "option_vs_result",
+        "if_let",
         "partial_functions",
         "none_on_error",
         "initial_values",
@@ -66,11 +68,18 @@ NAV_ORDER: dict[str, list[str]] = {
     ],
 }
 
+# Folder names whose label the word-by-word caser cannot get right.
+LABELS = {
+    "if_let": "`if let`",
+}
+
 PREFIX = re.compile(r"^\d+[_\-]")
 
 
 def clean(label: str) -> str:
     """`01_Foundations` -> `Foundations`; `option_vs_result` -> `Option vs Result`."""
+    if label in LABELS:
+        return LABELS[label]
     label = PREFIX.sub("", label)
     label = label.replace("_", " ").replace("-", " ")
     words = [w for w in label.split() if w]
