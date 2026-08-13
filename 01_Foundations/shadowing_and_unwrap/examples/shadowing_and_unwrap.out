@@ -1,0 +1,44 @@
+
+──── Step 1: The example as it is usually written
+  The doubled value is: 84
+  The unwrapped value is: 42
+      Two questions this raises: what did the shadow do, and why is
+      maybe_number still usable on the last line?
+
+──── Step 2: The shadow did nothing to protect the original
+  no shadow at all      -> doubled = 84
+  maybe_number afterwards -> Some(42)
+      Still intact. The shadow was never what kept it alive: `if let`
+      COPIED the i32 out, because Option<i32> is Copy.
+
+──── Step 3: Take Copy away and the same code stops compiling
+  borrowed, then shadowed -> Ada Ada
+  maybe_name afterwards   -> Some("Ada")
+      Option<String> is not Copy, so the by-value version is a compile
+      error no matter how the inside of the block is written.
+
+──── Step 4: What shadowing IS for: the name stays, the type changes
+  before: quorum is None   type core::option::Option<i32>
+  after:  quorum is 0      type i32
+      This is the one place the two ideas genuinely meet: unwrapping
+      changes the TYPE, and shadowing lets the NAME survive the change.
+      Without it you would invent quorum_opt / quorum_value pairs.
+
+──── Step 5: A shadow ends with its block; the outer name comes back
+  inside the block  -> 84
+  after the block   -> 42
+      So shadowing cannot 'hold onto' an unwrapped value for later —
+      the shadow is the thing that disappears first.
+
+──── Step 6: Shadowing is not mutation
+  let mut: 1, type i32
+  shadowed three times: 12, type u32
+      `mut` reuses one variable and its type is fixed. Each `let` makes a
+      NEW variable, so the type may change — which is the whole point.
+
+──── Step 7: The idiom worth copying: let-else
+  seats_for(Some(3)) -> 3
+  seats_for(None)    -> 1
+      Inside the function, `config` is a u32 rather than an Option<u32>
+      from that line on, and nothing downstream can forget to unwrap it.
+
