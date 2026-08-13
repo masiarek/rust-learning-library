@@ -1,0 +1,49 @@
+What a panic costs: unwinding is tidy about memory, not about work
+
+──── Step 1: Where the panic points — and where it does not
+  gulp(Some("coffee")) -> I love coffees!
+  gulp(None) -> panicked: called `Option::unwrap()` on a `None` value
+      reported in what_a_panic_costs.rs (line number withheld here: it moves whenever
+      this file is edited, and the recorded output would go stale)
+      is it the `unwrap` line?     true
+      is it the caller's line?     false
+      `Option::unwrap` is #[track_caller], so the location is YOUR
+      unwrap rather than a line inside core/src/option.rs. It is still
+      not the line that handed over the None — that one is only in the
+      backtrace (RUST_BACKTRACE=1), which is off by default.
+
+──── Step 2: A panic is not a return value: the job stops half-done
+  with unwrap: panicked ("called `Option::unwrap()` on a `None` value") after ["water", "coffee"]
+      Two glasses poured, three orders never looked at — and the two
+      poured glasses are still poured. Anything already written to a
+      file, a socket, or a database stays written.
+  with unwrap_or: served ["water", "coffee", "(nothing)", "tea", "cola"]
+      Same five orders, one answer each, the gap visible in the result.
+
+──── Step 3: Unwinding cleans up your memory, not your work
+      two glasses in hand, about to unwrap a None
+      Drop: the second glass is washed up
+      Drop: the first glass is washed up
+  caught: the bar always pours something
+      Both destructors ran, in reverse order, on the way out — RAII
+      holds during a panic, which is why a lock is released and a file
+      is closed. What does NOT happen is the rest of the function.
+      (With `panic = "abort"` in the release profile, not even this:
+      the process stops where it stands and no destructor runs.)
+
+──── Step 4: In a thread, only that thread dies
+  worker panicked, join() -> Err("the worker was promised a quorum")
+  main is still running, and prints this line
+      A panic unwinds one thread. `join` hands you the payload as an
+      Err, so the parent decides — which is the choice the unwrap
+      inside the worker had taken away. Any Mutex the worker held
+      while it died is now poisoned.
+
+──── Step 5: An uncaught panic is exit code 101, not 1
+  a child process that really panics exits Some(101)
+      101 is std's exit code for an unhandled panic — distinct from 1,
+      so a supervisor can tell 'the program failed and said so' from
+      'the program broke'. catch_unwind is how THIS demo survived its
+      own panics, but it is not a try/catch: it exists for FFI and
+      test harnesses, and it cannot catch an abort.
+
