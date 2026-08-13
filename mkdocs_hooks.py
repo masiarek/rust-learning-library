@@ -56,10 +56,13 @@ NAV_ORDER: dict[str, list[str]] = {
         "README.md",
         "option_vs_result",
         "partial_functions",
+        "none_on_error",
         "initial_values",
         "option_fields",
         "option_as_collection",
+        "nullable_pointers",
         "newtype_score",
+        "representing_a_ballot",
     ],
 }
 
