@@ -42,6 +42,8 @@ Read what it recorded before committing. `--update` accepts whatever the program
 
 **Stems are unique repo-wide.** A Markdown block names a bare stem with no path, so two `examples/basics.rs` in different folders is an error the tool refuses rather than guesses at.
 
+**Examples must be deterministic.** The recorded `.out` is an answer key, so an example that reads the clock, the environment, the filesystem, or a random number prints something different on your machine than in CI, and the check fails for a reason that has nothing to do with the lesson. Simulate those inputs instead — a small hard-coded table reads better on the page anyway, because the reader can see the data the output came from.
+
 ## Writing the prose
 
 - **One idea per page.** If a page needs two H1-sized ideas, it is two pages.

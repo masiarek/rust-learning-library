@@ -48,6 +48,7 @@ FIXUPS = {
 NAV_ORDER: dict[str, list[str]] = {
     "": [
         "index.md",
+        "ROADMAP.md",
         "01_Foundations",
         "GLOSSARY.md",
     ],
@@ -55,8 +56,10 @@ NAV_ORDER: dict[str, list[str]] = {
         "README.md",
         "option_vs_result",
         "partial_functions",
+        "initial_values",
         "option_fields",
         "option_as_collection",
+        "newtype_score",
     ],
 }
 

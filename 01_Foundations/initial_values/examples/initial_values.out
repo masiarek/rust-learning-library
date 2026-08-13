@@ -1,0 +1,35 @@
+
+──── Step 1: The pattern you will see written first
+  The initial value is: 42
+      It works. But notice what it costs: a `mut`, a wrapper, and a `match`
+      over a case that — by the time we look — cannot happen.
+
+──── Step 2: What Rust actually offers: declare now, assign later
+  settled = 42
+  same    = 42
+      Rust does not require a value at DECLARATION — only before USE, and
+      it proves that at compile time. So `settled` is never Option-shaped,
+      never mut, and no branch can forget to set it.
+
+──── Step 3: When Option IS right: absence survives to the point of use
+  lookup("log_level")  -> Some("debug")
+  lookup("port")       -> None
+  port in use          -> 8080
+      Here None is not 'not yet assigned', it is 'the user did not say'.
+      That fact is still true when we read it — so it belongs in the type.
+
+──── Step 4: …and for a running 'best so far', where there is no sensible start
+  best of [3, 9, 4] -> Some(9)
+  best of []        -> None
+      Starting at 0 would be a LIE for an empty list, and wrong for negatives.
+      (In real code: scores.iter().max() — which returns Option for this reason.)
+  scores.iter().max() -> Some(9)
+
+──── Step 5: Initialize once, later, globally: OnceLock
+  before set: None
+  after set:  Some("hello")
+  second set: true
+      A `static` cannot be deferred — so this is the case that genuinely
+      needs an 'empty until later' box. OnceLock is that box, and unlike a
+      mut Option it guarantees the value is written exactly once.
+
