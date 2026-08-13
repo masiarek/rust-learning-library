@@ -52,7 +52,7 @@ error[E0502]: cannot borrow `stack` as mutable because it is also borrowed as im
   |                    --- immutable borrow later used here
 ```
 
-Read the third line of that error carefully, because it is the whole rule: *"immutable borrow later used here"*. What extends the borrow is not the `last()` call, and not the loop — it is the **last use of the binding**. Move the `println!` above the `pop()`, or copy the value out, and the borrow is over before the mutable one begins. This is non-lexical lifetimes doing exactly what they say: a borrow lives to its last use, not to the end of its block.
+The rule behind that pair — a borrow lives until its **last use**, not to the end of its block — belongs to [borrowing](../borrowing/README.md) rather than to loops, and is explained there. What is specific to `while let` is the collision it sets up: the head takes a shared borrow to *test* the pattern, and the body needs an exclusive one to make progress. Finish with the binding first (copy the value out, as above) and the two never overlap.
 
 ## `for` is this loop, already written for you
 
@@ -177,6 +177,6 @@ rustc --edition 2024 01_Foundations/while_let/examples/while_let.rs -o /tmp/wl &
 
 - [`if let`](../if_let/README.md) — the single-shot version, and the rest of the family
 - [Partial functions](../partial_functions/README.md) — why `pop()`, `next()`, and `recv()` hand back something that can say "no more"
-- [Ownership and moves](../ownership_and_moves/README.md) — the half of the borrow story that *is* written: why copying `*top` out ends the borrow, and why the collection will not simply hand you an element
+- [Borrowing](../borrowing/README.md) — why copying `*top` out ends the borrow, and the last-use rule that decides which order compiles
 - [`Option` is a one-item collection](../option_as_collection/README.md) — the iterator toolbox this loop is competing with
 - [The Rust Reference on `while let`](https://doc.rust-lang.org/reference/expressions/loop-expr.html#predicate-pattern-loops)

@@ -1,0 +1,49 @@
+
+──── Step 1: The alternative to borrowing is giving it back
+  moved in and out -> len 6, and we have "ballot" again
+  borrowed         -> len 6, and we never lost it
+      Same answer. The first signature makes every caller thread the
+      value back through a tuple; the second one just asks to look.
+
+──── Step 2: Many readers at once
+  a.len()=3 b.first()=Some(5) c=5
+  owner still readable: [5, 3, 0]
+      Any number of `&T` may coexist, and the owner can still read.
+      Nothing can change underneath them, so nothing can be surprised.
+
+──── Step 3: One writer, and only one
+  after add_one    -> [6, 4, 1]
+      While that `&mut` was out, `scores` was unusable even for
+      READING — an exclusive borrow is exclusive against everyone,
+      including its owner. A second `&mut v` alongside it is E0499.
+
+──── Step 4: A borrow ends at its LAST USE, not at the end of the block
+  read through the shared borrow: 5
+  pushed, now [5, 3, 0, 9]
+      Move that `println!` of `first` below the `push` and this stops
+      compiling with E0502. Same two statements, opposite order: what
+      extends a borrow is the last USE of the binding, not the call
+      that created it and not the closing brace.
+
+──── Step 5: The bug the rule exists to prevent
+  grown safely     -> [5, 3, 0, 1]
+  retain           -> [5, 3, 1]
+      Pushing to a Vec can REALLOCATE it, which would leave the loop's
+      pointer aimed at freed memory. Python raises at runtime if you
+      are lucky; C just reads the old buffer. Here it does not build.
+
+──── Step 6: `&` is shared, not immutable
+  mutated through &Cell<i32> -> 2
+      The rule is about ALIASING, not about writing: `&T` means
+      'others may hold this too', and a type built for it (Cell,
+      RefCell, Mutex, atomics) may still change inside. Calling `&`
+      'immutable' is the shorthand that makes those look like cheats.
+
+──── Step 7: Method calls borrow for you
+  scores.len()      -> 3
+  Vec::len(&scores) -> 3
+  owned.push('!')   -> "ada!"
+      The `&` and `&mut` in everyday code are mostly invisible: the
+      dot operator inserts whichever the method asked for. That is
+      why a borrow error can arrive from a line with no & in it.
+
