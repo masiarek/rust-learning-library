@@ -123,3 +123,9 @@ Short definitions. Every entry links to the page that explains it properly — a
 **`map_or`** — Transform the value, or fall back — in one call, with the fallback written first and run last. `map_or_else` is the lazy pair, and on a `Result` its *error* closure comes first. → [`map_or` and `map_or_else`](01_Foundations/map_or/README.md)
 
 **`is_none_or`** — Ask whether an option is absent *or* its value passes a predicate (Rust 1.82). The name for what `map_or(true, pred)` was doing the long way, as `is_some_and` is for `map_or(false, pred)`. → [`map_or` and `map_or_else`](01_Foundations/map_or/README.md)
+
+**Edition** — The three-yearly opt-in that lets Rust change syntax without breaking old code; a crate names one and they interoperate freely. Worth knowing because `rustc` on its own defaults to **2015**, so a modern file needs `--edition 2024` passed by hand. → [Running a scratch program](01_Foundations/rustc_without_cargo/README.md)
+
+**Binary target** — A compilation unit with a `main`, which Cargo turns into one executable. `src/main.rs`, every `src/bin/*.rs`, and every `[[bin]]` entry in the manifest is one; the auto-discovered ones do not replace the listed ones. → [Running a scratch program](01_Foundations/rustc_without_cargo/README.md)
+
+**`rustc --test`** — Builds the test harness as the entry point instead of your `main`, which is what `cargo test` runs underneath. It works on a loose file, so a single-file example can still have real `#[test]` functions. → [Running a scratch program](01_Foundations/rustc_without_cargo/README.md)

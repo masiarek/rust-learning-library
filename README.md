@@ -16,6 +16,7 @@ No page here hand-types what a program prints. Each lesson links a real `.rs` fi
 
 | Lesson | What it teaches |
 |---|---|
+| [Running a scratch program](01_Foundations/rustc_without_cargo/README.md) | How to run a `.rs` file at all — `rustc` alone, `cargo new`, and the edition flag Cargo would have passed for you |
 | [`Option` vs `Result`](01_Foundations/option_vs_result/README.md) | When absence is normal and when it is a failure — and the one question that decides which type you want |
 
 More lessons land in [`01_Foundations/`](01_Foundations/README.md) as they are written, and the ones that assume it — shared state across threads, `unsafe`, FFI — in [`09_Advanced/`](09_Advanced/README.md).

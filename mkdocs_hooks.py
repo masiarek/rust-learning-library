@@ -57,6 +57,8 @@ NAV_ORDER: dict[str, list[str]] = {
     ],
     "01_Foundations": [
         "README.md",
+        # How to run any of this at all, before the language itself.
+        "rustc_without_cargo",
         "some_and_none",
         "option_vs_result",
         "if_let",
