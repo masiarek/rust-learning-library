@@ -52,7 +52,7 @@ The [`std::option` module docs](https://doc.rust-lang.org/core/option/) list wha
 
 Rough order, not a promise. Each becomes a page once it has a runnable example worth reading:
 
-- **Borrowing** — `&T` and `&mut T`, and the one-writer-or-many-readers rule, picking up where [Ownership and moves](ownership_and_moves/README.md) leaves off
+- **Borrowing** — `&T` and `&mut T`, and the one-writer-or-many-readers rule, picking up where [Ownership and moves](ownership_and_moves/README.md) leaves off. It inherits one paragraph: [`while let`](while_let/README.md) explains non-lexical lifetimes in passing because nothing else does yet — move it here and leave a link behind
 - **Lifetimes** — what `'a` is actually annotating, and why most of the time you write none
 - **`String` vs `&str`** — the same split as `Vec<T>` vs `&[T]`, and why it exists
 - **Traits** — shared behaviour without inheritance; `impl Trait` versus `dyn Trait`

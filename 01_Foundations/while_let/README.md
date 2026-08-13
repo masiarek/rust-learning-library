@@ -177,5 +177,6 @@ rustc --edition 2024 01_Foundations/while_let/examples/while_let.rs -o /tmp/wl &
 
 - [`if let`](../if_let/README.md) — the single-shot version, and the rest of the family
 - [Partial functions](../partial_functions/README.md) — why `pop()`, `next()`, and `recv()` hand back something that can say "no more"
+- [Ownership and moves](../ownership_and_moves/README.md) — the half of the borrow story that *is* written: why copying `*top` out ends the borrow, and why the collection will not simply hand you an element
 - [`Option` is a one-item collection](../option_as_collection/README.md) — the iterator toolbox this loop is competing with
 - [The Rust Reference on `while let`](https://doc.rust-lang.org/reference/expressions/loop-expr.html#predicate-pattern-loops)
