@@ -20,6 +20,8 @@ No page here hand-types what a program prints. Each lesson links a real `.rs` fi
 
 More lessons land in [`01_Foundations/`](01_Foundations/README.md) as they are written, and the ones that assume it — shared state across threads, `unsafe`, FFI — in [`09_Advanced/`](09_Advanced/README.md).
 
+Every lesson explains; some of them also ask you to type. Those exercises are collected in [**KATAS.md**](KATAS.md), which is the only place they are ordered — each kata itself sits on the page for the topic it teaches, with a solution CI compiles and runs.
+
 There is also a slow, optional thread running through them: [**the long way round to a STAR count**](ROADMAP.md), which sequences a handful of lessons so that each one is the next thing Rust wants to teach, and the running example happens to be a voting method. Every rung stands alone; the election is the excuse.
 
 ## How the library works
