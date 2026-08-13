@@ -1,0 +1,38 @@
+
+──── Step 1: Who built me?
+  No Cargo here — CARGO_PKG_NAME was never set.
+      `option_env!` asks at COMPILE time, and answers None when the
+      variable is absent. Its cousin `env!` is a hard error instead:
+      'environment variable `CARGO_PKG_NAME` not defined at compile
+      time'. A crate that reads its own version that way cannot be
+      built by rustc alone — setting those is Cargo's job.
+
+──── Step 2: Which edition?
+  A let chain ran, so this was built as edition 2024: top = 5
+      That `if let … && …` head is the proof. rustc's DEFAULT edition
+      is 2015, not the current one, and under it this file does not
+      compile: 'let chains are only allowed in Rust 2024 or later'.
+      Cargo passes the edition from Cargo.toml every time; by hand
+      you pass it yourself, which is why every command in this repo
+      reads `rustc --edition 2024`.
+
+──── Step 3: Which profile?
+  cfg!(debug_assertions) = true
+  bump(255) = 0
+  255u8.checked_add(1) = None
+      Plain `rustc` is the debug profile: overflow checks ON. Add -O
+      and cfg!(debug_assertions) turns false — and a plain `v + 1`
+      that panicked here ('attempt to add with overflow', exit 101)
+      wraps quietly to 0 there. The flag you forgot changed the
+      program's BEHAVIOUR, not just its speed. `cargo run` gives you
+      the first and `cargo run --release` the second, under names
+      that are harder to forget.
+
+──── Step 4: What you gave up
+  std is all here: seats["Ada"] = Some(2)
+      All of std, and nothing else. `use rand::…` means fetching that
+      crate, building it, and passing --extern rand=librand.rlib by
+      hand — for it, and for every dependency of its own. That is the
+      wall, and clearing it is the one thing Cargo exists to do.
+      Tests too: #[test] functions are compiled out of this binary
+      entirely. `rustc --test` builds the harness instead of main.

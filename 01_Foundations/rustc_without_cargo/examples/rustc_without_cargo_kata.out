@@ -1,0 +1,13 @@
+total     = 12
+mean      = Some(3.0)
+mean([])  = None
+
+Built with debug_assertions = true
+  Plain `rustc` says true, `rustc -O` says false. That is the
+  same split as `cargo run` versus `cargo run --release`, and it
+  decides whether an arithmetic overflow panics or wraps.
+
+The tests below did not run, and were not even compiled:
+  #[cfg(test)] is false in this build, so the module does not
+  exist in this binary. `rustc --test` builds the harness as the
+  entry point instead — main is the thing that goes unused then.
