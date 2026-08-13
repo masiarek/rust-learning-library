@@ -161,7 +161,9 @@ def fill_pages(
     page mid-rename is sitting in the working tree beside work that is ready.
 
     With `only` set, a block naming any other stem is left exactly as it is, and is
-    reported as neither drift nor a problem. That is the point of `--only`: the
+    reported as neither drift nor a problem. That holds for `source:` blocks as
+    well as `output:` ones — the selection is checked before the kind is, so a run
+    scoped to one stem cannot rewrite either half of somebody else's page. That is the point of `--only`: the
     blocks it does not fill belong to an example it did not run, and rewriting one
     from a key this run never verified is how a colleague's page gets edited by
     somebody who was working two folders away.
