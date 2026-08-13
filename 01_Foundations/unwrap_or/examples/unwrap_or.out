@@ -1,0 +1,75 @@
+
+──── Step 1: What it does — and what it throws away
+  Some(5).unwrap_or(0)        -> 5
+  None.unwrap_or(0)             -> 0
+  Ok(5).unwrap_or(0)            -> 5
+  Err(e).unwrap_or(0)           -> 0
+  Err(e).unwrap_or_else(|e| ..) -> 0
+      Both produced 0, but only the closure was told why: "row 7: '4x' is not a score".
+      On a Result, unwrap_or DISCARDS the error — the one thing an
+      Option had none of to lose. If the reason is worth reporting,
+      unwrap_or is the wrong end of the family.
+
+──── Step 2: The default is computed whether or not it is used
+  5 lookups, exactly 1 of them missing:
+    unwrap_or(default_roster())    -> default_roster() ran 5 times
+    unwrap_or_else(default_roster) -> default_roster() ran 1 time
+      `unwrap_or(f())` is a method call with an argument, so Rust
+      evaluates f() first, every time, and then usually throws the
+      result away. Nothing is optimized away either: default_roster
+      allocates, and an allocation is a side effect the compiler must
+      keep. The lazy form never even calls it on the happy path.
+
+──── Step 3: It consumes the Option — reach for a borrowing form instead
+  name.as_deref().unwrap_or("(unnamed)")     -> Ada
+  missing.as_deref().unwrap_or("(unnamed)")  -> (unnamed)
+  name is still usable afterwards            -> Some("Ada")
+  scores.get(1).copied().unwrap_or(0)        -> 3
+  scores.get(9).copied().unwrap_or(0)        -> 0
+  name.as_ref().map_or(0, |s| s.len())       -> 3
+      Three ways to keep the Option alive: as_deref (Option<String>
+      -> Option<&str>), copied/cloned (Option<&T> -> Option<T>), and
+      as_ref for everything else. The type error you get without them
+      is a MOVE error, not a borrow error, which is why it reads as if
+      you did something exotic when you only asked for a default.
+
+──── Step 4: Which member of the family
+  None.unwrap_or(0)                 -> 0   value already in hand
+  None.unwrap_or_else(|| 6 * 7)     -> 42  costs something to build
+  None.unwrap_or_default()          -> 0   T::default(), no argument
+  None.map_or(-1, |v| v * 10)       -> -1  transform, or a default
+  Some(4).map_or(-1, |v| v * 10)    -> 40  same call, value present
+  Err(e).unwrap_or_else(|e| e.len())-> 18  the fallback FROM the error
+      The rule is one question: does the default already exist? A
+      literal, a constant, a copy of something on the stack — pass it,
+      unwrap_or is clearer. Anything you have to BUILD — allocate,
+      read, compute — goes in a closure, because the cost is real and
+      the happy path is the common one.
+
+──── Step 5: A default erases the difference it stood for
+  scored 0   [Some(5), Some(3), Some(0)]
+             unwrap_or(0) total = 8, but 3 of 3 marked
+  left blank [Some(5), Some(3), None]
+             unwrap_or(0) total = 8, but 2 of 3 marked
+      Both total 8, which is correct: a blank tabulates as zero. What
+      is not recoverable is the second number — after unwrap_or(0) the
+      two ballots are the same array of u8 and no later code can tell
+      them apart. So apply the default at the BOUNDARY where the
+      distinction stops mattering (the sum), never when loading the
+      data, or you have thrown away a fact you still needed.
+
+──── Step 6: The `const fn` in the documentation is not the whole story
+  compute_digest("Hello") -> [222, 254, 150]
+  const START: u8 = ZERO.unwrap();  -> 42
+      The docs show `pub const fn unwrap_or`, and the array-repeat
+      example above looks like proof that you can use it in a const
+      context. Two corrections. First, `[expr; N]` needs a constant
+      only when the element is not Copy; u8 is Copy, so the repeat is
+      legal with an ordinary runtime expression and the const never
+      mattered. Second, writing `const D: u8 = ZERO.unwrap_or(0);`
+      today is rejected: "`Option::<T>::unwrap_or` is not yet stable
+      as a const fn". The signature is const-generic-over-Destruct on
+      nightly. `unwrap` and `expect` ARE const-stable — which is the
+      rare corner where the eager member of the family is the only one
+      available, since a closure cannot run in a const context at all.
+
