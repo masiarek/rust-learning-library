@@ -1,0 +1,47 @@
+
+──── Step 1: Required by default; Option marks the exceptions
+  known.isbn = Some("1-123-456")   tags: rust, reference
+  draft.isbn = None   tags: 0 (none)
+      You cannot forget a field: leaving `isbn` out is a compile error, and
+      writing `None` is you SAYING it is absent rather than leaving it undefined.
+
+──── Step 2: Reading the field: match on a REFERENCE to it
+  Great book — ISBN 1-123-456
+  Untitled draft — no ISBN on record
+      `match &b.isbn`, not `match b.isbn` — the latter tries to move a String
+      out of a borrowed struct, which the borrow checker refuses.
+
+──── Step 3: The three one-liners you will actually use
+  as_deref()          Some("1-123-456")
+  map_or (known)      320 pages
+  map_or (draft)      unknown
+  unwrap_or_default   ""
+  as_ref().map(len)   Some(9)   (known.isbn still owned: Some("1-123-456"))
+
+──── Step 4: Option<Vec<T>> — usually wrong, occasionally exactly right
+  question: "Best method?"
+  not collected yet
+  collected — nobody answered
+  collected — 2 responses
+      A plain Vec cannot tell those first two apart. If they mean the same thing
+      in your domain, use Vec and delete the Option; if they differ, keep it.
+
+──── Step 5: Option<T> defaults to None for every T
+  Config::default() = Config { name: None, retries: None, verbose: false }
+  one field set     = Config { name: None, retries: Some(3), verbose: false }
+      Option<T>: Default is None regardless of T — so a config struct of Options
+      derives Default even when the inner types cannot.
+  retries.unwrap_or(1)      = 3
+  name.unwrap_or("anon")    = anon
+  verbose (a plain bool)   = false   <- not optional: false IS the answer
+
+──── Step 6: What an optional field costs
+  Ada Lovelace — age None
+  Person                  56 bytes
+  String (each)           24
+  Option<u8>               2
+  u8                       1
+      u8 uses all 256 of its bit patterns, so there is no spare one for None
+      and Option<u8> must carry a separate tag byte. Compare Option<Box<T>>,
+      which is free because a null pointer was never a legal Box.
+

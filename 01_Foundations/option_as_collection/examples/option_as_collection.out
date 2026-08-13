@@ -1,0 +1,59 @@
+
+──── Step 1: Yes — you can `for` over an Option
+  for i in Some(5)       -> body ran, i = 5
+  for i in None::<i32>   -> body never ran
+  Some(5).iter().count()     = 1
+  None::<i32>.iter().count() = 0
+      An Option is a Vec that can never hold more than one thing.
+
+──── Step 2: So every iterator adapter already works on it
+  flatten     [Some(1), None, Some(3)] -> [1, 3]
+  extend      [1,2] + Some(3) + None   -> [1, 2, 3]
+  filter_map  ["1", "x", "3"] -> [1, 3]
+  chain       [1,2].chain(Some(9))     -> [1, 2, 9]
+      filter_map is just map + flatten: the None rows drop out on their own.
+
+──── Step 3: The reverse: collect a pile of Options into ONE Option
+  every Some -> Some([1, 2, 3])
+  one None   -> None
+      All-or-nothing, and it short-circuits: nothing after the first None is visited.
+      Result collects the same way, which is how you validate a whole batch at once.
+
+──── Step 4: Are there numbers behind Some and None?
+  None::<i32> < Some(0)  = true
+  Some(1) < Some(2)      = true
+  discriminant(&None) == discriminant(&Some(1)) = false
+  discriminant(&None::<i32>) prints as Discriminant(0)
+  discriminant(&Some(1))     prints as Discriminant(1)
+      There ARE numbers: None is variant 0, Some is variant 1 — declaration order.
+      But you cannot get at them. `None as i32` does NOT compile: a cast is only
+      allowed for a fieldless enum, and Some(T) carries data. The Debug text above
+      is a courtesy, not an API — compare the sizes in the next step.
+
+──── Step 5: …and the tag is not always even stored
+  i32                        4 bytes
+  Option<i32>                8
+  Box<i32>                   8
+  Option<Box<i32>>           8
+  Option<Option<Box<i32>>>  16
+  bool                       1
+  Option<bool>               1
+      Where the inner type has an unused bit pattern (a 'niche'), None takes it
+      and the tag costs nothing. That is why the number is not part of the API.
+
+──── Step 6: Asking a question without unwrapping
+  Some(2).is_some()              = true
+  Some(2).is_none()              = false
+  Some(2).is_some_and(|n| n > 1) = true
+  Some(0).is_some_and(|n| n > 1) = false
+  None.is_some_and(|n| n > 1)    = false
+  Some(2).map_or(0, |n| n * 10)  = 20
+  None.map_or(0, |n| n * 10)     = 0
+      is_some_and replaces the `x.is_some() && x.unwrap() > 1` you were about to write.
+
+──── Step 7: take() and replace(): moving out of a field you only borrow
+  after take()     got = Some("first"), slot = None
+  after replace()  old = None, slot = Some("second")
+      take() swaps in None and hands you the value. It is the standard way to
+      move a non-Copy value out of a &mut, which the borrow checker otherwise refuses.
+
