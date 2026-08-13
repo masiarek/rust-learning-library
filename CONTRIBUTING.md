@@ -97,3 +97,13 @@ uv run --group docs mkdocs build --strict   # the site builds clean
 ```
 
 `--strict` turns a broken link into a build failure, which is the point — a dead link on the published site is invisible to everyone except the reader who tries to follow it.
+
+## When several people share the checkout
+
+More than one person often works in this repo at once, through **one working tree, one index, and one HEAD**. Three habits follow, and each is here because the failure has already happened.
+
+**Commit with a pathspec** — `git commit -F msg -- <paths>` — since a plain `git commit` sweeps up whatever else is staged. Know what the pathspec does and does not buy you: it commits the **working-tree** version of the paths you name, so if a colleague has uncommitted edits in one of *those* files, your commit publishes them. That is usually harmless — their work lands a few minutes early — but the diff you get is not always the diff you wrote, so read `git show --stat HEAD` afterwards.
+
+**Land the page before the row that points at it.** An entry in [`01_Foundations/README.md`](01_Foundations/README.md), [`GLOSSARY.md`](GLOSSARY.md), [`KATAS.md`](KATAS.md) or `NAV_ORDER` whose target is not committed yet makes `mkdocs build --strict` fail — and it fails on the *deploy*, for everyone, not for the author, whose working tree contains the file and resolves the link perfectly. Commit the lesson folder first and its index entries second, even if that means two commits a minute apart. This one has bitten twice.
+
+**Never `git checkout HEAD -- <a shared file>`.** It deletes a colleague's uncommitted work with no reflog entry to recover it from — strictly worse than the sweep above, which at least publishes their work rather than destroying it. If you genuinely need HEAD's version of a shared file, to commit your own lines without someone's half-finished ones, copy it aside and restore it **in the same command** — never as a later link in an `&&` chain, because an interleaved commit can turn an earlier link into a no-op, the chain stops there, and the restore never runs. That is exactly how the borrowing lesson came to be committed with none of its index entries.
