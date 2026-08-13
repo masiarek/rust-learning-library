@@ -1,0 +1,82 @@
+
+──── Step 1: What `Default` hands you
+  u8                       0
+  i64                      0
+  f64                      0.0
+  bool                     false
+  char                     '\0'
+  String                   ""
+  Vec<u8>                  []
+  Option<u8>               None
+  BTreeMap<u8, u8>         {}
+  ()                       ()
+  None.unwrap_or_default() 0   — the same call as unwrap_or_else(u8::default)
+      Nothing here is magic: `unwrap_or_default()` is unwrap_or_else with
+      the closure named by a trait bound, `T: Default`. Note char's — the
+      null character, not a space — and that Option's own default is None,
+      which is why a struct full of Options derives cleanly.
+
+──── Step 2: A derived default is the type's zero, not your domain's
+  ballots cast: 40, and the config set no quorum
+  #[derive(Default)] -> DerivedQuorum(0)  => quorum met? true
+  impl Default (50)  -> HouseQuorum(50)   => quorum met? false
+      Same call site, opposite outcome, and the difference is a line of
+      code in another file. `derive(Default)` on a newtype means 'zero is
+      the sensible fallback' — true for a tally, false for a quorum, a
+      threshold, a timeout, a seat count. The third option is the best one
+      when there IS no sensible fallback: implement Default for neither,
+      and `unwrap_or_default()` stops compiling (E0277). A missing impl is
+      a guard rail, not a gap.
+
+──── Step 3: On an enum, the compiler makes you say it out loud
+  Tiebreak::default()            -> Lot
+  configured.unwrap_or_default() -> Lot
+    Lot  <- #[default]
+    MostFirstPlaces
+    Alphabetical
+      `#[derive(Default)]` on an enum does not compile without `#[default]`
+      on a variant (E0665: this enum needs a unit variant marked with
+      #[default]). There is no first-variant rule and no zero to fall back
+      on, so the language refuses to guess — and the attribute you are
+      forced to write is a policy decision sitting in the type, where a
+      reviewer can see it. Compare Step 2, where a struct's derive makes
+      the same class of decision silently.
+
+──── Step 4: Empty is not absent
+  no file at all         match -> no ballot file was provided; nothing to count
+  a file with no rows    match -> a real election in which nobody voted
+  a file with 2 rows     match -> 2 ballots, 8 points
+  no file at all         unwrap_or_default() -> 0 ballots, 0 points
+  a file with no rows    unwrap_or_default() -> 0 ballots, 0 points
+      The first two print the same line once the default is applied, and
+      one of them is a bug report: an input that never arrived. This is
+      the Option<Vec<T>> question — if 'missing' and 'empty' mean the same
+      thing to every caller, store a plain Vec and skip the Option; if they
+      do not, unwrap_or_default() is the line that throws the difference
+      away, and it is one word long.
+
+──── Step 5: Where it is exactly right: zero as an identity
+  approvals: {"Ada": 3, "Ben": 2, "Cara": 1}
+  counts.get("Ada").copied().unwrap_or_default() -> 3
+  counts.get("Dan").copied().unwrap_or_default() -> 0
+  mem::take(&mut pending) -> "row 3: '4x' is not a number", leaving ""
+      A candidate nobody approved really did get zero approvals: here the
+      type's zero IS the domain's answer, and `or_default` / `unwrap_or_
+      default` say so in fewer characters than the alternative. mem::take
+      is the same idea used for its other half — swap the default IN to
+      move the real value OUT, which is how you take a field out of a &mut.
+
+──── Step 6: Three spellings, and the place Default really earns its keep
+  missing.unwrap_or(0)                 -> 0
+  missing.unwrap_or_else(u32::default) -> 0
+  missing.unwrap_or_default()          -> 0
+  Config { seats: 3, ..Default::default() }
+    -> port 8080, seats 3, title "(untitled election)"
+      All three fallbacks produce the same 0, and for a Copy type they
+      compile to the same thing — pick the one that says what you mean.
+      Struct update syntax is where Default is unambiguously good: every
+      field you did not name is filled from ONE impl you can read, and
+      adding a field later does not break the call. That is the same trait
+      doing the opposite job — stating the defaults in one place, instead
+      of quietly supplying one at a call site that never mentions it.
+
