@@ -63,6 +63,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "option_fields",
         "option_as_collection",
         "nullable_pointers",
+        "result_aliases",
         "newtype_score",
         "representing_a_ballot",
     ],
