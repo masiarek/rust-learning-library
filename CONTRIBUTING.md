@@ -32,13 +32,15 @@ python3 tools/run_examples.py
 
 It compiles every `examples/*.rs`, runs it, compares against the sibling `.out`, and rewrites every block. Inside the markers is generated; outside is yours. CI runs `--check`, which writes nothing and fails if the code, the answer key, and the page have drifted apart.
 
-For a brand-new example, record the key first:
+For a brand-new example, record the key first — and **scope it to your own stem**:
 
 ```bash
-python3 tools/run_examples.py --update
+python3 tools/run_examples.py --update --only my_new_example
 ```
 
 Read what it recorded before committing. `--update` accepts whatever the program currently prints, so it will happily enshrine a bug.
+
+**Always pass `--only` with `--update`.** A bare `--update` re-records *every* answer key in the repo, including examples someone else is midway through editing — so a run meant to record one file can quietly rewrite a colleague's in-flight key with output they have not looked at yet. With `--only`, everything outside your selection is left alone completely — not run, not re-recorded, and not even *read*, so no page block naming it can be rewritten either. The flag takes a stem, a path to the `.rs`, or the lesson folder that holds it, and a name matching nothing is an error rather than an empty selection — a typo that records nothing otherwise looks exactly like a clean run. It is not a CI flag: `--check` there has to stay whole-repo, since spotting repo-wide drift is its entire job. Do a full run of your own before committing, which is what the checklist at the bottom of this page is for.
 
 **Stems are unique repo-wide.** A Markdown block names a bare stem with no path, so two `examples/basics.rs` in different folders is an error the tool refuses rather than guesses at.
 

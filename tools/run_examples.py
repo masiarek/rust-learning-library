@@ -14,6 +14,13 @@ Three modes
     python3 tools/run_examples.py             verify + refill the .md blocks
     python3 tools/run_examples.py --update    accept current output as the key
     python3 tools/run_examples.py --check     write nothing; fail on any drift  (CI)
+    python3 tools/run_examples.py --only X    touch example X and nothing else
+
+``--only`` exists because this checkout is sometimes open in two sessions at once.
+A full ``--update`` re-records *every* answer key and refills *every* page, so
+recording your own key adopts whatever a colleague's half-finished example happens
+to print. ``--only`` narrows both halves to the stems you name. It is never right in
+CI: a partial run cannot see repo-wide drift, which is the whole job there.
 
 An example is any ``*.rs`` under a folder named ``examples/``. Its answer key is
 the sibling ``<stem>.out``. Stems must be unique repo-wide, because a Markdown
@@ -131,6 +138,7 @@ def fill_pages(
     sources: dict[str, Path],
     write: bool,
     problems: list[str],
+    only: set[str] | None = None,
 ) -> list[str]:
     """Refill every output block on every Markdown page. Returns drift descriptions.
 
@@ -138,6 +146,12 @@ def fill_pages(
     untouched, rather than exiting on the spot. It is still a failure — but dying
     on the first one would leave every *other* page unfilled, which matters when a
     page mid-rename is sitting in the working tree beside work that is ready.
+
+    With `only` set, a block naming any other stem is left exactly as it is, and is
+    reported as neither drift nor a problem. That is the point of `--only`: the
+    blocks it does not fill belong to an example it did not run, and rewriting one
+    from a key this run never verified is how a colleague's page gets edited by
+    somebody who was working two folders away.
     """
     drift: list[str] = []
     for page in sorted(walk(REPO)):
@@ -154,6 +168,8 @@ def fill_pages(
             if any(lo <= m.start() < hi for lo, hi in skip):
                 return m.group(0)
             stem = m.group("stem")
+            if only is not None and stem not in only:
+                return m.group(0)
             if stem not in outputs:
                 problems.append(
                     f"{page.relative_to(REPO)}: asks for output block {stem!r}, "
@@ -174,10 +190,46 @@ def fill_pages(
     return drift
 
 
+def resolve_selection(raw: str, examples: dict[str, Path]) -> set[str]:
+    """Turn a `--only` value into stems.
+
+    Accepts what you are likely to have on the clipboard: a bare stem, a path to
+    the `.rs`, or the lesson folder that holds it. A token that names nothing is an
+    error rather than an empty selection — a typo that silently records nothing
+    looks exactly like a successful run.
+    """
+    wanted: set[str] = set()
+    unknown: list[str] = []
+    for token in (t.strip() for t in raw.split(",")):
+        if not token:
+            continue
+        as_path = Path(token)
+        for candidate in (token, as_path.stem, as_path.name):
+            if candidate in examples:
+                wanted.add(candidate)
+                break
+        else:
+            unknown.append(token)
+    if unknown:
+        sys.exit(
+            f"ERROR: --only names no such example: {', '.join(unknown)}\n"
+            f"Known stems: {', '.join(sorted(examples))}"
+        )
+    return wanted
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--update", action="store_true", help="record current output as the answer key")
     ap.add_argument("--check", action="store_true", help="write nothing; fail on drift (CI)")
+    ap.add_argument(
+        "--only",
+        metavar="STEM[,STEM…]",
+        help="restrict to these example stems (a path to the .rs, or its folder, "
+        "works too); everything else is neither run, re-recorded, nor refilled. "
+        "Use it with --update when someone else is working in the tree, so you "
+        "record your own answer key without touching theirs. Not for CI.",
+    )
     args = ap.parse_args()
 
     examples = find_examples()
@@ -185,15 +237,26 @@ def main() -> int:
         print("No examples found (looked for *.rs under any examples/ folder).")
         return 0
 
+    selected: set[str] | None = None
+    if args.only:
+        selected = resolve_selection(args.only, examples)
+
     outputs: dict[str, str] = {}
     failures: list[str] = []
 
     with tempfile.TemporaryDirectory() as tmp:
         workdir = Path(tmp)
         for stem, src in examples.items():
+            key = src.with_suffix(".out")
+
+            # Outside the selection: not ours. Not run, and deliberately not even
+            # read — an output in hand is an output that `fill_pages` would write
+            # into somebody else's page.
+            if selected is not None and stem not in selected:
+                continue
+
             actual = run_example(src, workdir)
             outputs[stem] = actual
-            key = src.with_suffix(".out")
 
             if args.update:
                 key.write_text(actual, encoding="utf-8")
@@ -210,7 +273,9 @@ def main() -> int:
             else:
                 print(f"  ok        {src.relative_to(REPO)}")
 
-    drift = fill_pages(outputs, examples, write=not args.check, problems=failures)
+    drift = fill_pages(
+        outputs, examples, write=not args.check, problems=failures, only=selected
+    )
 
     if args.check and drift:
         failures.append(
@@ -226,6 +291,14 @@ def main() -> int:
         for f in failures:
             print(f"  - {f}")
         return 1
+
+    if selected is not None:
+        print(
+            f"\n{len(selected)} of {len(examples)} example(s) verified. --only was in "
+            f"effect: the other {len(examples) - len(selected)}, and every block that "
+            "names one of them, were left untouched. Do a full run before committing."
+        )
+        return 0
 
     print(f"\n{len(examples)} example(s) verified against their recorded output.")
     return 0
