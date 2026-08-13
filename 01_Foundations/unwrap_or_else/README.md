@@ -107,6 +107,32 @@ Identical in every way that matters: same value, same discarded error, same cost
 
 `|_|` in a fallback is worth treating as a small smell in review: it is the exact place a swallowed error is easiest to hide, precisely because the code looks like it is handling something.
 
+## The closure that panics
+
+`.unwrap_or_else(|| panic!("…"))` turns up in real code, and which of two things it is depends on the type you called it on.
+
+**On an `Option` it is `expect` spelled long.** Same panic, more typing, and a reviewer grepping for the places this program can die will not find it. Write `expect`.
+
+**On a `Result` it does one thing `expect` cannot.** The closure is handed the error, so the message is yours to compose — rather than a fixed string with the error's `Debug` form appended:
+
+```rust
+"4x".parse::<u32>().expect("unreadable score");
+
+"4x".parse::<u32>()
+    .unwrap_or_else(|e| panic!("ballot line 12: {e} — rerun the export"));
+```
+
+The two messages that come out:
+
+```text
+unreadable score: ParseIntError { kind: InvalidDigit }
+ballot line 12: invalid digit found in string — rerun the export
+```
+
+`expect` puts `Debug` at the end; the closure puts `Display` in the middle of a sentence, beside the context — which row, which file, what to do — that makes the panic actionable rather than merely accurate. That is the whole trade, and the only reason to prefer the longer form.
+
+(`panic!` is a macro, so it is always `|| panic!(…)`. Unlike `default_roster`, it cannot be passed bare.)
+
 ## Two things it does *not* fix
 
 **It still takes `self`.** Laziness is about the default, not the receiver — the option is moved just as it is by `unwrap_or`, and the compiler will tell you so in some detail if the closure also wants to look at it:
