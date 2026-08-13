@@ -15,6 +15,7 @@ Three modes
     python3 tools/run_examples.py --update    accept current output as the key
     python3 tools/run_examples.py --check     write nothing; fail on any drift  (CI)
     python3 tools/run_examples.py --only X    touch example X and nothing else
+                                 --only X,Y  or --only X --only Y for several
 
 ``--only`` exists because this checkout is sometimes open in two sessions at once.
 A full ``--update`` re-records *every* answer key and refills *every* page, so
@@ -208,17 +209,22 @@ def fill_pages(
     return drift
 
 
-def resolve_selection(raw: str, examples: dict[str, Path]) -> set[str]:
-    """Turn a `--only` value into stems.
+def resolve_selection(raw: list[str], examples: dict[str, Path]) -> set[str]:
+    """Turn the `--only` values into stems.
 
     Accepts what you are likely to have on the clipboard: a bare stem, a path to
-    the `.rs`, or the lesson folder that holds it. A token that names nothing is an
-    error rather than an empty selection — a typo that silently records nothing
-    looks exactly like a successful run.
+    the `.rs`, or the lesson folder that holds it. Comma-separate them, repeat the
+    flag, or mix the two — `action="append"` is there because argparse's default is
+    last-wins, and `--only a --only b` silently verifying only `b` is precisely the
+    quiet partial run this flag exists to prevent.
+
+    A token that names nothing is an error rather than an empty selection, for the
+    same reason: a typo that records nothing looks exactly like a successful run.
     """
     wanted: set[str] = set()
     unknown: list[str] = []
-    for token in (t.strip() for t in raw.split(",")):
+    tokens = [t for value in raw for t in value.split(",")]
+    for token in (t.strip() for t in tokens):
         if not token:
             continue
         as_path = Path(token)
@@ -242,9 +248,11 @@ def main() -> int:
     ap.add_argument("--check", action="store_true", help="write nothing; fail on drift (CI)")
     ap.add_argument(
         "--only",
+        action="append",
         metavar="STEM[,STEM…]",
         help="restrict to these example stems (a path to the .rs, or its folder, "
-        "works too); everything else is neither run, re-recorded, nor refilled. "
+        "works too); repeat the flag or comma-separate. Everything else is neither "
+        "run, re-recorded, nor refilled. "
         "Use it with --update when someone else is working in the tree, so you "
         "record your own answer key without touching theirs. Not for CI.",
     )
