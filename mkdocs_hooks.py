@@ -49,6 +49,7 @@ NAV_ORDER: dict[str, list[str]] = {
     "": [
         "index.md",
         "ROADMAP.md",
+        "KATAS.md",
         "01_Foundations",
         "09_Advanced",
         "GLOSSARY.md",
@@ -63,6 +64,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "what_a_panic_costs",
         "partial_functions",
         "none_on_error",
+        "wrong_guard",
         "initial_values",
         "optional_arguments",
         "option_fields",

@@ -8,6 +8,7 @@ The ideas you meet in your first week of Rust and keep using forever. Each page 
 | [`Option` vs `Result`](option_vs_result/README.md) | 101 | Absence versus failure — and the single question ("could the caller ask *why not?*") that decides which type you want |
 | [Partial functions](partial_functions/README.md) | 201 | Why `Option` exists at all: it turns a function that is undefined somewhere into one that always answers |
 | [Returning `None` on error](none_on_error/README.md) | 201 | Why `input.parse().ok()` is usually a downgrade: four distinct causes arriving as one indistinguishable `None` |
+| [Zero wins is not zero games](wrong_guard/README.md) | 201 | A guard on the wrong condition: the input with no answer is the one that gets a number, and `Result` does not stop it |
 | [Initial values](initial_values/README.md) | 201 | The job where `Option` is usually the *wrong* tool — Rust lets you declare without initializing and proves you assigned |
 | [Optional function arguments](optional_arguments/README.md) | 201 | No default parameters, no overloading — the five shapes that replace them, and why `Option<&T>` beats `&Option<T>` |
 | [`if let`](if_let/README.md) | 101 | A `match` with one arm — the family (`if let` / `let … else` / `while let` / `matches!`), and the exhaustiveness you trade away |

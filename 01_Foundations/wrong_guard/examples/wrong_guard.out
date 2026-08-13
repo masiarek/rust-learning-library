@@ -1,0 +1,40 @@
+
+──── Step 1: It compiles, it returns Result, and it is wrong twice
+       Bears -> Ok(1.8888888)
+       Lions -> Ok(0.0)
+   Expansion -> Ok(0.0)
+      Sharks -> Err("Invalid team")
+      Bears are 9-8. A winning ratio of 1.89 is not a ratio at all:
+      (wins + losses) / wins is games PER WIN. Both sides are f32, so
+      the compiler has nothing to object to. Arithmetic is on you.
+
+──── Step 2: The guard is real — it is just on the wrong condition
+  Lions     0-17  wins == 0, and 0/17 = 0.000 is a TRUE answer
+  Expansion 0-0   no games played, so there is NO answer to give
+      The author guarded `wins == 0`, which is unusual but answerable,
+      and left `wins + losses == 0`, which is undefined, unguarded.
+      So the one input with no answer is the one that got a number.
+
+──── Step 3: Move the guard to the undefined case
+       Bears -> Ok(0.5294118)
+       Lions -> Ok(0.0)
+   Expansion -> Err("that team has not played yet")
+      Sharks -> Err("no such team")
+      Lions keep their 0.0, because 0 wins in 17 games IS zero.
+      Expansion now fails, because 0 wins in 0 games is not a number.
+
+──── Step 4: Two failures the caller treats differently
+       Bears -> 0.529
+   Expansion -> print a dash, not a 0: the season has not started for that team
+      Sharks -> typo, ask again: "Sharks" is not a team we track
+      A bad lookup is the caller's mistake; an unplayed season is the
+      world's. Only a named E lets the caller tell them apart.
+
+──── Step 5: What would have caught it
+       Bears expected 0.5294  got 0.5294  ok
+       Lions expected 0.0000  got 0.0000  ok
+  Expansion is_err -> true
+      Not the compiler: every version above type-checks. What catches
+      an inverted formula is one hand-computed expectation, and what
+      catches a missing guard is a test at the boundary — 0 games.
+
