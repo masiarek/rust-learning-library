@@ -54,7 +54,11 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **`Ok(())`** — Success carrying no value, because `()` has exactly one value and zero size. What every `Display` impl and every `fn main() -> Result<(), E>` ends with. → [The `Result` you are reading is probably an alias](01_Foundations/result_aliases/README.md)
 
-**Non-lexical lifetimes** — A borrow lives until its **last use**, not to the end of its block. Why the same two statements compile in one order and are `E0502` in the other. → [`while let`](01_Foundations/while_let/README.md)
+**Non-lexical lifetimes** — A borrow lives until its **last use**, not to the end of its block. Why the same two statements compile in one order and are `E0502` in the other. → [Borrowing](01_Foundations/borrowing/README.md)
+
+**Shared reference (`&T`)** — Access without ownership, held by any number of readers at once. "Shared", not "immutable": a `Cell` or `Mutex` still mutates through one. → [Borrowing](01_Foundations/borrowing/README.md)
+
+**Exclusive reference (`&mut T`)** — The only reference to a value while it lives, and it excludes readers too — including the owner. → [Borrowing](01_Foundations/borrowing/README.md)
 
 **Niche** — A bit pattern a type can never legally hold (null for a `Box`, any byte but 0/1 for a `bool`). `None` takes the niche when one exists, which is why the wrapper is often free. → [`Option` is a one-item collection](01_Foundations/option_as_collection/README.md)
 

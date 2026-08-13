@@ -78,6 +78,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "shadowing_and_unwrap",
         # Opens the ownership arc — the next thread after the Option run.
         "ownership_and_moves",
+        "borrowing",
         "newtype_score",
         "representing_a_ballot",
     ],

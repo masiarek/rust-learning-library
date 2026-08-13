@@ -19,6 +19,7 @@ The ideas you meet in your first week of Rust and keep using forever. Each page 
 | [`expect`](expect/README.md) | 201 | The message is a claim about why this cannot fail — and being unable to write it is the finding |
 | [What a panic costs](what_a_panic_costs/README.md) | 201 | The other half of `unwrap`: where the panic points, what unwinding gives back (memory) and what it does not (your work), and why the exit code is 101 |
 | [`while let`](while_let/README.md) | 201 | The loop whose exit condition is a pattern — and the one bug `if let` cannot have: a body that never makes progress |
+| [Borrowing](borrowing/README.md) | 101 → 201 | `&T` and `&mut T`, the many-readers-or-one-writer rule, and the last-use rule that decides which order compiles |
 | [`Option` fields](option_fields/README.md) | 101 | `Option` in a type definition: required-by-default fields, and when `Option<Vec<T>>` is right |
 | [`Option` is a one-item collection](option_as_collection/README.md) | 201 | It iterates; `None` really is variant 0; and why the tag is often free |
 | [Nullable pointers](nullable_pointers/README.md) | 201 | Rust has no null, so an absent pointer is a different type — `Option<Box<T>>`, free, and what makes a recursive type possible |
@@ -53,7 +54,6 @@ The [`std::option` module docs](https://doc.rust-lang.org/core/option/) list wha
 
 Rough order, not a promise. Each becomes a page once it has a runnable example worth reading:
 
-- **Borrowing** — `&T` and `&mut T`, and the one-writer-or-many-readers rule, picking up where [Ownership and moves](ownership_and_moves/README.md) leaves off. It inherits one paragraph: [`while let`](while_let/README.md) explains non-lexical lifetimes in passing because nothing else does yet — move it here and leave a link behind
 - **Lifetimes** — what `'a` is actually annotating, and why most of the time you write none
 - **`String` vs `&str`** — the same split as `Vec<T>` vs `&[T]`, and why it exists
 - **Traits** — shared behaviour without inheritance; `impl Trait` versus `dyn Trait`
