@@ -1,0 +1,32 @@
+
+──── Fix 1: Borrow the option: `&maybe_name`
+  shouted   -> ADA
+  original  -> Some("Ada")   still here
+
+──── Fix 2: Borrow inside the pattern: `Some(ref name)`
+  borrowed  -> Ada
+  original  -> Some("Ada")   the older spelling of fix 1
+
+──── Fix 3: Change the option instead: `.as_ref()` / `.as_deref()`
+  as_ref()  -> Some("Ada")
+  as_deref()-> Some("Ada")   Option<&str>, which is what most fns want
+  length    -> Some(3)
+  original  -> Some("Ada")
+
+──── Fix 4: Clone it: correct, and the one to justify
+  cloned    -> "Ada"   a second allocation of the same bytes
+  original  -> Some("Ada")
+      Reach for this when you need a value that OUTLIVES the option.
+      Reaching for it to quiet E0382 is how a borrow bug becomes a
+      performance one — the compiler was asking a question, not
+      objecting.
+
+──── Fix 5: Not a fix: move it on purpose, and put it last
+  before    -> Some("Ada")
+  moved     -> Ada the First
+
+      Fix 1 is the one to ship: no allocation, and the option is
+      untouched. But read the error before reaching for any of them —
+      'use after partial move' is a question about how long you need
+      the value, and sometimes the honest answer is fix 5: you were
+      finished with it, and the line order was the only problem.

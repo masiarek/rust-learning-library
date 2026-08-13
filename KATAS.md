@@ -19,6 +19,8 @@ The happy side effect is that a kata arrives with its explanation already writte
 | # | Kata | Where it lives | Level |
 |---|---|---|---|
 | K1 | A favourite number that may not exist — `Some` / `None`, one `match`, and `unwrap_or` | [`Some` and `None`](01_Foundations/some_and_none/README.md#practice) | 101 |
+| K2 | The same program with a type that is not `Copy` — read `E0382`, then fix it four ways and pick one | [Shadowing and `unwrap`](01_Foundations/shadowing_and_unwrap/README.md#practice) | 201 |
+| K3 | What the panic left behind — read the damage an `unwrap` does mid-job, then make the missing row a return value | [What a panic costs](01_Foundations/what_a_panic_costs/README.md#practice) | 201 |
 
 More land here as they are written. Every lesson in [`01_Foundations/`](01_Foundations/README.md) is a candidate; a lesson with no kata yet is not a gap in the library so much as an invitation.
 

@@ -141,6 +141,151 @@ The second column is what makes the unwrap idiom possible at all: `Option<u32>` 
 - **Python.** `x = int(x)` looks like the same move, and reads the same, but Python is *rebinding one name* with no type discipline; Rust is creating a second variable, and the first still exists in the enclosing scope. The practical gain is the one Python cannot offer: after `let x = x.unwrap_or(0)`, the optional version is not merely discouraged, it is unreachable.
 - **ABAP.** You cannot do this at all — a `DATA` name is one typed variable for the whole routine, which is why ABAP code grows `lv_amount_str` / `lv_amount` pairs and every later line has to keep them straight. Shadowing removes the pair: same name, and the compiler guarantees you are past the conversion.
 
+## Practice
+
+**K2 — the same program, without `Copy`.** Take the program at the top of this page and change `maybe_number: Option<i32>` into `maybe_name: Option<String>`, keeping its shape: an `if let` that uses the value, and a line *after* the block that uses the option again. It will not compile.
+
+Read the error before you touch anything — `E0382` names the mechanism itself, in the note. Then make it compile **four** different ways, and decide which one you would ship.
+
+Worth getting wrong on purpose: fix it with `.clone()` first, then ask what you just paid for. And once it compiles, try deleting the line after the block instead — that is a fifth answer, and on a good day it is the right one.
+
+<details markdown="1">
+<summary><strong>Solution</strong></summary>
+
+<!-- source:shadowing_and_unwrap_kata -->
+*[`shadowing_and_unwrap_kata.rs`](examples/shadowing_and_unwrap_kata.rs) in full — pasted here by `tools/run_examples.py` from the file CI compiles and runs.*
+
+```rust
+//! Kata solution: the same program, with a type that is not `Copy`.
+//!
+//! The Step 1 program works on an `Option<i32>` for one reason: `i32` is `Copy`,
+//! so `if let Some(n) = opt` duplicates the value and leaves `opt` alone. Swap in
+//! a `String` and the same shape MOVES, so the line after the block is:
+//!
+//!     error[E0382]: use of partially moved value: `maybe_name`
+//!       |
+//!     4 |     if let Some(name) = maybe_name {
+//!       |                 ---- value partially moved here
+//!     9 |     let shout = maybe_name.unwrap_or_default();
+//!       |                 ^^^^^^^^^^ value used here after partial move
+//!       |
+//!       = note: partial move occurs because value has type `String`, which does
+//!               not implement the `Copy` trait
+//!
+//! Four ways to make it compile, and one that is not a fix at all but is often
+//! the right answer anyway.
+//!
+//!   rustc --edition 2024 shadowing_and_unwrap_kata.rs -o /tmp/sauk && /tmp/sauk
+
+fn banner(n: u32, title: &str) {
+    println!("\n──── Fix {n}: {title}");
+}
+
+fn main() {
+    // ─────────────────────────────────────────────────── 1
+    banner(1, "Borrow the option: `&maybe_name`");
+    let maybe_name: Option<String> = Some("Ada".to_string());
+
+    if let Some(name) = &maybe_name {
+        // `name` is a &String — match ergonomics borrowed it for us.
+        let name = name.to_uppercase(); // a shadow, and a NEW String
+        println!("  shouted   -> {name}");
+    }
+    println!("  original  -> {maybe_name:?}   still here");
+
+    // ─────────────────────────────────────────────────── 2
+    banner(2, "Borrow inside the pattern: `Some(ref name)`");
+    let maybe_name: Option<String> = Some("Ada".to_string());
+
+    if let Some(ref name) = maybe_name {
+        println!("  borrowed  -> {name}");
+    }
+    println!("  original  -> {maybe_name:?}   the older spelling of fix 1");
+
+    // ─────────────────────────────────────────────────── 3
+    banner(3, "Change the option instead: `.as_ref()` / `.as_deref()`");
+    let maybe_name: Option<String> = Some("Ada".to_string());
+
+    let borrowed: Option<&String> = maybe_name.as_ref();
+    let as_str: Option<&str> = maybe_name.as_deref();
+    println!("  as_ref()  -> {borrowed:?}");
+    println!("  as_deref()-> {as_str:?}   Option<&str>, which is what most fns want");
+    println!("  length    -> {:?}", maybe_name.as_ref().map(|s| s.len()));
+    println!("  original  -> {maybe_name:?}");
+
+    // ─────────────────────────────────────────────────── 4
+    banner(4, "Clone it: correct, and the one to justify");
+    let maybe_name: Option<String> = Some("Ada".to_string());
+
+    let owned = maybe_name.clone().unwrap_or_default();
+    println!("  cloned    -> {owned:?}   a second allocation of the same bytes");
+    println!("  original  -> {maybe_name:?}");
+    println!("      Reach for this when you need a value that OUTLIVES the option.");
+    println!("      Reaching for it to quiet E0382 is how a borrow bug becomes a");
+    println!("      performance one — the compiler was asking a question, not");
+    println!("      objecting.");
+
+    // ─────────────────────────────────────────────────── 5
+    banner(5, "Not a fix: move it on purpose, and put it last");
+    let maybe_name: Option<String> = Some("Ada".to_string());
+
+    println!("  before    -> {maybe_name:?}");
+    if let Some(name) = maybe_name {
+        // This CONSUMES the option. Nothing below reads it, so nothing complains.
+        let name = format!("{name} the First");
+        println!("  moved     -> {name}");
+    }
+    // println!("{maybe_name:?}");   // <- uncomment for the E0382 in the header
+
+    println!("\n      Fix 1 is the one to ship: no allocation, and the option is");
+    println!("      untouched. But read the error before reaching for any of them —");
+    println!("      'use after partial move' is a question about how long you need");
+    println!("      the value, and sometimes the honest answer is fix 5: you were");
+    println!("      finished with it, and the line order was the only problem.");
+}
+```
+<!-- /source -->
+
+<!-- output:shadowing_and_unwrap_kata -->
+*Verified output of [`shadowing_and_unwrap_kata.rs`](examples/shadowing_and_unwrap_kata.rs) — regenerated by `tools/run_examples.py`, never hand-typed.*
+
+```text
+──── Fix 1: Borrow the option: `&maybe_name`
+  shouted   -> ADA
+  original  -> Some("Ada")   still here
+
+──── Fix 2: Borrow inside the pattern: `Some(ref name)`
+  borrowed  -> Ada
+  original  -> Some("Ada")   the older spelling of fix 1
+
+──── Fix 3: Change the option instead: `.as_ref()` / `.as_deref()`
+  as_ref()  -> Some("Ada")
+  as_deref()-> Some("Ada")   Option<&str>, which is what most fns want
+  length    -> Some(3)
+  original  -> Some("Ada")
+
+──── Fix 4: Clone it: correct, and the one to justify
+  cloned    -> "Ada"   a second allocation of the same bytes
+  original  -> Some("Ada")
+      Reach for this when you need a value that OUTLIVES the option.
+      Reaching for it to quiet E0382 is how a borrow bug becomes a
+      performance one — the compiler was asking a question, not
+      objecting.
+
+──── Fix 5: Not a fix: move it on purpose, and put it last
+  before    -> Some("Ada")
+  moved     -> Ada the First
+
+      Fix 1 is the one to ship: no allocation, and the option is
+      untouched. But read the error before reaching for any of them —
+      'use after partial move' is a question about how long you need
+      the value, and sometimes the honest answer is fix 5: you were
+      finished with it, and the line order was the only problem.
+```
+<!-- /output -->
+
+</details>
+
 ---
 
 ## The verified output

@@ -141,7 +141,7 @@ Worth naming the shape of this bug: **a `Copy` type hides it**. The kata works, 
 
 **K1 — a favourite number.** Declare a variable `favnum` that is either a number or nothing at all, assign one of the two shapes to it, and print a different sentence for each using a `match`. Then print it a second way, falling back to `42` when there is no number.
 
-Try it before opening this. Two things are worth getting wrong on purpose first: delete the `None` arm and read what the compiler says, and change the type to `Option<String>` and see which line stops compiling.
+Try it before opening this. Two things are worth getting wrong on purpose first: delete the `None` arm and read what the compiler says, and change the type to `Option<String>` and see which line stops compiling. (That second one is [K2](../shadowing_and_unwrap/README.md#practice)'s whole subject, error text and all, if you want it worked through.)
 
 <details markdown="1">
 <summary><strong>Solution</strong></summary>
