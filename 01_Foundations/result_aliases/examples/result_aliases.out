@@ -1,0 +1,48 @@
+
+──── Step 1: io::Result<T> looks wrong until you expand it
+  io::Result<()>              -> Ok(())
+  Result<(), std::io::Error>  -> Ok(())
+  the two annotations are interchangeable -> Ok(())
+  buffer now holds: "Ada,Ben,Cara\n5,2,0\n"
+      type Result<T> = Result<T, Error>;   <- one line in std::io
+
+──── Step 2: The aliases you will actually meet
+  std::io::Result<T>      = Result<T, std::io::Error>
+  std::fmt::Result        = Result<(), std::fmt::Error>   <- NO parameters at all
+  std::thread::Result<T>  = Result<T, Box<dyn Any + Send>>
+  a Display impl returning fmt::Result -> [5, 2, 0]
+      fmt::Result pins BOTH slots, which is why `Ok(())` ends every fmt impl.
+
+──── Step 3: Writing your own alias
+  parse("5,2,0") -> Ok([5, 2, 0])
+  parse("") -> Err: the ballot line was empty
+  parse("5,x,0") -> Err: "x" is not a score
+  parse("5,9,0") -> Err: score 9 is above the 5 cap
+      pub type Result<T> = std::result::Result<T, Error>;
+      Inside the module `Result` now means YOUR Result. Outside it is
+      `ballot::Result<T>`, and the prelude's two-parameter one is untouched.
+
+──── Step 4: Ok(()) — the other slot emptied out
+  a function that only succeeds or fails -> Ok(())
+  Display of the error  -> score 9 is above the 5 cap
+  Debug of the error    -> OutOfRange { got: 9, max: 5 }
+      A failing `fn main() -> Result<(), E>` prints the DEBUG form after
+      "Error: " and exits 1. Your careful Display impl is not used.
+
+──── Step 5: Infallible — the error type that has no values
+  String::from_str("Ada")  -> Ok("Ada")    (FromStr::Err  = Infallible)
+  u64::try_from(3u32)      -> Ok(3)        (TryFrom::Error = Infallible)
+  size_of  Infallible=0  ()=0
+  size_of  u64=8  Result<u64, Infallible>=8  Result<u64, io::Error>=16
+      Infallible is an enum with NO variants, so Err(_) cannot be built.
+      The compiler knows it, drops the tag, and Result<u64, Infallible>
+      costs exactly what a u64 costs. A promise with no runtime price.
+
+──── Step 6: Reading the E slot back
+  Result<T, Infallible              > cannot fail; the Result is there for a trait's sake
+  Result<T, io::Error               > one concrete failure, ask it for .kind()
+  Result<T, BallotError (your enum) > a fixed menu; the caller can match on it
+  Result<T, Box<dyn Error>          > anything at all; nobody downstream will match
+      This is the only question the second parameter answers, and an
+      alias does not remove the answer — it just moves it one hop away.
+
