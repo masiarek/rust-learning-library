@@ -1,0 +1,18 @@
+# MkDocs build output — generated, never committed.
+site/
+
+# Rust build output.
+target/
+**/*.rs.bk
+*.pdb
+
+# Compiled example binaries (the .rs source and its .out answer key are what we keep).
+/tmp_examples/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store

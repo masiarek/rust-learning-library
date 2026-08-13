@@ -1,0 +1,57 @@
+
+──── Step 1: Two enums; the difference is whether the sad arm carries a reason
+  scores.get("ada")   -> Some(5)
+  scores.get("zoe")   -> None
+      "why not?" has exactly one answer, so None needs no payload.
+  "42".parse::<u32>() -> Ok(42)
+  "4x".parse::<u32>() -> Err(ParseIntError { kind: InvalidDigit })
+      "why not?" has many answers, so Err carries one.
+
+──── Step 2: match — the form that always works
+  Option: counted 461 ballots
+  Result: could not parse — invalid digit found in string
+      The compiler rejects the match if you forget an arm. That is the whole safety story.
+
+──── Step 3: Shortcuts for when you only care about one arm
+  if let            -> winner is Ada
+  let-else          -> bound "12" for the rest of the function
+  unwrap_or         -> 0
+  unwrap_or_else    -> 7
+  unwrap_or_default -> 0
+
+──── Step 4: map vs and_then — the nesting trap
+  map               -> Some("12")
+  map (wrong tool)  -> Some(Some(12))   <- Option<Option<u32>>
+  and_then          -> Some(12)
+  map_err           -> Ok(7)
+  map_err           -> Err("bad score: invalid digit found in string")
+
+──── Step 5: `?` — early return in one character
+  first_word_len("hello world") -> Some(5)
+  first_word_len("     ")       -> None
+  sum_scores("5, 2, 0")         -> Ok(7)
+  sum_scores("5, x, 0")         -> Err(ParseIntError { kind: InvalidDigit })
+      `?` on an Option needs an Option-returning fn; on a Result, a Result-returning fn.
+
+──── Step 6: Crossing between the two
+  Option -> Result  .ok_or(reason) -> Err("no quorum recorded")
+  Result -> Option  .ok()          -> None   (the reason is thrown away)
+      Going up you must SUPPLY a reason; going down you DISCARD one. That asymmetry is the point.
+
+──── Step 7: Two facts worth knowing early
+  .transpose() flips the nesting -> Ok(Some(12))
+  size_of  i32=4  Option<i32>=8  Box<i32>=8  Option<Box<i32>>=8
+      Option<Box<T>> is free: None reuses the null pointer. Safety with no runtime cost.
+
+──── Step 8: Designing the E in Result<T, E>
+  "5,2,0" -> ok [5, 2, 0]
+  "" -> error: the ballot line was empty
+  "5,x,0" -> error: not a number: invalid digit found in string
+  "5,9,0" -> error: score 9 is above the 5 cap
+      `?` did the ParseIntError -> BallotError conversion. That is `From`, not magic.
+
+──── Step 9: Box<dyn Error> — two unrelated error types in one function
+  load_and_total("5,2,0") -> Ok(21)
+  load_and_total("5,9,0") -> Err: score 9 is above the 5 cap
+      Libraries name their errors (Step 8). Applications usually erase them (Step 9).
+

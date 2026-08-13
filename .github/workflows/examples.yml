@@ -1,0 +1,24 @@
+# Every example must compile, run, and print exactly what its recorded .out file
+# says — and every lesson page's generated output block must match that run.
+#
+# This is what makes the library trustworthy: a page cannot claim a program
+# prints something it does not print, and code cannot rot quietly while the prose
+# keeps describing the old behaviour.
+
+name: examples
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Show toolchain
+        run: rustc --version
+      - name: Compile, run, and check every example against its answer key
+        run: python3 tools/run_examples.py --check
