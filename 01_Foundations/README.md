@@ -20,6 +20,7 @@ The ideas you meet in your first week of Rust and keep using forever. Each page 
 | [Nullable pointers](nullable_pointers/README.md) | 201 | Rust has no null, so an absent pointer is a different type — `Option<Box<T>>`, free, and what makes a recursive type possible |
 | [The `Result` you are reading is probably an alias](result_aliases/README.md) | 201 | `io::Result<T>` is `Result<T, io::Error>` — how to expand an alias and read what can actually go wrong, plus `Ok(())` and `Infallible` |
 | [Shadowing and `unwrap`](shadowing_and_unwrap/README.md) | 201 | Two unrelated ideas the tutorials tie together: what keeps the original `Option` alive is `Copy`, not the shadow — and what shadowing is really for |
+| [Ownership and moves](ownership_and_moves/README.md) | 101 | A move transfers *responsibility*, not bytes — the three rules, made visible by a value that announces its own death |
 | [A score is not a number](newtype_score/README.md) | 101 → 201 | The newtype: one private field, one validating door, and why privacy is per *module* |
 | [What is a ballot, in memory?](representing_a_ballot/README.md) | 201 | Array vs `Vec` vs tuple vs struct vs map vs flat matrix — and which bugs each one makes writeable |
 
@@ -48,8 +49,7 @@ The [`std::option` module docs](https://doc.rust-lang.org/core/option/) list wha
 
 Rough order, not a promise. Each becomes a page once it has a runnable example worth reading:
 
-- **Ownership and moves** — why a value can only have one owner, and what "moved" means in an error message
-- **Borrowing** — `&T` and `&mut T`, and the one-writer-or-many-readers rule
+- **Borrowing** — `&T` and `&mut T`, and the one-writer-or-many-readers rule, picking up where [Ownership and moves](ownership_and_moves/README.md) leaves off
 - **Lifetimes** — what `'a` is actually annotating, and why most of the time you write none
 - **`String` vs `&str`** — the same split as `Vec<T>` vs `&[T]`, and why it exists
 - **Traits** — shared behaviour without inheritance; `impl Trait` versus `dyn Trait`

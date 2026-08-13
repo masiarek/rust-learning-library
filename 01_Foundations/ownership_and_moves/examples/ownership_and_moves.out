@@ -1,0 +1,54 @@
+
+──── Step 1: Rule 3, made visible: the owner's scope end frees the value
+  entering an inner block
+  inside — inner is alive
+      · drop(inner)
+  the block ended, and inner was freed just above
+  outer lives until step1 returns
+      · drop(outer)
+
+──── Step 2: A move transfers RESPONSIBILITY, not bytes
+  `first` owns it
+  moved to `second`, inside the block
+      · drop(the-value)
+  the block ended — and it was freed THERE, not here
+      The bytes never travelled. What changed is who frees it, and so
+      when. And `first` is not merely stale: it is unusable, by name.
+
+──── Step 3: Copy types are duplicated instead of moved
+  i32     a = 5, b = 5        both still usable
+  bool    flag = true, same = true
+  String  t = "hi"              `s` is gone: reading it is error[E0382]
+      A type is Copy when duplicating it means copying its bytes and
+      nothing else. A String owns a heap buffer, so a byte copy would
+      leave TWO owners of one allocation — and two frees. Moves exist
+      to make that unrepresentable, not merely discouraged.
+
+──── Step 4: Passing by value moves; borrowing does not
+  inspect() only borrows a
+  inspect() only borrows a
+  a survived two borrows
+  consume() owns a now, and will free it on return
+      · drop(a)
+  consume() has returned, and a is already gone
+  hand_back() received b and returns it
+  b was moved out and moved back: still owned here as b
+      · drop(b)
+
+──── Step 5: Partial moves: ownership is tracked per FIELD
+  moved out   name = "Ada"
+  still fine  p.age = 36
+      But `p` as a whole is gone — passing it anywhere is
+      error[E0382] 'use of partially moved value'. The compiler
+      is tracking each field separately, not the variable.
+
+──── Step 6: Asking for a second one, and getting one out of a collection
+  clone     original = "ballot", copy = "ballot"   (two allocations)
+  &v[0]     "x"   — indexing yields a place, not a value:
+            `let first = v[0];` is error[E0507], cannot move out of index
+  remove    owned = "x", v is now ["y"]
+  take      taken = "here", slot left at Default = ""
+      Each of these is the same question answered differently: the
+      collection still owes one free per element, so it will not let
+      you walk off with an element unless something replaces it.
+

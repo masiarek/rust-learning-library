@@ -72,6 +72,8 @@ NAV_ORDER: dict[str, list[str]] = {
         "nullable_pointers",
         "result_aliases",
         "shadowing_and_unwrap",
+        # Opens the ownership arc — the next thread after the Option run.
+        "ownership_and_moves",
         "newtype_score",
         "representing_a_ballot",
     ],

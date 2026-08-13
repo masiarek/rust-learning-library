@@ -76,6 +76,16 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **`ok`** — Turn a `Result` into an `Option`, discarding the error. What a hand-written `match Ok => Some, Err(_) => None` is re-implementing — and a downgrade whenever the caller could have used the reason. → [Returning `None` on error](01_Foundations/none_on_error/README.md)
 
+**Ownership** — The rule that every value has exactly one owner, and is dropped when that owner goes out of scope. What makes "freed exactly once" true by construction rather than by discipline. → [Ownership and moves](01_Foundations/ownership_and_moves/README.md)
+
+**Move** — Transferring ownership. The bytes do not travel; what changes is who owes the free, and therefore when it happens. The source variable becomes unusable by name. → [Ownership and moves](01_Foundations/ownership_and_moves/README.md)
+
+**`Copy`** — The marker for types where duplicating the bytes duplicates nothing else (`i32`, `bool`, `char`, `&T`). Those are copied instead of moved; a `String` cannot be, because two owners of one allocation would mean two frees. → [Ownership and moves](01_Foundations/ownership_and_moves/README.md)
+
+**`Drop`** — The code that runs when a value's owner goes out of scope. Implementing it is the easiest way to *watch* ownership, since the value announces its own death. → [Ownership and moves](01_Foundations/ownership_and_moves/README.md)
+
+**Partial move** — Moving one field out of a struct, leaving the other fields readable but the struct as a whole unusable. Ownership is tracked per field, not per variable. → [Ownership and moves](01_Foundations/ownership_and_moves/README.md)
+
 **Prelude** — The set of names in scope in every Rust file without an import. `Option`, `Result`, and their variants live there, which is why you write `Some(x)` and not `Option::Some(x)`.
 
 **`?`** — Unwrap the happy value, or return the sad one from the current function — converting the error via `From` on the way out. → [`Option` vs `Result`](01_Foundations/option_vs_result/README.md)
