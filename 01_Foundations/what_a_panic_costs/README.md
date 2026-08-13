@@ -84,7 +84,7 @@ When continuing would be worse than stopping — the invariant is broken, and an
 
 ## Practice
 
-**K3 — what the panic left behind.** A batch job records five ballot rows, each one an `Option<u32>`, and the third row never arrived. The version you are given unwraps it.
+**What the panic left behind.** A batch job records five ballot rows, each one an `Option<u32>`, and the third row never arrived. The version you are given unwraps it.
 
 Write it in three parts. **First** run the unwrapping version and *read the damage*: how many rows made it into the ledger, which rows were never looked at, what the caller received, and what still got cleaned up on the way out. **Then** rewrite the function so the missing row is a return value — not a bare `None`, since which row is missing is the useful half. **Finally** write the version a caller usually actually wants: total the rows that are answerable and report the gaps, so one missing row does not cost you the other four.
 
