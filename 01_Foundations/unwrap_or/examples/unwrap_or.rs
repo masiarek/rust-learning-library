@@ -190,9 +190,11 @@ fn step6() {
     println!("      mattered. Second, writing `const D: u8 = ZERO.unwrap_or(0);`");
     println!("      today is rejected: \"`Option::<T>::unwrap_or` is not yet stable");
     println!("      as a const fn\". The signature is const-generic-over-Destruct on");
-    println!("      nightly. `unwrap` and `expect` ARE const-stable — which is the");
-    println!("      rare corner where the eager member of the family is the only one");
-    println!("      available, since a closure cannot run in a const context at all.");
+    println!("      nightly. `unwrap` and `expect` ARE const-stable — and");
+    println!("      unwrap_or_else is not const-stable either (its const form needs");
+    println!("      the closure itself to be const-callable). So in a const, those");
+    println!("      two are the whole family, and the eager/lazy advice does not");
+    println!("      apply at all.");
 }
 
 fn main() {

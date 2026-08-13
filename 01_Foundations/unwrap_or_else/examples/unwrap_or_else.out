@@ -1,0 +1,68 @@
+
+──── Step 1: Two shapes: no argument on Option, the error on Result
+  None.unwrap_or_else(|| 50)                -> 50
+  Err(e).unwrap_or_else(|e| e.len() as u16) -> 20
+      The Option closure takes nothing, because None carries nothing.
+      The Result closure takes the error BY VALUE — it is the only
+      fallback in the family that ever sees it. Swap the two by habit
+      and the compiler is specific: E0593, closure is expected to take
+      1 argument, but it takes 0.
+
+──── Step 2: The payoff: fall back AND keep the reason
+  raw rows: ["5", "3", "4x", "2", "", "12"]
+  total    : 10   (3 of 6 rows counted as 0)
+    row 3: "4x" — invalid digit found in string
+    row 5: "" — cannot parse integer from empty string
+    row 6: "12" — 12 is outside the 0-5 range
+      This is the shape to reach for when a bad row must not stop the
+      count but must not vanish either. `unwrap_or(0)` would produce
+      the same total and no second list — same arithmetic, no audit.
+
+──── Step 3: Only built when it is needed — and it need not be a closure
+  6 races, 2 without a configured roster -> default_roster() ran 2 times
+  None.unwrap_or_else(String::new)    -> ""
+  None.unwrap_or_else(Vec::new)       -> []
+  None::<Vec<u8>>.unwrap_or_default() -> []
+      `unwrap_or_else(Vec::new)` passes the function itself — no `||`,
+      because a function name already IS something callable. And when
+      the function you would name is exactly T::default, the shorter
+      spelling of the same call is unwrap_or_default().
+
+──── Step 4: The two `_else` methods do opposite things
+  port          flag=None then env=Some(8080) -> or_else gives Some(8080), unwrap_or_else gives 8080
+  metrics_port  flag=None then env=None -> or_else gives None, unwrap_or_else gives 9000
+  Ok(443).map_or_else(|e| .., |v| ..)  -> listening on 443
+  Err(e).map_or_else(|e| .., |v| ..)   -> failed: not a port
+      or_else STAYS inside the wrapper: Option -> Option, so you can
+      chain a second and third source. unwrap_or_else LEAVES it: the
+      result is a plain u16 and the chain is over. Writing one where
+      you meant the other is E0308 — expected `u16`, found `Option<u16>`.
+      map_or_else handles both sides at once: one closure per branch.
+
+──── Step 5: The lab coat: a closure that ignores its argument
+  bad.clone().unwrap_or(0)          -> 0
+  bad.clone().unwrap_or_else(|_| 0) -> 0
+      Identical, in every way that matters: same value, same discarded
+      error, same cost. The second one just looks more careful. If the
+      underscore is there because there is genuinely nothing to do with
+      the error, write unwrap_or(0) and say so plainly. If there IS —
+      a log line, a counter, a tag on the value — the closure is the
+      place for it, and that is Step 2.
+  a fallback that remembers it was one:
+    cast      counts 4
+    defaulted counts 0, because row 3: '4x' is not a number
+    cast      counts 5
+    total 9, and the sum can still say which rows it trusted.
+
+──── Step 6: A closure is a struct, and FnOnce means it may eat its captures
+  size_of_val(&|| 50)             = 0
+  size_of_val(&move || seats * 2) = 2
+  size_of_val(&move || fallback)  = 24  (a String moved in)
+  missing.unwrap_or_else(that closure) -> "(unnamed)"
+  Some(7).unwrap_or_else(|| 50)   -> 7
+      A closure capturing nothing is zero bytes and compiles to the
+      same code as the branch you would have written by hand, so the
+      laziness is free. FnOnce (rather than Fn) is what lets the last
+      one hand its captured String straight out as the fallback: it is
+      called at most once, so it is allowed to consume what it holds.
+

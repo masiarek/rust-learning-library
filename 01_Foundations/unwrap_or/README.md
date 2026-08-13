@@ -104,7 +104,7 @@ error: `Option::<T>::unwrap_or` is not yet stable as a const fn
 error[E0658]: cannot call conditionally-const method `Option::<u8>::unwrap_or` in constants
 ```
 
-The `const` in the rendered signature is the *conditionally-const* form (that is what the odd `T: Destruct` bound is doing there — it needs to know the discarded value can be dropped in a const context), still unstable. `unwrap()` and `expect()` **are** const-stable, since 1.83 — so a `const` is the one place where the eager member of the family is the only one available at all, a closure being unable to run there.
+The `const` in the rendered signature is the *conditionally-const* form (that is what the odd `T: Destruct` bound is doing there — it needs to know the discarded value can be dropped in a const context), still unstable. `unwrap()` and `expect()` **are** const-stable, since 1.83, and [`unwrap_or_else`](../unwrap_or_else/README.md) is not — its const form additionally needs the closure itself to be const-callable. So inside a `const` those two are the whole family, and the eager/lazy advice above does not apply at all.
 
 ## If you are coming from another language
 
@@ -190,9 +190,11 @@ The `const` in the rendered signature is the *conditionally-const* form (that is
       mattered. Second, writing `const D: u8 = ZERO.unwrap_or(0);`
       today is rejected: "`Option::<T>::unwrap_or` is not yet stable
       as a const fn". The signature is const-generic-over-Destruct on
-      nightly. `unwrap` and `expect` ARE const-stable — which is the
-      rare corner where the eager member of the family is the only one
-      available, since a closure cannot run in a const context at all.
+      nightly. `unwrap` and `expect` ARE const-stable — and
+      unwrap_or_else is not const-stable either (its const form needs
+      the closure itself to be const-callable). So in a const, those
+      two are the whole family, and the eager/lazy advice does not
+      apply at all.
 ```
 <!-- /output -->
 
@@ -204,6 +206,7 @@ rustc --edition 2024 01_Foundations/unwrap_or/examples/unwrap_or.rs -o /tmp/uo &
 
 ## See also
 
+- [`unwrap_or_else`](../unwrap_or_else/README.md) — the lazy sibling: the same job with a closure, which is the only form ever handed the error
 - [`Option` vs `Result`](../option_vs_result/README.md) — why discarding the error is a bigger decision on a `Result`
 - [Initial values](../initial_values/README.md) — `unwrap_or(8080)` in its natural habitat, and the case where you want no `Option` at all
 - [Partial functions](../partial_functions/README.md) — where the `None` you are defaulting away came from
