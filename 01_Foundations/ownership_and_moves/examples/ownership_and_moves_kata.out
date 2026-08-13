@@ -1,0 +1,24 @@
+Borrowing: responsibility never moves.
+  inspecting P12
+  still usable afterwards -> BallotBox { precinct: "P12" }
+
+Moving into a function: the free happens THERE.
+  sealing P3
+      [dropped: P3 — freed here]
+  (the drop line above printed before this one — inside `seal`)
+  `handed_over` is now unusable: E0382, borrow of moved value.
+
+Move out and back again:
+  returned -> BallotBox { precinct: "P7 (stamped)" }
+
+Moves are tracked per field, not per variable:
+  moved out the note -> "chain of custody"
+  pair.0 is still owned here -> BallotBox { precinct: "P1" }
+
+And integers only *feel* different because they are Copy:
+  count 461, also 461 — both usable, nothing was transferred
+
+End of main — everything still owned here is freed now, in reverse:
+      [dropped: P1 — freed here]
+      [dropped: P7 (stamped) — freed here]
+      [dropped: P12 — freed here]

@@ -1,0 +1,22 @@
+Many readers at once — fine:
+  a.len() = 4, b.len() = 4, total = 24
+
+One writer, once the readers are finished:
+  capped -> [5, 5, 3, 5]
+
+Where the borrow ends is the whole game:
+  read through the borrow -> 5
+  ...so pushing is allowed now -> [5, 5, 3, 5, 4]
+      Move that println! below the push and it stops compiling:
+      E0502, cannot borrow `scores` as mutable because it is also
+      borrowed as immutable. Nothing about the code moved — only
+      the last USE of the borrow, which is what defines its end.
+
+The bug the rule exists to prevent:
+  len read before the push -> 3, now 4 
+      Holding `&v[0]` across that push would be a dangling pointer
+      in a language that allowed it: push can reallocate, and the
+      old buffer is freed. Rust rejects it at compile time instead.
+
+`&` means shared, not immutable — the interior-mutability escape:
+  counter behind a & -> 2

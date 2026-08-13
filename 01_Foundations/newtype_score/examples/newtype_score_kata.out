@@ -1,0 +1,20 @@
+The door validates, and says so in the type:
+  Score::new(0) -> Some(Score(0))
+  Score::new(5) -> Some(Score(5))
+  Score::new(9) -> None
+
+  ballot -> [Score(5), Score(3), Score(0)]
+  total  -> 8
+      `total` does no range checking. It cannot need any: every
+      value that reaches it came through Score::new.
+
+Outside the module, the field is unreachable:
+  `Score(9)` here is E0423 — cannot initialize a tuple struct
+  which contains private fields. The invalid value is not merely
+  discouraged; there is no syntax for it.
+
+But privacy is per MODULE, so the module itself can cheat:
+  unchecked_backdoor(9) -> Score(9)   (score 9)
+      Nothing outside `mod ballot` could have written that. Keep the
+      module small and the invariant holds; grow it and every new
+      function in there is another place the guarantee can leak.

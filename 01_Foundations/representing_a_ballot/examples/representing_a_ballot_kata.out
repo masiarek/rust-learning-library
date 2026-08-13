@@ -1,0 +1,20 @@
+Both hold the same ballot:
+  parallel: Ben -> Some(3)
+  rows:     Ben -> Some(3)
+
+Now a candidate withdraws, and one line gets forgotten:
+  parallel: candidates ["Ada", "Cara"] scores [5, 3, 0]
+  parallel: Cara -> Some(3)   <- WRONG, that is Ben's 3
+      The two Vecs disagree and nothing noticed. This code compiles,
+      runs, and reports a plausible number.
+
+The same mistake in the row shape:
+  rows: [("Ada", 5), ("Cara", 0)]
+  rows: Cara -> Some(0)   <- still right
+      There was no second line to forget. The desync is not a bug
+      you avoided by being careful; it is a bug you cannot write.
+
+What the row shape costs, honestly:
+  lookup is a scan, not an index — fine for 5 candidates, wrong for
+  50,000 ballots in a hot loop, which is where the flat matrix and
+  the index-newtype shapes start to earn their extra ceremony.

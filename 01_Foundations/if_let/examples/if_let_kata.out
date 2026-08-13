@@ -1,0 +1,20 @@
+match — the compiler made me handle the new variant:
+  Counting                     -> still counting
+  Certified { winner: "Ada" }  -> Ada has won
+  Contested { by: "Ben" }      -> result challenged by Ben
+
+if let, used for what it is good at (one case, silence otherwise):
+  ★ Ada ★
+  (only one banner printed, and that was the intent)
+
+if let/else, used as a substitute for match:
+  Counting                     -> still counting
+  Certified { winner: "Ada" }  -> Ada has won
+  Contested { by: "Ben" }      -> still counting
+      The last line is wrong, and nothing warned. That is the
+      exhaustiveness you traded away for the deleted arm.
+
+let-else keeps the happy path at the left margin:
+    (not certified — nothing to print)
+    certified: Ada
+    (not certified — nothing to print)

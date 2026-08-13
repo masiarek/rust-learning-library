@@ -1,0 +1,24 @@
+Guarded on the wrong condition:
+  7 wins in 10 games -> Ok(0.7)
+  0 wins in 10 games -> Err(NoGames)
+  0 wins in  0 games -> Err(NoGames)
+      Line 2 rejects a real answer (0 wins in 10 games IS 0.0), and
+      line 3 — the one input with no answer — never reaches the guard
+      at all, because 0 wins is caught first. It would have divided
+      by zero and left through Ok as a plausible-looking number.
+
+Guarded on the right one:
+  7 wins in 10 games -> Ok(0.7)
+  0 wins in 10 games -> Ok(0.0)
+  0 wins in  0 games -> Err(NoGames)
+
+And what the wrong guard would have returned, unguarded:
+  0 as f64 / 0 as f64 = NaN
+      NaN. No panic — it sorts oddly, compares false against itself,
+      and prints in a report as if it were a measurement.
+
+The fix that removes the question:
+  Season::new(0, 0)  -> false
+  Season::new(7, 10) -> rate 0.70
+      `win_rate` here returns f64, not Result. The unanswerable input
+      was refused at the door, so there is no failure left to report.

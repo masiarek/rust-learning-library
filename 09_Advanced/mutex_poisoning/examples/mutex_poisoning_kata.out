@@ -1,0 +1,24 @@
+worker thread panicked while holding the lock: true
+
+Answer 1 — propagate. The invariant is broken; say so:
+  lock() -> Err: poisoned lock: another task failed inside
+
+Answer 2 — recover, having looked at the damage:
+  into_inner() -> Tally { counted: [12], total: 0 }
+      counted has one entry, total is 0 — exactly the broken
+      state the panic left. Recovering means REPAIRING this,
+      not merely getting past the Err.
+  repaired -> Tally { counted: [12], total: 12 }
+
+Poisoning is sticky:
+  still poisoned? true
+      Repairing the DATA does not clear the flag. Clearing it is
+      `clear_poison()`, and it is a separate, deliberate step — so
+      that no other thread quietly gets an Ok it did not earn.
+  after clear_poison() -> false
+  lock() now -> Ok(12)
+
+Answer 3 — `.lock().unwrap()`, which is a decision, not a shortcut:
+      It says: another thread broke this invariant, so this thread
+      should die too. Often right. Worth writing as .expect("…")
+      with the reason, since that is the sentence you will read.
