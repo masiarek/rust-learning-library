@@ -1,0 +1,66 @@
+
+──── Step 1: unwrap's message is the standard library's; expect's is yours
+  None.unwrap()                      -> PANIC: called `Option::unwrap()` on a `None` value
+  None.expect("…")                   -> PANIC: the config should list a quorum
+  Err(e).unwrap()                    -> PANIC: called `Result::unwrap()` on an `Err` value: "invalid digit found in string"
+  Err(e).expect("…")                 -> PANIC: the quorum line should be a number: "invalid digit found in string"
+  Ok(5).expect_err("…")              -> PANIC: no quorum should parse from an empty file: 5
+      Four panics, and only two of them tell you anything. Note what the
+      Result form does: `{your sentence}: {the error, Debug-printed}`, so
+      the claim AND the cause survive — expect never costs you the error.
+      expect_err is the mirror, for when the surprise is that it worked.
+
+──── Step 2: The panic names your line, not the standard library's
+  panicked at expect.rs:89
+  the ballot file should have been validated by now
+      That location is the `expect` call in THIS file — not a line inside
+      core/src/option.rs, which is where the panic is physically raised.
+      So the two halves of a good panic report come from two different
+      places: the address from the attribute on the method, the meaning
+      from the sentence you wrote.
+
+──── Step 3: Say what SHOULD be true, not what went wrong
+  expect("failed to get quorum")     -> PANIC: failed to get quorum
+  expect("unwrap failed")            -> PANIC: unwrap failed
+  expect("[election] should set…")   -> PANIC: the [election] section should set a quorum; the loader fills it in from defaults
+      Same bug, three panics, one of them useful. The standard library's
+      own guidance is to describe the reason you expected a value — so the
+      line reads as a CLAIM, and a reader who sees it knows both what was
+      supposed to hold and who was supposed to make it hold. 'Failed to
+      get X' only restates that the program stopped, which the word PANIC
+      already said.
+
+──── Step 4: If you cannot write the sentence, you do not have the proof
+  well-formed config:
+    by expect -> 50
+    by Result -> Ok(50)
+  config with a typo'd key (a thing users do):
+    by expect -> PANIC: the config should have a quorum
+    by Result -> Err("no `quorum` key in [election]")
+      Read the first message again: 'the config SHOULD have a quorum' —
+      should according to whom? Nobody proved that; a user typed the file.
+      The sentence is a hope, and the tell is that you cannot name who
+      guaranteed it. That is the signal to return Result: the second form
+      says the same thing to the same reader, names the offending value,
+      and lets the caller decide whether it is fatal.
+
+──── Step 5: Where expect is exactly right: a proof the compiler cannot check
+  literal in the source          -> 5
+  invariant established locally  -> 3
+  a lock that is never poisoned  -> 3 scores
+      All three sentences are checkable by a reader: one points at a
+      literal, one at an early return four lines up, one at a claim about
+      the whole program that a reviewer can go and test. That is the bar —
+      not 'this feels safe' but 'here is the argument, go and check it'.
+      A test is the fourth case, where the panic IS the failure report.
+
+──── Step 6: The message is an argument, so it is built even when nothing fails
+  expect(&proof(name))                    total 8, proof() ran 3 times
+  unwrap_or_else(|| panic!(proof(name)))  total 8, proof() ran 0 times
+      `expect` takes a &str, which is an ordinary eagerly-evaluated
+      argument — exactly like unwrap_or's default. A formatted message is
+      therefore built, allocated, and dropped on every SUCCESSFUL call, in
+      the hot loop, forever. A plain literal costs nothing, so write one;
+      when the message genuinely needs the value in it, the standard
+      library's own answer is unwrap_or_else with a panic! inside.
+
