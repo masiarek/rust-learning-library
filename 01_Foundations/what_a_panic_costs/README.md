@@ -148,6 +148,7 @@ rustc --edition 2024 01_Foundations/what_a_panic_costs/examples/what_a_panic_cos
 ## See also
 
 - [`Option` vs `Result`](../option_vs_result/README.md) — absence versus failure, and the combinators that keep you out of `unwrap`
+- [Zero wins is not zero games](../wrong_guard/README.md) — the same wrong branch failing the other way: the input with no answer leaves quietly through `Ok` as a plausible number, where a panic at least stops. Read together, they are the two prices of guarding the wrong condition
 - [Partial functions](../partial_functions/README.md) — where the `Option` came from in the first place; its step 3 catches a divide-by-zero panic the same way this page does
 - [`std::panic::catch_unwind`](https://doc.rust-lang.org/std/panic/fn.catch_unwind.html) and [`std::panic::set_hook`](https://doc.rust-lang.org/std/panic/fn.set_hook.html) — the two pieces this example is built on
 - [The Rust Book, ch. 9.1 — *To `panic!` or Not to `panic!`*](https://doc.rust-lang.org/book/ch09-03-to-panic-or-not-to-panic.html) — the same decision from the other side
