@@ -49,6 +49,7 @@ Read what it recorded before committing. `--update` accepts whatever the program
 - **Learner voice by default** — "you write", not "explain to your audience". A learner page serves a teacher fine; a teacher page fails a learner.
 - **`**Level:**`** tags a page's depth: `101` (newcomer), `201` (working knowledge), `301` (deep dive), or `reference`, followed by ` · ` and the audience. Untagged is fine; malformed is not.
 - **Say which trap you are describing.** The valuable half of most Rust lessons is the mistake, not the mechanism.
+- **Bridge to a language the reader already speaks.** Where a Rust idea has a counterpart elsewhere, name it under an *"If you are coming from another language"* heading — one line per language, saying what transfers *and* what the compiler now enforces that convention used to. `Result` is an exception that travels as a return value (Python) and it is `sy-subrc` you cannot forget to check (ABAP); both land faster than any amount of fresh explanation. Keep it honest: a bridge that glosses over a real difference costs more than it saves, so end it on what actually changed.
 - **Don't hard-wrap paragraphs.** One paragraph, one line; Markdown collapses single newlines anyway. Keep real breaks only where they are semantic.
 
 ## Linking
