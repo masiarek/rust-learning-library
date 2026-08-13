@@ -1,0 +1,46 @@
+
+──── Step 1: lock() returns a Result — and normally it is Ok
+  lock().is_ok()        -> true
+  is_poisoned()         -> false
+  data                  -> [1, 5, 2, 4]
+      The Result has exactly one possible cause: a previous holder
+      panicked. Nothing else makes lock() fail.
+
+──── Step 2: A holder panics: the invariant breaks and the lock remembers
+  is_poisoned()         -> true
+  lock()                -> Err(PoisonError)
+  the data behind it    -> [1, 5, 2, 4, 3]
+  invariant holds?      -> false
+      The Vec is not corrupt in a memory sense — it is corrupt in the
+      sense that matters: a candidate with no score. That is what the
+      Err is warning the next thread about.
+
+──── Step 3: Three honest responses, and the one you write by accident
+  (a) .unwrap()             -> panicked: true
+  (b) .unwrap_or_else(into_inner) -> [1, 5, 2, 4, 3]  consistent? false
+  (c) map_err + ?           -> Err("the score list was left inconsistent by a panicking thread")
+      (a) is the default everyone types. It is a real decision: this
+      thread dies because a different one did. Fine in an application,
+      rude in a library — the caller never got to choose.
+
+──── Step 4: Poisoning is sticky, and clearable
+  poisoned now?         -> true
+  every later lock()    -> Err, forever, in every thread
+  repaired to           -> [1, 5, 2, 4, 3, 0]  consistent? true
+  after clear_poison()  -> poisoned? false, lock() ok? true
+      clear_poison() only clears the FLAG. Fixing the data is your job,
+      and doing it in the other order tells the next thread a lie.
+
+──── Step 5: What actually poisons: the guard's Drop during unwinding
+  panic while NOT holding -> poisoned? false
+  RwLock, reader panicked -> poisoned? false
+  RwLock, writer panicked -> poisoned? true
+      Only an exclusive guard can leave a half-written invariant, so only
+      an exclusive guard poisons. The rule is mechanical, not a judgement.
+
+──── Step 6: When poisoning is noise
+  counter after the panic -> 1, poisoned? true
+      Nothing here can be half-done: one += 1 is complete or it never ran.
+      The flag is still set, because std cannot know that. This is the case
+      the parking_lot crate has in mind when it drops poisoning entirely.
+

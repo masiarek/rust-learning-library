@@ -18,7 +18,7 @@ No page here hand-types what a program prints. Each lesson links a real `.rs` fi
 |---|---|
 | [`Option` vs `Result`](01_Foundations/option_vs_result/README.md) | When absence is normal and when it is a failure — and the one question that decides which type you want |
 
-More lessons land in [`01_Foundations/`](01_Foundations/README.md) as they are written.
+More lessons land in [`01_Foundations/`](01_Foundations/README.md) as they are written, and the ones that assume it — shared state across threads, `unsafe`, FFI — in [`09_Advanced/`](09_Advanced/README.md).
 
 There is also a slow, optional thread running through them: [**the long way round to a STAR count**](ROADMAP.md), which sequences a handful of lessons so that each one is the next thing Rust wants to teach, and the running example happens to be a voting method. Every rung stands alone; the election is the excuse.
 

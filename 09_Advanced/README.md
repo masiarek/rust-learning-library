@@ -1,0 +1,18 @@
+# Advanced
+
+Pages that assume [the Foundations spine](../01_Foundations/README.md) and then add a second hard thing on top — shared state across threads, `unsafe`, FFI, macros, layout and performance. Nothing here is harder to *read* than a Foundations page; what makes it advanced is that the mistakes cost more and the compiler helps less.
+
+Each page is still one idea with a program you can compile and run beside it.
+
+| Lesson | Level | What it teaches |
+|---|---|---|
+| [Lock poisoning](mutex_poisoning/README.md) | 301 | Why `Mutex::lock()` returns a `Result` at all, what your `.unwrap()` is deciding on someone's behalf, and the three honest answers |
+
+## Planned
+
+Rough order, not a promise:
+
+- **`Send` and `Sync`** — the two traits that decide what may cross a thread boundary, and why you almost never write them yourself
+- **`Arc<Mutex<T>>` and its alternatives** — channels, `RwLock`, atomics, and the question of which one your problem actually is
+- **Interior mutability** — `Cell`, `RefCell`, and the runtime borrow check you are opting into
+- **`unsafe`** — what it does and does not turn off, and why the unit of review is the module rather than the block

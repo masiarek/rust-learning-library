@@ -50,6 +50,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "index.md",
         "ROADMAP.md",
         "01_Foundations",
+        "09_Advanced",
         "GLOSSARY.md",
     ],
     "01_Foundations": [
@@ -62,6 +63,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "partial_functions",
         "none_on_error",
         "initial_values",
+        "optional_arguments",
         "option_fields",
         "option_as_collection",
         "nullable_pointers",
@@ -69,6 +71,10 @@ NAV_ORDER: dict[str, list[str]] = {
         "shadowing_and_unwrap",
         "newtype_score",
         "representing_a_ballot",
+    ],
+    "09_Advanced": [
+        "README.md",
+        "mutex_poisoning",
     ],
 }
 
