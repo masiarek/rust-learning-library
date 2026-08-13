@@ -1,0 +1,14 @@
+The naive version, on the input it has no answer for:
+  mean_naive(scored)   -> 4
+  mean_naive(unscored) -> NaN
+      0.0 / 0.0 is NaN. No panic, no warning — and NaN is not even
+      equal to itself, so a later == or sort quietly misbehaves.
+
+The total version says so instead:
+  scored         -> average score 4
+  unscored       -> nobody scored this candidate
+
+What None means here is a decision, so write it down:
+  mean(unscored) is None because there is no such average —
+  NOT because the average is 0, which is a score a voter can give.
+  mean(&[0.0, 0.0]) -> Some(0.0)

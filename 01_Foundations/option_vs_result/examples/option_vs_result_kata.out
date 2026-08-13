@@ -1,0 +1,14 @@
+Option — one sad answer for four different problems:
+  "4" -> Some(4)
+  "" -> None
+  "x" -> None
+  "9" -> None
+
+Result — the caller can tell them apart, and tell the voter:
+  "4" -> counted as 4
+  "" -> rejected: the cell was blank
+  "x" -> rejected: not a number: invalid digit found in string
+  "9" -> rejected: score 9 is above the 5 cap
+
+And going back down throws it away again:
+  score_result("9").ok() -> None

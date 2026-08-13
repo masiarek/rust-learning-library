@@ -1,0 +1,10 @@
+Three voters, and the two absences the type keeps apart:
+  Ada Q              precinct 7    ballot returned, 3 scores, total 7
+  Ben                precinct 7    ballot returned, nobody scored
+  Cara               precinct 12   no ballot returned
+
+  ballots returned: 2 of 3
+      A Vec<u8> field with no Option could not have told you that.
+
+Default gives None for every optional field, for free:
+  Voter { name: "", middle_name: None, precinct: 0, scores: None }

@@ -1,0 +1,17 @@
+unwrap_or, when the value was there all along:
+      …reading the default width from config
+  width -> 100
+      The argument is an ordinary argument, so Rust built it before
+      the call and then threw it away. Nothing in the answer shows it.
+
+unwrap_or_else, same value:
+  width -> 100
+      The closure was never called.
+
+And when the value really is missing, both do the same work:
+      …reading the default width from config
+  width -> 72
+
+Borrowing instead of consuming:
+  shown -> Springfield 2026
+  title is still here -> Some("Springfield 2026")

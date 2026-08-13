@@ -1,0 +1,15 @@
+The type changes, which is the reason to reach for map_or:
+  Ada by 17 votes
+  no result yet
+      Option<Winner> in, String out. unwrap_or cannot do that —
+      its fallback must already be the same type as the value.
+
+Eager and lazy, the same rule as the unwrap family:
+      …building the default (ran even though seats was Some)
+  map_or       -> 6
+  map_or_else  -> 6
+
+Where a match still wins — when both arms have something to say:
+  Ada won comfortably (17 votes)
+      Three outcomes and a guard. Squeezing that into map_or would
+      cost more than the line it saves.

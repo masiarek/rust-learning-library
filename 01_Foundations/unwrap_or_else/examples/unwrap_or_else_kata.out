@@ -1,0 +1,10 @@
+Total across 5 rows -> 22
+
+And the report can still say what it did with the rest:
+  row "twelve" counted as 0 — invalid digit found in string
+  row "" counted as 0 — cannot parse integer from empty string
+
+The same fallback written three ways, and what each forgets:
+  unwrap_or(0)            -> 0   (the reason is gone)
+  unwrap_or_default()     -> 0   (the reason is gone)
+  unwrap_or_else(|e| …)   -> 0   (kept: invalid digit found in string)

@@ -1,0 +1,18 @@
+1. Two functions:
+   ******* Results ********
+   *************** Results ****************
+
+2. An Option parameter — the call site states the absence:
+   ******* Results ********
+   *************** Results ****************
+
+3. Option<&T> takes callers the other shape cannot:
+   — 461 ballots
+   — unofficial
+   —
+      A `&Option<String>` parameter would have rejected the middle
+      line, and forced the caller to build an Option to say nothing.
+
+4. impl Into<Option<usize>> — no Some at the call site:
+   *************** Results ****************
+   ******* Results ********

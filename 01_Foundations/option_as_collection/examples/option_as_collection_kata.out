@@ -1,0 +1,16 @@
+Iterating an Option like the one-item collection it is:
+  entries       -> 5
+  ballots cast  -> 3
+  score total   -> 8
+  mean of cast  -> 2.67
+  doubled       -> [10, 6, 0]
+
+The zero-or-one shape shows up directly, too:
+  Some(5).iter().count() -> 1
+  None::<u8>.iter().count() -> 0
+  Some(5).into_iter().chain(None).collect::<Vec<_>>() -> [5]
+
+take() — moving out of something you only borrow:
+  collected -> Some("Cara's late ballot")
+  pending   -> None   (left as None, not a copy)
+  again     -> None

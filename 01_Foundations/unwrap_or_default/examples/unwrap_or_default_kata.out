@@ -1,0 +1,19 @@
+unwrap_or_default fills in the TYPE's zero:
+  handed in     -> Ballot { ada: 5, ben: 2, cara: 0 }
+  not handed in -> Ballot { ada: 0, ben: 0, cara: 0 }
+      The second line is a ballot nobody cast, and it is now
+      indistinguishable from a voter who scored everyone 0:
+      equal? true
+
+So the count has to ask before it defaults:
+  ballots returned: 2 of 3
+  of those, all-zero ballots: 1
+
+Empty is not absent — the same trap one level up:
+  None.unwrap_or_default()      -> []
+  Some(vec![]).unwrap_or_default() -> []
+      Same value out, two different facts in: 'no list was given'
+      and 'a list was given and it was empty'. Default erases which.
+
+Where it is exactly right — a counter with no entry yet:
+  seen.unwrap_or_default() + 1 -> 1

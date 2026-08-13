@@ -1,0 +1,13 @@
+A list whose end is a None rather than a null:
+  contents -> [0, 3, 5]
+  pop      -> Some(0)
+  contents -> [3, 5]
+  pop, pop -> Some(3), Some(5)
+  pop on empty -> None
+
+And the safety costs nothing:
+  size_of::<Box<Node>>()         = 8
+  size_of::<Option<Box<Node>>>() = 8
+      Same width. None is stored as the one bit pattern a Box can
+      never hold — the null — so the tag is free. That is why a
+      linked list in Rust is not paying for its safety.
