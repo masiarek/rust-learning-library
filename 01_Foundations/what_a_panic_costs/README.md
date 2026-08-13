@@ -82,6 +82,161 @@ When continuing would be worse than stopping — the invariant is broken, and an
 
 ---
 
+## Practice
+
+**K3 — what the panic left behind.** A batch job records five ballot rows, each one an `Option<u32>`, and the third row never arrived. The version you are given unwraps it.
+
+Write it in three parts. **First** run the unwrapping version and *read the damage*: how many rows made it into the ledger, which rows were never looked at, what the caller received, and what still got cleaned up on the way out. **Then** rewrite the function so the missing row is a return value — not a bare `None`, since which row is missing is the useful half. **Finally** write the version a caller usually actually wants: total the rows that are answerable and report the gaps, so one missing row does not cost you the other four.
+
+Try it before opening this. The mistake worth making on purpose is running part 1 first and looking at what it leaves behind, because on this page that is the entire lesson: the cost of an `unwrap` is invisible until it fires, and then it is measured in work you cannot get back. Give the batch a value with a `Drop` impl while you are there — watching the cleanup succeed while the job fails is the distinction the page is about.
+
+<details markdown="1">
+<summary><strong>Solution</strong></summary>
+
+<!-- source:what_a_panic_costs_kata -->
+*[`what_a_panic_costs_kata.rs`](examples/what_a_panic_costs_kata.rs) in full — pasted here by `tools/run_examples.py` from the file CI compiles and runs.*
+
+```rust
+//! Kata solution: read what the panic left behind, then make the failure a value.
+//!
+//! A batch job records five ballot rows and the third one never arrived. Part 1
+//! unwraps, so you can see exactly how much work is done, what never runs, and
+//! what still gets cleaned up. Parts 2 and 3 hand the same fact to the caller as
+//! a return value — first as a failure that names the row, then as a result that
+//! keeps the four answerable rows instead of spending them.
+//!
+//!   rustc --edition 2024 what_a_panic_costs_kata.rs -o /tmp/wpck && /tmp/wpck
+
+use std::panic::{self, AssertUnwindSafe};
+use std::sync::Mutex;
+
+/// The batch. Row 2 (zero-based) is missing.
+const ROWS: [Option<u32>; 5] = [Some(5), Some(3), None, Some(4), Some(2)];
+
+/// Prints when dropped, so the unwind is visible rather than asserted.
+struct Ledger;
+
+impl Drop for Ledger {
+    fn drop(&mut self) {
+        println!("      Ledger closed — Drop ran, even on the way out");
+    }
+}
+
+// ─────────────────────────────────────────────── Part 1: the unwrapping version
+fn total_by_unwrap(log: &Mutex<Vec<u32>>) -> u32 {
+    let _ledger = Ledger;
+    let mut total = 0;
+    for row in ROWS {
+        let score = row.unwrap(); // row 2 stops the program here
+        total += score;
+        log.lock().expect("single-threaded here").push(score);
+    }
+    total
+}
+
+// ───────────────────────────────────── Part 2: the absence as a return value
+/// `?` on the `Option` would hand the caller a bare `None`; which row was missing
+/// is the useful half, so this is a `Result` carrying the index.
+fn total_by_result() -> Result<u32, usize> {
+    let mut total = 0;
+    for (i, row) in ROWS.iter().enumerate() {
+        match row {
+            Some(score) => total += score,
+            None => return Err(i),
+        }
+    }
+    Ok(total)
+}
+
+// ──────────────────────────── Part 3: what the caller usually actually wants
+/// One missing row need not cost the other four. Total what is answerable, and
+/// report the gaps as data rather than as a stopping condition.
+fn total_reporting_gaps() -> (u32, Vec<usize>) {
+    let mut total = 0;
+    let mut missing = Vec::new();
+    for (i, row) in ROWS.iter().enumerate() {
+        match row {
+            Some(score) => total += score,
+            None => missing.push(i),
+        }
+    }
+    (total, missing)
+}
+
+fn main() {
+    println!("The same batch, three ways of meeting the missing row\n");
+
+    // ── Part 1
+    println!("Part 1 — unwrap: the panic, and what it leaves behind");
+    let log = Mutex::new(Vec::new());
+    let prior = panic::take_hook();
+    panic::set_hook(Box::new(|_| {})); // keep the demo's output readable
+    let outcome = panic::catch_unwind(AssertUnwindSafe(|| total_by_unwrap(&log)));
+    panic::set_hook(prior);
+
+    let recorded = log.lock().expect("single-threaded here").clone();
+    match outcome {
+        Ok(total) => println!("  returned {total}"),
+        Err(_) => println!("  panicked on row 2 — no total was returned at all"),
+    }
+    println!("  rows recorded before it fired: {recorded:?}");
+    println!("      Two rows are in the ledger, rows 3 and 4 were never looked at,");
+    println!("      and the caller got no answer — not even a wrong one. What DID");
+    println!("      happen is the cleanup: the Ledger's Drop ran on the way out.");
+
+    // ── Part 2
+    println!("\nPart 2 — the same fact, as a return value");
+    match total_by_result() {
+        Ok(total) => println!("  Ok({total})"),
+        Err(row) => println!("  Err({row}) — row {row} is missing, and the caller decides"),
+    }
+    println!("      Nothing was recorded, nothing was half-done, and the caller can");
+    println!("      retry, ask for that row, or give up. Same information the panic");
+    println!("      had; delivered as a value instead of as an exit.");
+
+    // ── Part 3
+    println!("\nPart 3 — keep the rows that are answerable");
+    let (total, missing) = total_reporting_gaps();
+    println!("  total {total} over the answerable rows, missing {missing:?}");
+    println!("      Four rows out of five is usually the right answer, and the gap");
+    println!("      is now in the result where a reader can see it. The panic threw");
+    println!("      away three rows to report the same one missing.");
+}
+```
+<!-- /source -->
+
+<!-- output:what_a_panic_costs_kata -->
+*Verified output of [`what_a_panic_costs_kata.rs`](examples/what_a_panic_costs_kata.rs) — regenerated by `tools/run_examples.py`, never hand-typed.*
+
+```text
+The same batch, three ways of meeting the missing row
+
+Part 1 — unwrap: the panic, and what it leaves behind
+      Ledger closed — Drop ran, even on the way out
+  panicked on row 2 — no total was returned at all
+  rows recorded before it fired: [5, 3]
+      Two rows are in the ledger, rows 3 and 4 were never looked at,
+      and the caller got no answer — not even a wrong one. What DID
+      happen is the cleanup: the Ledger's Drop ran on the way out.
+
+Part 2 — the same fact, as a return value
+  Err(2) — row 2 is missing, and the caller decides
+      Nothing was recorded, nothing was half-done, and the caller can
+      retry, ask for that row, or give up. Same information the panic
+      had; delivered as a value instead of as an exit.
+
+Part 3 — keep the rows that are answerable
+  total 14 over the answerable rows, missing [2]
+      Four rows out of five is usually the right answer, and the gap
+      is now in the result where a reader can see it. The panic threw
+      away three rows to report the same one missing.
+```
+<!-- /output -->
+
+</details>
+
+---
+
 ## The verified output
 
 <!-- output:what_a_panic_costs -->

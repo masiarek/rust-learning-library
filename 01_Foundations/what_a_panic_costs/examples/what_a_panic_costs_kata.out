@@ -1,0 +1,21 @@
+The same batch, three ways of meeting the missing row
+
+Part 1 — unwrap: the panic, and what it leaves behind
+      Ledger closed — Drop ran, even on the way out
+  panicked on row 2 — no total was returned at all
+  rows recorded before it fired: [5, 3]
+      Two rows are in the ledger, rows 3 and 4 were never looked at,
+      and the caller got no answer — not even a wrong one. What DID
+      happen is the cleanup: the Ledger's Drop ran on the way out.
+
+Part 2 — the same fact, as a return value
+  Err(2) — row 2 is missing, and the caller decides
+      Nothing was recorded, nothing was half-done, and the caller can
+      retry, ask for that row, or give up. Same information the panic
+      had; delivered as a value instead of as an exit.
+
+Part 3 — keep the rows that are answerable
+  total 14 over the answerable rows, missing [2]
+      Four rows out of five is usually the right answer, and the gap
+      is now in the result where a reader can see it. The panic threw
+      away three rows to report the same one missing.
