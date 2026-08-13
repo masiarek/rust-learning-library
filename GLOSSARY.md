@@ -44,7 +44,7 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Pattern binding** — The name a pattern introduces, as `x` in `Some(x)`. A fresh name rather than a shadow — and for a non-`Copy` type it *moves* the value out of what you matched on, unless you borrow. → [Shadowing and `unwrap`](01_Foundations/shadowing_and_unwrap/README.md)
 
-**`Copy`** — The trait marking a type that is duplicated instead of moved on assignment (`i32`, `bool`, `&T`, and `Option`s of them). Why `if let Some(n) = opt` leaves `opt` usable for an `Option<i32>` and is a compile error for an `Option<String>`. → [Shadowing and `unwrap`](01_Foundations/shadowing_and_unwrap/README.md)
+**`Copy`** — The trait marking a type that is duplicated instead of moved on assignment (`i32`, `bool`, `char`, `&T`, and `Option`s of them). A `String` cannot be `Copy`, because two owners of one allocation would mean two frees — so the test is not size but whether duplicating the bytes would duplicate an *obligation*. → [Ownership and moves](01_Foundations/ownership_and_moves/README.md), and why `if let Some(n) = opt` leaves `opt` usable for an `Option<i32>` but not an `Option<String>` → [Shadowing and `unwrap`](01_Foundations/shadowing_and_unwrap/README.md)
 
 **`while let`** — Loop for as long as the pattern keeps matching; the `None` is the exit condition. The natural shape for draining a collection with `pop()`. → [`if let`](01_Foundations/if_let/README.md)
 
@@ -109,3 +109,9 @@ Short definitions. Every entry links to the page that explains it properly — a
 **`or_else`** — Try another source and stay inside the wrapper: `Option` → `Option`. The one to reach for when there is a second and third place to look; its neighbour `unwrap_or_else` ends the chain with a plain value instead. → [`unwrap_or_else`](01_Foundations/unwrap_or_else/README.md)
 
 **`unwrap_or_else`** — Replace `None`/`Err` with a value a closure produces, computed only if it is needed. On a `Result` the closure is handed the error, which makes it the only fallback that can salvage a row *and* record why. → [`unwrap_or_else`](01_Foundations/unwrap_or_else/README.md)
+
+**`Default`** — The trait supplying a type's zero value. Derived, it takes every field's own default; written by hand, it states the domain's answer; left unimplemented, it stops `unwrap_or_default()` from compiling, which is often the right outcome. → [`unwrap_or_default`](01_Foundations/unwrap_or_default/README.md)
+
+**`unwrap_or_default`** — Replace `None`/`Err` with `T::default()`. The shortest fallback and the only one whose value is decided somewhere other than the call site — on a `Result`, without even naming the error. → [`unwrap_or_default`](01_Foundations/unwrap_or_default/README.md)
+
+**`mem::take`** — Swap a value out of a `&mut` by leaving `Default::default()` behind. The same trait as `unwrap_or_default`, used for the opposite half of the job. → [`unwrap_or_default`](01_Foundations/unwrap_or_default/README.md)

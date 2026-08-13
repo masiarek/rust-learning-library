@@ -61,6 +61,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "if_let",
         "unwrap_or",
         "unwrap_or_else",
+        "unwrap_or_default",
         "what_a_panic_costs",
         "partial_functions",
         "none_on_error",
