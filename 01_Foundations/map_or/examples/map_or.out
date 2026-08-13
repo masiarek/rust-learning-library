@@ -1,0 +1,60 @@
+
+──── Step 1: One call instead of two — and the type may change
+  Some(4)  map(|v| v*25).unwrap_or(0) = 100 map_or(0, |v| v*25) = 100
+  None     map(|v| v*25).unwrap_or(0) = 0   map_or(0, |v| v*25) = 0
+  Option<u8> -> String: "4 stars" / "no score"
+      unwrap_or can only give you a T. map_or gives you a U, so it is the
+      one to reach for when the fallback and the transformed value are the
+      same KIND of answer — a label, a percentage, a row of a report — but
+      not the type you started with.
+
+──── Step 2: The default is written first and runs last
+  match: Some(q) => q*2, None => 100   -> 80
+  quorum.map_or(100, |q| q * 2)        -> 80
+      Same answer, opposite reading order: the match names the happy case
+      first, map_or names the fallback first. Nothing enforces the habit —
+      but swapping the two arguments is a type error, not a silent bug, so
+      the cost of the surprise is one compile, not one wrong report.
+
+──── Step 3: On a Result, the ERROR closure comes first
+  Ok(4)    map_or_else(|e| .., |v| ..) -> counted 4
+  Err(..)  map_or_else(|e| .., |v| ..) -> skipped — row 7: '4x' is not a number
+      Read the signature, not the name: map_or_else(default, f), and on a
+      Result the 'default' is the closure taking E. So the sad path is
+      written on the left, which is the reverse of every match you have
+      written, where Ok comes first. This is the one member of the family
+      worth double-checking at the call site every single time.
+
+──── Step 4: map_or is eager, map_or_else is lazy — same rule as before
+  scored.map_or(expensive_label(), |v| format!("{v} stars"))
+      (building the fallback label...)
+  -> "4 stars"   (the fallback was built and thrown away)
+  scored.map_or_else(expensive_label, |v| format!("{v} stars"))
+  -> "4 stars"   (nothing printed above: the closure never ran)
+
+──── Step 5: Where clippy pushes you in, and where it pushes you back out
+  IN  — map(f).unwrap_or(d) is clippy::map_unwrap_or (pedantic):
+        "use map_or(<a>, <f>) instead"
+  OUT — map_or over a PREDICATE is clippy::unnecessary_map_or (on by default):
+        Some(4)  map_or(false, |v| v > 3) = true  is_some_and(|v| v > 3) = true
+        Some(4)  map_or(true,  |v| v > 3) = true  is_none_or(|v| v > 3)  = true
+        None     map_or(false, |v| v > 3) = false is_some_and(|v| v > 3) = false
+        None     map_or(true,  |v| v > 3) = true  is_none_or(|v| v > 3)  = true
+      The two nudges are not in conflict: they mark a boundary. When the
+      fallback is a VALUE, map_or beats writing map and unwrap_or. When it
+      is `false` or `true`, you were never defaulting at all — you were
+      asking a yes/no question, and is_some_and / is_none_or say that in
+      words. (is_none_or is the newer of the two: Rust 1.82.)
+
+──── Step 6: Where a match still wins
+  Ada   5/5
+  Ben   —
+  Cara  0/5
+  counted 2, abstained 1, total 5
+      The first loop is exactly what map_or is for: two short expressions
+      producing one value. The second is not — the branches update three
+      counters, and a closure that mutates its environment to be useful is
+      a match wearing a disguise. Neither closure can `?` or `return` out
+      of the enclosing function either, so anything with an early exit is a
+      match or an `if let` and not a debate.
+
