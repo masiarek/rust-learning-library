@@ -54,6 +54,7 @@ NAV_ORDER: dict[str, list[str]] = {
     "01_Foundations": [
         "README.md",
         "option_vs_result",
+        "partial_functions",
         "option_fields",
         "option_as_collection",
     ],

@@ -1,0 +1,43 @@
+
+──── Step 1: The classic partial function, made total
+  divide(10, 2) -> Result: 5
+  divide(10, 0) -> Cannot divide by zero
+      `divide` now has an answer for EVERY pair of f64. That is what
+      'total' means, and it is the whole trick.
+
+──── Step 2: But be careful WHY you are guarding: floats do not panic
+  10.0_f64 / 0.0  = inf
+   0.0_f64 / 0.0  = NaN
+      No panic, no error — IEEE 754 says inf and NaN, and they propagate
+      silently through every later calculation. So the Option is not
+      preventing a crash; it is stopping a WRONG NUMBER from escaping.
+
+──── Step 3: Integers are the case that really does panic
+  10 / 0 -> panicked (caught here only to keep this demo running)
+  10i32.checked_div(0) -> None
+      Same expression, two designs: `/` is partial and panics;
+      `checked_div` is total and hands back None.
+
+──── Step 4: std is full of these — the checked_* family
+  i32::MAX.checked_add(1)  -> None
+  5u32.checked_sub(10)     -> None
+  10i32.checked_rem(0)     -> None
+  2i32.checked_pow(40)     -> None
+      Every one is an operation that is undefined somewhere in its input
+      range, offered as a total function returning Option.
+
+──── Step 5: Collections do it too: indexing vs get()
+  v.first()  -> Some(10)
+  v.last()   -> Some(30)
+  v.get(9)   -> None
+  empty.first() -> None
+      `v[9]` is the partial version and panics. `.get(9)` is the total one.
+      Same data, same question — the return type is the entire difference.
+
+──── Step 6: When None is not enough, the answer is Result
+  sqrt(9.0)  -> Some(3.0)
+  sqrt(-1.0) -> None
+      Here None is fine: there is exactly one reason a real square root
+      is undefined. Once a function can be undefined for SEVERAL reasons,
+      None stops being an answer and you owe the caller a Result.
+
