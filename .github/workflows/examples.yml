@@ -22,3 +22,5 @@ jobs:
         run: rustc --version
       - name: Compile, run, and check every example against its answer key
         run: python3 tools/run_examples.py --check
+      - name: Check the kata index against the Practice sections
+        run: python3 tools/check_katas.py

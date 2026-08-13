@@ -143,7 +143,7 @@ The second column is what makes the unwrap idiom possible at all: `Option<u32>` 
 
 ## Practice
 
-**K2 — the same program, without `Copy`.** Take the program at the top of this page and change `maybe_number: Option<i32>` into `maybe_name: Option<String>`, keeping its shape: an `if let` that uses the value, and a line *after* the block that uses the option again. It will not compile.
+**The same program, without `Copy`.** Take the program at the top of this page and change `maybe_number: Option<i32>` into `maybe_name: Option<String>`, keeping its shape: an `if let` that uses the value, and a line *after* the block that uses the option again. It will not compile.
 
 Read the error before you touch anything — `E0382` names the mechanism itself, in the note. Then make it compile **four** different ways, and decide which one you would ship.
 
