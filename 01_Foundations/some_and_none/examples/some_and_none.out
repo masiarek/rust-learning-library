@@ -1,0 +1,47 @@
+Some and None: reading an Option
+
+──── Step 1: One variable, two possible shapes, one match
+  Some(3) -> your favourite number is 3, good choice
+  None    -> you don't have a favourite number... what?!
+      Same variable, same match, both shapes handled. Delete an arm and
+      the program stops compiling — 'I forgot the None case' is not a
+      bug you can ship.
+
+──── Step 2: `Some(3)` and `Option::Some(3)` are the same thing
+  Some(3) == Option::Some(3) -> true
+  None    == Option::None    -> true
+      Both variants are in the prelude, so the `Option::` prefix is only
+      needed when some other name in scope collides. Write the short form.
+  The annotation is not decoration: `let x = None;` on its own does not
+      compile, because nothing in that line says what T is.
+
+──── Step 3: Getting the value out
+  Some(3).unwrap_or(42)          -> 3
+  None.unwrap_or(42)             -> 42
+  None.unwrap_or_default()       -> 0
+  None.unwrap_or_else(|| 7 * 6)  -> 42
+  None.unwrap()                  -> panicked (caught here only to keep this demo running)
+      `unwrap` and `expect` are the same call; only `expect` leaves behind
+      the sentence you will want six months from now. Neither belongs in
+      code that ships unless you can write down why None is impossible.
+
+──── Step 4: `Some(0)` is not `None` — the trap Python and ABAP both set
+  Some(0).unwrap_or(42) -> 0
+  None.unwrap_or(42)    -> 42
+  Some(0).is_some() -> true
+  Some(0) == None   -> false
+      Python's `favnum or 42` answers 42 for BOTH of these, because 0 is
+      falsy. ABAP says the same with IS INITIAL: 0 and 'never set' are one
+      value. Rust keeps them apart, which is the difference between a
+      ballot that scored a candidate 0 and one that left them blank.
+
+──── Step 5: The trap: `match favnum` MOVES the value, and i32 hides it
+  match fav_num  -> Some(3)
+  fav_num is still usable afterwards -> 3
+      i32 is Copy, so the match copied it. Nothing moved, nothing broke.
+  match &fav_name -> Some(Ada)
+  fav_name is still usable afterwards -> Ada
+      String is NOT Copy. Written the first way — `match fav_name` — the
+      match would move it and the next line would not compile. Matching on
+      a reference borrows instead, which is why `&` is there.
+
