@@ -1,0 +1,50 @@
+
+──── Step 1: An optional owned box
+  has no value
+  has value 9000
+      To use the i32 you must first say what happens when it is not
+      there. The match is not ceremony — it IS the null check, and the
+      compiler will not let you skip it.
+
+──── Step 2: The same trick for borrowed pointers
+  describe(Some(&n)) -> points at 7
+  describe(None)     -> points at nothing
+      `&i32` is the non-nullable reference; `Option<&i32>` is the
+      nullable one. Two different types, so a function's signature
+      says which it accepts and no caller can get it wrong.
+
+──── Step 3: The optional pointer is free — with one exception
+  Box<i32>                  8 bytes
+  Option<Box<i32>>          8
+  &i32                      8
+  Option<&i32>              8
+  *const i32                8
+  Option<*const i32>        16   <- the exception
+      A Box or a reference can never be null, so the compiler spends that
+      impossible bit pattern on None and the tag costs nothing. A RAW
+      pointer is allowed to be null, so it has no spare pattern left and
+      Option has to store a real tag beside it. Same idea as C's nullable
+      pointer, then, but you cannot forget the check.
+
+──── Step 4: In practice you rarely write the whole match
+  if let           got 9000
+  map              Some(18000)
+  map (on None)    None
+  unwrap_or        -1
+  is_some_and      true
+  deref            *p + 1 = 9001
+      Note what `p` is in the Some arm: a Box<i32>, not an i32. It prints
+      and dereferences like the number because Box derefs to its contents.
+      `as_deref()` is the one to remember: Option<Box<T>> -> Option<&T>,
+      so you can look inside without consuming the box.
+
+──── Step 5: Why this type exists at all: a structure that ends
+  1 -> 2 -> 3 -> end   (sum 6)
+  size_of::<Node>()         16 bytes
+      `next: Option<Box<Node>>` carries both halves of the answer. The Box
+      gives Node a known size, without which the type is infinitely large
+      and does not compile; the Option is what lets the chain STOP. A C
+      linked list writes that as a null next-pointer and hopes; here the
+      end of the list is a value the type system knows about — and it still
+      costs 16 bytes a node, with no separate 'is there a next?' flag.
+
