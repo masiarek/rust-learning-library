@@ -166,3 +166,4 @@ rustc --edition 2024 01_Foundations/wrong_guard/examples/wrong_guard.rs -o /tmp/
 - [Partial functions](../partial_functions/README.md) — the general case: a function undefined over part of its input range, and what widening the return type buys
 - [`Option` vs `Result`](../option_vs_result/README.md) — which of the two to reach for, and designing the `E`
 - [Returning `None` on error](../none_on_error/README.md) — the neighbouring downgrade: a real reason thrown away rather than a fake answer invented
+- [What a panic costs](../what_a_panic_costs/README.md) — the other end of the same branch: what it costs when the wrong path wins loudly instead of quietly, and why unwinding tidies your memory but not your half-done work
