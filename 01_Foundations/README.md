@@ -9,9 +9,11 @@ The ideas you meet in your first week of Rust and keep using forever. Each page 
 | [Partial functions](partial_functions/README.md) | 201 | Why `Option` exists at all: it turns a function that is undefined somewhere into one that always answers |
 | [Returning `None` on error](none_on_error/README.md) | 201 | Why `input.parse().ok()` is usually a downgrade: four distinct causes arriving as one indistinguishable `None` |
 | [Initial values](initial_values/README.md) | 201 | The job where `Option` is usually the *wrong* tool — Rust lets you declare without initializing and proves you assigned |
+| [`if let`](if_let/README.md) | 101 | A `match` with one arm — the family (`if let` / `let … else` / `while let` / `matches!`), and the exhaustiveness you trade away |
 | [`Option` fields](option_fields/README.md) | 101 | `Option` in a type definition: required-by-default fields, and when `Option<Vec<T>>` is right |
 | [`Option` is a one-item collection](option_as_collection/README.md) | 201 | It iterates; `None` really is variant 0; and why the tag is often free |
 | [Nullable pointers](nullable_pointers/README.md) | 201 | Rust has no null, so an absent pointer is a different type — `Option<Box<T>>`, free, and what makes a recursive type possible |
+| [The `Result` you are reading is probably an alias](result_aliases/README.md) | 201 | `io::Result<T>` is `Result<T, io::Error>` — how to expand an alias and read what can actually go wrong, plus `Ok(())` and `Infallible` |
 | [A score is not a number](newtype_score/README.md) | 101 → 201 | The newtype: one private field, one validating door, and why privacy is per *module* |
 | [What is a ballot, in memory?](representing_a_ballot/README.md) | 201 | Array vs `Vec` vs tuple vs struct vs map vs flat matrix — and which bugs each one makes writeable |
 
@@ -23,9 +25,9 @@ The [`std::option` module docs](https://doc.rust-lang.org/core/option/) list wha
 
 | Job | Covered by |
 |---|---|
-| Initial values | [`Option` fields](option_fields/README.md) — `Default` gives `None` for every `T` |
+| Initial values | [Initial values](initial_values/README.md) — and why deferred initialization usually beats it |
 | Return values for **partial functions** (undefined over part of their input range) | [Partial functions](partial_functions/README.md) |
-| Reporting **simple errors**, returning `None` on failure | [`Option` vs `Result`](option_vs_result/README.md) — and when to stop doing this and return `Result` |
+| Reporting **simple errors**, returning `None` on failure | [Returning `None` on error](none_on_error/README.md) — where "simple" is the load-bearing word |
 | Optional **struct fields** | [`Option` fields](option_fields/README.md) |
 | Fields that can be **loaned or taken** | [one-item collection](option_as_collection/README.md) — `take()` / `replace()` |
 | Optional **function arguments** | *not yet written* |

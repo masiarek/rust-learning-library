@@ -1,10 +1,12 @@
 
-──── Step 1: Yes — you can `for` over an Option
+──── Step 1: Yes — you can `for` over an Option (and still shouldn't)
   for i in Some(5)       -> body ran, i = 5
   for i in None::<i32>   -> body never ran
   Some(5).iter().count()     = 1
   None::<i32>.iter().count() = 0
       An Option is a Vec that can never hold more than one thing.
+      rustc warns on the loops above — 'more readably written as an
+      if let' — and it is right. The impl earns its keep in Step 2.
 
 ──── Step 2: So every iterator adapter already works on it
   flatten     [Some(1), None, Some(3)] -> [1, 3]

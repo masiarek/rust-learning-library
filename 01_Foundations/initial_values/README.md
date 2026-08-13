@@ -89,6 +89,8 @@ Prefer it over a `mut Option` in a global: it guarantees the value is written *e
   The initial value is: 42
       It works. But notice what it costs: a `mut`, a wrapper, and a `match`
       over a case that — by the time we look — cannot happen.
+      rustc agrees, and says so: "value assigned to `initial_value` is
+      never read" — the placeholder was dead the moment it was written.
 
 ──── Step 2: What Rust actually offers: declare now, assign later
   settled = 42

@@ -10,6 +10,11 @@ fn banner(n: u32, title: &str) {
 }
 
 // ─────────────────────────────────────────────────────────── Step 1
+// The `allow` is deliberate, and it IS the lesson: rustc says
+//   warning: value assigned to `initial_value` is never read
+// about the `= None`, because nothing ever reads it before the real value lands.
+// The compiler has spotted the placeholder for what it is.
+#[allow(unused_assignments)]
 fn step1() {
     banner(1, "The pattern you will see written first");
 
@@ -22,6 +27,8 @@ fn step1() {
     }
     println!("      It works. But notice what it costs: a `mut`, a wrapper, and a `match`");
     println!("      over a case that — by the time we look — cannot happen.");
+    println!("      rustc agrees, and says so: \"value assigned to `initial_value` is");
+    println!("      never read\" — the placeholder was dead the moment it was written.");
 }
 
 // ─────────────────────────────────────────────────────────── Step 2

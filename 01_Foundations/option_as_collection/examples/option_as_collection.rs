@@ -13,8 +13,16 @@ fn banner(n: u32, title: &str) {
 }
 
 // ─────────────────────────────────────────────────────────── Step 1
+// The `allow` is deliberate. rustc's `for_loops_over_fallibles` lint fires here:
+//   warning: for loop over an `Option`. This is more readably written as an
+//            `if let` statement
+// It is right, and that is worth demonstrating rather than hiding: a bare `for`
+// over an Option is legal, proves the point, and is still not what you should
+// write. The value of the IntoIterator impl is in Step 2, where the Option is
+// fed to an adapter rather than looped over directly.
+#[allow(for_loops_over_fallibles)]
 fn step1() {
-    banner(1, "Yes — you can `for` over an Option");
+    banner(1, "Yes — you can `for` over an Option (and still shouldn't)");
 
     for i in Some(5) {
         println!("  for i in Some(5)       -> body ran, i = {i}");
@@ -27,6 +35,8 @@ fn step1() {
     println!("  Some(5).iter().count()     = {}", Some(5).iter().count());
     println!("  None::<i32>.iter().count() = {}", None::<i32>.iter().count());
     println!("      An Option is a Vec that can never hold more than one thing.");
+    println!("      rustc warns on the loops above — 'more readably written as an");
+    println!("      if let' — and it is right. The impl earns its keep in Step 2.");
 }
 
 // ─────────────────────────────────────────────────────────── Step 2

@@ -1,0 +1,45 @@
+
+──── Step 1: The function, and the one-liner it already is
+  parse_integer("42") -> Parsed value: 42
+  parse_integer("abc") -> Failed to parse integer
+  "42".parse::<i32>().ok()  -> Some(42)
+  "abc".parse::<i32>().ok() -> None
+  agree on every input?      true
+
+──── Step 2: What the downgrade threw away
+  input              as Result                                      as Option
+  "abc"              Err(ParseIntError { kind: InvalidDigit })      None
+  ""                 Err(ParseIntError { kind: Empty })             None
+  "99999999999999"   Err(ParseIntError { kind: PosOverflow })       None
+  "-99999999999999"  Err(ParseIntError { kind: NegOverflow })       None
+  "4.5"              Err(ParseIntError { kind: InvalidDigit })      None
+      FIVE inputs, FOUR distinct causes — InvalidDigit, Empty, PosOverflow,
+      NegOverflow — and all of them arrive as the same None.
+
+──── Step 3: The cost lands on whoever reads the message
+  input "99999999999999"
+    kept Result  -> that didn't work — number too large to fit in target type
+    downgraded   -> Failed to parse integer
+  input ""
+    kept Result  -> that didn't work — cannot parse integer from empty string
+    downgraded   -> Failed to parse integer
+      A user who typed too many digits is told the same thing as one who
+      typed nothing. The information existed; the return type discarded it.
+
+──── Step 4: When None-on-error is exactly right
+  '7'.to_digit(10)   -> Some(7)
+  'x'.to_digit(10)   -> None
+  'f'.to_digit(16)   -> Some(15)
+  find("ada")        -> Some(1)
+  find("zoe")        -> None
+      One cause each: the char is not a digit in that radix; the name is not
+      on the roster. There is no second reason for a caller to distinguish.
+
+──── Step 5: Going the other way when you need to
+  read_field(Some("42")) -> Ok(42)
+  read_field(None) -> Err: the field was not supplied
+  read_field(Some("abc")) -> Err: not a number — invalid digit found in string
+      ok_or supplies the reason Option could not carry. And note the default:
+      return the Result. A caller who does not care can always call .ok();
+      a caller who does care cannot invent what you already threw away.
+

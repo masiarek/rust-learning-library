@@ -126,8 +126,19 @@ def rendered_block(stem: str, src: Path, output: str, page: Path) -> str:
     )
 
 
-def fill_pages(outputs: dict[str, str], sources: dict[str, Path], write: bool) -> list[str]:
-    """Refill every output block on every Markdown page. Returns drift descriptions."""
+def fill_pages(
+    outputs: dict[str, str],
+    sources: dict[str, Path],
+    write: bool,
+    problems: list[str],
+) -> list[str]:
+    """Refill every output block on every Markdown page. Returns drift descriptions.
+
+    A block naming a stem that no longer exists is recorded in `problems` and left
+    untouched, rather than exiting on the spot. It is still a failure — but dying
+    on the first one would leave every *other* page unfilled, which matters when a
+    page mid-rename is sitting in the working tree beside work that is ready.
+    """
     drift: list[str] = []
     for page in sorted(walk(REPO)):
         if page.suffix != ".md":
@@ -144,10 +155,11 @@ def fill_pages(outputs: dict[str, str], sources: dict[str, Path], write: bool) -
                 return m.group(0)
             stem = m.group("stem")
             if stem not in outputs:
-                sys.exit(
-                    f"ERROR: {page.relative_to(REPO)} asks for output block {stem!r}, "
-                    "but no examples/*.rs has that stem."
+                problems.append(
+                    f"{page.relative_to(REPO)}: asks for output block {stem!r}, "
+                    "but no examples/*.rs has that stem"
                 )
+                return m.group(0)
             return (
                 m.group("open")
                 + rendered_block(stem, sources[stem], outputs[stem], page)
@@ -198,7 +210,7 @@ def main() -> int:
             else:
                 print(f"  ok        {src.relative_to(REPO)}")
 
-    drift = fill_pages(outputs, examples, write=not args.check)
+    drift = fill_pages(outputs, examples, write=not args.check, problems=failures)
 
     if args.check and drift:
         failures.append(
