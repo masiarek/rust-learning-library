@@ -63,7 +63,7 @@ So the rule of thumb: **`if let` when you genuinely mean "this one shape, and I 
 |---|---|---|
 | one shape, nothing otherwise | `if let Some(x) = v { … }` | the empty arm deleted |
 | one shape, or leave this scope | `let Some(x) = v else { return; };` | the happy path stays unindented |
-| repeat while the shape keeps matching | `while let Some(x) = stack.pop() { … }` | the `None` *is* the loop's exit condition |
+| repeat while the shape keeps matching | [`while let Some(x) = stack.pop() { … }`](../while_let/README.md) | the `None` *is* the loop's exit condition |
 | just a `bool` | `matches!(v, Some(n) if n > 4)` | if the answer is a bool, ask for a bool |
 
 [`let … else`](../option_vs_result/README.md) is the one worth internalising early. It inverts `if let`: instead of indenting the work you came to do, it deals with the failure and leaves the binding in scope at the left margin for the whole rest of the function. The `else` block must **diverge** — `return`, `break`, `continue`, `panic!` — which is what lets the compiler treat the binding as unconditionally present afterwards.
@@ -201,6 +201,7 @@ rustc --edition 2024 01_Foundations/if_let/examples/if_let.rs -o /tmp/il && /tmp
 ## See also
 
 - [`Option` vs `Result`](../option_vs_result/README.md) — where these patterns get used, and `let … else` in its natural habitat
+- [`while let`](../while_let/README.md) — the same head in a loop, where the pattern failing is how it ends
 - [Partial functions](../partial_functions/README.md) — why `pop()` and `first()` return an `Option` for `while let` and `if let` to consume
 - [`Option` is a one-item collection](../option_as_collection/README.md) — the other way to handle one arm: `map`, `and_then`, `is_some_and`
 - [The Rust Reference on `if let`](https://doc.rust-lang.org/reference/expressions/if-expr.html#if-let-expressions) and [`let` statements with an `else`](https://doc.rust-lang.org/reference/statements.html#let-statements)

@@ -59,6 +59,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "some_and_none",
         "option_vs_result",
         "if_let",
+        "while_let",
         "unwrap_or",
         "unwrap_or_else",
         "unwrap_or_default",
@@ -88,6 +89,7 @@ NAV_ORDER: dict[str, list[str]] = {
 # Folder names whose label the word-by-word caser cannot get right.
 LABELS = {
     "if_let": "`if let`",
+    "while_let": "`while let`",
 }
 
 PREFIX = re.compile(r"^\d+[_\-]")

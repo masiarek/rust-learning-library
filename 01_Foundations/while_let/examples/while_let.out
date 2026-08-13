@@ -1,0 +1,59 @@
+
+──── Step 1: The exit condition IS the pattern
+  popped 30, 2 left
+  popped 20, 1 left
+  popped 10, 0 left
+      `pop()` is a partial function returning Option, so running out
+      of items and ending the loop are the same event. Nothing here
+      counts, indexes, or checks a length.
+
+──── Step 2: The bug `if let` cannot have: a body that makes no progress
+  pass 1: top is still 30
+  pass 2: top is still 30
+  pass 3: top is still 30
+  pass 4: top is still 30
+  ...stopped by hand at 4 — nothing in the loop was ever going to stop it
+      An `if let` runs once whatever you write in it. A `while let`
+      re-tests the pattern, and the compiler will not check that the
+      body changed anything. The scrutinee has to CONSUME.
+
+──── Step 3: Where the borrow ends decides whether you may consume
+  read 30, then popped it
+  read 20, then popped it
+  read 10, then popped it
+      Move the `println!` of `top` below the `pop()` and this stops
+      compiling with E0502 — the immutable borrow from `last()` is
+      still live at that point. Same two statements, opposite order,
+      and the difference is the last USE of the binding, not the pop.
+
+──── Step 4: `for` is this loop, already written for you
+  for            -> Ada Ben Cara
+  while let      -> Ada Ben Cara
+      Identical, because `for` desugars to roughly the second one.
+      Hand-writing it is usually a downgrade — unless you need the
+      iterator itself between passes, which `for` has moved away.
+
+──── Step 5: When you DO need the iterator: peeking and taking
+  runs           -> 5×3 3×2 0×1
+  first two [5, 5], then the rest -> 5 3 3 0
+      Both halves need the iterator to survive between passes, which
+      is the one thing `for` takes away. That — not style — is when
+      the hand-written loop is the right call.
+
+──── Step 6: Not just Option: any pattern that eventually stops matching
+  received 5, running total 5
+  received 3, running total 8
+  received 0, running total 8
+  channel closed, final total 8
+      Convenient, and it carries `if let`'s trade into a loop: `Err`
+      ends it, and a disconnect and a real error are now the same
+      event. If those deserve different handling, write the `match`.
+
+──── Step 7: There is no `while let … else`
+  first_two(&[5, 3, 0]) -> Some((5, 3))
+  first_two(&[5])       -> None
+      `while … else` is a hard error: "`while...else` loops are not
+      supported". A loop's pattern failing is its NORMAL ending, so
+      there is nothing for an else to mean. Put the escape inside the
+      body with `let … else`, or check after the loop.
+
