@@ -9,6 +9,7 @@ The ideas you meet in your first week of Rust and keep using forever. Each page 
 | [Partial functions](partial_functions/README.md) | 201 | Why `Option` exists at all: it turns a function that is undefined somewhere into one that always answers |
 | [Returning `None` on error](none_on_error/README.md) | 201 | Why `input.parse().ok()` is usually a downgrade: four distinct causes arriving as one indistinguishable `None` |
 | [Initial values](initial_values/README.md) | 201 | The job where `Option` is usually the *wrong* tool — Rust lets you declare without initializing and proves you assigned |
+| [Optional function arguments](optional_arguments/README.md) | 201 | No default parameters, no overloading — the five shapes that replace them, and why `Option<&T>` beats `&Option<T>` |
 | [`if let`](if_let/README.md) | 101 | A `match` with one arm — the family (`if let` / `let … else` / `while let` / `matches!`), and the exhaustiveness you trade away |
 | [`unwrap_or`](unwrap_or/README.md) | 201 | The default you already have — eager, consuming, and it erases the very difference it stood in for |
 | [What a panic costs](what_a_panic_costs/README.md) | 201 | The other half of `unwrap`: where the panic points, what unwinding gives back (memory) and what it does not (your work), and why the exit code is 101 |
@@ -33,17 +34,18 @@ The [`std::option` module docs](https://doc.rust-lang.org/core/option/) list wha
 | Reporting **simple errors**, returning `None` on failure | [Returning `None` on error](none_on_error/README.md) — where "simple" is the load-bearing word |
 | Optional **struct fields** | [`Option` fields](option_fields/README.md) |
 | Fields that can be **loaned or taken** | [one-item collection](option_as_collection/README.md) — `take()` / `replace()` |
-| Optional **function arguments** | *not yet written* |
+| Optional **function arguments** | [Optional function arguments](optional_arguments/README.md) — and the four alternatives that usually beat it |
 | **Nullable pointers** | [Nullable pointers](nullable_pointers/README.md) — `Option<Box<T>>`, the niche that makes it free, and the recursive type it unlocks |
 | **Swapping** things out of difficult situations | [one-item collection](option_as_collection/README.md) — `take()` against the borrow checker |
 
 "Partial function" is the phrase worth keeping, and it now has [its own page](partial_functions/README.md). A function undefined for some of its inputs — `first()` on an empty list, square root of a negative — is exactly the shape `Option` exists to make total: returning `Option<T>` turns a function that *sometimes has no answer* into one that *always* has an answer, where "no answer" is one of the answers.
 
+**Every row in that table now has a page.**
+
 ## Planned
 
 Rough order, not a promise. Each becomes a page once it has a runnable example worth reading:
 
-- **Optional function arguments** — the last unwritten row in the table above
 - **Ownership and moves** — why a value can only have one owner, and what "moved" means in an error message
 - **Borrowing** — `&T` and `&mut T`, and the one-writer-or-many-readers rule
 - **Lifetimes** — what `'a` is actually annotating, and why most of the time you write none

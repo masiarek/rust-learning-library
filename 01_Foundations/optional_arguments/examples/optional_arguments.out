@@ -1,0 +1,43 @@
+
+──── Step 1: No default arguments — so std writes a second function
+  open("a.txt")                     -> a.txt [read]
+  open_with_mode("a.txt", "append") -> a.txt [append]
+      This is Vec::new / Vec::with_capacity, HashMap::new / with_capacity.
+      Two names beat one name plus a None nobody can read.
+
+──── Step 2: The Option parameter, and what it costs the CALLER
+  connect("a.io", None, None)          -> a.io:443 (timeout 30s)
+  connect("a.io", Some(80), None)      -> a.io:80 (timeout 30s)
+  connect("a.io", None, Some(5))       -> a.io:443 (timeout 5s)
+      Every call site must spell out every argument, including the ones it
+      does not care about — and `None, None` says nothing about WHICH knobs
+      were skipped. Two Nones is tolerable; five is a puzzle.
+
+──── Step 3: Option<&T> in argument position, never &Option<T>
+  greet_flexible(Some("Ben"))       -> hello, Ben
+  greet_flexible(owned.as_deref())  -> hello, Ada
+  greet_flexible(None)              -> hello, stranger
+  greet_rigid(&owned)               -> hello, Ada
+      greet_rigid demands a real Option<String> to point at. A caller holding
+      a plain &str has to BUILD one — allocating a String and an Option — to
+      call it. Option<&T> takes both, so it is the one to write.
+
+──── Step 4: impl Into<Option<T>>: pass the bare value OR None
+  retries(5)     -> 5
+  retries(None)  -> 3
+      `impl From<T> for Option<T>` exists, so 5 converts to Some(5).
+      Cute, and rare on purpose: it weakens inference, it does not compose
+      past one or two arguments, and the signature stops being obvious.
+
+──── Step 5: An options struct: the arguments get their names back
+  a.io:443 (timeout 30s, 3 retries)
+  a.io:443 (timeout 5s, 3 retries)
+      `timeout: Some(5)` says at the call site which knob was turned.
+      Adding a fourth option later does not touch a single existing caller.
+
+──── Step 6: The builder: for when there are many, and defaults are real values
+  POST https://a.io (5 retries)
+  GET https://a.io (3 retries)   <- untouched defaults
+      Note there is no Option anywhere: the defaults are ordinary values held
+      by the builder. Option only appears when 'unset' differs from any value.
+
