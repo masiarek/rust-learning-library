@@ -80,8 +80,6 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Move** — Transferring ownership. The bytes do not travel; what changes is who owes the free, and therefore when it happens. The source variable becomes unusable by name. → [Ownership and moves](01_Foundations/ownership_and_moves/README.md)
 
-**`Copy`** — The marker for types where duplicating the bytes duplicates nothing else (`i32`, `bool`, `char`, `&T`). Those are copied instead of moved; a `String` cannot be, because two owners of one allocation would mean two frees. → [Ownership and moves](01_Foundations/ownership_and_moves/README.md)
-
 **`Drop`** — The code that runs when a value's owner goes out of scope. Implementing it is the easiest way to *watch* ownership, since the value announces its own death. → [Ownership and moves](01_Foundations/ownership_and_moves/README.md)
 
 **Partial move** — Moving one field out of a struct, leaving the other fields readable but the struct as a whole unusable. Ownership is tracked per field, not per variable. → [Ownership and moves](01_Foundations/ownership_and_moves/README.md)
