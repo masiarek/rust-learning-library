@@ -129,3 +129,13 @@ Short definitions. Every entry links to the page that explains it properly — a
 **Binary target** — A compilation unit with a `main`, which Cargo turns into one executable. `src/main.rs`, every `src/bin/*.rs`, and every `[[bin]]` entry in the manifest is one; the auto-discovered ones do not replace the listed ones. → [Running a scratch program](01_Foundations/rustc_without_cargo/README.md)
 
 **`rustc --test`** — Builds the test harness as the entry point instead of your `main`, which is what `cargo test` runs underneath. It works on a loose file, so a single-file example can still have real `#[test]` functions. → [Running a scratch program](01_Foundations/rustc_without_cargo/README.md)
+
+**Cranelift** — An alternative code-generation backend to LLVM, tuned to emit machine code *quickly* rather than to emit quick machine code. Nightly-only and right for `[profile.dev]` alone: on a release profile it hands you a slower binary. → [Compile times](05_Tooling/compile_times/README.md)
+
+**Monomorphization** — Compiling one generic function separately for each concrete type it is used with. It is what makes generics cost nothing at runtime, and it is why a generics-heavy crate spends most of its build in codegen. → [Compile times](05_Tooling/compile_times/README.md)
+
+**`cargo build --timings`** — Writes an HTML chart of how long each crate in the build took and which ones blocked others. The thing to run *before* changing any build setting, because which optimization helps is a property of the project. → [Compile times](05_Tooling/compile_times/README.md)
+
+**`line-tables-only`** — A `[profile.dev] debug` setting keeping just enough DWARF to resolve a backtrace to a file and line, dropping the type and variable information a debugger needs. Cheap to produce and much cheaper to link. → [Compile times](05_Tooling/compile_times/README.md)
+
+**Parallel front end** — rustc's nightly `-Z threads=N`, which multi-threads parsing, type checking and borrow checking. The *back* end has been parallel for years; this is the half that used to leave your other cores idle. → [Compile times](05_Tooling/compile_times/README.md)

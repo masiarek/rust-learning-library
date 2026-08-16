@@ -19,7 +19,7 @@ No page here hand-types what a program prints. Each lesson links a real `.rs` fi
 | [Running a scratch program](01_Foundations/rustc_without_cargo/README.md) | How to run a `.rs` file at all — `rustc` alone, `cargo new`, and the edition flag Cargo would have passed for you |
 | [`Option` vs `Result`](01_Foundations/option_vs_result/README.md) | When absence is normal and when it is a failure — and the one question that decides which type you want |
 
-More lessons land in [`01_Foundations/`](01_Foundations/README.md) as they are written, and the ones that assume it — shared state across threads, `unsafe`, FFI — in [`09_Advanced/`](09_Advanced/README.md).
+More lessons land in [`01_Foundations/`](01_Foundations/README.md) as they are written; the ones about the toolchain rather than the language — `cargo`, build profiles, compile times — in [`05_Tooling/`](05_Tooling/README.md); and the ones that assume the foundations — shared state across threads, `unsafe`, FFI — in [`09_Advanced/`](09_Advanced/README.md).
 
 Every lesson explains; some of them also ask you to type. Those exercises are collected in [**KATAS.md**](KATAS.md), which is the only place they are ordered — each kata itself sits on the page for the topic it teaches, with a solution CI compiles and runs.
 

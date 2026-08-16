@@ -43,9 +43,10 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K23 | [Expand the alias — follow a one-parameter `Result` back to the list of things that can go wrong](01_Foundations/result_aliases/README.md#practice) | [The `Result` you are reading is probably an alias](01_Foundations/result_aliases/README.md) | 201 |
 | K24 | [Guard the input that has no answer — find the case the careful-looking guard lets through](01_Foundations/wrong_guard/README.md#practice) | [Zero wins is not zero games](01_Foundations/wrong_guard/README.md) | 201 |
 | K25 | [The `Result` the lock hands you — a thread dies mid-update, and you answer it three ways](09_Advanced/mutex_poisoning/README.md#practice) | [Lock poisoning](09_Advanced/mutex_poisoning/README.md) | 301 |
+| K26 | [Credit a fourth knob honestly — the same linker swap, first and last in the ladder](05_Tooling/compile_times/README.md#practice) | [Compile times](05_Tooling/compile_times/README.md) | 201 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
-Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
+Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
 
 ## Adding one
 
