@@ -1,0 +1,15 @@
+Linker swapped FIRST:
+  linker = "lld"                  - 6.60 s   ( 83.4 s left)
+  debug = "line-tables-only"      -14.06 s   ( 69.3 s left)
+  -Z threads=8                    - 8.80 s   ( 60.5 s left)
+  codegen-backend = cranelift     -17.10 s   ( 43.4 s left)
+
+Linker swapped LAST:
+  debug = "line-tables-only"      -16.70 s   ( 73.3 s left)
+  -Z threads=8                    - 8.80 s   ( 64.5 s left)
+  codegen-backend = cranelift     -17.10 s   ( 47.4 s left)
+  linker = "lld"                  - 3.96 s   ( 43.4 s left)
+
+Same four changes, same final build: 43.44 s and 43.44 s.
+But the linker swap is credited with 6.60 s in one order and 3.96 s in the other, so "lld saved us N seconds" is a fact about the ORDER, not about lld.
+Overall: 90.0 s -> 43.4 s, a 52% cut.

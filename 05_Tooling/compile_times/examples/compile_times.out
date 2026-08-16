@@ -1,0 +1,19 @@
+Clean debug build, as measured:              90.0 s
+
+after adding                       total    saved  needs
+-------------------------------------------------------------
+debug = "line-tables-only"        73.3 s    18.6%  stable
+-Z threads=8                      64.5 s    28.3%  nightly
+codegen-backend = cranelift       47.4 s    47.3%  nightly
+
+phase                        before    after   removed
+-------------------------------------------------------------
+parse & macro expansion       4.0 s    4.0 s     0.0 s
+type & borrow check          22.0 s   13.2 s     8.8 s
+codegen (LLVM)               38.0 s   20.9 s    17.1 s
+debug info                   14.0 s    2.1 s    11.9 s
+link                         12.0 s    7.2 s     4.8 s
+
+90.0 s -> 47.4 s, a 47% cut.
+The floor: 4.0 s no knob reached, now 8% of the build.
+The next thing worth attacking is codegen (LLVM) at 20.9 s.
