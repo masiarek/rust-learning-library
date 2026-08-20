@@ -1,0 +1,58 @@
+
+──── Step 1: The six kinds of zero
+  char   variant                          tallies as
+   0     scored                           0
+   -     blank                            0
+   ~     race abstention                  0
+   &     candidate abstention             0
+   ?     spoiled                          0
+   %     spoiled + reissued               0
+      Every row adds zero to the total. Six different things
+      happened, and a report that says only "0" has lost five of them.
+
+──── Step 2: Option can tell two of them apart, and that is all
+  Option<Stars>  [Some(Zero), None, None, None, None, None]
+      Some(Stars(0)) is the voter who wrote a zero. The five Nones
+      are five different voters, and Option has one shape for all
+      of them. `Option` is not "the maybe type" — it is a sum type
+      with exactly two variants, and you have six cases.
+
+──── Step 3: Two tempting wrong turns
+  sentinel u8    [0, 255, 254, 253, 252, 251]
+      Works until somebody sums the column. 255 is a NUMBER; the
+      compiler will happily add it to a tally, and 0..=5 no longer
+      describes the type. You have widened the thing you narrowed.
+  parallel flags scores [0, 0, 0, 0, 0, 0] is_marker [false, true, true, true, true, true]
+      Two Vecs that must be edited together — the desync bug from
+      the ballot lesson, reintroduced. And it still cannot say WHICH
+      marker, so a third parallel Vec is coming.
+
+──── Step 4: The enum, and a projection that is lossy on purpose
+  ballot  5,-,3,~,?,%
+    cell 0  scored               -> tallies 5   paper-only: false
+    cell 1  blank                -> tallies 0   paper-only: false
+    cell 2  scored               -> tallies 3   paper-only: false
+    cell 3  race abstention      -> tallies 0   paper-only: true
+    cell 4  spoiled              -> tallies 0   paper-only: true
+    cell 5  spoiled + reissued   -> tallies 0   paper-only: true
+  total = 8
+      tally_value() throws five distinctions away, and that is
+      correct — the arithmetic genuinely does not care. The type
+      keeps what the projection discards, so the audit still can.
+
+──── Step 5: The report the type makes possible
+  Paper: 12 cells, 6 non-scores, 4 of them paper-only
+  Online: 12 cells, 3 non-scores, 0 of them paper-only
+      Pooled, that reads "paper voters are sloppier." Split, it reads
+      "only paper voters CAN produce four of the six marks." Same
+      numbers, opposite conclusion — which is why the channel has to
+      be in the type too, not in a comment.
+
+──── Step 6: What it costs
+  size_of::<Stars>()          = 1
+  size_of::<Mark>()           = 1
+  size_of::<Option<Mark>>()   = 1
+      Six score values plus five markers is eleven states, and a byte
+      holds 256. Option<Mark> is still one byte, because the compiler
+      parks None in a bit pattern Mark never uses. Remembering all six
+      distinctions costs exactly nothing over storing the digit.

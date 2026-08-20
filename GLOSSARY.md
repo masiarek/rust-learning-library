@@ -62,6 +62,10 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Niche** — A bit pattern a type can never legally hold (null for a `Box`, any byte but 0/1 for a `bool`). `None` takes the niche when one exists, which is why the wrapper is often free. → [`Option` is a one-item collection](01_Foundations/option_as_collection/README.md)
 
+**Exhaustiveness** — A `match` must cover every variant, or it does not compile. The value is not the check itself but what it does later: add a variant and every match that ignores it becomes a build error, so the list of places to revisit is computed rather than remembered. A `_` arm opts out permanently — it is a promise that every *future* variant belongs in that bucket. → [Six kinds of zero](01_Foundations/six_kinds_of_zero/README.md)
+
+**Sum type (tagged union)** — A type that is exactly one of several alternatives, each free to carry different data. `Option` is one with two variants and no special powers; when a problem has six cases, writing your own is the idiomatic move, not a departure. → [Six kinds of zero](01_Foundations/six_kinds_of_zero/README.md)
+
 **Null-pointer optimization** — The niche rule applied to pointers: `Option<Box<T>>` is the same size as `Box<T>`, because null was never a legal `Box`. Null safety at zero runtime cost. → [`Option` vs `Result`](01_Foundations/option_vs_result/README.md)
 
 **Panic** — The unrecoverable failure: the thread gives up, its stack unwinds, and no caller gets to decide. `unwrap` chooses one on your behalf; an uncaught one leaves the process with exit code **101**, not 1. → [What a panic costs](01_Foundations/what_a_panic_costs/README.md)

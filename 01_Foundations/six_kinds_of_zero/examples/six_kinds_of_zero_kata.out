@@ -1,0 +1,33 @@
+Eight cells, two audit reports of the same stack:
+
+  with `_ => "blank"`   [("abstention", 2), ("blank", 3), ("scored", 2), ("spoiled", 1)]
+  exhaustive            [("abstention", 2), ("blank", 1), ("scored", 2), ("spoiled", 3)]
+
+  The two reissued ballots landed in "blank" on the first report.
+  Nothing failed. It compiled, it ran, and it filed two spoiled
+  ballots as voters who declined to mark the box — which is the
+  difference between a printing fault and an electorate's opinion.
+
+What the second function did this morning, before it was fixed —
+real rustc output, not a paraphrase:
+
+    error[E0004]: non-exhaustive patterns: `Mark::SpoiledReissued` not covered
+       |
+       |     match m {
+       |           ^ pattern `Mark::SpoiledReissued` not covered
+       |
+    help: ensure that all possible cases are being handled by adding a match
+          arm with a wildcard pattern or an explicit pattern as shown
+       |
+       ~         Mark::Spoiled => "spoiled",
+       ~         Mark::SpoiledReissued => todo!(),
+
+  Read the help text closely: rustc offers you the wildcard as a fix.
+  Taking it turns this compile error into the silent miscount above,
+  for every marker anyone adds afterwards. `_` is not a shortcut —
+  it is a standing promise that every FUTURE variant belongs in that
+  bucket, made on behalf of people who have not written them yet.
+
+  Where a wildcard IS right: matching on something genuinely open,
+  like a char from a file. `_ => return Err(other)` is a real answer
+  to 'any other character', because there is no finite list to name.

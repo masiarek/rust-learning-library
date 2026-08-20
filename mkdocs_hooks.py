@@ -85,6 +85,8 @@ NAV_ORDER: dict[str, list[str]] = {
         "borrowing",
         "newtype_score",
         "representing_a_ballot",
+        # The sequel: "blank is not zero" stops at two cases; markers need six.
+        "six_kinds_of_zero",
     ],
     "05_Tooling": [
         "README.md",
