@@ -143,3 +143,9 @@ Short definitions. Every entry links to the page that explains it properly — a
 **`line-tables-only`** — A `[profile.dev] debug` setting keeping just enough DWARF to resolve a backtrace to a file and line, dropping the type and variable information a debugger needs. Cheap to produce and much cheaper to link. → [Compile times](05_Tooling/compile_times/README.md)
 
 **Parallel front end** — rustc's nightly `-Z threads=N`, which multi-threads parsing, type checking and borrow checking. The *back* end has been parallel for years; this is the half that used to leave your other cores idle. → [Compile times](05_Tooling/compile_times/README.md)
+
+**Typestate** — Encoding what stage a value has reached into its *type*, so that operations valid only at one stage do not exist at the others. An unauthenticated request and an authenticated one become different types rather than one type with a boolean. → [The right to vote is a value](09_Advanced/one_person_one_vote/README.md)
+
+**Consuming method** — A method taking `self` by value rather than `&self`, so calling it moves the receiver and the caller cannot use it again. Turns "at most once" from a rule you enforce into one the borrow checker enforces. → [The right to vote is a value](09_Advanced/one_person_one_vote/README.md)
+
+**Extractor** — A web-framework type built from the incoming request before the handler runs, which fails the request instead of returning if it cannot be built. A handler's argument list is therefore its access-control policy; `rocket` calls the same idea a *request guard*. → [The right to vote is a value](09_Advanced/one_person_one_vote/README.md)

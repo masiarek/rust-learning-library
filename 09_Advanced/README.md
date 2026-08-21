@@ -7,6 +7,7 @@ Each page is still one idea with a program you can compile and run beside it.
 | Lesson | Level | What it teaches |
 |---|---|---|
 | [Lock poisoning](mutex_poisoning/README.md) | 301 | Why `Mutex::lock()` returns a `Result` at all, what your `.unwrap()` is deciding on someone's behalf, and the three honest answers |
+| [The right to vote is a value](one_person_one_vote/README.md) | 301 | Authentication as a type rather than a boolean — a permission that cannot be forged, a `cast` that spends it, and the hole move semantics still cannot close |
 
 ## Planned
 
