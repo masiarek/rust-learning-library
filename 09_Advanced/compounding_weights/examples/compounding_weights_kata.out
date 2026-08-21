@@ -1,0 +1,34 @@
+700 ballots, 16 candidates, 10 seats — 6 electorates
+
+     exact count finished on 6 of 6, ran out of i128 on 0
+
+     scale   reproduces the exact winner list
+     10^18   6 of 6
+     10^12   6 of 6
+     10^9    6 of 6
+     10^6    6 of 6
+     10^4    6 of 6
+     10^2    4 of 6   <-- diverges
+
+2000 ballots, 30 candidates, 20 seats — 6 electorates
+
+     exact count finished on 5 of 6, ran out of i128 on 1
+     (the fixed-point count returned a committee on all 6)
+
+     scale   reproduces the exact winner list
+     10^18   5 of 5
+     10^12   5 of 5
+     10^9    5 of 5
+     10^6    5 of 5
+     10^4    5 of 5
+     10^2    1 of 5   <-- diverges
+
+Four decimal places reproduce every exact answer anyone could check.
+Two do not. The exact count that ran out of i128 was working to 68-odd
+bits of denominator to reach a result that 10^4 also reaches.
+
+What that establishes: on these electorates, at these sizes, the
+approximation and the exact answer agree. What it does not establish:
+anything at all about an election with a tied round, which is exactly
+where a truncated weight and an exact one part company, and exactly the
+case the companion lesson opened with.
