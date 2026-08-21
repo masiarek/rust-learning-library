@@ -8,6 +8,7 @@ Each page is still one idea with a program you can compile and run beside it.
 |---|---|---|
 | [Lock poisoning](mutex_poisoning/README.md) | 301 | Why `Mutex::lock()` returns a `Result` at all, what your `.unwrap()` is deciding on someone's behalf, and the three honest answers |
 | [The right to vote is a value](one_person_one_vote/README.md) | 301 | Authentication as a type rather than a boolean — a permission that cannot be forged, a `cast` that spends it, and the hole move semantics still cannot close |
+| [Scale the denominator away](scaled_integers/README.md) | 301 | Exact arithmetic without fractions — why a float breaks a tied count, why the rationals that fix it cost a `gcd` apiece, and when you can multiply the denominators out and spend the count in `i128` |
 
 ## Planned
 

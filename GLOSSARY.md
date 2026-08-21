@@ -149,3 +149,11 @@ Short definitions. Every entry links to the page that explains it properly — a
 **Consuming method** — A method taking `self` by value rather than `&self`, so calling it moves the receiver and the caller cannot use it again. Turns "at most once" from a rule you enforce into one the borrow checker enforces. → [The right to vote is a value](09_Advanced/one_person_one_vote/README.md)
 
 **Extractor** — A web-framework type built from the incoming request before the handler runs, which fails the request instead of returning if it cannot be built. A handler's argument list is therefore its access-control policy; `rocket` calls the same idea a *request guard*. → [The right to vote is a value](09_Advanced/one_person_one_vote/README.md)
+
+**Scaled integer (fixed-point)** — Carrying an exact fractional value as an integer count of some fixed unit `1/l`, chosen before the computation starts, so no division ever happens during it. Exact wherever every denominator in play divides `l` — which has to be checked, not assumed. → [Scale the denominator away](09_Advanced/scaled_integers/README.md)
+
+**`i128`** — A 128-bit signed integer, an ordinary primitive with no crate and no allocation behind it. What makes multiplying a whole count through by a large denominator practical: the same arithmetic overflows `i64` at well under a million ballots. → [Scale the denominator away](09_Advanced/scaled_integers/README.md)
+
+**Overflow checks** — The debug-build panic on integer overflow, absent from release builds, where the same expression wraps instead. The reason arithmetic whose range you have not proved should say which it wants: `checked_*`, `saturating_*`, `wrapping_*` or `overflowing_*`. → [Scale the denominator away](09_Advanced/scaled_integers/README.md)
+
+**`black_box`** — A hint that stops the optimizer reasoning about a value, so a benchmark measures the code rather than LLVM's ability to delete it. Without it a loop over constants can compile to nothing and time at zero. → [Scale the denominator away](09_Advanced/scaled_integers/README.md)

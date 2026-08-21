@@ -96,6 +96,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "README.md",
         "mutex_poisoning",
         "one_person_one_vote",
+        "scaled_integers",
     ],
 }
 
