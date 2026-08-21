@@ -1,0 +1,31 @@
+A 7-seat count, still scaled by a constant computed for 5 seats.
+
+1. Which denominators the stale scale can still represent
+     stale scale = 2329089562800  (= lcm 5..=30)
+     ballot 1  denominator 31   TRUNCATES
+     ballot 2  denominator 32   TRUNCATES
+     ballot 3  denominator 35   exact
+     ballot 4  denominator 17   exact
+     ballot 5  denominator  5   exact
+     ballot 6  denominator 10   exact
+     31 is a prime above 30, and 32 needs a fifth factor of two.
+     Neither is in lcm(5..=30), so neither divides it.
+
+2. What the stale scale actually does to the count
+     exact        Alma 37217/7378   Bruno 46721/6944
+     stale scale  Alma 11748675285800   Bruno 15670707584025  -> Bruno wins
+     derived      Alma 26951461105654800   Bruno 35948603197789425  -> Bruno wins
+     stale total equals the exact value?  Alma false   Bruno false
+     derived total equals the exact value? Alma true   Bruno true
+     -> the winner is the same either way. No test on the winner
+        would ever have caught this.
+
+3. The same count, checking its precondition first
+     stale scale   -> Err: ballot 1 has denominator 31, which does not divide the scale 2329089562800
+     derived scale -> Ok(26951461105654800)
+
+4. What the correct scale costs
+     5 seats: scale          2329089562800   ballots that fit i64:  792015
+     7 seats: scale       5342931457063200   ballots that fit i64:     345
+     Fixing the exactness bug cut the i64 ballot capacity from 792,015
+     to 345. In i128 the same election still has room for 6.4e21 ballots.
