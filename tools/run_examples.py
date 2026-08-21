@@ -209,11 +209,31 @@ def fill_pages(
     return drift
 
 
+def examples_under(token: Path, examples: dict[str, Path]) -> set[str]:
+    """Every example stem inside `token`, if `token` names a directory.
+
+    Empty set when it is not a directory or holds no examples, so the caller can
+    fall through to matching it as a stem and then to the unknown-token error.
+    """
+    for base in (token, REPO / token):
+        try:
+            if not base.is_dir():
+                continue
+            resolved = base.resolve()
+        except OSError:
+            continue
+        held = {stem for stem, path in examples.items() if resolved in path.parents}
+        if held:
+            return held
+    return set()
+
+
 def resolve_selection(raw: list[str], examples: dict[str, Path]) -> set[str]:
     """Turn the `--only` values into stems.
 
     Accepts what you are likely to have on the clipboard: a bare stem, a path to
-    the `.rs`, or the lesson folder that holds it. Comma-separate them, repeat the
+    the `.rs`, or a folder — which selects *every* example under it, lesson folder
+    and whole section alike. Comma-separate them, repeat the
     flag, or mix the two — `action="append"` is there because argparse's default is
     last-wins, and `--only a --only b` silently verifying only `b` is precisely the
     quiet partial run this flag exists to prevent.
@@ -228,6 +248,15 @@ def resolve_selection(raw: list[str], examples: dict[str, Path]) -> set[str]:
         if not token:
             continue
         as_path = Path(token)
+        held = examples_under(as_path, examples)
+        if held:
+            # A folder selects everything it holds. Matching it to the single
+            # stem that happens to share its name would quietly skip the
+            # `<topic>_kata.rs` sitting beside the main example — a half-run
+            # that looks exactly like a clean one, which is the failure this
+            # whole flag exists to prevent.
+            wanted |= held
+            continue
         for candidate in (token, as_path.stem, as_path.name):
             if candidate in examples:
                 wanted.add(candidate)
@@ -250,8 +279,9 @@ def main() -> int:
         "--only",
         action="append",
         metavar="STEM[,STEM…]",
-        help="restrict to these example stems (a path to the .rs, or its folder, "
-        "works too); repeat the flag or comma-separate. Everything else is neither "
+        help="restrict to these example stems (a path to the .rs works too, and a "
+        "folder selects every example under it); repeat the flag or comma-separate. "
+        "Everything else is neither "
         "run, re-recorded, nor refilled. "
         "Use it with --update when someone else is working in the tree, so you "
         "record your own answer key without touching theirs. Not for CI.",
