@@ -100,6 +100,8 @@ NAV_ORDER: dict[str, list[str]] = {
         "scaled_integers",
         # The technique first, then what the type it lands on actually guarantees.
         "i128_exactness",
+        # ...and the method the scaling technique cannot reach at all.
+        "compounding_weights",
     ],
 }
 

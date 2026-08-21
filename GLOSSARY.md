@@ -167,3 +167,7 @@ Short definitions. Every entry links to the page that explains it properly — a
 **Arbitrary precision** — A number that grows to fit its value rather than overflowing, as Python's `int` does. Not the same property as exactness: `i128` is exact and bounded, Python's `int` is exact and unbounded, and the cost of the second is that operations get slower as the value gets wider. → [What `i128` is exact about](09_Advanced/i128_exactness/README.md)
 
 **`num_rational::Ratio`** — Rust's rational type, a numerator and denominator reduced by `gcd` after each operation. `Ratio<i128>` is the closest thing to Python's `fractions.Fraction`, with the difference that matters: it has a ceiling, and the `gcd` is what buys the range rather than overhead on top of it. → [What `i128` is exact about](09_Advanced/i128_exactness/README.md)
+
+**Arbitrary precision** — Integers that grow to fit their value instead of wrapping or failing at a fixed width. Python's `int` is one and its `Fraction` inherits it for free; Rust's standard library has none, so exactness beyond `i128` means a crate (`num-bigint`, `num-rational`) and an allocation per value. → [When the denominators compound](09_Advanced/compounding_weights/README.md)
+
+**lcm addition** — Adding two fractions over `lcm(b, d)` rather than `b*d`. Identical answer, far smaller intermediate — which decides whether a fixed-width rational survives a long computation, because what overflows is usually the product being reduced away, not the result. → [When the denominators compound](09_Advanced/compounding_weights/README.md)
