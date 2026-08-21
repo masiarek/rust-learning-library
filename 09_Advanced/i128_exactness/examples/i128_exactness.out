@@ -1,0 +1,51 @@
+1. The type, exactly
+     i64     8 bytes, align  8   max 9223372036854775807
+     i128   16 bytes, align 16   max 170141183460469231731687303715884105727
+     that is 39 digits against 19 — 20 decimal digits more room.
+     It is a primitive: no crate, no heap, no allocation. Just twice
+     the register and twice the cache line of an i64.
+
+2. Exact under + - *, right up to the ceiling
+     i64::MAX x i64::MAX
+       i128   85070591730234615847396907784232501249
+       f64    85070591730234615865843651857942052864
+       error  18446744073709551615  <- larger than i64::MAX itself (9223372036854775807)
+     Every digit of the i128 answer is right. The f64 keeps about 17
+     significant digits and fills the rest with whatever the exponent
+     implies, which is how a tied count stops being tied.
+
+     The ceiling is real, though, and it is the price of the exactness:
+       i128::MAX x 2 = None — there is no wider primitive to escape to
+
+3. And exact about nothing at all under /
+     100 ballots, 3 candidates, integer division:
+       each gets 33, and 33 × 3 = 99 — 1 ballot unaccounted for
+     The same statement in i64 loses the same ballot. Widening the type
+     does not close the integers under division; nothing can. That is
+     what a rational is for — and what it charges for.
+
+4. A rational built on i128: how far 1 + 1/2 + 1/3 + ... gets
+     never call gcd             reaches 1/33
+     gcd after each add         reaches 1/83
+     gcd before each multiply   reaches 1/88
+
+     The furthest an i128 pair gets is the sum of the first 88 terms:
+       40866521918642154860585199122889549709
+       8076030954443701744994070304101969600
+     Numerator is 38 digits, denominator 37 — one more term and neither fits.
+
+5. So what did the gcd buy?
+     no reduction        1/33    ← the denominators just multiply out
+     reduce the result   1/83    ← +50 terms, and what overflows is now
+                                   the INTERMEDIATE, not the answer
+     reduce first        1/88    ← +5 more; now the answer itself is
+                                   the thing that no longer fits
+
+     The gcd is not overhead sitting on top of the arithmetic. It IS
+     the range. Skip it and a 128-bit rational gets no further than 1/33.
+
+     Python's Fraction has no such term. It reduces with the same gcd
+     and then simply grows — so it never reports a limit, and never
+     needs to. That is the whole difference, and it is not free either:
+     the bill moves from a ceiling you must prove onto a running cost
+     that rises with the size of the number you are holding.

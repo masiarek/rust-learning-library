@@ -1,0 +1,46 @@
+1. The average, by division — the mistake worth making first
+     Alma     1000000 / 3000  = 333
+     Bruno    1000500 / 3001  = 333
+     Cara      999000 / 3000  = 333
+     Three identical averages, and a three-way tie for the seat.
+
+2. What the truncation actually did
+     The real averages, to six places, computed only to show them:
+       Alma   333.333333
+       Bruno  333.388870
+       Cara   333.000000
+     They were never equal. Integer division floors, and flooring is
+     monotone — so it can never REVERSE two candidates, only collapse
+     them onto the same number. That sounds like the harmless failure
+     until you remember what a tie does: it hands the seat to the
+     tiebreak ladder, and at the bottom of that ladder is a lot.
+     A manufactured tie is not a rounding error. It is a coin flip
+     between candidates who were not actually tied.
+
+3. The fix: rank them without dividing at all
+     1. Bruno  (1000500/3001)
+     2. Alma   (1000000/3000)
+     3. Cara   (999000/3000)
+     The comparison Alma vs Bruno is one multiplication each side:
+       1000000 × 3001 = 3001000000
+       1000500 × 3000 = 3001500000
+     No division, so nothing truncates, so no tie is invented.
+
+4. The bill: cross-multiplying needs headroom dividing did not
+     Alma  90000000000000000000000000000000000000 / 6000000000000
+     Bruno 80000000000000000000000000000000000000 / 5000000000000
+     naive cross-multiply -> None: that product needs about 168 bits,
+                                   and an i128 has 127 to spend
+     Both operands fit i128 comfortably. Their product does not, and
+     in a release build a bare `*` would have wrapped to a negative
+     number and ranked the field by it.
+
+     Reducing each pair by its gcd first, the same comparison is tiny:
+       gcd of the totals   10000000000000000000000000000000000000
+       gcd of the counts   1000000000000
+       9 × 5 = 45   vs   8 × 6 = 48
+     -> Bruno leads
+     Two 38-digit numbers compared by multiplying 9 by 5 and 8 by 6.
+     That is the same move the lesson called reduce-before-multiply,
+     and it is the reason a rational library calls gcd as often as it
+     does: the reduction is not tidiness, it is the headroom.
