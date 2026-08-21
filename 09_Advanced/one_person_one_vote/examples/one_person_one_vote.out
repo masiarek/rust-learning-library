@@ -1,0 +1,22 @@
+Design A — the rule lives in whoever calls `cast`:
+  VoterId(1) accepted     (checked endpoint)
+  VoterId(2) accepted     (checked endpoint)
+  VoterId(1) accepted     (resubmit endpoint)
+  VoterId(3) refused      (not signed up)
+  -> 3 ballots in the box from 2 eligible voters, 19 points cast
+  -> design A: MORE BALLOTS THAN VOTERS
+
+Design B — the right to vote is a value, and casting spends it:
+  VoterId(1) signed in
+      ballot accepted, receipt serial 1
+  VoterId(2) signed in
+      ballot accepted, receipt serial 2
+  VoterId(3) refused at sign-in
+  VoterId(1) refused at sign-in
+  VoterId(1) signed in
+      ballot accepted, receipt serial 3
+  -> 3 ballots in the box from 2 eligible voters, 21 points cast
+  -> design B: MORE BALLOTS THAN VOTERS
+
+Both boxes hold three ballots. Design A can be fixed at every call
+site that forgot a check; design B has exactly one function to fix.

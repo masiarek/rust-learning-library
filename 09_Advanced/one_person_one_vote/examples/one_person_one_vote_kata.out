@@ -1,0 +1,12 @@
+Roll opens with 2 unspent entitlements.
+
+  VoterId(1) signed in
+      ballot accepted, receipt serial 1
+  VoterId(1) refused  (entitlement already spent)
+  VoterId(2) signed in
+      token dropped without casting
+  VoterId(2) refused  (entitlement already spent)
+
+  -> ballots in the box: 1 (2 eligible voters, 7 points cast)
+  -> entitlements left on the roll: 0
+  -> nobody voted twice, and Ben did not vote at all
