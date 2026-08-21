@@ -108,11 +108,11 @@ The precondition is sharper than "the denominators are bounded." It is that **th
 | | how the weight is updated | denominators |
 |---|---|---|
 | **Reweighted Range Voting** | `weight = C / (C + S)`, from the accumulated integer `S` | drawn from a fixed set — **scaling works** |
-| **Allocated Score** | `weight = weight × (1 − quota/allocated)` | multiplied round on round — **scaling does not** |
+| **[Allocated Score](../compounding_weights/README.md)** | `weight = weight × (1 − quota/allocated)` | multiplied round on round — **scaling does not** |
 
 In the first, the weight of a ballot in round 4 depends only on an integer, so every denominator that can ever appear is enumerable in advance. In the second, each round multiplies a new fraction into the old weight, so the denominators compound, the set is no longer fixed, and no single `l` covers it. There you keep the rationals — and the win available to you is the ordinary one of a compiled language, not two orders of magnitude.
 
-Being able to tell these apart at a glance is most of the value of the page. The question to ask of any weighted count is: *is this round's weight a function of an integer, or of last round's weight?*
+The second case gets its own page — [when the denominators compound](../compounding_weights/README.md) — because "the trick doesn't apply here" turns out to be the least interesting thing true about it. Being able to tell the two apart at a glance is most of the value of this one. The question to ask of any weighted count is: *is this round's weight a function of an integer, or of last round's weight?*
 
 ## Why `i128`, specifically
 
