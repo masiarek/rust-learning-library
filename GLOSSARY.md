@@ -152,8 +152,18 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Scaled integer (fixed-point)** — Carrying an exact fractional value as an integer count of some fixed unit `1/l`, chosen before the computation starts, so no division ever happens during it. Exact wherever every denominator in play divides `l` — which has to be checked, not assumed. → [Scale the denominator away](09_Advanced/scaled_integers/README.md)
 
-**`i128`** — A 128-bit signed integer, an ordinary primitive with no crate and no allocation behind it. What makes multiplying a whole count through by a large denominator practical: the same arithmetic overflows `i64` at well under a million ballots. → [Scale the denominator away](09_Advanced/scaled_integers/README.md)
+**`i128`** — A 128-bit signed integer, an ordinary primitive with no crate and no allocation behind it: 16 bytes, `Copy`, two registers. Exact under `+ − ×` up to a ceiling of 39 digits, no more exact under `÷` than an `i64`, and the widest Rust has — there is no `i256` to escape into. → [What `i128` is exact about](09_Advanced/i128_exactness/README.md)
 
 **Overflow checks** — The debug-build panic on integer overflow, absent from release builds, where the same expression wraps instead. The reason arithmetic whose range you have not proved should say which it wants: `checked_*`, `saturating_*`, `wrapping_*` or `overflowing_*`. → [Scale the denominator away](09_Advanced/scaled_integers/README.md)
 
 **`black_box`** — A hint that stops the optimizer reasoning about a value, so a benchmark measures the code rather than LLVM's ability to delete it. Without it a loop over constants can compile to nothing and time at zero. → [Scale the denominator away](09_Advanced/scaled_integers/README.md)
+
+**Closure (under an operation)** — Whether applying an operation to two values of a type always yields a value *of that type*. Integers are closed under `+ − ×` and not under `÷`, which is why a wider integer buys range but never makes division exact. → [What `i128` is exact about](09_Advanced/i128_exactness/README.md)
+
+**`__divti3`** — The compiler-rt routine an `i128` division compiles to. Neither x86-64 nor aarch64 has a 128-bit divide instruction, so `/` and `%` on `i128` are a function call rather than an instruction — the one operation where widening is not close to free. → [What `i128` is exact about](09_Advanced/i128_exactness/README.md)
+
+**Cross-multiplication** — Comparing `a/b` against `c/d` as `a*d` against `c*b`, so the ranking is exact because no division happens. The usual fix when integer division has collapsed distinct values onto one; it trades truncation for a product that needs headroom. → [What `i128` is exact about](09_Advanced/i128_exactness/README.md)
+
+**Arbitrary precision** — A number that grows to fit its value rather than overflowing, as Python's `int` does. Not the same property as exactness: `i128` is exact and bounded, Python's `int` is exact and unbounded, and the cost of the second is that operations get slower as the value gets wider. → [What `i128` is exact about](09_Advanced/i128_exactness/README.md)
+
+**`num_rational::Ratio`** — Rust's rational type, a numerator and denominator reduced by `gcd` after each operation. `Ratio<i128>` is the closest thing to Python's `fractions.Fraction`, with the difference that matters: it has a ceiling, and the `gcd` is what buys the range rather than overhead on top of it. → [What `i128` is exact about](09_Advanced/i128_exactness/README.md)

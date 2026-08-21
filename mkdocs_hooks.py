@@ -39,6 +39,7 @@ FIXUPS = {
     "Rc": "Rc",
     "Arc": "Arc",
     "Cow": "Cow",
+    "I128": "`i128`",
     "Option": "`Option`",
     "Result": "`Result`",
 }
@@ -97,6 +98,8 @@ NAV_ORDER: dict[str, list[str]] = {
         "mutex_poisoning",
         "one_person_one_vote",
         "scaled_integers",
+        # The technique first, then what the type it lands on actually guarantees.
+        "i128_exactness",
     ],
 }
 
