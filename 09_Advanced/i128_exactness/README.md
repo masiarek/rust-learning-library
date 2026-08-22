@@ -4,7 +4,7 @@
 
 **One line:** `i128` makes `+`, `−` and `×` exact to the last digit inside a ceiling you are responsible for proving, does nothing whatever for `÷`, and is not a substitute for Python's `fractions.Fraction` — which is exact under division and has no ceiling at all, and bills you for both on every operation.
 
-`i128` usually gets reached for about ten minutes after a float has lost a tie. That instinct is right, and the type does deliver — but it is a *wider integer*, not an exact-arithmetic library, and the two get conflated constantly. "Exact" is really three separate properties, and `i128` has one of them:
+`i128` usually gets reached for about ten minutes after a float has destroyed a tie — two totals that are mathematically equal come out differing in the last bit, so the tiebreak that should have decided the seat never runs and the win goes to whichever way the rounding fell. That instinct is right, and the type does deliver — but it is a *wider integer*, not an exact-arithmetic library, and the two get conflated constantly. "Exact" is really three separate properties, and `i128` has one of them:
 
 | | exact under `+ − ×`? | exact under `÷`? | unbounded? |
 |---|---|---|---|
