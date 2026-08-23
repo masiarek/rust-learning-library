@@ -1,0 +1,34 @@
+What a warning is asking
+
+──── Step 1: Three ways to not use a binding
+      let used     -> 10, and no warning: it was read
+      let _computed -> computed on purpose, unused on purpose
+      let _         -> discarded outright; there is no name to read
+      All three compile with zero warnings. They are not the same.
+
+──── Step 2: The two underscores disagree about WHEN
+    (a) let _named = Guard(..)  — binds, lives to the end of scope
+      still inside the block
+      DROP a: _named
+    (b) let _ = Guard(..)       — binds nothing, drops immediately
+      DROP b: bare _
+      still inside the block
+      Read the order above: (a) dropped after its line, (b) before.
+      A mutex guard bound to `_` is unlocked before you use it.
+
+──── Step 3: The four lint levels, and where you set them
+      #[allow ] say nothing at all
+      #[warn  ] print it; compile anyway; exit 0
+      #[deny  ] print it as an error; compile fails
+      #[forbid] deny, and refuse any later allow of this lint
+      Set on an item, a block, or the crate (`#![deny(...)]`),
+      or from outside with `-D warnings` / RUSTFLAGS in CI.
+      never_called_but_allowed() = 42
+
+──── Step 4: A warning is not an error, and that is the trap
+      Every warning in this file's history still exited 0.
+      Nothing fails until someone chooses to make it fail —
+      `-D warnings` in CI is that choice, made once.
+      `cargo fix` applies the compiler's own suggestions, so
+      read them first: it will happily add an underscore where
+      the honest fix was to USE the variable.
