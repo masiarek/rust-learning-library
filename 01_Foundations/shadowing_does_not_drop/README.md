@@ -480,6 +480,8 @@ rustc --edition 2024 01_Foundations/shadowing_does_not_drop/examples/shadowing_d
 ## See also
 
 - [Shadowing and `unwrap`](../shadowing_and_unwrap/README.md) — what shadowing is *for*, and the folklore that credits it for `Copy`'s work
+- [When to shadow](../when_to_shadow/README.md) — where this page's mechanism turns into a rule: never shadow a value that holds a resource
+- [Shadowing](../../SHADOWING.md) — the map of all three shadowing lessons and the pages that touch it
 - [Ownership and moves](../ownership_and_moves/README.md) — who owes the free, and the `Drop` that makes this page's claims checkable
 - [Borrowing](../borrowing/README.md) — `&T`, and the last-use rule that decides how long `keep` holds the value
 - [The Rust Book, ch. 3.1 — Shadowing](https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html#shadowing)

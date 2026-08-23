@@ -356,6 +356,8 @@ rustc --edition 2024 01_Foundations/shadowing_and_unwrap/examples/shadowing_and_
 ## See also
 
 - [A shadow does not drop](../shadowing_does_not_drop/README.md) — the sequel: this page is about the *name*, that one is about the value it stopped naming
+- [When to shadow](../when_to_shadow/README.md) — once you know what it is: the trade against `mut`, the idioms, and the three bugs that compile
+- [Shadowing](../../SHADOWING.md) — the map of all three shadowing lessons and the pages that touch it
 - [`unwrap`: the bet you are making](../what_a_panic_costs/README.md) — the other half of the pair: what unwrapping decides on your behalf
 - [`unwrap_or`](../unwrap_or/README.md) — the fallback in `let x = x.unwrap_or(…)`, and the three things it costs
 - [`Option` vs `Result`](../option_vs_result/README.md) — `let … else`, `?`, and the rest of the ways to stop holding a wrapper

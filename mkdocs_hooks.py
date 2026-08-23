@@ -50,6 +50,7 @@ NAV_ORDER: dict[str, list[str]] = {
     "": [
         "index.md",
         "OPTION.md",
+        "SHADOWING.md",
         "ROADMAP.md",
         "KATAS.md",
         "01_Foundations",
@@ -96,6 +97,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # Closes the ownership arc by putting shadowing back through it:
         # what a shadow does to the value, rather than to the name.
         "shadowing_does_not_drop",
+        # ...and then the judgement call both of those leave open, which needs
+        # the name half AND the value half already in the reader's hands.
+        "when_to_shadow",
         "newtype_score",
         "representing_a_ballot",
         # The sequel: "blank is not zero" stops at two cases; markers need six.
