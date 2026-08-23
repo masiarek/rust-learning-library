@@ -568,3 +568,5 @@ fn main() {
 - [Shadowing and `unwrap`](../shadowing_and_unwrap/README.md) — the `Copy` confusion this page's `String` example is guarding against
 - [Borrowing](../borrowing/README.md) — why `y` stays valid across the shadow, and what `E0506` is protecting
 - [Ownership and moves](../ownership_and_moves/README.md) — drop order, which is what the two `Drop` blocks above are showing
+- [Scope is about names](../scope_is_about_names/README.md) — the three questions one word answers, and the reason `E0506` above stops mattering at the borrow's *last use* rather than at a brace
+- [A block is an expression](../a_block_is_an_expression/README.md) — the escape hatch this page reaches for twice: `{ }` scopes the work and still hands back the value
