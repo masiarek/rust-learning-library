@@ -108,6 +108,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "i128_exactness",
         # ...and the method the scaling technique cannot reach at all.
         "compounding_weights",
+        # Picks up that page's "if the rule specifies the scale": what to do
+        # when the scale was your decision and a margin came in close.
+        "interval_arithmetic",
     ],
 }
 
