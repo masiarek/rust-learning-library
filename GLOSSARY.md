@@ -176,6 +176,22 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **`#[rustfmt::skip]`** — An attribute exempting one item from formatting, for the rare block whose hand-alignment carries meaning: a matrix, a table of constants. Deliberately per-item — the global alternative is a settings argument with no end. → [Formatting](05_Tooling/formatting/README.md)
 
+**Toolchain shim** — The small stand-in `rustup` puts on your `PATH` under the names `rustc`, `cargo` and friends. It resolves which real toolchain this invocation wants and execs it, which is why every version pin only works for callers that go *through* it — an absolute path to the real binary silently ignores all of them. → [rustup](05_Tooling/rustup/README.md)
+
+**Channel** — Which stream of Rust a toolchain follows: `stable` (a release every six weeks), `beta` (the next stable, early), or `nightly` (built from master, where unstable features are permitted). A dated form, `nightly-2026-08-11`, freezes one night — the only form that identifies a compiler. → [rustup](05_Tooling/rustup/README.md), [Nightly by default](05_Tooling/nightly/README.md)
+
+**`rust-toolchain.toml`** — A file naming the toolchain a project needs, which rustup installs and uses automatically. Fourth of rustup's five precedence rungs and the only one that travels with the code. `channel = "stable"` pins nothing, because stable moves; write the version number. → [Pinning the toolchain](05_Tooling/pinning_the_toolchain/README.md)
+
+**Caret requirement** — What a bare version string in `Cargo.toml` means: `rayon = "1.12.0"` accepts anything from 1.12.0 up to, but not including, 2.0.0. A range, not a version — `Cargo.lock` records which member of the range you actually built. → [Adding a dependency](05_Tooling/cargo_dependencies/README.md)
+
+**MSRV** — Minimum Supported Rust Version, declared as `rust-version` in a crate's manifest and printed by `cargo info`. A dependency's MSRV becomes your project's floor, which is what makes it worth reading before `cargo add` rather than after. → [Adding a dependency](05_Tooling/cargo_dependencies/README.md)
+
+**Lint priority** — The `priority = -1` on a `[lints.clippy]` group entry, making the whole group apply before the individual lints beneath it so those can still override a member. Without it Cargo rejects the manifest rather than resolving the conflict. → [Strict clippy lints](05_Tooling/strict_lints/README.md)
+
+**Nix** — A package manager treating a build as a pure function of its inputs, so identical inputs give identical outputs on any machine and incompatible versions coexist without conflict. The engine under `devenv`, and the actual cost of adopting it. → [devenv](05_Tooling/devenv/README.md)
+
+**devenv** — Cachix's front end to Nix: one `devenv.nix` declares a project's compiler, CLI tools, system libraries, environment variables and running services, reproduced identically wherever it is entered. Worth its price when your project needs *services*; overkill when a pinned compiler would have done. → [devenv](05_Tooling/devenv/README.md)
+
 **Typestate** — Encoding what stage a value has reached into its *type*, so that operations valid only at one stage do not exist at the others. An unauthenticated request and an authenticated one become different types rather than one type with a boolean. → [The right to vote is a value](09_Advanced/one_person_one_vote/README.md)
 
 **Consuming method** — A method taking `self` by value rather than `&self`, so calling it moves the receiver and the caller cannot use it again. Turns "at most once" from a rule you enforce into one the borrow checker enforces. → [The right to vote is a value](09_Advanced/one_person_one_vote/README.md)

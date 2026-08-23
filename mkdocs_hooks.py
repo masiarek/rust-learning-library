@@ -51,6 +51,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "index.md",
         "OPTION.md",
         "SHADOWING.md",
+        "TOOLCHAIN.md",
         "ROADMAP.md",
         "KATAS.md",
         "01_Foundations",
@@ -179,9 +180,20 @@ NAV_ORDER: dict[str, list[str]] = {
         # Day zero: the window you will be reading all of this through, and the
         # one decision that is cheapest to make badly and expensive to revisit.
         "editors",
+        # The toolchain arc, cheapest answer first — TOOLCHAIN.md is its map.
+        # Which compiler actually runs, how to make that a decision rather than
+        # luck, and the one channel choice invisible from inside the project.
+        "rustup",
+        "pinning_the_toolchain",
+        "nightly",
+        # Then what the build pulls in, and who decides what the code may look like.
+        "cargo_dependencies",
         # Day one, and cheap: settle the whitespace question before anything else.
         "formatting",
+        "strict_lints",
         "compile_times",
+        # Last, because it subsumes every rung above and costs the most.
+        "devenv",
     ],
     "06_Data": [
         "README.md",
@@ -216,6 +228,10 @@ NAV_ORDER: dict[str, list[str]] = {
 
 # Folder names whose label the word-by-word caser cannot get right.
 LABELS = {
+    # A product name that is lowercase on purpose; the title-caser would say "Devenv".
+    "devenv": "devenv",
+    # Likewise: the tool is spelled lowercase everywhere it appears.
+    "rustup": "rustup",
     "if_let": "`if let`",
     "while_let": "`while let`",
     "main_returns_result": "`main` can return a `Result`",
