@@ -100,6 +100,19 @@ uv run --group docs mkdocs build --strict   # the site builds clean
 
 `--strict` turns a broken link into a build failure, which is the point — a dead link on the published site is invisible to everyone except the reader who tries to follow it.
 
+**Then run them again on what you are actually publishing.** Those three commands read the *working tree*, and in a shared checkout the working tree is nobody's build: it is the commit you are pushing, plus every other session's uncommitted work, minus anything they have staged but not written out. A gate that passes there has told you about a state that will never exist on the server. The failure is not hypothetical — a green `check_katas.py` is exactly what a broken deploy looks like from the author's chair, because the README the row points at is on disk and not in the commit.
+
+So extract the pushed tree and re-run against that:
+
+```bash
+T=$(mktemp -d); git archive origin/master | tar -x -C "$T"
+(cd "$T" && python3 tools/check_katas.py && python3 tools/run_examples.py --check)
+```
+
+`git archive` writes only tracked, committed content, so an in-flight folder belonging to someone else cannot make this pass and a file you forgot to `git add` cannot hide in it. Do it after you push, against `origin/master` — that is the tree CI builds and the one readers get. `--check` rather than a plain run, since the extract is a throwaway and nothing there is worth rewriting.
+
+A corollary worth keeping: **a gate that fails on a stem you have never heard of is somebody's in-flight folder, not your bug.** Check `git status` for a `??` beside it, and leave it alone — never `--update` a key you did not write.
+
 ## When several people share the checkout
 
 More than one person often works in this repo at once, through **one working tree, one index, and one HEAD**. Three habits follow, and each is here because the failure has already happened.
