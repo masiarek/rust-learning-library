@@ -81,6 +81,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "nullable_pointers",
         "result_aliases",
         "shadowing_and_unwrap",
+        # Closes the Result run by asking how any of it reaches a person:
+        # the sentence you wrote for a human, and the paths that print the other one.
+        "debug_vs_display",
         # Opens the ownership arc — the next thread after the Option run.
         "ownership_and_moves",
         "borrowing",
