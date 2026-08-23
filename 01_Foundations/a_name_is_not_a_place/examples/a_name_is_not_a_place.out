@@ -1,0 +1,37 @@
+
+──── Two places, one name, both alive
+  y = 5   <- the place y borrowed, untouched
+  x = 6   <- the place the name means now
+
+──── Not a `Copy` trick — the same thing with a String
+  seen = Ada   <- still the first String, still owned
+  name = ADA   <- the name now means the new one
+
+──── The `mut` spelling of those four lines does not compile
+  let mut x = 5;
+  let y = &x;
+  x = 6;        <- error[E0506]: cannot assign to `x`
+                                 because it is borrowed
+  One place, and `y` is watching it. There is no second place
+  to put the 6 in, so the write has to be refused.
+
+──── So `mut` does not 'edit the value in place' either
+  mut:    slot holds first
+    drop: first
+  mut:    assigned; the drop above already happened
+  mut:    slot holds second
+    drop: second
+
+  shadow: slot holds first
+  shadow: shadowed; nothing has dropped
+  shadow: slot holds second
+    drop: second
+    drop: first
+
+──── Mutability belongs to the binding, not to the value
+  s = Hello, world
+  One String, three bindings, two answers to "is it mutable?"
+  The value never had an opinion; only the binding does.
+
+──── They are not opposites, so they combine
+  weight = 61.5 kg

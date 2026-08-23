@@ -1,0 +1,34 @@
+
+──── 1. Two places, one name
+      y = 5, x = 6   <- both alive, so there are two places
+      The `mut` spelling of the same four lines is rejected:
+        let mut x = 5;
+        let y = &x;
+        x = 6;   error[E0506]: cannot assign to `x`
+                              because it is borrowed
+      One place. `y` is reading it. The write cannot be allowed.
+
+──── 2. Not a `Copy` trick
+      seen = Ada   <- the first String, still owned, still allocated
+      name = ADA   <- what the name means from here on
+
+──── 3. Assignment drops; a shadow does not
+    mut:
+      holding first
+      drop: first
+      assigned — and the drop above has already run
+      holding second
+      drop: second
+    shadow:
+      holding first
+      shadowed — nothing has dropped
+      holding second
+      drop: second
+      drop: first
+
+──── 4. Why `let guess: u32` needs no `mut`
+      "fifty" -> not a number, next
+      7 -> too small
+      42 -> correct
+      Two variables named `guess`, and neither is ever reassigned:
+      the String is mutated through `&mut`, the u32 is initialized once.
