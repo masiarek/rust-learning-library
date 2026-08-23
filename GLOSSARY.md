@@ -171,3 +171,11 @@ Short definitions. Every entry links to the page that explains it properly — a
 **Arbitrary precision** — Integers that grow to fit their value instead of wrapping or failing at a fixed width. Python's `int` is one and its `Fraction` inherits it for free; Rust's standard library has none, so exactness beyond `i128` means a crate (`num-bigint`, `num-rational`) and an allocation per value. → [When the denominators compound](09_Advanced/compounding_weights/README.md)
 
 **lcm addition** — Adding two fractions over `lcm(b, d)` rather than `b*d`. Identical answer, far smaller intermediate — which decides whether a fixed-width rational survives a long computation, because what overflows is usually the product being reduced away, not the result. → [When the denominators compound](09_Advanced/compounding_weights/README.md)
+
+**NaN** — The floating-point value for "no numeric value can be determined" (`0.0/0.0`, `sqrt(-1)`). It is not equal to itself and is neither less than nor greater than anything, which is the single reason `f64` cannot implement `Eq` or `Ord`. → [What a float actually stores](01_Foundations/what_a_float_stores/README.md)
+
+**Total order vs partial order** — `Ord` promises that any two values compare as exactly one of `<`, `==`, `>`; `PartialOrd` admits that some pairs have no answer and returns `Option<Ordering>`. Floats get only the partial one, so `.sort()`, `sort_by_key` and `HashMap` keys are closed to them by the compiler rather than by convention. → [What a float actually stores](01_Foundations/what_a_float_stores/README.md)
+
+**`total_cmp`** — `f64`'s escape hatch: IEEE 754's totalOrder as an `Ordering`, so `sort_by(f64::total_cmp)` never panics. Worth reading twice before use — it gives NaN a defined seat in the ranking rather than excluding it. → [What a float actually stores](01_Foundations/what_a_float_stores/README.md)
+
+**`f64::EPSILON`** — The gap between 1.0 and the next representable float (about 2.2e-16). Not a general-purpose comparison tolerance: it is far too small for large magnitudes and needlessly generous for tiny ones, so pick a tolerance from the problem instead. → [What a float actually stores](01_Foundations/what_a_float_stores/README.md)
