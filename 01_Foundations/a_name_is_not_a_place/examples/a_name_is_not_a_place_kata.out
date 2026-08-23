@@ -32,3 +32,32 @@
       42 -> correct
       Two variables named `guess`, and neither is ever reassigned:
       the String is mutated through `&mut`, the u32 is initialized once.
+
+──── 5. String in, number out — which line do you write?
+      A)  let mut age = age.parse::<u32>().unwrap();   compiles — with a warning
+      B)  let age     = age.parse::<u32>().unwrap();   compiles clean   <- ship this
+      C)      age     = age.parse::<u32>().unwrap();   error[E0308]
+      B runs: age = 30, and its type is now u32
+    C is not a style question — it does not compile:
+        error[E0308]: mismatched types
+          |     let age = "30";
+          |               ---- expected due to this value
+          |     age = age.parse::<u32>().unwrap();
+          |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `&str`, found `u32`
+      And `mut` does not rescue it. Write `let mut age = "30";` on the
+      first line and C reports the SAME E0308 — assignment writes into a
+      place, and that place is &str-shaped for as long as it exists.
+      (E0384, `cannot assign twice to immutable variable`, is the error
+      people expect here. You only reach it once the types match.)
+    A is the one the answer key gets wrong. It compiles:
+        warning: variable does not need to be mutable
+          |     let mut age = age.parse::<u32>().unwrap();
+          |         ----^^^
+          |         help: remove this `mut`
+      That is `unused_mut`, and it is a narrow, checkable complaint:
+      nothing below ever reassigns `age`. It is not a ruling against
+      shadowing and `mut` in one line — that combination is ordinary:
+      let mut birthday = birthday.parse::<u32>().unwrap();
+      birthday += 1;   ->  31   <- one shadow, one mut, no warning
+      So: pick B because the compiler asked you to, not because the
+      two keywords cannot be spelled on one line.
