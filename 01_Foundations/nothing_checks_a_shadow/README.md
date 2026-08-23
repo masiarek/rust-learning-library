@@ -4,7 +4,7 @@
 
 **One line:** `rustc` has no lint for a shadowed variable — what gets mistaken for protection is the **type error** a wrong shadow trips on its way past, so when the shadow's type matches what it hides there is nothing between you and a wrong answer.
 
-Two pages already cover shadowing here: [Shadowing and `unwrap`](../shadowing_and_unwrap/README.md) on what it is *for*, and [A shadow does not drop](../shadowing_does_not_drop/README.md) on what it does to the value underneath. Both answer questions about the **mechanism**. This one answers a question about the **tooling**, because the reassuring answer is in wide circulation and it is not true:
+Three pages already cover shadowing here: [Shadowing and `unwrap`](../shadowing_and_unwrap/README.md) on what it is *for*, [A shadow does not drop](../shadowing_does_not_drop/README.md) on what it does to the value underneath, and [When to shadow](../when_to_shadow/README.md) on whether to reach for it at all — with [SHADOWING.md](../../SHADOWING.md) as the map of the set. The first two are about the **mechanism**; the third is a judgement call. This one asks something narrower: what **tooling** stands between you and a shadow that is simply wrong. The reassuring answer is in wide circulation and it is not true:
 
 > "Most downsides of shadowing are negated by the borrow checker. If you got confused around variables, that code is probably not going to compile."
 
@@ -506,6 +506,8 @@ rustc --edition 2024 01_Foundations/nothing_checks_a_shadow/examples/nothing_che
 
 - [Shadowing and `unwrap`](../shadowing_and_unwrap/README.md) — what shadowing is *for*, and the type change that makes it worth having
 - [A shadow does not drop](../shadowing_does_not_drop/README.md) — what happens to the value the shadow hid: nothing, until the end of the scope
+- [When to shadow](../when_to_shadow/README.md) — the judgement call this page leaves open: what the feature buys that `mut` cannot, the idioms worth copying, and the three bugs that compile
+- [SHADOWING.md](../../SHADOWING.md) — the map of all four shadowing lessons, in reading order
 - [What a warning is asking](../what_a_warning_is_asking/README.md) — `unused_variables`, the near-miss above, and what `_name` actually answers
 - [Ownership and moves](../ownership_and_moves/README.md) — the rule that *is* enforced, and why it turns the same shape into `E0382`
 - [`shadow_reuse`](https://rust-lang.github.io/rust-clippy/master/index.html#shadow_reuse), [`shadow_same`](https://rust-lang.github.io/rust-clippy/master/index.html#shadow_same), [`shadow_unrelated`](https://rust-lang.github.io/rust-clippy/master/index.html#shadow_unrelated) — the three lints, and the `restriction` group they sit in
