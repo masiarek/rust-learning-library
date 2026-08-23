@@ -1,0 +1,75 @@
+
+=== one byte, read two ways ===
+  00000000  =    0  =  0x00
+  00000001  =    1  =  0x01
+  00000010  =    2  =  0x02
+  01011001  =   89  =  0x59
+  11111111  =  255  =  0xff
+  u8::MAX = 255, u8::BITS = 8
+  0b0101_1001 == 89 == 0x59 : true
+
+=== memory is addressed one byte at a time ===
+  three bytes            : 01010011 01010101 10110111
+  addr(cells[1]) - addr(cells[0]) = 1   <- one, always
+  size_of::<[u8; 3]>()   = 3
+  the same three as ints : [83, 85, 183]
+  the same three as text : 'S' 'U' (183: no ASCII letter)
+  str::from_utf8(&cells) : Err("invalid utf-8 sequence of 1 bytes from index 2")
+
+=== you cannot fetch one bit -- you fetch the byte and mask ===
+  b                      = 01011001
+  read  bit 3            = 1
+  test  bit 6            = true
+  set   bit 1            = 01011011
+  clear bit 3            = 01010001
+  flip  all              = 10100110   <- still 8 bits wide
+  b.count_ones()         = 4
+
+=== what is exactly one byte ===
+  u8                     : 1
+  bool                   : 1
+  Option<bool>           : 1   <- the None hides in an unused bit pattern
+  Option<NonZeroU8>      : 1   <- the None hides in the zero
+  char                   : 4   <- NOT one byte: a Unicode scalar value
+  b'F' (a byte literal)  : 70 = 01000110
+  'F' as u32             : 70
+
+=== what is more than one byte ===
+  i32 / u64 / f64        : 4 / 8 / 8
+  usize (this target)    : 8
+  &str  (pointer + len)  : 16
+  String (ptr+len+cap)   : 24   <- the text itself is on the heap
+
+=== a string's length is counted in BYTES ===
+  heart.len()            = 3   bytes
+  heart.chars().count()  = 1   char
+  heart.as_bytes()       = [226, 157, 164]
+  as bits                = 11100010 10011101 10100100
+  is_char_boundary(1)    = false   <- &heart[0..1] would panic
+  String::from_utf8(0xFF)= Err("invalid utf-8 sequence of 1 bytes from index 0")
+
+=== the bill for having a width: overflow ===
+  wrapping_add(1)        = 0
+  checked_add(1)         = None
+  saturating_add(1)      = 255
+  overflowing_add(1)     = (0, true)
+  plain  255u8 + 1       = panic 'attempt to add with overflow'  (checks ON)
+  cfg!(debug_assertions) = true
+
+=== the two right shifts -- the TYPE decides which one you get ===
+  253u8 >> 1             = 126   <- unsigned: pad with 0
+  (-3i8) >> 1            = -2   <- signed: pad with the sign bit
+
+=== the byte has no order; a MULTI-byte number does ===
+  271u16.to_be_bytes()   = [1, 15]   00000001 00001111
+  271u16.to_le_bytes()   = [15, 1]   00001111 00000001
+  this target is little  = true
+
+=== eight bytes, many meanings ===
+  8 x u8       : [99, 111, 109, 112, 117, 116, 101, 114]
+  4 x u16 LE   : [28515, 28781, 29813, 29285]
+  2 x u32 LE   : [1886220131, 1919251573]
+  1 x u64 LE   : 8243122740717776739
+  1 x u64 BE   : 7165065861944075634
+  1 x f64 LE   : 1.1444935686054472e243
+  8 x ASCII    : "computer"

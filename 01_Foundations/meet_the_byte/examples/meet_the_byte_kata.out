@@ -1,0 +1,27 @@
+=== three ballots, one byte each ===
+  voter 1: 00100101  3 approval(s)  ["Ada", "Cara", "Fay"]
+  voter 2: 00001100  2 approval(s)  ["Cara", "Dev"]
+  voter 3: 10000101  3 approval(s)  ["Ada", "Cara", "Hal"]
+  size_of::<Ballot>() = 1   for all eight candidates
+
+=== the tally, read one bit at a time ===
+  Ada   ##
+  Ben    -
+  Cara  ###
+  Dev   #
+  Elif   -
+  Fay   #
+  Gus    -
+  Hal   #
+
+=== then a ninth candidate signs up ===
+  1u8.checked_shl(8)  = None          <- the honest answer
+  1u8.wrapping_shl(8) = 1              <- what a RELEASE build silently does
+       ...which is bit 0: Ivy's approval lands on Ada
+  plain 1u8 << 8       = panic 'attempt to shift left with overflow'
+
+=== the fix is a wider byte-count, and it has its own ceiling ===
+  size_of::<Wide>()     = 2   (two bytes, sixteen seats)
+  Ivy at seat 8         = 0000000100000000
+  u16 ceiling           = seat 15 is the last one that fits
+  u128 would buy you    = 128 seats, and no more
