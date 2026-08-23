@@ -1,0 +1,78 @@
+
+──── Step 1: What the feature buys: it keeps `mut` meaning something
+  shadowed: 42
+      Three `let`s, zero `mut`. Every line's value is final, and
+      the type changed twice without inventing `raw_trimmed`.
+  with mut: 42
+      `mut` could not carry &str -> u32, so a second name arrived
+      anyway — and `text` is now mutable for the rest of the
+      scope, which promises the reader far less than the
+      shadowed version did.
+      THAT is the trade: shadowing says "changed HERE";
+      `mut` says "may change ANYWHERE below".
+
+──── Step 2: The idioms: same concept, better form
+  generic -> concrete:  /etc/hosts
+  unwrap-and-narrow:    ADA
+  frozen after build:   [5, 3]
+      From this line on, `tally` cannot be pushed to. The `mut`
+      was scoped to the building, not to the variable's life.
+  narrowed to newtype:  BallotId(42)
+      The bare u32 is still alive, but nothing can reach it —
+      so no later line can pass a raw number where an id is due.
+  clone-for-move:       thread counted 3, outer still has 3
+      The shadow lived and died inside the braces. Shadowing in an
+      inner block is the cheapest way to keep a name you still need.
+
+──── Step 3: The accumulator that never accumulates
+  inside the loop, total = 5
+  inside the loop, total = 3
+  inside the loop, total = 4
+  after the loop,  total = 0
+      Every iteration built a fresh `total` from the outer 0 and
+      threw it away at the closing brace. The sum is lost.
+      The tell is a warning that never mentions shadowing:
+        warning: variable does not need to be mutable
+      An accumulator that does not need `mut` is not accumulating.
+      Read that warning as the bug report it is.
+
+──── Step 4: The guard that was never released
+  read the counter through its guard: 0
+  holding the register guard, value = 1
+  counter still locked?  true
+  register still locked? true
+      BOTH. The first guard did not go anywhere when its name
+      was taken — it is alive and holding the lock until the
+      brace, with nothing left that could release it early.
+  after the brace, counter free? true
+      In one thread this only wastes a lock. Add a second thread
+      that wants `counter` and it is a deadlock whose cause is a
+      line that looks like a rename.
+
+──── Step 5: One name, two concepts — the failure with no warning
+  scores      = [5, 2, 4, 0, 3]
+  minimum score to count: 3
+  threshold   = 5   (the ballot count, not the minimum score)
+  counted     = 1   — expected 3, the scores that are >= 3
+      Both bindings are `usize` and both are read, so there is no
+      warning to catch it. The compiler cannot know that the first
+      `threshold` was a score and the second one a quantity.
+      This is the case for a second name. Not because shadowing is
+      unsafe — because the two values are not the same thing.
+
+──── Step 6: A shadow hides a function just as happily as a value
+  ballots_cast = 461
+      The name is now a usize, so the function is unreachable:
+        let again = ballots_cast();
+        error[E0618]: expected function, found `usize`
+          | this function of the same name is available here,
+          | but it's shadowed by the local binding
+      Worth reading once, because it is the only shadowing
+      mistake rustc names out loud. Steps 3 to 5 got a misleading
+      warning, a correct-looking program, and nothing at all.
+
+──── The rule
+  Shadow when the new binding is the SAME CONCEPT in a new form,
+  and keep it close to the one it replaces. Reach for a second
+  name when it is a different thing (step 5), and never shadow
+  something that holds a resource (step 4).

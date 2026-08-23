@@ -1,0 +1,27 @@
+──── The broken version
+  counting support at 3 or above
+  total score = 0      (five cards scoring 5, 2, 4, 0, 3)
+  supporters  = 1      (should be the scores of 3 or more)
+      Both numbers are wrong, and both look like they could be
+      right — which is the whole hazard. A total of 0 reads as a
+      blank election, and 1 supporter as a weak field. Neither
+      number looks like a bug; they look like a finding.
+
+──── The fixed version
+  counting support at 3 or above, over 5 cards
+  total score = 14     (5 + 2 + 4 + 0 + 3)
+  supporters  = 3      (5, 4 and 3 clear the bar of 3)
+
+──── Why the two fixes differ
+  The lost sum was a shadow standing where `mut` belonged: the
+  loop needed to CHANGE something that outlives it, and that is
+  the one job shadowing cannot do. Deleting the `let` fixed it.
+
+  The wrong filter was a shadow standing where a SECOND NAME
+  belonged: a minimum score and a card count are different
+  quantities that happen to share a type. Renaming fixed it,
+  and no shadow was involved in the repair at all.
+
+  Shadow #1 survived both passes untouched. Same concept, new
+  form, two lines apart — that is what an earned shadow reads
+  like, and it is why the answer is never "stop shadowing".
