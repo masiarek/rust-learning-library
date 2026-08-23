@@ -297,6 +297,7 @@ rustc --edition 2024 01_Foundations/borrowing/examples/borrowing.rs -o /tmp/br &
 ## See also
 
 - [Ownership and moves](../ownership_and_moves/README.md) — the half this one continues: who owes the free, and what a move actually transfers
+- [A shadow does not drop](../shadowing_does_not_drop/README.md) — a borrow that outlives the *name* it borrowed from, and the `E0505` you get for freeing underneath it
 - [`while let`](../while_let/README.md) — a loop that has to look before it consumes, which turns out to be a borrow question
 - [`Option` is a one-item collection](../option_as_collection/README.md) — `take()`, the standard way to get a value *out* of something you only borrowed
 - [The Rust Book, ch. 4.2 — References and Borrowing](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html)

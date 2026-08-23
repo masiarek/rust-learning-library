@@ -10,7 +10,7 @@ They do meet in exactly one idiom, and it is worth learning: `let x = x.unwrap_o
 
 ## The two ideas, separately
 
-**Shadowing** is declaring a variable whose name is already in use. The new one hides the old for the rest of the scope; the old one is still there, unchanged, and comes back when the scope ends.
+**Shadowing** is declaring a variable whose name is already in use. The new one hides the old for the rest of the scope; the old one is [still there](../shadowing_does_not_drop/README.md), unchanged, and comes back when the scope ends.
 
 ```rust
 let score = "42";              // &str
@@ -355,6 +355,7 @@ rustc --edition 2024 01_Foundations/shadowing_and_unwrap/examples/shadowing_and_
 
 ## See also
 
+- [A shadow does not drop](../shadowing_does_not_drop/README.md) — the sequel: this page is about the *name*, that one is about the value it stopped naming
 - [`unwrap`: the bet you are making](../what_a_panic_costs/README.md) — the other half of the pair: what unwrapping decides on your behalf
 - [`unwrap_or`](../unwrap_or/README.md) — the fallback in `let x = x.unwrap_or(…)`, and the three things it costs
 - [`Option` vs `Result`](../option_vs_result/README.md) — `let … else`, `?`, and the rest of the ways to stop holding a wrapper

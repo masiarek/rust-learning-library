@@ -28,6 +28,7 @@ The ideas you meet in your first week of Rust and keep using forever. Each page 
 | [Shadowing and `unwrap`](shadowing_and_unwrap/README.md) | 201 | Two unrelated ideas the tutorials tie together: what keeps the original `Option` alive is `Copy`, not the shadow — and what shadowing is really for |
 | [Debug and Display](debug_vs_display/README.md) | 101 → 201 | Two printing traits, two audiences: `{:?}` can be derived because it is structural and `{}` never will be — plus the compiler note that spreads the habit, and the four default paths that print your error's `Debug` form instead of the sentence you wrote |
 | [Ownership and moves](ownership_and_moves/README.md) | 101 | A move transfers *responsibility*, not bytes — the three rules, made visible by a value that announces its own death |
+| [A shadow does not drop](shadowing_does_not_drop/README.md) | 201 | What shadowing does to the value underneath: nothing — it is still alive, still borrowable, and it drops *after* the shadow that hid it, with no name left to release it early |
 | [A score is not a number](newtype_score/README.md) | 101 → 201 | The newtype: one private field, one validating door, and why privacy is per *module* |
 | [What is a ballot, in memory?](representing_a_ballot/README.md) | 201 | Array vs `Vec` vs tuple vs struct vs map vs flat matrix — and which bugs each one makes writeable |
 | [Six kinds of zero](six_kinds_of_zero/README.md) | 201 | Where `Option` runs out: six reasons a cell is empty, one enum, and a report the compiler audits |

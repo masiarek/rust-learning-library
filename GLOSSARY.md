@@ -40,7 +40,7 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Scrutinee** — The expression a `match` or `if let` is examining. Worth knowing because edition 2024 changed when a temporary built there is dropped. → [`if let`](01_Foundations/if_let/README.md)
 
-**Shadowing** — Declaring a variable whose name is already in use. The new one hides the old for the rest of the scope and may have a different type, which is what makes `let x = x.unwrap_or(0)` possible; it is not mutation, and the old variable returns when the scope ends. → [Shadowing and `unwrap`](01_Foundations/shadowing_and_unwrap/README.md)
+**Shadowing** — Declaring a variable whose name is already in use. The new one hides the old for the rest of the scope and may have a different type, which is what makes `let x = x.unwrap_or(0)` possible; it is not mutation, and the old variable returns when the scope ends. It also does not *drop* anything — the shadowed value stays alive to the end of the scope, nameless. → [Shadowing and `unwrap`](01_Foundations/shadowing_and_unwrap/README.md), [A shadow does not drop](01_Foundations/shadowing_does_not_drop/README.md)
 
 **Pattern binding** — The name a pattern introduces, as `x` in `Some(x)`. A fresh name rather than a shadow — and for a non-`Copy` type it *moves* the value out of what you matched on, unless you borrow. → [Shadowing and `unwrap`](01_Foundations/shadowing_and_unwrap/README.md)
 
@@ -91,6 +91,12 @@ Short definitions. Every entry links to the page that explains it properly — a
 **Move** — Transferring ownership. The bytes do not travel; what changes is who owes the free, and therefore when it happens. The source variable becomes unusable by name. → [Ownership and moves](01_Foundations/ownership_and_moves/README.md)
 
 **`Drop`** — The code that runs when a value's owner goes out of scope. Implementing it is the easiest way to *watch* ownership, since the value announces its own death. → [Ownership and moves](01_Foundations/ownership_and_moves/README.md)
+
+**Drop order** — Within a scope, values drop in **reverse declaration order**. The consequence people miss: a shadowed value is declared *before* the shadow, so it dies *after* it. → [A shadow does not drop](01_Foundations/shadowing_does_not_drop/README.md)
+
+**Dangling reference** — A reference that outlives the value it points at. Rust makes it unwriteable (`E0505` when a borrowed value would be freed, `E0106` when a function tries to return one); C and C++ compile the same shape silently. → [A shadow does not drop](01_Foundations/shadowing_does_not_drop/README.md)
+
+**Undefined behaviour** — A program the language standard declines to define at all, so no output is the "right" one. The reason C's use-after-free can print nothing on one run and the correct answer on the next, and the reason such a program can never have a recorded answer key. → [A shadow does not drop](01_Foundations/shadowing_does_not_drop/README.md)
 
 **Partial move** — Moving one field out of a struct, leaving the other fields readable but the struct as a whole unusable. Ownership is tracked per field, not per variable. → [Ownership and moves](01_Foundations/ownership_and_moves/README.md)
 

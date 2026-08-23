@@ -87,6 +87,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # Opens the ownership arc — the next thread after the Option run.
         "ownership_and_moves",
         "borrowing",
+        # Closes the ownership arc by putting shadowing back through it:
+        # what a shadow does to the value, rather than to the name.
+        "shadowing_does_not_drop",
         "newtype_score",
         "representing_a_ballot",
         # The sequel: "blank is not zero" stops at two cases; markers need six.
