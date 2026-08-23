@@ -191,3 +191,15 @@ Short definitions. Every entry links to the page that explains it properly — a
 **Fat pointer** — A reference carrying a second word beside the address: `&str` and `&[T]` add a length (16 bytes on a 64-bit target), `&dyn Trait` adds a vtable pointer. It is why `size_of::<&str>()` is not 8. → [Meet the byte](01_Foundations/meet_the_byte/README.md)
 
 **Shift masking** — With overflow checks off, `a << b` uses `b` modulo the type's bit width, so `1u8 << 8` is `1u8 << 0` — the same expression that panics in a debug build silently returns a wrong answer in release. `checked_shl` is the honest form whenever the shift amount is not a visible literal. → [Meet the byte](01_Foundations/meet_the_byte/README.md)
+
+**Hexadecimal** — Base 16, and the spelling bit patterns are written in because 16 is 2⁴: one digit is exactly four bits, so a byte is exactly two digits and the boundary between bytes never falls inside a character. Base 10 has no such correspondence; base 8 has one at the wrong granularity, since 3 does not divide 8. → [Why hexadecimal](01_Foundations/why_hexadecimal/README.md)
+
+**Nibble** — Four bits, half a byte, and exactly one hex digit. A byte's two hex digits are literally its two nibbles: `b >> 4` is the left one, `b & 0x0F` the right. → [Why hexadecimal](01_Foundations/why_hexadecimal/README.md)
+
+**Radix** — The base a numeral is written in. It is the *second argument* to `from_str_radix`, not something a prefix in the string can convey — which is why `u8::from_str_radix("0xff", 16)` is an error rather than a courtesy. → [Why hexadecimal](01_Foundations/why_hexadecimal/README.md)
+
+**Numeric literal prefix (`0x` / `0b` / `0o`)** — Rust's four literal spellings — `0xBE`, `0b1011_1110`, `0o276`, `190` — all producing the same value, with `_` permitted anywhere in any of them for grouping. The prefix belongs to the *source*; it is not part of the number and not accepted by the parser. → [Why hexadecimal](01_Foundations/why_hexadecimal/README.md)
+
+**`from_str_radix`** — The integer parser that takes a base. The target type bounds it, so `u8::from_str_radix("100", 16)` is `Err(PosOverflow)` — 0x100 does not fit a `u8` and it refuses rather than truncating. Its asymmetry with `{:#x}`, which prints a prefix it will not read back, is the reason format and parse are not inverses without `strip_prefix`. → [Why hexadecimal](01_Foundations/why_hexadecimal/README.md)
+
+**Two's complement** — How a signed integer stores a negative value, and therefore what its hex spelling shows: `format!("{:x}", -1i8)` is `"ff"` and `-1i32` is `"ffffffff"`. No minus sign appears and the width of the type shows through, because hex spells the bits rather than the quantity. → [Why hexadecimal](01_Foundations/why_hexadecimal/README.md)

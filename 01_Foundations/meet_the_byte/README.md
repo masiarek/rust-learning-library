@@ -411,6 +411,7 @@ The ninth candidate is the point. A debug build panics with `attempt to shift le
 - [A score is not a number](../newtype_score/README.md) — the other half of "pick a type that states the range", at the domain level rather than the machine level
 - [What a panic costs](../what_a_panic_costs/README.md) — what actually happens when the overflow check fires
 - [Running a scratch program](../rustc_without_cargo/README.md) — the debug/release split this page leans on, in the build command itself
+- [Why hexadecimal](../why_hexadecimal/README.md) — how a byte gets written down: one hex digit is four bits, so the two-digit spelling this page uses throughout is not a convention but a consequence
 - [What a float actually stores](../what_a_float_stores/README.md) — the sequel: what the eight bytes of an `f64` are spent on, and why exactness ends at the first division
 - [What `i128` is exact about](../../09_Advanced/i128_exactness/README.md) — where "just use a wider integer" does and does not deliver
 - Julia Evans, *How Integers and Floats Work* ([wizardzines.com](https://wizardzines.com/)) — the zine this page follows; its "meet the byte" and "8 bytes, many meanings" pages are the source of the `b"computer"` decode, whose integer rows the example above reproduces exactly

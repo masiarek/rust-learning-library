@@ -90,6 +90,8 @@ NAV_ORDER: dict[str, list[str]] = {
         "six_kinds_of_zero",
         # Opens the numbers arc: the unit every other size is counted in.
         "meet_the_byte",
+        # ...and how to write one down, which is the last thing before meaning.
+        "why_hexadecimal",
         # Closes the numbers arc, and hands off to the 09_Advanced exactness cluster.
         "what_a_float_stores",
     ],
