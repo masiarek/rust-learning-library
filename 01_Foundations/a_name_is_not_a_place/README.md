@@ -120,6 +120,13 @@ The other half of the confusion. `x = 6` on an `i32` really does overwrite four 
 
 ──── They are not opposites, so they combine
   weight = 61.5 kg
+
+──── Where each one ends: a block
+  shadow: inside the block,  quorum  = 100
+  shadow: after it,          quorum  = 5    <- restored
+  mut:    inside the block,  turnout = 100
+  mut:    after it,          turnout = 100  <- kept
+  block:  handed out of it,  quorum  = 101  <- carried
 ```
 <!-- /output -->
 
@@ -149,9 +156,77 @@ weight += 1.5;                    // weight = 61.5
 
 That line is one shadow *and* one `mut`. A table with a column for each cannot say so.
 
+## The quiz that circulates, option by option
+
+The table has a companion in the wild: a short multiple-choice question that hands you a string and asks which line turns it into a number. A user's age arrives as `"30"`, the rest of the program wants a `u32`, and you pick one of three lines.
+
+```rust
+let age = "30";
+println!("Age as string: {age}");
+
+// A)  let mut age = age.parse::<u32>().unwrap();
+// B)  let age     = age.parse::<u32>().unwrap();
+// C)      age     = age.parse::<u32>().unwrap();
+
+println!("Age as number: {age}");
+```
+
+The published answer is **B**, and B is right. Two of the three explanations that travel with it are right as well. The third is worth being careful about, because it is the same mistake the two-column table encourages.
+
+| Option | What the compiler does with it | The explanation that comes with it |
+|---|---|---|
+| **A** `let mut age = …` | **Compiles** — `warning: variable does not need to be mutable` | *"Mixes `mut` with shadowing in a confusing way."* **The wrong one** — see below |
+| **B** `let age = …` | **Compiles clean** | *"A new, immutable `age` of the right type."* Correct, and the reason to ship it |
+| **C** `age = …` | `error[E0308]: mismatched types` — expected `&str`, found `u32` | *"`mut` changes a value, not a type."* Correct — and provable |
+
+**C is worth proving rather than asserting**, because the claim is stronger than it looks. Put `mut` on the first line — `let mut age = "30";` — and C reports the *same* `E0308`. Mutability was never what stopped it. Assignment writes into a place, and that place is `&str`-shaped for as long as it exists; there is nowhere in it to put a `u32`. The error most people expect here is `E0384`, *cannot assign twice to immutable variable* — you only reach that one once the types already match, because the type error fires first and stops the compile.
+
+**A is the row to fix.** It is not confusing and it is not a category error: it is one shadow and one `mut`, which is the `weight` line three paragraphs up and an ordinary thing to write. What is wrong with it *here* is narrower, and the compiler states it in one line — nothing below ever reassigns `age`, so the `mut` is unearned and `unused_mut` fires. Make the mutation real and the warning goes away:
+
+```rust
+let birthday = "30";
+let mut birthday = birthday.parse::<u32>().unwrap();   // shadow AND mut
+birthday += 1;                                         // birthday = 31, and no warning
+```
+
+At which point A's shape is the right answer to a slightly different question. Keep that distinction, because the two rejects are rejected by different machinery: **C is refused, A is merely unearned.** Filing them together under "wrong" is how *shadowing and `mut` are alternatives* gets learned, and taking that apart is what this page is for.
+
+## The row the table is missing
+
+Not one of the five rows mentions the difference you will actually trip over: **the two effects end at different times.** A shadow is a *declaration*, so it expires with the block that declared it and the outer name comes back. A write goes into a place declared somewhere else, so it outlives the block it happened in.
+
+```rust
+let quorum = 5;
+{
+    let quorum = quorum * 20;   // a declaration — it ends at the brace
+}
+// quorum is 5 again out here
+
+let mut turnout = 5;
+{
+    turnout *= 20;              // a write into a place declared outside
+}
+// turnout is 100 out here
+```
+
+The `Where each one ends` group in the verified output above is those two blocks running. Neither one is surprising on its own; what makes the pair worth a row is that the source lines look equally local, and only one of them is.
+
+This is the mechanical reason behind the worst shadowing bug in the set. A loop body is a block, so a shadowed accumulator is rebuilt from the outer value and thrown away at every brace — [the tally that never tallies](../when_to_shadow/README.md#1-the-accumulator-that-never-accumulates), which compiles, runs, and complains only that a `mut` it no longer uses could be dropped. **If the new value has to outlive the block that computes it, a shadow cannot do the job at all**, and no error will say so.
+
+The escape hatch is that a block is an *expression*, so the work can stay scoped while the result leaves:
+
+```rust
+let quorum = {
+    let raw = quorum * 20;   // scratch names die at the brace
+    raw + 1                  // the value is handed out
+};                           // quorum is 101, and `raw` never existed outside
+```
+
+One qualifier, because it cuts the other way: a *same-scope* shadow does not end early either — it holds the name to the end of the enclosing block, and [the value it hid outlives it](../shadowing_does_not_drop/README.md), dropping afterwards rather than sooner. Scope is what ends a shadow; it is not a way to end a value.
+
 ## Mutability is a property of the binding, not of the value
 
-The row above is worth pushing one step further, because the two-column framing encourages a belief that is flatly false: that `let mut` means *mutable data* and a bare `let` means *immutable data*. It does not. Values are never mutable or immutable; **bindings** are. Move the same value to a different binding and the answer changes:
+The table's last row is worth pushing one step further, because the two-column framing encourages a belief that is flatly false: that `let mut` means *mutable data* and a bare `let` means *immutable data*. It does not. Values are never mutable or immutable; **bindings** are. Move the same value to a different binding and the answer changes:
 
 ```rust
 let s = String::from("Hello");   // immutable binding
@@ -223,6 +298,8 @@ Then settle the drop question. Give a type a `Drop` impl that prints, and build 
 
 Finally, settle the performance question yourself rather than believing this page: put the two functions above in a file, run `rustc --crate-type=lib --emit asm -O` on it, and find out what your compiler does with them.
 
+Last, grade the quiz. Compile all three of its options yourself, predicting each verdict before you run it — one compiles clean, one compiles with a warning, one does not compile at all. Then push on the two rejects, because they do not fail the same way: add `mut` to the first line and see whether that rescues C, then add a line that reassigns `age` and see whether that rescues A. Say which of the two you were stopped by a rule and which by a lint.
+
 <details markdown="1">
 <summary><strong>Solution</strong></summary>
 
@@ -239,6 +316,8 @@ Finally, settle the performance question yourself rather than believing this pag
 //! assignment destroys the old value rather than editing it.
 //! Part 4 is the guessing-game shape where every Rust learner first meets
 //! this, and the warning that sends them here.
+//! Part 5 is the three-way multiple choice that circulates as a quiz, with
+//! the distractor its answer key gets wrong.
 //!
 //!   rustc --edition 2024 a_name_is_not_a_place_kata.rs -o /tmp/anipk && /tmp/anipk
 
@@ -343,11 +422,62 @@ fn the_guess_that_needs_no_mut() {
     println!("      the String is mutated through `&mut`, the u32 is initialized once.");
 }
 
+
+/// Part 5 — three ways to write one line, and only one of them to ship.
+///
+/// The circulating quiz gives a string, asks for a number, and offers
+/// `let mut age = …`, `let age = …` and a bare `age = …`. Its answer (the
+/// middle one) is right; its reason for rejecting the first one is not.
+fn three_ways_to_write_one_line() {
+    banner("5. String in, number out — which line do you write?");
+
+    let age = "30"; //   a &str, and the rest of the function wants a number
+    println!("      A)  let mut age = age.parse::<u32>().unwrap();   compiles — with a warning");
+    println!("      B)  let age     = age.parse::<u32>().unwrap();   compiles clean   <- ship this");
+    println!("      C)      age     = age.parse::<u32>().unwrap();   error[E0308]");
+
+    // B, for real. A second variable, of a second type, wearing the same name.
+    let age = age.parse::<u32>().unwrap();
+    println!("      B runs: age = {age}, and its type is now u32");
+
+    println!("    C is not a style question — it does not compile:");
+    println!("        error[E0308]: mismatched types");
+    println!("          |     let age = \"30\";");
+    println!("          |               ---- expected due to this value");
+    println!("          |     age = age.parse::<u32>().unwrap();");
+    println!("          |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `&str`, found `u32`");
+    println!("      And `mut` does not rescue it. Write `let mut age = \"30\";` on the");
+    println!("      first line and C reports the SAME E0308 — assignment writes into a");
+    println!("      place, and that place is &str-shaped for as long as it exists.");
+    println!("      (E0384, `cannot assign twice to immutable variable`, is the error");
+    println!("      people expect here. You only reach it once the types match.)");
+
+    println!("    A is the one the answer key gets wrong. It compiles:");
+    println!("        warning: variable does not need to be mutable");
+    println!("          |     let mut age = age.parse::<u32>().unwrap();");
+    println!("          |         ----^^^");
+    println!("          |         help: remove this `mut`");
+    println!("      That is `unused_mut`, and it is a narrow, checkable complaint:");
+    println!("      nothing below ever reassigns `age`. It is not a ruling against");
+    println!("      shadowing and `mut` in one line — that combination is ordinary:");
+
+    // The same shape as A, with the `mut` earned — so no warning fires.
+    let birthday = "30";
+    let mut birthday = birthday.parse::<u32>().unwrap(); //   shadow AND mut
+    birthday += 1; //                                        this is what earns it
+    println!("      let mut birthday = birthday.parse::<u32>().unwrap();");
+    println!("      birthday += 1;   ->  {birthday}   <- one shadow, one mut, no warning");
+
+    println!("      So: pick B because the compiler asked you to, not because the");
+    println!("      two keywords cannot be spelled on one line.");
+}
+
 fn main() {
     two_places();
     not_a_copy_trick();
     when_does_it_die();
     the_guess_that_needs_no_mut();
+    three_ways_to_write_one_line();
 }
 ```
 <!-- /source -->
@@ -389,6 +519,35 @@ fn main() {
       42 -> correct
       Two variables named `guess`, and neither is ever reassigned:
       the String is mutated through `&mut`, the u32 is initialized once.
+
+──── 5. String in, number out — which line do you write?
+      A)  let mut age = age.parse::<u32>().unwrap();   compiles — with a warning
+      B)  let age     = age.parse::<u32>().unwrap();   compiles clean   <- ship this
+      C)      age     = age.parse::<u32>().unwrap();   error[E0308]
+      B runs: age = 30, and its type is now u32
+    C is not a style question — it does not compile:
+        error[E0308]: mismatched types
+          |     let age = "30";
+          |               ---- expected due to this value
+          |     age = age.parse::<u32>().unwrap();
+          |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `&str`, found `u32`
+      And `mut` does not rescue it. Write `let mut age = "30";` on the
+      first line and C reports the SAME E0308 — assignment writes into a
+      place, and that place is &str-shaped for as long as it exists.
+      (E0384, `cannot assign twice to immutable variable`, is the error
+      people expect here. You only reach it once the types match.)
+    A is the one the answer key gets wrong. It compiles:
+        warning: variable does not need to be mutable
+          |     let mut age = age.parse::<u32>().unwrap();
+          |         ----^^^
+          |         help: remove this `mut`
+      That is `unused_mut`, and it is a narrow, checkable complaint:
+      nothing below ever reassigns `age`. It is not a ruling against
+      shadowing and `mut` in one line — that combination is ordinary:
+      let mut birthday = birthday.parse::<u32>().unwrap();
+      birthday += 1;   ->  31   <- one shadow, one mut, no warning
+      So: pick B because the compiler asked you to, not because the
+      two keywords cannot be spelled on one line.
 ```
 <!-- /output -->
 

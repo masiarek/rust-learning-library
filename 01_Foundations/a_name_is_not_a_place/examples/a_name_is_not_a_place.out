@@ -35,3 +35,10 @@
 
 ──── They are not opposites, so they combine
   weight = 61.5 kg
+
+──── Where each one ends: a block
+  shadow: inside the block,  quorum  = 100
+  shadow: after it,          quorum  = 5    <- restored
+  mut:    inside the block,  turnout = 100
+  mut:    after it,          turnout = 100  <- kept
+  block:  handed out of it,  quorum  = 101  <- carried

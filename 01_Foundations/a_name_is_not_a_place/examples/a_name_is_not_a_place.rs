@@ -82,4 +82,26 @@ fn main() {
     let mut weight = weight as f32; //      new place, new type, and mutable
     weight += 1.5; //                       a write into that new place
     println!("  weight = {weight} kg");
+
+    banner("Where each one ends: a block");
+
+    let quorum = 5;
+    {
+        let quorum = quorum * 20; //        a declaration, and it ends at the brace
+        println!("  shadow: inside the block,  quorum  = {quorum}");
+    }
+    println!("  shadow: after it,          quorum  = {quorum:<3}  <- restored");
+
+    let mut turnout = 5;
+    {
+        turnout *= 20; //                   a write into a place declared outside
+        println!("  mut:    inside the block,  turnout = {turnout}");
+    }
+    println!("  mut:    after it,          turnout = {turnout:<3}  <- kept");
+
+    let quorum = {
+        let raw = quorum * 20; //           the work still happens in the block
+        raw + 1 //                          but the value is handed out of it
+    };
+    println!("  block:  handed out of it,  quorum  = {quorum:<3}  <- carried");
 }
