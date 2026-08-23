@@ -46,6 +46,20 @@ Read what it recorded before committing. `--update` accepts whatever the program
 
 **Examples must be deterministic.** The recorded `.out` is an answer key, so an example that reads the clock, the environment, the filesystem, or a random number prints something different on your machine than in CI, and the check fails for a reason that has nothing to do with the lesson. Simulate those inputs instead — a small hard-coded table reads better on the page anyway, because the reader can see the data the output came from.
 
+## Stubs
+
+A **stub** is a lesson page with no example behind it yet: an H1, a `**Level:**`, a `**One line:**`, and the questions the finished page has to answer. It exists so that an arc has a shape and a permanent URL before the prose does — [`02_Errors/`](02_Errors/README.md), [`03_Command_Line/`](03_Command_Line/README.md), [`04_Files/`](04_Files/README.md), [`06_Data/`](06_Data/README.md) and [`07_Clients/`](07_Clients/README.md) are stubs throughout.
+
+Every stub carries the same notice directly under its `**Level:**` line, so nobody mistakes an outline for a checked page:
+
+```markdown
+> **Stub — an outline, not a lesson.** There is no runnable example behind this page yet, so nothing on it has been through [the check that backs every other claim in this library](../../CONTRIBUTING.md). The bullets below are the questions the finished page has to answer.
+```
+
+Two things a stub must not have. An `<!-- output: -->` block — there is no answer key to fill it from, so the block would be a promise the tool cannot keep. And a `## Practice` section — `check_katas.py` will fail it for the missing row, and rightly: an exercise whose solution is not compiled is the one thing a practice page must never ship. A stub graduates by gaining an `examples/` program, losing the notice, and, if it gained a kata on the way, its row in [KATAS.md](KATAS.md).
+
+Prefer a stub to a bullet on a *Planned* list when the page's **boundaries** are the useful part — what it covers, what the neighbouring page covers instead, and the see-also links between them. Those cost nothing to write while the whole arc is in your head, and are retrofitted badly months later. Prefer the Planned bullet when all you have is a title.
+
 ## Katas
 
 A kata is an exercise, and it lives **on the page for the topic it teaches** — under a `## Practice` heading near the end, with the solution folded into a `<details markdown="1">` block. There is no folder of katas, and no `K01_` prefix anywhere on disk: folders are permanent URLs, and a numbered sequence is exactly the thing that gets reordered. The sequence lives in [KATAS.md](KATAS.md) instead, which costs nothing to reshuffle. Same reasoning as the sidebar order below.
