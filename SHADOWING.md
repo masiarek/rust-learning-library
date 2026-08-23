@@ -65,7 +65,7 @@ Shadowing is not a topic you finish; it is a habit that shows up inside other le
 
 ## Practising it
 
-Each of the three pages ends in a `## Practice` exercise with a solution CI compiles and runs. The order to attempt them in is in [KATAS.md](KATAS.md); every kata is a row there, and the numbers live only in that table.
+Every page in the set ends in a `## Practice` exercise with a solution CI compiles and runs. The order to attempt them in is in [KATAS.md](KATAS.md); every kata is a row there, and the numbers live only in that table.
 
 ## Looking a term up
 
