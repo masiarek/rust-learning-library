@@ -88,6 +88,8 @@ NAV_ORDER: dict[str, list[str]] = {
         "representing_a_ballot",
         # The sequel: "blank is not zero" stops at two cases; markers need six.
         "six_kinds_of_zero",
+        # Opens the numbers arc: the unit every other size is counted in.
+        "meet_the_byte",
         # Closes the numbers arc, and hands off to the 09_Advanced exactness cluster.
         "what_a_float_stores",
     ],

@@ -179,3 +179,15 @@ Short definitions. Every entry links to the page that explains it properly — a
 **`total_cmp`** — `f64`'s escape hatch: IEEE 754's totalOrder as an `Ordering`, so `sort_by(f64::total_cmp)` never panics. Worth reading twice before use — it gives NaN a defined seat in the ranking rather than excluding it. → [What a float actually stores](01_Foundations/what_a_float_stores/README.md)
 
 **`f64::EPSILON`** — The gap between 1.0 and the next representable float (about 2.2e-16). Not a general-purpose comparison tolerance: it is far too small for large magnitudes and needlessly generous for tiny ones, so pick a tolerance from the problem instead. → [What a float actually stores](01_Foundations/what_a_float_stores/README.md)
+
+**Byte** — Eight bits, and the smallest thing in memory with an address of its own; `u8` in Rust, and the unit `size_of` reports in. Bytes of other widths existed historically and Rust cannot express them — there is no `CHAR_BIT`. → [Meet the byte](01_Foundations/meet_the_byte/README.md)
+
+**Byte literal** — `b'F'` is a `u8` (70) and `b"Sw"` is a `&[u8; 2]`, distinct from `'F'` (a `char`, four bytes) and `"Sw"` (a UTF-8 `&str`). The separate syntax exists because, unlike C, Rust's `char` is not the byte. → [Meet the byte](01_Foundations/meet_the_byte/README.md)
+
+**Char boundary** — A byte offset in a `&str` that starts a character rather than landing inside one. Slicing to a non-boundary compiles and panics, which is why `is_char_boundary` exists and why indexing a string by an integer does not compile at all. → [Meet the byte](01_Foundations/meet_the_byte/README.md)
+
+**Endianness** — The order the bytes of a multi-byte number are stored in: big-endian puts the most significant first, little-endian the least. A single byte has none. Name it explicitly at any boundary with `to_be_bytes` / `to_le_bytes` rather than letting `to_ne_bytes` bake in this CPU's preference. → [Meet the byte](01_Foundations/meet_the_byte/README.md)
+
+**Fat pointer** — A reference carrying a second word beside the address: `&str` and `&[T]` add a length (16 bytes on a 64-bit target), `&dyn Trait` adds a vtable pointer. It is why `size_of::<&str>()` is not 8. → [Meet the byte](01_Foundations/meet_the_byte/README.md)
+
+**Shift masking** — With overflow checks off, `a << b` uses `b` modulo the type's bit width, so `1u8 << 8` is `1u8 << 0` — the same expression that panics in a debug build silently returns a wrong answer in release. `checked_shl` is the honest form whenever the shift amount is not a visible literal. → [Meet the byte](01_Foundations/meet_the_byte/README.md)
