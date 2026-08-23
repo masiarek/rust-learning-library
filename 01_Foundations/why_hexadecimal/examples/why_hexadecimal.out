@@ -1,0 +1,77 @@
+
+=== one number, four spellings ===
+  binary   10111110   8 digits, unreadable, but honest about the bits
+  decimal       190   3 digits, and the count changes with the value
+  octal         276   3 digits, but see below
+  hex            be   2 digits -- always, for every byte there is
+  all four are the same u8: true
+
+=== the whole reason: one hex digit IS four bits ===
+  0x0  =  0000  =   0
+  0x1  =  0001  =   1
+  0x7  =  0111  =   7
+  0x9  =  1001  =   9
+  0xA  =  1010  =  10
+  0xF  =  1111  =  15
+  16 == 2^4, so a digit maps onto a fixed, whole number of bits
+
+=== ...so a byte is two digits, and the seam falls between them ===
+  0xBE      = 10111110
+  high nibble = 1011 = 0xB   <- (byte >> 4)
+  low  nibble = 1110 = 0xE   <- (byte & 0x0F)
+  the two hex digits of a byte ARE its two nibbles
+
+=== why not decimal: the boundary wanders ===
+    7 decimal is 1 digit(s);  0x07 is always 2
+   42 decimal is 2 digit(s);  0x2A is always 2
+  100 decimal is 3 digit(s);  0x64 is always 2
+  255 decimal is 3 digit(s);  0xFF is always 2
+  10 is not a power of 2, so no decimal digit owns a fixed set of bits
+
+=== why not octal: it fits a 3-bit group, and a byte is not one ===
+  one octal digit = 3 bits, and 3 does not divide 8
+  0xFF as octal   = 377  <- 3 digits for 8 bits: the top digit holds only 2
+  where octal still wins: a 9-bit field, which IS three groups of 3
+    0o755 = 111101101 = rwx r-x r-x   (Unix file permissions)
+    111 101 101   <- owner / group / other, one digit each
+
+=== Rust's literals -- same value, four ways, plus _ anywhere ===
+  0xBE == 0b1011_1110 == 0o276 == 190 : true
+  0xDEAD_BEEFu32      = 3735928559
+  1_000_000           = 1000000
+  b'A'                = 65 = 0x41   <- a byte literal is just a u8
+
+=== Rust's formatting ===
+  {:x}       a           lowercase, NO padding
+  {:X}       A           uppercase
+  {:02x}     0a          padded to one byte  <- what you almost always want
+  {:#x}      0xa         with the 0x prefix
+  {:#04x}    0x0a        prefix, and the width COUNTS the prefix
+  {:b}       1010        binary
+  {:#010b}   0b00001010  prefix + 8 bits = width 10
+  {:o}       12          octal
+
+=== TRAP 1: unpadded hex silently loses the byte boundary ===
+  [0x0A, 0xB0]   naive "ab0"  padded 0ab0
+  [0xAB, 0x00]   naive "ab0"  padded ab00
+  two DIFFERENT arrays, one naive string: true
+  padded, they stay distinct:             true
+  dropping the 02 throws away the one property you chose hex for
+
+=== TRAP 2: from_str_radix takes a RADIX, not a prefix ===
+  u8::from_str_radix("ff", 16)   = Ok(255)
+  u8::from_str_radix("0xff", 16) = Err("invalid digit found in string")   <- 'x' is not a hex digit
+  u8::from_str_radix("100", 16)  = Err("number too large to fit in target type")   <- 0x100 does not fit a u8
+  so {:#x} does not round-trip: printed "0xff", reads back Err("invalid digit found in string")
+  strip it first:                          Ok(255)
+
+=== TRAP 3: hex of a signed number is two's complement, not a minus sign ===
+  format!("{:x}", -1i8)  = ff         (not "-1")
+  format!("{:x}", -1i32) = ffffffff   (the width shows through)
+  -1i8 as u8             = 255
+
+=== bytes <-> hex, both directions ===
+  bytes -> text : [10, 240, 5, 190] -> "0af005be"
+  text  -> bytes: "0af005be" -> [10, 240, 5, 190]
+  round-trips    : true
+  and it works BECAUSE every byte spent exactly two characters

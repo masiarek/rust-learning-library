@@ -1,0 +1,34 @@
+=== two ballot files, one fingerprint ===
+  file A  [0x0A, 0xB0, 0x42]  ->  naive "ab042"
+  file B  [0xAB, 0x00, 0x42]  ->  naive "ab042"
+  different files:      true
+  same fingerprint:     true   <- the observers agree, and they are wrong
+
+=== the fix is two characters of format string ===
+  file A  ->  "0ab042"
+  file B  ->  "ab0042"
+  now distinct:         true
+
+=== how bad was it? every two-byte file, counted ===
+  inputs                     : 65536
+  distinct naive fingerprints: 61936   <- 3600 files lost their identity
+  distinct fixed fingerprints: 65536   <- one each, which is the job
+  worst single collision     : 2 different files share one string
+  the first few collisions:
+      110 <- [1, 16]  [17, 0]
+      111 <- [1, 17]  [17, 1]
+      112 <- [1, 18]  [17, 2]
+
+=== reading a fingerprint back ===
+  0ab042     -> Ok([10, 176, 66])
+  0x0ab042   -> Ok([10, 176, 66])
+  0AB042     -> Ok([10, 176, 66])
+  0ab04      -> Err(OddLength(5))
+  0ab0zz     -> Err(BadDigit("zz"))
+
+=== the round trip, proved rather than asserted ===
+  all 256 single bytes round-trip   : true
+  all 65536 two-byte files round-trip: true
+  ...and with the naive encoder     : 240 of 256
+  the 16 that fail are 0x00..=0x0F -- exactly the bytes one digit could spell,
+  which is why the bug hides: it needs a small byte to show itself at all
