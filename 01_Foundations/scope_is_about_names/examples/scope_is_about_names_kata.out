@@ -1,0 +1,39 @@
+
+──── 1. Fields drop in DECLARATION order, not in reverse
+    broken — `_file` first, so the file closes before the write:
+      [broken] file closed
+      [broken] totals written
+    fixed — `_totals` first, and nothing else changed:
+      [fixed] totals written
+      [fixed] file closed
+      The reverse-order rule you learned for locals is not the rule
+      for fields. Two locals in the same order would have worked;
+      moving them into one struct silently flipped the sequence.
+
+──── 2. `let _` is not a name, so it holds nothing
+      let _      = registry.lock();   guards held here: 0
+      let _guard = registry.lock();   guards held here: 1
+      Zero, then one. The first critical section was unprotected,
+      and it is the spelling an `unused variable` warning suggests.
+      With std's Mutex, rustc refuses the first line outright:
+          error: non-binding let on a synchronization lock
+          note: `#[deny(let_underscore_lock)]` on by default
+      That deny is a special case for std's locks, not for the
+      pattern — your own guard, above, drew no diagnostic at all.
+
+──── 3. Three ways to end a borrow sooner, and none of them clone
+      The starting point does not compile:
+          let leader = &standings[0];
+          standings.push(9);            <- E0502, borrow still live
+          println!("{leader}");         <- because of THIS line
+      A) read first:        leader = 41
+         then mutate:       [41, 12, 9]
+      B) borrow in a block: leader = 41
+         mutate after it:   [41, 12, 9]
+      C) copy the value:    leader = 41, [41, 12, 9]
+      A is the one to ship: it is the same program with one line
+      moved, and it says the read happens before the write.
+      B is for when the borrow's users are a group, not a line.
+      C changes the meaning — `leader` is now a snapshot, and on a
+      non-Copy type its spelling is `.clone()`, with the cost that
+      implies. Reach for it when you wanted a snapshot anyway.

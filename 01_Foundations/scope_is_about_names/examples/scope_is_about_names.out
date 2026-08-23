@@ -1,0 +1,61 @@
+
+──── 1. A name ends at the brace; its value need not
+  inside:  two names, two values
+    drop: scratch
+  after:   the block is over, and that value is alive as `carried`
+  after:   `leaving` and `_scratch` are not names here —
+           error[E0425]: cannot find value `leaving` in this scope
+  So the block ended two names and one value. They are not one event.
+    drop: carried out
+
+──── 2. A borrow ends at its last use, not at the brace
+  first   = Ada   <- and ends here, at its last use
+  ballots = ["Ada", "Ben"]   <- mutated afterwards, same block, no error
+  Move that first println! BELOW the push and it stops compiling:
+      error[E0502]: cannot borrow `ballots` as mutable because it is
+                    also borrowed as immutable
+        |   let first = &ballots[0];
+        |                ------- immutable borrow occurs here
+        |   ballots.push("Ben");
+        |   ^^^^^^^^^^^^^^^^^^^ mutable borrow occurs here
+        |   println!("{first}");
+        |              ----- immutable borrow later used here
+  No brace moved. What moved was the last use — which is the whole
+  of the borrow's life, and it is shorter than the name's.
+
+──── 3. When each value actually dies
+  two locals, and the brace is next:
+    drop: local declared second
+    drop: local declared first
+  ^ reverse declaration order — the last one declared dies first
+  one struct, two fields, and the brace is next:
+    drop: field declared first
+    drop: field declared second
+  ^ DECLARATION order. The reverse rule is about locals, not fields
+  temporary: an unnamed temporary
+    drop: an unnamed temporary
+  ^ dropped at the end of the statement that built it, not the block
+    drop: let _      = …
+  `let _`      binds nothing, so the value died on that line
+  `let _kept`  binds normally; it is still alive, until:
+    drop: let _kept = …
+    drop: drop(early)
+  drop(x) is not a keyword and not magic: it takes x and returns ()
+
+──── 4. Held, or not: `try_lock` answers what style cannot
+  after `let _      = tally.lock()`:  try_lock succeeds = true
+  after `let _guard = tally.lock()`:  try_lock succeeds = false
+  Same thread, same mutex, one identifier apart, and `try_lock` can
+  tell them apart. The first is an unlocked critical section that
+  reads exactly like a locked one — which is why rustc DENIES it
+  by default, and why the line above needs an #[allow] to exist.
+  But the lint knows std's locks, not the pattern:
+    drop: a hand-rolled guard, released early
+  no error, no warning — the value is already gone
+
+──── 5. Some names are in scope before they are written
+  quorum() = 7   <- called above its own definition
+  A `let` cannot do that. Read one above its own line and you get
+      error[E0425]: cannot find value `quorum` in this scope
+  Items are in scope for the entire block; a binding's scope starts
+  at its `let` and runs to the brace. Same word, two different rules.
