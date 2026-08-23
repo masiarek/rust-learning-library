@@ -1,0 +1,42 @@
+1. WHAT IS ACTUALLY STORED
+   you wrote 0.1, and the machine kept:
+     0.1_f32 = 0.100000001490116119384765625000
+     0.1_f64 = 0.100000000000000005551115123126
+   neither is 0.1. In binary, 1/10 repeats forever:
+     1/10 = 0.0001100110011001100110011...  (0011 forever)
+   f32 keeps 24 significant bits, f64 keeps 53. The rest is cut.
+
+2. IT ROUNDS — IT DOES NOT TRUNCATE
+   the discarded tail votes on the last kept bit first,
+   so the error goes in BOTH directions:
+     0.3_f32 = 0.300000011920928955078125000000   UP
+     0.3_f64 = 0.299999999999999988897769753748   DOWN
+     0.7_f32 = 0.699999988079071044921875000000   DOWN
+   same literal, two widths, opposite directions.
+
+3. THE CUT COMPOUNDS
+   ten ballots, every one scoring the candidate 1 of 5
+     sum as integers, divide once : 1   == 1.0 ? true
+     add 1/10 ten times           : 0.9999999999999999   == 1.0 ? false
+     difference                   : 1.1102230246251565e-16
+   ten roundings instead of one. Same data, same average, same
+   arithmetic — and one of them cannot be compared to 1.0.
+
+4. WHY RUST WITHHOLDS Eq AND Ord
+   because of one value that breaks both laws:
+     NAN == NAN                  : false
+     NAN  < 1.0                  : false
+     NAN  > 1.0                  : false
+   not less, not greater, not equal. Ord promises a TOTAL order,
+   Eq promises reflexivity (a == a). NaN breaks both, so f64 gets
+   only PartialEq and PartialOrd — and partial_cmp says so:
+     1.0.partial_cmp(&2.0)       : Some(Less)
+     1.0.partial_cmp(&NAN)       : None
+   that None is the answer a language without it has to invent.
+
+5. THE ESCAPE HATCHES, WHEN YOU MEAN IT
+   sort_by(f64::total_cmp)     : [0.3, 0.30000000000000004, 1.0, NaN]
+   compare within a tolerance you chose for the problem:
+     a == b                    : false
+     (a-b).abs() < 1e-9        : true
+     HashMap<u32, _> key       : {1: 10}  (f64 is not Hash)

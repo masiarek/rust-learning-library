@@ -1,0 +1,37 @@
+the table, as integers — nothing here is inexact:
+  Alma   total  34  over 10 ballots  = avg 3.4
+  Bruno  total  41  over 10 ballots  = avg 4.1
+  Cato   total  28  over 10 ballots  = avg 2.8
+  Delia  total  41  over 10 ballots  = avg 4.1
+
+FIX A — partial_cmp().unwrap()
+  ["Bruno", "Delia", "Alma", "Cato"]
+  works, and hides a panic: unwrap() is a claim that no NaN can reach here.
+  with an unscored candidate: PANIC — 0/0 is NaN, partial_cmp gave None
+
+FIX B — total_cmp
+  ["Bruno", "Delia", "Alma", "Cato", "Emil"]
+  never panics: IEEE-754 totalOrder gives NaN a defined seat (last, here).
+  but read that last name twice — Emil is RANKED, not excluded.
+
+FIX C — do not divide at all
+  ["Bruno", "Delia", "Alma", "Cato", "Emil"]
+  no float, no NaN, no unwrap, no tolerance — and a tie stays a tie:
+  exact ties detected: 1  (Bruno and Delia, both 41)
+
+WHAT THE THREE COST
+  A  compiles, ranks, panics on data you have not seen yet
+  B  compiles, ranks, never panics — and silently ranks a NaN
+  C  compiles, ranks, cannot produce a NaN, and finds the tie
+  same first four either way? true
+  the float was never carrying information the integer did not have.
+
+AND THE COMPARISON THAT STARTED IT
+  Alma's average prints as 3.4, Cato's as 2.8
+  alma == 3.4                 : true
+  stored value                : 3.39999999999999991118
+  neither side is 3.4 — 34/10 is 17/5, and 5 is not a power of two.
+  the division and the literal just rounded to the SAME wrong f64,
+  which is luck, not correctness. One addition spends it:
+  alma + cato == 6.2          : false
+  alma + cato                 : 6.19999999999999928946
