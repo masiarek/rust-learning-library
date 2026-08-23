@@ -100,6 +100,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...and then the judgement call both of those leave open, which needs
         # the name half AND the value half already in the reader's hands.
         "when_to_shadow",
+        # ...and last, the question the judgement call raises: what would
+        # have caught me? Needs the three bugs already seen to land.
+        "nothing_checks_a_shadow",
         "newtype_score",
         "representing_a_ballot",
         # The sequel: "blank is not zero" stops at two cases; markers need six.

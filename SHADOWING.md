@@ -4,7 +4,7 @@
 
 **One line:** Writing `let x` when `x` already exists makes a **second variable** wearing the first one's name — and this page is the door to every lesson about what that does, what it is for, and where it goes wrong.
 
-Three pages, and they answer three different questions: *what is it*, *what happens to the value it hid*, and *should I use it here*. Start wherever your question is; none of them assumes the others.
+Four pages, and they answer four different questions: *what is it*, *what happens to the value it hid*, *should I use it here*, and *what would have caught me if I got it wrong*. Start wherever your question is; none of them assumes the others.
 
 ---
 
@@ -34,15 +34,16 @@ Three consequences follow, and everything on the three pages below is one of the
 - **ABAP.** There is no analogue. A `DATA` name is one typed variable for the whole routine, and declaring `DATA(lv_x)` twice is a syntax error. So ABAP has to use `lv_input` / `lv_input_num`, and its `lv_` / `lt_` prefixes exist to carry the type in the name — precisely the job shadowing removes. What you give up in exchange is ABAP's free guarantee that one name in a routine means one thing.
 - **C / C++.** Both shadow, but only in a *nested* block; a redefinition in the same block is an error, which is why C code opens braces to get the effect and why `-Wshadow` exists. Neither gives you the type change, because the declaration carries the type.
 
-## The three lessons
+## The four lessons
 
 | # | Lesson | Level | The question it answers |
 |---|---|---|---|
 | 1 | [Shadowing and `unwrap`](01_Foundations/shadowing_and_unwrap/README.md) | 201 | What shadowing *is* — and why the popular explanation that ties it to `unwrap` is crediting it for something `Copy` is doing |
 | 2 | [A shadow does not drop](01_Foundations/shadowing_does_not_drop/README.md) | 201 | What happens to the value underneath: nothing. It outlives the shadow that hid it, and no name is left to free it early |
 | 3 | [When to shadow](01_Foundations/when_to_shadow/README.md) | 201 | The judgement call — the design trade against `mut`, the five idioms, and the three bugs that compile |
+| 4 | [Nothing checks a shadow](01_Foundations/nothing_checks_a_shadow/README.md) | 201 | What the tooling does about it — no lint in `rustc`, the type error mistaken for one, and the clippy lint that catches the bug only by banning the idiom |
 
-Read in that order they build: the first defines it, the second explains the mechanism the third page's worst bug rests on, and the third is the one you will come back to.
+Read in that order they build: the first defines it, the second explains the mechanism the third page's worst bug rests on, the third is the one you will come back to, and the fourth says how much help you can expect while you get it wrong.
 
 ## Where it turns up elsewhere
 
