@@ -468,4 +468,5 @@ fn main() {
 - [Debug and Display](../debug_vs_display/README.md) — what `{}` and `{:?}` actually ask the type for, which is the other half of every format string
 - [A block is an expression](../a_block_is_an_expression/README.md) — the `let` you write above the line, and why braces have a value at all
 - [When to shadow](../when_to_shadow/README.md) — because a capture reads whatever the name means at that point
+- [Scope is about names, not values](../scope_is_about_names/README.md) — how far "that point" extends, and why the answer differs for the name, the value and a borrow of it
 - [What a warning is asking](../what_a_warning_is_asking/README.md) — the `unused variable` you get when you bind a value for a print and then delete the print

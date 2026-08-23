@@ -213,7 +213,7 @@ The `Where each one ends` group in the verified output above is those two blocks
 
 This is the mechanical reason behind the worst shadowing bug in the set. A loop body is a block, so a shadowed accumulator is rebuilt from the outer value and thrown away at every brace — [the tally that never tallies](../when_to_shadow/README.md#1-the-accumulator-that-never-accumulates), which compiles, runs, and complains only that a `mut` it no longer uses could be dropped. **If the new value has to outlive the block that computes it, a shadow cannot do the job at all**, and no error will say so.
 
-The escape hatch is that a block is an *expression*, so the work can stay scoped while the result leaves:
+The escape hatch is that [a block is an *expression*](../a_block_is_an_expression/README.md), so the work can stay scoped while the result leaves:
 
 ```rust
 let quorum = {

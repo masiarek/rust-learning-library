@@ -126,7 +126,7 @@ let ballots = {
 // `ballots` is not `mut`. Nothing below this line can push to it.
 ```
 
-**Give a shadow an end.** A shadow normally runs to the end of its scope; a block chooses that end deliberately — which is the standard fix for the one shadowing bug the compiler will not catch. See [When to shadow](../when_to_shadow/README.md).
+**Give a shadow an end.** A shadow normally runs to the end of its scope; a block chooses that end deliberately — which is the standard fix for the one shadowing bug the compiler will not catch. See [When to shadow](../when_to_shadow/README.md), and [A name is not a place](../a_name_is_not_a_place/README.md) for this same idiom seen from the shadow's side — including the qualifier that cuts the other way, that a *same-scope* shadow does not end early at all.
 
 **End a borrow early.** A borrow taken inside a block cannot outlive it, so the block is the tool when you need the original writable again. Note the caveat: since Rust 2018 a borrow ends at its **last use** rather than at the closing brace, so most of the `{ }` blocks you will see doing this in older code and older tutorials are no longer necessary. It is still the answer when the compiler disagrees with you about where the last use was. See [Borrowing](../borrowing/README.md) for the rule, and [Scope is about names, not values](../scope_is_about_names/README.md) for why a name's scope and a borrow's region are two different measurements that happen to share a word.
 

@@ -58,6 +58,7 @@ Shadowing is not a topic you finish; it is a habit that shows up inside other le
 | [`if let`](01_Foundations/if_let/README.md) | Pattern bindings introduce a fresh name; `let … else` is the guard clause the unwrap-and-narrow idiom opens with |
 | [Initial values](01_Foundations/initial_values/README.md) | The other route away from `mut` — declare without initializing and let the compiler prove you assigned |
 | [A score is not a number](01_Foundations/newtype_score/README.md) | `let id = BallotId(id);` — narrowing into a newtype so the loose form becomes unreachable |
+| [A block is an expression](01_Foundations/a_block_is_an_expression/README.md) | Where a shadow is given a deliberate *end* — and the nested-block snippet that circulates as "shadowing in Rust", which is the kind every language has |
 | [Lock poisoning](09_Advanced/mutex_poisoning/README.md) | The guards that must never be shadowed, and what a held one costs a second thread |
 
 ## The one rule, if you only keep one
