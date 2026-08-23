@@ -1,0 +1,42 @@
+
+──── Part 1: Name the guarantor, or admit there isn't one
+      #1  "the literal \"5\" parses as a u8"
+            guarantor: the literal, three characters to the left.   KEEP
+      #2  "a non-empty slice has a middle element, and we
+           returned early above if it was empty"
+            guarantor: the `return None` four lines up.             KEEP
+      #3  "the config should have a quorum"
+            guarantor: nobody. A user typed the file.               FIX THE TYPE
+      #4  "ballot N should score X; the loader pads short rows"
+            guarantor: the loader, named in the sentence.           KEEP THE PROOF,
+                                                                    MOVE THE MESSAGE
+      Three can name a guarantor. #3 can only say "should" — a hope
+      wearing the grammar of a proof. The tell is precise: you can write
+      the words, but you cannot name anyone who makes them true.
+
+──── Part 2: Which one dies on input a user could plausibly type?
+      #1 max_score()             -> 5
+      #2 middle_score(&[3,5,0])  -> Some(3)
+      #2 middle_score(&[])       -> None
+      #3 well-formed config      -> 50
+      #3 typo'd key              -> PANIC: the config should have a quorum
+      #1 and #2 cannot fail — #2 answers `None` rather than panicking,
+      because emptiness is a caller's question, not a bug. #3 dies on a
+      config that is merely misspelled, with a message blaming nothing.
+
+──── Part 3: Fix #3 by changing the signature, not the wording
+      well-formed  -> Ok(50)
+      typo'd key   -> Err("no `quorum` key in [election]")
+      not a number -> Err("quorum = \"fifty\" is not a number (invalid digit found in string)")
+      No panic, and the third message carries the offending value —
+      which the `expect` version could not, because a &str message is
+      chosen before anyone knows what went wrong.
+
+──── Part 4: The proof is fine; the message is built 4 times for nothing
+      expect(&proof(i, name))                    total 16, proof() ran 4 times
+      unwrap_or_else(|| panic!(proof(i, name)))  total 16, proof() ran 0 times
+      Same total, same proof, same sentence if it ever fires. `expect`
+      takes a &str — an ordinary eager argument — so the String is built,
+      allocated and dropped on every SUCCESSFUL row, forever, to be read
+      never. A plain literal costs nothing; a formatted one belongs in
+      the sad path.
