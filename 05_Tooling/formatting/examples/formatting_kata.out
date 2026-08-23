@@ -1,0 +1,13 @@
+as pasted
+  bytes in the literal: 34
+  sections found:       1
+    ballots: -> 3 rows
+  ballots counted:      3
+
+tidied to line up with the surrounding code
+  bytes in the literal: 50
+  sections found:       0
+  ballots counted:      0
+
+same election, 3 ballots vs 0
+rustfmt changed neither block: a string literal is data, not code.
