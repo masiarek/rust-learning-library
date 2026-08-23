@@ -1,0 +1,28 @@
+=== a game, played into one u32 ===
+  X O O
+  . X .
+  . . X
+  raw            = 0101000000110100010001
+  the same bits  = 0101 000000110 100010001   <- moves | O cells | X cells
+  X cells        = 100010001
+  O cells        = 000000110
+  moves played   = 5
+  occupied       = 100010111  (5 of 9)
+
+=== the win check is one mask comparison ===
+  x & 000000111 == mask  ->  false  top row
+  x & 000111000 == mask  ->  false  middle row
+  x & 111000000 == mask  ->  false  bottom row
+  x & 001001001 == mask  ->  false  left column
+  x & 010010010 == mask  ->  false  middle column
+  x & 100100100 == mask  ->  false  right column
+  x & 100010001 == mask  ->  true   diagonal \
+  x & 001010100 == mask  ->  false  diagonal /
+  winner: X on the diagonal \
+
+=== the trap, once a third field sits above the other two ===
+  O cells  (b >> 9) & 0x1FF = 000000110   right
+  O cells   b >> 9          = 101000000110   WRONG once moves is nonzero
+  ...the move counter is sitting directly on top of O, exactly where
+     the TCP offset sat on top of reserved. Same bug, different header.
+  X cells   b & 0x1FF       = 100010001   no shift needed: X is the bottom field

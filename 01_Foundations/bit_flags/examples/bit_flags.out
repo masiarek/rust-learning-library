@@ -1,0 +1,40 @@
+
+=== a flag is a one-bit field ===
+  O_RDWR | O_CREAT | O_TRUNC =   578  = 000000001001000010
+    O_CREAT      64 = 000000000001000000  set? true
+    O_TRUNC     512 = 000000001000000000  set? true
+    O_APPEND   1024 = 000000010000000000  set? false
+  flags.count_ones() = 3   <- BITS set, not flags set: one of them is the O_RDWR field
+
+=== TRAP 1: a zero-valued flag cannot be tested with & ===
+  O_RDONLY = 0, so `flags & O_RDONLY` is 0 for EVERY flags:
+    read-only   flags & O_RDONLY != 0  ->  false   (wrong for all three)
+    write-only  flags & O_RDONLY != 0  ->  false   (wrong for all three)
+    read-write  flags & O_RDONLY != 0  ->  false   (wrong for all three)
+  the low two bits are a FIELD, not three flags. mask it and compare:
+    read-only   flags & O_ACCMODE == ...  ->  O_RDONLY
+    write-only  flags & O_ACCMODE == ...  ->  O_WRONLY
+    read-write  flags & O_ACCMODE == ...  ->  O_RDWR
+
+=== an n-bit field is the same mechanism, wider ===
+  pack(offset=8, reserved=0, flags=ACK) = 0x8010 = 1000000000010000
+                                           offset|rsv|flags
+  offset   = (w >> 12) & 0xF    = 8
+  reserved = (w >> 9)  & 0x7    = 0
+  flags    =  w        & 0x1FF = 000010000
+  ACK set? true   SYN set? false   FIN set? false
+
+=== TRAP 2: the top field forgives a missing mask; a middle field does not ===
+  offset   w >> 12          =     8  correct -- nothing lives above it
+  reserved w >> 9           =    64  WRONG -- the offset bled in
+  reserved (w >> 9) & 0x7    =     0  right
+  ...which is how the habit forms: you learn >> on the top field, where it works.
+
+=== the newtype: names in the output, and no cross-type mixing ===
+  Mode(O_RDWR | O_CREAT | O_APPEND)
+  contains(O_CREAT)  = true
+  contains(O_TRUNC)  = false
+  bare u16 vs Mode   : `Mode(O_RDWR) | ACK` does not compile (E0308)
+  contains() uses `& x == x`, not `!= 0` -- so a multi-bit mask means ALL of it:
+    Mode(O_CREAT).contains(both)      = false
+    Mode(O_CREAT|O_TRUNC).contains(both) = true
