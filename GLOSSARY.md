@@ -150,6 +150,12 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Parallel front end** — rustc's nightly `-Z threads=N`, which multi-threads parsing, type checking and borrow checking. The *back* end has been parallel for years; this is the half that used to leave your other cores idle. → [Compile times](05_Tooling/compile_times/README.md)
 
+**`rustfmt`** — The formatter that ships with the toolchain and applies the community style guide. It works on a **whole file** and has no fragment mode, which is the source of every surprise around it: an IDE asked to reformat a selection cannot use it and silently falls back to its own formatter. → [Formatting](05_Tooling/formatting/README.md)
+
+**`cargo fmt -- --check`** — The CI form: writes nothing, prints the diff it would have applied, and exits non-zero. What turns a formatting *preference* into a fact about the repository — without it, whoever last opened a file decides how it looks. → [Formatting](05_Tooling/formatting/README.md)
+
+**`#[rustfmt::skip]`** — An attribute exempting one item from formatting, for the rare block whose hand-alignment carries meaning: a matrix, a table of constants. Deliberately per-item — the global alternative is a settings argument with no end. → [Formatting](05_Tooling/formatting/README.md)
+
 **Typestate** — Encoding what stage a value has reached into its *type*, so that operations valid only at one stage do not exist at the others. An unauthenticated request and an authenticated one become different types rather than one type with a boolean. → [The right to vote is a value](09_Advanced/one_person_one_vote/README.md)
 
 **Consuming method** — A method taking `self` by value rather than `&self`, so calling it moves the receiver and the caller cannot use it again. Turns "at most once" from a rule you enforce into one the borrow checker enforces. → [The right to vote is a value](09_Advanced/one_person_one_vote/README.md)

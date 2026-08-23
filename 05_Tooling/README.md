@@ -7,6 +7,7 @@ These pages are not about making your program better. They are about the loop yo
 | Lesson | Level | What it teaches |
 |---|---|---|
 | [Compile times](compile_times/README.md) | 201 | A build is four phases, and each optimization reaches exactly one — reduced debug info, the parallel front end, Cranelift, and why a saving is never portable |
+| [Formatting](formatting/README.md) | 101 → 201 | Hand the whitespace argument to `rustfmt` — and learn which of your IDE's *two* Rust formatters just ran, because a selection and a whole file do not go through the same one |
 
 The one tooling page that is a *prerequisite* rather than a refinement lives in Foundations instead: [running a scratch program](../01_Foundations/rustc_without_cargo/README.md), which is how you run anything in this library at all.
 

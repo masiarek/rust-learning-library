@@ -103,6 +103,8 @@ NAV_ORDER: dict[str, list[str]] = {
     ],
     "05_Tooling": [
         "README.md",
+        # Day one, and cheap: settle the whitespace question before anything else.
+        "formatting",
         "compile_times",
     ],
     "09_Advanced": [
