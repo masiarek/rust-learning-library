@@ -32,7 +32,7 @@ error[E0277]: `Opaque` doesn't implement `Debug`
 note: required by a bound in `Result::<T, E>::expect`
 ```
 
-The bound is a fact about what the message is *made of*, not an arbitrary requirement — which is the argument for deriving `Debug` on error types by reflex.
+The bound is a fact about what the message is *made of*, not an arbitrary requirement — which is the argument for deriving `Debug` on error types by reflex. It is also a fact about *whose* message the user ends up reading: the panic pairs your sentence with the error's `Debug` form, never its `Display` one, and [that split is a page of its own](../debug_vs_display/README.md).
 
 ## Say what should be true, not what went wrong
 

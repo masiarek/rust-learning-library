@@ -72,7 +72,7 @@ That signature is worth having in your fingers: it is the shortest way to use `?
 Error: OutOfRange { got: 9, max: 5 }
 ```
 
-not `score 9 is above the 5 cap`. (Verified by running it; it is `Termination` for `Result`, which is [documented to use `Debug`](https://doc.rust-lang.org/std/process/trait.Termination.html).) If a human is meant to read that message, print it yourself and call [`std::process::exit`](https://doc.rust-lang.org/std/process/fn.exit.html), or use a wrapper type whose `Debug` delegates to `Display` — which is exactly what `anyhow::Error` does.
+not `score 9 is above the 5 cap`. (Verified by running it; it is `Termination` for `Result`, which is [documented to use `Debug`](https://doc.rust-lang.org/std/process/trait.Termination.html).) If a human is meant to read that message, print it yourself and call [`std::process::exit`](https://doc.rust-lang.org/std/process/fn.exit.html), or use a wrapper type whose `Debug` delegates to `Display` — which is exactly what `anyhow::Error` does. That trap is one of *four* default paths that print `Debug` without asking; [Debug and Display](../debug_vs_display/README.md) counts them, and its kata prices both of those two fixes against each other.
 
 ## `Infallible` — an `E` with no values at all
 

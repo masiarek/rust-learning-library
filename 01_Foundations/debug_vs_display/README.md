@@ -226,7 +226,7 @@ your derived Debug      -> ScoreTooHigh { got: 9, max: 5 }
 fn main() -> Result     -> Error: ScoreTooHigh { got: 9, max: 5 }
 ```
 
-One in five. `unwrap` and [`expect`](../expect/README.md) are made of `Debug` — that is why `expect` on a `Result` carries an `E: Debug` bound that `unwrap_or` does not — and a failing `fn main() -> Result<(), E>` prints `Error: ` followed by the `Debug` form, which is the same fact stated in [the aliases lesson](../result_aliases/README.md).
+One in five. `unwrap` and [`expect`](../expect/README.md) are made of `Debug` — that is why `expect` on a `Result` carries an `E: Debug` bound that `unwrap_or` does not — and a failing `fn main() -> Result<(), E>` prints `Error: ` followed by the `Debug` form, which is the same fact stated in [the aliases lesson](../result_aliases/README.md) — where the two ways out of it are named, and which the kata below prices against each other.
 
 Nothing warns you. There is no lint, no compile error, no clippy note: the sentence you wrote for a human is simply never reached, because the paths that deliver errors by default were all built out of the trait that can be derived. The [kata below](#practice) counts it, fixes it two ways, and prices both fixes.
 
