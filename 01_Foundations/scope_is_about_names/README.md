@@ -32,7 +32,7 @@ let carried = {
 };                                   // `_scratch` dies here; `leaving` did not
 ```
 
-Two names ended and one value ended, at the same brace. That is the whole distinction, and the run below prints it: `drop: scratch` lands at the brace, `carried out` survives to be dropped later under a different name.
+Two names ended and one value ended, at the same brace — the brace being an [expression as well as a scope](../a_block_is_an_expression/README.md) is what lets the value out. That is the whole distinction, and the run below prints it: `drop: scratch` lands at the brace, `carried out` survives to be dropped later under a different name.
 
 This is the same fact [a shadow does not drop](../shadowing_does_not_drop/README.md) is about, seen from the other side — there, the name goes and the value stays *put*; here, the name goes and the value *leaves*.
 
@@ -423,6 +423,7 @@ fn main() {
 
 ## See also
 
+- [A block is an expression](../a_block_is_an_expression/README.md) — the other half of the brace: it opens the scope this page measures, and it is also a value
 - [A name is not a place](../a_name_is_not_a_place/README.md) — the sibling question: not *when* a name ends, but what it refers to, and why a shadow is not a write
 - [Borrowing](../borrowing/README.md) — the rule whose region this page measures
 - [Ownership and moves](../ownership_and_moves/README.md) — who owns the value whose scope end does the dropping

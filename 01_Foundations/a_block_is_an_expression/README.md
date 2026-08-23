@@ -128,7 +128,7 @@ let ballots = {
 
 **Give a shadow an end.** A shadow normally runs to the end of its scope; a block chooses that end deliberately — which is the standard fix for the one shadowing bug the compiler will not catch. See [When to shadow](../when_to_shadow/README.md).
 
-**End a borrow early.** A borrow taken inside a block cannot outlive it, so the block is the tool when you need the original writable again. Note the caveat: since Rust 2018 a borrow ends at its **last use** rather than at the closing brace, so most of the `{ }` blocks you will see doing this in older code and older tutorials are no longer necessary. It is still the answer when the compiler disagrees with you about where the last use was. See [Borrowing](../borrowing/README.md).
+**End a borrow early.** A borrow taken inside a block cannot outlive it, so the block is the tool when you need the original writable again. Note the caveat: since Rust 2018 a borrow ends at its **last use** rather than at the closing brace, so most of the `{ }` blocks you will see doing this in older code and older tutorials are no longer necessary. It is still the answer when the compiler disagrees with you about where the last use was. See [Borrowing](../borrowing/README.md) for the rule, and [Scope is about names, not values](../scope_is_about_names/README.md) for why a name's scope and a borrow's region are two different measurements that happen to share a word.
 
 A fourth, rarer and worth knowing about: **releasing a lock**. A `MutexGuard` unlocks when it drops, and it drops at the end of its scope — so wrapping the critical section in a block is how you unlock before the function ends. [Lock poisoning](../../09_Advanced/mutex_poisoning/README.md) covers what happens when that goes wrong.
 
@@ -459,9 +459,11 @@ fn main() {
 ## See also
 
 - [The braces take a name, not an expression](../braces_take_a_name/README.md) — the other thing every line above is quietly using: `{n}` in a format string
+- [Scope is about names, not values](../scope_is_about_names/README.md) — the word Job 1 uses, and the two other things it is asked to mean: when a value dies, and when a borrow stops mattering
 - [What a warning is asking](../what_a_warning_is_asking/README.md) — `unused variable` on a block's working name, and what the two answers to it mean
 - [When to shadow](../when_to_shadow/README.md) — where "give the shadow an end" is the fix
 - [A shadow does not drop](../shadowing_does_not_drop/README.md) — why a block is the way to free something early, when nothing else will
 - [Borrowing](../borrowing/README.md) — the last-use rule, and when a block is still the answer
+- [Scope is about names, not values](../scope_is_about_names/README.md) — what job 1 actually ends, and the two other things "out of scope" is asked to mean
 - [Initial values](../initial_values/README.md) — the other route away from `mut`: declare without initializing and let the compiler prove you assigned
 - [SHADOWING.md](../../SHADOWING.md) — the map, if the nested-`n` snippet is what brought you here

@@ -68,6 +68,11 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...and what the compiler says back about it. Third because everyone
         # meets `unused variable` on day one; its Drop half pays off much later.
         "what_a_warning_is_asking",
+        # ...and then the two pieces of punctuation every page below is
+        # already using without explaining: the braces that hold a program
+        # together, and the braces that print.
+        "a_block_is_an_expression",
+        "braces_take_a_name",
         "some_and_none",
         "option_vs_result",
         "if_let",
@@ -107,6 +112,10 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...and last, the question the judgement call raises: what would
         # have caught me? Needs the three bugs already seen to land.
         "nothing_checks_a_shadow",
+        # Closes the arc by separating the three things "out of scope" is
+        # asked to mean. Last, because it measures the borrow region, the
+        # drop order and the shadow — all three already met by here.
+        "scope_is_about_names",
         "newtype_score",
         "representing_a_ballot",
         # The sequel: "blank is not zero" stops at two cases; markers need six.
