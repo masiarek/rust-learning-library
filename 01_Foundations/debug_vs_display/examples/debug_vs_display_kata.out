@@ -1,0 +1,44 @@
+The sentence written for the human:
+  score 9 is above the 5 cap -- check the ballot file's score column
+
+=== with #[derive(Debug)] -- what you shipped ===
+  println!("{e}")        SENTENCE  score 9 is above the 5 cap -- check the ballot file's score column
+  println!("{e:?}")         --     ScoreTooHigh { got: 9, max: 5 }
+  .unwrap()                 --     called `Result::unwrap()` on an `Err` value: ScoreTooHigh { got: 9, max: 5 }
+  .expect("...")            --     the ballot file was validated on load: ScoreTooHigh { got: 9, max: 5 }
+  fn main() -> Result       --     Error: ScoreTooHigh { got: 9, max: 5 }
+  1 of 5 paths delivered the sentence you wrote
+
+=== with Debug delegating to Display -- the anyhow move ===
+  println!("{e}")        SENTENCE  score 9 is above the 5 cap -- check the ballot file's score column
+  println!("{e:?}")      SENTENCE  score 9 is above the 5 cap -- check the ballot file's score column
+  .unwrap()              SENTENCE  called `Result::unwrap()` on an `Err` value: score 9 is above the 5 cap -- check the ballot file's score column
+  .expect("...")         SENTENCE  the ballot file was validated on load: score 9 is above the 5 cap -- check the ballot file's score column
+  fn main() -> Result    SENTENCE  Error: score 9 is above the 5 cap -- check the ballot file's score column
+  5 of 5 paths delivered the sentence you wrote
+
+=== and what the delegating Debug gave away ===
+  a failing assert_eq! prints the Debug form of both sides. Compare:
+    derived     ScoreTooHigh { got: 9, max: 5 }
+    delegating  score 9 is above the 5 cap -- check the ballot file's score column
+  The first names the variant and both fields, which is what you want at
+  3am with a red test. The second is a sentence -- good for the operator,
+  and it has quietly removed the field values from your own diagnostics.
+
+=== the other fix: stop letting the runtime choose ===
+  Keep the derived Debug, and handle the error where it leaves the program:
+
+      fn main() -> ExitCode {
+          match run() {
+              Ok(()) => ExitCode::SUCCESS,
+              Err(e) => { eprintln!("error: {e}"); ExitCode::FAILURE }
+          }
+      }
+
+  what the operator now sees on stderr:  error: score 9 is above the 5 cap -- check the ballot file's score column
+  and the process still exits 1:         ExitCode::FAILURE
+
+  scoreboard: 1 of 5 shipped, 5 of 5 after delegating,
+  and 5 of 5 with the derived Debug intact -- because the path that mattered
+  was never `{:?}` at all. It was the one place nobody had written any
+  printing code, so the runtime picked for you, and it picked Debug.

@@ -1,0 +1,118 @@
+
+=== where the habit forms: on an integer, the two agree exactly ===
+  {}    on 11i32     -> 11
+  {:?}  on 11i32     -> 11
+  same characters, so nothing tells you two different traits ran
+
+  {}    on "Ada"     -> Ada
+  {:?}  on "Ada"     -> "Ada"
+  the quotes are not decoration: Debug for str prints a Rust LITERAL
+
+  {}    on 'A'       -> A
+  {:?}  on 'A'       -> 'A'
+
+  {}    on 1.0f64    -> 1
+  {:?}  on 1.0f64    -> 1.0   <- Debug keeps the point, so you can
+                            see this is a float and not an integer
+
+=== the same trait pair, read the other way round: Debug shows the data ===
+  with {:?}       bytes  with {}, bracketed and last on the line
+  "Ada"           3      [Ada]
+  "Ben "          4      [Ben ]
+  ""              0      []
+  "Ca\tra"        5      [Ca	ra]
+  "O'Neill\n"     8      [O'Neill
+]
+  "Ada\u{200b}"   6      [Ada​]
+
+  Five of those six names are a bug, and {} renders every one of them as
+  something a reviewer would sign off: a trailing space, an empty string, a
+  tab, a newline, a zero-width space. The byte count is the tell, and {:?}
+  is how you see the cause -- it escapes anything a Rust literal would.
+
+  Note what the O'Neill row did to this table: it wrapped, because the name
+  really does contain a newline. That is Display doing its job faithfully,
+  and it is why the Debug column had to come first to stay readable.
+
+=== one is generated, one is written -- and that is not an oversight ===
+  {}    -> Ada scored 5/2/0
+  {:?}  -> Ballot { voter: "Ada", scores: [5, 2, 0] }
+  {:#?} ->
+      Ballot {
+          voter: "Ada",
+          scores: [
+              5,
+              2,
+              0,
+          ],
+      }
+
+  #[derive(Debug)] can be generated because the answer is structural:
+  the type's name, its fields, their names. There is no #[derive(Display)]
+  in std, because nothing about the type says whether a human wants
+  "Ada scored 5/2/0", "Ada: 5, 2, 0", or a row in a table.
+
+=== why you reach for {:?} so often: the containers have no Display ===
+  Vec<u8>          {} does not compile   {:?} -> [5, 2, 0]
+  Option<u8>       {} does not compile   {:?} -> Some(5)
+  Result<u8, E>    {} does not compile   {:?} -> Err(ScoreTooHigh { got: 9, max: 5 })
+  (&str, u8, bool) {} does not compile   {:?} -> ("Ada", 5, true)
+  BTreeMap         {} does not compile   {:?} -> {"Ada": 5, "Ben": 2}
+
+  Every one of those has a Debug impl and no Display impl, for the same
+  reason Ballot needed a hand-written one: there is no single right way
+  to read a collection out loud. Comma-separated? One per line? With the
+  keys? std declines to guess, so `{}` on a Vec is error E0277.
+
+  Path is the case worth knowing:
+    {:?}        -> "/etc/ballots.yaml"
+    .display()   -> /etc/ballots.yaml
+  A path is not guaranteed to be UTF-8, so Path CANNOT promise the
+  lossless string Display implies. `.display()` hands back a helper that
+  can -- by admitting it may substitute characters. The missing impl is
+  the type telling you something true.
+
+=== Display pays a dividend Debug does not: ToString ===
+  b.to_string()      -> "Ada scored 5/2/0"
+  format!("{b:?}")   -> "Ballot { voter: \"Ada\", scores: [5, 2, 0] }"
+  (both shown with {:?} here, so you can see they really are Strings)
+
+  impl<T: Display> ToString for T is a blanket impl in std, so writing
+  Display is what makes .to_string() exist. Debug has no such impl:
+  the Debug string is reachable only through format!("{:?}").
+
+  And Debug pays a different one -- it is what the tooling is made of:
+    assert_eq!(a, b)   prints both sides on failure   => T: Debug
+    .unwrap() on Err   prints the error               => E: Debug
+    dbg!(x)            prints file:line and the value => T: Debug
+  which is why #[derive(Debug)] belongs on almost everything you write,
+  and why leaving it off is felt first by your tests.
+
+=== the delivery paths choose Debug, and they do not ask ===
+  your Display sentence   -> score 9 is above the 5 cap
+  your derived Debug      -> ScoreTooHigh { got: 9, max: 5 }
+
+  .unwrap()               -> PANIC: called `Result::unwrap()` on an `Err` value: ScoreTooHigh { got: 9, max: 5 }
+  .expect("...")          -> PANIC: the ballot file was validated on load: ScoreTooHigh { got: 9, max: 5 }
+  fn main() -> Result     -> Error: ScoreTooHigh { got: 9, max: 5 }   (to stderr, exit 1)
+
+  Three of the four use Debug. The one sentence written for a human is
+  the one the standard paths never reach -- and none of this is a
+  warning, a lint, or a compile error. It is just what gets printed.
+
+=== derived Debug prints every field it can reach ===
+  #[derive(Debug)]  -> Session { voter_id: 4711, token: "sk_live_9f3a2b8c1d" }
+                       ^ that is now in your log file, your CI output,
+                         and the panic message of any failing unwrap
+
+  hand-written      -> Guarded { voter_id: 4711, token: <redacted, 18 chars> }   <- the same two fields
+  and it still honours {:#?}, because f.debug_struct() does that for you:
+      Guarded {
+          voter_id: 4711,
+          token: <redacted, 18 chars>,
+      }
+
+  The other half of the same rule: Debug output is NOT a stable format.
+  std reserves the right to change how any of its types debug-print, so a
+  program that parses a {:?} string has built on sand. If you need the
+  text to hold still, that is a Display impl -- or serde -- not Debug.
