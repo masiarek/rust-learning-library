@@ -1,0 +1,34 @@
+
+──── Job 1: it opens a scope, anywhere you like
+  outer n is: 5
+    inner n is: 10
+  outer n is: 5   <- the outer one was never touched
+
+──── ...and a name declared inside is gone at the brace
+  { let a = 1; }
+  println!("{a}");   <- error[E0425]: cannot find value `a`
+  No subtlety: past the brace, the name does not exist.
+
+──── Job 2: it has a VALUE — its last line, with no semicolon
+  quorum = 5
+
+──── The semicolon is the switch
+  { tally() }    is 6
+  { tally(); }   is ()      <- the unit value
+  Same block, one character apart, two different types.
+
+──── So a function body was a block all along
+  fn double(n: i32) -> i32 { n * 2 }
+  double(4) = 8   <- a tail expression, not a `return`
+
+──── What it is FOR (1): scoping the `mut` to the building
+  ballots = [5, 3, 4]
+  `ballots` is not `mut`, and no line below here can grow it.
+
+──── What it is FOR (2): giving a shadow an end
+    inside:  ADA
+  outside: ada   <- the shadow ended at the brace
+
+──── What it is FOR (3): the branch that decides a value
+  turnout 61% -> quorate
+  `if` is an expression because its arms are blocks.

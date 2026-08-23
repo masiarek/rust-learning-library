@@ -1,0 +1,48 @@
+
+──── What a Python programmer writes, and what each brace gets back
+  println!("{ballot.voter}");
+      error: invalid format string: field access isn't supported
+      help: consider using a positional formatting argument instead
+
+  println!("{ballot.scores.len()} candidates");
+      error: invalid format string: expected `}`, found `.`
+
+  println!("first: {ballot.scores[0]}");
+      error: invalid format string: expected `}`, found `.`
+
+  println!("mean: {ballot.total() / 3}");
+      error: invalid format string: expected `}`, found `.`
+
+  Only the first one is diagnosed as what it is. The other three
+  stop at the first character that cannot continue an identifier,
+  so the message names the punctuation and not your intent.
+
+──── Fix A: a `let` above the line, then capture the name
+  Ada: 3 candidates, first 5, mean 4
+
+──── Fix B: a named argument — the name lives in the call
+  Ada: 3 candidates, first 5, mean 4
+
+──── Fix C: positional — no names at all
+  Ada: 3 candidates, first 5, mean 4
+
+──── Which one to ship
+  All three print the same line. They are not equally readable.
+
+  C is the one that rots. With four holes you are already counting
+  arguments against braces by eye, and inserting a fifth in the
+  middle silently renumbers everything after it.
+
+  B keeps the names but spends four lines inventing them at the
+  call site, where they exist only until the semicolon.
+
+  A is the default. The names outlive the print, so the next line
+  can reuse them; the types are visible to the reader and to the
+  compiler's error messages; and the format string reads as the
+  sentence it is going to become. Reach for C only when there is
+  exactly one hole and the expression is short.
+
+──── The one C is genuinely for
+  12
+  ...and inside a method, where `{self.voter}` is refused, a
+  positional argument is often lighter than binding every field.

@@ -1,0 +1,49 @@
+
+──── A name in the braces is looked up like any other name
+  n is 5, voters is 9
+  the old way still works: n is 5, voters is 9
+
+──── But ONLY a name. These three are compile errors:
+  println!("{n + 1}");
+      error: invalid format string: expected `}`, found `+`
+  println!("{scores.len()}");
+      error: invalid format string: expected `}`, found `.`
+  println!("{scores[0]}");
+      error: invalid format string: expected `}`, found `[`
+  Not one of them is a type error. The macro cannot even finish
+  reading the string — it wanted a name and found punctuation.
+
+──── Field access gets a message of its very own
+  println!("ballot from {self.voter}");
+      error: invalid format string: field access isn't supported
+      help: consider using a positional formatting argument instead
+  rustc wrote that error for this exact mistake, which tells you
+  how often people make it. The fix it suggests:
+  Ada scored [5, 3, 0]
+
+──── The two escape hatches
+  3
+  3
+  3
+  All three print the same 3. The third names the value, which is
+  the only one of them a reader can still follow at ten lines.
+
+──── Width and precision take a name too — with a trailing $
+  |     Ada|   <- right-aligned in `width` columns
+  0.33        <- `prec` decimal places
+
+──── It reads whatever the name means AT THAT POINT
+  5
+  five   <- same four characters in the string, different variable
+  The capture is a name lookup, so a shadow changes what it finds.
+
+──── The format string itself must be a literal
+  let s = "hello {n}";
+  println!(s);
+      error: format argument must be a string literal
+  The braces are read at COMPILE time, so a string assembled at
+  run time has nothing left to read them.
+
+──── And a real brace is doubled
+  To print {} you write {{}} — and Ada still captures alongside it.
+  {"voter": "Ada"}
