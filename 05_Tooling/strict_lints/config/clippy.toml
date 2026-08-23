@@ -1,0 +1,13 @@
+# Drop this in a project root, beside Cargo.toml.
+#
+# The panic-denying lints in Cargo.toml's [lints.clippy] block are right for
+# shipped code and wrong for tests, where `unwrap()` IS the assertion and a
+# panic IS the failure report. These four carve tests back out.
+#
+# Source: https://namtao.com/rust  (Tris Oaten / No Boilerplate)
+# Explained in: ../README.md
+
+allow-unwrap-in-tests = true
+allow-expect-in-tests = true
+allow-panic-in-tests = true
+allow-indexing-slicing-in-tests = true
