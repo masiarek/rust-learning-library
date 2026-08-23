@@ -73,6 +73,32 @@ All three are **allow-by-default `restriction` lints**, which is clippy saying t
 
 If you want one of them on, `shadow_unrelated` is the cheapest, because `let config = other_thing;` under an existing `config` is hard to justify. It just will not catch this.
 
+### A historical note: the one it *did* catch was not a shadow
+
+Worth knowing before you turn `shadow_unrelated` on, because it is a good illustration of how thin the tooling's grasp of this topic has been. For two years the recommended lint fired on code containing no `let` at all:
+
+```rust
+let (mut x, mut y) = (1, 2);
+(x, y) = (3, 4);              // a destructuring ASSIGNMENT — two writes
+```
+
+```text title="clippy ≤ 1.85 — a false positive, reported as rust-clippy#10279"
+error: `y` shadows a previous, unrelated binding
+  |
+6 |         (x, y) = (3, 4);
+  |             ^
+note: previous binding is here
+  |
+6 |         (x, y) = (3, 4);
+  |          ^
+```
+
+Read the two spans: the "previous binding" it named is `x`, on the same line, in the same tuple. Nothing there is a shadow — `(x, y) = (3, 4)` writes into two existing places, which is precisely the operation a shadow is *not*. The lint had confused an assignment with a declaration, which is the same conflation the reader is here to unlearn, running inside the tool sold as the cure for it.
+
+It was reported in February 2023, was still reproducing when it came up on the users forum in January 2025, and was fixed by [rust-clippy#14381](https://github.com/rust-lang/rust-clippy/pull/14381), merged on 2025-03-27. It is genuinely gone — on clippy 0.1.97 that block passes under `#[deny(clippy::shadow_unrelated)]`, while a real unrelated shadow in the same file still stops the build, so the lint is live and simply no longer wrong about this.
+
+The reason to keep the story rather than delete it: this page's argument is that almost nothing stands between you and a bad shadow. The tooling that does exist is three allow-by-default lints, the only one that catches the accumulator also bans the Book's own idiom, and the one recommended as cheapest spent two years unable to tell a write from a declaration. That is the actual state of the net, and it is worth knowing how recently the last hole was patched. See [A name is not a place](../a_name_is_not_a_place/README.md) for the distinction the lint was missing.
+
 ## Items are shadowed too
 
 `fn` and `let` share the **value namespace**, so shadowing is not only about variables — and the two directions get opposite treatment.
