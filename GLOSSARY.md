@@ -227,3 +227,9 @@ Short definitions. Every entry links to the page that explains it properly — a
 **Alternate flag (`#`)** — The `#` in `{:#?}` and `{:#x}`: one bit on the `Formatter` that an impl may read. The derived `Debug` uses it to pretty-print one field per line, and `f.debug_struct()` honours it for free in a hand-written impl. → [Debug and Display](01_Foundations/debug_vs_display/README.md)
 
 **`ToString`** — The trait behind `.to_string()`, which you never implement: `impl<T: Display> ToString for T` gives it to every type that has a `Display`. The dividend Display pays and Debug does not — the `Debug` string is reachable only through `format!("{:?}")`. → [Debug and Display](01_Foundations/debug_vs_display/README.md)
+
+**Doc comment** — `///` or `//!`, and not a comment: the compiler parses it into a `#[doc = "..."]` attribute on an item, so it must have an item to attach to. `//!` is *inner* (it documents what it is inside, hence the top of a file); `///` is *outer* (it documents the item below it). → [Comments that compile](01_Foundations/comments_that_compile/README.md)
+
+**Doctest** — A fenced code block inside a doc comment, which `cargo test` compiles and runs like any other test. The reason documentation examples in Rust cannot quietly rot into ones that no longer compile — the only kind of comment any language checks. → [Comments that compile](01_Foundations/comments_that_compile/README.md)
+
+**`unused_doc_comments`** — The warn-by-default lint for a `///` that attached to a statement or expression rather than an item. Worth knowing by name because it is the quiet failure: the doc comment parsed, the build succeeded, and nothing will ever read what you wrote. → [Comments that compile](01_Foundations/comments_that_compile/README.md)

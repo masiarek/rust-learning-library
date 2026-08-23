@@ -1,0 +1,58 @@
+
+──── Step 1: `//` is erased before the parser runs
+  The two lines above this one are syntactic garbage.
+  The program compiled anyway, so nothing ever parsed them.
+      That is what "the compiler ignores comments" means, and
+      it is true of exactly two of the four forms.
+
+──── Step 2: `///` is not erased — it becomes an attribute
+  `Ballot` carries:
+      #[doc = r" A ballot."]
+      #[doc = "Written the long way."]
+      The macro captured a `meta` fragment, so those are real
+      attributes, not text. `///` is sugar for `#[doc = "..."]`,
+      which is why the two forms sit side by side above and why
+      the leading space after the slashes is preserved verbatim.
+
+──── Step 3: Which way each one points
+  ///  documents the item BELOW it        (outer — points down)
+  //!  documents the item it is INSIDE    (inner — points out)
+      So the `//!` block at the top of this file documents the
+      file. Put it after an item and there is nothing enclosing
+      it to describe, which is a compile error, not a warning.
+
+──── Step 4: A misplaced doc comment: warning, or error, or neither
+  There are three answers, not one, and the first surprises
+  people: a doc comment on a STATEMENT is only a warning —
+        warning: unused doc comment
+        ...rustdoc does not generate documentation for
+           macro invocations
+  It attached to something, so it parsed. Nothing will ever
+  read it, and the build still succeeds.
+      Uncomment the LAST line of that block, where nothing
+      follows, and it stops being a warning:
+        error[E0585]: found a documentation comment that
+                      doesn't document anything
+        help: doc comments must come before what they document,
+              if a comment was intended use `//`
+      And an inner `//!` at item level, after an item has begun:
+        error[E0753]: expected outer doc comment
+      So the trap is not the error. The error tells you. The trap
+      is the WARNING — a `///` you wrote inside a function is not
+      documentation, it is a comment with extra steps, and the
+      only thing that says so is a line in the build log.
+
+──── Step 5: Block comments nest, unlike C's
+  /* outer /* inner */ still commented */ compiles here.
+      In C the first `*/` ends it and the rest is a syntax error,
+      so commenting out a region that already contains a comment
+      breaks. In Rust the lexer counts the pairs, so it works.
+
+──── Step 6: The reason any of this matters: doc comments are tested
+  A fenced block inside `///` is compiled and run by `cargo test`:
+        /// ```
+        /// assert_eq!(doubled(3), 6);
+        /// ```
+      Write 7 there and the test suite fails. So the examples in
+      your documentation cannot rot into ones that no longer
+      compile — the one kind of comment that is checked at all.

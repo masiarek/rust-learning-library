@@ -61,6 +61,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "README.md",
         # How to run any of this at all, before the language itself.
         "rustc_without_cargo",
+        # ...and what the text in that file means, before any of it is Rust:
+        # two of the four comment forms are parsed, not discarded.
+        "comments_that_compile",
         "some_and_none",
         "option_vs_result",
         "if_let",

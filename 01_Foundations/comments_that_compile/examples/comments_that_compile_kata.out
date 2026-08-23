@@ -1,0 +1,3 @@
+`Ballot` carries:
+    #[doc = r" One voter's filled-in paper."]
+score = 3
