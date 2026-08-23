@@ -176,6 +176,9 @@ NAV_ORDER: dict[str, list[str]] = {
     ],
     "05_Tooling": [
         "README.md",
+        # Day zero: the window you will be reading all of this through, and the
+        # one decision that is cheapest to make badly and expensive to revisit.
+        "editors",
         # Day one, and cheap: settle the whitespace question before anything else.
         "formatting",
         "compile_times",

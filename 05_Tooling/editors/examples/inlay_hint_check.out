@@ -1,0 +1,9 @@
+alone on the page, an integer literal settles on i32: 3
+a float literal settles on f64: 0.5
+a bare string literal is a borrowed &str: Ada
+
+`votes` is the same literal on the same shape of line as `seats`.
+Adding it to a u64 two lines later makes it a u64: 3 + 10 = 13
+Inference runs over the whole body, so the hint on a `let` can be
+a conclusion drawn from a line you have not read yet. That is the
+thing an editor tells you and a printout of the source does not.

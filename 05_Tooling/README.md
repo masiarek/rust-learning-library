@@ -6,6 +6,7 @@ These pages are not about making your program better. They are about the loop yo
 
 | Lesson | Level | What it teaches |
 |---|---|---|
+| [Choosing an editor](editors/README.md) | reference | Every editor but RustRover is a front end for the same `rust-analyzer`, so the choice is what the window costs you before it shows you a type — with the pros and cons of six of them, and one verified way the do-it-yourself path fails silently |
 | [Compile times](compile_times/README.md) | 201 | A build is four phases, and each optimization reaches exactly one — reduced debug info, the parallel front end, Cranelift, and why a saving is never portable |
 | [Formatting](formatting/README.md) | 101 → 201 | Hand the whitespace argument to `rustfmt` — and learn which of your IDE's *two* Rust formatters just ran, because a selection and a whole file do not go through the same one |
 
