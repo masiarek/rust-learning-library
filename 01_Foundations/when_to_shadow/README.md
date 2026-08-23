@@ -94,9 +94,9 @@ for score in [5, 3, 4] {
 println!("{total}");             // 0
 ```
 
-Each iteration builds a fresh `total` from the outer zero and throws it away at the brace. This one does get a warning, but not the one you would expect — rustc says *"variable does not need to be mutable"* and never mentions shadowing at all.
+Each iteration builds a fresh `total` from the outer zero and throws it away at the brace. The only warning is *"variable does not need to be mutable"*, which never says "shadow" — so read it as the bug report it is: **an accumulator that does not need `mut` is not accumulating.**
 
-Read that warning as the bug report it is: **an accumulator that does not need `mut` is not accumulating.** It is [the compiler asking whether you meant it](../what_a_warning_is_asking/README.md), in a vocabulary that does not contain the word "shadow".
+This one has a page of its own. [Nothing checks a shadow](../nothing_checks_a_shadow/README.md) takes it apart as its central specimen — why no lint fires, and how narrow the margin is that makes it silent.
 
 ### 2. The guard that was never released
 
@@ -154,25 +154,21 @@ error[E0618]: expected function, found `usize`
 
 Worth meeting once, because it is the only shadowing mistake rustc names out loud. The three above got a misleading warning, a correct-looking program, and nothing at all.
 
-## What the compiler will and will not do for you
+## What would have caught this?
 
-| The mistake | What rustc says |
-|---|---|
-| Shadowed binding never read at all | `warning: unused variable` — the one genuine net, and it catches a pure typo |
-| Shadow used where you wanted mutation | `warning: variable does not need to be mutable`, pointing at the `mut`, not the `let` |
-| Shadowed a guard, lock or other RAII value | Nothing |
-| Same name for two different concepts | Nothing |
-| Shadowed a function you still need | `error[E0618]`, naming the shadow explicitly |
+Almost nothing, and that is the uncomfortable part of the rule at the top of this page. The compiler's one genuine net is `unused variable`, which fires only when a shadowed binding is **never read** — and in all three bugs above the first binding *was* read, because that is what real code looks like. `error[E0618]` is the honourable exception, and it is the only one of the four mistakes on this page that rustc names out loud.
 
-The net is thinner than it looks, and it is thinnest exactly where the value is highest — a shadow whose predecessor was read at least once is invisible to the compiler, and that is most real code.
+Clippy has three lints for it, all allow-by-default, and choosing between them is not the coin flip it looks like. Run over this page's own kata file — which holds a shadowed accumulator, a name reused for a second concept, and four correct parse-and-narrow shadows:
 
-## Clippy has three opinions, all off by default
+| Lint | On the accumulator (bug 1) | On the reused name (bug 3) | On the four correct shadows |
+|---|---|---|---|
+| `shadow_same` | no | no | no — it found nothing in the file at all |
+| `shadow_unrelated` | **no** — the accumulator *reuses* `total`, so it is not "unrelated" | yes | no |
+| `shadow_reuse` | **yes** | no | **yes — all four of them** |
 
-- **`shadow_same`** — flags `let x = x;`, the freeze idiom above. Almost always too strict.
-- **`shadow_reuse`** — flags `let x = x + 1;`, where the new value is built from the old. That is the parse-and-narrow idiom, so this one bans most of the good uses.
-- **`shadow_unrelated`** — flags a shadow whose new value has nothing to do with the old. This is bug 3 above, and it is the only one of the three worth considering.
+So the only lint that catches the worst bug is the one that also condemns the idiom the feature exists for. `shadow_reuse` cannot tell `let total = total + s` in a loop from `let raw: u32 = raw.parse()?` at the top of a function, because syntactically they are the same move. If you want one of them on, `shadow_unrelated` is the cheapest and the most defensible — it just will not catch bug 1.
 
-Most projects run none of them. If a codebase has been bitten by the third, turning on `shadow_unrelated` is a defensible call; turning on all three is a decision to stop writing idiomatic Rust.
+[Nothing checks a shadow](../nothing_checks_a_shadow/README.md) is the full account: the lint output in situ, what the `restriction` group means about all three, and the one-line margin that decides whether the compiler says anything at all.
 
 ## If you are coming from another language
 
@@ -468,15 +464,15 @@ rustc --edition 2024 01_Foundations/when_to_shadow/examples/when_to_shadow.rs -o
 - **Shadowing at distance.** Two lines apart is a refinement a reader follows. Forty lines apart is a redefinition, and the second `let` will read as a new variable to everyone including you.
 - **Assuming the compiler is watching.** It warns only when the shadowed binding was *never read*. Read it once — which is normal — and every check in the table above goes quiet.
 - **Treating "shadowing is fine" as "shadowing is free".** It is a naming decision, and naming decisions are the ones that survive into every later reading of the code.
-- **Turning on all three clippy lints after getting burned once.** `shadow_reuse` bans the parse-and-narrow idiom, which is the reason the feature exists. Reach for `shadow_unrelated` alone.
+- **Reaching for a clippy lint after getting burned once.** The lint that would have caught the bug that burned you is probably `shadow_reuse`, and it fires on every honest parse chain you own. `shadow_unrelated` is the affordable one and it is silent on the accumulator. There is no setting that buys you bug 1 for free — the rule at the top of this page is the mitigation.
 
 ## See also
 
 - [Shadowing](../../SHADOWING.md) — the map: all three shadowing lessons, and the pages that touch it
 - [Shadowing and `unwrap`](../shadowing_and_unwrap/README.md) — what shadowing is, and the folklore that credits it for `Copy`'s work
 - [A shadow does not drop](../shadowing_does_not_drop/README.md) — the mechanism behind bug 2, in full, with a value that announces its own death
+- [Nothing checks a shadow](../nothing_checks_a_shadow/README.md) — the companion to this page: how little the compiler and clippy will do about any of it
 - [What a warning is asking](../what_a_warning_is_asking/README.md) — how to read the `unused_mut` that is really a bug report
 - [Initial values](../initial_values/README.md) — the other way to avoid `mut`: declare without initializing and let the compiler prove you assigned
 - [`if let`](../if_let/README.md) — `let … else`, the guard clause the unwrap-and-narrow idiom opens with
 - [The Rust Book, ch. 3.1 — Shadowing](https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html#shadowing)
-- [clippy: `shadow_unrelated`](https://rust-lang.github.io/rust-clippy/master/index.html#shadow_unrelated) — the one of the three worth turning on
