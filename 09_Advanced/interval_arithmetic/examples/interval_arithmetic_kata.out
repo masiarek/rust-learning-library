@@ -1,0 +1,31 @@
+=== the slate, and what is actually true ===
+  race     contest             exact A      exact B      margin
+  Ward 1   Alma v Bruno       1205/168     1205/168           0
+  Ward 2   Petra v Quinn          15/2     3779/504       1/504
+  Ward 3   Rosa v Sami        9511/504      349/126    2705/168
+  Ward 4   Tariq v Vera         285/28     5197/504      67/504
+  Ward 5   Wes v Yuki         3095/252     4465/504     575/168
+
+=== the naive escalation: `while undecided { scale *= 10 }` ===
+  Run it on Ward 1 with a counter instead of a prayer:
+    spun 30 times, reached scale 10000000000000000000000000000000, still undecided
+    it is not slow -- it does not terminate. The exact answer is a
+    tie, and no scale separates a tie. A loop whose only two states
+    are 'decided' and 'try harder' cannot represent that.
+
+=== the fix is a third outcome, not a bigger budget ===
+  race     contest              true  audit says               check
+  Ward 1   Alma v Bruno          tie  escalate: hand count     correct to refuse
+  Ward 2   Petra v Quinn       Petra  certified Petra at 1/10000 ok
+  Ward 3   Rosa v Sami          Rosa  certified Rosa at 1/10   ok
+  Ward 4   Tariq v Vera         Vera  certified Vera at 1/100  ok
+  Ward 5   Wes v Yuki            Wes  certified Wes at 1/10    ok
+
+=== what the audit is allowed to claim ===
+  certified          : 4
+  certified wrongly  : 0   <- the number that must stay 0
+  escalated          : 1
+  An escalation is never a failure of the method. It is the method
+  declining to certify something it cannot prove -- which on Ward 1
+  is not conservatism at all, but the only correct answer there is.
+  Cost is one-sided too: the worst an audit can do is unnecessary work.
