@@ -54,7 +54,15 @@ NAV_ORDER: dict[str, list[str]] = {
         "ROADMAP.md",
         "KATAS.md",
         "01_Foundations",
+        # The command-line-tool arc: what a program does about failure, what it
+        # is handed on the way in, and the three things outside it that can say
+        # no — the filesystem, a saved file, a server.
+        "02_Errors",
+        "03_Command_Line",
+        "04_Files",
         "05_Tooling",
+        "06_Data",
+        "07_Clients",
         "09_Advanced",
         "GLOSSARY.md",
     ],
@@ -129,11 +137,64 @@ NAV_ORDER: dict[str, list[str]] = {
         # Closes the numbers arc, and hands off to the 09_Advanced exactness cluster.
         "what_a_float_stores",
     ],
+    # Reading order for the command-line-tool arc. These sections are stubs for
+    # now — outlines with no examples behind them yet — so the order is the one a
+    # finished section would want, not the order they were written in.
+    "02_Errors": [
+        "README.md",
+        # Failures you did not notice: the Result you threw away, and the loop
+        # that never ends because "no more input" is not an error.
+        "readers_are_fallible",
+        "endless_iteration",
+        # ...then failures that reach a person.
+        "main_returns_result",
+        "stderr_and_exit_status",
+        "keep_going_or_stop",
+        # ...and last, the type they travel in, which is the deepest question.
+        "not_every_error_is_io_error",
+        "anyhow_and_context",
+        "thiserror_vs_anyhow",
+    ],
+    "03_Command_Line": [
+        "README.md",
+        "command_line_arguments",
+        "flags_by_hand",
+        "clap_derive",
+        # The struct the flags land in, once there is more than one.
+        "the_default_trait",
+        "arguments_and_environment",
+        # Last, because it needs all of the above to have something to assert on.
+        "testing_a_command",
+    ],
+    "04_Files": [
+        "README.md",
+        "opening_a_file",
+        "path_and_pathbuf",
+        "reading_lines_efficiently",
+        "missing_is_not_empty",
+        "temp_dirs_in_tests",
+    ],
     "05_Tooling": [
         "README.md",
         # Day one, and cheap: settle the whitespace question before anything else.
         "formatting",
         "compile_times",
+    ],
+    "06_Data": [
+        "README.md",
+        "serde_derive",
+        "json_round_trip",
+        "a_type_instead_of_a_vec",
+    ],
+    "07_Clients": [
+        "README.md",
+        "http_with_reqwest",
+        "deserializing_a_response",
+        # Testability is one move — turn a decision into a parameter — so the
+        # page that makes it comes before the page that spends it.
+        "injecting_the_base_url",
+        "mocking_a_server",
+        "units_are_types",
     ],
     "09_Advanced": [
         "README.md",
@@ -154,6 +215,21 @@ NAV_ORDER: dict[str, list[str]] = {
 LABELS = {
     "if_let": "`if let`",
     "while_let": "`while let`",
+    "main_returns_result": "`main` can return a `Result`",
+    "stderr_and_exit_status": "Standard error, and exit status",
+    "not_every_error_is_io_error": "Not every error is an `io::Error`",
+    "anyhow_and_context": "`anyhow` and context",
+    "thiserror_vs_anyhow": "`thiserror` vs `anyhow`",
+    "flags_by_hand": "Flags by hand",
+    "clap_derive": "Deriving a parser with `clap`",
+    "the_default_trait": "The `Default` trait",
+    "path_and_pathbuf": "`Path` and `PathBuf`",
+    "temp_dirs_in_tests": "Temporary directories in tests",
+    "serde_derive": "Deriving `Serialize` and `Deserialize`",
+    "json_round_trip": "The round trip",
+    "a_type_instead_of_a_vec": "A type instead of a `Vec`",
+    "http_with_reqwest": "An HTTP request",
+    "injecting_the_base_url": "Injecting the base URL",
 }
 
 PREFIX = re.compile(r"^\d+[_\-]")

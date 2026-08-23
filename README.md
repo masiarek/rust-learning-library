@@ -21,6 +21,8 @@ No page here hand-types what a program prints. Each lesson links a real `.rs` fi
 
 More lessons land in [`01_Foundations/`](01_Foundations/README.md) as they are written; the ones about the toolchain rather than the language — `cargo`, build profiles, compile times — in [`05_Tooling/`](05_Tooling/README.md); and the ones that assume the foundations — shared state across threads, `unsafe`, FFI — in [`09_Advanced/`](09_Advanced/README.md).
 
+Five sections in between follow one long arc: **turning a snippet into a program somebody else runs.** [`02_Errors/`](02_Errors/README.md) is what a failure does on its way out; [`03_Command_Line/`](03_Command_Line/README.md) is what the program was handed on the way in; and [`04_Files/`](04_Files/README.md), [`06_Data/`](06_Data/README.md) and [`07_Clients/`](07_Clients/README.md) are the three things outside it that can say no. **Those pages are stubs today** — one outline and a set of questions per page, with no runnable example behind them yet, each marked as such at the top. They exist so the arc has a shape, and a permanent URL, before the prose does; a page graduates by acquiring an example and losing its notice.
+
 Two topics are big enough to have a map of their own rather than a single page: [**OPTION.md**](OPTION.md) and [**SHADOWING.md**](SHADOWING.md) each collect every lesson on their subject in reading order, and say what the idea is before the syllabus starts.
 
 Every lesson explains; some of them also ask you to type. Those exercises are collected in [**KATAS.md**](KATAS.md), which is the only place they are ordered — each kata itself sits on the page for the topic it teaches, with a solution CI compiles and runs.
