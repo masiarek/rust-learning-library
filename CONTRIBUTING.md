@@ -113,6 +113,16 @@ T=$(mktemp -d); git archive origin/master | tar -x -C "$T"
 
 A corollary worth keeping: **a gate that fails on a stem you have never heard of is somebody's in-flight folder, not your bug.** Check `git status` for a `??` beside it, and leave it alone — never `--update` a key you did not write.
 
+**And a cancelled CI run is not a failed one.** `.github/workflows/docs.yml` sets `concurrency: {group: pages, cancel-in-progress: true}`, so when somebody pushes seconds after you, *your* docs run is cancelled and only the newest one deploys. `gh run watch --exit-status` returns non-zero for that, which reads exactly like a build failure, and the published page 404s for a minute while the newer run finishes. Before debugging anything, look at what actually happened:
+
+```bash
+gh run list --workflow=docs --json headSha,conclusion,status
+```
+
+`cancelled` on your SHA with a newer run in flight means nothing is wrong — the behaviour is correct, you *want* the newest site, and the newer run carries your commit anyway.
+
+The asymmetry is what makes this safe to wave off, and it is worth knowing rather than re-checking: **`examples.yml` has no `concurrency` block at all**, and it is the workflow that runs both `run_examples.py --check` and `check_katas.py`. So a cancellation is always the docs deploy and never the gates — a `cancelled` conclusion cannot be hiding a red gate. The converse is the trap: a green docs deploy is *not* evidence `check_katas.py` passed, because that gate runs in the other workflow.
+
 ## When several people share the checkout
 
 More than one person often works in this repo at once, through **one working tree, one index, and one HEAD**. Three habits follow, and each is here because the failure has already happened.
