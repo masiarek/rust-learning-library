@@ -4,7 +4,7 @@
 
 **One line:** Writing `let x` when `x` already exists makes a **second variable** wearing the first one's name — and this page is the door to every lesson about what that does, what it is for, and where it goes wrong.
 
-Four pages, and they answer four different questions: *what is it*, *what happens to the value it hid*, *should I use it here*, and *what would have caught me if I got it wrong*. Start wherever your question is; none of them assumes the others.
+Five pages, and they answer five different questions: *what is it*, *how does it differ from `mut`*, *what happens to the value it hid*, *should I use it here*, and *what would have caught me if I got it wrong*. Start wherever your question is; none of them assumes the others.
 
 ---
 
@@ -24,7 +24,7 @@ Three consequences follow, and everything on the four pages below is one of them
 
 **It can change the type, so a name can survive a conversion.** This is the whole point. `input` stays `input` through `&str` → trimmed `&str` → `u32`, instead of becoming `input_raw`, `input_trimmed`, `input_num` — names that re-encode in text what the compiler already knows.
 
-**It is not mutation, and that distinction is load-bearing.** `let mut x` promises the reader *"this may change anywhere below"*. A shadow promises *"this changed here, and the result is final"*. The second is a much stronger claim, and it is why so much idiomatic Rust manages without `mut` at all. The two are not interchangeable, either: a shadow cannot write to something that outlives the block it is in, which is the most common way shadowing is misused.
+**It is not mutation, and that distinction is load-bearing.** `let mut x` promises the reader *"this may change anywhere below"*. A shadow promises *"this changed here, and the result is final"*. The second is a much stronger claim, and it is why so much idiomatic Rust manages without `mut` at all. The two are not interchangeable, either: a shadow cannot write to something that outlives the block it is in, which is the most common way shadowing is misused. The distinction is not a matter of taste, and there is a four-line test that proves it — see [A name is not a place](01_Foundations/a_name_is_not_a_place/README.md).
 
 **It takes away a name, not a value.** This is the one that surprises people. The shadowed value is still alive, still owned, still borrowable through any reference taken earlier — and because values drop in reverse declaration order, it dies *after* the shadow that hid it. So shadowing is not a way to release something early; it is the opposite, since it removes the handle you would have needed.
 
@@ -34,16 +34,17 @@ Three consequences follow, and everything on the four pages below is one of them
 - **ABAP.** There is no analogue. A `DATA` name is one typed variable for the whole routine, and declaring `DATA(lv_x)` twice is a syntax error. So ABAP has to use `lv_input` / `lv_input_num`, and its `lv_` / `lt_` prefixes exist to carry the type in the name — precisely the job shadowing removes. What you give up in exchange is ABAP's free guarantee that one name in a routine means one thing.
 - **C / C++.** Both shadow, but only in a *nested* block; a redefinition in the same block is an error, which is why C code opens braces to get the effect and why `-Wshadow` exists. Neither gives you the type change, because the declaration carries the type.
 
-## The four lessons
+## The five lessons
 
 | # | Lesson | Level | The question it answers |
 |---|---|---|---|
 | 1 | [Shadowing and `unwrap`](01_Foundations/shadowing_and_unwrap/README.md) | 201 | What shadowing *is* — and why the popular explanation that ties it to `unwrap` is crediting it for something `Copy` is doing |
-| 2 | [A shadow does not drop](01_Foundations/shadowing_does_not_drop/README.md) | 201 | What happens to the value underneath: nothing. It outlives the shadow that hid it, and no name is left to free it early |
-| 3 | [When to shadow](01_Foundations/when_to_shadow/README.md) | 201 | The judgement call — the design trade against `mut`, the five idioms, and the three bugs that compile |
-| 4 | [Nothing checks a shadow](01_Foundations/nothing_checks_a_shadow/README.md) | 201 | What the tooling does about it — no lint in `rustc`, the type error mistaken for one, and the clippy lint that catches the bug only by banning the idiom |
+| 2 | [A name is not a place](01_Foundations/a_name_is_not_a_place/README.md) | 201 | The mechanical difference from `mut` — one name and two places, proved by a borrow rather than by printing addresses, plus the one row the usual comparison table gets backwards |
+| 3 | [A shadow does not drop](01_Foundations/shadowing_does_not_drop/README.md) | 201 | What happens to the value underneath: nothing. It outlives the shadow that hid it, and no name is left to free it early |
+| 4 | [When to shadow](01_Foundations/when_to_shadow/README.md) | 201 | The judgement call — the design trade against `mut`, the five idioms, and the three bugs that compile |
+| 5 | [Nothing checks a shadow](01_Foundations/nothing_checks_a_shadow/README.md) | 201 | What the tooling does about it — no lint in `rustc`, the type error mistaken for one, and the clippy lint that catches the bug only by banning the idiom |
 
-Read in that order they build: the first defines it, the second explains the mechanism the third page's worst bug rests on, the third is the one you will come back to, and the fourth says how much help you can expect while you get it wrong.
+Read in that order they build: the first defines it, the second says what it *is* against `mut` and hands you the test that settles any argument about it, the third explains the mechanism the fourth page's worst bug rests on, the fourth is the one you will come back to, and the fifth says how much help you can expect while you get it wrong.
 
 ## Where it turns up elsewhere
 

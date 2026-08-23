@@ -94,6 +94,10 @@ NAV_ORDER: dict[str, list[str]] = {
         # Opens the ownership arc — the next thread after the Option run.
         "ownership_and_moves",
         "borrowing",
+        # The borrow rule immediately pays for itself: it is what proves a
+        # shadow makes a second place, since it accepts `let y = &x; let x = 6`
+        # and rejects the `mut` spelling of the same lines.
+        "a_name_is_not_a_place",
         # Closes the ownership arc by putting shadowing back through it:
         # what a shadow does to the value, rather than to the name.
         "shadowing_does_not_drop",
