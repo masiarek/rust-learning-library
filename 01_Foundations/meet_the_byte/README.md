@@ -74,7 +74,7 @@ The same goes for the right shift, which is really **two** operations wearing on
   (-3i8) >> 1 = -2    signed:   pad the top with the sign bit
 ```
 
-There is no `>>>` in Rust, and there does not need to be. `u8` and `i8` are different types, so the compiler already knows whether the top bit is a sign or a value, and it cannot pick wrong. Choosing the signedness of the variable *is* choosing the shift.
+There is no `>>>` in Rust, and there does not need to be. `u8` and `i8` are different types, so the compiler already knows whether the top bit is a sign or a value, and it cannot pick wrong. Choosing the signedness of the variable *is* choosing the shift. Why padding with the sign bit yields −2 rather than something arbitrary is [two's complement](../why_hexadecimal/README.md), which is easiest to *see* in hex: `-1i8` prints as `ff` — every bit set, no minus sign anywhere.
 
 ## What is exactly one byte
 
