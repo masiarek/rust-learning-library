@@ -243,3 +243,9 @@ Short definitions. Every entry links to the page that explains it properly — a
 **Wildcard pattern (`_`)** — Not a variable name but a pattern that binds nothing, so `let _ = value;` drops the value immediately rather than at the end of the scope. Silencing an unused-variable warning with a bare `_` therefore changes when the value dies — which for a `MutexGuard`, file lock, span or transaction handle releases it before the code it was protecting runs. → [What a warning is asking](01_Foundations/what_a_warning_is_asking/README.md)
 
 **Underscore-prefixed binding (`_name`)** — An ordinary binding whose leading underscore exempts it from `unused_variables` and changes nothing else: it still binds, and the value still lives to the end of the scope. The form to reach for whenever a value's lifetime is the point, and the one thing a bare `_` is not. → [What a warning is asking](01_Foundations/what_a_warning_is_asking/README.md)
+
+**Bit flag** — A named constant with exactly one bit set, combined into an integer with `|` and tested with `& flag != 0`. It is the degenerate bit field: one bit wide, its two values named set and unset. A flag whose value is `0` cannot be tested this way at all, because `x & 0` is `0` for every `x`. → [Bit flags](01_Foundations/bit_flags/README.md)
+
+**Bit field** — A run of adjacent bits inside a larger integer holding one value. Pack it mask-then-shift, unpack it shift-then-mask. The topmost field is the one that forgives a missing mask, which is why the habit of omitting it survives long enough to reach a field that does not. → [Bit flags](01_Foundations/bit_flags/README.md)
+
+**Bit mask** — An integer whose set bits mark the positions you want, so `x & mask` keeps those and zeroes the rest. Testing membership of a multi-bit mask is `x & m == m` (all of it), not `x & m != 0` (any of it) — the two agree only for a single bit. → [Bit flags](01_Foundations/bit_flags/README.md)

@@ -36,6 +36,7 @@ The ideas you meet in your first week of Rust and keep using forever. Each page 
 | [Six kinds of zero](six_kinds_of_zero/README.md) | 201 | Where `Option` runs out: six reasons a cell is empty, one enum, and a report the compiler audits |
 | [Meet the byte](meet_the_byte/README.md) | 101 → 201 | `u8` is one byte and the unit `size_of` counts in — plus the three bills a width comes with: overflow that differs by build, the shift the type picks, and a `.len()` measured in bytes |
 | [Why hexadecimal](why_hexadecimal/README.md) | 101 → 201 | Why a byte is two hex digits and always will be — plus the three traps that follow: unpadded `{:x}` losing the byte boundary, `from_str_radix` refusing the `0x` it just printed, and hex of a negative showing two's complement |
+| [Bit flags](bit_flags/README.md) | 201 | Several values in one integer: a flag is a one-bit field and a header field is an n-bit flag — plus the zero-valued flag `&` cannot test, and the missing mask only a middle field punishes |
 | [What a float actually stores](what_a_float_stores/README.md) | 201 | The one division that ends exactness — why `0.1` is not 0.1, why the error goes both ways, and why Rust withholds `Eq` and `Ord` from `f64` |
 
 The `newtype_score`, `representing_a_ballot` and `six_kinds_of_zero` rows are the first rungs of [the long way round](../ROADMAP.md) — a slow walk toward a working STAR count, where each step exists because it is the next thing Rust wants to teach. They stand alone as Rust lessons; the election is the excuse.
