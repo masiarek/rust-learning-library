@@ -33,6 +33,8 @@ Note what Rust does *not* offer: a way to say "a byte is nine bits here". The zi
 The unit is not a convention in Rust, it is arithmetic you can perform. Take the address of two neighbouring elements of a `[u8; 3]` and subtract:
 
 ```rust
+let cells: [u8; 3] = [0b0101_0011, 0b0101_0101, 0b1011_0111];
+
 let first  = &cells[0] as *const u8 as usize;
 let second = &cells[1] as *const u8 as usize;
 println!("{}", second - first);   // 1
