@@ -1,0 +1,53 @@
+
+──── The problem: shadowed, so it cannot be released
+    marked = 6
+    ...doing report work, during which nothing above is needed...
+    (the buffer is STILL alive right here)
+    DROP A: shadowed (8 bytes freed)
+      It was freed at the brace, after all the work — not after
+      the last line that needed it. Nothing was leaked; the
+      buffer was simply held far longer than the code implies.
+
+──── Fix 1: drop it explicitly, BEFORE the shadow
+    DROP B: dropped early (8 bytes freed)
+    marked = 6
+    ...doing report work, during which nothing above is needed...
+      Correct, and it relies on a human remembering. Move that
+      `drop` one line later and it silently drops the usize.
+
+──── Fix 2: give it a scope that ends: the block expression
+    DROP C: scoped (8 bytes freed)
+    marked = 6
+    ...doing report work, during which nothing above is needed...
+      The one to ship. The lifetime is stated by the shape of the
+      code rather than by a call you have to remember, and the
+      buffer is unreachable afterwards because it is out of scope,
+      not merely nameless.
+
+──── Fix 3: hand it to something that consumes it
+    DROP D: moved in (8 bytes freed)
+    marked = 6
+    ...doing report work, during which nothing above is needed...
+      Best when a real function already wants ownership: the move
+      makes the buffer the callee's problem, and it drops there.
+
+──── The trap: drop() AFTER the shadow drops the wrong thing
+    dropped `ballots`... and the buffer is still alive:
+    ...doing report work, during which nothing above is needed...
+    DROP E: still held (8 bytes freed)
+      `drop` takes whatever the name means NOW, and after a shadow
+      that is the new binding. Here it freed a short String and
+      left the buffer untouched — it reads like a fix and is not
+      one.
+      Whether you get a warning depends on the shadow's type, which
+      is a thin thing to rely on. Shadow with a `usize` and rustc
+      catches it: `calls to std::mem::drop with a value that
+      implements Copy does nothing` (lint: dropping_copy_types).
+      Shadow with anything owned — a String, a Vec, a struct — and
+      the drop is genuine, so there is nothing for that lint to
+      say. The silent case is the one you will actually write.
+
+      The through-line: shadowing is a naming tool, not a memory
+      tool. When you want a value GONE, end its scope (fix 2) or
+      move it (fix 3); reach for `drop` only where neither shape
+      fits, and put it before the name changes meaning.

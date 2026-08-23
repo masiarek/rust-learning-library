@@ -1,0 +1,51 @@
+
+──── Step 1: The program that raises the question
+  s = 5, but the String is still there: something important
+      `keep` still reads it, so the String was neither moved nor
+      freed. The shadow took away a NAME, not a value.
+
+──── Step 2: Where the value actually dies
+  both alive: keep -> first  — the shadowed one, item -> second — the shadow
+      Nothing has dropped yet. Watch the brace:
+  DROP second — the shadow
+  DROP first  — the shadowed one
+      Drop runs in REVERSE declaration order, so the shadow dies
+      first and the value it hid dies last. The shadowed value
+      outlived the thing that shadowed it.
+
+──── Step 3: The cost: a shadowed value cannot be released early
+  before the shadow, the original has a name: the original — soon unreachable
+  DROP the shadow
+  drop(buffer) took the shadow, as the name says it must.
+      The original is still alive with no name left to reach
+      it — it cannot be used, moved, or dropped until the brace:
+  DROP the original — soon unreachable
+      So shadowing is not a way to release something early. It is
+      the opposite: it removes the handle you would have needed.
+
+──── Step 4: An inner-block shadow ends; the outer value never moved
+  inside the block -> inner
+  DROP inner
+  after the block  -> outer   the outer value was never touched
+  DROP outer
+      Two different mechanisms that look alike: the inner binding
+      DIED at its brace, while a same-scope shadow merely goes
+      nameless and lives to the end of the enclosing scope.
+
+──── Step 5: What the borrow checker is guaranteeing while this happens
+  s = 5, keep = something important
+      Uncomment that `drop(s)` and rustc declines:
+        error[E0505]: cannot move out of `s` because it is borrowed
+      THAT is the guarantee. Not that shadowing is harmless, but
+      that no reachable path frees the String while `keep` lives.
+
+──── Step 6: The same shape in C, where the name IS the storage
+  C rejects `int s = 5;` after `char *s` in one block outright:
+        error: redefinition of 's' with a different type
+  ...and it is not the type change. `int x = 1; int x = 2;` in one
+  block is `error: redefinition of 'x'` too. A name belongs to its
+  block, once. Shadowing needs new braces, and -Wshadow warns.
+      C++ answers identically, and adds destructors — so a
+      std::string really does die at its closing brace, the way
+      Noisy does above. What neither language adds is Step 5:
+      nothing checks that the alias dies before the value does.
