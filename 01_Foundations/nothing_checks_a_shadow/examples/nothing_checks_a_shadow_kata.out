@@ -1,0 +1,73 @@
+
+──── As shipped: a log that looks fine and a winner that is not
+  counted [5, 3, 0]  running total [5, 3, 0]
+  counted [4, 5, 1]  running total [4, 5, 1]
+  counted [0, 2, 5]  running total [0, 2, 5]
+  Winner: Ada
+      Nothing above looks alarming. Every ballot was counted, each
+      running total is a real number, and Ada is a real candidate.
+      Two things give it away, and only in hindsight:
+  totals = [0, 0, 0]
+      Every 'running total' was just that ballot echoed back, and
+      the accumulator never left zero. `winner` broke the all-zero
+      tie by index, so the report named whoever was first in the
+      candidate list. The honest winner is Ben, with 10.
+
+──── What the compiler had to say about it: nothing
+  $ rustc --edition 2024 nothing_checks_a_shadow_kata.rs
+  $                                    <- no output, exit 0
+      `unused_variables` cannot fire: the shadow is read on the
+      next line, by the log. There is no type error: both are
+      [u32; 3]. And there is no shadowing lint in rustc to fire in
+      the first place. Three near-misses, all accidents of shape —
+      drop the log line and the first one would have caught it.
+
+──── Which clippy lint finds it (recorded from a real run on this file)
+  (clippy needs a cargo crate, so this file is src/main.rs there)
+  $ cargo clippy -- -W clippy::shadow_same
+  $                                    <- finds NOTHING
+
+  $ cargo clippy -- -W clippy::shadow_unrelated
+  $                                    <- finds NOTHING
+
+  $ cargo clippy -- -W clippy::shadow_reuse
+  warning: `totals` is shadowed
+    --> src/main.rs:36:13        <- the bug
+  warning: `raw` is shadowed
+    --> src/main.rs:78:9         <- parse_quorum, line 1
+  warning: `raw` is shadowed
+    --> src/main.rs:79:9         <- parse_quorum, line 2
+      parse_quorum("  42 ") = 42
+      ...which is correct code, flagged twice. It is the idiom
+      chapter 3.1 of the Book teaches.
+
+──── The trade, stated plainly
+  shadow_same       `let x = x;`             junk always, the bug never
+  shadow_unrelated  `let x = something_else;` silent here
+  shadow_reuse      `let x = f(x);`          catches it — and the idiom
+      The only lint that would have caught this bug is the one that
+      also condemns the good use of the feature. All three are
+      allow-by-default `restriction` lints, which is clippy saying
+      the same thing in its own vocabulary: a style commitment, not
+      a bug filter. Turn `shadow_reuse` on and you have banned
+      `let x = x.trim().parse()?` across the crate. That can be a
+      trade worth making — a large team, a codebase full of loops —
+      but make it deliberately, not hoping to catch one accumulator.
+
+──── Three fixes, and the one to ship
+  1. `mut`, no shadow      -> [9, 10, 6]  winner Ben
+  2. fold, no accumulator  -> [9, 10, 6]  winner Ben
+  3. no name reused        -> [9, 10, 6]  winner Ben
+      Fix 2 is the one to ship, and the reason generalises past this
+      bug: it removes the BINDING, so the mistake has nowhere to
+      live. Fix 1 works, and is the honest counter-example to
+      'shadowing lets you keep everything immutable' — an
+      accumulator is supposed to survive the iteration, so a fresh
+      binding per pass is precisely the wrong tool. Fix 3 works and
+      relies on you not reusing a name, which is the discipline that
+      just failed.
+
+      The through-line: the compiler polices ownership, types and
+      exhaustiveness, and a shadow can be wrong in none of those
+      ways. When a shadow's type matches what it hides, you are the
+      only check there is.

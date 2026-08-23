@@ -1,0 +1,61 @@
+
+──── Step 1: The shadow that compiles clean
+  running total: 5
+  running total: 3
+  running total: 0
+  running total: 4
+  final total:   0
+      The running totals are 5, 3, 0, 4 — the scores themselves,
+      not a sum. Each iteration read the outer `total` (still 0),
+      added one score, and threw the result away at the brace.
+      Zero warnings. `rustc` compiled this without a word.
+
+──── Step 2: Why nothing warned
+  There is no shadowing lint in rustc. `rustc -W help` mentions
+  'shadow' four times and every one is about trait items or glob
+  re-exports — none about a `let`.
+      Two things nearly catch it, and neither is a shadow check:
+      * `unused_variables`, if the shadow is never READ. Read it
+        once inside the loop — as the println above does — and
+        that lint has nothing to say.
+      * a TYPE MISMATCH downstream, if the shadow's type differs
+        from what later code expects: `E0308: mismatched types`.
+      Both are accidents. Same type, read once: total silence.
+
+──── Step 3: Items get shadowed too, just as quietly
+  outer threshold() -> 50
+  inner threshold() -> 5   <- a different function
+  after the block   -> 50
+      A `fn` inside a block shadows one outside it, with no
+      diagnostic at all. `fn` and `let` share the VALUE namespace,
+      so a variable can hide a function too — and that one rustc
+      does catch, because calling a u32 is a type error:
+        error[E0618]: expected function, found `u32`
+          | this function of the same name is available here,
+          | but it's shadowed by the local binding
+      Note rustc's own word for it there: shadowed.
+
+──── Step 4: The same shape, where the compiler DOES stop you
+  job 1: Ada
+  job 2: Ada
+  job 3: Ada
+  original still here: Ada
+      Delete that `let name = name.clone();` and it does not
+      compile: E0382, 'value moved into closure here, in previous
+      iteration of loop'. Structurally the SAME shadow-in-a-loop as
+      step 1 — and this one is a hard error.
+      The difference is not the shadow. It is that ownership is
+      checked and arithmetic is not. Step 1 lost a number, which
+      no rule forbids; step 4 would have lost a String twice over,
+      which every rule forbids.
+
+──── Step 5: Three ways to write step 1 so it cannot go quiet
+  1. `mut`, no shadow          -> 12
+  2. no accumulator at all     -> 12
+  3. a name that cannot collide-> 12
+      This is the one place `mut` genuinely beats shadowing, and
+      it is the opposite of the usual advice: an accumulator is
+      supposed to survive the iteration, so the thing shadowing
+      gives you — a fresh binding each time — is exactly the bug.
+      Option 2 is the one to ship: with no binding to shadow,
+      the mistake has nowhere to live.
