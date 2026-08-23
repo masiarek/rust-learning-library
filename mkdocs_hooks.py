@@ -64,6 +64,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...and what the text in that file means, before any of it is Rust:
         # two of the four comment forms are parsed, not discarded.
         "comments_that_compile",
+        # ...and what the compiler says back about it. Third because everyone
+        # meets `unused variable` on day one; its Drop half pays off much later.
+        "what_a_warning_is_asking",
         "some_and_none",
         "option_vs_result",
         "if_let",
