@@ -119,6 +119,8 @@ NAV_ORDER: dict[str, list[str]] = {
         # Opens the ownership arc — the next thread after the Option run.
         "ownership_and_moves",
         "borrowing",
+        # ...and the scaffold most people are told to use while it lands.
+        "how_to_learn_lifetimes",
         # The borrow rule immediately pays for itself: it is what proves a
         # shadow makes a second place, since it accepts `let y = &x; let x = 6`
         # and rejects the `mut` spelling of the same lines.

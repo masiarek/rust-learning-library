@@ -26,6 +26,7 @@ The ideas you meet in your first week of Rust and keep using forever. Each page 
 | [What a panic costs](what_a_panic_costs/README.md) | 201 | The other half of `unwrap`: where the panic points, what unwinding gives back (memory) and what it does not (your work), and why the exit code is 101 |
 | [`while let`](while_let/README.md) | 201 | The loop whose exit condition is a pattern — and the one bug `if let` cannot have: a body that never makes progress |
 | [Borrowing](borrowing/README.md) | 101 → 201 | `&T` and `&mut T`, the many-readers-or-one-writer rule, and the last-use rule that decides which order compiles |
+| [How to learn lifetimes](how_to_learn_lifetimes/README.md) | 201 | Is *"clone everything"* good advice? Mostly yes — with three amendments, the sharpest being that cloning to dodge a *mutation* error compiles and silently does nothing |
 | [`Option` fields](option_fields/README.md) | 101 | `Option` in a type definition: required-by-default fields, and when `Option<Vec<T>>` is right |
 | [`Option` is a one-item collection](option_as_collection/README.md) | 201 | It iterates; `None` really is variant 0; and why the tag is often free |
 | [Nullable pointers](nullable_pointers/README.md) | 201 | Rust has no null, so an absent pointer is a different type — `Option<Box<T>>`, free, and what makes a recursive type possible |
