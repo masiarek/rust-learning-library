@@ -25,6 +25,106 @@ So the library keeps a strict split, and it is worth knowing which surface answe
 
 Same rule the sidebar follows: order is presentation, so it belongs in a page, never in a path. [OPTION.md](OPTION.md) and [SHADOWING.md](SHADOWING.md) are the other two maps.
 
+## The territory, as a picture
+
+Four diagrams, because a map of the vocabulary is a different question from *"which one do I write here?"*. They render on GitHub and on the site from the same source.
+
+### 1. The whole territory, and its keywords
+
+Everything a struct question turns out to be about, in one frame. If a term below is unfamiliar, [GLOSSARY.md](GLOSSARY.md) defines it in a line.
+
+```mermaid
+flowchart LR
+    S["struct<br/>names a group of values,<br/>and makes that name a type"]
+
+    S --> SHAPE["SHAPE<br/>what the declaration looks like"]
+    S --> BEHAV["BEHAVIOUR<br/>lives in impl, never in the body"]
+    S --> DATA["DATA<br/>what the fields let you do"]
+    S --> VIS["VISIBILITY<br/>who is allowed to look"]
+    S --> MEM["MEMORY<br/>what it actually costs"]
+    S --> GEN["GENERICS<br/>one struct, many types"]
+
+    SHAPE --> N1["named fields"]
+    SHAPE --> N2["tuple struct, and the newtype"]
+    SHAPE --> N3["unit struct"]
+
+    BEHAV --> B1["associated function<br/>no self — Type::new"]
+    BEHAV --> B2["method<br/>takes a self receiver — value.thing"]
+    BEHAV --> B3["inherent impl vs trait impl"]
+
+    DATA --> D1["Copy and Clone"]
+    DATA --> D2["Default, and ..base update syntax"]
+    DATA --> D3["Debug and Display"]
+    DATA --> D4["PartialEq, Eq, PartialOrd, Ord"]
+
+    VIS --> V1["pub is per FIELD, not per struct"]
+    VIS --> V2["privacy is per MODULE"]
+    VIS --> V3["non_exhaustive, for published types"]
+
+    MEM --> M1["field order is NOT guaranteed"]
+    MEM --> M2["padding, alignment, size"]
+    MEM --> M3["repr C, when the layout is a contract"]
+
+    GEN --> G1["type parameters"]
+    GEN --> G2["const generics"]
+    GEN --> G3["associated types — on TRAITS, not structs"]
+    GEN --> G4["a reference in a field needs a lifetime"]
+```
+
+### 2. Which flavour do I declare?
+
+```mermaid
+flowchart TD
+    Q1{"Does it hold any data?"}
+    Q1 -- no --> UNIT["UNIT STRUCT<br/>struct Marker;<br/>a name with no bytes"]
+    Q1 -- yes --> Q2{"Is it wrapping exactly one existing<br/>type in order to give it a job?"}
+    Q2 -- yes --> NEW["NEWTYPE<br/>struct Score of u8<br/>a distinct type, not an alias"]
+    Q2 -- no --> Q3{"Would a reader need the parts named?"}
+    Q3 -- yes --> NAMED["NAMED FIELDS<br/>the default, and usually right"]
+    Q3 -- no --> TUP["TUPLE STRUCT<br/>positional, for 2 or 3 obvious parts"]
+```
+
+The newtype branch is the one people skip and then want back: [A score is not a number](01_Foundations/newtype_score/README.md), and why [an alias gives no safety at all](01_Foundations/result_aliases/README.md).
+
+### 3. Which receiver do I write?
+
+The decision that causes the most compiler errors, and the one most tutorials get slightly wrong.
+
+```mermaid
+flowchart TD
+    A{"Does it need an existing instance at all?"}
+    A -- no --> AF["ASSOCIATED FUNCTION<br/>no self parameter<br/>called as Type::new"]
+    A -- yes --> B{"Does it change the value?"}
+    B -- no --> R1["&self<br/>reads it — caller keeps it<br/>many of these can run at once"]
+    B -- yes --> C{"Should the caller still have it afterwards?"}
+    C -- yes --> R2["&mut self<br/>changes it in place<br/>caller needs a mut binding"]
+    C -- no --> R3["self<br/>consumes it — the value's life<br/>ends here, deliberately"]
+    R3 --> D{"Do you assign to a field inside the body?"}
+    D -- yes --> R4["mut self<br/>SAME receiver, plus a mutable binding"]
+    D -- no --> R5["self"]
+```
+
+**`mut self` is not a fourth receiver.** It is `self` with a mutable binding, exactly like `fn f(mut x: T)`. The caller cannot see the difference — a trait that declares `fn consume(self)` may be implemented as `fn consume(mut self)`, and calling a `mut self` method needs no `mut` on the caller's binding. Both facts are compiled, not asserted.
+
+The rarer spellings — `self: Box<Self>`, `Rc<Self>`, `Arc<Self>`, `Pin<&mut Self>` — *are* real receivers and do change what the caller must hand over. The [Reference](https://doc.rust-lang.org/reference/items/associated-items.html) gives the full grammar.
+
+### 4. The life of one instance
+
+```mermaid
+flowchart LR
+    N["Type::new — associated function"] --> V["a value you own"]
+    V -- "&" --> B["shared borrow<br/>many readers, no writers"]
+    V -- "&mut" --> M["exclusive borrow<br/>one writer, no readers"]
+    V -- "..base" --> U["struct update<br/>moves field by field —<br/>the base ends up PARTIALLY dead"]
+    V -- "a method taking self" --> C["consumed<br/>using it again is E0382"]
+    B --> V
+    M --> V
+    C --> DR["Drop runs"]
+    V --> DR
+```
+
+`Drop` is skipped by `std::process::abort` and by `std::mem::forget` — running a destructor is a strong default, not a guarantee.
+
 ## Start here
 
 | # | Lesson | Level | The question it answers |
@@ -89,6 +189,10 @@ Named honestly, because a map that only lists what exists is a map of the wrong 
 - **The builder pattern** — and the simpler thing that usually beats it
 
 If you want one of these next, that is the list to point at.
+
+## The material that is not in this library
+
+[**Structs: the shelf**](10_Resources/structs/README.md) is the checked list of outside material — the Book chapter worth reading, the Reference pages that settle an argument, the videos with their chapter marks, and the four links that have rotted since they were collected.
 
 ## Looking a term up
 

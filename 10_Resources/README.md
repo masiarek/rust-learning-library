@@ -4,7 +4,7 @@
 
 **One line:** A curated shelf rather than a link dump — every entry says *when it is the right one*, because the problem with Rust learning material is not that there is too little of it.
 
-There is an enormous amount of good, free Rust material, almost all of it excellent, and that is precisely the difficulty: at any given moment roughly two of these are the right thing to read and the rest are a way of avoiding the one you need. So each page here is organised by **the moment you are in**, not by topic.
+There is an enormous amount of good, free Rust material, almost all of it excellent, and that is precisely the difficulty: at any given moment roughly two of these are the right thing to read and the rest are a way of avoiding the one you need. So each page here is organised by **the moment you are in** rather than by topic — with one deliberate exception, [Structs](structs/README.md), because that is the topic where the material is thickest and the quality spread widest, so the choice is worth making once.
 
 | Page | For |
 |---|---|
@@ -12,6 +12,7 @@ There is an enormous amount of good, free Rust material, almost all of it excell
 | [Exercises](exercises/README.md) | typing — the practice tracks, and which one suits which stage |
 | [Going deeper](going_deeper/README.md) | a specific domain — unsafe, embedded, async, macros, testing, performance |
 | [Why Haskell](haskell/README.md) | curiosity — what Rust borrowed, renamed, and deliberately left behind |
+| [Structs](structs/README.md) | one topic — the checked shelf for structs: the chapter, the normative sources, the videos worth the time |
 
 ## Where to start, honestly
 

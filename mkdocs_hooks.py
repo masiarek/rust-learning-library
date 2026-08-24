@@ -256,6 +256,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "exercises",
         "going_deeper",
         "haskell",
+        # The shelf's one topic page; last, because it is the odd one out —
+        # the four above sort by the moment you are in, this one by subject.
+        "structs",
     ],
     "09_Advanced": [
         "README.md",
