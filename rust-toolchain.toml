@@ -1,0 +1,41 @@
+# The compiler this library's answer keys are recorded against.
+#
+# Every page here claims what a program *printed*, not what it prints, and
+# tools/run_examples.py enforces that by diffing each example against a stored
+# .out file. That check is only as meaningful as the compiler behind it, and
+# until this file existed there was none named: the laptop ran whatever rustup
+# last installed, CI ran whatever `ubuntu-latest` happened to ship, and the two
+# agreed by coincidence rather than by decision.
+#
+# rustup reads this on any invocation that goes through its shim — including a
+# bare `rustc`, which is what the example runner calls — and installs the named
+# toolchain if it is missing. There is no command for anyone to remember and no
+# README instruction to skip; the file is the instruction. A rustc that is NOT
+# a rustup shim (a distro package, a Nix store path) ignores this completely,
+# which is the usual explanation for a pin that appears not to apply.
+#
+# The version is written out rather than `channel = "stable"`, which pins
+# nothing: stable moves every six weeks, so two machines a month apart would
+# get two compilers from a file that looks like a guarantee. Bumping this is a
+# chore on purpose — it becomes a commit, with a diff, in which every answer
+# key is re-verified by the new compiler before anyone else sees it.
+#
+# rustfmt and clippy are listed because two lessons are about them
+# (05_Tooling/formatting, 05_Tooling/strict_lints) and a reader following those
+# should not have to discover a missing component first.
+#
+# Explained in full: 05_Tooling/pinning_the_toolchain/README.md
+
+# rust-analyzer is NOT optional here, despite being an editor concern rather
+# than a build one. With profile = "minimal" and no rust-analyzer component,
+# the rustup shim reports `rust-analyzer is unavailable for the active
+# toolchain`, falls back to ITSELF, and loops:
+#
+#     error: infinite recursion detected
+#
+# The editor shows no language server and no useful reason. Verified here.
+
+[toolchain]
+channel = "1.97.1"
+profile = "minimal"
+components = ["rustfmt", "clippy", "rust-analyzer"]

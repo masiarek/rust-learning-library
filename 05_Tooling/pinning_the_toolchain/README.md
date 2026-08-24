@@ -18,7 +18,7 @@ rustc --version    # rustc 1.97.1 (8bab26f4f 2026-07-14)
 
 `examples.yml` opens with a `rustc --version` step for exactly this reason, and on the most recent run it printed the same string — same version, same commit hash. So the recorder and the checker agree.
 
-Nothing in the repository makes them agree. `runs-on: ubuntu-latest` supplies whatever Rust the runner image happens to ship this month; the laptop supplies whatever `rustup` last installed. Two unpinned numbers that currently match, and no file anywhere asserts that they should.
+For most of this library's life, nothing made them agree. `runs-on: ubuntu-latest` supplies whatever Rust the runner image happens to ship this month; the laptop supplies whatever `rustup` last installed. Two unpinned numbers that happened to match, with no file anywhere asserting that they should — which is the state this page was written to describe, and which it no longer describes, because writing it prompted the fix. The repository now carries a [`rust-toolchain.toml`](https://github.com/masiarek/rust-learning-library/blob/master/rust-toolchain.toml); the rest of this page is what is in it and why.
 
 ## What that actually exposes — which is less than you would guess
 
@@ -36,14 +36,15 @@ The middle row is a non-event: it fails immediately and unmistakably. The bottom
 
 So the honest summary is that this library's reproducibility exposure is small and specific. That matters, because it is the number any proposed fix has to be weighed against — see [devenv](../devenv/README.md), which solves a far larger version of this problem at a far larger price.
 
-## The fix, in four lines
+## The fix, in five lines
 
-Put this at the repository root:
+At the repository root:
 
 ```toml
 # rust-toolchain.toml
 [toolchain]
 channel = "1.97.1"
+profile = "minimal"
 components = ["rustfmt", "clippy"]
 ```
 
@@ -54,6 +55,8 @@ Two details decide whether it works:
 **It is a rustup feature, not a Rust feature.** What intercepts the call is the rustup shim on your `PATH` — the `rustc` in `~/.cargo/bin` is a few kilobytes that reads the toolchain file and re-executes the real compiler. Call a real binary directly, by absolute path, and the file is ignored completely. On this machine the shims live under Homebrew's rustup rather than `~/.cargo/bin`, which is worth knowing before you debug a pin that appears not to apply.
 
 **`channel = "stable"` pins nothing.** It tracks stable, so two machines a month apart get two compilers and you have written a file that looks like a guarantee and is not one. Pin the number.
+
+**`profile` decides what gets downloaded, and it is not free.** A version-pinned toolchain is a *separate install* from `stable`, even when the two resolve to the identical compiler — rustup keys toolchains by name, not by resolved version. Measured here on adding the pin: the default profile installs **1.5 GB**, `minimal` plus those two components installs **657 MB**, and `rustfmt --version` and `cargo clippy --version` both answer from it either way. On CI, which caches nothing between runs, that difference is downloaded on every job.
 
 The cost is a chore, and the chore is the feature: the toolchain now moves only when somebody edits that line, and that edit is a commit, with a diff, in which every answer key is re-verified by the new compiler before anyone else sees it. An unpinned toolchain upgrades itself between your commits, which is the same event with nobody watching.
 
