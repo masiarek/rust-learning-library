@@ -1,0 +1,78 @@
+
+──── Step 1: Twenty-six arms become five
+  checked every hour 0..=30, disagreements: 0
+  hour 8 -> "Food"   hour 12 -> "Food"   hour 25 -> "NOT A VALID HOUR"
+      `8 | 12 | 18` is ONE arm that accepts any of three values, and
+      `0..=7` is one arm that accepts eight. The two compose — `9..=11 |
+      13..=17` is a single pattern — because `|` joins patterns, not
+      numbers. Nothing about the behaviour changed; 21 lines went away.
+
+──── Step 2: The first arm that matches wins, and the rest are dead
+  halfway(12) -> "Food"
+      The `12 => "Clothing"` arm below it never runs. `match` takes the
+      FIRST arm that matches, so widening an arm silently retires every
+      later arm it now covers — and rustc says so:
+          warning: unreachable pattern
+          8 | 12 | 18 => ...   matches all the relevant values
+          12 => ...            ^^ no value can reach this
+      Here the dead arm agreed with the live one, so deleting it changes
+      nothing. That is the lucky case, and it is why the warning is worth
+      reading rather than clearing: it is the same warning either way.
+
+──── Step 3: rustc checks each ALTERNATIVE, not each arm
+  too_wide( 8) -> "Food"                 correct: "Food"
+  too_wide(12) -> "Clothing"             correct: "Food"   <- wrong
+  too_wide(18) -> "Food"                 correct: "Food"
+      One arm of the pair is still perfectly reachable — 8 and 18 arrive
+      there every day — so "is this arm dead?" is the wrong question, and
+      a compiler that asked it would have nothing to report. rustc asks it
+      of each alternative separately and puts the caret under the one that
+      lost:
+          9..=17 => ...          matches all the relevant values
+          8 | 12 | 18 => ...         ^^ no value can reach this
+      That is a real bug caught for free. The version of this mistake the
+      compiler CANNOT catch is a range that is too wide with no later arm
+      to contradict it — nothing is unreachable, and hour 12 just quietly
+      sells clothing. Step 1's agreement loop is how you find that one.
+
+──── Step 4: Three tokens, two meanings: `8 | 12 | 18`
+  as an expression:  let mask = 8 | 12 | 18;   -> 30
+  as a pattern:      matches!(12, 8 | 12 | 18) -> true
+  as a pattern:      matches!(30, 8 | 12 | 18) -> false
+      Identical characters, unrelated jobs. In an EXPRESSION `|` is bitwise
+      or, and 8|12|18 is the single number 30. In a PATTERN it is
+      alternation, and the same text means "any one of these three" — which
+      is why 30 does not match it. Position decides, and there is no way to
+      ask for the other one: a pattern cannot compute.
+  0..=7 includes 7:  matches!(7, 0..=7) -> true
+  0..7  excludes 7:  matches!(7, 0..7)  -> false
+      `..=` is the inclusive form and the one you almost always want for
+      hours, scores and grades, because the top of the range is a real
+      value. `..` stops one short — the same off-by-one as everywhere else.
+
+──── Step 5: Every alternative must bind the same names
+  let (Ok(n) | Err(n)) = Err(7);   -> n = 7
+      Useful when both arms carry the same thing and you do not care yet
+      which one you got — a line number, a parsed value, a ballot id.
+  Some(x) | None => x              -> does not compile
+      error[E0408]: variable `x` is not bound in all patterns
+      There is no value for `x` when the None side matched, and Rust will
+      not invent one. Same names, same types, on every alternative.
+  Some(8)  Some(8 | 12 | 18) -> true  Some(8) | Some(12) | Some(18) -> true
+  Some(9)  Some(8 | 12 | 18) -> false Some(8) | Some(12) | Some(18) -> false
+  None     Some(8 | 12 | 18) -> false Some(8) | Some(12) | Some(18) -> false
+      Those two spellings mean the same thing. The nested form has been
+      allowed since Rust 1.53; before that `|` only worked at the top of an
+      arm, which is why older code repeats the constructor.
+
+──── Step 6: A guard covers the whole arm
+  hour 12, fasting true  -> "Water"
+  hour 12, fasting false -> "Food"
+      The `if` is not attached to `18`; it is attached to the arm. Any
+      alternative may match, and then the guard decides whether the arm
+      runs at all — if it says no, matching continues at the NEXT arm,
+      which is how the same three values reach two different answers here.
+      Note also that a guard makes an arm invisible to the exhaustiveness
+      checker: the compiler cannot evaluate `!fasting`, so it assumes the
+      arm might not run and still demands a catch-all.
+

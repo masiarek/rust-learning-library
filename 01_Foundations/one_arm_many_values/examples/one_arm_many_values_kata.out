@@ -1,0 +1,51 @@
+Every hour 0..=30, against the twenty-six-arm original:
+
+  collapsed        disagreements: 0
+      compiler warned? —
+
+  wrong_swallowed  disagreements: 1
+      hour 12: original "Food", this version "Clothing"
+      compiler warned? yes: unreachable pattern, caret under `12`
+
+  wrong_exclusive  disagreements: 1
+      hour  7: original "Classic", this version "NOT A VALID HOUR"
+      compiler warned? yes: non_contiguous_range_endpoints
+
+  wrong_too_far    disagreements: 1
+      hour 25: original "NOT A VALID HOUR", this version "Season ticket"
+      compiler warned? no
+
+What the three mistakes have in common is that each is one character:
+  9..=11 | 13..=17  ->  9..=17     a range that ate a value from the arm below
+  0..=7             ->  0..7       inclusive to exclusive
+  19..=24           ->  19..=25    one hour past the end of the day
+
+What they do not have in common is whether anyone tells you — and the
+count is two out of three, from two different lints:
+
+  warning: unreachable pattern
+      9..=17 => ...            matches all the relevant values
+      8 | 12 | 18 => ...           ^^ no value can reach this
+
+  warning: multiple ranges are one apart
+      0..7 => ...              this range doesn't match `7_u32` because
+                               `..` is an exclusive range
+      8 | 12 | 18 => ...       this could appear to continue range `0..7`,
+                               but `7_u32` isn't matched by either of them
+      help: use an inclusive range instead: `0_u32..=7_u32`
+
+The second one is worth knowing about, because it is not an exhaustiveness
+check at all — every hour is still handled, hour 7 merely falls through to
+the catch-all. `non_contiguous_range_endpoints` is a lint about the SHAPE of
+your arms: two ranges left exactly one value apart is a typo often enough
+that rustc says so on sight, and it names the missing value.
+
+Which leaves the third, and nothing catches the third. `19..=25` makes hour
+25 a valid hour; the catch-all below it still has 26, 27, 28 to serve, so no
+arm is dead and no two ranges are one apart. There is nothing structurally
+wrong for a compiler to notice. Exhaustiveness says every value is handled;
+it never claimed the handler was the right one.
+
+So the loop above is not ceremony. Collapsing a match is a refactor, and the
+only claim a refactor makes is that the answers did not change — which is a
+claim you can check on every input, for a function this small, in four lines.
