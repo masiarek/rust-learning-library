@@ -1,37 +1,41 @@
-1. The refusal
-   s1 and s2 are both &str — a pointer and a length, owning nothing.
-   There is nowhere to put the joined bytes, so there is no `+` to call.
+1. Joining two names
+   format!("{first} {last}")     "Ada Lovelace"
+   first.to_owned() + " " + last   "Ada Lovelace"
+   String::from(first) + " " + last  "Ada Lovelace"
+   All three allocate exactly one buffer, and all three leave
+   first = "Ada" and last = "Lovelace" usable afterwards.
+   Only format! reads in the order the finished sentence does.
 
 2. The one impl there is: String + &str
    left        right      compiles   why
+   String      &str       yes        the left buffer is taken and grown
+   String      String     NO         E0308 — expected `&str`, borrow the right
    &str        &str       NO         E0369 — neither side owns a buffer
    &str        String     NO         E0369 — the left side still owns nothing
-   String      String     NO         E0308 — expected `&str`, found `String`
-   String      &str       yes        the left buffer is taken and grown
 
-3. Three ways to say what Adam meant
-   format!("{s1} {s2}")   "Adam Masiarek"   s1, s2 both still usable
-   s1.to_owned() + " " + s2  "Adam Masiarek"   the compiler's own suggestion
-   String::from(s1) + " " + s2  "Adam Masiarek"   same thing, spelled differently
-   All three allocate exactly one buffer. Only format! reads as the sentence it builds.
-
-4. What `+` actually does to its left operand
+3. What `+` does to its left operand
    capacity before 32, after 32
    same heap buffer reused: true
-   "Adam Masiarek"
-   That is why `+` consumes the left side: the answer IS the left buffer, grown.
-   The right side is only borrowed, so s2 is still usable: "Masiarek"
+   "Ada Lovelace"
+   The answer IS the left buffer, grown — which is why `+` consumes it,
+   and why the right side, being only borrowed, survives: "Lovelace"
 
-5. `+=` works where `+` does not — on a String
-   "Hello, Adam!"
-   `let mut t = "Hello, "; t += s1;` is E0368 — a &str has no buffer to append to.
+4. `+=` is push_str wearing an operator
+   "Hello, Ada!"
 
-6. More than two pieces
+5. More than two pieces
    parts.concat()        "AdaBenCara"
    parts.join(", ")      "Ada, Ben, Cara"
    owned.join(" | ")     "Ada | Ben | Cara"
-   Both take a slice of &str OR of String, and both allocate once,
-   sized up front — which a chain of `+` cannot do.
+   Both take a slice of &str OR of String, and both size the buffer
+   up front — which a chain of `+` cannot do.
+
+6. The three refusals, and the one fact under them
+   &str  + &str     E0369   neither side owns a buffer to grow
+   String + String  E0308   the one impl is Add<&str>; borrow the right
+   &str  += &str    E0368   same missing buffer, assignment spelling
+   All three say one thing: `+` grows its LEFT operand, so the left
+   operand has to be something that owns bytes.
 
 7. Which to reach for
    two or three known pieces        -> format!

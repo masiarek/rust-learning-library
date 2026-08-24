@@ -56,7 +56,7 @@ flowchart LR
 | 2 | [String slices](01_Foundations/string_slices/README.md) | 101 → 201 | What a view actually is: the stale index it replaces, the `E0502` that keeps it honest, and the one way `&s[a..b]` panics |
 | 3 | [The anatomy of a `String`](01_Foundations/anatomy_of_a_string/README.md) | 101 → 201 | What the owner *is*: three words on the stack, bytes on the heap, and a capacity that is not the length |
 | 4 | [Making a `String`](01_Foundations/making_a_string/README.md) | 101 → 201 | `to_string` vs `to_owned` vs `String::from` vs `into` vs `format!` — and why `Display` is the only one you implement |
-| 5 | [Concatenating strings](01_Foundations/concatenating_strings/README.md) | 101 → 201 | Why `"a" + "b"` will not compile — the single `Add` impl, the `E0369`/`E0308`/`E0368` family it produces, and what to write instead |
+| 5 | [Concatenating strings](01_Foundations/concatenating_strings/README.md) | 101 → 201 | How to join two pieces of text — and why `+` insists on an owned `String` on the left, which is the whole of `E0369`/`E0308`/`E0368` |
 | 6 | [Building a `String`](01_Foundations/building_a_string/README.md) | 101 → 201 | `push_str`, `push`, the `+` that consumes its left operand, and `format!` vs `write!` inside a loop |
 | 7 | [Meet the `char`](01_Foundations/meet_the_char/README.md) | 101 → 201 | What the bytes encode — why `.len()` is not "how many characters", and why `s[0]` refuses to compile |
 | 8 | [Walking a `String`](01_Foundations/walking_a_string/README.md) | 101 → 201 | Three item types and the split family — and why `split(' ')` and `split_whitespace()` disagree about empty fields |

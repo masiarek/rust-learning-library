@@ -1,28 +1,28 @@
-PART 1 — the three refusals
-   &str  + &str    E0369  neither side owns a buffer to grow
-   String + String E0308  the ONE impl is Add<&str>; borrow the right side
-   &str  += &str   E0368  same missing buffer, assignment spelling
-   All three are the same fact: `+` grows the left operand, so the left
-   operand has to be something that owns bytes.
-
-PART 2 — the greeting, three ways
-   format!      "Hello, Adam Masiarek!"
-                first = "Adam", last = "Masiarek" — both still usable
+PART 1 — the greeting, three ways
+   format!      "Hello, Ada Lovelace!"
+                first = "Ada", last = "Lovelace" — both still usable
                 1 buffer, sized from the finished string
-   chained +    "Hello, Adam Masiarek!"
-                first = "Adam", last = "Masiarek" — only borrowed on the right
-                1 buffer, but grown in four steps — see PART 3
-   join         "Hello, Adam Masiarek!"
+   chained +    "Hello, Ada Lovelace!"
+                first and last are only borrowed on the right, so both live
+                1 buffer, grown in four steps — see PART 3
+   join         "Hello, Ada Lovelace!"
                 join sizes the buffer up front, then + adds the '!'
 
    agree: true
 
-PART 3 — why the LEADING piece is the one that must be owned
+PART 2 — why the LEADING piece is the one that must be owned
    capacity 64 before, 64 after
    same buffer the whole way: true
-   "Hello, Adam Masiarek!"
-   Four appends, zero new allocations — because the left operand was
-   pre-sized and every `+` handed the same buffer to the next one.
+   "Hello, Ada Lovelace!"
+   Four appends, zero new allocations — the left operand was pre-sized
+   and every `+` handed the same buffer to the next one.
+
+PART 3 — the three refusals
+   &str  + &str     E0369   neither side owns a buffer to grow
+   String + String  E0308   the ONE impl is Add<&str>; borrow the right side
+   &str  += &str    E0368   same missing buffer, assignment spelling
+   One fact, three spellings: `+` grows the left operand, so the left
+   operand has to own bytes. PART 2 is that fact used deliberately.
 
 PART 4 — what to write
    Reach for format! by default: it does not care who owns what, and it
