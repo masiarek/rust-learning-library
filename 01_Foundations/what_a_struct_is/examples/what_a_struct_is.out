@@ -1,0 +1,23 @@
+1. Three flavors, and a fourth spelling
+   named   Ballot { voter: "Ada", scores: [] }
+   tuple   Precinct(7)   field reached by index: 7
+   unit    Sealed          — the type has exactly one value
+   braces  AlsoEmpty      — `AlsoEmpty {}`, NOT the same as a unit struct
+
+2. A tuple struct is a named-field struct whose fields are numbers
+   Precinct { 0: 7 } == Precinct(7)  ->  true
+
+3. Field ORDER in the expression is free; the value is the same
+   Ballot { voter: "Ben", scores: [5, 2] }
+   Ballot { voter: "Ben", scores: [5, 2] }
+   same value: true
+
+4. Data in the struct, behaviour in the impl block
+   Cara scored [5, 2, 0], total 7
+   Ballot::total(&ballot) == ballot.total()  ->  true
+
+5. Privacy is per module — `count` is private, and that is why
+   the module has to hand you a method to read it
+   id (pub)        12
+   count (private) 431   <- via count(), not s.count
+   s.count would be E0616: field `count` of struct `Sealed` is private

@@ -1,0 +1,19 @@
+1. Identical shapes, different types
+   Color(0,0,0) -> #000000
+   Point(0, 0, 0) is the same THREE i32s and paint(&origin) will not compile:
+     error[E0308]: mismatched types — expected `&Color`, found `&Point`
+   A bare (i32, i32, i32) would have accepted either. The name is the guard.
+
+2. Destructuring — the tuple struct comes apart like a tuple
+   let Color(r, g, b) = black;  ->  r=0 g=0 b=0
+   let Point(x, y, z) = origin; ->  x=0 y=0 z=0
+   Same shape, same destructuring, and still not interchangeable.
+
+3. A private field makes a tuple struct's CONSTRUCTOR private
+   sealed::Ballot::new(431) -> Ballot(431), get() = 431
+   sealed::Ballot(431) from out here is E0603:
+     `a constructor is private if any of the fields is private`
+   That is the newtype's whole guarantee: one door, and the module owns it.
+
+4. A unit struct holds nothing, so behaviour is all it can hold
+   (no ballot returned)   <- via its Display impl; the value carries no data at all
