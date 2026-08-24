@@ -39,6 +39,7 @@ Same rule the sidebar follows: order is presentation, so it belongs in a page, n
 
 | Lesson | Level | What it teaches |
 |---|---|---|
+| [Struct update syntax](01_Foundations/struct_update/README.md) | 101 → 201 | `..base` moves field by field, so the base ends up *partially* dead — and `Copy` decides which half |
 | [`Some` is a constructor, not a flag](01_Foundations/some_is_a_constructor/README.md) | 101 → 201 | `Some(None)` in a field, and the doubly-optional type that makes it legal |
 | [What is a ballot, in memory?](01_Foundations/representing_a_ballot/README.md) | 201 | Designing a real struct: the layout choices, and the parallel `Vec`s that desync |
 | [Six kinds of zero](01_Foundations/six_kinds_of_zero/README.md) | 201 | When a field's zero is a value and when it is a hole |
@@ -78,7 +79,6 @@ A struct owning its fields is the default, and the reason `String` shows up in b
 
 Named honestly, because a map that only lists what exists is a map of the wrong territory. Each becomes a page once it has a runnable example worth reading — rough order, not a promise:
 
-- **Struct update syntax and the partial move** — `..user1` moves, so `user1` may be dead afterwards; which fields are `Copy` decides it
 - **Destructuring a struct** — in a `let`, in a `match` arm, and in a function parameter
 - **`Copy` vs `Clone`** — why a struct is not `Copy` by default, what deriving each one costs, and when to write `Clone` by hand
 - **Comparing structs** — `PartialEq` / `Eq` / `PartialOrd` / `Ord`, and the derive that compares fields in declaration order

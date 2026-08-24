@@ -95,6 +95,7 @@ NAV_ORDER: dict[str, list[str]] = {
         # A compound type of your own, before the two the library leans on.
         "what_a_struct_is",
         "impl_blocks",
+        "struct_update",
         "some_and_none",
         "some_is_a_constructor",
         "option_vs_result",

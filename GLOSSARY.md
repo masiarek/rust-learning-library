@@ -74,7 +74,7 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Struct** — A type that names a group of values, each field with its own type. Three flavors: named-field, tuple struct, and unit struct. It holds *no* behaviour — methods live in a separate `impl` block, shared behaviour in traits — which is why Rust has no classes and no inheritance. → [What a struct is](01_Foundations/what_a_struct_is/README.md)
 
-**Struct update syntax** — `Config { retries: Some(3), ..Default::default() }` — fill the fields you name, take the rest from another value. It **moves** out of that value, so a non-`Copy` field can leave the original partly dead. → [`unwrap_or_default`](01_Foundations/unwrap_or_default/README.md)
+**Struct update syntax** — `Config { retries: Some(3), ..Default::default() }` — fill the fields you name, take the rest from another value. It **moves** the fields you did not name, one at a time, so a non-`Copy` field leaves the original *partially* dead — the compiler names the field, not the value. → [Struct update syntax](01_Foundations/struct_update/README.md)
 
 **Tuple struct** — A struct whose fields are numbered rather than named: `struct Precinct(u32);`, reached as `.0`. Really a named-field struct whose names are digits (`Precinct { 0: 7 }` compiles). A private field makes its *constructor* private too, which is what the newtype pattern relies on. → [What a struct is](01_Foundations/what_a_struct_is/README.md)
 
