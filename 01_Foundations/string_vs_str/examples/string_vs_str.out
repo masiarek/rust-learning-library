@@ -1,0 +1,22 @@
+1. Three ways to have text
+   literal  &'static str  "The Big Lebowski"
+   owned    String        "The Big Lebowski"
+   view     &str          "Big"   <- bytes 4..7 of `owned`, borrowed
+
+2. What each one costs on the stack
+   size_of::<&str>()    = 16 bytes  (pointer + length)
+   size_of::<String>()  = 24 bytes  (pointer + length + capacity)
+   size_of::<&String>() = 8 bytes  (just a pointer)
+
+3. One &str parameter serves every caller
+   shout(literal) = "THE BIG LEBOWSKI"
+   shout(&owned)  = "THE BIG LEBOWSKI"   <- &String coerced to &str, free
+   shout(view)    = "BIG"
+
+4. The owner can grow; the view never can
+   grows = "counted"   <- push_str needs a `mut String`
+   a &str has no push_str — the text may not even be yours to change
+
+5. String moves; &str copies
+   &str:   s1 = "hello", s2 = "hello"   <- both alive
+   String: big2 = "hello", and `big1` is now unusable — E0382

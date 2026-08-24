@@ -1,0 +1,32 @@
+Round 1 — the inventory
+   city = "Łódź"
+      byte 0: 'Ł'   2 byte(s)   U+0141
+      byte 2: 'ó'   2 byte(s)   U+00F3
+      byte 4: 'd'   1 byte(s)   U+0064
+      byte 5: 'ź'   2 byte(s)   U+017A
+      -> 7 bytes, 4 chars
+
+Round 2 — the same-looking name, spelled two ways
+   composed = "Zoé"
+      byte 0: 'Z'   1 byte(s)   U+005A
+      byte 1: 'o'   1 byte(s)   U+006F
+      byte 2: 'é'   2 byte(s)   U+00E9
+      -> 4 bytes, 3 chars
+   decomposed = "Zoe\u{301}"
+      byte 0: 'Z'   1 byte(s)   U+005A
+      byte 1: 'o'   1 byte(s)   U+006F
+      byte 2: 'e'   1 byte(s)   U+0065
+      byte 3: '\u{301}'   2 byte(s)   U+0301
+      -> 5 bytes, 4 chars
+   composed == decomposed?  false
+
+Round 3 — which counts can std give you?
+   bytes:     .len()            -> 4 vs 5
+   chars:     .chars().count()  -> 3 vs 4
+   graphemes: what a reader sees -> 3 vs 3, but std cannot count
+              these; the unicode-segmentation crate can
+
+Round 4 — safe slicing needs a boundary
+   city.get(0..1) = None   <- inside 'Ł', refused as None
+   city.get(0..2) = Some("Ł")
+   city.chars().next() = Some('Ł')   <- the honest way to ask for one char

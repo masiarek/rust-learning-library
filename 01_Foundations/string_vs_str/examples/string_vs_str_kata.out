@@ -1,0 +1,17 @@
+Round 1 — fn first_word(s: &str) -> &str
+   from a literal        "score"
+   from a String         "equal"   <- &owned, coerced for free
+   from a slice of one   "preference"
+   and `owned` is still usable afterwards: 27 bytes
+
+Round 2 — fn first_word_owned(s: String) -> String
+   from a literal        "score"   <- had to allocate with .to_string()
+   from a String         "equal"   <- had to .clone() to keep `owned`
+   from a slice of one   "preference"   <- allocate again
+   or hand it over:      "equal"   <- moved; `owned` is gone (E0382 next use)
+
+The catalogue:
+   &str parameter:   every caller pays nothing — a literal, a String,
+                     and a slice all coerce or borrow for free.
+   String parameter: every caller pays — an allocation, a clone, or
+                     the value itself. Take &str unless you must own it.

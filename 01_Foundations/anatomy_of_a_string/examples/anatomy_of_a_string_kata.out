@@ -1,0 +1,18 @@
+Round 1 — the naive build, watching the buffer move
+   String::new()              len  0  capacity  0   no heap buffer at all
+   push_str("STAR")           len  4  capacity  8   first allocation
+   push_str(" voting")        len 11  capacity 16   outgrew it — reallocated, bytes moved
+   push_str(" is score")      len 20  capacity 32   outgrew it again
+   push_str(" + runoff")      len 29  capacity 32   fits — no reallocation this time
+
+Round 2 — the same text, one allocation, because we knew the size
+   with_capacity(29)          len  0  capacity 29   bought once, up front
+   four push_str calls        len 29  capacity 29   capacity never changed
+
+Round 3 — the two builds are equal; capacity is not content
+   s == planned?  true   (capacities 32 vs 29)
+
+The rule to carry away:
+   len is the text, capacity is the room. Growth doubles so that
+   repeated pushes stay cheap; with_capacity skips the moves when
+   you can name the size; shrink_to_fit hands the spare room back.

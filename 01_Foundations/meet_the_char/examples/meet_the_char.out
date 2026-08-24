@@ -1,0 +1,28 @@
+1. One string, two counts
+   "Zoë".len()           = 4 bytes
+   "Zoë".chars().count() = 3 chars
+
+2. Where each char sits, and what it costs in the string
+   byte 0: 'Z'   1 byte(s) in UTF-8, U+005A
+   byte 1: 'o'   1 byte(s) in UTF-8, U+006F
+   byte 2: 'ë'   2 byte(s) in UTF-8, U+00EB
+
+3. A char VALUE is always 4 bytes — decoded, not encoded
+   size_of::<char>() = 4 bytes
+   'ë' costs 4 bytes as a char, 2 bytes inside a String
+
+4. Slicing is by byte, and only at char boundaries
+   name.get(0..1) = Some("Z")
+   name.get(2..4) = Some("ë")
+   name.get(2..3) = None      <- byte 3 is the middle of 'ë'
+   name.is_char_boundary(3) = false
+
+5. Case is not one-to-one
+   'ß'.to_uppercase() = "SS"   <- one char in, two out
+
+6. Two spellings that look identical
+   composed   "é"  1 char(s), 2 bytes
+   decomposed "e\u{301}"  2 char(s), 3 bytes
+   composed == decomposed?  false
+   what a READER calls one character is a third counting — the
+   grapheme — and std stops before it; that one needs a crate

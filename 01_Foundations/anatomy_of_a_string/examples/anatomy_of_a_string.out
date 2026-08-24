@@ -1,0 +1,26 @@
+1. String::new() allocates nothing
+   String::new()                  len  0   capacity  0
+
+2. The first push buys a buffer; growth roughly doubles
+   push_str("aa")                 len  2   capacity  8
+   push_str("bbbbbbb")            len  9   capacity 16
+   push_str("cccccccccc")         len 19   capacity 32
+   (the exact numbers are the allocator's choice — the SHAPE is the
+    lesson: capacity jumps ahead of len, so most pushes cost nothing)
+
+3. Paying up front: with_capacity
+   String::with_capacity(32)      len  0   capacity 32
+   push_str("scores: 5, 4, 3")    len 15   capacity 32
+   push_str(", 2, 1, 0")          len 24   capacity 32
+   two pushes, zero reallocations — the buffer never moved
+
+4. Giving it back: shrink_to_fit
+   shrink_to_fit()                len 24   capacity 24
+
+5. Capacity is bookkeeping, not content
+   "hi" with capacity  2 == "hi" with capacity 64?  true
+
+6. A String is a Vec<u8> that promises UTF-8
+   from_utf8([83, 84, 65, 82]) = Ok("STAR")
+   from_utf8([83, 84, 0xFF])   = Err: invalid utf-8 sequence of 1 bytes from index 2
+   the promise is checked at the door, so it never needs checking inside

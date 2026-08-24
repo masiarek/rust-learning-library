@@ -1,0 +1,18 @@
+Round 1 — route each arrival to its type
+   text you built yourself      -> String    (UTF-8 is yours to promise)
+   a filename from the OS       -> OsString  (the OS promised nothing)
+   a string headed into C code  -> CString   (C stops at the first NUL)
+
+Round 2 — break the UTF-8 promise
+   a real, legal Unix filename: "case\xF5.yaml"
+   to_str() -> None      <- not UTF-8; String would have to lie
+   to_string_lossy() -> "case�.yaml"   <- the byte is gone, and says so
+
+Round 3 — break the NUL promise
+   CString::new("tally\0sheet") -> Err
+   the error names the byte: nul byte found in provided data at position: 5
+   C would have read only "tally" — Rust refuses instead
+
+Round 4 — and the promise that always holds
+   a CString of plain ASCII is also valid UTF-8: to_str() = Ok("tally")
+   every narrowing that checks out hands you the &str view for free

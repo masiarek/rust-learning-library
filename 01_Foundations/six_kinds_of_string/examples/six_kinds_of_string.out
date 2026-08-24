@@ -1,0 +1,27 @@
+1. The pattern: every pair is String-and-&str again
+   owned      borrowed   what the bytes promise
+   String     &str       valid UTF-8, always
+   OsString   &OsStr     whatever the OS handed you
+   CString    &CStr      no NUL inside, one NUL at the end
+   PathBuf    &Path      an OsString that knows about '/'
+   Vec<u8>    &[u8]      nothing at all — just bytes
+
+2. OsStr: the honest type for filenames
+   to_str() on a UTF-8 name     = Some("results.yaml")
+   to_str() on a non-UTF-8 one  = None
+   to_string_lossy()            = "bv�.y"   <- data lost, visibly
+
+3. CString: the contract C needs
+   CString::new("STAR")        = "STAR"
+   CString::new("STAR\0vote")  = Err: nul byte found in provided data at position: 4
+
+4. Path: an OsStr that knows the shape of a path
+   file_stem() = Some("results")
+   extension() = Some("yaml")
+   parent()    = Some("04_Approval/cases")
+
+5. Widening is free; narrowing returns an Option
+   &str -> OsString -> to_str() = Some("turnout.csv")
+   narrowing is where a promise gets CHECKED — which is why the
+   cheap direction never asks, and the checked one answers with
+   an Option (OsStr) or a Result naming the fault (CStr)
