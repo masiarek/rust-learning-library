@@ -1,0 +1,28 @@
+1. What it saves you
+   user2 = User { email: …, ..user1 }
+   User { active: true, sign_in_count: 1, username: "someusername123", email: "another@example.com" }
+   `..base` must come LAST, and takes no trailing comma.
+
+2. It is an assignment, so it MOVES — and it moves per FIELD
+   user1.active        true   <- bool is Copy, so it was copied
+   user1.sign_in_count 1   <- u64 is Copy, so it was copied
+   user1.username      -- moved out, and now unusable:
+     error[E0382]: borrow of moved value: `user1.username`
+     note: move occurs because `user1.username` has type `String`,
+           which does not implement the `Copy` trait
+   user1.email         someone@example.com   <- NOT moved: user2 supplied its own
+   user2.username      someusername123   <- this is user1's String, relocated
+   So `user1` is not dead. It is PARTIALLY moved, field by field.
+
+3. Name every non-Copy field and the base survives intact
+   base is still whole:  User { active: true, sign_in_count: 7, username: "ada", email: "ada@example.com" }
+   and the new one:      User { active: true, sign_in_count: 7, username: "ben", email: "ben@example.com" }
+
+4. `..Default::default()` never strands anything
+   User { active: false, sign_in_count: 0, username: "cara", email: "" }
+   The base is a temporary nobody holds, so there is no binding
+   left half-moved. That is why config structs use this form.
+
+5. It is not a copy constructor
+   `..base` does not clone, and it does not call any of your code.
+   If you want `base` intact and a full duplicate, that is `.clone()`.

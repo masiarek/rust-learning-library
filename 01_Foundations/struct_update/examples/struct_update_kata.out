@@ -1,0 +1,26 @@
+Predict, field by field, what is still readable on `original`:
+
+  precinct  Copy      -> copied   -> 12 still readable
+  counted   Copy      -> copied   -> false still readable
+  voter     NOT Copy  -> MOVED    -> reading it is E0382
+  notes     NOT Copy  -> not taken (we named it) -> "handed in late" still readable
+
+  amended = Ballot { precinct: 12, counted: false, voter: "Ada", notes: "resolved" }
+
+The rule in one line:
+  `..base` moves exactly the fields you did NOT name,
+  and only the non-Copy ones among those actually go dead.
+
+Three ways to keep the base whole:
+  1. name every non-Copy field   -> base alive: "Ben"
+  2. clone into the base slot    -> base alive: "Ben"
+  3. ..Default::default()        -> nothing to strand
+
+  Ballot { precinct: 3, counted: true, voter: "Cara", notes: "n/a" }
+  Ballot { precinct: 99, counted: true, voter: "Ben", notes: "n/a" }
+  Ballot { precinct: 0, counted: false, voter: "Dan", notes: "" }
+
+And the syntax trap, which is its own error:
+  Ballot { precinct: 1, ..base, }
+    error: cannot use a comma after the base struct
+    note: the base struct must always be the last field
