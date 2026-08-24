@@ -213,6 +213,7 @@ NAV_ORDER: dict[str, list[str]] = {
         # that connects the window to everything configured above.
         "bacon",
         "nextest",
+        "commit_on_green",
         "rustrover_setup",
         "neovim_setup",
         "compile_times",

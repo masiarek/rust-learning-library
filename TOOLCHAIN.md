@@ -61,6 +61,7 @@ Start wherever your question is; each page stands alone.
 | "onboarding a machine takes a day" | [devenv](05_Tooling/devenv/README.md) |
 | "I make a lot of tiny projects and copy the same config" | [A tree of practice projects](05_Tooling/practice_workspace/README.md) |
 | "I want the compiler to just tell me, without me asking" | [bacon](05_Tooling/bacon/README.md) |
+| "I broke it an hour ago and cannot get back" | [Commit on green](05_Tooling/commit_on_green/README.md) |
 | "my editor shows no types and I cannot see why" | [Neovim with LazyVim](05_Tooling/neovim_setup/README.md) — two independent silent failures — or [Choosing an editor](05_Tooling/editors/README.md) for the shim trap |
 | "my tests are slow, or one of them takes the run down" | [cargo-nextest](05_Tooling/nextest/README.md) |
 | "which pin actually applies?" | [rustup](05_Tooling/rustup/README.md) — the five-rung precedence table |
