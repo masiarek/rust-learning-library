@@ -64,6 +64,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "05_Tooling",
         "06_Data",
         "07_Clients",
+        "08_Interfaces",
         "09_Advanced",
         "GLOSSARY.md",
     ],
@@ -218,6 +219,10 @@ NAV_ORDER: dict[str, list[str]] = {
         "injecting_the_base_url",
         "mocking_a_server",
         "units_are_types",
+    ],
+    "08_Interfaces": [
+        "README.md",
+        "rust_ui_options",
     ],
     "09_Advanced": [
         "README.md",
