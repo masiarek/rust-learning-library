@@ -2,7 +2,7 @@
 
 **Level:** 101 → 201 · working knowledge
 
-**One line:** `Clone` is a method you call by name; `Copy` changes what `let b = a;` *means* — and a struct is never `Copy` by accident.
+**One line:** `Clone` is a method you call. `Copy` changes what `let b = a;` means. A struct is never `Copy` by accident.
 
 ```rust
 let b = a;   // moves or copies. Nothing here says which; the type decides.
@@ -15,7 +15,7 @@ let b = a;   // moves or copies. Nothing here says which; the type decides.
 | after `let b = a;` | `a` is **moved** — dead | `a` is **copied** — alive |
 | visible in the source | yes | **no** |
 
-The last row is why they are separate traits: `Copy` hides duplication, which is only safe when duplication is trivial.
+The last row is why they are separate traits. `Copy` hides duplication, which is only safe when duplication is trivial.
 
 ---
 
@@ -23,7 +23,7 @@ The last row is why they are separate traits: `Copy` hides duplication, which is
 
 It is **"duplicating is just a `memcpy`, and afterwards nobody owns anything extra."**
 
-One `String` field poisons the whole struct: copying it bit-for-bit duplicates the *pointer* — two owners, two frees. `Copy` makes that unrepresentable rather than discouraged.
+One `String` field disqualifies the whole struct. Copying it bit-for-bit duplicates the *pointer*: two owners, two frees. Not discouraged — unrepresentable.
 
 ## Three refusals, three codes
 
@@ -35,7 +35,7 @@ error[E0204]: the trait `Copy` cannot be implemented for this type
 error[E0184]: `Copy` not allowed on types with destructors    // Drop runs once per value
 ```
 
-Always `#[derive(Clone, Copy)]` together. `E0204` points at the offending field — the fastest way to see what a type actually owns.
+Always `#[derive(Clone, Copy)]` together. `E0204` points at the offending field, which is the fastest way to see what a type owns.
 
 ## All-`Copy` fields is not enough
 
@@ -44,20 +44,37 @@ Always `#[derive(Clone, Copy)]` together. `E0204` points at the offending field 
 struct Tally { counted: u32 }
 ```
 
-One `u32`, still moves. You opt in, not the fields — because `Copy` is a promise to callers that adding a `String` later would silently break.
+One `u32`, still moves. You opt in, not the fields. `Copy` is a promise to callers that adding a `String` later would silently break.
 
 ## Which to reach for
 
-1. **A reference.** Most "I need `Copy`" is really "my signature should have taken `&`".
-2. **`Copy`** for small plain data (ids, coordinates, counters) where `&` everywhere is noise.
-3. **`.clone()`** last, and justify it — it is a real allocation, written where it happens.
+1. **A reference.** Most "I need `Copy`" is really "my signature should take `&`".
+2. **`Copy`** for small plain data — ids, coordinates, counters — where `&` everywhere is noise.
+3. **`.clone()`** last, justified. A real allocation, written where it happens.
 
-[Struct update syntax](../struct_update/README.md) shows this at its sharpest: one `..base` line copies the `Copy` fields and moves the rest, out of the same value.
+[Struct update syntax](../struct_update/README.md) shows it sharpest: one `..base` line copies the `Copy` fields and moves the rest, out of the same value.
 
-## Elsewhere
+## If you are coming from another language
 
-- **Python** — `b = a` binds a reference and never duplicates; `Clone` ≈ `copy.deepcopy`. The *move* has no equivalent, and that is the new idea.
-- **ABAP** — structure assignment always copies, i.e. always behaves like `Copy`. Nothing there corresponds to a move.
+**Python.** Every name binds a reference, so `b = a` never duplicates and this page's question does not arise.
+
+| Python | Rust |
+|---|---|
+| `b = a` | a reference; both usable | a **move**; `a` is dead |
+| `copy.copy` / `copy.deepcopy` | explicit | `.clone()` |
+| — | no equivalent | `Copy` |
+
+The move is the new idea. `Clone` is `deepcopy` renamed, and `Copy` names the types where a move and a copy are indistinguishable.
+
+**ABAP.** Structure and internal-table assignment copies deeply, always — every ABAP type behaves like a Rust `Copy` type, so two-owners-of-one-allocation never happens.
+
+| ABAP | Rust |
+|---|---|
+| `ls_b = ls_a.` | copy | move, unless the type is `Copy` |
+| `REF TO` / `CREATE OBJECT` | the exception | the default for anything owning data |
+| pass a ref, agree not to touch the original | convention | enforced by the compiler |
+
+`Copy` is how you say "small enough that no agreement is needed".
 
 ---
 

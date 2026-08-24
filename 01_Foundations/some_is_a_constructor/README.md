@@ -13,7 +13,7 @@ let alfredo = Person {
 };
 ```
 
-Reads fine in English — `Some` sounds like *set*, `None` like *nothing*.
+Reads fine in English: `Some` sounds like *set*, `None` like *nothing*.
 
 ```text title="Real rustc output — rustc 1.97.1, edition 2024"
 error[E0308]: mismatched types
@@ -26,7 +26,7 @@ note: tuple variant defined here   --> /…/core/src/option.rs:605:5
 605 |     Some(#[stable(feature = "rust1", since = "1.0.0")] T),
 ```
 
-**"arguments to this enum variant are incorrect"** — not *"you nested an Option"*. And `Some` is shown as a **tuple variant**: a thing you call, called wrongly.
+**"arguments to this enum variant are incorrect"** — not *"you nested an Option"*. `Some` is shown as a **tuple variant**: a thing you call, called wrongly.
 
 ---
 
@@ -39,7 +39,7 @@ note: tuple variant defined here   --> /…/core/src/option.rs:605:5
 | `None` | the whole absence | nothing — takes no argument |
 | `Some(x)` | the whole presence | `x`, which must be a `T` |
 
-`None` is not the payload of `Some` — it is its **sibling**. The clincher is that `Some` is a value you can hold:
+`None` is not the payload of `Some`. It is its **sibling**. `Some` is a value you can hold:
 
 ```rust
 let wrap: fn(u8) -> Option<u8> = Some;
@@ -47,11 +47,11 @@ wrap(31)                                  // Some(31)
 [31u8, 44, 7].into_iter().map(Some)       // Some(31), Some(44), Some(7)
 ```
 
-With the type written out, `Some(None)` is just a `fn(u8)` called with an `Option` — same error as `wrap(None)`.
+With the type written out, `Some(None)` is a `fn(u8)` called with an `Option`. Same error as `wrap(None)`.
 
 ## When `Some(None)` is right
 
-It is a fine value, just not an `Option<u8>`. It is an **`Option<Option<u8>>`**, which earns its keep when there are *two* questions:
+It is a fine value, just not an `Option<u8>`. It is an **`Option<Option<u8>>`**, useful when there are *two* questions:
 
 ```rust
 let rows: [(&str, Option<Option<u8>>); 3] = [
@@ -61,16 +61,40 @@ let rows: [(&str, Option<Option<u8>>); 3] = [
 ];
 ```
 
-*Did we ask?* and *did they answer?* `.flatten()` collapses them once you no longer care which absence you had.
+*Did we ask?* and *did they answer?* `.flatten()` collapses them when you stop caring which absence you had.
 
 Same test [`Option` fields](../option_fields/README.md) applies to `Option<Vec<T>>`: keep the wrapper exactly when **absent and empty mean different things**. Usually they do not.
 
-The two-layer type normally arrives *by accident*, from `.map()` with a closure that returns an `Option` — see [`Option` vs `Result`](../option_vs_result/README.md) and [what a monad is](../what_a_monad_is/README.md). Typing it by hand is the only route the compiler catches immediately.
+The two-layer type normally arrives *by accident*, from `.map()` with a closure returning an `Option` — see [`Option` vs `Result`](../option_vs_result/README.md) and [what a monad is](../what_a_monad_is/README.md). Typing it by hand is the only route the compiler catches immediately.
 
-## Elsewhere
+## If you are coming from another language
 
-- **Python** — `d.get("age")` returns `None` for a missing key *and* a present-`None`; telling them apart needs `"age" in d`, a separate expression the value does not carry. `Option<Option<u8>>` welds both answers into one value.
-- **ABAP** — inexpressible on an elementary field: `lv_age TYPE i` is `0` for *unknown*, *declined*, and *a genuine zero*.
+**Python.** You have this distinction, spelled two ways:
+
+```python
+d.get("age")     # None for a missing key AND for a present None
+"age" in d       # the second answer, as a separate expression
+```
+
+`Option<Option<u8>>` welds both answers into one value; `.flatten()` discards the second.
+
+The other Python habit it replaces is the sentinel default:
+
+```python
+_MISSING = object()
+def f(age=_MISSING): ...   # tells "not passed" from "passed None"
+```
+
+`Some(None)` is the typed version, and it cannot leak into the rest of the program.
+
+**ABAP.** Not expressible on an elementary field:
+
+```abap
+DATA lv_age TYPE i.   " 0 means never asked, declined, OR a real zero
+IF lv_age IS INITIAL. " cannot separate the three
+```
+
+The workaround is a companion flag (`lv_age_supplied TYPE abap_bool`) every reader must remember to check. `Option<u8>` makes that structural; `Option<Option<u8>>` covers the two-question case. `REF TO i` is the nearest native analogue — initial or bound — at the cost of an allocation for a number.
 
 ---
 

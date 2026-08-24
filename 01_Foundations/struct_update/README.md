@@ -2,13 +2,13 @@
 
 **Level:** 101 → 201 · working knowledge
 
-**One line:** `..base` fills every field you did not name — by **moving** them one at a time, so the base ends up *partially* dead, and `Copy` decides which half survives.
+**One line:** `..base` fills every field you did not name, by **moving** them one at a time. The base ends up *partially* dead; `Copy` decides which half survives.
 
 ```rust
 let user2 = User { email: "another@example.com".to_string(), ..user1 };
 ```
 
-As English: *"and the rest like `user1`"*. As Rust: an **assignment of each remaining field** — and assignment moves.
+As English: *"and the rest like `user1`"*. As Rust: an **assignment of each remaining field**. Assignment moves.
 
 ---
 
@@ -19,7 +19,7 @@ let b = Ballot { notes: "…".into(), ..a };   // VALUES from another instance o
 struct Rectangle { top_left: Point }         // a TYPE, as a field's type — unrelated
 ```
 
-Also not a copy constructor: `..base` runs none of your code. Base intact *and* a duplicate is `.clone()`.
+Not a copy constructor either — `..base` runs none of your code. Base intact *and* a duplicate is `.clone()`.
 
 ## The rule
 
@@ -44,13 +44,13 @@ error[E0382]: borrow of moved value: `user1.username`
           which does not implement the `Copy` trait
 ```
 
-It names **`user1.username`**, not `user1` — the borrow checker tracks this per field. Clearest place in the library to watch [`Copy`](../copy_vs_clone/README.md) work: one line copies two fields and moves a third.
+It names **`user1.username`**, not `user1`. The borrow checker tracks this per field. Clearest place in the library to watch [`Copy`](../copy_vs_clone/README.md) work — one line copies two fields and moves a third.
 
 ## Keeping the base whole
 
-1. **Name every non-`Copy` field** — then `..base` carries only `Copy` fields.
-2. **`..base.clone()`** — the cost is written down.
-3. **`..Default::default()`** — the base is a temporary nobody holds, so nothing is stranded. Why config structs are built this way.
+1. **Name every non-`Copy` field.** Then `..base` carries only `Copy` fields.
+2. **`..base.clone()`.** The cost is written down.
+3. **`..Default::default()`.** The base is a temporary nobody holds, so nothing is stranded. This is why config structs are built this way.
 
 ## Syntax
 
@@ -64,10 +64,25 @@ error: cannot use a comma after the base struct
    = note: the base struct must always be the last field
 ```
 
-## Elsewhere
+## If you are coming from another language
 
-- **Python** — `dataclasses.replace(x, …)` and `{**d, …}` leave the original intact, because Python copies a *reference*. That behaviour is `..base.clone()`.
-- **ABAP** — `MOVE-CORRESPONDING` looks like this and is a **copy**; the source survives. Rust's `..` does not, for any field owning heap data.
+**Python.** `dataclasses.replace(user1, email=…)`, or `{**d, "email": …}` for dicts.
+
+```python
+user2 = dataclasses.replace(user1, email="b@example.com")
+user1.username   # still fine
+```
+
+Python copies a *reference*, so the string is shared and the original is untouched. Rust relocates the owned data. `..base.clone()` is the line that matches Python's behaviour, and the difference between the two is the allocation Python was doing for you.
+
+**ABAP.** `MOVE-CORRESPONDING ls_source TO ls_target`, or `CORRESPONDING #( ls_source )`.
+
+```abap
+MOVE-CORRESPONDING ls_source TO ls_target.
+" ls_source unchanged, deep components included
+```
+
+Always a copy. Rust's `..` looks like the same operation and is not, for any field owning heap data. Nothing in `..user1` signals that `user1` lost something.
 
 ---
 

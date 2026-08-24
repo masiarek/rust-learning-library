@@ -2,7 +2,7 @@
 
 **Level:** 101 → 201 · for newcomers
 
-**One line:** A struct names a group of values and makes that name a *type* — and holds no behaviour, which is what catches everyone arriving from an object-oriented language.
+**One line:** A struct names a group of values and makes that name a *type*. It holds no behaviour.
 
 ```rust
 struct Ballot {
@@ -11,9 +11,9 @@ struct Ballot {
 }
 ```
 
-- **Names each field** — no dependence on position, unlike a bare `(String, Vec<u8>)`.
-- **Is a new type**, kept apart from every other, including an identical one under a different name.
-- **Holds no behaviour.** No method can go in that block. Methods live in an `impl` block; shared behaviour in traits.
+- Named fields, so nothing depends on position (unlike `(String, Vec<u8>)`).
+- A new type. Kept apart from every other type, including an identical one under a different name.
+- No behaviour. Methods go in an `impl` block; shared behaviour in traits.
 
 ---
 
@@ -28,7 +28,7 @@ impl Ballot {              // behaviour
 }
 ```
 
-Why Rust has no classes and no inheritance: a struct is a record, `impl` attaches functions, a `trait` describes behaviour many types share. Whatever you would use inheritance for, you use traits for. Details: [`impl` blocks](../impl_blocks/README.md).
+Struct = record. `impl` = functions. `trait` = behaviour many types share. This is why there are no classes and no inheritance; traits do that job. Details: [`impl` blocks](../impl_blocks/README.md).
 
 ## Three flavors, and a fourth spelling
 
@@ -38,9 +38,9 @@ Why Rust has no classes and no inheritance: a struct is a record, `impl` attache
 | tuple struct | `struct Precinct(u32);` | `.0` |
 | unit struct | `struct Sealed;` | none |
 
-A tuple struct is a named-field struct whose names are digits: `Precinct { 0: 7 }` compiles and equals `Precinct(7)`.
+A tuple struct is a named-field struct whose names are digits — `Precinct { 0: 7 }` compiles and equals `Precinct(7)`.
 
-Don't gloss named-field as *"a classic C struct"*: layout is **undefined by default** (fields may be reordered), fields are **private by default**, and assignment **moves** unless the type is [`Copy`](../copy_vs_clone/README.md).
+Not "a classic C struct": layout is **undefined by default** (fields may be reordered), fields are **private by default**, assignment **moves** unless the type is [`Copy`](../copy_vs_clone/README.md).
 
 `struct AlsoEmpty {}` also has no fields but is **not** a unit struct — it needs braces:
 
@@ -50,7 +50,7 @@ error[E0423]: expected value, found struct `AlsoEmpty`
    |                      ^^^^^^^^^ help: use struct literal syntax instead: `AlsoEmpty {}`
 ```
 
-A unit struct holds nothing, so behaviour is all it *can* hold — which is when you want one: something to `impl` a trait on.
+A unit struct holds nothing, so behaviour is all it can hold. Use one when you need something to `impl` a trait on.
 
 `struct Sealed;` declares **two** things sharing a name: the type `Sealed` and a constant value `Sealed`. A type alias aliases only the type:
 
@@ -66,26 +66,44 @@ let b: Sealed = Alias;      // error[E0423]: expected value, found type alias `A
 
 ## Privacy is per module
 
-Private means **visible inside the defining module**, not "only to its own methods" — any code in that module reads any field. Consequence: for a tuple struct, a private field makes the *constructor* private.
+Private = **visible inside the defining module**, not "only to its own methods". Any code in that module reads any field.
+
+For a tuple struct, a private field makes the *constructor* private:
 
 ```text
 error[E0603]: tuple struct constructor `Ballot` is private
    |  a constructor is private if any of the fields is private
 ```
 
-That is the mechanism [the newtype](../newtype_score/README.md) relies on — one checked door.
+This is what [the newtype](../newtype_score/README.md) relies on: one checked door.
 
 ## What you cannot do
 
-- **Mark one field mutable** — `mut` belongs to the binding; all of it or none.
-- **Put `&str` in a field without a lifetime** — `error[E0106]: missing lifetime specifier`. Owned `String` sidesteps it, which is why beginner code uses it.
-- **Print with `{}`** — no `Display` unless you write one. See [Debug and Display](../debug_vs_display/README.md).
+- **Mark one field mutable.** `mut` is on the binding — all of it or none.
+- **Put `&str` in a field without a lifetime.** `error[E0106]: missing lifetime specifier`. Owned `String` sidesteps it; that is why beginner code uses it.
+- **Print with `{}`.** No `Display` unless you write one. See [Debug and Display](../debug_vs_display/README.md).
 
-## Elsewhere
+## If you are coming from another language
 
-- **Python** — closest is `@dataclass` / `NamedTuple`, but checked at compile time, and you **cannot** bolt on an attribute at runtime: the field set is part of the type.
-- **ABAP** — `TYPES: BEGIN OF … END OF` is very close. Missing there is `impl`: no way to attach methods to a structure type.
-- **Not objects** — no classes, no inheritance, nothing virtual unless you ask with `dyn`.
+**Python.** Closest match is a `@dataclass` or `NamedTuple`. The field list looks the same, and `self` is explicit in both.
+
+| | Python | Rust |
+|---|---|---|
+| wrong field name | `AttributeError` at runtime | build error |
+| add a field at runtime | `obj.new_field = 1` works | impossible; the field set is the type |
+| data + methods | one `class` body | `struct` + `impl`, separate |
+
+`__slots__` is the nearest Python analogue to a fixed field set, but it is opt-in and Rust's is not.
+
+**ABAP.** `TYPES: BEGIN OF ty_ballot, voter TYPE string, ... END OF ty_ballot.` maps almost directly; `DATA ls_ballot TYPE ty_ballot` is the instance.
+
+| | ABAP | Rust |
+|---|---|---|
+| methods on the type | none — behaviour goes in a class beside it | `impl` block |
+| flat vs deep | a distinction you manage | none; a `String` field always owns its data |
+| uninitialised | initial value, free | must supply every field or it does not compile |
+
+`impl` is the half ABAP has no place for, which is why a Rust struct behaves more like a small class than like a `TYPES` group.
 
 ---
 
