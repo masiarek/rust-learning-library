@@ -47,9 +47,11 @@ The only difference between an **associated function** and a **method** is wheth
 
 | Flavor | Written | Fields reached by |
 |---|---|---|
-| named-field (the classic C struct) | `struct Ballot { voter: String }` | `.voter` |
+| named-field | `struct Ballot { voter: String }` | `.voter` |
 | tuple struct | `struct Precinct(u32);` | `.0` |
 | unit struct | `struct Sealed;` | there are none |
+
+Tutorials often gloss the first as *"a classic C struct"*. Resist it: Rust's layout is **undefined by default** so the compiler may reorder fields, the fields are **private by default**, and assigning one **moves** rather than copies unless the type is [`Copy`](../copy_vs_clone/README.md). Three of the four things a C programmer would assume are wrong.
 
 A tuple struct really is a named-field struct whose field names happen to be numbers — `Precinct { 0: 7 }` compiles and is the same value as `Precinct(7)`.
 
@@ -63,6 +65,18 @@ error[E0423]: expected value, found struct `AlsoEmpty`
 ```
 
 A unit struct is not a consolation prize. It holds nothing, so behaviour is the *only* thing it can hold — which makes it exactly the right type when you need something to `impl` a trait on and have no data to carry.
+
+One more wrinkle, and it explains a confusing error. `struct Sealed;` declares **two** things that
+share a name: the *type* `Sealed`, and a constant *value* `Sealed`. They live in different
+namespaces, which you can see by aliasing it — a type alias only aliases the **type**:
+
+```rust
+type Alias = Sealed;
+let a: Sealed = Alias {};   // fine — struct expression, type namespace
+let b: Sealed = Alias;      // error[E0423]: expected value, found type alias `Alias`
+```
+
+So a unit struct is usable as `Sealed` *or* `Sealed {}`, but an alias of it only as `Alias {}`.
 
 ## What things are called
 
