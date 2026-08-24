@@ -51,6 +51,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "index.md",
         "OPTION.md",
         "SHADOWING.md",
+        "STRUCTS.md",
         "TOOLCHAIN.md",
         "ROADMAP.md",
         "KATAS.md",
@@ -91,6 +92,8 @@ NAV_ORDER: dict[str, list[str]] = {
         # together, and the braces that print.
         "a_block_is_an_expression",
         "braces_take_a_name",
+        # A compound type of your own, before the two the library leans on.
+        "what_a_struct_is",
         "some_and_none",
         "some_is_a_constructor",
         "option_vs_result",

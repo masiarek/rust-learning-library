@@ -2,17 +2,23 @@
 
 Short definitions. Every entry links to the page that explains it properly — a definition that dead-ends hides the lesson that already exists.
 
+**Algebraic data type (ADT)** — The umbrella term for the two ways Rust builds a compound type. A `struct` is a **product** type: it holds a field *and* a field *and* a field, so its possible values multiply. An `enum` is a **sum** type: it is one variant *or* another, so its values add. Every Rust data model is these two composed — `Option` is a sum of two, a struct of three `Option`s is a product of sums. → [What a struct is](01_Foundations/what_a_struct_is/README.md)
+
 **`and_then`** — Transform a value with a closure that can *itself* come up empty or fail, flattening the result instead of nesting it. The counterpart to `map` when the closure returns another `Option`/`Result`. → [`Option` vs `Result`](01_Foundations/option_vs_result/README.md)
 
 **`anyhow`** — A crate giving applications one catch-all error type with good ergonomics and backtraces. The application-side counterpart to `thiserror`. → [`Option` vs `Result`](01_Foundations/option_vs_result/README.md)
 
 **`as_deref`** — Borrow through an owned inner value: `Option<String>` → `Option<&str>`. The usual fix when a method takes `self` but you still need the option afterwards. → [`unwrap_or`](01_Foundations/unwrap_or/README.md)
 
+**Associated function** — A function in an `impl` block that does *not* take `self`, called as `Type::name(..)`. `Ballot::new` is one; so is `String::from`. Rust has no constructor syntax, so `new` is only a convention. A method is the same thing with `self` as the first parameter. → [What a struct is](01_Foundations/what_a_struct_is/README.md)
+
 **`Box<dyn Error>`** — A type-erased error: any error can convert into it, so unrelated failures can flow through one function. What applications reach for when nothing downstream will `match` on the cause. → [`Option` vs `Result`](01_Foundations/option_vs_result/README.md)
 
 **Discriminant** — The number identifying which variant an enum value currently is; `None` is 0 and `Some` is 1, by declaration order. Comparable via `std::mem::discriminant`, but not extractable — and often not even stored. → [`Option` is a one-item collection](01_Foundations/option_as_collection/README.md)
 
 **Enum** — A type that is exactly one of several named variants, each optionally carrying data. `Option` and `Result` are both ordinary enums; nothing about them is built into the language.
+
+**Field init shorthand** — Writing `Ballot { voter }` instead of `Ballot { voter: voter }` when the variable already has the field's name. Purely cosmetic, and worth knowing because it is what most real code looks like. → [What a struct is](01_Foundations/what_a_struct_is/README.md)
 
 **`is_some_and`** — Ask whether an option is `Some` *and* its value passes a predicate, without unwrapping. Takes `self`, so pair it with `.as_ref()` for non-`Copy` types. → [`Option` is a one-item collection](01_Foundations/option_as_collection/README.md)
 
@@ -57,6 +63,14 @@ Short definitions. Every entry links to the page that explains it properly — a
 **Binding mutability** — `mut` is a property of the **binding**, never of the value: values are not mutable or immutable, handles to them are. `let s = …; let mut s = s;` moves one `String` into a mutable binding and mutates it, and `let s = s;` freezes it again — one value, three bindings, two answers. So "`let mut` means mutable data" is the introductory framing to unlearn first. → [A name is not a place](01_Foundations/a_name_is_not_a_place/README.md)
 
 **`E0506`** — *cannot assign to `x` because it is borrowed.* The write half of the borrow rule, and the cleanest proof that a shadow is not an assignment: the same four lines compile with `let` and are refused with `mut`. Its neighbour `E0505` covers a *move* out of a borrowed value rather than a write into it. → [A name is not a place](01_Foundations/a_name_is_not_a_place/README.md), [Borrowing](01_Foundations/borrowing/README.md)
+
+**Struct** — A type that names a group of values, each field with its own type. Three flavors: named-field, tuple struct, and unit struct. It holds *no* behaviour — methods live in a separate `impl` block, shared behaviour in traits — which is why Rust has no classes and no inheritance. → [What a struct is](01_Foundations/what_a_struct_is/README.md)
+
+**Struct update syntax** — `Config { retries: Some(3), ..Default::default() }` — fill the fields you name, take the rest from another value. It **moves** out of that value, so a non-`Copy` field can leave the original partly dead. → [`unwrap_or_default`](01_Foundations/unwrap_or_default/README.md)
+
+**Tuple struct** — A struct whose fields are numbered rather than named: `struct Precinct(u32);`, reached as `.0`. Really a named-field struct whose names are digits (`Precinct { 0: 7 }` compiles). A private field makes its *constructor* private too, which is what the newtype pattern relies on. → [What a struct is](01_Foundations/what_a_struct_is/README.md)
+
+**Unit struct** — A struct with no fields at all: `struct Sealed;`, and the type has exactly one value. Since it holds no data, behaviour is the only thing it can hold, which is the point. Not the same as `struct Sealed {}`, which must be built with braces. → [What a struct is](01_Foundations/what_a_struct_is/README.md)
 
 **Value namespace** — Rust resolves types and values in separate namespaces, and functions live in the *value* one — so `let score = score();` shadows the function `score` and makes it uncallable for the rest of the scope. `error[E0618]` says so explicitly, and it is the only shadowing mistake the compiler names out loud. → [When to shadow](01_Foundations/when_to_shadow/README.md)
 
