@@ -92,6 +92,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "a_block_is_an_expression",
         "braces_take_a_name",
         "some_and_none",
+        "some_is_a_constructor",
         "option_vs_result",
         # ...and, much later, the name for the shape all of these share.
         "what_a_monad_is",

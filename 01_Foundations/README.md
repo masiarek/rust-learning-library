@@ -10,6 +10,7 @@ The ideas you meet in your first week of Rust and keep using forever. Each page 
 | [A block is an expression](a_block_is_an_expression/README.md) | 101 → 201 | `{ }` does two jobs, and the second is the surprise: it *has a value* — its last line without a semicolon. Why a function body needs no `return`, and why one extra character is `E0308` |
 | [The braces take a name](braces_take_a_name/README.md) | 101 → 201 | `{n}` in a format string is an **identifier**, not a Python f-string — `{n + 1}`, `{v.len()}` and `{self.voter}` are three different compile errors, and only one of them is diagnosed as what it is |
 | [`Some` and `None`](some_and_none/README.md) | 101 | The enum itself: two shapes, one exhaustive `match`, and why `Some(0)` is not `None` |
+| [`Some` is a constructor, not a flag](some_is_a_constructor/README.md) | 101 → 201 | Why `Some(None)` is `E0308` and not "present but empty" — `Some` is a `fn(T) -> Option<T>`, so the argument must be the payload; plus the one type where `Some(None)` is the right answer |
 | [`Option` vs `Result`](option_vs_result/README.md) | 101 | Absence versus failure — and the single question ("could the caller ask *why not?*") that decides which type you want |
 | [What a monad is](what_a_monad_is/README.md) | 301 | The shape `Option`, `Result` and `Vec` all share — and why Rust uses monads without ever saying the word |
 | [Partial functions](partial_functions/README.md) | 201 | Why `Option` exists at all: it turns a function that is undefined somewhere into one that always answers |
