@@ -279,6 +279,7 @@ rustc --edition 2024 01_Foundations/newtype_score/examples/newtype_score.rs -o /
 ## See also
 
 - [Partial functions](../partial_functions/README.md) — why `Score::new` returns `Option` rather than panicking
+- [The `Result` you are reading is probably an alias](../result_aliases/README.md) — the *other* way to name a type, and the one that buys no safety: `type Score = u8;` would have kept 200 legal
 - [`Option` is a one-item collection](../option_as_collection/README.md) — the niche that makes `Option<Stars>` free
 - [`Option` fields](../option_fields/README.md) — the same "required by default" instinct applied to structs
 - [The long way round](../../ROADMAP.md) — where this rung sits, and what comes next

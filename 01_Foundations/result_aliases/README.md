@@ -292,7 +292,7 @@ rustc --edition 2024 01_Foundations/result_aliases/examples/result_aliases.rs -o
 ## Traps
 
 - **Passing two arguments to a one-parameter alias.** Once `type Result<T>` is in scope, `Result<u32, ParseIntError>` no longer compiles — the error is `type alias takes 1 generic argument but 2 generic arguments were supplied`, which reads like nonsense until you remember which `Result` you are looking at. Fix by dropping the second argument, or by naming `std::result::Result` explicitly.
-- **Assuming an alias is a new type.** It is not, so you cannot `impl` a trait on it, and it gives you no extra type safety. If you want a distinct type — one the compiler will keep apart from its inner type — you want a newtype (a one-field `struct`), not an alias.
+- **Assuming an alias is a new type.** It is not, so you cannot `impl` a trait on it, and it gives you no extra type safety. If you want a distinct type — one the compiler will keep apart from its inner type — you want a [newtype](../newtype_score/README.md) (a one-field `struct`), not an alias. That is the whole of the choice: an alias is a nickname the compiler expands and forgets, a newtype is a type it will hold you to.
 - **`main`'s `Debug` output.** Covered above, and worth repeating because it is the one that gets shipped: your `Display` impl is not what the user sees.
 - **`anyhow::Result` in a library.** Convenient for you, a dead end for your callers. Name the errors in a library; erase them in a binary.
 - **Reading `io::Result` as "a different, simpler `Result`".** It has every method the two-parameter one has, because it *is* the two-parameter one. If a method seems missing, check [`std::result::Result`](https://doc.rust-lang.org/std/result/enum.Result.html) — that is where the list lives.
@@ -300,6 +300,7 @@ rustc --edition 2024 01_Foundations/result_aliases/examples/result_aliases.rs -o
 ## See also
 
 - [`Option` vs `Result`](../option_vs_result/README.md) — the prior page: which of the two you want, and everything `?` does
+- [A score is not a number: the newtype](../newtype_score/README.md) — the other answer to "I want a name for this type", and the one that actually changes what compiles
 - [matklad — Study of `std::io::Error`](https://matklad.github.io/2020/10/15/study-of-std-io-error.html) — a slow read of the single error type behind `io::Result`, and the best short lesson available on designing an `E`
 - [The Rust Book, ch. 9 — Error Handling](https://doc.rust-lang.org/book/ch09-00-error-handling.html)
 - [`std::result`](https://doc.rust-lang.org/std/result/) — the method list the aliases inherit
