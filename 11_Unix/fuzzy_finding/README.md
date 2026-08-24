@@ -119,6 +119,55 @@ This is not a speed argument; fzf narrows 18,800 lines instantly. It is that a l
 
 The variables are read when you press the key, not when the shell starts, so it does not matter whether these lines come before or after the `fzf --fish | source` line — but they do have to be in a shell that has started since you wrote them.
 
+## Ctrl-T from your home directory is not the tool
+
+Pointing fzf at `fd` fixes the list *inside a project*. Run the same keystroke from `~` and you get a different problem, because `.gitignore` only helps where there are git repositories, and your home directory is mostly not that.
+
+Measured on this machine, from `~`:
+
+```text
+589,679 files
+```
+
+Nearly all of it is generated, and `--hidden` is why you can see it:
+
+| Directory | Files |
+|---|---|
+| `Library/` | 257,764 |
+| `.cache/` | 212,482 |
+| `.npm/` | 38,767 |
+| `.cargo/` | 32,520 |
+| `.local/` | 19,898 |
+| `.vscode/` | 12,064 |
+| `.rustup/` | 7,499 |
+
+Those seven are **98.5%** of the list, and not one of them holds a file you would ever pick by name. `Library/` is the largest and it is not even hidden — no dot, so `--hidden` is not what let it in; it is simply a directory with a quarter of a million files in it.
+
+`fd` reads a **global ignore file** for exactly this, in `.gitignore` syntax, at `~/.config/fd/ignore`. No flag turns it on:
+
+```fish
+mkdir -p ~/.config/fd
+echo '# Machine-generated caches — never a file you pick from a list.
+Library/
+.cache/
+.npm/
+.cargo/
+.rustup/
+.local/
+.vscode/
+node_modules/
+.Trash/' > ~/.config/fd/ignore
+```
+
+| From `~` | Files offered |
+|---|---|
+| before | 589,679 |
+| after | 8,684 |
+
+A 68-fold cut, and what survives is `Desktop`, `Documents`, `Downloads` and your actual project folders. It applies to every `fd` invocation on the machine, Ctrl-T included, and costs you nothing you were going to search for — `rg -uu` and `fd -u` still reach past it when you genuinely mean to.
+
+Even at 8,684 this is a project tool used from inside a project. The honest rule is that Ctrl-T's list should be the tree you are working in; if you find yourself pressing it from `~`, the thing you actually wanted was to change directory first.
+
 ## The macOS trap: Alt-C types a letter instead
 
 Ctrl-T and Ctrl-R work the moment the integration is sourced. **Alt-C** usually does not, and it fails in a way that looks like nothing to do with fzf: pressing it inserts an accented character into your command line.
