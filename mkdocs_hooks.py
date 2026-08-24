@@ -96,6 +96,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "what_a_struct_is",
         "impl_blocks",
         "struct_update",
+        "copy_vs_clone",
         "some_and_none",
         "some_is_a_constructor",
         "option_vs_result",

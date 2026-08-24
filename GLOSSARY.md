@@ -14,6 +14,8 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **`Box<dyn Error>`** — A type-erased error: any error can convert into it, so unrelated failures can flow through one function. What applications reach for when nothing downstream will `match` on the cause. → [`Option` vs `Result`](01_Foundations/option_vs_result/README.md)
 
+**`Clone`** — An explicit duplicate, via `.clone()`. May allocate and may run your own code, and is always visible in the source — which is the point, since an allocation you can see is one you can question. `#[derive(Clone)]` clones each field, and `Copy` requires it. → [`Copy` vs `Clone`](01_Foundations/copy_vs_clone/README.md)
+
 **Discriminant** — The number identifying which variant an enum value currently is; `None` is 0 and `Some` is 1, by declaration order. Comparable via `std::mem::discriminant`, but not extractable — and often not even stored. → [`Option` is a one-item collection](01_Foundations/option_as_collection/README.md)
 
 **Enum** — A type that is exactly one of several named variants, each optionally carrying data. `Option` and `Result` are both ordinary enums; nothing about them is built into the language.
@@ -94,7 +96,7 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **`unreachable_patterns`** — The warn-by-default lint for a `match` arm no value can reach, because an earlier arm already covers it. Fires per *alternative* rather than per arm, so a too-wide range above an or-pattern names the one alternative it swallowed. → [One arm, many values](01_Foundations/one_arm_many_values/README.md)
 
-**`Copy`** — The trait marking a type that is duplicated instead of moved on assignment (`i32`, `bool`, `char`, `&T`, and `Option`s of them). A `String` cannot be `Copy`, because two owners of one allocation would mean two frees — so the test is not size but whether duplicating the bytes would duplicate an *obligation*. → [Ownership and moves](01_Foundations/ownership_and_moves/README.md), and why `if let Some(n) = opt` leaves `opt` usable for an `Option<i32>` but not an `Option<String>` → [Shadowing and `unwrap`](01_Foundations/shadowing_and_unwrap/README.md)
+**`Copy`** — The trait marking a type that is duplicated instead of moved on assignment (`i32`, `bool`, `char`, `&T`, and `Option`s of them). A `String` cannot be `Copy`, because two owners of one allocation would mean two frees — so the test is not size but whether duplicating the bytes would duplicate an *obligation*. → [Ownership and moves](01_Foundations/ownership_and_moves/README.md), and why `if let Some(n) = opt` leaves `opt` usable for an `Option<i32>` but not an `Option<String>` → [Shadowing and `unwrap`](01_Foundations/shadowing_and_unwrap/README.md), and how it differs from `Clone` → [`Copy` vs `Clone`](01_Foundations/copy_vs_clone/README.md)
 
 **`while let`** — Loop for as long as the pattern keeps matching; the `None` is the exit condition. Nothing checks that the body moves toward it, so the scrutinee has to consume. → [`while let`](01_Foundations/while_let/README.md)
 

@@ -39,6 +39,7 @@ Same rule the sidebar follows: order is presentation, so it belongs in a page, n
 
 | Lesson | Level | What it teaches |
 |---|---|---|
+| [`Copy` vs `Clone`](01_Foundations/copy_vs_clone/README.md) | 101 → 201 | Why a struct is never `Copy` by accident, and the three refusals — `E0277`, `E0204`, `E0184` |
 | [Struct update syntax](01_Foundations/struct_update/README.md) | 101 → 201 | `..base` moves field by field, so the base ends up *partially* dead — and `Copy` decides which half |
 | [`Some` is a constructor, not a flag](01_Foundations/some_is_a_constructor/README.md) | 101 → 201 | `Some(None)` in a field, and the doubly-optional type that makes it legal |
 | [What is a ballot, in memory?](01_Foundations/representing_a_ballot/README.md) | 201 | Designing a real struct: the layout choices, and the parallel `Vec`s that desync |
@@ -80,7 +81,6 @@ A struct owning its fields is the default, and the reason `String` shows up in b
 Named honestly, because a map that only lists what exists is a map of the wrong territory. Each becomes a page once it has a runnable example worth reading — rough order, not a promise:
 
 - **Destructuring a struct** — in a `let`, in a `match` arm, and in a function parameter
-- **`Copy` vs `Clone`** — why a struct is not `Copy` by default, what deriving each one costs, and when to write `Clone` by hand
 - **Comparing structs** — `PartialEq` / `Eq` / `PartialOrd` / `Ord`, and the derive that compares fields in declaration order
 - **Generic structs** — `Point<T>`, and the trait bound that lets you add two of them
 - **Implementing a trait for your struct** — including default methods, and why this replaces inheritance
