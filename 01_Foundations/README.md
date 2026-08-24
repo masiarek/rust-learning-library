@@ -25,6 +25,7 @@ The ideas you meet in your first week of Rust and keep using forever. Each page 
 | [`expect`](expect/README.md) | 201 | The message is a claim about why this cannot fail — and being unable to write it is the finding |
 | [What a panic costs](what_a_panic_costs/README.md) | 201 | The other half of `unwrap`: where the panic points, what unwinding gives back (memory) and what it does not (your work), and why the exit code is 101 |
 | [`while let`](while_let/README.md) | 201 | The loop whose exit condition is a pattern — and the one bug `if let` cannot have: a body that never makes progress |
+| [One arm, many values](one_arm_many_values/README.md) | 101 → 201 | `8 \| 12 \| 18` and `0..=7`: the two ways to widen a `match` arm, the two lints that catch a botched collapse, and the one mistake neither can see |
 | [Borrowing](borrowing/README.md) | 101 → 201 | `&T` and `&mut T`, the many-readers-or-one-writer rule, and the last-use rule that decides which order compiles |
 | [How to learn lifetimes](how_to_learn_lifetimes/README.md) | 201 | Is *"clone everything"* good advice? Mostly yes — with three amendments, the sharpest being that cloning to dodge a *mutation* error compiles and silently does nothing |
 | [`Option` fields](option_fields/README.md) | 101 | `Option` in a type definition: required-by-default fields, and when `Option<Vec<T>>` is right |

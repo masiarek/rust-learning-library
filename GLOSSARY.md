@@ -16,6 +16,8 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **`is_some_and`** — Ask whether an option is `Some` *and* its value passes a predicate, without unwrapping. Takes `self`, so pair it with `.as_ref()` for non-`Copy` types. → [`Option` is a one-item collection](01_Foundations/option_as_collection/README.md)
 
+**`is_some` / `is_none`** — Ask which variant an option is, as a `bool`, without opening it. Both take `&self`, so the option survives — which is what makes them the natural predicate for `.filter()` over a collection of options. Reach for `is_some_and` instead the moment the next thing you write is `&& x.unwrap() > …`. → [`Option` is a one-item collection](01_Foundations/option_as_collection/README.md)
+
 **`expect`** — Panic with a message you wrote. Preferred over `unwrap` everywhere, because the message records *why* you believed this could not fail — and being unable to write it is the signal to return a `Result` instead. → [`expect`](01_Foundations/expect/README.md)
 
 **`Infallible`** — An enum with no variants, used as the `E` of a `Result` that cannot fail (`String`'s `FromStr`, `u64::try_from(u32)`). Because `Err` cannot be built, the compiler drops the tag and the `Result` costs what the value costs. → [The `Result` you are reading is probably an alias](01_Foundations/result_aliases/README.md)
@@ -63,6 +65,12 @@ Short definitions. Every entry links to the page that explains it properly — a
 **`restriction` (clippy lint group)** — Lints that forbid something legal and idiomatic, for codebases that have decided against it. Allow-by-default and *meant* to stay that way, unlike `correctness` or `suspicious` — so finding a lint here is clippy saying "this is a style commitment, not a bug filter." All three shadow lints live in it. → [Nothing checks a shadow](01_Foundations/nothing_checks_a_shadow/README.md)
 
 **Pattern binding** — The name a pattern introduces, as `x` in `Some(x)`. A fresh name rather than a shadow — and for a non-`Copy` type it *moves* the value out of what you matched on, unless you borrow. → [Shadowing and `unwrap`](01_Foundations/shadowing_and_unwrap/README.md)
+
+**Or-pattern** — Alternatives joined by `|` inside a single pattern, so one arm accepts several shapes: `8 | 12 | 18`. Not the bitwise `|`, which is what the same characters mean in an *expression*; every alternative must bind the same names at the same types, and rustc checks each alternative separately for reachability. → [One arm, many values](01_Foundations/one_arm_many_values/README.md)
+
+**Range pattern** — A span as a pattern: `0..=7` inclusive, `0..7` exclusive. Composes with `|` (`9..=11 | 13..=17`), and two ranges left exactly one value apart are reported by the default-on `non_contiguous_range_endpoints` lint. → [One arm, many values](01_Foundations/one_arm_many_values/README.md)
+
+**`unreachable_patterns`** — The warn-by-default lint for a `match` arm no value can reach, because an earlier arm already covers it. Fires per *alternative* rather than per arm, so a too-wide range above an or-pattern names the one alternative it swallowed. → [One arm, many values](01_Foundations/one_arm_many_values/README.md)
 
 **`Copy`** — The trait marking a type that is duplicated instead of moved on assignment (`i32`, `bool`, `char`, `&T`, and `Option`s of them). A `String` cannot be `Copy`, because two owners of one allocation would mean two frees — so the test is not size but whether duplicating the bytes would duplicate an *obligation*. → [Ownership and moves](01_Foundations/ownership_and_moves/README.md), and why `if let Some(n) = opt` leaves `opt` usable for an `Option<i32>` but not an `Option<String>` → [Shadowing and `unwrap`](01_Foundations/shadowing_and_unwrap/README.md)
 

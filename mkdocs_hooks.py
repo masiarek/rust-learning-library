@@ -97,6 +97,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "what_a_monad_is",
         "if_let",
         "while_let",
+        # ...and what goes INSIDE a pattern, now that three pages have been
+        # writing them: the `|` and the `..=` that let one arm cover many values.
+        "one_arm_many_values",
         "unwrap_or",
         "unwrap_or_else",
         "unwrap_or_default",
