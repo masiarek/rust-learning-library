@@ -93,6 +93,8 @@ NAV_ORDER: dict[str, list[str]] = {
         "braces_take_a_name",
         "some_and_none",
         "option_vs_result",
+        # ...and, much later, the name for the shape all of these share.
+        "what_a_monad_is",
         "if_let",
         "while_let",
         "unwrap_or",
@@ -240,6 +242,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "books",
         "exercises",
         "going_deeper",
+        "haskell",
     ],
     "09_Advanced": [
         "README.md",

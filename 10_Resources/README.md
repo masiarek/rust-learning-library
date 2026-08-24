@@ -11,6 +11,7 @@ There is an enormous amount of good, free Rust material, almost all of it excell
 | [Books](books/README.md) | reading — the long-form explanations, from first day to specialist |
 | [Exercises](exercises/README.md) | typing — the practice tracks, and which one suits which stage |
 | [Going deeper](going_deeper/README.md) | a specific domain — unsafe, embedded, async, macros, testing, performance |
+| [Why Haskell](haskell/README.md) | curiosity — what Rust borrowed, renamed, and deliberately left behind |
 
 ## Where to start, honestly
 
