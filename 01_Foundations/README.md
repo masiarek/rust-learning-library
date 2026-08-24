@@ -45,6 +45,10 @@ The ideas you meet in your first week of Rust and keep using forever. Each page 
 | [When to shadow](when_to_shadow/README.md) | 201 | The judgement call the other two leave open: what shadowing buys that `mut` cannot, the five idioms worth copying, and the three bugs that compile — only one of which warns, and not about shadowing |
 | [Nothing checks a shadow](nothing_checks_a_shadow/README.md) | 201 | The tooling, not the mechanism: `rustc` has no shadowing lint, the type error that gets mistaken for one, and the single clippy lint that catches the accumulator bug — by also banning the idiom |
 | [Scope is about names, not values](scope_is_about_names/README.md) | 201 | One word, three questions: a name ends at its brace, a borrow ends at its last use, and a value dies on a schedule that five ordinary things can move — including the `_` that `rustc` denies outright on a lock |
+| [`String` vs `&str`](string_vs_str/README.md) | 101 → 201 | The owner and the view — a literal lives in the *binary*, not the stack; `&String` coerces to `&str` for free; and why parameters take `&str` while fields own `String` |
+| [The anatomy of a `String`](anatomy_of_a_string/README.md) | 101 → 201 | Three words on the stack, bytes on the heap — `len` is what you have, `capacity` is what you paid for, growth doubles, and the borrow checker's rule against a view held across a `push_str` |
+| [Meet the `char`](meet_the_char/README.md) | 101 → 201 | One Unicode scalar, four bytes as a value, 1–4 inside a `String` — why `.len()` is not "how many characters", `s[0]` refuses to compile, and `'ß'.to_uppercase()` returns *two* letters |
+| [Six kinds of string](six_kinds_of_string/README.md) | 201 | `OsString`, `CString` and friends are not five more inventions — three promises about the bytes, each owned or borrowed, and narrowing is where a promise gets checked |
 | [A score is not a number](newtype_score/README.md) | 101 → 201 | The newtype: one private field, one validating door, and why privacy is per *module* |
 | [What is a ballot, in memory?](representing_a_ballot/README.md) | 201 | Array vs `Vec` vs tuple vs struct vs map vs flat matrix — and which bugs each one makes writeable |
 | [Six kinds of zero](six_kinds_of_zero/README.md) | 201 | Where `Option` runs out: six reasons a cell is empty, one enum, and a report the compiler audits |
@@ -79,7 +83,6 @@ The [`std::option` module docs](https://doc.rust-lang.org/core/option/) list wha
 Rough order, not a promise. Each becomes a page once it has a runnable example worth reading:
 
 - **Lifetimes** — what `'a` is actually annotating, and why most of the time you write none
-- **`String` vs `&str`** — the same split as `Vec<T>` vs `&[T]`, and why it exists
 - **Traits** — shared behaviour without inheritance; `impl Trait` versus `dyn Trait`
 - **Error handling in the large** — `thiserror` for libraries, `anyhow` for applications, building on [`Option` vs `Result`](option_vs_result/README.md)
 - **Iterators** — laziness, and why the loop you would write by hand is usually slower

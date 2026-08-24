@@ -339,3 +339,23 @@ Short definitions. Every entry links to the page that explains it properly — a
 **Inline format argument (`{n}`)** — Naming a variable directly inside a format string, stabilized in Rust 1.58. It captures an **identifier** and nothing else — resolved by the macro at compile time, by ordinary name lookup — so `{n + 1}`, `{v.len()}` and `{self.voter}` are all compile errors, and the format string itself must be a literal. Not a Python f-string, which takes a full expression. → [The braces take a name](01_Foundations/braces_take_a_name/README.md)
 
 **Format spec** — Everything after the `:` in `{value:>width$.prec$}` — fill, alignment, width, precision, and which trait to print through. A separate small language from the capture before the colon; a trailing `$` is what marks a width or precision as a *name* rather than a literal number. Which trait `{}` and `{:?}` reach for is a different question. → [The braces take a name](01_Foundations/braces_take_a_name/README.md), [Debug and Display](01_Foundations/debug_vs_display/README.md)
+
+**`String`** — The owned, growable text type: three words on the stack (pointer, length, capacity), UTF-8 bytes on the heap. A `Vec<u8>` that promises valid UTF-8, with the same `new` / `with_capacity` / `reserve` vocabulary. Own it in fields, build it for returns — and take `&str` in parameters. → [`String` vs `&str`](01_Foundations/string_vs_str/README.md), [The anatomy of a `String`](01_Foundations/anatomy_of_a_string/README.md)
+
+**String slice (`&str`)** — A borrowed view of UTF-8 text living anywhere — the binary, a `String`'s heap buffer, a stack array: one pointer plus one length, owning nothing. `Copy`, read-only, and the type every text-reading parameter should take, since literals, `String`s and slices all arrive as one for free. → [`String` vs `&str`](01_Foundations/string_vs_str/README.md)
+
+**String literal** — `"…"` in source: a `&'static str` whose bytes are baked into the executable's read-only data — not the stack, not the heap — alive for the whole run. "Stack-allocated string" in a tutorial is this fact, misplaced. → [`String` vs `&str`](01_Foundations/string_vs_str/README.md)
+
+**Deref coercion** — The compiler's automatic `&String` → `&str` (and `&Vec<T>` → `&[T]`, `&PathBuf` → `&Path`) at call sites, via `Deref`. It is also why a `String` *inherits* `str`'s methods — `owned.to_uppercase()` finds the method through the coercion. The reverse direction is never free: `.to_string()` allocates. → [`String` vs `&str`](01_Foundations/string_vs_str/README.md)
+
+**Capacity** — The room a growable buffer has bought, as distinct from `len`, the part in use. Growth doubles it, `with_capacity` pre-pays it, `shrink_to_fit` returns it — and it is bookkeeping, not content: equality and hashing never see it. → [The anatomy of a `String`](01_Foundations/anatomy_of_a_string/README.md)
+
+**`char`** — One Unicode scalar value, four bytes wide as a value — decoded, so it can be compared, classified and ranged over. Inside a `String` the same character is 1–4 UTF-8 bytes. `'a'` is a `char`; `"a"` is a `&str` holding one. → [Meet the `char`](01_Foundations/meet_the_char/README.md)
+
+**UTF-8** — The encoding every `String` and `&str` promises: ASCII costs one byte, `é` two, an emoji four. The promise is checked where bytes enter (`from_utf8`) so no method inside ever re-checks — and it is why `.len()` counts bytes and `s[0]` does not compile. → [Meet the `char`](01_Foundations/meet_the_char/README.md)
+
+**Grapheme cluster** — What a *reader* calls one character: `e` plus a combining accent is two `char`s, one grapheme. The third answer to "how long is this string", and the one std cannot count — that is the `unicode-segmentation` crate's job. → [Meet the `char`](01_Foundations/meet_the_char/README.md)
+
+**`OsString` / `OsStr`** — Owned and borrowed text exactly as the operating system hands it over — filenames, env vars, arguments — with no UTF-8 promise, because the OS makes none. Narrowing to `&str` is `to_str()` returning an `Option`, and the `None` is a real answer. → [Six kinds of string](01_Foundations/six_kinds_of_string/README.md)
+
+**`CString` / `CStr`** — Owned and borrowed text under C's contract: no NUL byte inside, one NUL at the end. `CString::new` refuses an interior NUL with an error naming the byte — the string C would have silently truncated. → [Six kinds of string](01_Foundations/six_kinds_of_string/README.md)

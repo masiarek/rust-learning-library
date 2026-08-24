@@ -27,7 +27,7 @@ More lessons land in [`01_Foundations/`](01_Foundations/README.md) as they are w
 
 Five sections in between follow one long arc: **turning a snippet into a program somebody else runs.** [`02_Errors/`](02_Errors/README.md) is what a failure does on its way out; [`03_Command_Line/`](03_Command_Line/README.md) is what the program was handed on the way in; and [`04_Files/`](04_Files/README.md), [`06_Data/`](06_Data/README.md) and [`07_Clients/`](07_Clients/README.md) are the three things outside it that can say no. **Those pages are stubs today** — one outline and a set of questions per page, with no runnable example behind them yet, each marked as such at the top. They exist so the arc has a shape, and a permanent URL, before the prose does; a page graduates by acquiring an example and losing its notice.
 
-Three topics are big enough to have a map of their own rather than a single page: [**OPTION.md**](OPTION.md), [**SHADOWING.md**](SHADOWING.md) and [**STRUCTS.md**](STRUCTS.md) each collect every lesson on their subject in reading order, and say what the idea is before the syllabus starts.
+Four topics are big enough to have a map of their own rather than a single page: [**OPTION.md**](OPTION.md), [**SHADOWING.md**](SHADOWING.md), [**STRUCTS.md**](STRUCTS.md) and [**STRINGS.md**](STRINGS.md) each collect every lesson on their subject in reading order, and say what the idea is before the syllabus starts.
 
 Every lesson explains; some of them also ask you to type. Those exercises are collected in [**KATAS.md**](KATAS.md), which is the only place they are ordered — each kata itself sits on the page for the topic it teaches, with a solution CI compiles and runs.
 

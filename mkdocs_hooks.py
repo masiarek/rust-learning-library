@@ -52,6 +52,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "OPTION.md",
         "SHADOWING.md",
         "STRUCTS.md",
+        "STRINGS.md",
         "TOOLCHAIN.md",
         "ROADMAP.md",
         "KATAS.md",
@@ -148,6 +149,18 @@ NAV_ORDER: dict[str, list[str]] = {
         # asked to mean. Last, because it measures the borrow region, the
         # drop order and the shadow — all three already met by here.
         "scope_is_about_names",
+        # Opens the strings arc — the pair of types the ownership pages were
+        # secretly about all along: one owns the text, one looks at it.
+        "string_vs_str",
+        # ...then what the owning half is made of: three words on the stack,
+        # bytes on the heap, and a capacity that is not the length.
+        "anatomy_of_a_string",
+        # ...then what those bytes encode: a char is not a byte, and
+        # "how many characters" has three honest answers.
+        "meet_the_char",
+        # Closes the arc: the other four string types, and the one
+        # owned/borrowed pattern all six repeat.
+        "six_kinds_of_string",
         "newtype_score",
         "representing_a_ballot",
         # The sequel: "blank is not zero" stops at two cases; markers need six.
@@ -297,6 +310,9 @@ LABELS = {
     "clap_derive": "Deriving a parser with `clap`",
     "the_default_trait": "The `Default` trait",
     "path_and_pathbuf": "`Path` and `PathBuf`",
+    "string_vs_str": "`String` vs `&str`",
+    "anatomy_of_a_string": "The anatomy of a `String`",
+    "meet_the_char": "Meet the `char`",
     "temp_dirs_in_tests": "Temporary directories in tests",
     "serde_derive": "Deriving `Serialize` and `Deserialize`",
     "json_round_trip": "The round trip",

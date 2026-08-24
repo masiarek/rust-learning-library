@@ -23,7 +23,7 @@ So the library keeps a strict split, and it is worth knowing which surface answe
 | [KATAS.md](KATAS.md) | the exercises, numbered — the numbers live nowhere else | K52 |
 | [GLOSSARY.md](GLOSSARY.md) | the vocabulary, one line each, linking the page | *associated function* |
 
-Same rule the sidebar follows: order is presentation, so it belongs in a page, never in a path. [OPTION.md](OPTION.md) and [SHADOWING.md](SHADOWING.md) are the other two maps.
+Same rule the sidebar follows: order is presentation, so it belongs in a page, never in a path. [OPTION.md](OPTION.md), [SHADOWING.md](SHADOWING.md) and [STRINGS.md](STRINGS.md) are the other maps.
 
 ## The territory, as a picture
 
@@ -153,7 +153,7 @@ flowchart LR
 
 ## Ownership, borrowing, lifetimes
 
-A struct owning its fields is the default, and the reason `String` shows up in beginner code where `&str` looks tidier.
+A struct owning its fields is the default, and the reason [`String` shows up in beginner code where `&str` looks tidier](01_Foundations/string_vs_str/README.md).
 
 | Lesson | Level | What it teaches |
 |---|---|---|
