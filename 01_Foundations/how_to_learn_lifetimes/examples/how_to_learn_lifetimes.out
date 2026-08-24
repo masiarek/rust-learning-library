@@ -1,0 +1,18 @@
+1. Cloning to read: wasteful, harmless, and fine while learning
+   total(&scores)          = 12
+   total(&scores.clone())  = 12   <- same answer, one pointless copy
+
+2. Cloning to WRITE: compiles, runs, silently does nothing
+   after add_ballot(&mut a, 4)      a = [5, 3, 4]   <- the push landed
+   after add_ballot_cloned(b.clone(), 4)  b = [5, 3]      <- it did not
+   no error, no warning, no panic. The compiler cannot help here:
+   mutating a copy is a perfectly legal thing to want.
+
+3. `.clone()` does not mean one thing
+   Vec::clone   -> a second, independent Vec  (3 and 3 elements)
+   Rc::strong_count before  = 1
+   Rc::clone    -> the SAME Vec, one more owner
+   Rc::strong_count after   = 2   (and both see [1, 2, 3])
+
+   Same method name, opposite meanings: one copies the data,
+   the other copies only the right to reach it.
