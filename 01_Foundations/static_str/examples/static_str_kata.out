@@ -1,0 +1,29 @@
+Fix 1 — match to literals, -> &'static str
+   label_fixed(0) = "header"
+   label_fixed(1) = "first row"
+   label_fixed(2) = "second row"
+   label_fixed(7) = "later row"
+   cost: nothing. limit: cannot name the row number.
+
+Fix 2 — leak, -> &'static str
+   label_leaked(0) = "row 0"
+   label_leaked(1) = "row 1"
+   label_leaked(2) = "row 2"
+   label_leaked(7) = "row 7"
+   cost: 4 allocations that are never freed. Called in a loop, that is
+   an unbounded leak — fine for a value computed once at startup, not
+   for one computed per row.
+
+Fix 3 — return String
+   label_owned(0) = "row 0"  (5 bytes, dropped at end of scope)
+   label_owned(1) = "row 1"  (5 bytes, dropped at end of scope)
+   label_owned(2) = "row 2"  (5 bytes, dropped at end of scope)
+   label_owned(7) = "row 7"  (5 bytes, dropped at end of scope)
+   cost: one allocation per call, freed. This is the one to ship.
+
+Which to reach for:
+   closed set of answers        -> &'static str, all arms literals
+   computed once, lives forever -> .leak(), and say so in a comment
+   computed per call            -> String
+   The mistake is reading &'static str as "a fast string". It is a
+   promise about lifetime, and the only free way to keep it is a literal.

@@ -1,0 +1,19 @@
+One impl, four abilities:
+   {}            Ada: 5/2/0
+   to_string()   "Ada: 5/2/0"
+   format!()     "<Ada: 5/2/0>"
+   impl Display  "Ada: 5/2/0"
+
+The same function serves every printable type:
+   label(42)          "42"
+   label(true)        "true"
+   label('x')         "x"
+   label("a literal") "a literal"
+   label(3.5)         "3.5"
+   label(&b)          "Ada: 5/2/0"
+
+Debug is the other one, and it is NOT free:
+   {:?}   Ballot { voter: "Ada", scores: [5, 2, 0] }   <- from #[derive(Debug)]
+   Display is for users and you write it; Debug is for you and you derive it.
+
+What you did NOT have to write: ToString, and it would not compile if you tried.

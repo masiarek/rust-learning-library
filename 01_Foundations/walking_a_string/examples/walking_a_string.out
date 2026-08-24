@@ -1,0 +1,45 @@
+The slice: "bête noir  d'Arrrgh "
+   21 bytes, 20 chars
+
+1. Item type u8 — .bytes()
+   first 6: [98, 195, 170, 116, 101, 32]   (21 in total)
+
+2. Item type char — .chars()
+   first 6: ['b', 'ê', 't', 'e', ' ', 'n']   (20 in total)
+   'ê' is one char here and two bytes above. Same text, two rulers.
+
+3. .char_indices() is not .chars().enumerate()
+   char_indices():      (0,'b') (1,'ê') (3,'t') (4,'e') (5,' ') (6,'n') 
+   chars().enumerate(): (0,'b') (1,'ê') (2,'t') (3,'e') (4,' ') (5,'n') 
+   They diverge at 't'. char_indices gives BYTE OFFSETS you can slice with;
+   enumerate gives ordinals you cannot.
+
+4. Item type &str — the split family
+   .split(' ')              5 -> ["bête", "noir", "", "d'Arrrgh", ""]
+   .split_terminator(' ')   4 -> ["bête", "noir", "", "d'Arrrgh"]
+   .rsplit(' ')             5 -> ["", "d'Arrrgh", "", "noir", "bête"]
+   .split_whitespace()      3 -> ["bête", "noir", "d'Arrrgh"]
+   .splitn(3, ' ')          3 -> ["bête", "noir", " d'Arrrgh "]
+   .rsplitn(3, ' ')         3 -> ["", "d'Arrrgh", "bête noir "]
+
+5. Splits are the gaps between matches
+   .matches("rr")           1 -> ["rr"]
+   .split("rr")             2 -> ["bête noir  d'A", "rgh "]
+   One match, two pieces. n matches always give n+1 pieces — which is
+   where the empty strings above come from: two adjacent spaces have
+   nothing between them, and so does a separator at the very end.
+
+6. The pattern can be a char, a &str, or a closure
+   .split('r')              5 -> ["bête noi", "  d'A", "", "", "gh "]
+   .split("rr")             2 -> ["bête noir  d'A", "rgh "]
+   .split(char::is_whitespace) 5 -> ["bête", "noir", "", "d'Arrrgh", ""]
+   .split(|c: char| c == '\'') 2 -> ["bête noir  d", "Arrrgh "]
+
+7. The two you will actually reach for
+   config = "name = Ada\nscore = 5\nnote = has = signs\n"
+      split_once  name   -> "Ada"
+      split_once  score  -> "5"
+      split_once  note   -> "has = signs"
+   split_once takes the FIRST separator and returns the rest whole, so
+   the value containing ' = ' survives. splitn(2, …) does the same job.
+   trim():  "  padded  " -> "padded"

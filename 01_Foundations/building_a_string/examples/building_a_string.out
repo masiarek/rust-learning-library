@@ -1,0 +1,42 @@
+1. push_str takes a slice; push takes one char
+   after push_str(" Adam")   "Hi Adam"
+   after push('!')            "Hi Adam!"
+   push_str("!") would work too — the difference is the argument type,
+   not the effect: 'a' is a char, "a" is a &str. One is 4 bytes, the
+   other is a pointer and a length.
+
+2. + consumes its left operand
+   let joined = a + &b;   "equal vote"
+   `a` is MOVED into the result — the buffer is reused, not copied.
+   `b` is only borrowed, and is still usable: "vote"
+   a + b would be E0308: expected `&str`, found `String`
+
+3. format! borrows everything
+   format!("{c}{d}")   "equal vote"
+   both still alive: "equal " "vote"
+   Cost: a fresh allocation. `+` reuses the left buffer, so a long chain
+   of `+` beats format! — and format! beats a chain you cannot read.
+
+4. write! appends without allocating a second buffer
+Ada   5
+Ben   2
+Cara  0
+   (needs `use std::fmt::Write`; the Result is always Ok for a String)
+
+5. Editing in the middle
+   insert(5, ',')       "hello, world"
+   insert_str(0, ">> ") ">> hello, world"
+   pop()                ">> hello, worl"   returned Some('d')
+   remove(0)            "> hello, worl"   returned '>'
+   truncate(8)          "> hello,"
+   clear()              ""   len 0 capacity 22
+   clear() keeps the buffer — that is why it is the cheap way to reuse one.
+
+6. The edits are byte-indexed too, so they can panic
+   "bête" is 5 bytes
+   truncate(2) PANICKED — byte 2 is inside 'ê'
+   truncate(3) -> "bê"   <- 3 is a char boundary
+
+7. Pre-paying for the growth
+   String::new()             64 pushes -> 4 reallocation(s), capacity 64
+   String::with_capacity(64) 64 pushes -> 0 reallocation(s), capacity 64

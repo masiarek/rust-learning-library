@@ -1,0 +1,41 @@
+1. Five ways to turn a &str into a String
+   literal.to_string()   "equal vote"
+   literal.to_owned()    "equal vote"
+   String::from(literal) "equal vote"
+   literal.into()        "equal vote"   <- needs the annotation to pick a target
+   format!("{literal}")   "equal vote"   <- the only one that can also reshape
+   all equal? true
+
+2. They are not all the same call
+   to_owned()   the borrowed -> owned conversion, defined on str itself
+   String::from the From impl, same machinery, reads as a constructor
+   to_string()  goes through Display — universal, and the one to reach for
+                on ANY printable type, not just &str
+   into()       From, backwards; fine when the target type is already known
+   format!()    allocates and runs the formatter — use it when you are
+                building, not merely converting
+
+3. to_string() works on anything that prints
+   42.to_string()        "42"
+   3.5_f64.to_string()   "3.5"
+   true.to_string()      "true"
+   'x'.to_string()       "x"
+   Score(4).to_string()  "4 stars"   <- our own type, no ToString impl written
+   Score(1).to_string()  "1 star"
+
+4. Why you never write `impl ToString`
+   alloc already has:  impl<T: Display + ?Sized> ToString for T
+   so writing your own is E0119: conflicting implementations.
+   Implement Display. ToString, and `{}`, and format!, all follow.
+
+5. The one that is not a conversion
+   owned.to_string() on a String   "already owned"
+   That is a full clone — a second heap buffer. It compiles, it is silent,
+   and in a loop it is the allocation nobody meant to write. Wanted a view?
+   &owned is free. Wanted the value? Move it.
+
+6. Coming back the other way
+   "42".parse::<i32>()        42      annotation or turbofish, pick one
+   let n: i32 = text.parse()  42      same call, type from the binding
+   "forty-two".parse::<i32>() Err(ParseIntError { kind: InvalidDigit })
+   parse() returns Result, because text is input and input lies.

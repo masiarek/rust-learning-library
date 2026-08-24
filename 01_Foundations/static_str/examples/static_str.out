@@ -1,0 +1,41 @@
+1. Three spellings, one type
+   let s1 = "hi";                  "hi"
+   let s2: &str = "hi";            "hi"
+   let s3: &'static str = "hi";    "hi"
+   TypeId::of::<&str>() == TypeId::of::<&'static str>() -> true
+   ...and that comparison is vacuous: TypeId::of<T> requires T: 'static,
+   so `&str` written there ALREADY means `&'static str`. One type, twice.
+
+2. The annotation only bites when the text is not a literal
+   let view: &str = &owned;          "a local String"   <- compiles
+   let view: &'static str = &owned;  E0597: `owned` does not live long enough
+   On a literal the two annotations agree. On a borrow they do not.
+
+3. const, static, let
+   const  GREETING: &str = "hi";   "hi"   inlined at each use, no address
+   static BANNER:   &str = "hi";   "hi"   one address, lives the whole run
+   let    s1             = "hi";   "hi"   a local name for the same bytes
+   All three point into the binary. `const` and `static` differ in whether
+   there is one object or a copy per use — not in how long the text lives.
+
+4. "A String can never be borrowed as &'static str" — three ways it can
+   String::leak()          "built at runtime from 7"
+   Box::leak(into_boxed)   "boxed then leaked"
+   a String in a static    "stored in a static"
+   The first two never free the buffer — that is the price, and it is
+   deliberate: 'static means "never dropped", not "in the binary".
+
+5. 'static the BOUND is not 'static the reference
+      String satisfies T: 'static
+      &'static str satisfies T: 'static
+      i32 satisfies T: 'static
+   T: 'static means "contains no borrow that could expire" — every owned
+   type qualifies, String included. It does NOT mean "lives forever".
+
+6. Where you actually write it
+   in a return type:  greeting(9) = "Good morning!"
+                      greeting(20) = "Good evening!"
+   in an enum:        Parse("expected a digit")  ->  "expected a digit"
+   in an enum:        Io  ->  "no detail carried"
+   Both work because every arm is a literal. Return a String instead the
+   moment one arm needs to say which digit it expected.

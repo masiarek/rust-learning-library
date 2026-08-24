@@ -1,0 +1,22 @@
+naive: &s[..len/2]
+   "bete noir"  (9 bytes)  ->  "bete" + " noir"
+   "bête noir"  (10 bytes)  ->  "bête" + " noir"
+   "naïve café"  (12 bytes)  ->  "naïve" + " café"
+   "日本語"  (9 bytes)  ->  PANIC — byte index is not a char boundary
+
+is_char_boundary, walking back:
+   "bete noir"  ->  "bete" + " noir"
+   "bête noir"  ->  "bête" + " noir"
+   "naïve café"  ->  "naïve" + " café"
+   "日本語"  ->  "日" + "本語"
+
+char_indices, same answers:
+   "bete noir"  ->  "bete" + " noir"
+   "bête noir"  ->  "bête" + " noir"
+   "naïve café"  ->  "naïve" + " café"
+   "日本語"  ->  "日" + "本語"
+
+Why 'naive' passes and 'naïve' does not:
+   "naive café"  len 11  mid 5  boundary? true
+   "naïve café"  len 12  mid 6  boundary? true
+   A test suite of ASCII names never finds this. One accent does.

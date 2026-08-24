@@ -1,0 +1,28 @@
+A — chained +
+   "Ada, Ben, Cara"
+   a1 is gone (moved into the result). b1 = "Ben", c1 = "Cara" still alive.
+   Allocations: 0 new buffers — a1's buffer grew and became the answer.
+
+B — format!
+   "Ada, Ben, Cara"
+   all three still alive: "Ada" "Ben" "Cara"
+   Allocations: 1 new buffer. Nothing was consumed.
+
+C — push_str in a loop
+   "Ada, Ben, Cara"
+   all three still alive; `built` grew from empty, capacity 16
+   Allocations: however many times the buffer doubled — pre-pay with
+   String::with_capacity if you know the size.
+
+D — write!
+   "Ada, Ben, Cara"
+   Same shape as C, but the formatter writes straight into `out` — no
+   intermediate String per item, which is what format!-inside-a-loop costs.
+
+All four agree: true
+
+Which to reach for:
+   two or three known pieces      -> format!, and read it out loud
+   accumulating in a loop         -> push_str / write! into one buffer
+   a left value you are done with -> + reuses its buffer
+   format! inside a loop          -> the one to avoid: an allocation per pass

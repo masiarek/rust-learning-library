@@ -1,0 +1,36 @@
+split(',') keeps every field, including the empty ones:
+   5,2,0      -> ["5", "2", "0"]
+   5, ,0      -> ["5", " ", "0"]
+   5,,0       -> ["5", "", "0"]
+   ,,         -> ["", "", ""]
+   5, 2 , 0   -> ["5", " 2 ", " 0 "]
+
+split_whitespace() does not — it cannot even see the commas:
+   5,2,0      -> ["5,2,0"]
+   5, ,0      -> ["5,", ",0"]
+   5,,0       -> ["5,,0"]
+   ,,         -> [",,"]
+   5, 2 , 0   -> ["5,", "2", ",", "0"]
+
+And on whitespace-separated data it still drops the gap:
+   5 2 0    split(' ')          ["5", "2", "0"]
+            split_whitespace()  ["5", "2", "0"]
+   5  0     split(' ')          ["5", "", "0"]
+            split_whitespace()  ["5", "0"]
+   5 2      split(' ')          ["5", "2", ""]
+            split_whitespace()  ["5", "2"]
+
+Parsed as ballots — None is an abstention, not a zero:
+   5,2,0      -> [Some(5), Some(2), Some(0)]   (3 of 3 scored)
+   5, ,0      -> [Some(5), None, Some(0)]   (2 of 3 scored)
+   5,,0       -> [Some(5), None, Some(0)]   (2 of 3 scored)
+   ,,         -> [None, None, None]   (0 of 3 scored)
+   5, 2 , 0   -> [Some(5), Some(2), Some(0)]   (3 of 3 scored)
+
+The rule:
+   split(sep)          n separators -> n+1 fields, empties included.
+                       Use it when position matters: CSV, fixed columns.
+   split_whitespace()  runs of whitespace collapse, ends are trimmed.
+                       Use it for prose and hand-typed input.
+   Reaching for split_whitespace() on delimited data silently shortens
+   the row, so column 3 becomes column 2 and nothing errors.
