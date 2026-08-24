@@ -44,6 +44,7 @@ Three honesty notes, because a benchmark without them is advocacy:
 
 - macOS ships **BSD grep**, which is slow even by the standards of C. GNU grep, which is what you get on Linux, is substantially faster and would narrow that 2.8× — I have not measured by how much, and neither should you believe a number I did not run.
 - These are **warm-cache** timings on an external SSD. The first cold run of each was between three and six times slower, and the ratios shift because everything becomes I/O-bound.
+- All four rows were counted in one sitting, and the file counts **drift** afterwards: `site/` is rewritten by every docs build and `.venv/` grows whenever a dependency group is synced. The timings and the ratios are the durable part.
 - The 397-versus-146 difference is **not `rg` missing things**. The extra 251 files are the built `site/` directory, `.git/` and a Python `.venv/` — all three in `.gitignore`, none of them anything you meant.
 
 ## The default is also the trap

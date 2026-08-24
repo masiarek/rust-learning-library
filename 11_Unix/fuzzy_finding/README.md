@@ -106,12 +106,14 @@ Measured on this repository, August 2026:
 
 | Ctrl-T list is built by | Entries offered |
 |---|---|
-| fzf's own walker (hidden included, `.git` and `node_modules` skipped) | 18,770 |
-| `fd` with the settings above | 443 |
+| fzf's own walker — files *and* directories, hidden included, `.git` and `node_modules` skipped | ~18,800 |
+| `fd --type f --hidden --exclude .git` | 444 |
 
-Two directories account for almost the entire difference: `.venv/` (17,099 files) and the built `site/` (480). Both are in `.gitignore`, so `fd` never enters them and fzf's walker has no reason not to.
+Two generated directories are about 97% of that gap: a Python `.venv/` and the built `site/`. Both are named in `.gitignore`, so `fd` never enters them and fzf's walker has no reason not to.
 
-This is not a speed argument — fzf narrows 18,770 lines instantly. It is that a list of 443 real files can be narrowed to one by typing three characters, and a list of 18,770 cannot: every fragment you type still matches forty files you have never opened.
+The totals are rounded because they **drift while you watch** — `.venv/` grows whenever a tool syncs a dependency group, and `site/` is rewritten by every docs build, this page now among its 700-odd files. The proportion is the stable fact, and it is the one that matters.
+
+This is not a speed argument; fzf narrows 18,800 lines instantly. It is that a list of 444 real files can be cut to one by typing three characters, and a list of 18,800 cannot — every fragment you type still leaves forty files you have never opened.
 
 **How to tell which one you are on**, without checking any config: fzf's walker lists **directories as well as files**, with a trailing `/`. `fd --type f` lists only files. If your Ctrl-T shows `examples/` on a line of its own, the variables above have not reached that shell yet.
 
