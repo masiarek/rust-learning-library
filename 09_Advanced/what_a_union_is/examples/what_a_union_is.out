@@ -1,0 +1,35 @@
+1. Same two fields, two layouts
+   struct Both    size 8  align 4   u32 AND f32, side by side
+   union  Either  size 4  align 4   u32 OR  f32, the same bytes
+   struct Unit    size 0              no fields at all — unrelated to `union`
+   Both answers both questions at once:  7 and 2.5
+   Either answers exactly one, and will not tell you which.
+
+2. Writing is safe. Reading is not.
+   wrote 1.0f32, read those same 4 bytes as u32:  1065353216  = 0x3F800000
+   f32::to_bits(1.0) = 0x3F800000  <- the safe stdlib way to ask the same question
+
+3. Why the unsafe: a union has no tag
+   Nothing in those 4 bytes records whether they mean 1.0 or 1065353216.
+   Both readings are legal HERE only because every bit pattern is a valid
+   u32 and a valid f32. A `bool` field read as 1065353216 is instant UB —
+   the only valid bit patterns for bool are 0 and 1.
+
+4. The Rust answer: an enum is a tagged union
+   an integer 1065353216
+   a float 1
+   Same overlapping bytes, plus a tag the compiler makes you read.
+   That is the whole difference — and it is why `union` is a tool for FFI
+   and bit reinterpretation, not something you reach for to model a choice.
+
+5. Borrowing one field borrows the whole union
+   let a = &mut u.int;
+   let b = &mut u.float;   // E0499: second mutable borrow
+   The fields overlap, so the borrow checker treats them as one place.
+   For a struct the same two lines are fine — the fields are disjoint.
+
+6. What a union field may hold
+   Copy types, references, ManuallyDrop<T>, and tuples/arrays of those.
+   A String field is refused (E0740): with no tag, dropping the union could
+   not know whether there is a String in there to free. ManuallyDrop is the
+   escape hatch, and it makes freeing it your job.
