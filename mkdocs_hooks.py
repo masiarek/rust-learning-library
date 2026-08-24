@@ -152,12 +152,24 @@ NAV_ORDER: dict[str, list[str]] = {
         # Opens the strings arc — the pair of types the ownership pages were
         # secretly about all along: one owns the text, one looks at it.
         "string_vs_str",
+        # ...then the view in its own right: what a slice stores, the stale
+        # index it replaces, and the byte offsets that make it panic.
+        "string_slices",
         # ...then what the owning half is made of: three words on the stack,
         # bytes on the heap, and a capacity that is not the length.
         "anatomy_of_a_string",
+        # ...how to get one: five spellings, and the trait behind the useful one.
+        "making_a_string",
+        # ...and how to grow one, plus the operator that eats its left operand.
+        "building_a_string",
         # ...then what those bytes encode: a char is not a byte, and
         # "how many characters" has three honest answers.
         "meet_the_char",
+        # ...and how to walk them: three item types, and the split family.
+        "walking_a_string",
+        # The lifetime half, once the two types are solid: three spellings of
+        # one type, and the claim about String that is not true.
+        "static_str",
         # Closes the arc: the other four string types, and the one
         # owned/borrowed pattern all six repeat.
         "six_kinds_of_string",
@@ -313,6 +325,11 @@ LABELS = {
     "string_vs_str": "`String` vs `&str`",
     "anatomy_of_a_string": "The anatomy of a `String`",
     "meet_the_char": "Meet the `char`",
+    "string_slices": "String slices",
+    "making_a_string": "Making a `String`",
+    "building_a_string": "Building a `String`",
+    "walking_a_string": "Walking a `String`",
+    "static_str": "`&'static str`",
     "temp_dirs_in_tests": "Temporary directories in tests",
     "serde_derive": "Deriving `Serialize` and `Deserialize`",
     "json_round_trip": "The round trip",

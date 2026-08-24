@@ -19,13 +19,15 @@ flowchart LR
     S --> TY["THE TWO TYPES<br/>String owns, &str looks"]
     S --> MEM["MEMORY<br/>what the owner is made of"]
     S --> ENC["ENCODING<br/>what the bytes mean"]
+    S --> USE["MAKING & EDITING<br/>getting one, growing one"]
     S --> FAM["THE FAMILY<br/>three promises, one pattern"]
-    S --> ED["BUILDING & EDITING<br/>still missing, listed below"]
 
     TY --> T1["a literal is &'static str —<br/>in the binary, not the stack"]
     TY --> T2["deref coercion:<br/>&String becomes &str, free"]
     TY --> T3["parameters take &str,<br/>fields own String"]
     TY --> T4["String moves, &str copies"]
+    TY --> T5["a slice is ptr + len;<br/>its indices are BYTES"]
+    TY --> T6["&str and &'static str:<br/>on a literal, one type"]
 
     MEM --> M1["ptr / len / capacity on the stack,<br/>bytes on the heap"]
     MEM --> M2["growth doubles;<br/>with_capacity pre-pays"]
@@ -34,6 +36,11 @@ flowchart LR
     ENC --> E1["char: one Unicode scalar,<br/>4 bytes as a value"]
     ENC --> E2["in a String: 1-4 UTF-8 bytes,<br/>so len() counts bytes"]
     ENC --> E3["bytes, chars, graphemes —<br/>three answers to 'how long'"]
+    ENC --> E4["walking it: u8, char, &str —<br/>splits are the gaps between matches"]
+
+    USE --> U1["to_string comes free<br/>from Display"]
+    USE --> U2["push_str grows in place;<br/>+ eats its left operand"]
+    USE --> U3["every edit is byte-indexed,<br/>so every edit can panic"]
 
     FAM --> F1["OsString / &OsStr —<br/>whatever the OS handed you"]
     FAM --> F2["CString / &CStr —<br/>text bound for C"]
@@ -45,9 +52,14 @@ flowchart LR
 | # | Lesson | Level | The question it answers |
 |---|---|---|---|
 | 1 | [`String` vs `&str`](01_Foundations/string_vs_str/README.md) | 101 → 201 | Which of the two types do I write here — and why does every parameter want `&str`? |
-| 2 | [The anatomy of a `String`](01_Foundations/anatomy_of_a_string/README.md) | 101 → 201 | What the owner *is*: three words on the stack, bytes on the heap, and a capacity that is not the length |
-| 3 | [Meet the `char`](01_Foundations/meet_the_char/README.md) | 101 → 201 | What the bytes encode — why `.len()` is not "how many characters", and why `s[0]` refuses to compile |
-| 4 | [Six kinds of string](01_Foundations/six_kinds_of_string/README.md) | 201 | Why `OsString` and `CString` exist, and the one owned/borrowed pattern all six types repeat |
+| 2 | [String slices](01_Foundations/string_slices/README.md) | 101 → 201 | What a view actually is: the stale index it replaces, the `E0502` that keeps it honest, and the one way `&s[a..b]` panics |
+| 3 | [The anatomy of a `String`](01_Foundations/anatomy_of_a_string/README.md) | 101 → 201 | What the owner *is*: three words on the stack, bytes on the heap, and a capacity that is not the length |
+| 4 | [Making a `String`](01_Foundations/making_a_string/README.md) | 101 → 201 | `to_string` vs `to_owned` vs `String::from` vs `into` vs `format!` — and why `Display` is the only one you implement |
+| 5 | [Building a `String`](01_Foundations/building_a_string/README.md) | 101 → 201 | `push_str`, `push`, the `+` that consumes its left operand, and `format!` vs `write!` inside a loop |
+| 6 | [Meet the `char`](01_Foundations/meet_the_char/README.md) | 101 → 201 | What the bytes encode — why `.len()` is not "how many characters", and why `s[0]` refuses to compile |
+| 7 | [Walking a `String`](01_Foundations/walking_a_string/README.md) | 101 → 201 | Three item types and the split family — and why `split(' ')` and `split_whitespace()` disagree about empty fields |
+| 8 | [`&'static str`](01_Foundations/static_str/README.md) | 201 | Is it different from `&str`? On a literal, no — and the claim that a `String` can never yield one is false |
+| 9 | [Six kinds of string](01_Foundations/six_kinds_of_string/README.md) | 201 | Why `OsString` and `CString` exist, and the one owned/borrowed pattern all six types repeat |
 
 ## The lessons strings lean on
 
@@ -67,15 +79,16 @@ Strings are the worked example half the library's ownership pages already use, s
 
 Named honestly, because a map that only lists what exists is a map of the wrong territory. Each becomes a page once it has a runnable example worth reading — rough order, not a promise:
 
-- **Building and editing** — `push` vs `push_str`, `insert`, `truncate`, `pop`, and why `+` consumes its left operand while `format!` borrows everything
-- **Parsing out of a string** — `.parse()`, the turbofish, and `FromStr` as the trait behind both
-- **Searching and splitting** — `find`/`contains`, `split` and its many siblings, `trim`, `lines`, and the `Pattern` type that unifies them
-- **Slicing that panics** — `&s[a..b]` off a char boundary at runtime, `get` as the total version, and where the panic actually points
+- **Parsing out of a string** — `.parse()` beyond the one worked example, `FromStr` for your own type, and what to do with the `Result` that is not `.unwrap()`
+- **Searching without splitting** — `find` / `rfind` / `contains` / `starts_with`, and `Pattern` as the trait that unifies them with the split family
+- **`str` is unsized** — `?Sized`, why you only ever meet `str` behind a pointer, and what a fat pointer is
+- **The third owned form** — `Box<str>`, `Rc<str>`, `Arc<str>`: frozen text without the capacity word, and when the 8-byte saving matters
 - **`Cow<str>`** — the maybe-owned string: borrow when unchanged, allocate only when you must
-- **The third owned form** — `Box<str>`, `Rc<str>`, `Arc<str>`: frozen text without the capacity word, and when the small saving matters
 - **Raw strings and escapes** — `r"…"`, `r#"…"#`, `\u{…}`, and byte strings `b"…"`
+- **The format mini-language** — `{:>8.3}`, `{:#x}`, `{val:^width$}`: fill, align, sign, width, precision, and the `$` that makes them dynamic
 - **Comparing and sorting** — `Ord` on strings is byte order, which is not human order; case folding vs `to_lowercase`
 - **String APIs worth copying** — `impl AsRef<str>`, `Into<String>`, and when a signature should take `impl Display`
+- **When `String` is too slow** — `with_capacity` in anger, `smallstr` / `smartstring`, and avoiding a `format!` that a literal would do
 
 If you want one of these next, that is the list to point at.
 
