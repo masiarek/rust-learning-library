@@ -87,6 +87,13 @@ Then add a row to [KATAS.md](KATAS.md) at the point in the sequence where the ka
 
 - **One idea per page.** If a page needs two H1-sized ideas, it is two pages.
 - **Lead with the shortest true statement.** Open with a `**One line:**` summary a reader can carry away, then earn it.
+- **These are shortcuts, not a book. Cut hard.** The pages exist to be re-read fast by someone who already met the idea once, so density beats flow and a table beats a paragraph. Four habits produce nearly all the bloat, and all four are deletions:
+  - **A sentence explaining why the previous sentence matters.** *"…which is the point"*, *"…and that is the whole behaviour"*, *"worth naming out loud"*. If the point needs restating, the first sentence was wrong — fix that one instead.
+  - **Announcing structure.** *"Three things are true of this, and the third is surprising"*, *"one more wrinkle"*. Just say the three things.
+  - **Prose that restates a table** you just printed.
+  - **Page meta-commentary** — *"twenty pages already use structs and none says what one is; this is that page"*. True, and it teaches nothing.
+
+  A compiler error, a table, a code block and a `**One line:**` are content and stay. Prose connecting them is where the fat is. A rewrite of the five struct pages cut **43%** of the words without losing a single fact.
 - **Learner voice by default** — "you write", not "explain to your audience". A learner page serves a teacher fine; a teacher page fails a learner.
 - **`**Level:**`** tags a page's depth: `101` (newcomer), `201` (working knowledge), `301` (deep dive), or `reference`, followed by ` · ` and the audience. Untagged is fine; malformed is not.
 - **Say which trap you are describing.** The valuable half of most Rust lessons is the mistake, not the mechanism.

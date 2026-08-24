@@ -2,118 +2,92 @@
 
 **Level:** 101 → 201 · for newcomers
 
-**One line:** The functions do not go in the struct — they go in an `impl` block beside it, and the only thing that decides "associated function" from "method" is whether the first parameter is `self`.
-
-Try putting a function in a struct and the compiler does not just refuse; it explains its own design:
+**One line:** Functions do not go in the struct — they go in an `impl` block beside it, and the only thing separating an associated function from a method is whether the first parameter is `self`.
 
 ```text title="Real rustc output"
 error: functions are not allowed in struct definitions
   |
-1 | struct Floor {
-  |        ----- while parsing this struct
 3 |     fn people(&self) -> u32 { 3 }
   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   |
   = help: unlike in C++, Java, and C#, functions are declared in `impl` blocks
 ```
 
-That help line is the whole page in one sentence. If you learned objects anywhere else, you learned that data and behaviour live in **one** box. Rust puts them in two:
+Everywhere else data and behaviour share one box. Rust uses two, and neither owns the other:
 
 ```rust
-struct Ballot { … }        // the box with the data
-
-impl Ballot { … }          // the box with the functions
+struct Ballot { … }        // the data
+impl   Ballot { … }        // the functions
 ```
-
-They are not nested and neither owns the other. `impl Ballot` says *"the following functions are associated with the type `Ballot`"*, and that is all it says.
 
 ---
 
-## Why two boxes and not one
+## Why two boxes
 
-Because the second box can be opened again, by you, later, and — with traits — for types you did not define. One box would have to be closed when the type is defined. Three consequences follow, and each surprises somebody:
+The second can be reopened later, and — via traits — for types you did not define. Three consequences:
 
-- **A type may have many `impl` blocks.** They add up. Nothing is being reopened or overridden.
-- **`impl` is not struct-only.** Enums take methods identically — `Option`'s hundred methods are one `impl<T> Option<T>` in the standard library, no different from yours. So do type aliases of your own types, and unions.
-- **Behaviour can be *shared* without inheritance,** by naming the shape in a `trait` and writing `impl Trait for Type`. That is Rust's answer to the thing inheritance was for.
+- **Many `impl` blocks per type.** They add up; nothing is reopened or overridden.
+- **Not struct-only.** Enums take methods identically; `Option`'s hundred methods are one `impl<T> Option<T>` in std.
+- **Sharing without inheritance** — name the shape in a `trait`, write `impl Trait for Type`.
 
-## Associated function vs method — one difference only
+## Associated function vs method
 
 | | first parameter | called as |
 |---|---|---|
 | **associated function** | none | `Ballot::new("Ada")` |
-| **method** | `self`, `&self`, or `&mut self` | `ballot.total()` |
-
-That is the entire distinction. A method is not a special kind of item — it is an associated function whose first parameter happens to be the value itself, and `ballot.total()` is **sugar**:
+| **method** | `self` / `&self` / `&mut self` | `ballot.total()` |
 
 ```rust
-ballot.total()  ==  Ballot::total(&ballot)   // the same call
+ballot.total()  ==  Ballot::total(&ballot)   // the dot is sugar
 ```
 
-The dot inserts the `&` for you. The example below asserts those two are equal, so you can watch the sugar dissolve.
+So "an associated function is standalone, called like `Foo::bar()`" means: no instance to hang the call on, so you name the **type**. There is no constructor syntax — `new` is an ordinary associated function returning `Self`, and the name is only a std convention.
 
-So when a reference says an associated function *"can be standalone, meaning it would be called like `Foo::bar()`"* — that is what it means. There is no instance to hang the call on, so you name the **type** instead of a value. `Ballot::new` is the obvious case: it is the function that *makes* a `Ballot`, so it cannot take one.
+**`Self`** (capital) is the *type*; **`self`** (lowercase) is the *value*.
 
-And Rust has no constructor syntax at all. `new` is an ordinary associated function returning `Self`; the name is a convention the standard library follows and nothing more. Nothing stops you writing `Ballot::blank()` or `Ballot::from_csv(..)`, and plenty of good APIs do.
+## The three receivers
 
-## `Self` and `self` are different words
-
-- **`Self`** (capital) is the **type** — inside `impl Ballot`, it is another spelling of `Ballot`. Useful in return position, and it keeps working if the type gets renamed.
-- **`self`** (lowercase) is the **value** — the instance the method was called on.
-
-`fn new(..) -> Self` returns a `Ballot`. `fn total(&self)` borrows one.
-
-## The three receivers, and what each costs the caller
-
-This is the choice you make on every method, and getting it wrong is what most early borrow-checker pain actually is:
-
-| Receiver | The method may | The caller | Reach for it when |
+| Receiver | May | The caller | Use when |
 |---|---|---|---|
-| `&self` | read | keeps the value | the method asks a question |
-| `&mut self` | read and change | keeps the value, changed | the method updates it in place |
-| `self` | do anything, including destroy it | **loses the value** | the operation ends the value's life |
+| `&self` | read | keeps it | the method asks a question |
+| `&mut self` | read and change | keeps it, changed | it updates in place |
+| `self` | anything, incl. destroy it | **loses it** | the operation ends the value's life |
 
-`self` is not an exotic case. `into_receipt`, `into_iter`, `certify` — anything whose name starts `into_` is usually taking `self`, and the value being unusable afterwards is the *feature*: a certified tally cannot be voted into, because it no longer exists.
-
-Two errors come straight out of this table, and both name the fix:
+`self` is not exotic — anything named `into_*` takes it, and the value being unusable afterwards is the feature: a certified tally cannot be voted into.
 
 ```text
 error[E0596]: cannot borrow `t` as mutable, as it is not declared as mutable
 error[E0382]: borrow of moved value: `t`
 ```
 
-The first is a `&mut self` method called through a binding that is not `mut` — the *method signature* is what demands it. The second is using a value after a method took `self`.
+First: a `&mut self` method through a non-`mut` binding — the *signature* demands it. Second: using a value after a method took `self`.
 
-## Inherent impl vs trait impl
+## Inherent vs trait impl
 
 ```rust
-impl Ballot          { fn total(&self) -> u32 { … } }        // inherent
-impl Summary for Ballot { fn one_line(&self) -> String { … } } // trait
+impl Ballot             { fn total(&self) -> u32 { … } }        // inherent — your signature
+impl Summary for Ballot { fn one_line(&self) -> String { … } }  // trait — someone else's
 ```
 
-Same syntax plus `for`. The difference is **who chose the signature**: an inherent impl is yours alone, while a trait impl fills in a shape someone else declared — which is what lets a function accept "any type that can summarise itself" rather than one concrete type.
+A trait may ship a **default method** body, overridable by any implementor — the closest thing to inherited implementation. Note what is missing: no base class, no `super`, no reaching into a field.
 
-A trait may ship a **default method** body, which every implementor gets free and any implementor may override. That is the closest thing Rust has to inheriting an implementation, and note what is missing: no base class, no `super`, and no way for the default to reach into a field.
+Gotcha: trait methods are only callable where the **trait is in scope**. A mysterious *"method not found"* is usually a missing `use`.
 
-One practical gotcha the example does not show: a trait's methods are only callable where the **trait is in scope**. A mysterious *"method not found"* on a type you know has the method is very often a missing `use`.
+## Elsewhere
 
-## Coming from another language
-
-- **Python.** A `class` body holds fields *and* `def`s; Rust splits those into `struct` and `impl`. `self` is explicit in both — Python's `def total(self)` and Rust's `fn total(&self)` line up almost exactly, and `Ballot::new` is close to a `@classmethod` or `@staticmethod`. What has no equivalent is the receiver *choice*: Python has one `self`, Rust has three, and picking among them is the design work.
-- **ABAP.** An `impl` block is doing the job `CLASS … IMPLEMENTATION` does, but attached to a plain structure type rather than to a class — so you get methods on data without needing an object at all. `Ballot::new` is a static method (`CLASS-METHODS`), `ballot.total()` an instance method, and a `trait` is close to an `INTERFACE` — with the large difference that you can implement one for a type you did not write.
+- **Python** — a `class` holds fields *and* `def`s; Rust splits them. `Ballot::new` ≈ `@classmethod`. No equivalent to the receiver *choice*: Python has one `self`, Rust has three.
+- **ABAP** — `impl` does the job of `CLASS … IMPLEMENTATION` but attached to a plain structure type, so you get methods without an object. `trait` ≈ `INTERFACE`, except you can implement one for a type you did not write.
 
 ---
 
 ## Practice
 
-**Pick the right receiver four times, then break two of them on purpose.** Model a `Tally { contest: String, counts: Vec<u32> }` with four operations — create one, ask who is leading, record a vote, and certify the result — and give each the receiver it deserves before you write any bodies. One takes no `self`, one takes `&self`, one `&mut self`, and one takes `self`. Justify the last one in a sentence: what does consuming the tally *prevent*?
+**Pick the right receiver four times, then break two.** Model `Tally { contest: String, counts: Vec<u32> }` with create / who-leads / record-a-vote / certify. Choose each receiver *before* writing any bodies: one takes no `self`, one `&self`, one `&mut self`, one `self`.
 
-Then make each of these happen and read the error:
-
-1. Call the recording method through a binding declared without `mut` — `E0596`. Note that nothing in the *call* is wrong; it is the method's signature reaching back out to the caller.
-2. Use the tally again after certifying it — `E0382`.
-
-Finally, make `leader()` answer `None` rather than `Some(0)` on a tally where nobody has voted, and say which of the two is the bug you would rather ship.
+1. Justify the last: what does consuming the tally *prevent*?
+2. Call the recording method through a non-`mut` binding — `E0596`. Nothing in the call is wrong.
+3. Use the tally after certifying — `E0382`.
+4. Make `leader()` return `None`, not `Some(0)`, on an empty tally. Which is the bug you would rather ship?
 
 <details markdown="1">
 <summary><strong>Solution</strong></summary>
@@ -272,8 +246,4 @@ Break 2 — use the value after a method that took `self`:
 
 ## See also
 
-- [STRUCTS.md](../../STRUCTS.md) — the map: every struct lesson in reading order
-- [What a struct is](../what_a_struct_is/README.md) — the data half, and the three flavors
-- [Ownership and moves](../ownership_and_moves/README.md) — what `self` as a receiver actually does
-- [Borrowing](../borrowing/README.md) — why `&self` and `&mut self` follow different rules
-- [A score is not a number: the newtype](../newtype_score/README.md) — an `impl` block whose job is to guard one door
+- [STRUCTS.md](../../STRUCTS.md) · [What a struct is](../what_a_struct_is/README.md) · [Ownership and moves](../ownership_and_moves/README.md) · [Borrowing](../borrowing/README.md) · [the newtype](../newtype_score/README.md)

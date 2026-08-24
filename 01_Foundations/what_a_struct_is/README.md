@@ -2,9 +2,7 @@
 
 **Level:** 101 → 201 · for newcomers
 
-**One line:** A struct names a group of values and makes that name a *type* — and the behaviour does not live inside it, which is the part that catches everyone arriving from an object-oriented language.
-
-Twenty pages in this library already use structs. None of them says what one is. This is that page.
+**One line:** A struct names a group of values and makes that name a *type* — and holds no behaviour, which is what catches everyone arriving from an object-oriented language.
 
 ```rust
 struct Ballot {
@@ -13,113 +11,91 @@ struct Ballot {
 }
 ```
 
-Three things are true of that, and the third is the surprising one:
-
-1. It groups values that belong together, and **names each one** — so you do not depend on position the way a bare tuple `(String, Vec<u8>)` does.
-2. It creates a **new type**. Not a nickname for the pair — a type the compiler will keep apart from every other type, including an identical one under a different name.
-3. It contains **no behaviour whatsoever.** There is no method in that block and there cannot be. Methods live in a separate `impl` block, and shared behaviour lives in traits.
+- **Names each field** — no dependence on position, unlike a bare `(String, Vec<u8>)`.
+- **Is a new type**, kept apart from every other, including an identical one under a different name.
+- **Holds no behaviour.** No method can go in that block. Methods live in an `impl` block; shared behaviour in traits.
 
 ---
 
 ## Data here, behaviour there
 
 ```rust
-struct Ballot { … }        // the data
+struct Ballot { … }        // data
 
-impl Ballot {              // the behaviour
+impl Ballot {              // behaviour
     fn new(voter: &str) -> Self { … }   // associated function — no self
     fn total(&self) -> u32 { … }        // method — takes self
 }
 ```
 
-That split is not a stylistic quirk; it is why Rust has no classes and no inheritance. A struct is a **record**, an `impl` block attaches functions to it, and a `trait` describes behaviour that many types can share. Anything you would reach for inheritance to do, you do with traits instead.
+Why Rust has no classes and no inheritance: a struct is a record, `impl` attaches functions, a `trait` describes behaviour many types share. Whatever you would use inheritance for, you use traits for. Details: [`impl` blocks](../impl_blocks/README.md).
 
-The only difference between an **associated function** and a **method** is whether the first parameter is `self`:
+## Three flavors, and a fourth spelling
 
-| | signature | called as |
-|---|---|---|
-| associated function | `fn new(voter: &str) -> Self` | `Ballot::new("Ada")` |
-| method | `fn total(&self) -> u32` | `ballot.total()` |
-
-`ballot.total()` is *sugar* for `Ballot::total(&ballot)` — the example below proves it by asserting the two are equal. Rust has no special constructor syntax either: `new` is an ordinary associated function that happens to return `Self`, and the name is a convention, nothing more.
-
-## Three flavors — and a fourth spelling
-
-| Flavor | Written | Fields reached by |
+| Flavor | Written | Fields by |
 |---|---|---|
 | named-field | `struct Ballot { voter: String }` | `.voter` |
 | tuple struct | `struct Precinct(u32);` | `.0` |
-| unit struct | `struct Sealed;` | there are none |
+| unit struct | `struct Sealed;` | none |
 
-Tutorials often gloss the first as *"a classic C struct"*. Resist it: Rust's layout is **undefined by default** so the compiler may reorder fields, the fields are **private by default**, and assigning one **moves** rather than copies unless the type is [`Copy`](../copy_vs_clone/README.md). Three of the four things a C programmer would assume are wrong.
+A tuple struct is a named-field struct whose names are digits: `Precinct { 0: 7 }` compiles and equals `Precinct(7)`.
 
-A tuple struct really is a named-field struct whose field names happen to be numbers — `Precinct { 0: 7 }` compiles and is the same value as `Precinct(7)`.
+Don't gloss named-field as *"a classic C struct"*: layout is **undefined by default** (fields may be reordered), fields are **private by default**, and assignment **moves** unless the type is [`Copy`](../copy_vs_clone/README.md).
 
-The **fourth spelling** is the one that produces a confusing error. `struct AlsoEmpty {}` has no fields either, but it is not a unit struct: it must be constructed with braces. Use the bare name and you get an error that reads as though the type does not exist:
+`struct AlsoEmpty {}` also has no fields but is **not** a unit struct — it needs braces:
 
 ```text title="Real rustc output"
 error[E0423]: expected value, found struct `AlsoEmpty`
-   |
    |     println!("{:?}", AlsoEmpty);
    |                      ^^^^^^^^^ help: use struct literal syntax instead: `AlsoEmpty {}`
 ```
 
-A unit struct is not a consolation prize. It holds nothing, so behaviour is the *only* thing it can hold — which makes it exactly the right type when you need something to `impl` a trait on and have no data to carry.
+A unit struct holds nothing, so behaviour is all it *can* hold — which is when you want one: something to `impl` a trait on.
 
-One more wrinkle, and it explains a confusing error. `struct Sealed;` declares **two** things that
-share a name: the *type* `Sealed`, and a constant *value* `Sealed`. They live in different
-namespaces, which you can see by aliasing it — a type alias only aliases the **type**:
+`struct Sealed;` declares **two** things sharing a name: the type `Sealed` and a constant value `Sealed`. A type alias aliases only the type:
 
 ```rust
 type Alias = Sealed;
-let a: Sealed = Alias {};   // fine — struct expression, type namespace
+let a: Sealed = Alias {};   // fine — type namespace
 let b: Sealed = Alias;      // error[E0423]: expected value, found type alias `Alias`
 ```
 
-So a unit struct is usable as `Sealed` *or* `Sealed {}`, but an alias of it only as `Alias {}`.
+## Names
 
-## What things are called
+`UpperCamelCase` for types, `snake_case` for fields and methods — `rustc` lints both (`non_camel_case_types`, `non_snake_case`). Name the struct for what the group *means*: `Ballot`, not `Data`.
 
-`UpperCamelCase` for the type, `snake_case` for fields and methods. This is not
-taste — `rustc` has a lint for each (`non_camel_case_types`, `non_snake_case`) and
-will warn on the way past. The struct's name should say what the group *means*
-(`Ballot`, not `Data`), because that name is the type every downstream signature
-will read.
+## Privacy is per module
 
-## Privacy is per module, not per struct
-
-Fields are **private by default**, and "private" means *"visible inside the module that defines the struct"* — not *"visible only to its own methods"*. Any code in the same module can read any field.
-
-There is one consequence people meet as a puzzle rather than as a rule: for a **tuple struct**, a private field makes the *constructor* private too.
+Private means **visible inside the defining module**, not "only to its own methods" — any code in that module reads any field. Consequence: for a tuple struct, a private field makes the *constructor* private.
 
 ```text
 error[E0603]: tuple struct constructor `Ballot` is private
    |  a constructor is private if any of the fields is private
 ```
 
-That is not an obstacle, it is the mechanism — it is precisely what lets [the newtype](../newtype_score/README.md) guarantee that every value of a type went through one checked door.
+That is the mechanism [the newtype](../newtype_score/README.md) relies on — one checked door.
 
-## What the compiler will *not* let you do
+## What you cannot do
 
-- **Mark one field mutable.** `mut` belongs to the binding, not the field: the whole instance is mutable or none of it is.
-- **Put a `&str` in a field without a lifetime.** `struct User { name: &str }` is `error[E0106]: missing lifetime specifier` — the struct must promise it will not outlive what it borrows. Owned `String` sidesteps the question, which is why beginner code uses it.
-- **Print it with `{}`.** A struct has no `Display` unless you write one; `#[derive(Debug)]` and `{:?}` are the way in. See [Debug and Display](../debug_vs_display/README.md).
+- **Mark one field mutable** — `mut` belongs to the binding; all of it or none.
+- **Put `&str` in a field without a lifetime** — `error[E0106]: missing lifetime specifier`. Owned `String` sidesteps it, which is why beginner code uses it.
+- **Print with `{}`** — no `Display` unless you write one. See [Debug and Display](../debug_vs_display/README.md).
 
-## Coming from another language
+## Elsewhere
 
-- **Python.** The closest thing is a `@dataclass` or a `NamedTuple` — a named record with typed fields. Two differences bite. Rust's is checked at compile time, so a misspelled field is an error rather than an `AttributeError` at 3am. And you **cannot bolt a new attribute on at runtime**: `rect.trash = "…"` has no equivalent, because the set of fields is part of the type.
-- **ABAP.** A named-field struct is essentially a `TYPES: BEGIN OF … END OF` structure, and that analogy is very close. What has no ABAP counterpart is the `impl` block: there is no way to attach methods to a structure type, so behaviour ends up in a class or a function module *beside* the data. Rust splits them the same way — the difference is that `impl` keeps the association in the type system.
-- **Not objects.** Rust has no classes and no inheritance. A struct with methods may get called an object in prose, but nothing is inherited and nothing is virtual unless you ask for it with `dyn`.
+- **Python** — closest is `@dataclass` / `NamedTuple`, but checked at compile time, and you **cannot** bolt on an attribute at runtime: the field set is part of the type.
+- **ABAP** — `TYPES: BEGIN OF … END OF` is very close. Missing there is `impl`: no way to attach methods to a structure type.
+- **Not objects** — no classes, no inheritance, nothing virtual unless you ask with `dyn`.
 
 ---
 
 ## Practice
 
-**Three flavors, and the two things the compiler keeps apart.** Define `Color(i32, i32, i32)` and `Point(i32, i32, i32)` — identical shapes, different names — write a function taking one of them, pass it the other, and read `E0308`. Then note what a bare `(i32, i32, i32)` would have done with the same call, because that difference is the entire argument for tuple structs.
+**Three flavors, and the two things the compiler keeps apart.**
 
-Next, put a tuple struct in a module with `pub` on the struct but **not** on its field, and try to construct it from outside. The error is `E0603`, and the sentence to read twice is *"a constructor is private if any of the fields is private."* Work out why that follows rather than being an extra rule.
-
-Finish with a unit struct, and give it a `Display` impl — a type with no data whose entire reason to exist is the behaviour hung on it.
+1. Define `Color(i32, i32, i32)` and `Point(i32, i32, i32)`, write a function taking one, pass it the other. Read `E0308` — then note what a bare `(i32, i32, i32)` would have accepted.
+2. Put a tuple struct in a module with `pub` on the struct but not the field; construct it from outside. `E0603`: *"a constructor is private if any of the fields is private."* Why does that follow, rather than being an extra rule?
+3. Give a unit struct a `Display` impl — a type whose only content is behaviour.
 
 <details markdown="1">
 <summary><strong>Solution</strong></summary>
@@ -265,8 +241,4 @@ fn main() {
 
 ## See also
 
-- [STRUCTS.md](../../STRUCTS.md) — the map: every struct lesson in the library, in reading order
-- [A score is not a number: the newtype](../newtype_score/README.md) — the tuple struct with a job
-- [`Option` fields](../option_fields/README.md) — the field that may legitimately be missing
-- [Debug and Display](../debug_vs_display/README.md) — why `{}` refuses your struct
-- [Ownership and moves](../ownership_and_moves/README.md) — what happens when a struct owns its fields
+- [STRUCTS.md](../../STRUCTS.md) · [`impl` blocks](../impl_blocks/README.md) · [the newtype](../newtype_score/README.md) · [`Option` fields](../option_fields/README.md) · [Debug and Display](../debug_vs_display/README.md)

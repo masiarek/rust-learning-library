@@ -2,93 +2,72 @@
 
 **Level:** 101 → 201 · working knowledge
 
-**One line:** `Clone` gives you a method you call by name; `Copy` changes what `let b = a;` *means* — and a struct is never `Copy` by accident, because every field has to be `Copy` **and** you have to opt in.
+**One line:** `Clone` is a method you call by name; `Copy` changes what `let b = a;` *means* — and a struct is never `Copy` by accident.
 
 ```rust
-let b = a;
+let b = a;   // moves or copies. Nothing here says which; the type decides.
 ```
-
-That line either **moves** `a` or **copies** it, and nothing in the line says which. The type decides, and the difference is whether `a` is still usable on the next line.
-
----
-
-## The one difference that matters
 
 | | `Clone` | `Copy` |
 |---|---|---|
-| how you use it | `a.clone()` — you write it | nothing — `=` just stops moving |
-| what it may do | run your code, allocate, be slow | a bit-for-bit `memcpy`, always |
+| how you use it | `a.clone()` — you write it | nothing; `=` stops moving |
+| what it may do | run your code, allocate | a bit-for-bit `memcpy`, always |
 | after `let b = a;` | `a` is **moved** — dead | `a` is **copied** — alive |
 | visible in the source | yes | **no** |
 
-That last row is the whole reason the two are separate traits. Making a type `Copy` makes duplication *invisible*, which is only safe when duplication is *trivial*. `Clone` is for everything else, and its verbosity is the feature: an allocation you can see is an allocation you can question.
+The last row is why they are separate traits: `Copy` hides duplication, which is only safe when duplication is trivial.
+
+---
 
 ## `Copy` is not "cheap to duplicate"
 
-It is **"duplicating this is just a `memcpy`, and afterwards nobody owns anything extra."**
+It is **"duplicating is just a `memcpy`, and afterwards nobody owns anything extra."**
 
-That is why a `String` field poisons it for the whole struct. Copying a `String` bit-for-bit would duplicate its *pointer*, giving two owners of one heap allocation and two frees at the end of scope. `Copy` does not forbid that as a style rule — it makes it unrepresentable.
+One `String` field poisons the whole struct: copying it bit-for-bit duplicates the *pointer* — two owners, two frees. `Copy` makes that unrepresentable rather than discouraged.
 
-## The three refusals, each with its own code
-
-```text
-error[E0277]: the trait bound `P: Clone` is not satisfied
-  |  impl Copy for P {}
-  = note: required by a bound in `Copy`
-```
-
-`Copy` **requires** `Clone` as a supertrait, so you cannot have one without the other. Always `#[derive(Clone, Copy)]` together.
+## Three refusals, three codes
 
 ```text
+error[E0277]: the trait bound `P: Clone` is not satisfied     // Copy requires Clone
 error[E0204]: the trait `Copy` cannot be implemented for this type
   |  struct P { s: String }
   |         ^   --------- this field does not implement `Copy`
+error[E0184]: `Copy` not allowed on types with destructors    // Drop runs once per value
 ```
 
-One non-`Copy` field is enough. The compiler points at the field, which makes this the fastest way to find out what is actually owned inside a type you did not write.
-
-```text
-error[E0184]: the trait `Copy` cannot be implemented for this type;
-              the type has a destructor
-```
-
-A `Drop` impl runs **once per value**. If the value could be copied, it would run per copy, on the same resource. So `Copy` and `Drop` are mutually exclusive, and that is not a limitation — it is the same double-free argument as above, arriving from the other direction.
+Always `#[derive(Clone, Copy)]` together. `E0204` points at the offending field — the fastest way to see what a type actually owns.
 
 ## All-`Copy` fields is not enough
 
 ```rust
-#[derive(Debug, Clone)]   // note: no Copy
+#[derive(Debug, Clone)]   // no Copy
 struct Tally { counted: u32 }
 ```
 
-One `u32`, and it still moves. Nothing about the fields opts a struct in — **you** do, and the deliberateness is the point: `Copy` is a promise to every caller that passing the value by value costs them nothing. Adding a `String` field later would silently break every call site that relied on it, so Rust makes you say it out loud first.
+One `u32`, still moves. You opt in, not the fields — because `Copy` is a promise to callers that adding a `String` later would silently break.
 
 ## Which to reach for
 
-1. **A reference first.** `fn report(r: &Reading)` copies nothing and asks for the least. Most "I need `Copy`" moments are really "my signature should have taken `&`".
-2. **`Copy` for small plain data** — coordinates, ids, counters — where an `&` at every call site would be noise. Rough guide: a couple of machine words, no field that owns anything.
-3. **`.clone()` last**, and justify it. It is a real allocation, written where it happens.
+1. **A reference.** Most "I need `Copy`" is really "my signature should have taken `&`".
+2. **`Copy`** for small plain data (ids, coordinates, counters) where `&` everywhere is noise.
+3. **`.clone()`** last, and justify it — it is a real allocation, written where it happens.
 
-## Where this shows up
+[Struct update syntax](../struct_update/README.md) shows this at its sharpest: one `..base` line copies the `Copy` fields and moves the rest, out of the same value.
 
-[Struct update syntax](../struct_update/README.md) is the sharpest demonstration in the library: one `..base` line copies the `Copy` fields and moves the non-`Copy` ones, out of the *same value*, and the error names the field rather than the value. If this page is abstract, that one is the same idea with the compiler pointing at it.
+## Elsewhere
 
-## Coming from another language
-
-- **Python.** Every assignment binds a reference, so `b = a` never duplicates and `copy.deepcopy` is the explicit escape. Rust's `Clone` is roughly the `deepcopy` — and Rust's *move* has no Python equivalent at all, which is the genuinely new idea. `Copy` then names the small set of types where a move and a copy are indistinguishable.
-- **ABAP.** Assignment of a structure copies it, always. Rust's `Copy` types behave exactly that way, and everything else does not — the closest ABAP analogue to a move is passing a reference and then agreeing, by convention, not to touch the original. Rust makes that agreement the compiler's job.
+- **Python** — `b = a` binds a reference and never duplicates; `Clone` ≈ `copy.deepcopy`. The *move* has no equivalent, and that is the new idea.
+- **ABAP** — structure assignment always copies, i.e. always behaves like `Copy`. Nothing there corresponds to a move.
 
 ---
 
 ## Practice
 
-**One `E0382`, three fixes, and the field that removes one of them.** Write a small `Reading { precinct: u32, turnout: u32 }`, a function taking it **by value**, and call that function twice. Read the error.
+**One `E0382`, three fixes, and the field that removes one.** Write `Reading { precinct: u32, turnout: u32 }`, a function taking it **by value**, call it twice.
 
-Now fix it three ways — derive `Copy`, `.clone()` at the call site, and change the signature to take `&Reading` — and rank them for this type. Say what each costs the *caller*, not the callee.
-
-Then change `precinct` to a `String` and try all three again. One is now impossible; get its error and explain, in one sentence about heap allocations, why that follows rather than being an arbitrary rule.
-
-Finally, predict which of `#[derive(Clone)]`, `#[derive(Copy)]` and `impl Drop` can coexist on one type, then check.
+1. Fix three ways — derive `Copy`, `.clone()` at the call site, take `&Reading`. Rank them by what each costs the *caller*.
+2. Change `precinct` to `String` and retry all three. One is impossible: get the error, explain it in one sentence about heap allocations.
+3. Predict which of `#[derive(Clone)]`, `#[derive(Copy)]`, `impl Drop` can coexist. Check.
 
 <details markdown="1">
 <summary><strong>Solution</strong></summary>
@@ -260,7 +239,4 @@ The rule to carry away:
 
 ## See also
 
-- [STRUCTS.md](../../STRUCTS.md) — the map: every struct lesson in reading order
-- [Struct update syntax](../struct_update/README.md) — `Copy` deciding, field by field, inside one line
-- [Ownership and moves](../ownership_and_moves/README.md) — what a move is, and what `Copy` opts out of
-- [Borrowing](../borrowing/README.md) — the fix that beats both, most of the time
+- [STRUCTS.md](../../STRUCTS.md) · [Struct update syntax](../struct_update/README.md) · [Ownership and moves](../ownership_and_moves/README.md) · [Borrowing](../borrowing/README.md)

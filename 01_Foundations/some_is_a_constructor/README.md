@@ -4,59 +4,42 @@
 
 **One line:** `Some(x)` is a *function call* whose argument is the value itself — so `Some(None)` does not mean "present but empty", it means you handed an `Option` to something expecting a `u8`.
 
-Here is the mistake, and it is a good one to make on purpose:
-
 ```rust
-#[derive(Debug)]
-struct Person {
-    first_name: String,
-    last_name: String,
-    age: Option<u8>,
-}
+struct Person { first_name: String, age: Option<u8> }
 
 let alfredo = Person {
     first_name: "Alfredo".to_string(),
-    last_name: "Sanchez".to_string(),
     age: Some(None),          // <- "the age field is set, to nothing"
 };
 ```
 
-That last line reads perfectly well in English. `Some` sounds like *the field is filled in*, `None` sounds like *the value is nothing*, so `Some(None)` sounds like *filled in with nothing* — which is exactly the state you were trying to describe. The compiler disagrees, and the way it disagrees is the lesson:
+Reads fine in English — `Some` sounds like *set*, `None` like *nothing*.
 
 ```text title="Real rustc output — rustc 1.97.1, edition 2024"
 error[E0308]: mismatched types
-   --> shot2.rs:12:19
-    |
  12 |         age: Some(None),
     |              ---- ^^^^ expected `u8`, found `Option<_>`
     |              |
     |              arguments to this enum variant are incorrect
     |
-    = note: expected type `u8`
-               found enum `Option<_>`
-note: tuple variant defined here
-   --> /…/core/src/option.rs:605:5
-    |
+note: tuple variant defined here   --> /…/core/src/option.rs:605:5
 605 |     Some(#[stable(feature = "rust1", since = "1.0.0")] T),
-    |     ^^^^
 ```
 
-**"arguments to this enum variant are incorrect."** Not *"you nested an Option"* — *arguments*. And then it shows you the definition of `Some` as a **tuple variant**, which is the compiler's way of saying: this is a thing you call, and you called it wrong.
+**"arguments to this enum variant are incorrect"** — not *"you nested an Option"*. And `Some` is shown as a **tuple variant**: a thing you call, called wrongly.
 
 ---
 
-## The property, stated once
+## Two shapes, no third
 
-`Option<T>` has two shapes and there is **no third shape meaning "present but empty."** The two are not `filled` / `empty`; they are:
+`Option<T>` has no shape meaning "present but empty":
 
 | | what it is | what it holds |
 |---|---|---|
-| `None` | the whole absence | nothing — it takes no argument at all |
+| `None` | the whole absence | nothing — takes no argument |
 | `Some(x)` | the whole presence | `x`, which must be a `T` |
 
-`None` is not the payload of `Some`. `None` is the *sibling* of `Some`. Writing `Some(None)` puts a sibling where a payload belongs, and the type of the payload is `u8`.
-
-The clinching demonstration is that you can hold `Some` in a variable, because it really is a function:
+`None` is not the payload of `Some` — it is its **sibling**. The clincher is that `Some` is a value you can hold:
 
 ```rust
 let wrap: fn(u8) -> Option<u8> = Some;
@@ -64,11 +47,11 @@ wrap(31)                                  // Some(31)
 [31u8, 44, 7].into_iter().map(Some)       // Some(31), Some(44), Some(7)
 ```
 
-Once `Some` has the type `fn(u8) -> Option<u8>` written out in full, `Some(None)` stops being mysterious. You called a `fn(u8)` with an `Option`. That is all `E0308` is saying, and it is the same error you would get from `wrap(None)`.
+With the type written out, `Some(None)` is just a `fn(u8)` called with an `Option` — same error as `wrap(None)`.
 
-## When `Some(None)` is right — and it genuinely is, sometimes
+## When `Some(None)` is right
 
-The expression is not nonsense. It is a perfectly good value; it just is not an `Option<u8>`. It is an **`Option<Option<u8>>`**, and that type earns its keep whenever there are *two* questions rather than one:
+It is a fine value, just not an `Option<u8>`. It is an **`Option<Option<u8>>`**, which earns its keep when there are *two* questions:
 
 ```rust
 let rows: [(&str, Option<Option<u8>>); 3] = [
@@ -78,26 +61,26 @@ let rows: [(&str, Option<Option<u8>>); 3] = [
 ];
 ```
 
-*Did we ask?* and *did they answer?* — two facts, two layers, and the outer layer is the one a single `Option<u8>` cannot record. `.flatten()` collapses them back to one when you no longer care which absence you had.
+*Did we ask?* and *did they answer?* `.flatten()` collapses them once you no longer care which absence you had.
 
-This is the same test [`Option` fields](../option_fields/README.md) applies to `Option<Vec<T>>`: keep the wrapper exactly when **absent and empty mean different things**. Most of the time they do not, and then the plain `Option<u8>` is the better type and `None` is the line you wanted.
+Same test [`Option` fields](../option_fields/README.md) applies to `Option<Vec<T>>`: keep the wrapper exactly when **absent and empty mean different things**. Usually they do not.
 
-Worth knowing that the two-layer type usually arrives *by accident* rather than by design — `.map()` with a closure that itself returns an `Option` nests them for you, which is the problem [`Option` vs `Result`](../option_vs_result/README.md) and [what a monad is](../what_a_monad_is/README.md) are about. Typing `Some(None)` by hand is the rarer route to the same place, and the only one where the compiler catches you immediately.
+The two-layer type normally arrives *by accident*, from `.map()` with a closure that returns an `Option` — see [`Option` vs `Result`](../option_vs_result/README.md) and [what a monad is](../what_a_monad_is/README.md). Typing it by hand is the only route the compiler catches immediately.
 
-## The same idea in the languages you already have
+## Elsewhere
 
-- **Python.** You have this distinction and you spell it two different ways. `d.get("age")` returns `None` both when the key is missing and when the key is present with value `None`; telling them apart needs `"age" in d`, a *separate expression* that the value does not carry. `Option<Option<u8>>` is those two answers welded into one value — and `.flatten()` is you deciding, in writing, that you no longer need the second one.
-- **ABAP.** There is no way to express it at all on an elementary field: `lv_age TYPE i` is `0` for *unknown*, for *declined*, and for *a genuine zero*. The distinction has to live in a companion flag you remember to set and every reader remembers to check. That is what widening the type does for free — and also why widening it without a reason is a real cost, since now every reader must handle a state you invented.
+- **Python** — `d.get("age")` returns `None` for a missing key *and* a present-`None`; telling them apart needs `"age" in d`, a separate expression the value does not carry. `Option<Option<u8>>` welds both answers into one value.
+- **ABAP** — inexpressible on an elementary field: `lv_age TYPE i` is `0` for *unknown*, *declined*, and *a genuine zero*.
 
 ---
 
 ## Practice
 
-**Three ways to make `Some(None)` compile, and only one of them is what you meant.** Start by typing the broken line into a `Person { name: String, age: Option<u8> }` and reading `E0308` in full — specifically the words *arguments to this enum variant are incorrect*, and the `tuple variant defined here` note pointing into `core::option`.
+**Three ways to make `Some(None)` compile, only one of them meant.** Type it into a `Person { name: String, age: Option<u8> }` and read `E0308` in full.
 
-Then make it build three different ways: delete the `Some`; pass a real `u8`; and change the field's type so the original line is legal. For the third, write a reader that tells *not asked* from *asked and declined* from *answered*, and produce a count the singly-optional type could not have produced.
-
-Finish by defending one of the three as the fix you would ship for "we do not know Alfredo's age" — and say what the other two cost. One of them is not wrong so much as expensive.
+1. Build it three ways: delete the `Some`; pass a real `u8`; change the field's type so the original line is legal.
+2. For the third, write a reader telling *not asked* from *asked and declined* from *answered*, and produce a count the singly-optional type could not.
+3. Defend one as the fix you would ship for "we do not know Alfredo's age". One of the others is not wrong so much as expensive.
 
 <details markdown="1">
 <summary><strong>Solution</strong></summary>

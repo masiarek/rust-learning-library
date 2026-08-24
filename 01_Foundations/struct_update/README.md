@@ -2,46 +2,35 @@
 
 **Level:** 101 → 201 · working knowledge
 
-**One line:** `..base` fills in every field you did not name — by **moving** them one at a time, so the base is not dead afterwards, it is *partially* dead, and exactly which half survives is decided field by field by `Copy`.
+**One line:** `..base` fills every field you did not name — by **moving** them one at a time, so the base ends up *partially* dead, and `Copy` decides which half survives.
 
 ```rust
-let user2 = User {
-    email: "another@example.com".to_string(),
-    ..user1
-};
+let user2 = User { email: "another@example.com".to_string(), ..user1 };
 ```
 
-Read as English that says *"and the rest like `user1`"*, which is what it does. Read as Rust it is an **assignment of each remaining field**, and assignment in Rust moves. That second reading is the one that decides what compiles next.
+As English: *"and the rest like `user1`"*. As Rust: an **assignment of each remaining field** — and assignment moves.
 
 ---
 
-## First, the two things it is not
-
-**It is not nested structs.** *Reusing fields from another struct* and *a field whose type is another struct* sound alike and share nothing:
+## Two things it is not
 
 ```rust
-let b = Ballot { notes: "…".into(), ..a };   // VALUES, from another instance of the SAME type
-struct Rectangle { top_left: Point }         // a TYPE, as the type of a field
+let b = Ballot { notes: "…".into(), ..a };   // VALUES from another instance of the SAME type
+struct Rectangle { top_left: Point }         // a TYPE, as a field's type — unrelated
 ```
 
-The first is this page. The second is just a field, and needs no special syntax at all.
+Also not a copy constructor: `..base` runs none of your code. Base intact *and* a duplicate is `.clone()`.
 
-**It is not a copy constructor.** `..base` calls none of your code, clones nothing, and cannot convert anything. If you want the base intact *and* a duplicate, that is `.clone()`.
+## The rule
 
-## The rule, in one line
-
-**`..base` moves exactly the fields you did not name — and only the non-`Copy` ones among those actually go dead.**
-
-Everything else on this page follows from that. Take a four-field `User` and write `User { email: …, ..user1 }`:
+**`..base` moves exactly the fields you did not name — and only the non-`Copy` ones go dead.**
 
 | Field | Named? | `Copy`? | After |
 |---|---|---|---|
-| `email` | yes | — | untouched on `user1` — you supplied your own |
-| `active` | no | yes | **copied**; still readable on `user1` |
-| `sign_in_count` | no | yes | **copied**; still readable on `user1` |
+| `email` | yes | — | untouched on `user1` |
+| `active` | no | yes | copied; still readable |
+| `sign_in_count` | no | yes | copied; still readable |
 | `username` | no | no | **moved**; reading it is `E0382` |
-
-So `user1` is not gone. Three of its four fields are still perfectly readable, and one is not:
 
 ```text title="Real rustc output"
 error[E0382]: borrow of moved value: `user1.username`
@@ -55,17 +44,17 @@ error[E0382]: borrow of moved value: `user1.username`
           which does not implement the `Copy` trait
 ```
 
-Note what the compiler names: not `user1`, but **`user1.username`**. The borrow checker tracks this per field, and that precision is the whole behaviour. This is also the cleanest place to *see* what `Copy` buys you — the same line copies two fields and moves one, and the only difference is the field's type.
+It names **`user1.username`**, not `user1` — the borrow checker tracks this per field. Clearest place in the library to watch [`Copy`](../copy_vs_clone/README.md) work: one line copies two fields and moves a third.
 
-## Three ways to keep the base whole
+## Keeping the base whole
 
-1. **Name every non-`Copy` field yourself.** Then `..base` carries only `Copy` fields and nothing goes dead.
-2. **Clone into the base slot** — `..base.clone()`. Honest about the cost, because the cost is now written down.
-3. **`..Default::default()`.** The base is a temporary nobody holds, so there is no binding left half-moved. This is why config structs are built this way, and it is the form you will write most often.
+1. **Name every non-`Copy` field** — then `..base` carries only `Copy` fields.
+2. **`..base.clone()`** — the cost is written down.
+3. **`..Default::default()`** — the base is a temporary nobody holds, so nothing is stranded. Why config structs are built this way.
 
-## Two rules of syntax
+## Syntax
 
-`..base` must come **last**, and takes **no trailing comma**. The second has its own error, which is friendlier than most:
+`..base` comes **last**, no trailing comma:
 
 ```text
 error: cannot use a comma after the base struct
@@ -75,20 +64,20 @@ error: cannot use a comma after the base struct
    = note: the base struct must always be the last field
 ```
 
-## Coming from another language
+## Elsewhere
 
-- **Python.** The nearest thing is `dataclasses.replace(user1, email=...)` or `{**d, "email": ...}` — and both of those leave the original completely intact, because Python copies a *reference*. Rust's version relocates the owned data instead. If you want Python's behaviour, that is `..base.clone()`, and the difference is exactly the allocation you are now choosing to pay for.
-- **ABAP.** `MOVE-CORRESPONDING` is the close cousin, and it is a **copy** — the source structure is untouched afterwards. Rust's `..` looks like the same operation and is not, for the fields that own heap data.
+- **Python** — `dataclasses.replace(x, …)` and `{**d, …}` leave the original intact, because Python copies a *reference*. That behaviour is `..base.clone()`.
+- **ABAP** — `MOVE-CORRESPONDING` looks like this and is a **copy**; the source survives. Rust's `..` does not, for any field owning heap data.
 
 ---
 
 ## Practice
 
-**Predict which half of the base survives.** Take a struct with two `Copy` fields and two `String` fields, build a second value from it naming only *one* of the `String`s, and — before compiling — write down for each of the four fields whether it is still readable on the base and why. Then check, and make the failing read happen so you see `E0382` name the field rather than the value.
+**Predict which half survives.** A struct with two `Copy` fields and two `String` fields; build a second value naming only *one* `String`. Before compiling, write down per field whether it is still readable, and why.
 
-Then make the base survive three different ways, and say which you would ship for a config struct and which for amending one record.
-
-Finally, add a trailing comma after `..base` and read that error too. It is a different error from every other one on this page, and knowing it on sight saves a minute.
+1. Check. Then trigger the failing read and watch `E0382` name the field, not the value.
+2. Keep the base whole three ways. Which for a config struct, which for amending one record?
+3. Add a trailing comma after `..base` — a different error from every other one here.
 
 <details markdown="1">
 <summary><strong>Solution</strong></summary>
@@ -244,7 +233,4 @@ And the syntax trap, which is its own error:
 
 ## See also
 
-- [STRUCTS.md](../../STRUCTS.md) — the map: every struct lesson in reading order
-- [What a struct is](../what_a_struct_is/README.md) — the three flavors, and why `mut` is on the binding
-- [Ownership and moves](../ownership_and_moves/README.md) — what a move is, before it happens field by field
-- [`unwrap_or_default`](../unwrap_or_default/README.md) — a derived `Default` is the type's zero, not your domain's
+- [STRUCTS.md](../../STRUCTS.md) · [`Copy` vs `Clone`](../copy_vs_clone/README.md) · [What a struct is](../what_a_struct_is/README.md) · [Ownership and moves](../ownership_and_moves/README.md)
