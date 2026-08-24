@@ -1,0 +1,19 @@
+Fix 1 — delete the `Some`. The absence of a u8 is spelled `None`.
+Fix 3 — or pass a u8, which is what `Some` was asking for all along.
+   Alfredo   unknown
+   Bianca    31
+   Two states, and no way to write a third. That is the point.
+
+Fix 2 — widen the field, and `Some(None)` starts carrying a fact.
+   Alfredo   not asked
+   Bianca    asked, declined
+   Chidi     31
+   asked 2 of 3, answered 1
+   An Option<u8> field folds 'not asked' and 'declined' into one
+   None, and no reader downstream can prise them apart again.
+
+Which would you ship for "we do not know Alfredo's age"? Fix 1.
+   Fix 2 buys a distinction you were not making. It puts a third
+   state in front of every reader, and each one now owes a
+   `Some(None)` arm for a fact nobody collected. Widen the type
+   when the second question is real — not to make one line build.

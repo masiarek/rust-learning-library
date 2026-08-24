@@ -1,0 +1,19 @@
+1. Two shapes, and neither of them is 'present but empty'
+   Alfredo Sanchez, age not on file
+   Bianca Rossi, 31 years old
+   the field itself:  None  and  Some(31)
+
+2. `Some` is a function, so it has a type you can write down
+   let wrap: fn(u8) -> Option<u8> = Some;
+   wrap(31)                  -> Some(31)
+   [31, 44, 7].map(Some)     -> [Some(31), Some(44), Some(7)]
+   So `Some(None)` is a call with the wrong argument type. The
+   compiler says `expected u8, found Option<_>` because that is
+   literally what happened: you passed an Option to fn(u8).
+
+3. Where `Some(None)` is exactly right: two questions, not one
+   never asked      None            flatten -> None
+   asked, declined  Some(None)      flatten -> None
+   asked, answered  Some(Some(31))  flatten -> Some(31)
+   `.flatten()` collapses the two absences back into one, which is
+   the right move only once you no longer need to tell them apart.
