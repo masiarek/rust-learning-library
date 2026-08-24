@@ -88,6 +88,8 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...and what the compiler says back about it. Third because everyone
         # meets `unused variable` on day one; its Drop half pays off much later.
         "what_a_warning_is_asking",
+        # ...and the messages that DO stop the build, read the same way.
+        "when_a_struct_refuses",
         # ...and then the two pieces of punctuation every page below is
         # already using without explaining: the braces that hold a program
         # together, and the braces that print.
@@ -127,6 +129,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # Closes the Result run by asking how any of it reaches a person:
         # the sentence you wrote for a human, and the paths that print the other one.
         "debug_vs_display",
+        # The macro that needs the trait above, and does five things
+        # println!("{:?}") does not.
+        "what_dbg_does",
         # Opens the ownership arc — the next thread after the Option run.
         "ownership_and_moves",
         "borrowing",

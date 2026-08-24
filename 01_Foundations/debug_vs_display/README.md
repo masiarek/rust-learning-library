@@ -512,6 +512,8 @@ The sentence written for the human:
 
 ## See also
 
+- [What `dbg!` does](../what_dbg_does/README.md) — the macro that needs the `Debug` above, and the five things it does that `println!("{:?}")` does not, starting with handing your value back
+- [When a struct refuses](../when_a_struct_refuses/README.md) — the two `E0277`s on this page, beside the six other struct errors that share their first week
 - [`expect`](../expect/README.md) — where the `E: Debug` bound comes from, and why the message is the claim rather than the complaint
 - [The `Result` you are reading is probably an alias](../result_aliases/README.md) — `fmt::Result` is the return type of every impl on this page, and step 4 there is this page's Trap 2 seen from the `Result` side
 - [`Option` vs `Result`](../option_vs_result/README.md) — where a custom error type with a `Display` impl comes from in the first place

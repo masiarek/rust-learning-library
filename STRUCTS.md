@@ -138,6 +138,8 @@ flowchart LR
 | 3 | [A score is not a number: the newtype](01_Foundations/newtype_score/README.md) | 101 → 201 | The tuple struct with a job — one checked door, and the invalid value stops existing |
 | 4 | [`Option` fields](01_Foundations/option_fields/README.md) | 101 | Required by default, and the one question that decides whether a field should be optional at all |
 | 5 | [Debug and Display](01_Foundations/debug_vs_display/README.md) | 101 → 201 | Why `{}` refuses your struct and `{:?}` does not — the first derive you will reach for |
+| [When a struct refuses](01_Foundations/when_a_struct_refuses/README.md) | 101 → 201 | The eight errors you will actually hit — and why `E0277` names four unrelated problems |
+| [What `dbg!` does](01_Foundations/what_dbg_does/README.md) | 101 → 201 | Five things it does that `println!("{:?}")` does not — and why a field prints when the struct will not |
 
 ## The data inside
 
@@ -196,7 +198,6 @@ Named honestly, because a map that only lists what exists is a map of the wrong 
 - **Zero-sized types** — `struct Nothing;` costs no bytes, and why `Set<K> = Map<K, ()>` is free
 - **Layout, padding and `repr`** — why `String, String, u8` is 56 bytes and not 49, and when field order becomes a contract
 - **Swapping two fields** — `mem::swap` needs *one* type, so two `&mut` into different fields is the interesting half
-- **The struct error catalogue** — `E0063` missing field, `E0277` on an unsized field, `E0119` derive-vs-manual `Default`, `E0594` reassigned as immutable
 
 If you want one of these next, that is the list to point at.
 
