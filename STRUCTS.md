@@ -187,6 +187,12 @@ Named honestly, because a map that only lists what exists is a map of the wrong 
 - **A reference in a field** — `E0106` in full, `struct User<'a>`, and what `'static` does and does not promise
 - **Enum variants that carry structs** — the nesting that makes a state machine, and matching it
 - **The builder pattern** — and the simpler thing that usually beats it
+- **Const generics** — `struct Board<const PINS: usize>`, and why the `impl` needs the parameter too
+- **Associated types** — and the trap that they live on **traits**, never in a struct body
+- **Zero-sized types** — `struct Nothing;` costs no bytes, and why `Set<K> = Map<K, ()>` is free
+- **Layout, padding and `repr`** — why `String, String, u8` is 56 bytes and not 49, and when field order becomes a contract
+- **Swapping two fields** — `mem::swap` needs *one* type, so two `&mut` into different fields is the interesting half
+- **The struct error catalogue** — `E0063` missing field, `E0277` on an unsized field, `E0119` derive-vs-manual `Default`, `E0594` reassigned as immutable
 
 If you want one of these next, that is the list to point at.
 
