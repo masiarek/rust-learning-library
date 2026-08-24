@@ -1,0 +1,16 @@
+what you did                               tests      savepoint
+------------------------------------------------------------------------------
+write the first test and make it pass      pass       SAVEPOINT REACHED  <- commit
+refactor, still green                      pass       still passing     (no commit)
+start the risky change                     FAIL       Error!
+try something                              FAIL       still failing
+try something else                         FAIL       still failing
+revert to the last savepoint and retry     pass       SAVEPOINT REACHED  <- commit
+tidy up                                    pass       still passing     (no commit)
+
+2 commits from 7 edits.
+Note what did NOT commit: the second green run, and the fourth and
+fifth failures. Only the EDGE from red to green saves, so a passing
+suite you keep re-running does not bury you in commits.
+
+Both say "SAVEPOINT REACHED!", which is why the next step is squashing.
