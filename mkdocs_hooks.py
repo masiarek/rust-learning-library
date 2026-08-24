@@ -165,6 +165,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "anatomy_of_a_string",
         # ...how to get one: five spellings, and the trait behind the useful one.
         "making_a_string",
+        # ...then the first thing anyone does with two of them, and the E0369
+        # that refuses it: `+` grows the left operand, so the left must own one.
+        "concatenating_strings",
         # ...and how to grow one, plus the operator that eats its left operand.
         "building_a_string",
         # ...then what those bytes encode: a char is not a byte, and
@@ -335,6 +338,7 @@ LABELS = {
     "meet_the_char": "Meet the `char`",
     "string_slices": "String slices",
     "making_a_string": "Making a `String`",
+    "concatenating_strings": "Concatenating strings",
     "building_a_string": "Building a `String`",
     "walking_a_string": "Walking a `String`",
     "static_str": "`&'static str`",

@@ -39,8 +39,9 @@ flowchart LR
     ENC --> E4["walking it: u8, char, &str —<br/>splits are the gaps between matches"]
 
     USE --> U1["to_string comes free<br/>from Display"]
-    USE --> U2["push_str grows in place;<br/>+ eats its left operand"]
-    USE --> U3["every edit is byte-indexed,<br/>so every edit can panic"]
+    USE --> U2["two &str will not add —<br/>+ needs an owned left"]
+    USE --> U3["push_str grows in place;<br/>format! borrows everything"]
+    USE --> U4["every edit is byte-indexed,<br/>so every edit can panic"]
 
     FAM --> F1["OsString / &OsStr —<br/>whatever the OS handed you"]
     FAM --> F2["CString / &CStr —<br/>text bound for C"]
@@ -55,11 +56,12 @@ flowchart LR
 | 2 | [String slices](01_Foundations/string_slices/README.md) | 101 → 201 | What a view actually is: the stale index it replaces, the `E0502` that keeps it honest, and the one way `&s[a..b]` panics |
 | 3 | [The anatomy of a `String`](01_Foundations/anatomy_of_a_string/README.md) | 101 → 201 | What the owner *is*: three words on the stack, bytes on the heap, and a capacity that is not the length |
 | 4 | [Making a `String`](01_Foundations/making_a_string/README.md) | 101 → 201 | `to_string` vs `to_owned` vs `String::from` vs `into` vs `format!` — and why `Display` is the only one you implement |
-| 5 | [Building a `String`](01_Foundations/building_a_string/README.md) | 101 → 201 | `push_str`, `push`, the `+` that consumes its left operand, and `format!` vs `write!` inside a loop |
-| 6 | [Meet the `char`](01_Foundations/meet_the_char/README.md) | 101 → 201 | What the bytes encode — why `.len()` is not "how many characters", and why `s[0]` refuses to compile |
-| 7 | [Walking a `String`](01_Foundations/walking_a_string/README.md) | 101 → 201 | Three item types and the split family — and why `split(' ')` and `split_whitespace()` disagree about empty fields |
-| 8 | [`&'static str`](01_Foundations/static_str/README.md) | 201 | Is it different from `&str`? On a literal, no — and the claim that a `String` can never yield one is false |
-| 9 | [Six kinds of string](01_Foundations/six_kinds_of_string/README.md) | 201 | Why `OsString` and `CString` exist, and the one owned/borrowed pattern all six types repeat |
+| 5 | [Concatenating strings](01_Foundations/concatenating_strings/README.md) | 101 → 201 | Why `"a" + "b"` will not compile — the single `Add` impl, the `E0369`/`E0308`/`E0368` family it produces, and what to write instead |
+| 6 | [Building a `String`](01_Foundations/building_a_string/README.md) | 101 → 201 | `push_str`, `push`, the `+` that consumes its left operand, and `format!` vs `write!` inside a loop |
+| 7 | [Meet the `char`](01_Foundations/meet_the_char/README.md) | 101 → 201 | What the bytes encode — why `.len()` is not "how many characters", and why `s[0]` refuses to compile |
+| 8 | [Walking a `String`](01_Foundations/walking_a_string/README.md) | 101 → 201 | Three item types and the split family — and why `split(' ')` and `split_whitespace()` disagree about empty fields |
+| 9 | [`&'static str`](01_Foundations/static_str/README.md) | 201 | Is it different from `&str`? On a literal, no — and the claim that a `String` can never yield one is false |
+| 10 | [Six kinds of string](01_Foundations/six_kinds_of_string/README.md) | 201 | Why `OsString` and `CString` exist, and the one owned/borrowed pattern all six types repeat |
 
 ## The lessons strings lean on
 

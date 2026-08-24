@@ -346,6 +346,10 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **String literal** — `"…"` in source: a `&'static str` whose bytes are baked into the executable's read-only data — not the stack, not the heap — alive for the whole run. "Stack-allocated string" in a tutorial is this fact, misplaced. → [`String` vs `&str`](01_Foundations/string_vs_str/README.md)
 
+**String concatenation (`+`)** — `impl Add<&str> for String` is the only impl there is: the left operand must **own** a buffer and is consumed, the right is only borrowed. So `"a" + "b"` is `E0369`, `a + b` on two `String`s is `E0308`, and `a + &b` compiles because the answer *is* `a`'s buffer grown — which is why a `+` chain allocates nothing after its first piece. `format!` borrows everything and never asks the question. → [Concatenating strings](01_Foundations/concatenating_strings/README.md)
+
+**`E0369`** — *cannot add `X` to `Y`.* No operator impl exists for that pair of types, and on text it always means the same thing: the left operand was a `&str`, a view with no buffer to grow. The note spells it out — "string concatenation requires an owned `String` on the left" — and `E0368` is the same complaint about `+=`. → [Concatenating strings](01_Foundations/concatenating_strings/README.md)
+
 **Deref coercion** — The compiler's automatic `&String` → `&str` (and `&Vec<T>` → `&[T]`, `&PathBuf` → `&Path`) at call sites, via `Deref`. It is also why a `String` *inherits* `str`'s methods — `owned.to_uppercase()` finds the method through the coercion. The reverse direction is never free: `.to_string()` allocates. → [`String` vs `&str`](01_Foundations/string_vs_str/README.md)
 
 **Capacity** — The room a growable buffer has bought, as distinct from `len`, the part in use. Growth doubles it, `with_capacity` pre-pays it, `shrink_to_fit` returns it — and it is bookkeeping, not content: equality and hashing never see it. → [The anatomy of a `String`](01_Foundations/anatomy_of_a_string/README.md)

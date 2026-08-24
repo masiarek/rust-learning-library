@@ -33,7 +33,7 @@ let joined = a + &b;     // "equal vote"
 // a is gone; b is still usable
 ```
 
-There is exactly one `Add` impl for `String`, and it is `impl Add<&str> for String`. So the left side must be an owned `String` and is consumed, while the right side is only borrowed. Forget the `&` and you get:
+There is exactly one `Add` impl for `String`, and it is `impl Add<&str> for String`. So the left side must be an owned `String` and is consumed, while the right side is only borrowed. Start from two `&str`s instead — two literals, say — and neither side qualifies, which is a different error again: [Concatenating strings](../concatenating_strings/README.md) is that whole family, `E0369` first. Forget the `&` here and you get:
 
 ```text
 error[E0308]: mismatched types
@@ -324,6 +324,7 @@ rustc --edition 2024 01_Foundations/building_a_string/examples/building_a_string
 ## See also
 
 - [STRINGS.md](../../STRINGS.md) — the map: every string lesson, in reading order
+- [Concatenating strings](../concatenating_strings/README.md) — the other half of this: joining two pieces you already have, and the `E0369` two literals produce
 - [The anatomy of a `String`](../anatomy_of_a_string/README.md) — capacity, growth, and why appending is cheap
 - [Making a `String`](../making_a_string/README.md) — getting one in the first place
 - [String slices](../string_slices/README.md) — the same byte-index panic, on the reading side
