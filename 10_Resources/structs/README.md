@@ -53,22 +53,24 @@ Sorted by what they are for, not by length. Titles and channels are as published
 
 | Link | Use |
 |---|---|
+| [**Rust By Practice** — structs](https://practice.course.rs/compound-types/struct.html) | Fill-in-the-blank exercises that compile, right beside the explanation. The closest thing here to the library's own kata format. |
 | [Exercism — Rust track, structs](https://exercism.org/tracks/rust/concepts/structs) | Exercises with human mentoring available. Requires an account. |
 | [LogRocket — fundamentals for using structs](https://blog.logrocket.com/fundamentals-for-using-structs-in-rust/) | A solid single-sitting article covering all three forms plus `impl`. |
 | [jmmv — structs in tests](https://jmmv.dev/2023/10/rust-test-structs.html) | Narrow and genuinely useful: using a struct to make a test suite readable. Nothing else here covers it. |
 
 ## What was dropped
 
-Four links from the original list did not survive the check, and are recorded here so nobody re-adds them:
+Three links from the original list did not survive the check, and are recorded here so nobody re-adds them:
 
 | Link | Status on 2026-08-24 |
 |---|---|
-| `practice.rs/compound-types/struct.html` | **404.** Rust By Practice reorganised; no replacement path for this page answered either. The site root is alive, so search from there rather than deep-linking. |
 | `marketsplash.com/tutorials/rust/rust-structs/` | **No response.** Connection failed outright. |
 | `blog.knoldus.com/…/amp/` | **No response.** Also an AMP URL, which is the wrong thing to bookmark even while it works. |
 | Google Docs working notes | **Not linked, by policy.** They are private documents — a link is a 404 for every reader of this site and a leaked document id besides. Same rule as the [shelf front page](../README.md). |
 
 `exercism.org` answered `403` to an automated check but is live in a browser; Cloudflare refuses scripted requests. It is listed above on that basis, not on a green check.
+
+**Rust By Practice moved rather than died.** The widely-circulated `practice.rs/compound-types/struct.html` is a hard 404; the live page is `practice.course.rs/compound-types/struct.html`. The old host still serves its root, which is what makes the dead deep link easy to miss — the domain looks healthy.
 
 ---
 
