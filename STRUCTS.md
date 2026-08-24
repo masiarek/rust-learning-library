@@ -92,7 +92,9 @@ The decision that causes the most compiler errors, and the one most tutorials ge
 
 ```mermaid
 flowchart TD
-    A{"Does it need an existing instance at all?"}
+    Z{"Is this function about THIS type?"}
+    Z -- "no, it spans several types<br/>or belongs to your domain" --> FF["FREE FUNCTION<br/>module scope, called as feel<br/>invisible from the type"]
+    Z -- yes --> A{"Does it need an existing instance at all?"}
     A -- no --> AF["ASSOCIATED FUNCTION<br/>no self parameter<br/>called as Type::new"]
     A -- yes --> B{"Does it change the value?"}
     B -- no --> R1["&self<br/>reads it — caller keeps it<br/>many of these can run at once"]
@@ -103,6 +105,8 @@ flowchart TD
     D -- yes --> R4["mut self<br/>SAME receiver, plus a mutable binding"]
     D -- no --> R5["self"]
 ```
+
+A free function that returns a `Feelings` and does nothing else is an associated function written in the wrong place. Nothing about the behaviour differs — what differs is that `Feelings::new()` is found by typing `Feelings::`, appears in the type's documentation, and can satisfy a trait requirement, while a free `feel()` does none of the three.
 
 **`mut self` is not a fourth receiver.** It is `self` with a mutable binding, exactly like `fn f(mut x: T)`. The caller cannot see the difference — a trait that declares `fn consume(self)` may be implemented as `fn consume(mut self)`, and calling a `mut self` method needs no `mut` on the caller's binding. Both facts are compiled, not asserted.
 
