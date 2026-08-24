@@ -1,0 +1,48 @@
+1. `dbg!` returns its argument, and that is the whole point
+   let doubled = dbg!(2 + 3) * 10;   ->  50
+   It evaluated to 5 and handed it straight back, so you can wrap any
+   sub-expression without restructuring the code around it.
+   println! returns (), so the same move would not compile.
+
+2. It prints three things, not one
+   file:line:col, the EXPRESSION SOURCE TEXT, and the value:
+       [what_dbg_does.rs:19:19] 2 + 3 = 5
+   `2 + 3` is not a string you passed — the macro captured the source.
+   That is why `dbg!(x)` beats `println!("x = {:?}", x)`: the label
+   cannot go stale when you rename x.
+
+3. It writes to STDERR
+   A dbg! line just fired above and you may not see it here — `2>/dev/null`
+   hides it, and a pipe reorders it, because stdout is block-buffered when
+   piped while stderr never is.
+   Practical consequence: `cargo run > out.txt` keeps your program's real
+   output clean and leaves the debugging on the terminal. In THIS repo it
+   means run_examples.py cannot record dbg! output at all — it captures
+   stdout only, so a lesson must print with println! to have an answer key.
+
+4. It formats with `{:#?}`, always
+   dbg! is hard-wired to the alternate (pretty) form, one field per line.
+   For a derived Debug that is a gift. For a HAND-WRITTEN one it is a trap:
+   if your impl never asks f.alternate(), `{:?}` and `{:#?}` print the
+   same thing, and dbg! silently gets the flat version.
+
+5. It MOVES a non-Copy argument
+   dbg!(owned) took ownership. It gives the value back, so `let x = dbg!(x)`
+   is fine — but a bare `dbg!(owned);` on its own line drops it, and the
+   next use is E0382. `dbg!(&owned)` is the habit: borrow, print, move on.
+   still here: Ben scored 3
+
+6. It is NOT removed in release builds
+   Unlike debug_assert!, dbg! has no cfg gate. Compile with -O and it still
+   prints. It is a thing you delete, not a logging macro you leave in.
+   (`cargo build --release` will not save you; a code review has to.)
+
+7. The confusion worth naming: field vs whole value
+   dbg!(b.score) works with no derive, because u8 implements Debug.
+   dbg!(b) needs Ballot to implement it. These four are the SAME error:
+       dbg!(named_struct)        println!("{:?}", named_struct)
+       dbg!(unit_struct)         println!("{:?}", unit_struct)
+   A unit struct only LOOKS stricter — it has no field to name, so the
+   lenient move is not available. There is no unit-struct rule, and no
+   dbg!-specific rule: whatever you NAME must implement Debug.
+   (that dbg! fired on stderr too — a u8, no derive needed)

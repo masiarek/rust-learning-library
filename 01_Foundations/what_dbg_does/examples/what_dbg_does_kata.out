@@ -1,0 +1,40 @@
+TRAP 1 — a hand-written Debug that never asks f.alternate()
+
+  Flat with {:?}   -> Boxy fake1 fake2
+
+  Flat with {:#?}  -> Boxy fake1 fake2
+
+  Identical. The alternate flag arrived and the impl ignored it.
+  dbg! is hard-wired to {:#?}, so dbg! gets the flat one too — and the
+  stray writeln! adds a blank line on top of the newline dbg! prints.
+
+  Honest with {:?}  -> Data { name: "Boxy", bones: ["fake1", "fake2"] }
+  Honest with {:#?} ->
+Data {
+    name: "Boxy",
+    bones: [
+        "fake1",
+        "fake2",
+    ],
+}
+  f.debug_struct() checks the flag for you. Reach for it first.
+
+  Manual with {:?}  -> Boxy ["fake1", "fake2"]
+  Manual with {:#?} -> Boxy
+  bones: ["fake1", "fake2"]
+  ...and if you must write it by hand, f.alternate() is the question.
+
+TRAP 2 — dbg! moves a non-Copy argument
+
+  dbg!(d);        // moves d in. It hands the value back...
+  println!("{}", d.name);   // ...but you did not catch it: E0382
+
+  Two fixes, and they mean different things:
+    let d = dbg!(d);   rebind — d is alive because you took the return
+    dbg!(&d);          borrow — nothing moved at all, and the printed
+                       label shows `&d` rather than `d`
+  Reach for the borrow. It reads as an inspection, which is what it is.
+  still own it: Boxy with 2 bones
+
+(Both dbg! calls above wrote to stderr, so they are absent from this
+page's recorded output — see section 3 of the lesson.)

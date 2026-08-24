@@ -1,0 +1,50 @@
+1. E0063 — missing field in initializer
+   There is no partly-built struct in Rust. Name every field, or let
+   something else supply the rest:
+   named all:            Ballot { voter: "Ada", score: 5 }   (voter "Ada", score 5)
+   ..Default::default(): Ballot { voter: "", score: 5 }   <- and this needs Default to exist
+   note the derived Default gave voter an EMPTY string, not a missing one:
+   the type's zero, which is rarely your domain's. b.voter.is_empty() = true
+
+2. E0277 — one code, four different problems
+   E0277 is 'a trait bound was not satisfied'. For structs it shows up as:
+
+   2a. no Display, from `{}`
+       Rust will not guess how you want a human to read your type.
+       Ada scored 5
+
+   2b. no Debug, from `{:?}`
+       Same code, opposite advice: this one it WILL generate.
+       Seat(3)
+
+   2c. `str` as a field type — not a missing impl, a missing SIZE
+       str is unsized, so it cannot be a field. Borrow it or box it:
+       &str  field: Ada   Box<str> field: Ada
+       The note is the part to read: 'only the LAST field of a struct
+       may have a dynamically sized type'.
+
+   2d. `#[derive(Eq)]` alone — Eq is a promise about PartialEq
+       Eq adds no methods. It says == is reflexive, so it needs the
+       PartialEq that defines ==. Always derive the pair:
+       Seat(3) == Seat(3) is true
+
+3. E0119 — conflicting implementations
+   #[derive(Default)] AND `impl Default` is two impls of one trait.
+   Keep the one that knows something the other cannot:
+   derived would be Quorum { needed: 0 }; ours says needed = 10
+
+4. E0594 — cannot assign, not declared as mutable
+   `let b = b;` rebinds. mut belongs to the BINDING, so the new one
+   does not inherit it — and rustc's help points at line 5, not line 6.
+   The value never changed; the name did.
+
+5. E0282 — type annotations needed
+   `Tally::quorum()` names no T anywhere, but it lives in impl<T>, so
+   there is nothing to infer T from. Three fixes, in order of preference:
+     Tally::<i32>::quorum() = 10   name it at the call
+     t.rows()               = 3   or have a receiver to infer from
+     ...or move it out of impl<T> entirely, if it truly has no T in it.
+
+The pattern across all eight: rustc is not withholding a fix.
+Seven of these print the exact edit, and the eighth (E0119) names both
+conflicting sites. The skill is reading the `note:` line, not the first one.
