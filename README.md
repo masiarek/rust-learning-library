@@ -14,6 +14,10 @@ No page here hand-types what a program prints. Each lesson links a real `.rs` fi
 
 ## Start here
 
+**New to Rust entirely?** [**00_Start_Here/**](00_Start_Here/README.md) is the plan: which three free resources to use, in what order, and why each covers what the other two cannot.
+
+Already writing Rust? Two lessons to begin with:
+
 | Lesson | What it teaches |
 |---|---|
 | [Running a scratch program](01_Foundations/rustc_without_cargo/README.md) | How to run a `.rs` file at all — `rustc` alone, `cargo new`, and the edition flag Cargo would have passed for you |

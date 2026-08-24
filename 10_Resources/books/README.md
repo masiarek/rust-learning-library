@@ -6,15 +6,16 @@
 
 All links checked 2026-08-23.
 
-## The one everyone means
+## The three foundational ones live in Start here
 
-**[The Rust Programming Language](https://doc.rust-lang.org/book/)** — "The Book", Klabnik and Nichols. Ships with the toolchain (`rustup doc --book`, offline). If you read one thing, this. Chapters 1–10 are the language; 11 onwards are increasingly optional.
+[The Book](https://doc.rust-lang.org/book/), [Rust by Example](https://doc.rust-lang.org/rust-by-example/) and [rustlings](https://github.com/rust-lang/rustlings) are not listed again on this page, deliberately — they are argued for properly in [**Start here**](../../00_Start_Here/README.md), including why the three are used *together*, which chapters to read, and the chapter-by-chapter rustlings mapping.
 
-Three variants worth knowing about, because they solve different problems with the same text:
+One owner per fact; this page owns everything else.
 
-- **[The Brown University edition](https://rust-book.cs.brown.edu/)** — the same book with interactive quizzes and ownership diagrams inserted. The quizzes are *diagnostic*: they are built around the misconceptions readers actually have. If ownership has not clicked, read chapter 4 here rather than again in the original.
-- **[The abridged Book](https://jasonwalton.ca/rust-book-abridged/)** — same material, much shorter, aimed at people who already program. Good if The Book's pace is testing your patience.
-- **[Rust by Example](https://doc.rust-lang.org/rust-by-example/)** — the official companion: runnable examples with commentary instead of prose with examples. A reference to jump around in, not a book to read front to back.
+Two variants of The Book are worth naming here because they are easy to miss:
+
+- **[The Brown University edition](https://rust-book.cs.brown.edu/)** — the same text with diagnostic quizzes, and [the one to use on a second read](../../00_Start_Here/the_book/README.md#read-it-twice).
+- **[The abridged Book](https://jasonwalton.ca/rust-book-abridged/)** — much shorter, for people who already program.
 
 ## First-day alternatives
 

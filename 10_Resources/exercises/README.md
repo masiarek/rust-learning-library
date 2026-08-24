@@ -13,17 +13,11 @@ All links checked 2026-08-23.
 | [Rust By Practice](https://practice.course.rs/why-exercise.html) | any, as a drill | topic-by-topic problems with solutions |
 | [this library's katas](../../KATAS.md) | alongside a lesson | one exercise per idea, in reading order |
 
-## rustlings — start here
+## rustlings
 
-`rustlings` is the official one, and the format is the point: each exercise is a file that **does not compile**, and your job is the smallest change that makes it. It watches the files and moves you on when a test passes.
+Covered in full in [**Start here**](../../00_Start_Here/rustlings/README.md) — why it is foundational, the current install (the widely-copied `curl … install.sh` line is dead), the 6.5 subcommands, and the exercise-to-Book-chapter mapping for all 24 sets.
 
-```sh
-cargo install rustlings
-rustlings init
-cd rustlings && rustlings
-```
-
-Why it works so well early: it makes the *compiler* the teacher, in small enough doses that a red error is a puzzle rather than a wall. Why it stops working: by exercise 60 you are fixing other people's programs rather than writing your own, which is a different skill and not the one you eventually need.
+The short version: do it first, do it alongside The Book, and stop when it starts feeling like filling in blanks.
 
 ## 100 Exercises to Learn Rust — the best of them
 

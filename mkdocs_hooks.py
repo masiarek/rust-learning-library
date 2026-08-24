@@ -54,6 +54,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "TOOLCHAIN.md",
         "ROADMAP.md",
         "KATAS.md",
+        "00_Start_Here",
         "01_Foundations",
         # The command-line-tool arc: what a program does about failure, what it
         # is handed on the way in, and the three things outside it that can say
@@ -68,6 +69,12 @@ NAV_ORDER: dict[str, list[str]] = {
         "09_Advanced",
         "10_Resources",
         "GLOSSARY.md",
+    ],
+    "00_Start_Here": [
+        "README.md",
+        "the_book",
+        "rust_by_example",
+        "rustlings",
     ],
     "01_Foundations": [
         "README.md",
