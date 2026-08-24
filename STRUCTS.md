@@ -30,9 +30,10 @@ Same rule the sidebar follows: order is presentation, so it belongs in a page, n
 | # | Lesson | Level | The question it answers |
 |---|---|---|---|
 | 1 | [What a struct is](01_Foundations/what_a_struct_is/README.md) | 101 → 201 | The three flavors, `impl` vs the struct body, associated function vs method, and why privacy is per *module* |
-| 2 | [A score is not a number: the newtype](01_Foundations/newtype_score/README.md) | 101 → 201 | The tuple struct with a job — one checked door, and the invalid value stops existing |
-| 3 | [`Option` fields](01_Foundations/option_fields/README.md) | 101 | Required by default, and the one question that decides whether a field should be optional at all |
-| 4 | [Debug and Display](01_Foundations/debug_vs_display/README.md) | 101 → 201 | Why `{}` refuses your struct and `{:?}` does not — the first derive you will reach for |
+| 2 | [`impl` blocks](01_Foundations/impl_blocks/README.md) | 101 → 201 | Where the functions went — associated function vs method, the three receivers, and inherent vs trait impl |
+| 3 | [A score is not a number: the newtype](01_Foundations/newtype_score/README.md) | 101 → 201 | The tuple struct with a job — one checked door, and the invalid value stops existing |
+| 4 | [`Option` fields](01_Foundations/option_fields/README.md) | 101 | Required by default, and the one question that decides whether a field should be optional at all |
+| 5 | [Debug and Display](01_Foundations/debug_vs_display/README.md) | 101 → 201 | Why `{}` refuses your struct and `{:?}` does not — the first derive you will reach for |
 
 ## The data inside
 

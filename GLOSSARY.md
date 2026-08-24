@@ -20,6 +20,8 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Field init shorthand** — Writing `Ballot { voter }` instead of `Ballot { voter: voter }` when the variable already has the field's name. Purely cosmetic, and worth knowing because it is what most real code looks like. → [What a struct is](01_Foundations/what_a_struct_is/README.md)
 
+**`impl` block** — Where a type's functions live. `impl Ballot { … }` is an *inherent* impl (the signatures are yours); `impl Summary for Ballot { … }` is a *trait* impl (the signatures are the trait's). Not nested in the struct and not limited to structs — enums take them identically. A type may have many. → [`impl` blocks](01_Foundations/impl_blocks/README.md)
+
 **`is_some_and`** — Ask whether an option is `Some` *and* its value passes a predicate, without unwrapping. Takes `self`, so pair it with `.as_ref()` for non-`Copy` types. → [`Option` is a one-item collection](01_Foundations/option_as_collection/README.md)
 
 **`is_some` / `is_none`** — Ask which variant an option is, as a `bool`, without opening it. Both take `&self`, so the option survives — which is what makes them the natural predicate for `.filter()` over a collection of options. Reach for `is_some_and` instead the moment the next thing you write is `&& x.unwrap() > …`. → [`Option` is a one-item collection](01_Foundations/option_as_collection/README.md)
@@ -38,6 +40,8 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Lock poisoning** — A `Mutex`/`RwLock` remembering that a thread panicked while holding its exclusive guard, so every later `lock()` returns `Err`. Not an error the lock hit: a warning that the invariant behind it may be half-restored. → [Lock poisoning](09_Advanced/mutex_poisoning/README.md)
 
+**Method** — An associated function whose first parameter is `self`, `&self` or `&mut self`, so it can be called with a dot. `b.total()` is sugar for `Ballot::total(&b)`. The receiver you choose decides what the caller keeps: `&self` and `&mut self` hand it back, `self` consumes it. → [`impl` blocks](01_Foundations/impl_blocks/README.md)
+
 **`PoisonError`** — What a poisoned `lock()` returns. It carries the guard, so nothing is lost — `into_inner()` hands you the data anyway, which makes `.unwrap()` a decision rather than the only option. → [Lock poisoning](09_Advanced/mutex_poisoning/README.md)
 
 **`io::Result<T>`** — Not a different type: a one-line alias for `Result<T, std::io::Error>`. The pattern behind `fmt::Result` and `thread::Result` too. → [The `Result` you are reading is probably an alias](01_Foundations/result_aliases/README.md)
@@ -46,7 +50,11 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **`matches!`** — Ask whether a value fits a pattern and get back a `bool`, optionally with a guard. What to write instead of an `if let` whose body only sets a flag. → [`if let`](01_Foundations/if_let/README.md)
 
+**Receiver** — The `self` parameter of a method, and the design decision on every one you write. `&self` reads, `&mut self` changes in place (and forces a `mut` binding at the call site — `E0596`), `self` consumes so the caller cannot use the value again — which is the guarantee, not the obstacle. → [`impl` blocks](01_Foundations/impl_blocks/README.md)
+
 **Scrutinee** — The expression a `match` or `if let` is examining. Worth knowing because edition 2024 changed when a temporary built there is dropped. → [`if let`](01_Foundations/if_let/README.md)
+
+**`Self`** — Capitalised, it is the *type* the current `impl` block is for; lowercase `self` is the *value*. `fn new(..) -> Self` returns the type, and keeps working if the type is renamed. → [`impl` blocks](01_Foundations/impl_blocks/README.md)
 
 **Shadowing** — Declaring a variable whose name is already in use. The new one hides the old for the rest of the scope and may have a different type, which is what makes `let x = x.unwrap_or(0)` possible; it is not mutation, and the old variable returns when the scope ends. It also does not *drop* anything — the shadowed value stays alive to the end of the scope, nameless. → [Shadowing and `unwrap`](01_Foundations/shadowing_and_unwrap/README.md), [A shadow does not drop](01_Foundations/shadowing_does_not_drop/README.md), [When to shadow](01_Foundations/when_to_shadow/README.md) for whether to reach for it here — the test is whether the new binding is the same concept in a new form, [Nothing checks a shadow](01_Foundations/nothing_checks_a_shadow/README.md) for how little the compiler will do about it if you get it wrong, [A name is not a place](01_Foundations/a_name_is_not_a_place/README.md) for the mechanical difference from `mut` and how to prove it
 
