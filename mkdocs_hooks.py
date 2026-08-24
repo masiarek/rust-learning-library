@@ -186,11 +186,19 @@ NAV_ORDER: dict[str, list[str]] = {
         "rustup",
         "pinning_the_toolchain",
         "nightly",
-        # Then what the build pulls in, and who decides what the code may look like.
+        # Then what the build pulls in, and how to lay out many small projects
+        # so the config above is written once rather than copied per folder.
         "cargo_dependencies",
+        "practice_workspace",
         # Day one, and cheap: settle the whitespace question before anything else.
         "formatting",
         "strict_lints",
+        # The inner loop: feedback without asking for it, and the IDE wiring
+        # that connects the window to everything configured above.
+        "bacon",
+        "nextest",
+        "rustrover_setup",
+        "neovim_setup",
         "compile_times",
         # Last, because it subsumes every rung above and costs the most.
         "devenv",
@@ -230,6 +238,11 @@ NAV_ORDER: dict[str, list[str]] = {
 LABELS = {
     # A product name that is lowercase on purpose; the title-caser would say "Devenv".
     "devenv": "devenv",
+    "neovim_setup": "Neovim with LazyVim",
+    "practice_workspace": "A tree of practice projects",
+    "rustrover_setup": "RustRover setup",
+    "nextest": "cargo-nextest",
+    "bacon": "bacon",
     # Likewise: the tool is spelled lowercase everywhere it appears.
     "rustup": "rustup",
     "if_let": "`if let`",

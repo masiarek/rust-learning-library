@@ -192,6 +192,14 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **devenv** — Cachix's front end to Nix: one `devenv.nix` declares a project's compiler, CLI tools, system libraries, environment variables and running services, reproduced identically wherever it is entered. Worth its price when your project needs *services*; overkill when a pinned compiler would have done. → [devenv](05_Tooling/devenv/README.md)
 
+**Workspace inheritance** — Declaring something once in a workspace's root manifest and having members pick it up: `[workspace.lints]` (taken wholesale with `[lints] workspace = true`, which `cargo new` writes for you) and `[workspace.dependencies]` (opted into per crate, so a package still declares what it uses). The alternative is copying config into every project and watching it drift. → [A tree of practice projects](05_Tooling/practice_workspace/README.md)
+
+**bacon** — A background code checker: it watches the files and re-runs `cargo check`, clippy or the tests into a pane you leave open, with `c` and `t` to switch. No config and no project changes, which makes it the cheapest tool in the toolchain. → [bacon](05_Tooling/bacon/README.md)
+
+**`black_box`** — `std::hint::black_box`, which hides a value from the optimiser so it cannot notice your benchmark's answer is a constant and delete the work. Without it you time an empty loop and conclude the code is infinitely fast. → [cargo-nextest](05_Tooling/nextest/README.md), and used throughout [Compile times](05_Tooling/compile_times/README.md)
+
+**Process-per-test** — nextest's model: each test runs in its own process rather than as a thread in a shared one. A test that *aborts* becomes one reported failure instead of killing the run, and tests cannot leak globals into each other. The cost is that doctests are not supported. → [cargo-nextest](05_Tooling/nextest/README.md)
+
 **Typestate** — Encoding what stage a value has reached into its *type*, so that operations valid only at one stage do not exist at the others. An unauthenticated request and an authenticated one become different types rather than one type with a boolean. → [The right to vote is a value](09_Advanced/one_person_one_vote/README.md)
 
 **Consuming method** — A method taking `self` by value rather than `&self`, so calling it moves the receiver and the caller cannot use it again. Turns "at most once" from a rule you enforce into one the borrow checker enforces. → [The right to vote is a value](09_Advanced/one_person_one_vote/README.md)

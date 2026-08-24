@@ -38,10 +38,16 @@ Start wherever your question is; each page stands alone.
 | 3 | [Pinning the toolchain](05_Tooling/pinning_the_toolchain/README.md) | Which compiler verified this — and how do I stop that being luck? |
 | 4 | [Nightly by default](05_Tooling/nightly/README.md) | Should I run `rustup default nightly`? |
 | 5 | [Adding a dependency](05_Tooling/cargo_dependencies/README.md) | What did `cargo add` actually write in my manifest? |
-| 6 | [Formatting](05_Tooling/formatting/README.md) | Who decides the whitespace, and which formatter just ran? |
-| 7 | [Strict clippy lints](05_Tooling/strict_lints/README.md) | Should my project be forbidden from panicking? |
-| 8 | [Compile times](05_Tooling/compile_times/README.md) | Where do the seconds go, and which knob reaches them? |
-| 9 | [devenv](05_Tooling/devenv/README.md) | Should I declare the *whole* environment, and what does Nix cost? |
+| 6 | [A tree of practice projects](05_Tooling/practice_workspace/README.md) | Forty small projects want the same four config files — do I need a script? |
+| 7 | [Formatting](05_Tooling/formatting/README.md) | Who decides the whitespace, and which formatter just ran? |
+| 8 | [Strict clippy lints](05_Tooling/strict_lints/README.md) | Should my project be forbidden from panicking? |
+| 9 | [bacon](05_Tooling/bacon/README.md) | How do I stop asking the compiler and let it tell me? |
+| 10 | [cargo-nextest](05_Tooling/nextest/README.md) | Is `cargo test` costing me anything? |
+| 11 | [Choosing an editor](05_Tooling/editors/README.md) | Which window am I going to read all of this through? |
+| 12 | [RustRover setup](05_Tooling/rustrover_setup/README.md) | How do I wire the IDE to everything above? |
+| 13 | [Neovim with LazyVim](05_Tooling/neovim_setup/README.md) | …or the other window, and the two ways it silently does nothing |
+| 14 | [Compile times](05_Tooling/compile_times/README.md) | Where do the seconds go, and which knob reaches them? |
+| 15 | [devenv](05_Tooling/devenv/README.md) | Should I declare the *whole* environment, and what does Nix cost? |
 
 ## Or, by the problem you actually have
 
@@ -53,6 +59,10 @@ Start wherever your question is; each page stands alone.
 | "my build got slower" | [Compile times](05_Tooling/compile_times/README.md), then [Adding a dependency](05_Tooling/cargo_dependencies/README.md) on what an unused crate costs |
 | "I want fewer runtime panics" | [Strict clippy lints](05_Tooling/strict_lints/README.md), and [`expect`](01_Foundations/expect/README.md) for the position it overrules |
 | "onboarding a machine takes a day" | [devenv](05_Tooling/devenv/README.md) |
+| "I make a lot of tiny projects and copy the same config" | [A tree of practice projects](05_Tooling/practice_workspace/README.md) |
+| "I want the compiler to just tell me, without me asking" | [bacon](05_Tooling/bacon/README.md) |
+| "my editor shows no types and I cannot see why" | [Neovim with LazyVim](05_Tooling/neovim_setup/README.md) — two independent silent failures — or [Choosing an editor](05_Tooling/editors/README.md) for the shim trap |
+| "my tests are slow, or one of them takes the run down" | [cargo-nextest](05_Tooling/nextest/README.md) |
 | "which pin actually applies?" | [rustup](05_Tooling/rustup/README.md) — the five-rung precedence table |
 
 ---
