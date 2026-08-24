@@ -297,6 +297,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # Picks up that page's "if the rule specifies the scale": what to do
         # when the scale was your decision and a margin came in close.
         "interval_arithmetic",
+        # Layout rather than arithmetic: the other thing `unsafe` buys you, and
+        # the enum that already gives it to you safely.
+        "what_a_union_is",
     ],
 }
 

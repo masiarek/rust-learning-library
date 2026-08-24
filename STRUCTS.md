@@ -200,6 +200,10 @@ Named honestly, because a map that only lists what exists is a map of the wrong 
 
 If you want one of these next, that is the list to point at.
 
+## The thing that is shaped like a struct but is not one
+
+A [**union**](09_Advanced/what_a_union_is/README.md) is declared exactly like a struct and behaves nothing like one: its fields share a single slot rather than sitting side by side. It is worth reading once, because the punchline settles a question this map raises twice — a Rust `enum` **is** a union with a tag the compiler makes you read, which is why you can model a choice without ever writing `unsafe`.
+
 ## The material that is not in this library
 
 [**Structs: the shelf**](10_Resources/structs/README.md) is the checked list of outside material — the Book chapter worth reading, the Reference pages that settle an argument, the videos with their chapter marks, and the four links that have rotted since they were collected.

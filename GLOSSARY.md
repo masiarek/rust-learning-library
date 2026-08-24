@@ -359,3 +359,7 @@ Short definitions. Every entry links to the page that explains it properly — a
 **`OsString` / `OsStr`** — Owned and borrowed text exactly as the operating system hands it over — filenames, env vars, arguments — with no UTF-8 promise, because the OS makes none. Narrowing to `&str` is `to_str()` returning an `Option`, and the `None` is a real answer. → [Six kinds of string](01_Foundations/six_kinds_of_string/README.md)
 
 **`CString` / `CStr`** — Owned and borrowed text under C's contract: no NUL byte inside, one NUL at the end. `CString::new` refuses an interior NUL with an error naming the byte — the string C would have silently truncated. → [Six kinds of string](01_Foundations/six_kinds_of_string/README.md)
+
+**Union** — A type declared exactly like a struct whose fields share one piece of storage rather than sitting side by side, so its size is its *largest* field rather than the sum. Writing a field is safe; reading one is `unsafe`, because nothing in a union records which field is live. Unrelated to the unit struct despite the name. → [What a union is](09_Advanced/what_a_union_is/README.md)
+
+**Tagged union** — A union plus a discriminant saying which field is live. In C you build one by hand out of a `struct`, an `enum` and a `union`, and remember to check the tag; in Rust it is spelled `enum` and the `match` checks the tag for you. The Reference defines a `repr(C)` enum with fields as literally this. → [What a union is](09_Advanced/what_a_union_is/README.md)

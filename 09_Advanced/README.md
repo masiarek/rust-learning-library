@@ -12,6 +12,7 @@ Each page is still one idea with a program you can compile and run beside it.
 | [What `i128` is exact about](i128_exactness/README.md) | 301 | The three different properties "exact" gets used for, which one a 128-bit integer actually has, what widening costs per operation — and why `fractions.Fraction` is a different trade rather than a slower one |
 | [When the denominators compound](compounding_weights/README.md) | 301 | The proportional count the companion trick cannot reach — why its denominators compound out of the previous round's, why the width you need is a property of the ballots, and what a fixed-width rational really runs out of |
 | [Did the rounding decide it?](interval_arithmetic/README.md) | 301 | The question the other four do not ask — bracket each rounded term instead of storing it, and find out whether your choice of scale or the ballots picked the winner; sound but not complete, so *decided* is a proof and *undecided* is only about that scale |
+| [What a union is](what_a_union_is/README.md) | 301 | Fields on top of each other instead of side by side — why the write is safe and the read is not, why the field type decides whether a bad read is merely wrong or undefined, and why an `enum` is this with the tag already checked |
 
 ## Planned
 
