@@ -70,6 +70,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "08_Interfaces",
         "09_Advanced",
         "10_Resources",
+        # The shell the compiler is run from — not Rust, but two of its three
+        # tools are written in it, which is the section's reason for existing.
+        "11_Unix",
         "GLOSSARY.md",
     ],
     "00_Start_Here": [
@@ -292,6 +295,14 @@ NAV_ORDER: dict[str, list[str]] = {
         # The shelf's one topic page; last, because it is the odd one out —
         # the four above sort by the moment you are in, this one by subject.
         "structs",
+    ],
+    "11_Unix": [
+        "README.md",
+        # The interactive tool first: it is the one with a visible payoff on
+        # the first keypress, and it is what sends you to fd.
+        "fuzzy_finding",
+        # ...then why the list it is reading was cheap to produce.
+        "search_tools_in_rust",
     ],
     "09_Advanced": [
         "README.md",
