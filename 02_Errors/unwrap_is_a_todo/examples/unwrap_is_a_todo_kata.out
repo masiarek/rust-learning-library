@@ -1,0 +1,10 @@
+input          parse_quorum                                 or_default
+--------------------------------------------------------------------------
+"quorum=60"    Ok(60)                                       60
+"quorum = 7 "  Ok(7)                                        7
+"quorum"       Err(NoEquals)                                51
+"seats=4"      Err(UnknownKey("seats"))                     51
+"quorum=lots"  Err(BadNumber(ParseIntError { kind: InvalidDigit })) 51
+"quorum=900"   Err(OutOfRange { value: 900, max: 100 })     51
+
+both implementations agreed on all 6 inputs

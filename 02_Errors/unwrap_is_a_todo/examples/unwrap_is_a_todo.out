@@ -1,0 +1,14 @@
+The three ways to panic (Rust Book, ch. 9) — and what to write instead
+
+  parse("41")    ->  Ok(41)                               unwrap_or_default() + 1 = 42
+  parse("nope")  ->  Err(invalid digit found in string)   unwrap_or_default() + 1 = 1
+  v.get(1)       ->  Some(2)
+  v.get(99)      ->  None                         (v[99] would have panicked)
+
+  quorum(10, 3)   ->  Err("3 present, 6 needed")
+  quorum(10, 30)  ->  Ok(6)
+
+The same work as a pipeline, with no unwrap anywhere:
+  "7"  ->  Ok(14)
+  "0"  ->  Err("zero has no reciprocal")
+  "not a number"  ->  Err("unreadable: invalid digit found in string")
