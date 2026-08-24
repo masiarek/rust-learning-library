@@ -11,6 +11,7 @@
 | [`main` can return a `Result`](main_returns_result/README.md) | 201 | `?` at the top level, the `Debug` form the runtime prints, and which exit code you get |
 | [Standard error, and exit status](stderr_and_exit_status/README.md) | 101 → 201 | Two streams and one number: what belongs on each, and what a caller can actually test |
 | [Keep going, or stop](keep_going_or_stop/README.md) | 201 | One bad row is a design decision — `collect::<Result<Vec<_>, _>>()`, and the alternative that keeps both halves |
+| [`unwrap` is a TODO you forgot to remove](unwrap_is_a_todo/README.md) | 201 | The three ways Rust panics, and why almost every `unwrap` you have arrived by paste from a crate's own front page — `serde`'s README unwraps twice |
 | [Not every error is an `io::Error`](not_every_error_is_io_error/README.md) | 201 | Two error types in one function, and the `From` hop `?` performs to make them one |
 | [`anyhow` and context](anyhow_and_context/README.md) | 201 | Turning *"No such file or directory"* into an error that names the file it was reading |
 | [`thiserror` vs `anyhow`](thiserror_vs_anyhow/README.md) | 301 | A library names its errors and an application erases them — the same crate on the wrong side of that line is the mistake |

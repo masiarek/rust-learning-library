@@ -153,6 +153,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "stderr_and_exit_status",
         "keep_going_or_stop",
         # ...and last, the type they travel in, which is the deepest question.
+        # ...but first: why there is an unwrap there at all, which is almost
+        # never a decision and almost always a paste from a crate's own README.
+        "unwrap_is_a_todo",
         "not_every_error_is_io_error",
         "anyhow_and_context",
         "thiserror_vs_anyhow",
