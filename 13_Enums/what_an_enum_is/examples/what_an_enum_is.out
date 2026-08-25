@@ -1,0 +1,7 @@
+house number 4                postable: true
+the house called Dunroamin    postable: true
+grid reference 51820 17450    postable: true
+not known                     postable: false
+
+Number(4) once imported: house number 4
+both are HouseLocation: 2

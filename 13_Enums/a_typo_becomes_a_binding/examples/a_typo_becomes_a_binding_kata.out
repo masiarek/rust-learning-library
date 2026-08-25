@@ -1,0 +1,8 @@
+two lints denied at the top of this file, and it still compiled.
+
+mark         glob-imported (typo)   qualified
+----------------------------------------------------------------------
+Scored(5)    5 / counted            5 / counted
+Blank        0 / left blank         0 / left blank
+Spoiled      0 / spoiled            0 / spoiled
+Reissued     0 / spoiled            0 / spoiled, replacement issued  <- report is wrong

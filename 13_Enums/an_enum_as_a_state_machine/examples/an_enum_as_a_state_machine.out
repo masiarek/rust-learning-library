@@ -1,0 +1,10 @@
+from     event    to
+----------------------------
+Blank    Submit   Blank    no change
+Blank    Mark     Marked
+Marked   Void     Blank
+Blank    Mark     Marked
+Marked   Submit   Cast
+Cast     Void     Cast     no change
+
+final state: Cast

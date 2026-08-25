@@ -1,0 +1,22 @@
+Coin has 3 values, Note has 2
+Wallet  (struct, AND) has 6 values  = 3 x 2
+Payment (enum,   OR ) has 5 values  = 3 + 2
+
+  InCoin(Penny)
+  InCoin(Nickel)
+  InCoin(Dime)
+  InNote(Five)
+  InNote(Ten)
+
+sizes on this target (64-bit pointers):
+  String                 24
+  HouseLocation          24   <- same as its largest payload
+  u64                     8
+  TagCosts               16   <- payload + a tag it must store
+  Box<u64>                8
+  TagFree                 8   <- tag hidden in the null pointer
+  Option<Box<u64>>        8   <- the same trick, in the library
+  Never                   0   <- no variants, so no bytes
+
+same variant, different payload: true
+different variant:               false
