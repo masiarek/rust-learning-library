@@ -1,0 +1,34 @@
+1. A seed determines the whole sequence
+   seed 2026, generator A: [261, 543, 261, 100]
+   seed 2026, generator B: [261, 543, 261, 100]
+   identical: true
+   'Random' here means unpredictable-if-you-do-not-know-the-seed,
+   not unrepeatable. Same seed, same numbers, forever.
+
+2. A different seed is a different sequence
+   seed 2027:              [716, 966, 484, 377]
+   differs from seed 2026: true
+
+3. The guessing game's secret number
+   secret = rng.range(1, 100) = 61
+   in 1..=100: true
+   With `rand` this line is `rand::random_range(1..=100)` and the
+   seed comes from the operating system, so it is different each run.
+
+4. Why `% n` is not good enough, counted exactly
+   Take 4 random bits (16 equally likely patterns) and map them to
+   1..=10 with `1 + bits % 10`. Count how many patterns reach each:
+   1:2 2:2 3:2 4:2 5:2 6:2 7:1 8:1 9:1 10:1
+   Six of the ten outcomes are twice as likely as the other four.
+   That is modulo bias, and it is exactly why you use a library:
+   `rand` rejects and redraws the values that would skew the result
+   instead of folding them back in.
+   Total patterns: 16 (and 16 is not a multiple of 10 — that is the whole cause)
+
+5. What std actually gives you
+   No RNG at all. std has `RandomState` (for HashMap) and `DefaultHasher`,
+   which are seeded from the OS but are hashing tools, not a generator API.
+   The answer in real code is the `rand` crate. The answer in THIS library's
+   examples is a seeded generator like the one above, because every example
+   here is compiled with bare `rustc` and diffed against a recorded answer
+   key — a value that changed per run would fail the check every time.
