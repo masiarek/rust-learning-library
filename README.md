@@ -25,6 +25,8 @@ Already writing Rust? Two lessons to begin with:
 
 More lessons land in [`01_Foundations/`](01_Foundations/README.md) as they are written; the ones about the toolchain rather than the language — `cargo`, build profiles, compile times — in [`05_Tooling/`](05_Tooling/README.md); and the ones that assume the foundations — shared state across threads, `unsafe`, FFI — in [`09_Advanced/`](09_Advanced/README.md).
 
+[`12_Traits/`](12_Traits/README.md) sits directly after the foundations because traits are what the rest of the language is made of — `Copy`, `Display`, `Iterator` and `From` all turn up in the earlier pages long before anything explains what they have in common.
+
 One section is not about Rust at all. [`11_Unix/`](11_Unix/README.md) is the shell you run the compiler from — `fzf` for picking a file instead of typing its path, `fd` and `rg` for finding one — and it earns its place because two of those three are themselves Rust programs, measured here against the Unix tools they stand in for.
 
 Five sections in between follow one long arc: **turning a snippet into a program somebody else runs.** [`02_Errors/`](02_Errors/README.md) is what a failure does on its way out; [`03_Command_Line/`](03_Command_Line/README.md) is what the program was handed on the way in; and [`04_Files/`](04_Files/README.md), [`06_Data/`](06_Data/README.md) and [`07_Clients/`](07_Clients/README.md) are the three things outside it that can say no. **Those pages are stubs today** — one outline and a set of questions per page, with no runnable example behind them yet, each marked as such at the top. They exist so the arc has a shape, and a permanent URL, before the prose does; a page graduates by acquiring an example and losing its notice.

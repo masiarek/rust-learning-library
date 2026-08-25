@@ -58,6 +58,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "KATAS.md",
         "00_Start_Here",
         "01_Foundations",
+        # ...and the feature the rest of the language is built out of, which is
+        # why it comes straight after the foundations rather than at the end.
+        "12_Traits",
         # The command-line-tool arc: what a program does about failure, what it
         # is handed on the way in, and the three things outside it that can say
         # no — the filesystem, a saved file, a server.
@@ -80,6 +83,18 @@ NAV_ORDER: dict[str, list[str]] = {
         "the_book",
         "rust_by_example",
         "rustlings",
+    ],
+    "12_Traits": [
+        "README.md",
+        # The declaration, then how a call reaches it, then what happens when a
+        # function has to hand one back.
+        "what_a_trait_is",
+        "trait_in_scope",
+        "returning_a_trait",
+        # One std trait in depth, and the one whose name causes the most
+        # confusion next to `clone`.
+        "to_owned",
+        "resources",
     ],
     "01_Foundations": [
         "README.md",
