@@ -9,6 +9,7 @@ The script: [`rust_scaffold.py` ↗](https://github.com/masiarek/rust-learning-l
 ```sh
 python3 rust_scaffold.py init ~/rust-practice
 python3 rust_scaffold.py new ex01_hello --workspace ~/rust-practice
+python3 rust_scaffold.py adopt ~/RustroverProjects/untitled
 python3 rust_scaffold.py doctor ~/rust-practice
 ```
 
@@ -164,7 +165,19 @@ That footer names the group, and reaching for the group is the obvious move. But
 warning: unused `std::result::Result` that must be used
 ```
 
-Pass `--warn-unused` to `init` if you want the four back. And note the mechanism is the same one the clippy policy uses, so it inherits the same way and has the same silent failure: a member with no `[lints] workspace = true` gets none of it, which is the check `doctor` grew for it.
+Pass `--warn-unused` to `init` if you want the four back.
+
+The projects that need this most are the ones `init` never touches. RustRover's *New Project* dialog runs a plain `cargo new`, so every `untitled2` starts out printing `--> src/main.rs` and warning about the bindings the file exists to demonstrate — and by the time it annoys you, the project already exists. `adopt` is `init`'s two scratch defaults applied to a directory that already has a `Cargo.toml`:
+
+```text title="Real output — rust_scaffold.py adopt, on a fresh cargo new"
+  wrote  .cargo/config.toml — diagnostics now name the file
+  wrote  [lints.rust] in Cargo.toml — unused bindings no longer warn
+  wrote  .gitignore entry (the remap names THIS directory)
+
+3 change(s). The next build recompiles: rustflags are part of the fingerprint.
+```
+
+It reads the manifest to decide which table to write, because that choice is silent when wrong: `[workspace.lints.rust]` in a package manifest is simply never read, and `[lints.rust]` at a workspace root applies to nothing. Running it twice does nothing the second time. And note the mechanism is the same one the clippy policy uses, so it inherits the same way and has the same silent failure: a member with no `[lints] workspace = true` gets none of it, which is the check `doctor` grew for it.
 
 ## The RustRover half
 

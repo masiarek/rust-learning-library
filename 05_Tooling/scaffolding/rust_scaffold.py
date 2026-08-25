@@ -3,6 +3,7 @@
 
     python3 rust_scaffold.py init ~/rust-practice
     python3 rust_scaffold.py new ex01_hello --workspace ~/rust-practice
+    python3 rust_scaffold.py adopt ~/RustroverProjects/untitled
     python3 rust_scaffold.py doctor ~/rust-practice
 
 The design rule, which is the whole reason this is short
@@ -568,6 +569,63 @@ def seed_tests(main_rs: Path, name: str) -> None:
     main_rs.write_text(SEED.format(name=name), encoding="utf-8")
 
 
+def cmd_adopt(args: argparse.Namespace) -> int:
+    """Give an EXISTING package the two scratch defaults.
+
+    `init` covers trees this script made. The throwaway projects are the ones it
+    did not: RustRover's New Project dialog runs a plain `cargo new`, so every
+    `untitled2` starts out printing `--> src/main.rs` and warning about the
+    bindings a scratch file exists to demonstrate. This is that fix, applied to a
+    directory that already has a Cargo.toml.
+    """
+    root = Path(args.path).expanduser().resolve()
+    manifest = root / "Cargo.toml"
+    if not manifest.exists():
+        print(f"error: no Cargo.toml in {root}", file=sys.stderr)
+        return 1
+
+    body = manifest.read_text(encoding="utf-8")
+    workspace = "[workspace]" in body and "[package]" not in body
+    changed = 0
+
+    cfg = root / ".cargo" / "config.toml"
+    if cfg.exists() and not args.force:
+        print("  kept   .cargo/config.toml")
+    else:
+        cfg.parent.mkdir(parents=True, exist_ok=True)
+        cfg.write_text(cargo_config_toml(root), encoding="utf-8")
+        print("  wrote  .cargo/config.toml — diagnostics now name the file")
+        changed += 1
+
+    # The table name differs by shape, and getting it wrong is silent: a
+    # `[workspace.lints]` table in a non-workspace manifest is simply never read.
+    table = "[workspace.lints.rust]" if workspace else "[lints.rust]"
+    if "lints.rust]" in body:
+        print(f"  kept   {table} (already present)")
+    else:
+        block = SCRATCH_RUST_LINTS.replace("[workspace.lints.rust]", table)
+        manifest.write_text(body.rstrip("\n") + "\n\n" + block, encoding="utf-8")
+        print(f"  wrote  {table} in Cargo.toml — unused bindings no longer warn")
+        changed += 1
+        if workspace:
+            print("  note: members need `[lints] workspace = true` to inherit it")
+
+    gitignore = root / ".gitignore"
+    line = "/.cargo/config.toml"
+    existing = gitignore.read_text(encoding="utf-8") if gitignore.exists() else ""
+    if line not in existing:
+        with gitignore.open("a", encoding="utf-8") as fh:
+            fh.write(f"\n# Machine-specific: it hard-codes this tree's absolute path.\n{line}\n")
+        print("  wrote  .gitignore entry (the remap names THIS directory)")
+        changed += 1
+
+    if changed:
+        print(f"\n{changed} change(s). The next build recompiles: rustflags are part of the fingerprint.")
+    else:
+        print("\nNothing to do — already adopted.")
+    return 0
+
+
 def cmd_doctor(args: argparse.Namespace) -> int:
     root = Path(args.path).expanduser().resolve()
     problems: list[str] = []
@@ -763,6 +821,13 @@ def main(argv: list[str] | None = None) -> int:
     p_new.add_argument("--no-tests", action="store_true", help="leave cargo's hello-world main.rs alone")
     p_new.add_argument("--no-idea", action="store_true")
     p_new.set_defaults(func=cmd_new)
+
+    p_adopt = sub.add_parser(
+        "adopt", help="give an existing package the scratch defaults (paths + quiet unused lints)"
+    )
+    p_adopt.add_argument("path", nargs="?", default=".")
+    p_adopt.add_argument("--force", action="store_true", help="overwrite .cargo/config.toml")
+    p_adopt.set_defaults(func=cmd_adopt)
 
     p_doc = sub.add_parser("doctor", help="check the tree against what is installed")
     p_doc.add_argument("path", nargs="?", default=".")
