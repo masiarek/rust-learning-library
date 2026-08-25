@@ -1,0 +1,19 @@
+1. Same answers, two dispatch strategies
+   run_static (&risc, 1) =  43   run_dynamic(&risc, 1) =  43
+   run_static (&cisc, 2) =  84   run_dynamic(&cisc, 2) =  84
+
+2. The thing generics cannot do: one collection, two types
+   Risc computes 6 and 7 as 13
+   Cisc computes 6 and 7 as 42
+
+3. What the second pointer costs
+   &Risc             8 bytes
+   &dyn Processor   16 bytes   data pointer + vtable pointer
+   Box<dyn Proc>    16 bytes   the same pair, owned
+   Risc itself       0 bytes   a unit struct: the vtable is shared,
+                            not stored in the value, unlike a C++ vptr.
+
+4. Static dispatch survives inlining; dynamic dispatch is a real call
+   Both printed the same numbers above, so correctness is never the
+   question. The question is one machine-code copy per type and a
+   direct call, or one copy shared and an indirect one.

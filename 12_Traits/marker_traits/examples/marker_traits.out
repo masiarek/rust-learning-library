@@ -1,0 +1,20 @@
+1. A marker trait gates a function without adding a method
+   publish(&Ballot) = published
+   publish(&Draft)  would be E0277: `Draft: Audited` is not satisfied
+
+2. `Sized` is the marker you never wrote — it is implicit on every T
+   width("hello")     = 5   a str: 5 bytes, and str is NOT Sized
+   width(&[1i32, 2, 3][..]) = 12   a slice of three i32
+   Without `T: ?Sized` on that function, neither call would compile.
+
+3. `Send` and `Sync` are AUTO traits: nobody wrote the impls
+   assert_send::<Arc<i32>>()  compiles — Arc's count is atomic
+   assert_send::<Rc<i32>>()   does NOT — Rc's count is not
+   size_of::<Rc<i32>>() = 8 and size_of::<Arc<i32>>() = 8: the same
+   size. The difference is a promise, not a byte.
+
+4. PhantomData marks the TYPE and costs nothing
+   Tagged<Metres> 400 · Tagged<Feet> 300
+   size_of::<f64>()            = 8
+   size_of::<Tagged<Metres>>() = 8   the unit is free
+   ...and adding them is a compile error, which is the entire point.

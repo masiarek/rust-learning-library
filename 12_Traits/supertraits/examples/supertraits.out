@@ -1,0 +1,16 @@
+1. The default body could call to_string() because Display is required
+   dog.shout()  = WOOF!!!
+   dog.twice()  = WOOF!!! ... WOOF!!!
+
+2. Both impl blocks are empty — `impl Shout for Dog {}`
+   The work was done by `impl Display for Dog`, which the supertrait
+   demanded. Leave that out and the impl is E0277, not E0599:
+   the trait bound `Dog: Display` is not satisfied.
+
+3. A trait object carries the supertrait's methods too
+   as &dyn Shout, Display still works: woof
+   ...and so does the trait's own method: WOOF!!!
+
+4. It is not inheritance: no fields, no override, two separate impls
+   size_of::<Dog>() = 0   Shout and Display added nothing to the value
+   and the same value viewed as &dyn Display is a different vtable: woof
