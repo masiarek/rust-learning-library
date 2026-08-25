@@ -179,17 +179,38 @@ Option-C  →  ç        # US layout
 Option-C  →  ć        # Polish layout
 ```
 
-That is macOS working as designed. The Option key is a compose key, and each layout maps it to its own accented letters, so the terminal never sends the Meta-C that fzf is listening for.
+That is macOS working as designed. The Option key is a compose key, and each layout maps it to its own accented letters, so the terminal never sends the Meta-C that fzf is listening for. Which letter you get is a property of your keyboard layout, not of the terminal.
 
-The fix is one terminal setting:
+**Change the right Option key and leave the left one alone.** Both terminals below configure the two keys separately, so *Right Option → Esc+* with *Left Option → Normal* gives you Meta on one thumb and `ć ó ż ł ę ś` on the other. Only give up the left one if you never type those.
 
-- **iTerm2** — Settings (⌘,) → Profiles → Keys → General → *Left Option key* → **Esc+**
-- **Terminal.app** — Settings → Profiles → Keyboard → tick *Use Option as Meta key*
+- **iTerm2** — Settings (⌘,) → **Profiles** → your profile → **Keys** tab → **General** → *Right Option (⌥) key* → **Esc+**
+- **Terminal.app** — Settings → Profiles → Keyboard → *Use Option as Meta key*
 - **Ghostty**, **WezTerm**, **Alacritty** — Meta is on by default; nothing to change
 
-**If you type a language that needs those characters, change the right Option key instead and leave the left one alone.** iTerm2 configures the two keys separately, so *Right Option key → Esc+* with *Left Option key → Normal* gives you Meta shortcuts on one thumb and `ć`, `ó`, `ż` on the other. Terminal.app has the same split under the same panel.
+### Two things that go wrong on the way there
 
-Worth knowing before you spend the setting: Alt-C is the least valuable of the three bindings. It fuzzy-matches directory names under the current directory only, so it is useful for descending a tree you are already standing in and useless for getting to a project somewhere else. A directory jumper that ranks by where you have actually been solves that instead, and Alt-C does not try to.
+iTerm2 has **two different panels called Keys**, and the one in the toolbar is the wrong one. Toolbar → Keys → *Remap Modifiers* changes which physical key *acts as* which modifier, machine-wide; setting Right Option to something there does not give you Meta and can cost you the Option key entirely. The setting you want is nested one level down, inside a **profile**. That is also why it is per-profile in the preferences file: a second profile keeps its own answer, and changing the one you are not using looks exactly like the change not working.
+
+Once you are on the right panel there are seven dropdowns in a column, and **the menu tells you whether you are on the right row**. The two Option rows offer *Normal / Meta / **Esc+***. The control, command and fn rows offer *Normal / Hyper / Meta / Super* — no `Esc+` at all. If the menu you just opened has no `Esc+` in it, you are on a modifier that cannot do this job; close it without choosing, because Meta or Super on a control row will break the Ctrl-R and Ctrl-T that currently work.
+
+### Check it without clicking
+
+The setting lands in iTerm2's preferences file, so you can read back what actually took effect — one pair per profile, in the order the profile list shows them:
+
+```sh
+/usr/libexec/PlistBuddy -c "Print" ~/Library/Preferences/com.googlecode.iterm2.plist | grep -i "Option Key Sends"
+```
+
+```text
+Option Key Sends = 0              <- left,  Normal: still types accents
+Right Option Key Sends = 2        <- right, Esc+:   this is the one fzf needs
+Option Key Sends = 0              <- a second profile, untouched
+Right Option Key Sends = 0
+```
+
+`0` is Normal, `1` is Meta, `2` is Esc+. Read it rather than trusting the click — this is a setting whose failure mode is *silence*, and a wrong profile looks identical to a wrong panel.
+
+Working Alt-C opens a list of **directories only**, which is a useful confirmation on its own: `FZF_ALT_C_COMMAND` runs `fd --type d`, so if what appears has files in it, the variable has not reached that shell.
 
 ## A preview pane
 
