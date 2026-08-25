@@ -1,0 +1,18 @@
+1. A String is in two places at once
+   size_of::<String>() = 24   ptr + len + capacity, on the stack
+   x.len()             = 11   bytes of text, on the heap
+   `&x` is the address of the first one. Never the second.
+
+2. What `let y = x;` did
+   header at a new address? true
+   heap bytes relocated?    false
+   same allocation?         true
+   24 bytes were copied between stack slots; 11 bytes of text stayed put.
+
+3. A changed address proves nothing about moving — Copy does it too
+   a and b at different addresses? true
+   and yet a is still alive: a = 5, b = 5
+
+4. What you can safely print: distances, not addresses
+   &cells[1] - &cells[0] = 1 byte   — the same on every run
+   the addresses themselves are different on every run.
