@@ -1,0 +1,17 @@
+1. The method call, now that the trait is in scope
+   dog.shout() = WOOF
+
+2. The same call, spelled out three ways
+   Shout::shout(&dog)          = WOOF
+   <Dog as Shout>::shout(&dog) = WOOF
+   Dog::shout(&dog)            = WOOF
+
+3. An associated function has no receiver, so the type carries it
+   <Dog as Shout>::motto() = LOUD BY DEFAULT
+   <Fox as Shout>::motto() = LOUD ONLY WHEN ASKED
+
+4. When an inherent method shares the name, the dot picks INHERENT
+   fox.shout()                 = (the fox's own shout)
+   Fox::shout(&fox)            = (the fox's own shout)
+   <Fox as Shout>::shout(&fox) = RING-DING-DING
+   ^ only the last spelling can reach the trait's method at all.

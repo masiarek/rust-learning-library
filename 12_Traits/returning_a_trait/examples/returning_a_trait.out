@@ -1,0 +1,17 @@
+1. One function, two concrete types — chosen at run time
+   1 seat(s) -> STAR      counts 1 seat(s)
+   3 seat(s) -> Bloc STAR counts 3 seat(s)
+
+2. `impl Trait` when the answer is always the same type
+   single_winner_method() -> STAR
+
+3. Why the box was needed: sizes
+   Star               0 bytes   a unit struct holds nothing
+   BlocStar           8 bytes   one usize
+   &Star              8 bytes   one pointer; the type is known
+   &dyn Method       16 bytes   TWO pointers: the data, and the vtable
+   Box<dyn Method>   16 bytes   same pair, owned
+
+4. The vtable is what makes the call land in the right impl
+   STAR      -> 1 seat(s)
+   Bloc STAR -> 5 seat(s)

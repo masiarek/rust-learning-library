@@ -1,0 +1,19 @@
+1. The abstract method — the compiler forced both to write it
+   star.name()     = STAR
+   approval.name() = Approval (approve at 3+)
+
+2. The default body — taken by one, replaced by the other
+   star.describe()     = STAR reads a 0-5 score ballot
+   approval.describe() = Approval (approve at 3+) — one bubble per candidate
+
+3. The associated constant belongs to the TYPE, not the value
+   <Star as Method>::BALLOT     = 0-5 score
+   <Approval as Method>::BALLOT = yes/no
+
+4. `Self` = the implementing type, so one signature builds two
+   Star::fresh().name()     = STAR
+   Approval::fresh().name() = Approval (approve at 3+)
+
+5. A trait is a promise, not a payload: implementing it adds no bytes
+   size_of::<Star>()     = 0
+   size_of::<Approval>() = 1

@@ -1,0 +1,33 @@
+1. The owned twin is a different TYPE — that is the whole point
+   "Adam"      (&str)    .to_owned() -> String "Adam"
+   [3, 1, 2]   (&[i32])  .to_owned() -> Vec    [3, 1, 2]
+
+2. `.clone()` cannot do that: on a &str it hands back another &str
+   name.clone()    is still a &str: "Adam"
+   needs_string(name.to_owned()) = 4
+   needs_string(name.clone())    would be E0308 — expected String, found &str
+   size_of::<&str>()   = 16   pointer + length
+   size_of::<String>() = 24   pointer + length + capacity
+
+2b. WHY .clone() behaves differently on &str than on &String
+   (&String).clone() -> String  "Ada"   <- String: Clone exists
+   (&str).clone()    -> &str    "Adam"  <- str: Clone does NOT
+   str is !Sized, and Clone requires Sized. That is the whole reason
+   ToOwned exists at all.
+
+3. For everything that is Clone, they are the SAME call
+   s.clone()    = "Ada"
+   s.to_owned() = "Ada"   <- blanket impl<T: Clone> ToOwned for T
+
+4. The trap that blanket impl sets: on an Rc it clones the POINTER
+   strong_count before      = 1
+   strong_count after       = 2
+   same allocation?           true
+   (*shared).clone() is the real copy: "ballot"
+
+5. `clone_into`: the provided method that reuses a buffer
+   capacity 64 -> 64 , contents "reuse me"   (no new allocation)
+
+6. Why the trait is shaped that way: Cow pays only when it must
+   "one  two"   -> "one two"   owned — one allocation
+   "one two"    -> "one two"   borrowed — nothing allocated
