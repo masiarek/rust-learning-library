@@ -20,6 +20,7 @@ These pages are not about making your program better. They are about the loop yo
 | [Neovim with LazyVim](neovim_setup/README.md) | 201 | A verified Rust setup in four commands — and the two independent ways it installs perfectly, looks healthy, and never starts a language server |
 | [Nightly by default](nightly/README.md) | 201 | `rustup default nightly` changes the compiler for every project on the machine, and is the one toolchain choice recorded nowhere |
 | [Pinning the toolchain](pinning_the_toolchain/README.md) | 201 | Which `rustc` verified the answer keys — nothing here says, and `rust-toolchain.toml` is the four-line file that makes the laptop and CI agree on purpose |
+| [RustRover Code Vision](rustrover_code_vision/README.md) | 101 → 201 | The grey `1 usage · 1 implementation` line above every declaration — the right-click that hides one metric, the checkbox that hides all of them, and the three toggles that are not the same toggle |
 | [RustRover setup](rustrover_setup/README.md) | 101 → 201 | Make clippy the on-the-fly linter, teach the run configurations which workspace package you meant, and the four things the IDE needs no help with |
 | [rustup](rustup/README.md) | 101 → 201 | The `rustc` on your `PATH` is a 154-byte shim, and the five-rung rule it uses to pick the real one |
 | [Strict clippy lints](strict_lints/README.md) | 201 | Denying `unwrap`, `panic` and indexing turns runtime aborts into compile errors — and rejects `n + 1` along the way |
