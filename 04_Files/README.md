@@ -12,4 +12,4 @@ The filesystem is the first thing outside your program that you are likely to ta
 | [Missing is not empty](missing_is_not_empty/README.md) | 201 | *"The file is not there"* and *"the file is there and empty"* are different answers, and only one is an error |
 | [Temporary directories in tests](temp_dirs_in_tests/README.md) | 201 → 301 | A test that writes to a fixed path cannot run twice at once — and the fix deletes itself if you drop the handle |
 
-The string half of this story — `String` against `&str`, and the slice that panics mid-character — is [planned in Foundations](../01_Foundations/README.md), where it belongs.
+The string half of this story — [`String` against `&str`](../14_Strings/string_vs_str/README.md), and [the slice that panics mid-character](../14_Strings/string_slices/README.md) — is in [Strings](../14_Strings/README.md), where it belongs.

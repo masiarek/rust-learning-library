@@ -95,7 +95,7 @@ error: arithmetic operation that can potentially result in unexpected side-effec
 
 ## Where this library disagrees, and why that is fine
 
-[`expect`](../../01_Foundations/expect/README.md) here argues that `expect` should be preferred over `unwrap` everywhere, because the message records *why* you believed this could not fail. This configuration denies both.
+[`expect`](../../17_Option_and_Result/expect/README.md) here argues that `expect` should be preferred over `unwrap` everywhere, because the message records *why* you believed this could not fail. This configuration denies both.
 
 The two are not in conflict once you see they answer different questions. That lesson asks *"given that this code may panic, how should it panic?"* — and the answer is: with a sentence explaining the assumption. This block asks *"may this code panic at all?"* — and answers no, so the question the lesson resolves never arises. A `restriction` lint is a policy, not a correction.
 
@@ -118,9 +118,10 @@ That is the two groups without the panic policy — the "teach you Rust" half on
 
 ## See also
 
+- [Scaffolding a practice tree](../scaffolding/README.md) — the one lint decision that runs the other way: the four `unused` lints a throwaway tree turns off, and the one in that group it must not
 - [Formatting](../formatting/README.md) — the other half of "the tool decides, not the reviewer"
-- [`expect`](../../01_Foundations/expect/README.md) — the position this configuration overrules, and why
-- [What a panic costs](../../01_Foundations/what_a_panic_costs/README.md) — what the panic set is actually buying you
+- [`expect`](../../17_Option_and_Result/expect/README.md) — the position this configuration overrules, and why
+- [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md) — what the panic set is actually buying you
 - [Scale the denominator away](../../09_Advanced/scaled_integers/README.md) — `checked_*` and `saturating_*`, which `arithmetic_side_effects` makes mandatory
 - Erik Schwartz, [*Your clippy config should be stricter* ↗](https://emschwartz.me/your-clippy-config-should-be-stricter/) — the argument at length, cited from the source above
 

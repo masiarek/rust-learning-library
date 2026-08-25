@@ -21,6 +21,6 @@ The newtype is cheap to add and awkward to keep — every arithmetic operation n
 
 ## See also
 
-- [A score is not a number](../../01_Foundations/newtype_score/README.md) — the same pattern asking *is this value legal?*; this page asks *what does this value mean?*
-- [What a float actually stores](../../01_Foundations/what_a_float_stores/README.md) — why a temperature round trip may not land exactly where it started
+- [A score is not a number](../../16_Structs/newtype_score/README.md) — the same pattern asking *is this value legal?*; this page asks *what does this value mean?*
+- [What a float actually stores](../../19_Numbers/what_a_float_stores/README.md) — why a temperature round trip may not land exactly where it started
 - [Scaled integers](../../09_Advanced/scaled_integers/README.md) — the other way out of floating point, when the domain has a fixed precision

@@ -1,66 +1,25 @@
 # Foundations
 
-The ideas you meet in your first week of Rust and keep using forever. Each page is one idea, with a program you can compile and run beside it.
+**One line:** The ideas you meet in your first week of Rust and keep using forever — six sections' worth, which is why this page is a map rather than a list.
 
-| Lesson | Level | What it teaches |
+This folder used to hold all of them: sixty-odd lessons in one flat run, sorted by nothing a reader could see. They are now grouped by what they are about, and this page is the door to each group. Nothing was dropped, and every lesson kept its content — only its address changed.
+
+Read them in this order. Each section assumes the ones above it and nothing else.
+
+| Section | Lessons | What it covers |
 |---|---|---|
-| [Running a scratch program](rustc_without_cargo/README.md) | 101 | `rustc` alone, `cargo new`, and `src/bin/` — rustc's edition-2015 default, and what Cargo was quietly doing for you |
-| [Comments that compile](comments_that_compile/README.md) | 101 → 201 | Four forms, and two of them are not comments — `///` is `#[doc = "..."]`, a misplaced one is a *warning* rather than an error, and the examples inside are compiled and run as tests |
-| [What a warning is asking](what_a_warning_is_asking/README.md) | 101 → 201 | A warning is the compiler asking whether you meant it — `rustc` raises it itself, `_name` and `_` are different answers, and only one of them leaves your value alive to the end of the scope |
-| [When a struct refuses](when_a_struct_refuses/README.md) | 101 → 201 | Eight struct errors and the fix each is asking for — and why `E0277` is never the diagnosis, since one code covers a missing `Display`, a missing `Debug`, an unsized field and an `Eq` without its `PartialEq` |
-| [A block is an expression](a_block_is_an_expression/README.md) | 101 → 201 | `{ }` does two jobs, and the second is the surprise: it *has a value* — its last line without a semicolon. Why a function body needs no `return`, and why one extra character is `E0308` |
-| [The braces take a name](braces_take_a_name/README.md) | 101 → 201 | `{n}` in a format string is an **identifier**, not a Python f-string — `{n + 1}`, `{v.len()}` and `{self.voter}` are three different compile errors, and only one of them is diagnosed as what it is |
-| [`Copy` vs `Clone`](copy_vs_clone/README.md) | 101 → 201 | `Clone` is a method you call; `Copy` changes what `=` *means* — and a struct is never `Copy` by accident: every field must be, and you must opt in. Three refusals, three error codes |
-| [Struct update syntax](struct_update/README.md) | 101 → 201 | `..base` fills the rest by **moving**, field by field — so the base is *partially* dead, and `Copy` decides which half survives; the compiler names `user1.username`, not `user1` |
-| [`impl` blocks](impl_blocks/README.md) | 101 → 201 | Where the functions went — `self` is the only thing separating an associated function from a method, `ballot.total()` is sugar for `Ballot::total(&ballot)`, and the three receivers decide what the *caller* keeps |
-| [What a struct is](what_a_struct_is/README.md) | 101 → 201 | The three flavors, why behaviour lives in a separate `impl` block rather than in the struct, associated function vs method, and the privacy that is per *module* — including the private field that makes a tuple struct's constructor private |
-| [A type is not a constructor](a_type_is_not_a_constructor/README.md) | 101 → 201 | There is no `Type()` call that makes a value — a literal, a tuple struct's real constructor function, or an associated function you wrote; plus why `let b: Ballot();` prints **two** errors and `let p = Precinct;` prints none |
-| [`Some` and `None`](some_and_none/README.md) | 101 | The enum itself: two shapes, one exhaustive `match`, and why `Some(0)` is not `None` |
-| [`Some` is a constructor, not a flag](some_is_a_constructor/README.md) | 101 → 201 | Why `Some(None)` is `E0308` and not "present but empty" — `Some` is a `fn(T) -> Option<T>`, so the argument must be the payload; plus the one type where `Some(None)` is the right answer |
-| [`Option` vs `Result`](option_vs_result/README.md) | 101 | Absence versus failure — and the single question ("could the caller ask *why not?*") that decides which type you want |
-| [What a monad is](what_a_monad_is/README.md) | 301 | The shape `Option`, `Result` and `Vec` all share — and why Rust uses monads without ever saying the word |
-| [Partial functions](partial_functions/README.md) | 201 | Why `Option` exists at all: it turns a function that is undefined somewhere into one that always answers |
-| [Returning `None` on error](none_on_error/README.md) | 201 | Why `input.parse().ok()` is usually a downgrade: four distinct causes arriving as one indistinguishable `None` |
-| [Zero wins is not zero games](wrong_guard/README.md) | 201 | A guard on the wrong condition: the input with no answer is the one that gets a number, and `Result` does not stop it |
-| [Initial values](initial_values/README.md) | 201 | The job where `Option` is usually the *wrong* tool — Rust lets you declare without initializing and proves you assigned |
-| [Randomness](randomness/README.md) | 101 → 201 | `std` has no generator, so the Rust Book's guessing game no longer compiles — `thread_rng`/`gen_range` are gone, the trait to import is `RngExt`, and `% n` is biased for a reason no better generator can fix |
-| [Optional function arguments](optional_arguments/README.md) | 201 | No default parameters, no overloading — the five shapes that replace them, and why `Option<&T>` beats `&Option<T>` |
-| [`if let`](if_let/README.md) | 101 | A `match` with one arm — the family (`if let` / `let … else` / `while let` / `matches!`), and the exhaustiveness you trade away |
-| [`unwrap_or`](unwrap_or/README.md) | 201 | The default you already have — eager, consuming, and it erases the very difference it stood in for |
-| [`unwrap_or_else`](unwrap_or_else/README.md) | 201 | The lazy fallback — built only if needed, allowed to consume what it captures, and on a `Result` the only one handed the error |
-| [`unwrap_or_default`](unwrap_or_default/README.md) | 201 | The fallback the *type* chose — a derived `Default` is the type's zero, not your domain's, and a missing impl is a guard rail |
-| [`map_or` and `map_or_else`](map_or/README.md) | 201 | Transform *and* fall back in one call — the default written first and run last, and the clippy lint on each side of it |
-| [`expect`](expect/README.md) | 201 | The message is a claim about why this cannot fail — and being unable to write it is the finding |
-| [What a panic costs](what_a_panic_costs/README.md) | 201 | The other half of `unwrap`: where the panic points, what unwinding gives back (memory) and what it does not (your work), and why the exit code is 101 |
-| [`while let`](while_let/README.md) | 201 | The loop whose exit condition is a pattern — and the one bug `if let` cannot have: a body that never makes progress |
-| [One arm, many values](one_arm_many_values/README.md) | 101 → 201 | `8 \| 12 \| 18` and `0..=7`: the two ways to widen a `match` arm, the two lints that catch a botched collapse, and the one mistake neither can see |
-| [Borrowing](borrowing/README.md) | 101 → 201 | `&T` and `&mut T`, the many-readers-or-one-writer rule, and the last-use rule that decides which order compiles |
-| [How to learn lifetimes](how_to_learn_lifetimes/README.md) | 201 | Is *"clone everything"* good advice? Mostly yes — with three amendments, the sharpest being that cloning to dodge a *mutation* error compiles and silently does nothing |
-| [`Option` fields](option_fields/README.md) | 101 | `Option` in a type definition: required-by-default fields, and when `Option<Vec<T>>` is right |
-| [`Option` is a one-item collection](option_as_collection/README.md) | 201 | It iterates; `None` really is variant 0; and why the tag is often free |
-| [Nullable pointers](nullable_pointers/README.md) | 201 | Rust has no null, so an absent pointer is a different type — `Option<Box<T>>`, free, and what makes a recursive type possible |
-| [The `Result` you are reading is probably an alias](result_aliases/README.md) | 201 | `io::Result<T>` is `Result<T, io::Error>` — how to expand an alias and read what can actually go wrong, plus `Ok(())` and `Infallible` |
-| [Shadowing and `unwrap`](shadowing_and_unwrap/README.md) | 201 | Two unrelated ideas the tutorials tie together: what keeps the original `Option` alive is `Copy`, not the shadow — and what shadowing is really for |
-| [Debug and Display](debug_vs_display/README.md) | 101 → 201 | Two printing traits, two audiences: `{:?}` can be derived because it is structural and `{}` never will be — plus the compiler note that spreads the habit, and the four default paths that print your error's `Debug` form instead of the sentence you wrote |
-| [What `dbg!` does](what_dbg_does/README.md) | 101 → 201 | Why it is not a shorter `println!("{:?}")` — it returns your value, captures the expression source, writes to stderr, always pretty-prints, moves a non-`Copy` argument, and survives `--release` |
-| [Ownership and moves](ownership_and_moves/README.md) | 101 | A move transfers *responsibility*, not bytes — the three rules, made visible by a value that announces its own death |
-| [What an address shows](what_an_address_shows/README.md) | 201 | `&x` addresses the three-word header, not the text — so a move changes the number without relocating a byte, and a `Copy` does the same thing while nothing moves at all |
-| [A name is not a place](a_name_is_not_a_place/README.md) | 201 | What separates a shadow from `mut`, proved with the borrow checker rather than with addresses: the shadow compiles and the `mut` spelling is `E0506`, because one is a declaration and the other is a write |
-| [A shadow does not drop](shadowing_does_not_drop/README.md) | 201 | What shadowing does to the value underneath: nothing — it is still alive, still borrowable, and it drops *after* the shadow that hid it, with no name left to release it early |
-| [When to shadow](when_to_shadow/README.md) | 201 | The judgement call the other two leave open: what shadowing buys that `mut` cannot, the five idioms worth copying, and the three bugs that compile — only one of which warns, and not about shadowing |
-| [Nothing checks a shadow](nothing_checks_a_shadow/README.md) | 201 | The tooling, not the mechanism: `rustc` has no shadowing lint, the type error that gets mistaken for one, and the single clippy lint that catches the accumulator bug — by also banning the idiom |
-| [Scope is about names, not values](scope_is_about_names/README.md) | 201 | One word, three questions: a name ends at its brace, a borrow ends at its last use, and a value dies on a schedule that five ordinary things can move — including the `_` that `rustc` denies outright on a lock |
-| [A score is not a number](newtype_score/README.md) | 101 → 201 | The newtype: one private field, one validating door, and why privacy is per *module* |
-| [What is a ballot, in memory?](representing_a_ballot/README.md) | 201 | Array vs `Vec` vs tuple vs struct vs map vs flat matrix — and which bugs each one makes writeable |
-| [Six kinds of zero](six_kinds_of_zero/README.md) | 201 | Where `Option` runs out: six reasons a cell is empty, one enum, and a report the compiler audits |
-| [Meet the byte](meet_the_byte/README.md) | 101 → 201 | `u8` is one byte and the unit `size_of` counts in — plus the three bills a width comes with: overflow that differs by build, the shift the type picks, and a `.len()` measured in bytes |
-| [Why hexadecimal](why_hexadecimal/README.md) | 101 → 201 | Why a byte is two hex digits and always will be — plus the three traps that follow: unpadded `{:x}` losing the byte boundary, `from_str_radix` refusing the `0x` it just printed, and hex of a negative showing two's complement |
-| [Bit flags](bit_flags/README.md) | 201 | Several values in one integer: a flag is a one-bit field and a header field is an n-bit flag — plus the zero-valued flag `&` cannot test, and the missing mask only a middle field punishes |
-| [What a float actually stores](what_a_float_stores/README.md) | 201 | The one division that ends exactness — why `0.1` is not 0.1, why the error goes both ways, and why Rust withholds `Eq` and `Ord` from `f64` |
+| [First programs](../15_First_Programs/README.md) | 8 | Running a `.rs` file at all, reading what the compiler says back, the braces every later page uses without explaining, and getting a program to print |
+| [Structs](../16_Structs/README.md) | 8 | A type of your own: fields here, behaviour in a separate `impl` block, no constructor, and the eight errors one produces |
+| [`Option` and `Result`](../17_Option_and_Result/README.md) | 24 | No null and no exceptions — two ordinary enums, and the dozen small methods between `match` and `.unwrap()` |
+| [Ownership](../18_Ownership/README.md) | 9 | One owner per value, what a move actually transfers, borrowing, and the three questions the word "scope" collapses into one |
+| [Strings](../14_Strings/README.md) | 10 | Text is an owner and a view — and the bytes underneath are why `len()` is not a character count |
+| [Numbers and bytes](../19_Numbers/README.md) | 4 | The unit everything else is measured in, how to write one down, and the type that cannot hold the value you typed |
 
-The ten lessons about text moved out of this section: they are [`14_Strings/`](../14_Strings/README.md) now, and [STRINGS.md](../STRINGS.md) is their reading order. They still lean on the ownership pages above, which is why they were here in the first place.
+Four of those topics are big enough to have a reading map of their own, which crosses section boundaries where the lessons do: [OPTION.md](../OPTION.md), [SHADOWING.md](../SHADOWING.md), [STRUCTS.md](../STRUCTS.md), [STRINGS.md](../STRINGS.md).
 
-The `newtype_score`, `representing_a_ballot` and `six_kinds_of_zero` rows are the first rungs of [the long way round](../ROADMAP.md) — a slow walk toward a working STAR count, where each step exists because it is the next thing Rust wants to teach. They stand alone as Rust lessons; the election is the excuse.
+Two sections sit alongside these rather than after them, because between them they are what the rest of the language is made of: [Enums](../13_Enums/README.md) and [Traits](../12_Traits/README.md).
+
+There is also a slow, optional thread running through several of the pages above — [the long way round to a STAR count](../ROADMAP.md), which sequences a handful of lessons so each one is the next thing Rust wants to teach. `newtype_score`, `representing_a_ballot` and `six_kinds_of_zero` are its first rungs. They stand alone as Rust lessons; the election is the excuse.
 
 ## The eight jobs `Option` does
 
@@ -68,16 +27,16 @@ The [`std::option` module docs ↗](https://doc.rust-lang.org/core/option/) list
 
 | Job | Covered by |
 |---|---|
-| Initial values | [Initial values](initial_values/README.md) — and why deferred initialization usually beats it |
-| Return values for **partial functions** (undefined over part of their input range) | [Partial functions](partial_functions/README.md) |
-| Reporting **simple errors**, returning `None` on failure | [Returning `None` on error](none_on_error/README.md) — where "simple" is the load-bearing word |
-| Optional **struct fields** | [`Option` fields](option_fields/README.md) |
-| Fields that can be **loaned or taken** | [one-item collection](option_as_collection/README.md) — `take()` / `replace()` |
-| Optional **function arguments** | [Optional function arguments](optional_arguments/README.md) — and the four alternatives that usually beat it |
-| **Nullable pointers** | [Nullable pointers](nullable_pointers/README.md) — `Option<Box<T>>`, the niche that makes it free, and the recursive type it unlocks |
-| **Swapping** things out of difficult situations | [one-item collection](option_as_collection/README.md) — `take()` against the borrow checker |
+| Initial values | [Initial values](../17_Option_and_Result/initial_values/README.md) — and why deferred initialization usually beats it |
+| Return values for **partial functions** (undefined over part of their input range) | [Partial functions](../17_Option_and_Result/partial_functions/README.md) |
+| Reporting **simple errors**, returning `None` on failure | [Returning `None` on error](../17_Option_and_Result/none_on_error/README.md) — where "simple" is the load-bearing word |
+| Optional **struct fields** | [`Option` fields](../17_Option_and_Result/option_fields/README.md) |
+| Fields that can be **loaned or taken** | [one-item collection](../17_Option_and_Result/option_as_collection/README.md) — `take()` / `replace()` |
+| Optional **function arguments** | [Optional function arguments](../17_Option_and_Result/optional_arguments/README.md) — and the four alternatives that usually beat it |
+| **Nullable pointers** | [Nullable pointers](../17_Option_and_Result/nullable_pointers/README.md) — `Option<Box<T>>`, the niche that makes it free, and the recursive type it unlocks |
+| **Swapping** things out of difficult situations | [one-item collection](../17_Option_and_Result/option_as_collection/README.md) — `take()` against the borrow checker |
 
-"Partial function" is the phrase worth keeping, and it now has [its own page](partial_functions/README.md). A function undefined for some of its inputs — `first()` on an empty list, square root of a negative — is exactly the shape `Option` exists to make total: returning `Option<T>` turns a function that *sometimes has no answer* into one that *always* has an answer, where "no answer" is one of the answers.
+"Partial function" is the phrase worth keeping, and it now has [its own page](../17_Option_and_Result/partial_functions/README.md). A function undefined for some of its inputs — `first()` on an empty list, square root of a negative — is exactly the shape `Option` exists to make total: returning `Option<T>` turns a function that *sometimes has no answer* into one that *always* has an answer, where "no answer" is one of the answers.
 
 **Every row in that table now has a page.**
 
@@ -87,6 +46,6 @@ Rough order, not a promise. Each becomes a page once it has a runnable example w
 
 - **Lifetimes** — what `'a` is actually annotating, and why most of the time you write none
 - **Traits** — shared behaviour without inheritance; `impl Trait` versus `dyn Trait`
-- **Error handling in the large** — `thiserror` for libraries, `anyhow` for applications, building on [`Option` vs `Result`](option_vs_result/README.md)
+- **Error handling in the large** — `thiserror` for libraries, `anyhow` for applications, building on [`Option` vs `Result`](../17_Option_and_Result/option_vs_result/README.md)
 - **Iterators** — laziness, and why the loop you would write by hand is usually slower
 - **`Rc`, `RefCell`, and friends** — what to reach for when the borrow checker says no and you are sure you are right

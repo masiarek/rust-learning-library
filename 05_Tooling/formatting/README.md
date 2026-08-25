@@ -64,7 +64,7 @@ fn main() {
 
 Two files, different bytes on disk, identical output. That is the claim this page rests on, and it is checked on every commit rather than asserted — CI compiles both and diffs them against those recorded keys.
 
-(The program itself is doing two things worth their own pages: `let x = 12;` is [shadowing](../../01_Foundations/shadowing_and_unwrap/README.md), a second variable reusing the name rather than an assignment to the first, and `let y = &x;` is a [borrow](../../01_Foundations/borrowing/README.md). `y + 1` then works without a `*` because std implements `Add<i32>` for `&i32`.)
+(The program itself is doing two things worth their own pages: `let x = 12;` is [shadowing](../../17_Option_and_Result/shadowing_and_unwrap/README.md), a second variable reusing the name rather than an assignment to the first, and `let y = &x;` is a [borrow](../../18_Ownership/borrowing/README.md). `y + 1` then works without a `*` because std implements `Add<i32>` for `&i32`.)
 
 ## What `rustfmt` actually changed
 

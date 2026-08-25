@@ -60,7 +60,7 @@ let home: IpAddr = "127.0.0.1"
     .expect("hardcoded loopback address should always parse");
 ```
 
-When it does fire, the message is the assumption that turned out to be wrong, which is most of the debugging. This library argues that case at length on [`expect`](../../01_Foundations/expect/README.md) — and note that it is a *different* argument from this page. That page asks "given that this may panic, how should it panic?"; this one asks "should it panic at all?"
+When it does fire, the message is the assumption that turned out to be wrong, which is most of the debugging. This library argues that case at length on [`expect`](../../17_Option_and_Result/expect/README.md) — and note that it is a *different* argument from this page. That page asks "given that this may panic, how should it panic?"; this one asks "should it panic at all?"
 
 ## Make the tooling ask
 
@@ -242,9 +242,9 @@ both implementations agreed on all 6 inputs
 
 ## See also
 
-- [`expect`](../../01_Foundations/expect/README.md) — the marker to use if you leave one, and why the message matters
-- [What a panic costs](../../01_Foundations/what_a_panic_costs/README.md) — what actually happens when one of these fires
+- [`expect`](../../17_Option_and_Result/expect/README.md) — the marker to use if you leave one, and why the message matters
+- [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md) — what actually happens when one of these fires
 - [Strict clippy lints](../../05_Tooling/strict_lints/README.md) — the configuration that makes the compiler ask
-- [`unwrap_or_default`](../../01_Foundations/unwrap_or_default/README.md) — the combinator that removes the most unwraps for the least thought
+- [`unwrap_or_default`](../../17_Option_and_Result/unwrap_or_default/README.md) — the combinator that removes the most unwraps for the least thought
 - [`anyhow` and context](../anyhow_and_context/README.md) — where the error goes once you stop unwrapping it
 - Tris Oaten, [*Rust: Don't Panic* ↗](https://www.namtao.com/rust-dont-panic/) — the argument this page is built from

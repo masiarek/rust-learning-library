@@ -27,7 +27,7 @@ These pages are not about making your program better. They are about the loop yo
 | [Scaffolding a practice tree](scaffolding/README.md) | 201 | What a setup script should write — the workspace root, `.idea/` run configurations, and a `doctor` for the cross-file invariants no single tool owns — and the one thing it must not template |
 | [Strict clippy lints](strict_lints/README.md) | 201 | Denying `unwrap`, `panic` and indexing turns runtime aborts into compile errors — and rejects `n + 1` along the way |
 
-The one tooling page that is a *prerequisite* rather than a refinement lives in Foundations instead: [running a scratch program](../01_Foundations/rustc_without_cargo/README.md), which is how you run anything in this library at all.
+The one tooling page that is a *prerequisite* rather than a refinement lives in Foundations instead: [running a scratch program](../15_First_Programs/rustc_without_cargo/README.md), which is how you run anything in this library at all.
 
 ## Planned
 

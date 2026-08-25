@@ -26,4 +26,4 @@ The off-by-one is the famous one and it is caught in a minute. The one that surv
 ## See also
 
 - [Flags by hand](../flags_by_hand/README.md) — what to do with the strings once you have them
-- [`Option` vs `Result`](../../01_Foundations/option_vs_result/README.md) — the `ok_or` hop from "not supplied" to "here is why I stopped"
+- [`Option` vs `Result`](../../17_Option_and_Result/option_vs_result/README.md) — the `ok_or` hop from "not supplied" to "here is why I stopped"

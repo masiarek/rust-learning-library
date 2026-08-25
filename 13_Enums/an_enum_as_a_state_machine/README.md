@@ -44,7 +44,7 @@ match (state, event) {
 }
 ```
 
-Every table you find in the wild ends this way, and it converts the compiler's nine-cell checklist into two cells and a shrug. Add a fourth event and no build breaks; the machine simply ignores it. This is the same trade as [`if let`](../../01_Foundations/if_let/README.md) and the same accident as [a typo becoming a binding](../a_typo_becomes_a_binding/README.md) — exhaustiveness is not something an enum gives you, it is something a `match` can decline.
+Every table you find in the wild ends this way, and it converts the compiler's nine-cell checklist into two cells and a shrug. Add a fourth event and no build breaks; the machine simply ignores it. This is the same trade as [`if let`](../../17_Option_and_Result/if_let/README.md) and the same accident as [a typo becoming a binding](../a_typo_becomes_a_binding/README.md) — exhaustiveness is not something an enum gives you, it is something a `match` can decline.
 
 The middle position, when nine arms really are too many, is a **partial** wildcard:
 
@@ -62,7 +62,7 @@ That still forces an arm for every new *state* while absorbing every new *event*
 (Cast, Mark) | (Cast, Submit) | (Cast, Void) => Cast,
 ```
 
-Three cells, one answer, and a fourth event still breaks the build. [One arm, many values](../../01_Foundations/one_arm_many_values/README.md) is the page on that, including the two lints that catch a collapse done wrong.
+Three cells, one answer, and a fourth event still breaks the build. [One arm, many values](../../17_Option_and_Result/one_arm_many_values/README.md) is the page on that, including the two lints that catch a collapse done wrong.
 
 ## Why the states are a type and not a `bool`
 
@@ -110,4 +110,4 @@ final state: Cast
 - [What an enum is](../what_an_enum_is/README.md) — the declaration and exhaustiveness, from the start
 - [Variants that carry data](../variants_that_carry_data/README.md) — why three variants beat two booleans
 - [A typo becomes a binding](../a_typo_becomes_a_binding/README.md) — the other way a table stops being audited
-- [One arm, many values](../../01_Foundations/one_arm_many_values/README.md) — `|` groups, ranges, and their lints
+- [One arm, many values](../../17_Option_and_Result/one_arm_many_values/README.md) — `|` groups, ranges, and their lints

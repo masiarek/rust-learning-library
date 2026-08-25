@@ -28,7 +28,7 @@ That single line of code removes the largest category of drift. A future `rustc`
 
 | Exposure | Caught by CI? |
 |---|---|
-| **Prose quoting a diagnostic.** [What a warning is asking](../../01_Foundations/what_a_warning_is_asking/README.md) reproduces compiler text in the page body, where nothing checks it | **No** — it rots silently |
+| **Prose quoting a diagnostic.** [What a warning is asking](../../15_First_Programs/what_a_warning_is_asking/README.md) reproduces compiler text in the page body, where nothing checks it | **No** — it rots silently |
 | **The edition floor.** The runner passes `--edition 2024`, which needs rustc ≥ 1.85. An older toolchain fails every example at once | Yes, loudly |
 | **Unstable-by-design output.** `{:?}` on standard types is explicitly not covered by the stability promise, and neither is float formatting | Yes, as a mystery diff |
 
@@ -75,7 +75,7 @@ Each of those is a step further from "a version number in a text file" and a ste
 
 - [devenv](../devenv/README.md) — the same problem taken to its limit: pin the compiler, the CLI tools, the system libraries, and the running services, at the price of installing Nix
 - [Compile times](../compile_times/README.md) — the other half of the build story, and the reason `[profile.dev]` is worth an evening
-- [Running a scratch program](../../01_Foundations/rustc_without_cargo/README.md) — where `--edition 2024` comes from, and why it is passed explicitly
+- [Running a scratch program](../../15_First_Programs/rustc_without_cargo/README.md) — where `--edition 2024` comes from, and why it is passed explicitly
 
 ---
 

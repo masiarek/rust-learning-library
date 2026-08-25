@@ -34,7 +34,7 @@ Mixing them in one enum is normal, not a code smell. The rule of thumb: **two fi
 
 ## Behaviour goes in an `impl` block
 
-Enums take [`impl` blocks](../../01_Foundations/impl_blocks/README.md) exactly the way structs do — same receivers, same associated functions. There is nothing struct-specific about them.
+Enums take [`impl` blocks](../../16_Structs/impl_blocks/README.md) exactly the way structs do — same receivers, same associated functions. There is nothing struct-specific about them.
 
 ```rust
 impl HouseLocation {
@@ -179,8 +179,8 @@ both are HouseLocation: 2
 
 ## See also
 
-- [`Some` and `None`](../../01_Foundations/some_and_none/README.md) — `Option` is an ordinary enum with two variants and no special powers
+- [`Some` and `None`](../../17_Option_and_Result/some_and_none/README.md) — `Option` is an ordinary enum with two variants and no special powers
 - [Variants that carry data](../variants_that_carry_data/README.md) — what the payload costs, measured
-- [`if let`](../../01_Foundations/if_let/README.md) — a `match` with one arm, and the exhaustiveness you trade for it
-- [One arm, many values](../../01_Foundations/one_arm_many_values/README.md) — `A | B` and ranges, for when several variants share an answer
-- [Six kinds of zero](../../01_Foundations/six_kinds_of_zero/README.md) — writing your own enum when `Option` runs out of shapes
+- [`if let`](../../17_Option_and_Result/if_let/README.md) — a `match` with one arm, and the exhaustiveness you trade for it
+- [One arm, many values](../../17_Option_and_Result/one_arm_many_values/README.md) — `A | B` and ranges, for when several variants share an answer
+- [Six kinds of zero](../../17_Option_and_Result/six_kinds_of_zero/README.md) — writing your own enum when `Option` runs out of shapes

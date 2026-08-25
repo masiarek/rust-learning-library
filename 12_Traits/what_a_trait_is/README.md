@@ -2,7 +2,7 @@
 
 **Level:** 101 → 201 · for newcomers
 
-**One line:** A trait names behaviour a type promises to have — the shared half that [a struct deliberately does not hold](../../01_Foundations/what_a_struct_is/README.md).
+**One line:** A trait names behaviour a type promises to have — the shared half that [a struct deliberately does not hold](../../16_Structs/what_a_struct_is/README.md).
 
 ```rust
 trait Loud {
@@ -40,7 +40,7 @@ trait Fresh {
 }
 ```
 
-`Star::fresh()` returns a `Star` and `Approval::fresh()` returns an `Approval`, from that single line. And because the function has no `self` parameter, there is nothing to put a dot after — you name the type, exactly as with [an inherent associated function](../../01_Foundations/impl_blocks/README.md).
+`Star::fresh()` returns a `Star` and `Approval::fresh()` returns an `Approval`, from that single line. And because the function has no `self` parameter, there is nothing to put a dot after — you name the type, exactly as with [an inherent associated function](../../16_Structs/impl_blocks/README.md).
 
 ## What it is not
 
@@ -48,7 +48,7 @@ trait Fresh {
 
 **It is not quite an interface either.** Java's interfaces cannot carry implementation; a Rust trait can, through default bodies. The nearer comparison is a Haskell type class, which is [where the feature came from](../../10_Resources/haskell/README.md).
 
-**The error you will actually meet is `E0277`** — *"the trait bound was not satisfied"*. One code covers four unrelated complaints, which is why [when a struct refuses](../../01_Foundations/when_a_struct_refuses/README.md) tells that half from the receiving end.
+**The error you will actually meet is `E0277`** — *"the trait bound was not satisfied"*. One code covers four unrelated complaints, which is why [when a struct refuses](../../16_Structs/when_a_struct_refuses/README.md) tells that half from the receiving end.
 
 ## The verified output
 
@@ -80,8 +80,8 @@ trait Fresh {
 
 ## See also
 
-- [`impl` blocks](../../01_Foundations/impl_blocks/README.md) — the inherent impl beside the trait impl: same syntax, different owner of the signatures
+- [`impl` blocks](../../16_Structs/impl_blocks/README.md) — the inherent impl beside the trait impl: same syntax, different owner of the signatures
 - [A trait must be in scope](../trait_in_scope/README.md) — the import that makes these methods appear, and the three ways to spell the call
 - [Returning a trait](../returning_a_trait/README.md) — `Box<dyn Trait>` and `impl Trait`, once one function has to answer with more than one type
-- [What a struct is](../../01_Foundations/what_a_struct_is/README.md) — the type with no behaviour in it, which is the gap this fills
-- [`Copy` vs `Clone`](../../01_Foundations/copy_vs_clone/README.md) — a marker trait that changes what `=` means, beside one you call
+- [What a struct is](../../16_Structs/what_a_struct_is/README.md) — the type with no behaviour in it, which is the gap this fills
+- [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) — a marker trait that changes what `=` means, beside one you call

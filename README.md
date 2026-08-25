@@ -20,12 +20,10 @@ Already writing Rust? Two lessons to begin with:
 
 | Lesson | What it teaches |
 |---|---|
-| [Running a scratch program](01_Foundations/rustc_without_cargo/README.md) | How to run a `.rs` file at all — `rustc` alone, `cargo new`, and the edition flag Cargo would have passed for you |
-| [`Option` vs `Result`](01_Foundations/option_vs_result/README.md) | When absence is normal and when it is a failure — and the one question that decides which type you want |
+| [Running a scratch program](15_First_Programs/rustc_without_cargo/README.md) | How to run a `.rs` file at all — `rustc` alone, `cargo new`, and the edition flag Cargo would have passed for you |
+| [`Option` vs `Result`](17_Option_and_Result/option_vs_result/README.md) | When absence is normal and when it is a failure — and the one question that decides which type you want |
 
-More lessons land in [`01_Foundations/`](01_Foundations/README.md) as they are written; the ones about the toolchain rather than the language — `cargo`, build profiles, compile times — in [`05_Tooling/`](05_Tooling/README.md); and the ones that assume the foundations — shared state across threads, `unsafe`, FFI — in [`09_Advanced/`](09_Advanced/README.md).
-
-[`14_Strings/`](14_Strings/README.md) sits directly after the foundations too, and used to be part of them: ten lessons on the one pattern text follows in Rust, an owner and a view. They lean on the ownership pages hard enough that they were written there, and they outgrew it.
+[`01_Foundations/`](01_Foundations/README.md) is the map of everything a first week of Rust needs, now split across six sections by subject rather than kept in one flat run: [first programs](15_First_Programs/README.md), [structs](16_Structs/README.md), [`Option` and `Result`](17_Option_and_Result/README.md), [ownership](18_Ownership/README.md), [strings](14_Strings/README.md) and [numbers and bytes](19_Numbers/README.md). Lessons about the toolchain rather than the language — `cargo`, build profiles, compile times — are in [`05_Tooling/`](05_Tooling/README.md); the ones that assume the foundations — shared state across threads, `unsafe`, FFI — in [`09_Advanced/`](09_Advanced/README.md).
 
 [`13_Enums/`](13_Enums/README.md) and [`12_Traits/`](12_Traits/README.md) sit directly after the foundations, because between them they are what the rest of the language is made of. Enums come first: anyone leaving the foundations has already used several of them — `Option` and `Result` among them — without being told that the feature has a name, or that a `match` which forgets a variant is a build error. Traits are the other half, and the same argument applies twice over: `Copy`, `Display`, `Iterator` and `From` all turn up in the earlier pages long before anything explains what they have in common.
 
@@ -42,7 +40,7 @@ There is also a slow, optional thread running through them: [**the long way roun
 ## How the library works
 
 ```
-01_Foundations/
+17_Option_and_Result/
   option_vs_result/
     README.md                       the lesson  (prose + code + a generated output block)
     examples/

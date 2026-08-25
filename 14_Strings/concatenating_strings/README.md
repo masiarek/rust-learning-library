@@ -123,7 +123,7 @@ A `&str` is a pointer and a length — a **view** of bytes somebody else owns. T
 | `", ".join(parts)` | separator first | `parts.join(", ")` — separator last, list first |
 | `a += b` | rebinds `a` to a new object | `a += b` — appends into `a`'s existing buffer |
 
-What actually changes: Python's `+` is always an allocation and never a mutation, so `a + b` costs the same whoever wrote it. Rust's is a **move** — `a + &b` consumes `a`, and using `a` afterwards is `E0382`. In exchange the operator is free of allocation, which is the trade the ownership system exists to offer. See [Ownership and moves](../../01_Foundations/ownership_and_moves/README.md) if that `E0382` is the part that stings.
+What actually changes: Python's `+` is always an allocation and never a mutation, so `a + b` costs the same whoever wrote it. Rust's is a **move** — `a + &b` consumes `a`, and using `a` afterwards is `E0382`. In exchange the operator is free of allocation, which is the trade the ownership system exists to offer. See [Ownership and moves](../../18_Ownership/ownership_and_moves/README.md) if that `E0382` is the part that stings.
 
 **ABAP.** `&&` concatenates two `string`s into a third and never consumes either, exactly like Python's `+` — and exactly unlike Rust's.
 
@@ -319,7 +319,7 @@ PART 4 — what to write
 Run it yourself:
 
 ```bash
-rustc --edition 2024 01_Foundations/concatenating_strings/examples/concatenating_strings.rs -o /tmp/cs && /tmp/cs
+rustc --edition 2024 14_Strings/concatenating_strings/examples/concatenating_strings.rs -o /tmp/cs && /tmp/cs
 ```
 
 ## See also
@@ -328,6 +328,6 @@ rustc --edition 2024 01_Foundations/concatenating_strings/examples/concatenating
 - [Building a `String`](../building_a_string/README.md) — the other half of this: `push_str`, `write!`, editing in the middle, and what to do inside a loop
 - [Making a `String`](../making_a_string/README.md) — `to_owned` vs `to_string` vs `String::from` vs `into`
 - [`String` vs `&str`](../string_vs_str/README.md) — why the two types exist, if the split is still new
-- [Ownership and moves](../../01_Foundations/ownership_and_moves/README.md) — the `E0382` you get from touching the left operand afterwards
+- [Ownership and moves](../../18_Ownership/ownership_and_moves/README.md) — the `E0382` you get from touching the left operand afterwards
 - [The anatomy of a `String`](../anatomy_of_a_string/README.md) — the capacity the `+` chain is reusing
 - [`std::ops::Add` for `String` ↗](https://doc.rust-lang.org/std/string/struct.String.html#impl-Add%3C%26str%3E-for-String) · [`rustc --explain E0369` ↗](https://doc.rust-lang.org/error_codes/E0369.html) · [The Rust Book, ch. 8.2 ↗](https://doc.rust-lang.org/book/ch08-02-strings.html#concatenation-with-the--operator-or-the-format-macro)

@@ -43,30 +43,30 @@ Chapter **names** are given as well as numbers on purpose: the numbering changed
 
 | rustlings | The Book | Deeper, here |
 |---|---|---|
-| `00_intro` | ch1 Getting Started | [Running a scratch program](../../01_Foundations/rustc_without_cargo/README.md) |
-| `01_variables` | ch3.1 Variables and Mutability | [Initial values](../../01_Foundations/initial_values/README.md) · [A name is not a place](../../01_Foundations/a_name_is_not_a_place/README.md) |
-| `02_functions` | ch3.3 Functions | [A block is an expression](../../01_Foundations/a_block_is_an_expression/README.md) |
-| `03_if` | ch3.5 Control Flow | [A block is an expression](../../01_Foundations/a_block_is_an_expression/README.md) |
-| `04_primitive_types` | ch3.2 Data Types · ch4.3 The Slice Type | [Six kinds of zero](../../01_Foundations/six_kinds_of_zero/README.md) · [What a float stores](../../01_Foundations/what_a_float_stores/README.md) |
-| `05_vecs` | ch8.1 Vectors | [`Option` is a one-item collection](../../01_Foundations/option_as_collection/README.md) |
-| `06_move_semantics` | ch4.1 What Is Ownership? · ch4.2 References and Borrowing | [Ownership and moves](../../01_Foundations/ownership_and_moves/README.md) · [Borrowing](../../01_Foundations/borrowing/README.md) |
-| `07_structs` | ch5.1 Defining Structs · ch5.3 Methods | [Representing a ballot](../../01_Foundations/representing_a_ballot/README.md) · [The newtype](../../01_Foundations/newtype_score/README.md) |
-| `08_enums` | ch6 Enums and Pattern Matching · ch19 Patterns and Matching | [`if let`](../../01_Foundations/if_let/README.md) · [`while let`](../../01_Foundations/while_let/README.md) |
-| `09_strings` | ch8.2 Strings | [Meet the byte](../../01_Foundations/meet_the_byte/README.md) |
-| `10_modules` | ch7 Packages, Crates, and Modules | [Scope is about names](../../01_Foundations/scope_is_about_names/README.md) |
+| `00_intro` | ch1 Getting Started | [Running a scratch program](../../15_First_Programs/rustc_without_cargo/README.md) |
+| `01_variables` | ch3.1 Variables and Mutability | [Initial values](../../17_Option_and_Result/initial_values/README.md) · [A name is not a place](../../18_Ownership/a_name_is_not_a_place/README.md) |
+| `02_functions` | ch3.3 Functions | [A block is an expression](../../15_First_Programs/a_block_is_an_expression/README.md) |
+| `03_if` | ch3.5 Control Flow | [A block is an expression](../../15_First_Programs/a_block_is_an_expression/README.md) |
+| `04_primitive_types` | ch3.2 Data Types · ch4.3 The Slice Type | [Six kinds of zero](../../17_Option_and_Result/six_kinds_of_zero/README.md) · [What a float stores](../../19_Numbers/what_a_float_stores/README.md) |
+| `05_vecs` | ch8.1 Vectors | [`Option` is a one-item collection](../../17_Option_and_Result/option_as_collection/README.md) |
+| `06_move_semantics` | ch4.1 What Is Ownership? · ch4.2 References and Borrowing | [Ownership and moves](../../18_Ownership/ownership_and_moves/README.md) · [Borrowing](../../18_Ownership/borrowing/README.md) |
+| `07_structs` | ch5.1 Defining Structs · ch5.3 Methods | [Representing a ballot](../../16_Structs/representing_a_ballot/README.md) · [The newtype](../../16_Structs/newtype_score/README.md) |
+| `08_enums` | ch6 Enums and Pattern Matching · ch19 Patterns and Matching | [`if let`](../../17_Option_and_Result/if_let/README.md) · [`while let`](../../17_Option_and_Result/while_let/README.md) |
+| `09_strings` | ch8.2 Strings | [Meet the byte](../../19_Numbers/meet_the_byte/README.md) |
+| `10_modules` | ch7 Packages, Crates, and Modules | [Scope is about names](../../18_Ownership/scope_is_about_names/README.md) |
 | `11_hashmaps` | ch8.3 Hash Maps | — |
 | `12_options` | ch6.1 Defining an Enum | [**OPTION.md**](../../OPTION.md) — the whole map |
-| `13_error_handling` | ch9 Error Handling | [`Option` vs `Result`](../../01_Foundations/option_vs_result/README.md) · [`unwrap` is a TODO](../../02_Errors/unwrap_is_a_todo/README.md) |
-| `14_generics` | ch10.1 Generic Data Types | [`Result` aliases](../../01_Foundations/result_aliases/README.md) |
-| `15_traits` | ch10.2 Traits | [`Debug` and `Display`](../../01_Foundations/debug_vs_display/README.md) |
-| `16_lifetimes` | ch10.3 Lifetimes | [Borrowing](../../01_Foundations/borrowing/README.md) |
+| `13_error_handling` | ch9 Error Handling | [`Option` vs `Result`](../../17_Option_and_Result/option_vs_result/README.md) · [`unwrap` is a TODO](../../02_Errors/unwrap_is_a_todo/README.md) |
+| `14_generics` | ch10.1 Generic Data Types | [`Result` aliases](../../17_Option_and_Result/result_aliases/README.md) |
+| `15_traits` | ch10.2 Traits | [`Debug` and `Display`](../../15_First_Programs/debug_vs_display/README.md) |
+| `16_lifetimes` | ch10.3 Lifetimes | [Borrowing](../../18_Ownership/borrowing/README.md) |
 | `17_tests` | ch11 Writing Automated Tests | [cargo-nextest](../../05_Tooling/nextest/README.md) |
-| `18_iterators` | ch13.1 Closures · ch13.2 Iterators | [`Option` is a one-item collection](../../01_Foundations/option_as_collection/README.md) |
-| `19_smart_pointers` | ch15 Smart Pointers | [Nullable pointers](../../01_Foundations/nullable_pointers/README.md) |
+| `18_iterators` | ch13.1 Closures · ch13.2 Iterators | [`Option` is a one-item collection](../../17_Option_and_Result/option_as_collection/README.md) |
+| `19_smart_pointers` | ch15 Smart Pointers | [Nullable pointers](../../17_Option_and_Result/nullable_pointers/README.md) |
 | `20_threads` | ch16 Fearless Concurrency | [Mutex poisoning](../../09_Advanced/mutex_poisoning/README.md) |
-| `21_macros` | ch20 Advanced Features | [The braces take a name](../../01_Foundations/braces_take_a_name/README.md) |
+| `21_macros` | ch20 Advanced Features | [The braces take a name](../../15_First_Programs/braces_take_a_name/README.md) |
 | `22_clippy` | *(no chapter — tooling)* | [Strict clippy lints](../../05_Tooling/strict_lints/README.md) |
-| `23_conversions` | ch10.2 Traits (`From` / `Into`) | [`Option` vs `Result`](../../01_Foundations/option_vs_result/README.md) |
+| `23_conversions` | ch10.2 Traits (`From` / `Into`) | [`Option` vs `Result`](../../17_Option_and_Result/option_vs_result/README.md) |
 
 There is also a `quizzes` set, interleaved between the others, which combines several topics at once — those are the ones worth slowing down on, because a quiz you cannot do names the chapter you skimmed.
 

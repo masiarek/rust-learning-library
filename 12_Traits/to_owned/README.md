@@ -121,7 +121,7 @@ let second = shared.to_owned();
 - [Concatenating strings](../../14_Strings/concatenating_strings/README.md) — where `s1.to_owned() + s2` comes from: `+` needs an owned left operand
 - [`String` vs `&str`](../../14_Strings/string_vs_str/README.md) — the owned/borrowed pair this trait converts between
 - [Six kinds of string](../../14_Strings/six_kinds_of_string/README.md) — `OsString`/`Path`/`Cow` and the rest of the owned-borrowed pairs
-- [`Copy` vs `Clone`](../../01_Foundations/copy_vs_clone/README.md) — the trait this one generalizes
+- [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) — the trait this one generalizes
 - [What a trait is](../what_a_trait_is/README.md) — associated types, which are what make `Owned` possible
 
 ## Sources

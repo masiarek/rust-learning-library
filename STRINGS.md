@@ -69,12 +69,12 @@ Strings are the worked example half the library's ownership pages already use, s
 
 | Lesson | Level | What it settles for strings |
 |---|---|---|
-| [Ownership and moves](01_Foundations/ownership_and_moves/README.md) | 101 | The `E0382` a moved `String` produces — in full, with a value that announces its own death |
-| [`Copy` vs `Clone`](01_Foundations/copy_vs_clone/README.md) | 101 → 201 | Why `&str` copies freely, and one `String` field makes a whole struct move |
-| [Borrowing](01_Foundations/borrowing/README.md) | 101 → 201 | The rule that refuses a view held across a `push_str` |
-| [How to learn lifetimes](01_Foundations/how_to_learn_lifetimes/README.md) | 201 | Why "own `String`, clone when stuck" is legitimate advice while `&str` fields wait |
-| [Meet the byte](01_Foundations/meet_the_byte/README.md) | 101 → 201 | The unit `len` counts in — this map's encoding arc is what those bytes *mean* |
-| [What is a ballot, in memory?](01_Foundations/representing_a_ballot/README.md) | 201 | `String` fields chosen inside a real struct design |
+| [Ownership and moves](18_Ownership/ownership_and_moves/README.md) | 101 | The `E0382` a moved `String` produces — in full, with a value that announces its own death |
+| [`Copy` vs `Clone`](16_Structs/copy_vs_clone/README.md) | 101 → 201 | Why `&str` copies freely, and one `String` field makes a whole struct move |
+| [Borrowing](18_Ownership/borrowing/README.md) | 101 → 201 | The rule that refuses a view held across a `push_str` |
+| [How to learn lifetimes](18_Ownership/how_to_learn_lifetimes/README.md) | 201 | Why "own `String`, clone when stuck" is legitimate advice while `&str` fields wait |
+| [Meet the byte](19_Numbers/meet_the_byte/README.md) | 101 → 201 | The unit `len` counts in — this map's encoding arc is what those bytes *mean* |
+| [What is a ballot, in memory?](16_Structs/representing_a_ballot/README.md) | 201 | `String` fields chosen inside a real struct design |
 | [`Path` and `PathBuf`](04_Files/path_and_pathbuf/README.md) | 201 | The family's honorary pair, in full — a **stub** for now |
 
 ## Still missing

@@ -140,7 +140,7 @@ wrapping_mul -> -6801296259709551616          (what a release build does if you 
 the same product in i128 -> 11645447814000000000
 ```
 
-`checked_mul` returns [`Option`](../../01_Foundations/partial_functions/README.md) — multiplication is a partial function once the type is finite, and this is the same idea as every other `Option` in this library: the case that has no answer gets a value instead of a lie. `saturating_mul` clamps, `wrapping_mul` wraps on purpose, and `overflowing_mul` hands back both the wrapped value and a flag. All four are explicit; only bare `*` is ambiguous about which you meant.
+`checked_mul` returns [`Option`](../../17_Option_and_Result/partial_functions/README.md) — multiplication is a partial function once the type is finite, and this is the same idea as every other `Option` in this library: the case that has no answer gets a value instead of a lie. `saturating_mul` clamps, `wrapping_mul` wraps on purpose, and `overflowing_mul` hands back both the wrapped value and a flag. All four are explicit; only bare `*` is ambiguous about which you meant.
 
 The negative number is the one to sit with. A candidate's total went below zero, and in a release build nothing in the language would have mentioned it.
 

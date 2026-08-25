@@ -33,7 +33,7 @@ Start wherever your question is; each page stands alone.
 
 | # | Page | The question it answers |
 |---|---|---|
-| 1 | [Running a scratch program](01_Foundations/rustc_without_cargo/README.md) | How do I run a `.rs` file at all? |
+| 1 | [Running a scratch program](15_First_Programs/rustc_without_cargo/README.md) | How do I run a `.rs` file at all? |
 | 2 | [rustup](05_Tooling/rustup/README.md) | Why is the `rustc` on my `PATH` 154 bytes, and how does it choose? |
 | 3 | [Pinning the toolchain](05_Tooling/pinning_the_toolchain/README.md) | Which compiler verified this — and how do I stop that being luck? |
 | 4 | [Nightly by default](05_Tooling/nightly/README.md) | Should I run `rustup default nightly`? |
@@ -61,7 +61,7 @@ Start wherever your question is; each page stands alone.
 | "a tutorial's `use rand::…` will not compile" | [A throwaway that needs a crate](05_Tooling/scratch_with_a_crate/README.md) — nothing is missing; the file is being compiled by `rustc` rather than Cargo |
 | "my build got slower" | [Compile times](05_Tooling/compile_times/README.md), then [Adding a dependency](05_Tooling/cargo_dependencies/README.md) on what an unused crate costs |
 | "my editor, `cargo fmt` and CI disagree with each other" | [Scaffolding a practice tree](05_Tooling/scaffolding/README.md) — its `doctor` checks the cross-file invariants (nightly-only rustfmt options against the pinned channel, `max_width` against `.editorconfig`) that no single tool owns |
-| "I want fewer runtime panics" | [Strict clippy lints](05_Tooling/strict_lints/README.md), and [`expect`](01_Foundations/expect/README.md) for the position it overrules |
+| "I want fewer runtime panics" | [Strict clippy lints](05_Tooling/strict_lints/README.md), and [`expect`](17_Option_and_Result/expect/README.md) for the position it overrules |
 | "onboarding a machine takes a day" | [devenv](05_Tooling/devenv/README.md) |
 | "I make a lot of tiny projects and copy the same config" | [A tree of practice projects](05_Tooling/practice_workspace/README.md) |
 | "I want the compiler to just tell me, without me asking" | [bacon](05_Tooling/bacon/README.md) |

@@ -51,7 +51,7 @@ Same program. Rust's is a translation, and the type signature is the same claim 
 
 **1. Why `Option` is a type and not a null.** In Haskell there is no alternative — there is no null to fall back to, so every absence is in a type and you spend a week doing nothing but composing `Maybe`s. That week makes `Option` obvious rather than annoying.
 
-**2. What a monad is, with the name attached.** Rust gives you `and_then` on `Option`, on `Result`, on iterators, and never says these are the same thing. Haskell says it out loud, gives it a trait, and makes you write one. Afterwards, [`?`](../../01_Foundations/what_a_monad_is/README.md) reads as syntax for a thing you understand rather than a magic operator.
+**2. What a monad is, with the name attached.** Rust gives you `and_then` on `Option`, on `Result`, on iterators, and never says these are the same thing. Haskell says it out loud, gives it a trait, and makes you write one. Afterwards, [`?`](../../17_Option_and_Result/what_a_monad_is/README.md) reads as syntax for a thing you understand rather than a magic operator.
 
 **3. Where traits came from, and what Rust changed.** Traits *are* type classes, with one significant addition: coherence — Rust's orphan rule, which Haskell lacks. Seeing type classes without that restriction is the fastest way to understand why Rust has it.
 
@@ -76,10 +76,10 @@ You need `ghci` and nothing else — `brew install ghc` or [GHCup ↗](https://w
 
 - **Yes, if** `?` and `and_then` feel like incantations you have memorised, or you enjoy knowing why a design is the way it is. This is a curiosity investment and it pays in understanding, not productivity.
 - **Not yet, if** you are still fighting the borrow checker. Ownership is Rust's genuinely novel idea and Haskell has nothing to say about it — it solves the same memory problem with a garbage collector. Time spent on Haskell now is time not spent on the one part Haskell cannot help with.
-- **Cheaper alternative:** read [What a monad is](../../01_Foundations/what_a_monad_is/README.md) here, which puts the names back on Rust's own machinery in one page. If that leaves you wanting the real thing, take the side quest.
+- **Cheaper alternative:** read [What a monad is](../../17_Option_and_Result/what_a_monad_is/README.md) here, which puts the names back on Rust's own machinery in one page. If that leaves you wanting the real thing, take the side quest.
 
 ## See also
 
-- [What a monad is](../../01_Foundations/what_a_monad_is/README.md) — the same idea without leaving Rust
-- [`Option` vs `Result`](../../01_Foundations/option_vs_result/README.md) — `Maybe` and `Either`, renamed and put to work
+- [What a monad is](../../17_Option_and_Result/what_a_monad_is/README.md) — the same idea without leaving Rust
+- [`Option` vs `Result`](../../17_Option_and_Result/option_vs_result/README.md) — `Maybe` and `Either`, renamed and put to work
 - [Books](../books/README.md) — the Rust shelf

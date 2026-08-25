@@ -75,5 +75,5 @@ Only the fully-qualified form can name the trait's version at all. This is also 
 ## See also
 
 - [What a trait is](../what_a_trait_is/README.md) — the declaration these calls are reaching into
-- [`impl` blocks](../../01_Foundations/impl_blocks/README.md) — inherent impl vs trait impl, which is the collision above
+- [`impl` blocks](../../16_Structs/impl_blocks/README.md) — inherent impl vs trait impl, which is the collision above
 - [Making a `String`](../../14_Strings/making_a_string/README.md) — `.to_string()` needs no import because `ToString` is in the prelude

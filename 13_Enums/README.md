@@ -17,13 +17,13 @@ Two things follow, and the section is mostly about the second. An enum lets you 
 
 `Option` and `Result` are ordinary enums, and they are met on the first day rather than in a section about enums — so their lessons stay where a beginner will find them. This section links them rather than moving them:
 
-- [`Some` and `None`](../01_Foundations/some_and_none/README.md) — the two-variant enum in the prelude
-- [`Option` vs `Result`](../01_Foundations/option_vs_result/README.md) — absence versus failure
-- [Six kinds of zero](../01_Foundations/six_kinds_of_zero/README.md) — writing your own when two variants are not enough
-- [`if let`](../01_Foundations/if_let/README.md) and [`while let`](../01_Foundations/while_let/README.md) — matching one variant, and giving up exhaustiveness to do it
-- [One arm, many values](../01_Foundations/one_arm_many_values/README.md) — `A | B` and ranges
-- [`Option` is a one-item collection](../01_Foundations/option_as_collection/README.md) — the discriminant, and when the tag is free
-- [Nullable pointers](../01_Foundations/nullable_pointers/README.md) — `Option<Box<T>>`, and recursive types
+- [`Some` and `None`](../17_Option_and_Result/some_and_none/README.md) — the two-variant enum in the prelude
+- [`Option` vs `Result`](../17_Option_and_Result/option_vs_result/README.md) — absence versus failure
+- [Six kinds of zero](../17_Option_and_Result/six_kinds_of_zero/README.md) — writing your own when two variants are not enough
+- [`if let`](../17_Option_and_Result/if_let/README.md) and [`while let`](../17_Option_and_Result/while_let/README.md) — matching one variant, and giving up exhaustiveness to do it
+- [One arm, many values](../17_Option_and_Result/one_arm_many_values/README.md) — `A | B` and ranges
+- [`Option` is a one-item collection](../17_Option_and_Result/option_as_collection/README.md) — the discriminant, and when the tag is free
+- [Nullable pointers](../17_Option_and_Result/nullable_pointers/README.md) — `Option<Box<T>>`, and recursive types
 - [What a union is](../09_Advanced/what_a_union_is/README.md) — the untagged version, and the desync only it can have
 
 [OPTION.md](../OPTION.md) is the full reading order for `Option` itself.

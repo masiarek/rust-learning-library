@@ -22,4 +22,4 @@ A round-trip test passes forever under a *renamed field*, because both halves re
 
 - [Deriving `Serialize` and `Deserialize`](../serde_derive/README.md) — the two traits this exercises
 - [Temporary directories in tests](../../04_Files/temp_dirs_in_tests/README.md) — where the file in the middle of the round trip should live
-- [What a float actually stores](../../01_Foundations/what_a_float_stores/README.md) — why "the same number" needs care on the way back
+- [What a float actually stores](../../19_Numbers/what_a_float_stores/README.md) — why "the same number" needs care on the way back

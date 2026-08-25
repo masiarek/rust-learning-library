@@ -24,7 +24,7 @@ A `Draft` that does not implement `Audited` cannot be passed to `publish`, and t
 | Marker | Says |
 |---|---|
 | [`Sized` ↗](https://doc.rust-lang.org/std/marker/trait.Sized.html) | the size is known at compile time |
-| [`Copy`](../../01_Foundations/copy_vs_clone/README.md) | duplicating the bytes is a valid duplication of the value |
+| [`Copy`](../../16_Structs/copy_vs_clone/README.md) | duplicating the bytes is a valid duplication of the value |
 | [`Send` ↗](https://doc.rust-lang.org/std/marker/trait.Send.html) | it is safe to move this to another thread |
 | [`Sync` ↗](https://doc.rust-lang.org/std/marker/trait.Sync.html) | it is safe to share `&T` between threads |
 
@@ -63,7 +63,7 @@ struct Metres;
 struct Feet;
 ```
 
-`Tagged<Metres>` and `Tagged<Feet>` are different types that cannot be added together, and `size_of::<Tagged<Metres>>()` is 8 — exactly the `f64`. Same family as [the newtype](../../01_Foundations/newtype_score/README.md), one level more general: the newtype gives one type a private door, `PhantomData` gives a whole family of them.
+`Tagged<Metres>` and `Tagged<Feet>` are different types that cannot be added together, and `size_of::<Tagged<Metres>>()` is 8 — exactly the `f64`. Same family as [the newtype](../../16_Structs/newtype_score/README.md), one level more general: the newtype gives one type a private door, `PhantomData` gives a whole family of them.
 
 ## The verified output
 
@@ -96,7 +96,7 @@ struct Feet;
 
 ## See also
 
-- [`Copy` vs `Clone`](../../01_Foundations/copy_vs_clone/README.md) — the marker trait most people meet first, and the one that changes what `=` means
+- [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) — the marker trait most people meet first, and the one that changes what `=` means
 - [`ToOwned`](../to_owned/README.md) — what `Sized` being implicit costs `str`
-- [A score is not a number](../../01_Foundations/newtype_score/README.md) — the same "make it unwriteable" instinct, without generics
+- [A score is not a number](../../16_Structs/newtype_score/README.md) — the same "make it unwriteable" instinct, without generics
 - [What a trait is](../what_a_trait_is/README.md) — the ordinary kind, with methods in it

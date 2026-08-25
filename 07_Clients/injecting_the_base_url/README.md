@@ -22,4 +22,4 @@ Injection reads as test scaffolding, so it gets skipped in "real" code and retro
 
 - [Mocking a server](../mocking_a_server/README.md) — the thing this makes possible
 - [Testing a command](../../03_Command_Line/testing_a_command/README.md) — the same argument one level up: parameters, not constants
-- [Optional function arguments](../../01_Foundations/optional_arguments/README.md) — the five shapes a "usually this, sometimes that" argument can take
+- [Optional function arguments](../../17_Option_and_Result/optional_arguments/README.md) — the five shapes a "usually this, sometimes that" argument can take

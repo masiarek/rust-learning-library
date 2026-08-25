@@ -58,5 +58,5 @@ Use it as the third voice. When The Book's explanation has not landed and rustli
 ## See also
 
 - [The Book](the_book/README.md) · [Rust by Example](rust_by_example/README.md) · [rustlings](rustlings/README.md)
-- [Running a scratch program](../01_Foundations/rustc_without_cargo/README.md) — this library's first lesson, and the one to read before any of the above if `rustc` itself is new
+- [Running a scratch program](../15_First_Programs/rustc_without_cargo/README.md) — this library's first lesson, and the one to read before any of the above if `rustc` itself is new
 - [Resources](../10_Resources/README.md) — the full shelf, for after

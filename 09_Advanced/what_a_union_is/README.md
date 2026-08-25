@@ -286,7 +286,7 @@ fn main() {
 
 ## See also
 
-- [What a struct is](../../01_Foundations/what_a_struct_is/README.md) — the side-by-side version, and where the unit struct actually belongs
+- [What a struct is](../../16_Structs/what_a_struct_is/README.md) — the side-by-side version, and where the unit struct actually belongs
 - [STRUCTS.md](../../STRUCTS.md) — the map, including layout and `repr`
 - [Reference — unions ↗](https://doc.rust-lang.org/reference/items/unions.html) · [`repr(C)` enums with fields ↗](https://doc.rust-lang.org/reference/type-layout.html#reprc-enums-with-fields) · [`ManuallyDrop` ↗](https://doc.rust-lang.org/std/mem/struct.ManuallyDrop.html)
 - [The Nomicon — exotic sizes ↗](https://doc.rust-lang.org/nomicon/exotic-sizes.html) for the zero-sized types the unit struct is an instance of

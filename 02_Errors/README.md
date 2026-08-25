@@ -1,6 +1,6 @@
 # Errors
 
-[Foundations](../01_Foundations/README.md) covers the *types*: what an [`Option` is against a `Result`](../01_Foundations/option_vs_result/README.md), what [`?`](../01_Foundations/option_vs_result/README.md) does, what [`expect`](../01_Foundations/expect/README.md) claims, what [a panic costs](../01_Foundations/what_a_panic_costs/README.md). This section is the other half: what happens to a failure on its way out of your program — from the read that produced it, through the function that could not handle it, to the sentence a person reads and the number a shell script tests.
+[Foundations](../01_Foundations/README.md) covers the *types*: what an [`Option` is against a `Result`](../17_Option_and_Result/option_vs_result/README.md), what [`?`](../17_Option_and_Result/option_vs_result/README.md) does, what [`expect`](../17_Option_and_Result/expect/README.md) claims, what [a panic costs](../17_Option_and_Result/what_a_panic_costs/README.md). This section is the other half: what happens to a failure on its way out of your program — from the read that produced it, through the function that could not handle it, to the sentence a person reads and the number a shell script tests.
 
 **These pages are stubs.** They are outlines waiting for a runnable example, written so the arc has a shape and a permanent URL before the prose exists. A page graduates by getting an `examples/` program and losing its stub notice — the same promise as everywhere else here: [no page claims something a program has not printed](../CONTRIBUTING.md).
 

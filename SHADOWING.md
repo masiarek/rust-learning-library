@@ -24,7 +24,7 @@ Three consequences follow, and everything on the four pages below is one of them
 
 **It can change the type, so a name can survive a conversion.** This is the whole point. `input` stays `input` through `&str` → trimmed `&str` → `u32`, instead of becoming `input_raw`, `input_trimmed`, `input_num` — names that re-encode in text what the compiler already knows.
 
-**It is not mutation, and that distinction is load-bearing.** `let mut x` promises the reader *"this may change anywhere below"*. A shadow promises *"this changed here, and the result is final"*. The second is a much stronger claim, and it is why so much idiomatic Rust manages without `mut` at all. The two are not interchangeable, either: a shadow cannot write to something that outlives the block it is in, which is the most common way shadowing is misused. The distinction is not a matter of taste, and there is a four-line test that proves it — see [A name is not a place](01_Foundations/a_name_is_not_a_place/README.md).
+**It is not mutation, and that distinction is load-bearing.** `let mut x` promises the reader *"this may change anywhere below"*. A shadow promises *"this changed here, and the result is final"*. The second is a much stronger claim, and it is why so much idiomatic Rust manages without `mut` at all. The two are not interchangeable, either: a shadow cannot write to something that outlives the block it is in, which is the most common way shadowing is misused. The distinction is not a matter of taste, and there is a four-line test that proves it — see [A name is not a place](18_Ownership/a_name_is_not_a_place/README.md).
 
 **It takes away a name, not a value.** This is the one that surprises people. The shadowed value is still alive, still owned, still borrowable through any reference taken earlier — and because values drop in reverse declaration order, it dies *after* the shadow that hid it. So shadowing is not a way to release something early; it is the opposite, since it removes the handle you would have needed.
 
@@ -38,11 +38,11 @@ Three consequences follow, and everything on the four pages below is one of them
 
 | # | Lesson | Level | The question it answers |
 |---|---|---|---|
-| 1 | [Shadowing and `unwrap`](01_Foundations/shadowing_and_unwrap/README.md) | 201 | What shadowing *is* — and why the popular explanation that ties it to `unwrap` is crediting it for something `Copy` is doing |
-| 2 | [A name is not a place](01_Foundations/a_name_is_not_a_place/README.md) | 201 | The mechanical difference from `mut` — one name and two places, proved by a borrow rather than by printing addresses, plus the one row the usual comparison table gets backwards |
-| 3 | [A shadow does not drop](01_Foundations/shadowing_does_not_drop/README.md) | 201 | What happens to the value underneath: nothing. It outlives the shadow that hid it, and no name is left to free it early |
-| 4 | [When to shadow](01_Foundations/when_to_shadow/README.md) | 201 | The judgement call — the design trade against `mut`, the five idioms, and the three bugs that compile |
-| 5 | [Nothing checks a shadow](01_Foundations/nothing_checks_a_shadow/README.md) | 201 | What the tooling does about it — no lint in `rustc`, the type error mistaken for one, and the clippy lint that catches the bug only by banning the idiom |
+| 1 | [Shadowing and `unwrap`](17_Option_and_Result/shadowing_and_unwrap/README.md) | 201 | What shadowing *is* — and why the popular explanation that ties it to `unwrap` is crediting it for something `Copy` is doing |
+| 2 | [A name is not a place](18_Ownership/a_name_is_not_a_place/README.md) | 201 | The mechanical difference from `mut` — one name and two places, proved by a borrow rather than by printing addresses, plus the one row the usual comparison table gets backwards |
+| 3 | [A shadow does not drop](18_Ownership/shadowing_does_not_drop/README.md) | 201 | What happens to the value underneath: nothing. It outlives the shadow that hid it, and no name is left to free it early |
+| 4 | [When to shadow](18_Ownership/when_to_shadow/README.md) | 201 | The judgement call — the design trade against `mut`, the five idioms, and the three bugs that compile |
+| 5 | [Nothing checks a shadow](18_Ownership/nothing_checks_a_shadow/README.md) | 201 | What the tooling does about it — no lint in `rustc`, the type error mistaken for one, and the clippy lint that catches the bug only by banning the idiom |
 
 Read in that order they build: the first defines it, the second says what it *is* against `mut` and hands you the test that settles any argument about it, the third explains the mechanism the fourth page's worst bug rests on, the fourth is the one you will come back to, and the fifth says how much help you can expect while you get it wrong.
 
@@ -52,18 +52,18 @@ Shadowing is not a topic you finish; it is a habit that shows up inside other le
 
 | Lesson | What shadowing is doing there |
 |---|---|
-| [What a warning is asking](01_Foundations/what_a_warning_is_asking/README.md) | `unused variable` is the compiler's only genuine net against an accidental shadow — and `unused_mut` on an accumulator is a shadowing bug reported in words that never say so |
-| [Ownership and moves](01_Foundations/ownership_and_moves/README.md) | Drop order in reverse declaration order, which is what makes a shadowed value outlive its shadow |
-| [Borrowing](01_Foundations/borrowing/README.md) | Why a reference taken before a shadow keeps working after it |
-| [`if let`](01_Foundations/if_let/README.md) | Pattern bindings introduce a fresh name; `let … else` is the guard clause the unwrap-and-narrow idiom opens with |
-| [Initial values](01_Foundations/initial_values/README.md) | The other route away from `mut` — declare without initializing and let the compiler prove you assigned |
-| [A score is not a number](01_Foundations/newtype_score/README.md) | `let id = BallotId(id);` — narrowing into a newtype so the loose form becomes unreachable |
-| [A block is an expression](01_Foundations/a_block_is_an_expression/README.md) | Where a shadow is given a deliberate *end* — and the nested-block snippet that circulates as "shadowing in Rust", which is the kind every language has |
+| [What a warning is asking](15_First_Programs/what_a_warning_is_asking/README.md) | `unused variable` is the compiler's only genuine net against an accidental shadow — and `unused_mut` on an accumulator is a shadowing bug reported in words that never say so |
+| [Ownership and moves](18_Ownership/ownership_and_moves/README.md) | Drop order in reverse declaration order, which is what makes a shadowed value outlive its shadow |
+| [Borrowing](18_Ownership/borrowing/README.md) | Why a reference taken before a shadow keeps working after it |
+| [`if let`](17_Option_and_Result/if_let/README.md) | Pattern bindings introduce a fresh name; `let … else` is the guard clause the unwrap-and-narrow idiom opens with |
+| [Initial values](17_Option_and_Result/initial_values/README.md) | The other route away from `mut` — declare without initializing and let the compiler prove you assigned |
+| [A score is not a number](16_Structs/newtype_score/README.md) | `let id = BallotId(id);` — narrowing into a newtype so the loose form becomes unreachable |
+| [A block is an expression](15_First_Programs/a_block_is_an_expression/README.md) | Where a shadow is given a deliberate *end* — and the nested-block snippet that circulates as "shadowing in Rust", which is the kind every language has |
 | [Lock poisoning](09_Advanced/mutex_poisoning/README.md) | The guards that must never be shadowed, and what a held one costs a second thread |
 
 ## The one rule, if you only keep one
 
-**Shadow when the new binding is the same concept in a new form, and keep it close to the one it replaces.** Reach for a second name when it is a different thing, and never shadow a value that holds a resource. [When to shadow](01_Foundations/when_to_shadow/README.md) is that sentence with the evidence attached.
+**Shadow when the new binding is the same concept in a new form, and keep it close to the one it replaces.** Reach for a second name when it is a different thing, and never shadow a value that holds a resource. [When to shadow](18_Ownership/when_to_shadow/README.md) is that sentence with the evidence attached.
 
 ## Practising it
 

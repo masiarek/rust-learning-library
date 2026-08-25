@@ -97,7 +97,7 @@ enum Outcome {
 }
 ```
 
-Every arithmetic operation on the `Ratio` type returns `Option`, and a `None` anywhere propagates into `Overflowed`. This is the same discipline as every other [`Option`](../../01_Foundations/partial_functions/README.md) in this library — the case with no answer gets a value rather than a lie — applied to the one place where a voting engine most wants to lie to you, because the alternative is a wrapped negative vote total nobody notices.
+Every arithmetic operation on the `Ratio` type returns `Option`, and a `None` anywhere propagates into `Overflowed`. This is the same discipline as every other [`Option`](../../17_Option_and_Result/partial_functions/README.md) in this library — the case with no answer gets a value rather than a lie — applied to the one place where a voting engine most wants to lie to you, because the alternative is a wrapped negative vote total nobody notices.
 
 ## The intermediate is what overflows, not the answer
 

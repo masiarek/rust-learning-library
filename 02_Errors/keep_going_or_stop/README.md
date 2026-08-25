@@ -21,5 +21,5 @@ The two policies look identical on a file with no errors, which is every file du
 ## See also
 
 - [Readers are fallible](../readers_are_fallible/README.md) — where the iterator of `Result`s comes from
-- [Returning `None` on error](../../01_Foundations/none_on_error/README.md) — the same loss one level down: four distinct causes arriving as one `None`
+- [Returning `None` on error](../../17_Option_and_Result/none_on_error/README.md) — the same loss one level down: four distinct causes arriving as one `None`
 - [The long way round](../../ROADMAP.md) — rung 7 is this idea with ballots in it

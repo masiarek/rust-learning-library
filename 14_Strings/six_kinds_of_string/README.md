@@ -197,7 +197,7 @@ Round 4 — and the promise that always holds
 Run it yourself:
 
 ```bash
-rustc --edition 2024 01_Foundations/six_kinds_of_string/examples/six_kinds_of_string.rs -o /tmp/six && /tmp/six
+rustc --edition 2024 14_Strings/six_kinds_of_string/examples/six_kinds_of_string.rs -o /tmp/six && /tmp/six
 ```
 
 ## See also

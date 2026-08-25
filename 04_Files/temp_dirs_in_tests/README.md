@@ -20,6 +20,6 @@ The dropped-too-early temp dir produces a `NotFound` from code that just created
 
 ## See also
 
-- [Scope is about names, not values](../../01_Foundations/scope_is_about_names/README.md) — the schedule a value actually dies on, and the five things that move it
+- [Scope is about names, not values](../../18_Ownership/scope_is_about_names/README.md) — the schedule a value actually dies on, and the five things that move it
 - [Testing a command](../../03_Command_Line/testing_a_command/README.md) — the tests that need a filesystem of their own
-- [Ownership and moves](../../01_Foundations/ownership_and_moves/README.md) — a move transfers responsibility, and the temp directory is the responsibility
+- [Ownership and moves](../../18_Ownership/ownership_and_moves/README.md) — a move transfers responsibility, and the temp directory is the responsibility

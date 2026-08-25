@@ -94,4 +94,4 @@ That second line is newer than most of the material written about supertraits: *
 - [What a trait is](../what_a_trait_is/README.md) — default bodies, which are what a supertrait makes worth writing
 - [A trait must be in scope](../trait_in_scope/README.md) — `E0599`, the other missing-method error, and how to tell them apart
 - [Static vs dynamic dispatch](../static_vs_dynamic_dispatch/README.md) — the vtable that carries the supertrait's methods
-- [Debug and Display](../../01_Foundations/debug_vs_display/README.md) — the supertrait used above, and why it cannot be derived
+- [Debug and Display](../../15_First_Programs/debug_vs_display/README.md) — the supertrait used above, and why it cannot be derived

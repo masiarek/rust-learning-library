@@ -56,4 +56,4 @@ The chapter *names* are stable; the numbers are not. That is why the [rustlings 
 
 - [rustlings](../rustlings/README.md) — the exercises to run alongside, chapter by chapter
 - [Rust by Example](../rust_by_example/README.md) — for looking up syntax mid-chapter
-- [`Option` vs `Result`](../../01_Foundations/option_vs_result/README.md) — this library on the chapter 6 and 9 material, with the output proved
+- [`Option` vs `Result`](../../17_Option_and_Result/option_vs_result/README.md) — this library on the chapter 6 and 9 material, with the output proved

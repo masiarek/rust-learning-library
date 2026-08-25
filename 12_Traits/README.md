@@ -17,7 +17,7 @@ The section starts from the declaration and works outward — what goes in a tra
 | [`ToOwned`](to_owned/README.md) | 201 | `Clone` generalized to borrowed data: why `str` cannot be `Clone` at all, why `.clone()` on a `&str` quietly does nothing, and the `Rc` that `to_owned` does not deep-copy |
 | [Links and videos](resources/README.md) | reference | The reading behind the section |
 
-Three trait pages live outside this folder, because they are met long before anyone goes looking for a traits section: [`Copy` vs `Clone`](../01_Foundations/copy_vs_clone/README.md), [Debug and Display](../01_Foundations/debug_vs_display/README.md), and [the `Default` trait](../03_Command_Line/the_default_trait/README.md). They stay where they are; this section links them rather than moving them.
+Three trait pages live outside this folder, because they are met long before anyone goes looking for a traits section: [`Copy` vs `Clone`](../16_Structs/copy_vs_clone/README.md), [Debug and Display](../15_First_Programs/debug_vs_display/README.md), and [the `Default` trait](../03_Command_Line/the_default_trait/README.md). They stay where they are; this section links them rather than moving them.
 
 ## Not yet written
 

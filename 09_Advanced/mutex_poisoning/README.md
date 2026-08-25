@@ -281,8 +281,8 @@ rustc --edition 2024 09_Advanced/mutex_poisoning/examples/mutex_poisoning.rs -o 
 
 ## See also
 
-- [`unwrap`: the bet you are making](../../01_Foundations/what_a_panic_costs/README.md) — the general form of the decision this page is one instance of
-- [`unwrap_or`](../../01_Foundations/unwrap_or/README.md) — and `unwrap_or_else`, which is what `|e| e.into_inner()` is
-- [`Option` vs `Result`](../../01_Foundations/option_vs_result/README.md) — why `lock()` returns a `Result` rather than an `Option`: the caller can absolutely ask *why not?*
+- [`unwrap`: the bet you are making](../../17_Option_and_Result/what_a_panic_costs/README.md) — the general form of the decision this page is one instance of
+- [`unwrap_or`](../../17_Option_and_Result/unwrap_or/README.md) — and `unwrap_or_else`, which is what `|e| e.into_inner()` is
+- [`Option` vs `Result`](../../17_Option_and_Result/option_vs_result/README.md) — why `lock()` returns a `Result` rather than an `Option`: the caller can absolutely ask *why not?*
 - [`std::sync::Mutex::lock` ↗](https://doc.rust-lang.org/std/sync/struct.Mutex.html#method.lock) · [`PoisonError` ↗](https://doc.rust-lang.org/std/sync/struct.PoisonError.html) · [`clear_poison` ↗](https://doc.rust-lang.org/std/sync/struct.Mutex.html#method.clear_poison)
 - [The Rust Book, ch. 16.3 — Shared-State Concurrency ↗](https://doc.rust-lang.org/book/ch16-03-shared-state.html)

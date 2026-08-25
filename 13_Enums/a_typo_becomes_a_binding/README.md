@@ -191,6 +191,6 @@ None of the three lints fire. Qualifying the paths is the only one of the four s
 ## See also
 
 - [What an enum is](../what_an_enum_is/README.md) — where the `use Enum::*` shortcut is introduced
-- [`if let`](../../01_Foundations/if_let/README.md) — the other way to lose exhaustiveness, deliberately and visibly
-- [One arm, many values](../../01_Foundations/one_arm_many_values/README.md) — `A | B` and the two lints that catch a botched collapse
-- [What a warning is asking](../../01_Foundations/what_a_warning_is_asking/README.md) — why `_spade` and `spade` are different answers to the same question
+- [`if let`](../../17_Option_and_Result/if_let/README.md) — the other way to lose exhaustiveness, deliberately and visibly
+- [One arm, many values](../../17_Option_and_Result/one_arm_many_values/README.md) — `A | B` and the two lints that catch a botched collapse
+- [What a warning is asking](../../15_First_Programs/what_a_warning_is_asking/README.md) — why `_spade` and `spade` are different answers to the same question

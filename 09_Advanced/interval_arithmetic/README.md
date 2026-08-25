@@ -4,7 +4,7 @@
 
 **One line:** Interval arithmetic does not make a rounded count exact — it tells you whether your rounding could have changed the winner, and because its error is one-sided, a verdict of *decided* is a proof while *undecided* is only an admission about the scale you chose.
 
-This repo already has four pages about being exact. [What a float actually stores](../../01_Foundations/what_a_float_stores/README.md) is where exactness ends; [scaling the denominator away](../scaled_integers/README.md) is how to get it back when the denominators can be listed in advance; [what `i128` is exact about](../i128_exactness/README.md) is the ceiling on doing it with a wider integer; [when the denominators compound](../compounding_weights/README.md) is the case where no fixed width is enough. Between them they answer *what is the exact answer, and what does exactness cost.*
+This repo already has four pages about being exact. [What a float actually stores](../../19_Numbers/what_a_float_stores/README.md) is where exactness ends; [scaling the denominator away](../scaled_integers/README.md) is how to get it back when the denominators can be listed in advance; [what `i128` is exact about](../i128_exactness/README.md) is the ceiling on doing it with a wider integer; [when the denominators compound](../compounding_weights/README.md) is the case where no fixed width is enough. Between them they answer *what is the exact answer, and what does exactness cost.*
 
 None of them answers the question you actually have at 2 a.m. with a rounded count in front of you: **I rounded. Did that change who won?**
 
@@ -400,5 +400,5 @@ fn main() {
 - [Scale the denominator away](../scaled_integers/README.md) — the case where you never have to round at all, and should not
 - [When the denominators compound](../compounding_weights/README.md) — where rounding stops being optional, and the page whose "if the rule specifies the scale" this one picks up from
 - [What `i128` is exact about](../i128_exactness/README.md) — the rational alternative, its ceiling, and what a `gcd` really costs
-- [What a float actually stores](../../01_Foundations/what_a_float_stores/README.md) — why a tie stops being a tie, which is the failure this page detects rather than prevents
+- [What a float actually stores](../../19_Numbers/what_a_float_stores/README.md) — why a tie stops being a tie, which is the failure this page detects rather than prevents
 - Julia Evans, *How Integers and Floats Work* ([wizardzines.com ↗](https://wizardzines.com/)) — the zine that prompted this thread; its fixed-point pages name the alternatives, of which this is the one the library did not have

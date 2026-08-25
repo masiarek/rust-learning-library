@@ -46,4 +46,4 @@ The rest are offline copies, listed by title so they can be found again:
 - *Demo: traits* [34 of 35] — Rust for Beginners
 - *Method overloading (kinda), and advanced trait usage* — Quick Rust
 - *Easy Rust 063–070, 072–073* — the traits arc: introduction, reading an implementation, implementing `Display`, a longer trait, traits built on other traits, trait bounds, understanding `From`, implementing `From` (twice), and `AsRef`
-- *Easy Rust 071 — type aliases and new types* — sits inside that run but is a different topic; the newtype half is what makes it belong ([a score is not a number](../../01_Foundations/newtype_score/README.md) covers the same ground)
+- *Easy Rust 071 — type aliases and new types* — sits inside that run but is a different topic; the newtype half is what makes it belong ([a score is not a number](../../16_Structs/newtype_score/README.md) covers the same ground)

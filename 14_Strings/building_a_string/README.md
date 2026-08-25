@@ -318,7 +318,7 @@ Cara  0
 Run it yourself:
 
 ```bash
-rustc --edition 2024 01_Foundations/building_a_string/examples/building_a_string.rs -o /tmp/bs && /tmp/bs
+rustc --edition 2024 14_Strings/building_a_string/examples/building_a_string.rs -o /tmp/bs && /tmp/bs
 ```
 
 ## See also
@@ -328,5 +328,5 @@ rustc --edition 2024 01_Foundations/building_a_string/examples/building_a_string
 - [The anatomy of a `String`](../anatomy_of_a_string/README.md) — capacity, growth, and why appending is cheap
 - [Making a `String`](../making_a_string/README.md) — getting one in the first place
 - [String slices](../string_slices/README.md) — the same byte-index panic, on the reading side
-- [Borrowing](../../01_Foundations/borrowing/README.md) — why a `&str` into a string you are about to `push_str` is refused
+- [Borrowing](../../18_Ownership/borrowing/README.md) — why a `&str` into a string you are about to `push_str` is refused
 - [`String::push_str` ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.push_str) · [`std::fmt::Write` ↗](https://doc.rust-lang.org/std/fmt/trait.Write.html) · [The Rust Book, ch. 8.2 ↗](https://doc.rust-lang.org/book/ch08-02-strings.html#updating-a-string)

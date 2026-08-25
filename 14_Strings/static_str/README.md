@@ -317,7 +317,7 @@ Which to reach for:
 Run it yourself:
 
 ```bash
-rustc --edition 2024 01_Foundations/static_str/examples/static_str.rs -o /tmp/st && /tmp/st
+rustc --edition 2024 14_Strings/static_str/examples/static_str.rs -o /tmp/st && /tmp/st
 ```
 
 ## See also
@@ -325,6 +325,6 @@ rustc --edition 2024 01_Foundations/static_str/examples/static_str.rs -o /tmp/st
 - [STRINGS.md](../../STRINGS.md) — the map: every string lesson, in reading order
 - [`String` vs `&str`](../string_vs_str/README.md) — where the literal-lives-in-the-binary story starts
 - [String slices](../string_slices/README.md) — the view itself, and the one way it panics
-- [How to learn lifetimes](../../01_Foundations/how_to_learn_lifetimes/README.md) — `'static` is one lifetime; this is the rest of them
-- [Scope is about names, not values](../../01_Foundations/scope_is_about_names/README.md) — what "dropped here while still borrowed" is measuring
+- [How to learn lifetimes](../../18_Ownership/how_to_learn_lifetimes/README.md) — `'static` is one lifetime; this is the rest of them
+- [Scope is about names, not values](../../18_Ownership/scope_is_about_names/README.md) — what "dropped here while still borrowed" is measuring
 - [`str` (primitive) ↗](https://doc.rust-lang.org/std/primitive.str.html) · [`String::leak` ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.leak) · [Rust by Example — `'static` ↗](https://doc.rust-lang.org/rust-by-example/scope/lifetime/static_lifetime.html)

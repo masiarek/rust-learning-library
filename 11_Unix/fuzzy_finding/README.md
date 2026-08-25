@@ -10,7 +10,7 @@ Press **Ctrl-T** in the middle of typing a command. A filtered list of files ope
 
 ```text
 rustc --edition 2024 ▊          <- press Ctrl-T here, type "optvsres", pick
-rustc --edition 2024 01_Foundations/option_vs_result/examples/option_vs_result.rs▊
+rustc --edition 2024 17_Option_and_Result/option_vs_result/examples/option_vs_result.rs▊
 ```
 
 Nothing is remembered, nothing is configured per project, and the list is the current directory tree. That is the whole tool: it reads lines on stdin, lets you narrow them interactively, and writes the chosen one to stdout. Everything else is a wrapper around that.
@@ -62,9 +62,9 @@ You want to compile an example but cannot remember the folder.
 
 1. Type `rustc --edition 2024 ` and stop, cursor still at the end.
 2. Press **Ctrl-T**. The bottom half of the terminal fills with a list of every file under the current directory, and a `>` prompt appears.
-3. Type `optvs`. The list narrows as you type. These are not the first letters of the filename — fzf matches those characters *in order, anywhere in the path*, so `optvs` finds `01_Foundations/option_vs_result/examples/option_vs_result.rs`.
+3. Type `optvs`. The list narrows as you type. These are not the first letters of the filename — fzf matches those characters *in order, anywhere in the path*, so `optvs` finds `17_Option_and_Result/option_vs_result/examples/option_vs_result.rs`.
 4. Move with the arrow keys if more than one line survived, and press **Enter**.
-5. The list disappears and your command line now reads `rustc --edition 2024 01_Foundations/option_vs_result/examples/option_vs_result.rs`, cursor after it. Nothing has run yet — you finish the command and press Enter yourself.
+5. The list disappears and your command line now reads `rustc --edition 2024 17_Option_and_Result/option_vs_result/examples/option_vs_result.rs`, cursor after it. Nothing has run yet — you finish the command and press Enter yourself.
 
 **Esc** at any point closes the list and leaves your command line untouched.
 

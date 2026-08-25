@@ -23,4 +23,4 @@ The crates are not rivals, so "which is better" has no answer — and picking on
 
 - [`anyhow` and context](../anyhow_and_context/README.md) — the application side, in detail
 - [Not every error is an `io::Error`](../not_every_error_is_io_error/README.md) — the problem both crates are answering
-- [`Option` vs `Result`](../../01_Foundations/option_vs_result/README.md) — Steps 8 and 9: designing the `E`, and deciding not to
+- [`Option` vs `Result`](../../17_Option_and_Result/option_vs_result/README.md) — Steps 8 and 9: designing the `E`, and deciding not to

@@ -87,7 +87,7 @@ pub fn sign_in(id: VoterId, roll: &[VoterId], password_ok: bool) -> Option<Eligi
 }
 ```
 
-The load-bearing word in that comment is **private**. `Eligible` is not safe because of its name; it is safe because its field is private and `sign_in` is the only function in the module that constructs one, which is the same [privacy-is-per-module](../../01_Foundations/newtype_score/README.md) argument that makes a newtype worth anything. Outside this module there is no syntax for conjuring an `Eligible` — you can only be given one, and you are only given one after the check. A function that takes `Eligible` therefore cannot be reached by an unauthenticated caller, and "did you remember to check?" stops being a question anyone can answer wrongly.
+The load-bearing word in that comment is **private**. `Eligible` is not safe because of its name; it is safe because its field is private and `sign_in` is the only function in the module that constructs one, which is the same [privacy-is-per-module](../../16_Structs/newtype_score/README.md) argument that makes a newtype worth anything. Outside this module there is no syntax for conjuring an `Eligible` — you can only be given one, and you are only given one after the check. A function that takes `Eligible` therefore cannot be reached by an unauthenticated caller, and "did you remember to check?" stops being a question anyone can answer wrongly.
 
 That much makes the permission unforgeable. The second half makes it unrepeatable:
 
@@ -101,7 +101,7 @@ impl Eligible {
 }
 ```
 
-`self` by value, not `&self` by reference. Casting a ballot **moves** the token into `cast`, where it is dropped — so the caller no longer has it, and [a moved value cannot be used again](../../01_Foundations/ownership_and_moves/README.md). One person, one vote, expressed as ownership. Try to spend it twice and the program does not run at all:
+`self` by value, not `&self` by reference. Casting a ballot **moves** the token into `cast`, where it is dropped — so the caller no longer has it, and [a moved value cannot be used again](../../18_Ownership/ownership_and_moves/README.md). One person, one vote, expressed as ownership. Try to spend it twice and the program does not run at all:
 
 ```text
 error[E0382]: use of moved value: `token`
@@ -152,7 +152,7 @@ Get this wrong in the obvious way — store the `VoterId` alongside the ballot "
 ## If you are coming from another language
 
 - **Python** — `@login_required` is the same idea checked at runtime: a decorator wraps the view and raises before the body runs. What it cannot do is make the *absence* of the decorator visible; a view written without it is a public view, it looks identical in review, and the only thing that ever tells you is an audit or an incident. Rust moves the requirement into the signature, so the missing check is a compile error rather than a missing line.
-- **ABAP** — `AUTHORITY-CHECK OBJECT …` followed by `IF sy-subrc <> 0` is the closest cousin, and it has the classic `sy-subrc` failure mode: the check and its consequence are two separate statements, and the second one is optional. A program that runs `AUTHORITY-CHECK` and never reads `sy-subrc` passes a code review beautifully — the check is right there on the screen. Returning [`Option<Eligible>`](../../01_Foundations/option_vs_result/README.md) removes that gap, because there is no path to the protected value that skips the failure branch. The move-on-cast has no ABAP counterpart at all: you would enforce one-vote with an update and a `COMMIT WORK`, and trust that nothing calls the function twice.
+- **ABAP** — `AUTHORITY-CHECK OBJECT …` followed by `IF sy-subrc <> 0` is the closest cousin, and it has the classic `sy-subrc` failure mode: the check and its consequence are two separate statements, and the second one is optional. A program that runs `AUTHORITY-CHECK` and never reads `sy-subrc` passes a code review beautifully — the check is right there on the screen. Returning [`Option<Eligible>`](../../17_Option_and_Result/option_vs_result/README.md) removes that gap, because there is no path to the protected value that skips the failure branch. The move-on-cast has no ABAP counterpart at all: you would enforce one-vote with an update and a `COMMIT WORK`, and trust that nothing calls the function twice.
 
 Both bridges land on the same sentence. The convention you used to rely on — *remember the decorator*, *remember to read `sy-subrc`* — becomes something the compiler is now holding for you, and what you get back is the ability to stop thinking about it.
 

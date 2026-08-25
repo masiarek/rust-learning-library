@@ -20,6 +20,6 @@
 
 ## See also
 
-- [Debug and Display](../../01_Foundations/debug_vs_display/README.md) — the two traits, two audiences, and the default paths that print the wrong one
+- [Debug and Display](../../15_First_Programs/debug_vs_display/README.md) — the two traits, two audiences, and the default paths that print the wrong one
 - [Standard error, and exit status](../stderr_and_exit_status/README.md) — where that message goes, and the number beside it
-- [What a panic costs](../../01_Foundations/what_a_panic_costs/README.md) — the other way a program stops, and its own exit code
+- [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md) — the other way a program stops, and its own exit code

@@ -26,4 +26,4 @@ Both bugs pass every test you would think to write, because a test with three li
 ## See also
 
 - [Readers are fallible](../readers_are_fallible/README.md) — the `Result` this loop is failing to look at
-- [`while let`](../../01_Foundations/while_let/README.md) — the loop whose exit condition is a pattern, and the one bug it can have: a body that never makes progress
+- [`while let`](../../17_Option_and_Result/while_let/README.md) — the loop whose exit condition is a pattern, and the one bug it can have: a body that never makes progress

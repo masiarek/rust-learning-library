@@ -85,7 +85,7 @@ The help line is the reason this costs anyone an afternoon. Nothing is missing �
 
 `rustc --explain E0433` does eventually say *"Make sure the crate has been added as a dependency in `Cargo.toml`"* — four paragraphs down, after a `HashMap` example about a missing `use` statement, which is the same message from an unrelated cause.
 
-The narrow reading is [in the scratch-program page](../../01_Foundations/rustc_without_cargo/README.md): a dependency can be linked by hand with `--extern rand=librand.rlib`, once you have built `rand` and each of its six dependencies yourself, in order. That is the wall Cargo exists to clear, and `cargo add` is the whole of clearing it.
+The narrow reading is [in the scratch-program page](../../15_First_Programs/rustc_without_cargo/README.md): a dependency can be linked by hand with `--extern rand=librand.rlib`, once you have built `rand` and each of its six dependencies yourself, in order. That is the wall Cargo exists to clear, and `cargo add` is the whole of clearing it.
 
 ## What the three commands wrote
 
@@ -101,7 +101,7 @@ The narrow reading is [in the scratch-program page](../../01_Foundations/rustc_w
 
 | What you would otherwise decide | What decided it |
 |---|---|
-| the edition | `edition = "2024"` in the manifest — so the [2015 default](../../01_Foundations/rustc_without_cargo/README.md) that bites bare `rustc` cannot reach you |
+| the edition | `edition = "2024"` in the manifest — so the [2015 default](../../15_First_Programs/rustc_without_cargo/README.md) that bites bare `rustc` cannot reach you |
 | the version requirement | `cargo add` read crates.io and wrote `rand = "0.10.2"` |
 | which versions actually built | `Cargo.lock`, written by `cargo add` when it resolved the graph — before anything was compiled |
 | debug or release | `cargo run` is debug, `cargo run --release` is not — the two profiles have names instead of a `-O` you forget |
@@ -122,7 +122,7 @@ edition = "2024"
 rand = "0.10.2"
 ```
 
-That last line is the only one you would have typed, and `cargo add` typed it. Prefer that to writing it out: the command asks crates.io what the current version is, so it cannot enshrine a number you half-remember from a tutorial — [and `rand` is a crate that has renamed its API twice](../../01_Foundations/randomness/README.md), which makes an accidentally-stale version number a compile error with a confusing message.
+That last line is the only one you would have typed, and `cargo add` typed it. Prefer that to writing it out: the command asks crates.io what the current version is, so it cannot enshrine a number you half-remember from a tutorial — [and `rand` is a crate that has renamed its API twice](../../15_First_Programs/randomness/README.md), which makes an accidentally-stale version number a compile error with a confusing message.
 
 Two more tables are worth knowing about and neither belongs in a throwaway:
 
@@ -183,7 +183,7 @@ test tests::clamps_low ... ok
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-`#[cfg(test)]` is why this costs the binary nothing: the module is not in a `cargo run` build at all, so a throwaway can carry its tests without carrying their weight. Bare `rustc` reaches the same harness with `--test`, which is [what that flag was doing on a loose file](../../01_Foundations/rustc_without_cargo/README.md) — what Cargo adds is not the harness but not having to remember it.
+`#[cfg(test)]` is why this costs the binary nothing: the module is not in a `cargo run` build at all, so a throwaway can carry its tests without carrying their weight. Bare `rustc` reaches the same harness with `--test`, which is [what that flag was doing on a loose file](../../15_First_Programs/rustc_without_cargo/README.md) — what Cargo adds is not the harness but not having to remember it.
 
 Automating the loop from here is one more command and no configuration: [`bacon`](../bacon/README.md) re-runs the tests on every save in a pane you leave open, and [`cargo-nextest`](../nextest/README.md) is the replacement runner worth knowing about once a suite is big enough to notice.
 
@@ -224,8 +224,8 @@ The nearest true analogy is not `pip` at all but a `pyproject.toml` plus a lockf
 
 ## See also
 
-- [Running a scratch program](../../01_Foundations/rustc_without_cargo/README.md) — the page this one is the sequel to: `rustc` alone, `cargo new`, `src/bin/`, and what each leaves out
-- [Randomness, and the `rand` API the Rust Book still teaches](../../01_Foundations/randomness/README.md) — the *next* error after this one, and the reason `rand` is the crate everybody meets first
+- [Running a scratch program](../../15_First_Programs/rustc_without_cargo/README.md) — the page this one is the sequel to: `rustc` alone, `cargo new`, `src/bin/`, and what each leaves out
+- [Randomness, and the `rand` API the Rust Book still teaches](../../15_First_Programs/randomness/README.md) — the *next* error after this one, and the reason `rand` is the crate everybody meets first
 - [Adding a dependency](../cargo_dependencies/README.md) — `cargo search`, `cargo info`, and what a caret requirement really permits
 - [A tree of practice projects](../practice_workspace/README.md) — the answer when there are forty of these rather than one
 - [bacon](../bacon/README.md) — the tests re-running on save, in a pane you leave open

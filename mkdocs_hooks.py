@@ -58,7 +58,16 @@ NAV_ORDER: dict[str, list[str]] = {
         "KATAS.md",
         "00_Start_Here",
         "01_Foundations",
+        # The foundations, split into the arcs its NAV_ORDER comments
+        # already described: run it, then your own types, then the two
+        # enums everything returns, then who owns the value, then text,
+        # then the bytes under all of it.
+        "15_First_Programs",
+        "16_Structs",
+        "17_Option_and_Result",
+        "18_Ownership",
         "14_Strings",
+        "19_Numbers",
         # The two features the rest of the language is built out of, which is
         # why they come straight after the foundations rather than at the end.
         # Enums first: a reader leaving the foundations has already used four.
@@ -114,6 +123,9 @@ NAV_ORDER: dict[str, list[str]] = {
     ],
     "01_Foundations": [
         "README.md",
+    ],
+    "15_First_Programs": [
+        "README.md",
         # How to run any of this at all, before the language itself.
         "rustc_without_cargo",
         # ...and what the text in that file means, before any of it is Rust:
@@ -122,13 +134,25 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...and what the compiler says back about it. Third because everyone
         # meets `unused variable` on day one; its Drop half pays off much later.
         "what_a_warning_is_asking",
-        # ...and the messages that DO stop the build, read the same way.
-        "when_a_struct_refuses",
         # ...and then the two pieces of punctuation every page below is
         # already using without explaining: the braces that hold a program
         # together, and the braces that print.
         "a_block_is_an_expression",
         "braces_take_a_name",
+        # ...and then the other half of printing, once the braces are
+        # understood: which of the two traits fills them, and why only one
+        # of them can be derived.
+        "debug_vs_display",
+        # The macro that needs the trait above, and does five things
+        # println!("{:?}") does not.
+        "what_dbg_does",
+        # Last, because it is the first thing that needs anything outside
+        # the standard library: the crate almost everyone adds first, and
+        # the API the Book still teaches under its old names.
+        "randomness",
+    ],
+    "16_Structs": [
+        "README.md",
         # A compound type of your own, before the two the library leans on.
         "what_a_struct_is",
         # ...and where a value of one actually comes from.
@@ -136,6 +160,15 @@ NAV_ORDER: dict[str, list[str]] = {
         "impl_blocks",
         "struct_update",
         "copy_vs_clone",
+        # Closes the section with the errors a struct actually produces —
+        # eight of them, and the fix each is asking for.
+        "when_a_struct_refuses",
+        "newtype_score",
+        "representing_a_ballot",
+    ],
+    "17_Option_and_Result": [
+        "README.md",
+        # The enum itself before anything built on it.
         "some_and_none",
         "some_is_a_constructor",
         "option_vs_result",
@@ -156,21 +189,18 @@ NAV_ORDER: dict[str, list[str]] = {
         "none_on_error",
         "wrong_guard",
         "initial_values",
-        # The first crate almost everyone adds, and the API the Book still
-        # teaches under its old names.
-        "randomness",
         "optional_arguments",
         "option_fields",
         "option_as_collection",
         "nullable_pointers",
         "result_aliases",
         "shadowing_and_unwrap",
-        # Closes the Result run by asking how any of it reaches a person:
-        # the sentence you wrote for a human, and the paths that print the other one.
-        "debug_vs_display",
-        # The macro that needs the trait above, and does five things
-        # println!("{:?}") does not.
-        "what_dbg_does",
+        # Closes the section by asking what to do when two variants are not
+        # enough: "blank is not zero" stops at two cases, markers need six.
+        "six_kinds_of_zero",
+    ],
+    "18_Ownership": [
+        "README.md",
         # Opens the ownership arc — the next thread after the Option run.
         "ownership_and_moves",
         # ...and the thing everyone tries first to SEE a move happen, which
@@ -196,10 +226,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # asked to mean. Last, because it measures the borrow region, the
         # drop order and the shadow — all three already met by here.
         "scope_is_about_names",
-        "newtype_score",
-        "representing_a_ballot",
-        # The sequel: "blank is not zero" stops at two cases; markers need six.
-        "six_kinds_of_zero",
+    ],
+    "19_Numbers": [
+        "README.md",
         # Opens the numbers arc: the unit every other size is counted in.
         "meet_the_byte",
         # ...and how to write one down, which is the last thing before meaning.
@@ -209,9 +238,6 @@ NAV_ORDER: dict[str, list[str]] = {
         # Closes the numbers arc, and hands off to the 09_Advanced exactness cluster.
         "what_a_float_stores",
     ],
-    # Reading order for the command-line-tool arc. These sections are stubs for
-    # now — outlines with no examples behind them yet — so the order is the one a
-    # finished section would want, not the order they were written in.
     "14_Strings": [
         "README.md",
         # Opens the strings arc — the pair of types the ownership pages were
@@ -242,6 +268,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # owned/borrowed pattern all six repeat.
         "six_kinds_of_string",
     ],
+    # Reading order for the command-line-tool arc. These sections are stubs for
+    # now — outlines with no examples behind them yet — so the order is the one a
+    # finished section would want, not the order they were written in.
     "02_Errors": [
         "README.md",
         # Failures you did not notice: the Result you threw away, and the loop

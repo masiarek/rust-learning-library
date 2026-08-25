@@ -6,7 +6,7 @@
 
 Structs are the type you define on your first day and are still designing in your third month, so the lessons are spread across the library rather than gathered in one folder. What follows is a reading order, not a syllabus; start where your question is.
 
-**If you just want to know what a struct *is*, read [What a struct is](01_Foundations/what_a_struct_is/README.md)** — the tables below are the route, not the explanation.
+**If you just want to know what a struct *is*, read [What a struct is](16_Structs/what_a_struct_is/README.md)** — the tables below are the route, not the explanation.
 
 ---
 
@@ -18,7 +18,7 @@ So the library keeps a strict split, and it is worth knowing which surface answe
 
 | Surface | Holds | Example |
 |---|---|---|
-| a **topic folder** | one idea, with a runnable program | `01_Foundations/what_a_struct_is/` |
+| a **topic folder** | one idea, with a runnable program | `16_Structs/what_a_struct_is/` |
 | **this map** | the reading order, and what is still missing | you are here |
 | [KATAS.md](KATAS.md) | the exercises, numbered — the numbers live nowhere else | K52 |
 | [GLOSSARY.md](GLOSSARY.md) | the vocabulary, one line each, linking the page | *associated function* |
@@ -84,7 +84,7 @@ flowchart TD
     Q3 -- no --> TUP["TUPLE STRUCT<br/>positional, for 2 or 3 obvious parts"]
 ```
 
-The newtype branch is the one people skip and then want back: [A score is not a number](01_Foundations/newtype_score/README.md), and why [an alias gives no safety at all](01_Foundations/result_aliases/README.md).
+The newtype branch is the one people skip and then want back: [A score is not a number](16_Structs/newtype_score/README.md), and why [an alias gives no safety at all](17_Option_and_Result/result_aliases/README.md).
 
 ### 3. Which receiver do I write?
 
@@ -133,25 +133,25 @@ flowchart LR
 
 | # | Lesson | Level | The question it answers |
 |---|---|---|---|
-| 1 | [What a struct is](01_Foundations/what_a_struct_is/README.md) | 101 → 201 | The three flavors, `impl` vs the struct body, associated function vs method, and why privacy is per *module* |
-| 2 | [`impl` blocks](01_Foundations/impl_blocks/README.md) | 101 → 201 | Where the functions went — associated function vs method, the three receivers, and inherent vs trait impl |
-| 3 | [A score is not a number: the newtype](01_Foundations/newtype_score/README.md) | 101 → 201 | The tuple struct with a job — one checked door, and the invalid value stops existing |
-| 4 | [`Option` fields](01_Foundations/option_fields/README.md) | 101 | Required by default, and the one question that decides whether a field should be optional at all |
-| 5 | [Debug and Display](01_Foundations/debug_vs_display/README.md) | 101 → 201 | Why `{}` refuses your struct and `{:?}` does not — the first derive you will reach for |
-| [When a struct refuses](01_Foundations/when_a_struct_refuses/README.md) | 101 → 201 | The eight errors you will actually hit — and why `E0277` names four unrelated problems |
-| [What `dbg!` does](01_Foundations/what_dbg_does/README.md) | 101 → 201 | Five things it does that `println!("{:?}")` does not — and why a field prints when the struct will not |
+| 1 | [What a struct is](16_Structs/what_a_struct_is/README.md) | 101 → 201 | The three flavors, `impl` vs the struct body, associated function vs method, and why privacy is per *module* |
+| 2 | [`impl` blocks](16_Structs/impl_blocks/README.md) | 101 → 201 | Where the functions went — associated function vs method, the three receivers, and inherent vs trait impl |
+| 3 | [A score is not a number: the newtype](16_Structs/newtype_score/README.md) | 101 → 201 | The tuple struct with a job — one checked door, and the invalid value stops existing |
+| 4 | [`Option` fields](17_Option_and_Result/option_fields/README.md) | 101 | Required by default, and the one question that decides whether a field should be optional at all |
+| 5 | [Debug and Display](15_First_Programs/debug_vs_display/README.md) | 101 → 201 | Why `{}` refuses your struct and `{:?}` does not — the first derive you will reach for |
+| [When a struct refuses](16_Structs/when_a_struct_refuses/README.md) | 101 → 201 | The eight errors you will actually hit — and why `E0277` names four unrelated problems |
+| [What `dbg!` does](15_First_Programs/what_dbg_does/README.md) | 101 → 201 | Five things it does that `println!("{:?}")` does not — and why a field prints when the struct will not |
 
 ## The data inside
 
 | Lesson | Level | What it teaches |
 |---|---|---|
-| [`Copy` vs `Clone`](01_Foundations/copy_vs_clone/README.md) | 101 → 201 | Why a struct is never `Copy` by accident, and the three refusals — `E0277`, `E0204`, `E0184` |
-| [Struct update syntax](01_Foundations/struct_update/README.md) | 101 → 201 | `..base` moves field by field, so the base ends up *partially* dead — and `Copy` decides which half |
-| [`Some` is a constructor, not a flag](01_Foundations/some_is_a_constructor/README.md) | 101 → 201 | `Some(None)` in a field, and the doubly-optional type that makes it legal |
-| [What is a ballot, in memory?](01_Foundations/representing_a_ballot/README.md) | 201 | Designing a real struct: the layout choices, and the parallel `Vec`s that desync |
-| [Six kinds of zero](01_Foundations/six_kinds_of_zero/README.md) | 201 | When a field's zero is a value and when it is a hole |
-| [Bit flags](01_Foundations/bit_flags/README.md) | 201 | Packing several fields into one integer, and when that is worth doing |
-| [The `Result` you are reading is probably an alias](01_Foundations/result_aliases/README.md) | 201 | The *other* way to name a type — and why an alias gives no safety at all |
+| [`Copy` vs `Clone`](16_Structs/copy_vs_clone/README.md) | 101 → 201 | Why a struct is never `Copy` by accident, and the three refusals — `E0277`, `E0204`, `E0184` |
+| [Struct update syntax](16_Structs/struct_update/README.md) | 101 → 201 | `..base` moves field by field, so the base ends up *partially* dead — and `Copy` decides which half |
+| [`Some` is a constructor, not a flag](17_Option_and_Result/some_is_a_constructor/README.md) | 101 → 201 | `Some(None)` in a field, and the doubly-optional type that makes it legal |
+| [What is a ballot, in memory?](16_Structs/representing_a_ballot/README.md) | 201 | Designing a real struct: the layout choices, and the parallel `Vec`s that desync |
+| [Six kinds of zero](17_Option_and_Result/six_kinds_of_zero/README.md) | 201 | When a field's zero is a value and when it is a hole |
+| [Bit flags](19_Numbers/bit_flags/README.md) | 201 | Packing several fields into one integer, and when that is worth doing |
+| [The `Result` you are reading is probably an alias](17_Option_and_Result/result_aliases/README.md) | 201 | The *other* way to name a type — and why an alias gives no safety at all |
 
 ## Ownership, borrowing, lifetimes
 
@@ -159,20 +159,20 @@ A struct owning its fields is the default, and the reason [`String` shows up in 
 
 | Lesson | Level | What it teaches |
 |---|---|---|
-| [Ownership and moves](01_Foundations/ownership_and_moves/README.md) | 101 | A move transfers responsibility — what happens when a struct owns its fields |
-| [Borrowing](01_Foundations/borrowing/README.md) | 101 → 201 | `&T` and `&mut T`, and the rule that decides which order compiles |
-| [How to learn lifetimes](01_Foundations/how_to_learn_lifetimes/README.md) | 201 | Is *"clone everything"* good advice? Mostly — with three amendments |
-| [A name is not a place](01_Foundations/a_name_is_not_a_place/README.md) | 201 | Why `mut` belongs to the binding, which is why you cannot mark one field mutable |
+| [Ownership and moves](18_Ownership/ownership_and_moves/README.md) | 101 | A move transfers responsibility — what happens when a struct owns its fields |
+| [Borrowing](18_Ownership/borrowing/README.md) | 101 → 201 | `&T` and `&mut T`, and the rule that decides which order compiles |
+| [How to learn lifetimes](18_Ownership/how_to_learn_lifetimes/README.md) | 201 | Is *"clone everything"* good advice? Mostly — with three amendments |
+| [A name is not a place](18_Ownership/a_name_is_not_a_place/README.md) | 201 | Why `mut` belongs to the binding, which is why you cannot mark one field mutable |
 
 ## Deriving, and the traits you get for free
 
 | Lesson | Level | What it teaches |
 |---|---|---|
-| [`unwrap_or_default`](01_Foundations/unwrap_or_default/README.md) | 201 | A derived `Default` is the *type's* zero, not your domain's — and struct update syntax |
+| [`unwrap_or_default`](17_Option_and_Result/unwrap_or_default/README.md) | 201 | A derived `Default` is the *type's* zero, not your domain's — and struct update syntax |
 | [The `Default` trait](03_Command_Line/the_default_trait/README.md) | 201 | `..Default::default()` and the config struct built out of it — **stub**, an outline only |
 | [`serde` derive](06_Data/serde_derive/README.md) | 201 | The derive that turns a struct into a wire format — **stub**, an outline only |
 | [`clap` derive](03_Command_Line/clap_derive/README.md) | 201 | A struct that *is* the command-line interface — **stub**, an outline only |
-| [Comments that compile](01_Foundations/comments_that_compile/README.md) | 101 → 201 | `///` on a field or a method is `#[doc]`, and its examples are run as tests |
+| [Comments that compile](15_First_Programs/comments_that_compile/README.md) | 101 → 201 | `///` on a field or a method is `#[doc]`, and its examples are run as tests |
 
 ## Structs in the wild
 

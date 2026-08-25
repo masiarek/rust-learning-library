@@ -68,5 +68,5 @@ Neither is required for anything. `search` + `info` + `add` is the whole job; th
 ## See also
 
 - [Pinning the toolchain](../pinning_the_toolchain/README.md) — the same lock-versus-range idea, applied to the compiler
-- [Running a scratch program](../../01_Foundations/rustc_without_cargo/README.md) — what `cargo new` set up, and what `rustc` does without it
+- [Running a scratch program](../../15_First_Programs/rustc_without_cargo/README.md) — what `cargo new` set up, and what `rustc` does without it
 - [Compile times](../compile_times/README.md) — why an unused dependency is not free

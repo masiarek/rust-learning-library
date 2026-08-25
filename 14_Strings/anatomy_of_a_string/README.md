@@ -52,7 +52,7 @@ println!("{view}");
 error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
 ```
 
-Without that rule, `view` would point into freed memory the moment a push reallocates. The [borrowing](../../01_Foundations/borrowing/README.md) rules are not string-specific — but a growable buffer is where they earn their keep most visibly.
+Without that rule, `view` would point into freed memory the moment a push reallocates. The [borrowing](../../18_Ownership/borrowing/README.md) rules are not string-specific — but a growable buffer is where they earn their keep most visibly.
 
 ## A `Vec<u8>` that promises UTF-8
 
@@ -222,7 +222,7 @@ The rule to carry away:
 Run it yourself:
 
 ```bash
-rustc --edition 2024 01_Foundations/anatomy_of_a_string/examples/anatomy_of_a_string.rs -o /tmp/anat && /tmp/anat
+rustc --edition 2024 14_Strings/anatomy_of_a_string/examples/anatomy_of_a_string.rs -o /tmp/anat && /tmp/anat
 ```
 
 ## See also
@@ -230,7 +230,7 @@ rustc --edition 2024 01_Foundations/anatomy_of_a_string/examples/anatomy_of_a_st
 - [STRINGS.md](../../STRINGS.md) — the map: every string lesson, in reading order
 - [`String` vs `&str`](../string_vs_str/README.md) — who owns, who looks
 - [Meet the `char`](../meet_the_char/README.md) — what those heap bytes encode
-- [Borrowing](../../01_Foundations/borrowing/README.md) — the rule that stopped `view` above
-- [Meet the byte](../../01_Foundations/meet_the_byte/README.md) — the unit `len` and `capacity` count in
-- [What an address shows](../../01_Foundations/what_an_address_shows/README.md) — which of these two places `&s` actually points at, and what a move does to each
+- [Borrowing](../../18_Ownership/borrowing/README.md) — the rule that stopped `view` above
+- [Meet the byte](../../19_Numbers/meet_the_byte/README.md) — the unit `len` and `capacity` count in
+- [What an address shows](../../18_Ownership/what_an_address_shows/README.md) — which of these two places `&s` actually points at, and what a move does to each
 - [std docs — `String` ↗](https://doc.rust-lang.org/std/string/struct.String.html) · [`std::alloc` ↗](https://doc.rust-lang.org/std/alloc/index.html), where the buffer actually comes from

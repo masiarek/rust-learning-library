@@ -22,7 +22,7 @@ A third, quieter one: **each rung is a complete program in one file, and it stay
 
 | # | The STAR step | The Rust idea it exists to teach | Status |
 |---|---|---|---|
-| 1 | A score is 0–5, not any integer | Newtypes, `struct`/`impl`/`derive`, and why privacy is per *module* | [written](01_Foundations/newtype_score/README.md) |
+| 1 | A score is 0–5, not any integer | Newtypes, `struct`/`impl`/`derive`, and why privacy is per *module* | [written](16_Structs/newtype_score/README.md) |
 | 2 | What *is* a ballot, in memory? | The data types: array vs `Vec` vs tuple vs struct vs `HashMap`, and owned vs borrowed | **next** |
 | 3 | A candidate is not a name | Index newtypes, `&str` vs `String`, and lookup by position rather than by string | planned |
 | 4 | Sum each candidate's scores | Iterators — `map` / `sum` / `fold` — and the overflow you get for choosing the wrong integer to sum *into* | planned |

@@ -22,4 +22,4 @@ Reuse is presented as the fast option, and it is — but the borrow it needs (`&
 
 - [Readers are fallible](../../02_Errors/readers_are_fallible/README.md) — every line in all three shapes arrives inside a `Result`
 - [Endless iteration](../../02_Errors/endless_iteration/README.md) — the two loops this page's third shape can turn into
-- [Borrowing](../../01_Foundations/borrowing/README.md) — why the reused buffer has to be handed over and handed back
+- [Borrowing](../../18_Ownership/borrowing/README.md) — why the reused buffer has to be handed over and handed back

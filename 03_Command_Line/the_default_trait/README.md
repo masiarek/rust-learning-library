@@ -16,10 +16,10 @@
 
 ## The trap it exists for
 
-A derived `Default` is the **type's** zero, not your domain's — a `Timeout(0)` or a `Retries(0)` is a perfectly good `u32` and a terrible policy. [`unwrap_or_default`](../../01_Foundations/unwrap_or_default/README.md) already tells that story from the calling side; this page is the same fact from the *defining* side, where you can still do something about it.
+A derived `Default` is the **type's** zero, not your domain's — a `Timeout(0)` or a `Retries(0)` is a perfectly good `u32` and a terrible policy. [`unwrap_or_default`](../../17_Option_and_Result/unwrap_or_default/README.md) already tells that story from the calling side; this page is the same fact from the *defining* side, where you can still do something about it.
 
 ## See also
 
-- [`unwrap_or_default`](../../01_Foundations/unwrap_or_default/README.md) — the fallback the type chose, and the missing impl that is a guard rail
-- [Optional function arguments](../../01_Foundations/optional_arguments/README.md) — the options-struct pattern this makes bearable
+- [`unwrap_or_default`](../../17_Option_and_Result/unwrap_or_default/README.md) — the fallback the type chose, and the missing impl that is a guard rail
+- [Optional function arguments](../../17_Option_and_Result/optional_arguments/README.md) — the options-struct pattern this makes bearable
 - [Flags by hand](../flags_by_hand/README.md) — the struct that wanted a default in the first place

@@ -21,5 +21,5 @@ Both of these are one-line decisions, and both defaults are wrong half the time.
 ## See also
 
 - [Opening a file](../opening_a_file/README.md) — where the `ErrorKind` comes from
-- [`unwrap_or_default`](../../01_Foundations/unwrap_or_default/README.md) — the fallback that is right here and dangerous next door
-- [Six kinds of zero](../../01_Foundations/six_kinds_of_zero/README.md) — the same lesson in another domain: empty has more than one reason
+- [`unwrap_or_default`](../../17_Option_and_Result/unwrap_or_default/README.md) — the fallback that is right here and dangerous next door
+- [Six kinds of zero](../../17_Option_and_Result/six_kinds_of_zero/README.md) — the same lesson in another domain: empty has more than one reason

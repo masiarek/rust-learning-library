@@ -55,7 +55,7 @@ The mechanism is the **niche**: a spare bit pattern the payload can never itself
 
 So the honest rule is: **as big as the largest payload, plus a tag only when there is nowhere free to put it.** Every time you have hesitated over whether `Option<Box<T>>` is worth the wrapper, the answer was that it is the same eight bytes as the pointer.
 
-`Never` is not a curiosity: an enum with no variants is a type no value can inhabit, which is how [`Infallible`](../../01_Foundations/result_aliases/README.md) says *"this `Result` cannot be an `Err`"* and pays nothing for saying it.
+`Never` is not a curiosity: an enum with no variants is a type no value can inhabit, which is how [`Infallible`](../../17_Option_and_Result/result_aliases/README.md) says *"this `Result` cannot be an `Err`"* and pays nothing for saying it.
 
 ## Which variant is this, without a `match`
 
@@ -87,7 +87,7 @@ enum Reading {
 }
 ```
 
-The first version has four states, two of which are nonsense that every reader of the struct has to defend against forever. The second has two. This is the same argument [six kinds of zero](../../01_Foundations/six_kinds_of_zero/README.md) makes with six cases instead of two, and the same one that makes `Result` a better return type than a value-plus-a-flag.
+The first version has four states, two of which are nonsense that every reader of the struct has to defend against forever. The second has two. This is the same argument [six kinds of zero](../../17_Option_and_Result/six_kinds_of_zero/README.md) makes with six cases instead of two, and the same one that makes `Result` a better return type than a value-plus-a-flag.
 
 ## If you are coming from another language
 
@@ -137,7 +137,7 @@ different variant:               false
 ## See also
 
 - [What an enum is](../what_an_enum_is/README.md) — the declaration, and the four shapes of variant
-- [`Option` is a one-item collection](../../01_Foundations/option_as_collection/README.md) — the tag, the niche, and `None` as variant zero
-- [Nullable pointers](../../01_Foundations/nullable_pointers/README.md) — where the free tag matters most, and what makes a recursive type possible
+- [`Option` is a one-item collection](../../17_Option_and_Result/option_as_collection/README.md) — the tag, the niche, and `None` as variant zero
+- [Nullable pointers](../../17_Option_and_Result/nullable_pointers/README.md) — where the free tag matters most, and what makes a recursive type possible
 - [What a union is](../../09_Advanced/what_a_union_is/README.md) — the untagged version, and the desync only it can have
-- [Six kinds of zero](../../01_Foundations/six_kinds_of_zero/README.md) — when two variants are not enough
+- [Six kinds of zero](../../17_Option_and_Result/six_kinds_of_zero/README.md) — when two variants are not enough

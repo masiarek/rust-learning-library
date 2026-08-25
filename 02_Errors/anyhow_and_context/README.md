@@ -23,4 +23,4 @@ Context is added where the error is *created* — the deepest, least informed fr
 
 - [Not every error is an `io::Error`](../not_every_error_is_io_error/README.md) — why an application wants one type in the first place
 - [`thiserror` vs `anyhow`](../thiserror_vs_anyhow/README.md) — the line this crate belongs on the far side of
-- [Debug and Display](../../01_Foundations/debug_vs_display/README.md) — which of the two the chain prints, and where
+- [Debug and Display](../../15_First_Programs/debug_vs_display/README.md) — which of the two the chain prints, and where

@@ -20,6 +20,6 @@
 
 ## See also
 
-- [`Option` vs `Result`](../../01_Foundations/option_vs_result/README.md) — Step 8 designs the `E`, Step 9 is when you would rather not
+- [`Option` vs `Result`](../../17_Option_and_Result/option_vs_result/README.md) — Step 8 designs the `E`, Step 9 is when you would rather not
 - [`thiserror` vs `anyhow`](../thiserror_vs_anyhow/README.md) — the same decision, with the two crates that own each side of it
-- [The `Result` you are reading is probably an alias](../../01_Foundations/result_aliases/README.md) — how to expand `io::Result` and see the `E` you are trying to convert
+- [The `Result` you are reading is probably an alias](../../17_Option_and_Result/result_aliases/README.md) — how to expand `io::Result` and see the `E` you are trying to convert

@@ -22,4 +22,4 @@ Both approaches fail on a changed API; they differ in *when*. Structs fail loudl
 
 - [Deriving `Serialize` and `Deserialize`](../../06_Data/serde_derive/README.md) — the derive, and the attributes that survive somebody else's naming
 - [Mocking a server](../mocking_a_server/README.md) — where a stored real response earns its keep
-- [`Option` vs `Result`](../../01_Foundations/option_vs_result/README.md) — absent, or failed? The field that is missing has to pick one
+- [`Option` vs `Result`](../../17_Option_and_Result/option_vs_result/README.md) — absent, or failed? The field that is missing has to pick one

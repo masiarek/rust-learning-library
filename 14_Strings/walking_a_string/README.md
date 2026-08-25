@@ -289,7 +289,7 @@ The slice: "bête noir  d'Arrrgh "
 Run it yourself:
 
 ```bash
-rustc --edition 2024 01_Foundations/walking_a_string/examples/walking_a_string.rs -o /tmp/ws && /tmp/ws
+rustc --edition 2024 14_Strings/walking_a_string/examples/walking_a_string.rs -o /tmp/ws && /tmp/ws
 ```
 
 ## See also
@@ -297,6 +297,6 @@ rustc --edition 2024 01_Foundations/walking_a_string/examples/walking_a_string.r
 - [STRINGS.md](../../STRINGS.md) — the map: every string lesson, in reading order
 - [Meet the `char`](../meet_the_char/README.md) — why `bytes()` and `chars()` give different counts
 - [String slices](../string_slices/README.md) — what those byte offsets are for, and how they panic
-- [Meet the byte](../../01_Foundations/meet_the_byte/README.md) — the `u8` that `bytes()` yields
-- [`Option` as a collection](../../01_Foundations/option_as_collection/README.md) — the `Option<u8>` the kata builds, iterated
+- [Meet the byte](../../19_Numbers/meet_the_byte/README.md) — the `u8` that `bytes()` yields
+- [`Option` as a collection](../../17_Option_and_Result/option_as_collection/README.md) — the `Option<u8>` the kata builds, iterated
 - [`str::split` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split) · [`Pattern` ↗](https://doc.rust-lang.org/std/str/pattern/trait.Pattern.html) · [`str::split_once` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split_once)

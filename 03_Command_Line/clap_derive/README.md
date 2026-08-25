@@ -11,7 +11,7 @@
 - Cargo features: `clap` does nothing until `features = ["derive"]` is on, and what a feature actually is
 - The mapping — a `bool` field is a switch, an `Option<T>` is optional, a `Vec<T>` collects repeats, a plain `T` is required
 - `#[command(...)]` metadata pulled from `Cargo.toml`, so the version in `--version` cannot drift from the version you shipped
-- **Doc comments become help text** — the same `///` that [is really an attribute](../../01_Foundations/comments_that_compile/README.md), doing a third job
+- **Doc comments become help text** — the same `///` that [is really an attribute](../../15_First_Programs/comments_that_compile/README.md), doing a third job
 - `Parser::parse()` in `main` against `try_parse_from(["prog", "--words"])` in a test, which is what makes the interface unit-testable at all
 - The counterweight: one flag and no dependencies does not need a dependency
 
@@ -23,4 +23,4 @@ A derived parser is so cheap that it becomes the *specification* of the program 
 
 - [Flags by hand](../flags_by_hand/README.md) — the work this is replacing, and the conventions it gets right for free
 - [Testing a command](../testing_a_command/README.md) — testing the parser and testing the program are two different tests
-- [Comments that compile](../../01_Foundations/comments_that_compile/README.md) — why a `///` above a field can turn into help text at all
+- [Comments that compile](../../15_First_Programs/comments_that_compile/README.md) — why a `///` above a field can turn into help text at all
