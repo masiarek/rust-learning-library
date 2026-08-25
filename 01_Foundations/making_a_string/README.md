@@ -6,11 +6,11 @@
 
 | you write | what it is | reach for it when |
 |---|---|---|
-| `s.to_owned()` | the borrow → owned conversion | you have a `&str` and want the owned twin |
-| `String::from(s)` | the same `From` impl, constructor-shaped | you prefer it to read as construction |
-| `s.to_string()` | goes through `Display` | the source is *anything* printable |
-| `s.into()` | `From`, backwards | the target type is already fixed by context |
-| `format!("{s}")` | allocates and runs the formatter | you are *building*, not converting |
+| [`s.to_owned()`](../../12_Traits/to_owned/README.md) | the borrow → owned conversion | you have a `&str` and want the owned twin |
+| [`String::from(s)` ↗](https://doc.rust-lang.org/std/convert/trait.From.html) | the same `From` impl, constructor-shaped | you prefer it to read as construction |
+| [`s.to_string()` ↗](https://doc.rust-lang.org/std/string/trait.ToString.html) | goes through `Display` | the source is *anything* printable |
+| [`s.into()` ↗](https://doc.rust-lang.org/std/convert/trait.Into.html) | `From`, backwards | the target type is already fixed by context |
+| [`format!("{s}")`](../building_a_string/README.md) | allocates and runs the formatter | you are *building*, not converting |
 
 ---
 
@@ -310,4 +310,6 @@ rustc --edition 2024 01_Foundations/making_a_string/examples/making_a_string.rs 
 - [`Debug` vs `Display`](../debug_vs_display/README.md) — the trait you derive and the trait you write
 - [Six kinds of string](../six_kinds_of_string/README.md) — why half the conversions above return `Result`
 - [`Copy` vs `Clone`](../copy_vs_clone/README.md) — what the accidental `to_string()` on a `String` actually costs
+- [Building a `String`](../building_a_string/README.md) — `push_str`, `+` and `format!`, for when you are assembling rather than converting
+- [`ToOwned`](../../12_Traits/to_owned/README.md) — the trait behind `to_owned()`, and why `str`'s owned twin is a different type
 - [`ToString` ↗](https://doc.rust-lang.org/std/string/trait.ToString.html) · [`Display` ↗](https://doc.rust-lang.org/std/fmt/trait.Display.html) · [`FromStr` ↗](https://doc.rust-lang.org/std/str/trait.FromStr.html) · [Rust Language Cheat Sheet — String conversions ↗](https://cheats.rs/#string-conversions)
