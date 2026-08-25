@@ -21,6 +21,7 @@ python3 rust_scaffold.py doctor ~/rust-practice
 | `.idea/` run configurations | **Yes, and it keeps paying** | Outside Cargo entirely; no inheritance mechanism reaches it, so this is the one part a workspace can never replace |
 | The IDE's own settings — linter, on-the-fly analysis | **Impossible** | They are IDE-global, not project files. A script can only *tell you* to set them |
 | Checking what is declared against what is installed | **Yes — the best one** | Nothing else does it, and the failures are silent by construction |
+| Absolute paths in compiler output | **Yes** | One line, and it is the one file here that only an absolute path can express — so it is also the one a `git clone` invalidates |
 | The CI workflow | **Yes, marginally** | One file, written once — but it is the file that makes the toolchain pin mean anything |
 
 The first row is the interesting one, because it is the row everybody starts with.
@@ -64,6 +65,7 @@ rust-practice/
 ├── clippy.toml                  the tests carve-out
 ├── rustfmt.toml                 the whitespace answer, for cargo fmt / the IDE / CI alike
 ├── .editorconfig                the same width, for the files rustfmt never sees
+├── .cargo/config.toml           absolute paths in diagnostics — gitignored, it names THIS directory
 ├── bacon.toml                   the job re-run on every save
 ├── .gitignore
 ├── README.md
@@ -78,7 +80,7 @@ rust-practice/
 Re-running is safe, which is what makes it usable on a tree that already exists:
 
 ```text title="Real output — a second `init` on the same directory"
-0 written, 14 kept.
+0 written, 15 kept.
 ```
 
 Nothing is clobbered without `--force`, so picking up a new run configuration months later is just running `init` again.
@@ -125,6 +127,44 @@ info: latest update on 2026-08-25 for version 1.100.0-nightly (e7769602a 2026-08
 ```
 
 That is also how CI gets it: `rustup show` as the first step, no toolchain action, no version anywhere but the one file.
+
+## The lints a scratch tree turns off
+
+The [strict clippy policy](../strict_lints/README.md) is about lints to turn *on*. A practice tree needs one decision in the other direction, and `init` writes it:
+
+```toml
+[workspace.lints.rust]
+unused_variables = "allow"
+unused_imports = "allow"
+unused_mut = "allow"
+dead_code = "allow"
+```
+
+The reason is what a practice file *is*. It exists to show a form — five ways to make a `String`, each bound to a name nobody ever reads — and `unused_variables` fires on every single one:
+
+```text
+warning: unused variable: `a`
+ --> src/main.rs:5:9
+  |
+5 |     let a = literal.to_string();
+  |         ^ help: if this is intentional, prefix it with an underscore: `_a`
+```
+
+Five of those, on a six-line program that is doing exactly what it was written to do. The suggestion is not even wrong — `_a` is the right fix in real code — but taking it renames the thing the lesson is about, and refusing it five times a session teaches the one habit no lint policy survives: that warnings are wallpaper. A tree where a clean run means something is worth more here than four lints that are right about code nobody is going to keep.
+
+**`unused_must_use` is deliberately not in that list**, which is why it is four lines rather than the single `unused = "allow"` the warning's own footer suggests:
+
+```text
+  = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+```
+
+That footer names the group, and reaching for the group is the obvious move. But `unused_must_use` is in it too, and it fires on an ignored `Result` — a dropped error, not an unread name. Those are not the same kind of noise, and only one of them is noise at all:
+
+```text title="Real output — the same tree, on a program that ignores a Result"
+warning: unused `std::result::Result` that must be used
+```
+
+Pass `--warn-unused` to `init` if you want the four back. And note the mechanism is the same one the clippy policy uses, so it inherits the same way and has the same silent failure: a member with no `[lints] workspace = true` gets none of it, which is the check `doctor` grew for it.
 
 ## The RustRover half
 
@@ -175,6 +215,8 @@ Everything above is a one-time job. This is the part that stays useful, because 
   ✓ rustfmt max_width and .editorconfig max_line_length agree (100)
   ✓ bacon
   ✓ cargo-nextest
+  ✓ all 1 member(s) opt in to the workspace lint policy
+  ✓ compiler output names files absolutely (the remap points at this tree)
   · .idea/ present, 4 run configuration(s)
   ✓ .idea/workspace.xml is ignored (it is per-user churn)
 
@@ -191,10 +233,15 @@ The same tree with the channel switched to `stable` and `.editorconfig` widened 
 
 Every one of those three is a *cross-file* invariant, which is exactly the category no single tool owns. Cargo does not read `rustfmt.toml`. rustfmt does not read `.editorconfig`. The IDE reads `.editorconfig` and not `rustfmt.toml`. Each tool is behaving correctly and the tree is still wrong, and the only thing that can notice is something that reads all of them at once.
 
-Two more in the same family, both cheap and both real:
+Three more in the same family, all cheap and all real:
 
 - **`active toolchain is not <pinned>`** catches a `rustc` that is not a rustup shim — a Homebrew or Nix binary — which ignores `rust-toolchain.toml` completely. That is the standard explanation for a pin that appears not to apply, and nothing else on the machine will tell you.
 - **`component rust-analyzer` missing** catches the failure where the rustup shim, asked for a component the pinned toolchain lacks, falls back to itself and loops: `error: infinite recursion detected`. The editor shows no language server and no useful reason.
+- **The path remap pointing somewhere else** catches a tree that has been moved, renamed or cloned since `init` wrote `.cargo/config.toml`. It is the only check here whose failure is *louder* than the thing it replaced: the diagnostics keep printing confident absolute paths, at the old location.
+
+```text title="Real output — the same tree, copied to a new name"
+  ✗ the path remap points at /private/tmp/rust-practice, but this tree is /private/tmp/rust-practice-moved — every diagnostic names a file that is not here; re-run `init` with --force
+```
 
 ## What it deliberately does not do
 

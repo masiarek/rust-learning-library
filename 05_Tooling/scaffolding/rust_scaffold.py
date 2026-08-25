@@ -111,6 +111,24 @@ exit = "deny"
 }
 
 
+# The half of rustc's `unused` group that is pure noise in throwaway code. A
+# scratch file exists to show a form — five ways to make a String, each bound to a
+# name nobody reads — and `unused_variables` fires on every one of them, which
+# teaches a beginner that warnings are wallpaper. That is a worse habit than any of
+# these four lints prevents.
+#
+# `unused_must_use` is deliberately NOT here. It is in the same group and reads as
+# the same kind of pedantry, but it fires on an ignored `Result` — a dropped error,
+# not an unread name. Allowing the group wholesale with `unused = "allow"` would
+# take it out too, which is why this is four lines instead of one.
+SCRATCH_RUST_LINTS = """[workspace.lints.rust]
+unused_variables = "allow"
+unused_imports = "allow"
+unused_mut = "allow"
+dead_code = "allow"
+"""
+
+
 @dataclass
 class Plan:
     """What a run would write, so --dry-run and the real run share one list."""
@@ -145,7 +163,7 @@ components = [{components}]
 """
 
 
-def workspace_cargo_toml(lints: str, deps: bool) -> str:
+def workspace_cargo_toml(lints: str, deps: bool, allow_unused: bool) -> str:
     out = """# The workspace root. Nothing is built from here; everything is inherited.
 #
 # `members` is a GLOB, so a new directory under exercises/ is a member the moment
@@ -160,9 +178,14 @@ edition = "2024"
 """
     if lints:
         out += "\n" + lints
+    if allow_unused:
+        out += "\n" + SCRATCH_RUST_LINTS
+    if lints or allow_unused:
         out += """
 # Cargo writes `[lints] workspace = true` into a new member's manifest by itself,
-# because this table exists. That is the line a template would have had to copy.
+# because this table exists. That is the line a template would have had to copy —
+# and the line a member created BEFORE the table existed will not have, which is
+# what `doctor` checks. Without it a member inherits none of the above, silently.
 """
     if deps:
         body = "\n".join(f"{name} = {spec}" for name, spec in DEFAULT_DEPS.items())
@@ -174,6 +197,45 @@ edition = "2024"
 {body}
 """
     return out
+
+
+def cargo_config_toml(root: Path) -> str:
+    """The `.cargo/config.toml` that makes diagnostics name the file outright.
+
+    rustc prints a span RELATIVE TO ITS OWN WORKING DIRECTORY, and Cargo sets that
+    to the workspace root no matter where you invoked it from — so every project
+    on the machine reports `--> src/main.rs:5:9` and two IDE windows say the same
+    thing about different files.
+    """
+    return f"""# Absolute paths in compiler, clippy and rustfmt output.
+#
+# Without this a warning reads `--> src/main.rs:5:9`, because rustc prints a span
+# relative to its own working directory and Cargo sets that to the workspace root
+# — the same seven characters for every project you have open. With it the span
+# names the file outright and stays clickable from any terminal, not just from one
+# opened at the right directory.
+#
+# The DOUBLE `==` is not a typo and is the whole trick. `--remap-path-prefix=OLD=NEW`
+# here has an empty OLD, and the match is by PATH COMPONENT rather than by text: an
+# empty prefix matches the start of every RELATIVE path and no absolute one at all.
+# So your files get spelled out and the registry's and std's — already absolute —
+# pass through untouched. A trailing slash is optional for the same reason.
+#
+# THE PATH BELOW IS THIS DIRECTORY, spelled out because rustflags interpolate
+# nothing. Move or rename the tree and every diagnostic will point at where it used
+# to be, which is worse than a relative path, not better — so this file is
+# gitignored, and `rust_scaffold.py doctor` fails when the two disagree.
+#
+# Two side effects, both arguably improvements: `file!()` and panic locations become
+# absolute too, so a backtrace names a file you can open. If you record a program's
+# output as an answer key, record it after adding this.
+#
+# Note that a `RUSTFLAGS` environment variable REPLACES this wholesale rather than
+# adding to it, which is the usual reason it appears not to apply.
+
+[build]
+rustflags = ["--remap-path-prefix=={root}/"]
+"""
 
 
 CLIPPY_TOML = """# The carve-out that makes a strict lint policy liveable: prototype with `unwrap`
@@ -211,6 +273,8 @@ format_code_in_doc_comments = true
 
 
 GITIGNORE = """/target
+# Machine-specific: it hard-codes this tree's absolute path. See the file.
+/.cargo/config.toml
 /.idea/workspace.xml
 /.idea/shelf/
 .DS_Store
@@ -352,6 +416,7 @@ bacon                          # the same clippy job, re-run on every save
 | `clippy.toml` | the tests carve-out that makes the lint policy liveable |
 | `rustfmt.toml` | the whitespace answer, for `cargo fmt`, the IDE and CI alike |
 | `.editorconfig` | the same width, for the files rustfmt never sees |
+| `.cargo/config.toml` | absolute paths in compiler output, so a warning names the file |
 | `bacon.toml` | the job re-run on every save |
 | `.idea/` | run configurations, so the dropdown is populated on first open |
 
@@ -370,13 +435,18 @@ def build_plan(args: argparse.Namespace) -> Plan:
     nightly = args.channel.startswith("nightly")
 
     plan.add("rust-toolchain.toml", toolchain_toml(args.channel))
-    plan.add("Cargo.toml", workspace_cargo_toml(LINT_PROFILES[args.lints], not args.no_deps))
+    plan.add(
+        "Cargo.toml",
+        workspace_cargo_toml(LINT_PROFILES[args.lints], not args.no_deps, not args.warn_unused),
+    )
     plan.add("rustfmt.toml", rustfmt_toml(nightly))
     plan.add(".gitignore", GITIGNORE)
     plan.add(".editorconfig", EDITORCONFIG)
     plan.add("README.md", readme(root.name, args.channel))
     if args.lints != "none":
         plan.add("clippy.toml", CLIPPY_TOML)
+    if not args.no_abs_paths:
+        plan.add(".cargo/config.toml", cargo_config_toml(root))
     if not args.no_bacon:
         plan.add("bacon.toml", BACON_TOML)
     if not args.no_ci:
@@ -575,6 +645,45 @@ def cmd_doctor(args: argparse.Namespace) -> int:
         present = shutil.which(tool) is not None
         print(f"  {'✓' if present else '·'} {tool}{'' if present else f' not installed — optional, {why}'}")
 
+    # A member that predates the [workspace.lints] table inherits NOTHING from it
+    # and says nothing about that — the manifest is valid, the build is clean, and
+    # the lint policy simply does not apply to that one package.
+    root_manifest = root / "Cargo.toml"
+    if root_manifest.exists() and "[workspace.lints" in root_manifest.read_text(encoding="utf-8"):
+        members = sorted((root / "exercises").glob("*/Cargo.toml"))
+        missing = [
+            m.parent.name
+            for m in members
+            if "workspace = true" not in m.read_text(encoding="utf-8")
+        ]
+        if members:
+            check(
+                not missing,
+                f"all {len(members)} member(s) opt in to the workspace lint policy",
+                f"{', '.join(missing)} lack `[lints] workspace = true` — the root's lint "
+                "policy does not apply to them, silently; add the two lines to each manifest",
+            )
+
+    # The remap hard-codes an absolute path, so it is the one file here that a
+    # `git clone` or a `mv` silently invalidates — and it fails in the worst
+    # direction: diagnostics keep printing confident absolute paths, at the old
+    # location. Relative would have been better than wrong.
+    cargo_cfg = root / ".cargo" / "config.toml"
+    if cargo_cfg.exists():
+        m = re.search(r"--remap-path-prefix==([^\"]*)", cargo_cfg.read_text(encoding="utf-8"))
+        if m:
+            baked = Path(m.group(1).rstrip("/"))
+            check(
+                baked == root,
+                "compiler output names files absolutely (the remap points at this tree)",
+                f"the path remap points at {baked}, but this tree is {root} — every "
+                "diagnostic names a file that is not here; re-run `init` with --force",
+            )
+        else:
+            print("  · .cargo/config.toml present but sets no path remap")
+    else:
+        print("  · no .cargo/config.toml — diagnostics stay relative (`--> src/main.rs:5:9`)")
+
     idea = root / ".idea"
     if idea.exists():
         configs = sorted((idea / "runConfigurations").glob("*.xml")) if (idea / "runConfigurations").exists() else []
@@ -629,7 +738,17 @@ def main(argv: list[str] | None = None) -> int:
     p_init.add_argument("--channel", default=DEFAULT_CHANNEL, help=f"toolchain channel (default: {DEFAULT_CHANNEL})")
     p_init.add_argument("--lints", choices=sorted(LINT_PROFILES), default="learn")
     p_init.add_argument("--no-deps", action="store_true", help="omit [workspace.dependencies]")
+    p_init.add_argument(
+        "--warn-unused",
+        action="store_true",
+        help="keep rustc's unused_variables/imports/mut and dead_code at warn",
+    )
     p_init.add_argument("--no-idea", action="store_true", help="omit the .idea/ files")
+    p_init.add_argument(
+        "--no-abs-paths",
+        action="store_true",
+        help="omit .cargo/config.toml, leaving diagnostics relative to the tree root",
+    )
     p_init.add_argument("--no-ci", action="store_true", help="omit the GitHub Actions workflow")
     p_init.add_argument("--no-bacon", action="store_true", help="omit bacon.toml")
     p_init.add_argument("--no-git", action="store_true", help="do not run git init")
