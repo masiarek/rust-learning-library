@@ -163,10 +163,10 @@ node_modules/
 
 | From `~` | Files offered |
 |---|---|
-| before | ~652,700 |
-| after | ~8,700 |
+| before | 652,712 |
+| after | 9,430 |
 
-A seventy-fold cut, and what survives is `Desktop`, `Documents`, `Downloads` and your actual project folders. It applies to every `fd` invocation on the machine, Ctrl-T included, and costs you nothing you were going to search for — `rg -uu` and `fd -u` still reach past it when you genuinely mean to.
+Both figures are from the same shell on the same machine, minutes apart — a sixty-nine-fold cut, and what survives is `Desktop`, `Documents`, `Downloads` and your actual project folders. It applies to every `fd` invocation on the machine, Ctrl-T included, and costs you nothing you were going to search for — `rg -uu` and `fd -u` still reach past it when you genuinely mean to.
 
 Even at 8,684 this is a project tool used from inside a project. The honest rule is that Ctrl-T's list should be the tree you are working in; if you find yourself pressing it from `~`, the thing you actually wanted was to change directory first.
 
