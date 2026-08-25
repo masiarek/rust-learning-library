@@ -69,6 +69,7 @@ Start wherever your question is; each page stands alone.
 | "my editor shows no types and I cannot see why" | [Neovim with LazyVim](05_Tooling/neovim_setup/README.md) — two independent silent failures — or [Choosing an editor](05_Tooling/editors/README.md) for the shim trap |
 | "my tests are slow, or one of them takes the run down" | [cargo-nextest](05_Tooling/nextest/README.md) |
 | "which pin actually applies?" | [rustup](05_Tooling/rustup/README.md) — the five-rung precedence table |
+| "my editor is asking whether to allow MCP" | [What MCP is](05_Tooling/what_mcp_is/README.md) — what the two halves of `rustrover:read_file` are, and the difference between the two *Always allow* buttons |
 
 ---
 

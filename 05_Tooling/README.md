@@ -26,6 +26,7 @@ These pages are not about making your program better. They are about the loop yo
 | [rustup](rustup/README.md) | 101 → 201 | The `rustc` on your `PATH` is a 154-byte shim, and the five-rung rule it uses to pick the real one |
 | [Scaffolding a practice tree](scaffolding/README.md) | 201 | What a setup script should write — the workspace root, `.idea/` run configurations, and a `doctor` for the cross-file invariants no single tool owns — and the one thing it must not template |
 | [Strict clippy lints](strict_lints/README.md) | 201 | Denying `unwrap`, `panic` and indexing turns runtime aborts into compile errors — and rejects `n + 1` along the way |
+| [What MCP is](what_mcp_is/README.md) | 201 | JSON-RPC on a pipe — a whole MCP server in dependency-free Rust, the `println!` that corrupts one, and what *Always allow (`rustrover:*`)* actually grants |
 
 The one tooling page that is a *prerequisite* rather than a refinement lives in Foundations instead: [running a scratch program](../15_First_Programs/rustc_without_cargo/README.md), which is how you run anything in this library at all.
 
