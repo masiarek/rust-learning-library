@@ -2,7 +2,7 @@
 
 **Level:** reference · the map
 
-**One line:** `Option<T>` is either `Some(T)` or `None`, and this page is the door to every lesson about it — in the order the questions actually come up.
+**One line:** `Option<T>` is either [`Some(T)` or `None`](01_Foundations/some_and_none/README.md), and this page is the door to every lesson about it — in the order the questions actually come up.
 
 There is a lot here, because `Option` is the type you meet on your first day and are still learning in your third month. The lessons are all one-idea pages that stand alone; what follows is a reading order rather than a syllabus, so start where your question is. **If you just want to know what `Option` *is*, read the next section** — the tables after it are the reading order, not the explanation.
 
@@ -85,6 +85,8 @@ Three pages, in this order, are enough to use `Option` for real:
 | 2 | [`if let`: one arm, and move on](01_Foundations/if_let/README.md) | 101 | Handling only the case you care about — and the exhaustiveness you trade away for it |
 | 3 | [`Option` vs `Result`](01_Foundations/option_vs_result/README.md) | 101 | Absence versus failure, decided by one question: *could the caller ask why not?* |
 
+And the trap that follows the first of those: [`Some` is a constructor, not a flag](01_Foundations/some_is_a_constructor/README.md) (101 → 201) — `Some(x)` is a function call whose argument is the payload, so `Some(None)` is a type error rather than *"present but empty"*.
+
 ## Getting the value out
 
 Eight ways, and the last two are decisions rather than accesses:
@@ -114,13 +116,15 @@ And one page about a claim you will read elsewhere: [Shadowing and `unwrap`](01_
 
 ## When `Option` is not enough
 
-`None` says *"no answer"* and nothing more. Once the caller could act on *why*, you owe them a `Result`:
+`None` says *"no answer"* and nothing more. Once the caller could act on *why*, you owe them a [`Result`](01_Foundations/option_vs_result/README.md):
 
 | Lesson | Level | What it teaches |
 |---|---|---|
 | [Returning `None` on error](01_Foundations/none_on_error/README.md) | 201 | Why `input.parse().ok()` is usually a downgrade: four distinct causes arriving as one `None` |
 | [Zero wins is not zero games](01_Foundations/wrong_guard/README.md) | 201 | Returning `Result` does not mean you guarded the input that actually has no answer |
 | [The `Result` you are reading is probably an alias](01_Foundations/result_aliases/README.md) | 201 | `io::Result<T>` is `Result<T, io::Error>` — how to expand one and read what can fail |
+
+Past that point the topic is no longer `Option`: how a failure travels out of a program is [Errors](02_Errors/README.md), whose pages are stubs for now.
 
 ## The eight jobs the standard library says it does
 
