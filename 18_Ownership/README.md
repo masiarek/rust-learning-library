@@ -1,0 +1,27 @@
+# Ownership
+
+**One line:** Every value has exactly one owner, moving it transfers responsibility rather than bytes, and a borrow lets somebody read it without taking that responsibility on — which together are what let Rust free memory with no garbage collector and no `free()` you can get wrong.
+
+Three rules do the work, and the pages here try to make them *visible* rather than merely stated: a value that announces its own death shows exactly when a move happens, and `&x` printed before and after shows what actually changed (the three-word header, not the bytes).
+
+The back half is names rather than values. Shadowing, scope, and lifetimes are three different questions that English collapses into one word — a name ends at its brace, a borrow ends at its last use, and a value drops on a schedule five ordinary things can move — so the section separates them and then puts shadowing back through the borrow checker to prove the difference.
+
+| Lesson | Level | What it teaches |
+|---|---|---|
+| [Ownership and moves](ownership_and_moves/README.md) | 101 | A move transfers *responsibility*, not bytes — the three rules, made visible by a value that announces its own death |
+| [What an address shows](what_an_address_shows/README.md) | 201 | `&x` addresses the three-word header, not the text — so a move changes the number without relocating a byte, and a `Copy` does the same thing while nothing moves at all |
+| [Borrowing](borrowing/README.md) | 101 → 201 | `&T` and `&mut T`, the many-readers-or-one-writer rule, and the last-use rule that decides which order compiles |
+| [How to learn lifetimes](how_to_learn_lifetimes/README.md) | 201 | Is *"clone everything"* good advice? Mostly yes — with three amendments, the sharpest being that cloning to dodge a *mutation* error compiles and silently does nothing |
+| [A name is not a place](a_name_is_not_a_place/README.md) | 201 | What separates a shadow from `mut`, proved with the borrow checker rather than with addresses: the shadow compiles and the `mut` spelling is `E0506`, because one is a declaration and the other is a write |
+| [A shadow does not drop](shadowing_does_not_drop/README.md) | 201 | What shadowing does to the value underneath: nothing — it is still alive, still borrowable, and it drops *after* the shadow that hid it, with no name left to release it early |
+| [When to shadow](when_to_shadow/README.md) | 201 | The judgement call the other two leave open: what shadowing buys that `mut` cannot, the five idioms worth copying, and the three bugs that compile — only one of which warns, and not about shadowing |
+| [Nothing checks a shadow](nothing_checks_a_shadow/README.md) | 201 | The tooling, not the mechanism: `rustc` has no shadowing lint, the type error that gets mistaken for one, and the single clippy lint that catches the accumulator bug — by also banning the idiom |
+| [Scope is about names, not values](scope_is_about_names/README.md) | 201 | One word, three questions: a name ends at its brace, a borrow ends at its last use, and a value dies on a schedule that five ordinary things can move — including the `_` that `rustc` denies outright on a lock |
+
+## Related sections
+
+- [Strings](../14_Strings/README.md) — the worked example most of these pages already use
+- [Structs](../16_Structs/copy_vs_clone/README.md) — `Copy` vs `Clone`, which decides what `=` means
+- [`ToOwned`](../12_Traits/to_owned/README.md) — `Clone` generalized to borrowed data
+
+[SHADOWING.md](../SHADOWING.md) is the full reading order for the names half.
