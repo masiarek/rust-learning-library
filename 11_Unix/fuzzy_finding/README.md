@@ -126,14 +126,14 @@ Pointing fzf at `fd` fixes the list *inside a project*. Run the same keystroke f
 Measured on this machine, from `~`:
 
 ```text
-589,679 files
+652,712 files
 ```
 
-Nearly all of it is generated, and `--hidden` is why you can see it:
+Nearly all of it is generated, and `--hidden` is why you can see most of it:
 
 | Directory | Files |
 |---|---|
-| `Library/` | 257,764 |
+| `Library/` | 257,764+ |
 | `.cache/` | 212,482 |
 | `.npm/` | 38,767 |
 | `.cargo/` | 32,520 |
@@ -141,7 +141,9 @@ Nearly all of it is generated, and `--hidden` is why you can see it:
 | `.vscode/` | 12,064 |
 | `.rustup/` | 7,499 |
 
-Those seven are **98.5%** of the list, and not one of them holds a file you would ever pick by name. `Library/` is the largest and it is not even hidden — no dot, so `--hidden` is not what let it in; it is simply a directory with a quarter of a million files in it.
+Those seven are about **98%** of the list, and not one of them holds a file you would ever pick by name. `Library/` is the largest and it is not even hidden — no dot, so `--hidden` is not what let it in; it is simply a directory with a quarter of a million files in it.
+
+The `+` on that first row is not laziness. **The total depends on what the process asking is allowed to read**, because macOS gates `~/Library/Mail`, `~/Library/Messages`, `~/Library/Safari` and others behind privacy permissions. The same `fd` command run from a sandboxed process reported 589,679 — sixty-three thousand fewer — and returned zero files for each of those four directories rather than an error. If you are ever comparing two file counts on macOS and they differ by tens of thousands, this is the first thing to suspect, and it is silent in both directions.
 
 `fd` reads a **global ignore file** for exactly this, in `.gitignore` syntax, at `~/.config/fd/ignore`. No flag turns it on:
 
@@ -161,10 +163,10 @@ node_modules/
 
 | From `~` | Files offered |
 |---|---|
-| before | 589,679 |
-| after | 8,684 |
+| before | ~652,700 |
+| after | ~8,700 |
 
-A 68-fold cut, and what survives is `Desktop`, `Documents`, `Downloads` and your actual project folders. It applies to every `fd` invocation on the machine, Ctrl-T included, and costs you nothing you were going to search for — `rg -uu` and `fd -u` still reach past it when you genuinely mean to.
+A seventy-fold cut, and what survives is `Desktop`, `Documents`, `Downloads` and your actual project folders. It applies to every `fd` invocation on the machine, Ctrl-T included, and costs you nothing you were going to search for — `rg -uu` and `fd -u` still reach past it when you genuinely mean to.
 
 Even at 8,684 this is a project tool used from inside a project. The honest rule is that Ctrl-T's list should be the tree you are working in; if you find yourself pressing it from `~`, the thing you actually wanted was to change directory first.
 
