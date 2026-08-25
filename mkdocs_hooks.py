@@ -93,6 +93,10 @@ NAV_ORDER: dict[str, list[str]] = {
         "returning_a_trait",
         # One std trait in depth, and the one whose name causes the most
         # confusion next to `clone`.
+        # ...and then the three that need all of the above.
+        "static_vs_dynamic_dispatch",
+        "supertraits",
+        "marker_traits",
         "to_owned",
         "resources",
     ],
@@ -115,6 +119,8 @@ NAV_ORDER: dict[str, list[str]] = {
         "braces_take_a_name",
         # A compound type of your own, before the two the library leans on.
         "what_a_struct_is",
+        # ...and where a value of one actually comes from.
+        "a_type_is_not_a_constructor",
         "impl_blocks",
         "struct_update",
         "copy_vs_clone",
@@ -138,6 +144,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "none_on_error",
         "wrong_guard",
         "initial_values",
+        # The first crate almost everyone adds, and the API the Book still
+        # teaches under its old names.
+        "randomness",
         "optional_arguments",
         "option_fields",
         "option_as_collection",
@@ -279,6 +288,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "nextest",
         "commit_on_green",
         "rustrover_setup",
+        "rustrover_code_vision",
         "neovim_setup",
         "compile_times",
         # Last, because it subsumes every rung above and costs the most.

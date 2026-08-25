@@ -87,6 +87,7 @@ A `&dyn Trait` is a **fat pointer**: two words, one to the data and one to the v
 
 ## See also
 
+- [Static vs dynamic dispatch](../static_vs_dynamic_dispatch/README.md) — the same two spellings in *argument* position, where it is a design choice rather than a compiler requirement, plus what makes a trait usable as `dyn` at all
 - [What a trait is](../what_a_trait_is/README.md) — the declaration being returned
 - [Nullable pointers](../../01_Foundations/nullable_pointers/README.md) — `Box` in its other role, making a recursive type possible
 - [`String` vs `&str`](../../01_Foundations/string_vs_str/README.md) — the same owned/borrowed split, one layer down
