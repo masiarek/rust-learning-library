@@ -302,6 +302,7 @@ rustc --edition 2024 01_Foundations/ownership_and_moves/examples/ownership_and_m
 
 ## See also
 
+- [What an address shows](../what_an_address_shows/README.md) — the experiment everyone runs to *see* a move: printing `&x` before and after, and why the number that changes is the header rather than the text
 - [Borrowing](../borrowing/README.md) — the half this page hands off: using a value without taking responsibility for it
 - [`Option` is a one-item collection](../option_as_collection/README.md) — `take()`, the standard way to move out of something you only borrow
 - [Shadowing and `unwrap`](../shadowing_and_unwrap/README.md) — why a `Copy` type survives what looks like a move

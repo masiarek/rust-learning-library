@@ -152,6 +152,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "what_dbg_does",
         # Opens the ownership arc — the next thread after the Option run.
         "ownership_and_moves",
+        # ...and the thing everyone tries first to SEE a move happen, which
+        # shows the header moving and the bytes staying put.
+        "what_an_address_shows",
         "borrowing",
         # ...and the scaffold most people are told to use while it lands.
         "how_to_learn_lifetimes",
