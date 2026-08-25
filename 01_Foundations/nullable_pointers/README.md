@@ -86,7 +86,7 @@ Both halves are load-bearing, and they answer different questions. The `Box` giv
 
 - **Python** — `None` is a value that any reference may hold, so `p.value` is a legal expression that becomes `AttributeError: 'NoneType' object has no attribute 'value'` at runtime, on whichever input finally reaches that line. `Optional[Node]` says the same thing as `Option<Box<Node>>`, but it is an annotation a type checker may look at, not a fact the language enforces. What changes in Rust is *when* you find out, and that absence is no longer something every type is quietly capable of.
 - **ABAP** — this is `IS BOUND` on a data reference, and `IS ASSIGNED` on a field symbol, with the compiler holding you to it. Dereferencing an initial reference raises `CX_SY_REF_IS_INITIAL` at runtime; `Option<Box<T>>` is the same distinction moved to compile time, so the check you were supposed to write in front of every `->*` is the only way to reach the value at all.
-- **C, Java, C#** — you already have the representation: `Option<Box<T>>` compiles to the nullable pointer you would have written, one machine word, null meaning absent. The difference is only that the plain `Box<T>` and `&T` also exist, so "cannot be null" is finally something you can *say*. This is the [billion-dollar mistake](https://en.wikipedia.org/wiki/Null_pointer#History) Tony Hoare named after his own 1965 design: not that null exists, but that it was allowed into every type.
+- **C, Java, C#** — you already have the representation: `Option<Box<T>>` compiles to the nullable pointer you would have written, one machine word, null meaning absent. The difference is only that the plain `Box<T>` and `&T` also exist, so "cannot be null" is finally something you can *say*. This is the [billion-dollar mistake ↗](https://en.wikipedia.org/wiki/Null_pointer#History) Tony Hoare named after his own 1965 design: not that null exists, but that it was allowed into every type.
 
 ---
 
@@ -266,4 +266,4 @@ rustc --edition 2024 01_Foundations/nullable_pointers/examples/nullable_pointers
 - [`Option` is a one-item collection](../option_as_collection/README.md) — the niche optimization in full, and the sizes at which the free lunch runs out
 - [`Option` vs `Result`](../option_vs_result/README.md) — when absence should be a failure with a reason instead
 - [`Option` fields](../option_fields/README.md) — `Option` in a type definition rather than a return type
-- [`std::boxed::Box`](https://doc.rust-lang.org/std/boxed/struct.Box.html) and [`Option::as_deref`](https://doc.rust-lang.org/core/option/enum.Option.html#method.as_deref)
+- [`std::boxed::Box` ↗](https://doc.rust-lang.org/std/boxed/struct.Box.html) and [`Option::as_deref` ↗](https://doc.rust-lang.org/core/option/enum.Option.html#method.as_deref)

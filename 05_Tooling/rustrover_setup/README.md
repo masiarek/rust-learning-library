@@ -67,4 +67,4 @@ A fair question, and the honest answer is that the overlap is largest exactly he
 
 ---
 
-*Settings paths verified against the [RustRover external linters documentation](https://www.jetbrains.com/help/rust/rust-external-linters.html) rather than by driving the IDE; menu wording moves between releases, so treat the names as a route rather than a transcript.*
+*Settings paths verified against the [RustRover external linters documentation ↗](https://www.jetbrains.com/help/rust/rust-external-linters.html) rather than by driving the IDE; menu wording moves between releases, so treat the names as a route rather than a transcript.*

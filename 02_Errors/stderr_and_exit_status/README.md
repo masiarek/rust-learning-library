@@ -12,7 +12,7 @@
 - Why a diagnostic on stdout corrupts a pipeline — `prog file | wc -l` counting your warning as data
 - The exit status: zero is success, non-zero is failure, and that is nearly the whole convention
 - What a shell sees in `$?`, and what `&&` and `set -e` do with it
-- [`process::exit`](https://doc.rust-lang.org/std/process/fn.exit.html) ends the process *immediately* — no destructors, no flush — so a buffered write can be lost
+- [`process::exit` ↗](https://doc.rust-lang.org/std/process/fn.exit.html) ends the process *immediately* — no destructors, no flush — so a buffered write can be lost
 - Presenting a failure to a person: the program's name, the thing it was doing, the underlying cause; no stack trace
 
 ## The trap it exists for

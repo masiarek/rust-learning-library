@@ -473,4 +473,4 @@ fn main() {
 - [`unwrap_or`](../unwrap_or/README.md) — the answer when the missing value is not a bug, and the eager-argument rule this page inherits
 - [`unwrap_or_else`](../unwrap_or_else/README.md) — where `panic!` goes when the message needs a runtime value
 - [`Option` vs `Result`](../option_vs_result/README.md) — the decision the "cannot write the sentence" tell sends you back to
-- [`Option::expect`](https://doc.rust-lang.org/std/option/enum.Option.html#method.expect) · [`Result::expect`](https://doc.rust-lang.org/std/result/enum.Result.html#method.expect) · [`expect_err`](https://doc.rust-lang.org/std/result/enum.Result.html#method.expect_err)
+- [`Option::expect` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.expect) · [`Result::expect` ↗](https://doc.rust-lang.org/std/result/enum.Result.html#method.expect) · [`expect_err` ↗](https://doc.rust-lang.org/std/result/enum.Result.html#method.expect_err)

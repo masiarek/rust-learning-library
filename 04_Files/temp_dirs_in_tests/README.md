@@ -9,7 +9,7 @@
 ## What it has to cover
 
 - Why `/tmp/test_output.txt` fails: Rust's test harness runs tests in **threads, in parallel**, so two tests sharing a path are a race, and a leftover file from a crashed run is a test that passes for the wrong reason
-- [`tempfile::TempDir`](https://docs.rs/tempfile) — a directory whose `Drop` removes it, and the sharp edge that follows: bind it to a variable, because `TempDir::new()?.path().to_owned()` hands you a path to a directory that has already been deleted
+- [`tempfile::TempDir` ↗](https://docs.rs/tempfile) — a directory whose `Drop` removes it, and the sharp edge that follows: bind it to a variable, because `TempDir::new()?.path().to_owned()` hands you a path to a directory that has already been deleted
 - Which is a very concrete instance of a rule this library already has a page for: a value lives until its owner goes out of scope, and a temporary's owner is the end of the statement
 - What to assert: the *behaviour* (the file now contains the record) rather than the path, which differs every run
 - Keeping an example deterministic when it touches a filesystem at all — the reason this section's pages are harder to finish than the others

@@ -8,7 +8,7 @@
 
 ## What it has to cover
 
-- Matching on [`ErrorKind::NotFound`](https://doc.rust-lang.org/std/io/enum.ErrorKind.html) specifically, rather than on "an error happened"
+- Matching on [`ErrorKind::NotFound` ↗](https://doc.rust-lang.org/std/io/enum.ErrorKind.html) specifically, rather than on "an error happened"
 - The first-run case: no file means an empty collection, not a failure — and where that decision belongs, which is not in the function that reads bytes
 - The other half: a file the user *named explicitly* and that does not exist **is** an error, because they told you it existed
 - An empty file is a valid file: zero bytes parses to zero records, and any code path that treats that as suspicious will be wrong on day one

@@ -386,8 +386,8 @@ Same row = same idea on both types.
 
 ## See also
 
-- [The Rust Book, ch. 9 — Error Handling](https://doc.rust-lang.org/book/ch09-00-error-handling.html)
-- [`std::option`](https://doc.rust-lang.org/std/option/) and [`std::result`](https://doc.rust-lang.org/std/result/) — the method lists are worth one slow read; most of what you would write by hand is already there
-- [Rust by Example — Error handling](https://doc.rust-lang.org/rust-by-example/error.html)
-- [Bitfield Consulting — Rust errors: Option and Result](https://bitfieldconsulting.com/posts/rust-errors-option-result) — the source of the useful line *"good programs don't panic, and neither do good programmers"*; strong on when `unwrap` is and is not defensible
+- [The Rust Book, ch. 9 — Error Handling ↗](https://doc.rust-lang.org/book/ch09-00-error-handling.html)
+- [`std::option` ↗](https://doc.rust-lang.org/std/option/) and [`std::result` ↗](https://doc.rust-lang.org/std/result/) — the method lists are worth one slow read; most of what you would write by hand is already there
+- [Rust by Example — Error handling ↗](https://doc.rust-lang.org/rust-by-example/error.html)
+- [Bitfield Consulting — Rust errors: Option and Result ↗](https://bitfieldconsulting.com/posts/rust-errors-option-result) — the source of the useful line *"good programs don't panic, and neither do good programmers"*; strong on when `unwrap` is and is not defensible
 - [`Option` fields](../option_fields/README.md) and [`Option` is a one-item collection](../option_as_collection/README.md) — the two follow-on pages

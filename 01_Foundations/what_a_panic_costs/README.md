@@ -74,7 +74,7 @@ a child process that really panics exits Some(101)
 
 **101, not 1.** std reserves it for an unhandled panic, so a supervisor, a shell script, or CI can distinguish *"the program failed and said so"* from *"the program broke"*. Worth knowing before you write `if status != 0` and treat every failure the same.
 
-And note what that step reveals about the rest of this page: every other panic here was survived with [`catch_unwind`](https://doc.rust-lang.org/std/panic/fn.catch_unwind.html), which is why the demo can print its own crashes and still exit 0. That is not a pattern to copy. `catch_unwind` exists so a panic does not cross an FFI boundary into C, and so a test harness can report a failing test instead of dying with it. It cannot catch an abort, it says nothing about whether your data is still coherent, and using it as a `try`/`catch` around ordinary logic converts a loud bug into a quiet one.
+And note what that step reveals about the rest of this page: every other panic here was survived with [`catch_unwind` ↗](https://doc.rust-lang.org/std/panic/fn.catch_unwind.html), which is why the demo can print its own crashes and still exit 0. That is not a pattern to copy. `catch_unwind` exists so a panic does not cross an FFI boundary into C, and so a test harness can report a failing test instead of dying with it. It cannot catch an abort, it says nothing about whether your data is still coherent, and using it as a `try`/`catch` around ordinary logic converts a loud bug into a quiet one.
 
 ## So when is the panic the right cost?
 
@@ -305,6 +305,6 @@ rustc --edition 2024 01_Foundations/what_a_panic_costs/examples/what_a_panic_cos
 - [`Option` vs `Result`](../option_vs_result/README.md) — absence versus failure, and the combinators that keep you out of `unwrap`
 - [Zero wins is not zero games](../wrong_guard/README.md) — the same wrong branch failing the other way: the input with no answer leaves quietly through `Ok` as a plausible number, where a panic at least stops. Read together, they are the two prices of guarding the wrong condition
 - [Partial functions](../partial_functions/README.md) — where the `Option` came from in the first place; its step 3 catches a divide-by-zero panic the same way this page does
-- [`std::panic::catch_unwind`](https://doc.rust-lang.org/std/panic/fn.catch_unwind.html) and [`std::panic::set_hook`](https://doc.rust-lang.org/std/panic/fn.set_hook.html) — the two pieces this example is built on
-- [The Rust Book, ch. 9.1 — *To `panic!` or Not to `panic!`*](https://doc.rust-lang.org/book/ch09-03-to-panic-or-not-to-panic.html) — the same decision from the other side
-- [Rust by Example — `Option` & `unwrap`](https://doc.rust-lang.org/rust-by-example/std/option.html) — the source of the drink-serving shape used here (dual-licensed MIT / Apache-2.0)
+- [`std::panic::catch_unwind` ↗](https://doc.rust-lang.org/std/panic/fn.catch_unwind.html) and [`std::panic::set_hook` ↗](https://doc.rust-lang.org/std/panic/fn.set_hook.html) — the two pieces this example is built on
+- [The Rust Book, ch. 9.1 — *To `panic!` or Not to `panic!`* ↗](https://doc.rust-lang.org/book/ch09-03-to-panic-or-not-to-panic.html) — the same decision from the other side
+- [Rust by Example — `Option` & `unwrap` ↗](https://doc.rust-lang.org/rust-by-example/std/option.html) — the source of the drink-serving shape used here (dual-licensed MIT / Apache-2.0)

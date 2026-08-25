@@ -4,7 +4,7 @@
 
 **One line:** Rust has no default parameters and no overloading, so "this argument is optional" must be built out of something — and `Option<T>` is only one of five ways, usually not the best.
 
-This is the last of the eight jobs [`std::option`](https://doc.rust-lang.org/core/option/) lists, and the one where reaching for `Option` first does the most damage, because the cost lands on every call site rather than on you.
+This is the last of the eight jobs [`std::option` ↗](https://doc.rust-lang.org/core/option/) lists, and the one where reaching for `Option` first does the most damage, because the cost lands on every call site rather than on you.
 
 ---
 
@@ -262,4 +262,4 @@ rustc --edition 2024 01_Foundations/optional_arguments/examples/optional_argumen
 
 - [`Option` fields](../option_fields/README.md) — the same *unset vs. any value* question, applied to data
 - [Initial values](../initial_values/README.md) — another job where `Option` is the reflex and usually the wrong one
-- [`Option::as_deref`](https://doc.rust-lang.org/std/option/enum.Option.html#method.as_deref) — how a caller reaches an `Option<&T>` parameter
+- [`Option::as_deref` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.as_deref) — how a caller reaches an `Option<&T>` parameter

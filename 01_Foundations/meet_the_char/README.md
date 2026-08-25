@@ -29,7 +29,7 @@ The `ë` costs two bytes in UTF-8, so byte count and char count part ways on the
 | **chars** | `.chars().count()` | O(n) — UTF-8 must be walked |
 | **graphemes** | what a *reader* calls one character | a crate — std stops before this |
 
-The third row is real: `"e\u{301}"` — an `e` plus a combining accent — is **two** chars that render as one `é`. The [verified output](#the-verified-output) shows the two spellings printing identically and comparing unequal. Normalizing them into one form is the [`unicode-normalization`](https://crates.io/crates/unicode-normalization) crate's job; counting reader-characters is [`unicode-segmentation`](https://crates.io/crates/unicode-segmentation)'s.
+The third row is real: `"e\u{301}"` — an `e` plus a combining accent — is **two** chars that render as one `é`. The [verified output](#the-verified-output) shows the two spellings printing identically and comparing unequal. Normalizing them into one form is the [`unicode-normalization` ↗](https://crates.io/crates/unicode-normalization) crate's job; counting reader-characters is [`unicode-segmentation` ↗](https://crates.io/crates/unicode-segmentation)'s.
 
 ## Why `s[0]` does not compile
 
@@ -231,4 +231,4 @@ rustc --edition 2024 01_Foundations/meet_the_char/examples/meet_the_char.rs -o /
 - [Meet the byte](../meet_the_byte/README.md) — the unit; this page is what the bytes *mean*
 - [The anatomy of a `String`](../anatomy_of_a_string/README.md) — where those bytes live
 - [Six kinds of string](../six_kinds_of_string/README.md) — the types for text that does *not* keep UTF-8's promise
-- [The Rust Book, ch. 8.2](https://doc.rust-lang.org/book/ch08-02-strings.html) — its "bytes, scalar values, grapheme clusters" section is this page's origin story
+- [The Rust Book, ch. 8.2 ↗](https://doc.rust-lang.org/book/ch08-02-strings.html) — its "bytes, scalar values, grapheme clusters" section is this page's origin story

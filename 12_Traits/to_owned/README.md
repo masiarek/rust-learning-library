@@ -26,7 +26,7 @@ pub trait ToOwned {
 }
 ```
 
-The associated type is the whole mechanism — `Owned` is what makes `str`'s answer `String` and `[i32]`'s answer `Vec<i32>`. The bound on it, `Borrow<Self>`, is the promise that you can always get back to the borrowed form, which is what lets [`Cow`](https://doc.rust-lang.org/std/borrow/enum.Cow.html) hold either half and hand out a `&str` regardless.
+The associated type is the whole mechanism — `Owned` is what makes `str`'s answer `String` and `[i32]`'s answer `Vec<i32>`. The bound on it, `Borrow<Self>`, is the promise that you can always get back to the borrowed form, which is what lets [`Cow` ↗](https://doc.rust-lang.org/std/borrow/enum.Cow.html) hold either half and hand out a `&str` regardless.
 
 ## Why it has to exist
 
@@ -126,4 +126,4 @@ let second = shared.to_owned();
 
 ## Sources
 
-The two threads this page settles, both worth reading for how much disagreement a "simple" question produced: [Stack Overflow — the difference between `clone` and `to_owned`](https://stackoverflow.com/questions/22264502/in-rust-what-is-the-difference-between-clone-and-to-owned) (the accepted answer is right; the sharpest explanation is BallpointBen's comment underneath it, on deref coercion and `!Sized`) and [r/rust on the same question](https://www.reddit.com/r/rust/comments/l5uih4/what_is_the_difference_between_clone_and_to_owned/) — where the top answer is correct, the "it doesn't matter" answer is nearly correct, and one upvoted reply claiming `ToOwned` is how you get the data out of an `Rc` is **wrong** in the exact way the trap section above demonstrates.
+The two threads this page settles, both worth reading for how much disagreement a "simple" question produced: [Stack Overflow — the difference between `clone` and `to_owned` ↗](https://stackoverflow.com/questions/22264502/in-rust-what-is-the-difference-between-clone-and-to-owned) (the accepted answer is right; the sharpest explanation is BallpointBen's comment underneath it, on deref coercion and `!Sized`) and [r/rust on the same question ↗](https://www.reddit.com/r/rust/comments/l5uih4/what_is_the_difference_between_clone_and_to_owned/) — where the top answer is correct, the "it doesn't matter" answer is nearly correct, and one upvoted reply claiming `ToOwned` is how you get the data out of an `Rc` is **wrong** in the exact way the trap section above demonstrates.

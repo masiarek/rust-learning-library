@@ -322,4 +322,4 @@ rustc --edition 2024 01_Foundations/unwrap_or_default/examples/unwrap_or_default
 - [`unwrap_or_else`](../unwrap_or_else/README.md) — the same call with the closure written out, and the only form handed the error
 - [`Option` fields](../option_fields/README.md) — where the `Option<Vec<T>>` decision is made, one step before this one
 - [`Option` is a one-item collection](../option_as_collection/README.md) — `take()`, the `Option`-shaped `mem::take`
-- [`Option::unwrap_or_default`](https://doc.rust-lang.org/std/option/enum.Option.html#method.unwrap_or_default) · [`Default`](https://doc.rust-lang.org/std/default/trait.Default.html) · [`mem::take`](https://doc.rust-lang.org/std/mem/fn.take.html)
+- [`Option::unwrap_or_default` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.unwrap_or_default) · [`Default` ↗](https://doc.rust-lang.org/std/default/trait.Default.html) · [`mem::take` ↗](https://doc.rust-lang.org/std/mem/fn.take.html)

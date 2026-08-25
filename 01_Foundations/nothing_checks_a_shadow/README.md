@@ -95,7 +95,7 @@ note: previous binding is here
 
 Read the two spans: the "previous binding" it named is `x`, on the same line, in the same tuple. Nothing there is a shadow — `(x, y) = (3, 4)` writes into two existing places, which is precisely the operation a shadow is *not*. The lint had confused an assignment with a declaration, which is the same conflation the reader is here to unlearn, running inside the tool sold as the cure for it.
 
-It was reported in February 2023, was still reproducing when it came up on the users forum in January 2025, and was fixed by [rust-clippy#14381](https://github.com/rust-lang/rust-clippy/pull/14381), merged on 2025-03-27. It is genuinely gone — on clippy 0.1.97 that block passes under `#[deny(clippy::shadow_unrelated)]`, while a real unrelated shadow in the same file still stops the build, so the lint is live and simply no longer wrong about this.
+It was reported in February 2023, was still reproducing when it came up on the users forum in January 2025, and was fixed by [rust-clippy#14381 ↗](https://github.com/rust-lang/rust-clippy/pull/14381), merged on 2025-03-27. It is genuinely gone — on clippy 0.1.97 that block passes under `#[deny(clippy::shadow_unrelated)]`, while a real unrelated shadow in the same file still stops the build, so the lint is live and simply no longer wrong about this.
 
 The reason to keep the story rather than delete it: this page's argument is that almost nothing stands between you and a bad shadow. The tooling that does exist is three allow-by-default lints, the only one that catches the accumulator also bans the Book's own idiom, and the one recommended as cheapest spent two years unable to tell a write from a declaration. That is the actual state of the net, and it is worth knowing how recently the last hole was patched. See [A name is not a place](../a_name_is_not_a_place/README.md) for the distinction the lint was missing.
 
@@ -536,5 +536,5 @@ rustc --edition 2024 01_Foundations/nothing_checks_a_shadow/examples/nothing_che
 - [SHADOWING.md](../../SHADOWING.md) — the map of all four shadowing lessons, in reading order
 - [What a warning is asking](../what_a_warning_is_asking/README.md) — `unused_variables`, the near-miss above, and what `_name` actually answers
 - [Ownership and moves](../ownership_and_moves/README.md) — the rule that *is* enforced, and why it turns the same shape into `E0382`
-- [`shadow_reuse`](https://rust-lang.github.io/rust-clippy/master/index.html#shadow_reuse), [`shadow_same`](https://rust-lang.github.io/rust-clippy/master/index.html#shadow_same), [`shadow_unrelated`](https://rust-lang.github.io/rust-clippy/master/index.html#shadow_unrelated) — the three lints, and the `restriction` group they sit in
-- [The Rust Book, ch. 3.1 — Shadowing](https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html#shadowing)
+- [`shadow_reuse` ↗](https://rust-lang.github.io/rust-clippy/master/index.html#shadow_reuse), [`shadow_same` ↗](https://rust-lang.github.io/rust-clippy/master/index.html#shadow_same), [`shadow_unrelated` ↗](https://rust-lang.github.io/rust-clippy/master/index.html#shadow_unrelated) — the three lints, and the `restriction` group they sit in
+- [The Rust Book, ch. 3.1 — Shadowing ↗](https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html#shadowing)

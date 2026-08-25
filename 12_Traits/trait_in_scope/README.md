@@ -18,7 +18,7 @@ Delete the `use` and rustc says `E0599`: *"items from traits can only be used if
 
 ## Why it works this way
 
-A method call is resolved against the traits **currently in scope**, not against every trait in the universe. That is what stops two crates from silently fighting over the name `.next()`, and it is why the standard library ships a [prelude](https://doc.rust-lang.org/std/prelude/index.html) — `Clone`, `Iterator`, `Into`, `ToString` and about twenty others are imported into every file for you, which is the reason `.to_string()` needs no ceremony while `.write_all()` does.
+A method call is resolved against the traits **currently in scope**, not against every trait in the universe. That is what stops two crates from silently fighting over the name `.next()`, and it is why the standard library ships a [prelude ↗](https://doc.rust-lang.org/std/prelude/index.html) — `Clone`, `Iterator`, `Into`, `ToString` and about twenty others are imported into every file for you, which is the reason `.to_string()` needs no ceremony while `.write_all()` does.
 
 So the rule has a corollary worth saying out loud: **a trait you can see is not a trait you can call.** The `impl Shout for Dog` block can sit ten lines above `dog.shout()` in the same file and still not be reachable, if `Shout` came from a module you imported the *type* from and not the trait. That is the actual shape of the bug in real code — `use loud::Dog;` when you needed `use loud::{Dog, Shout};`.
 

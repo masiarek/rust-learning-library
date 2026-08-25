@@ -295,4 +295,4 @@ Every `dbg!` line this program prints goes to **stderr**, and the recorded key b
 - [Debug and Display](../debug_vs_display/README.md) — which trait `dbg!` needs, why `{}` refuses your struct, and why the language generates one and not the other
 - [When a struct refuses](../when_a_struct_refuses/README.md) — the `E0277` above, alongside the seven other struct refusals
 - [What a warning is asking](../what_a_warning_is_asking/README.md) — including why `let _ = value;` drops immediately and `let _x = value;` does not
-- [`dbg!`](https://doc.rust-lang.org/std/macro.dbg.html) · [`Formatter::alternate`](https://doc.rust-lang.org/std/fmt/struct.Formatter.html#method.alternate) · [`Formatter::debug_struct`](https://doc.rust-lang.org/std/fmt/struct.Formatter.html#method.debug_struct)
+- [`dbg!` ↗](https://doc.rust-lang.org/std/macro.dbg.html) · [`Formatter::alternate` ↗](https://doc.rust-lang.org/std/fmt/struct.Formatter.html#method.alternate) · [`Formatter::debug_struct` ↗](https://doc.rust-lang.org/std/fmt/struct.Formatter.html#method.debug_struct)

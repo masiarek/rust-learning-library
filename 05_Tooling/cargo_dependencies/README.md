@@ -55,8 +55,8 @@ The `-n` form is the useful one day to day, and it is exactly what appears in th
 
 Two third-party tools from the same talk, worth separating by how established they are — a distinction the recommendation itself does not make:
 
-- **[`cargo-shear`](https://crates.io/crates/cargo-shear)** — finds dependencies in `Cargo.toml` that nothing actually uses, and removes them. Mature and widely adopted (v1.13.4, ~474k downloads). Unused dependencies are pure cost — compile time, audit surface, lockfile churn — and nothing in Cargo warns about them, so this fills a real gap.
-- **[`cargo-seek`](https://crates.io/crates/cargo-seek)** — a terminal UI over crates.io: search on the left, the crate's details on the right, and keys to `add` or `install` without leaving it. Pleasant, and *very* new (v0.2.0, ~2.4k downloads). Try it, but do not build a team workflow on it yet.
+- **[`cargo-shear` ↗](https://crates.io/crates/cargo-shear)** — finds dependencies in `Cargo.toml` that nothing actually uses, and removes them. Mature and widely adopted (v1.13.4, ~474k downloads). Unused dependencies are pure cost — compile time, audit surface, lockfile churn — and nothing in Cargo warns about them, so this fills a real gap.
+- **[`cargo-seek` ↗](https://crates.io/crates/cargo-seek)** — a terminal UI over crates.io: search on the left, the crate's details on the right, and keys to `add` or `install` without leaving it. Pleasant, and *very* new (v0.2.0, ~2.4k downloads). Try it, but do not build a team workflow on it yet.
 
 Neither is required for anything. `search` + `info` + `add` is the whole job; these make it nicer.
 

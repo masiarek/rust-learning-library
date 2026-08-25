@@ -9,7 +9,7 @@
 ## What it has to cover
 
 - The struct-per-level approach: faithful, self-documenting, and a lot of types you will never construct
-- The pointer approach — `serde_json::Value` plus a [JSON Pointer](https://docs.rs/serde_json/latest/serde_json/value/enum.Value.html#method.pointer) like `/current/temperature` — small, and it moves the failure from compile time to run time
+- The pointer approach — `serde_json::Value` plus a [JSON Pointer ↗](https://docs.rs/serde_json/latest/serde_json/value/enum.Value.html#method.pointer) like `/current/temperature` — small, and it moves the failure from compile time to run time
 - Which to reach for: how much of the response you need, how stable it is, and who finds out when it changes
 - `#[serde(rename = "…")]` for a field name that is not a legal Rust identifier or not the name you want
 - Missing versus null versus absent — three different things that all read as "no value", and how `Option` plus `#[serde(default)]` tell them apart

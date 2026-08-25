@@ -99,7 +99,7 @@ None.unwrap_or(42)      // -> 42  the voter never answered
 
 An `Option` distinguishes *"the value is zero"* from *"there is no value"*. Most languages do not, and the shorthand everyone reaches for quietly collapses the two: Python's `favnum or 42` answers `42` for both, because `0` is falsy; ABAP's `IS INITIAL` says the same thing, because an integer that was never set and an integer set to `0` are the same bit pattern.
 
-The distinction is not academic. In the [star-voting-library](https://github.com/masiarek/star-voting-library) a ballot that scores a candidate **0** and a ballot that leaves them **blank** tabulate identically — both count as zero — but they mean opposite things about the voter, and any report that wants to say *"how many people declined to score anyone"* needs the two kept apart. `Option<Score>` is that distinction, made a property of the type rather than of the reader's memory.
+The distinction is not academic. In the [star-voting-library ↗](https://github.com/masiarek/star-voting-library) a ballot that scores a candidate **0** and a ballot that leaves them **blank** tabulate identically — both count as zero — but they mean opposite things about the voter, and any report that wants to say *"how many people declined to score anyone"* needs the two kept apart. `Option<Score>` is that distinction, made a property of the type rather than of the reader's memory.
 
 ## The trap: `match favnum` moves the value
 
@@ -298,5 +298,5 @@ rustc --edition 2024 01_Foundations/some_and_none/examples/some_and_none.rs -o /
 - [Partial functions](../partial_functions/README.md) — why the standard library hands you `Option`s in the first place
 - [Initial values](../initial_values/README.md) — the job `Option` looks right for and usually is not
 - [`Option` is a one-item collection](../option_as_collection/README.md) — `match` is not the only way to look inside
-- [`std::option`](https://doc.rust-lang.org/std/option/) — the full method list; one slow read is worth more than any tutorial
-- [The Rust Book, ch. 6 — Enums and Pattern Matching](https://doc.rust-lang.org/book/ch06-00-enums.html)
+- [`std::option` ↗](https://doc.rust-lang.org/std/option/) — the full method list; one slow read is worth more than any tutorial
+- [The Rust Book, ch. 6 — Enums and Pattern Matching ↗](https://doc.rust-lang.org/book/ch06-00-enums.html)

@@ -4,7 +4,7 @@
 
 **One line:** A `[lints.clippy]` block that denies `unwrap`, `expect`, indexing and `panic` converts a whole class of runtime abort into a compile error — and the same block rejects `n + 1`, which is the half of the trade nobody puts on the slide.
 
-The configuration below comes from [Tris Oaten's Rust notes](https://namtao.com/rust), where it is offered with a two-line rationale worth quoting for its honesty about what it is for: the lints *teach you Rust* and *stop panics at runtime*. Both halves are true. This page is about what each one costs, because the answer is not the same for the two groups and the panic set.
+The configuration below comes from [Tris Oaten's Rust notes ↗](https://namtao.com/rust), where it is offered with a two-line rationale worth quoting for its honesty about what it is for: the lints *teach you Rust* and *stop panics at runtime*. Both halves are true. This page is about what each one costs, because the answer is not the same for the two groups and the panic set.
 
 Both files are in [`config/`](config/clippy.toml) beside this page, ready to copy into a project.
 
@@ -122,7 +122,7 @@ That is the two groups without the panic policy — the "teach you Rust" half on
 - [`expect`](../../01_Foundations/expect/README.md) — the position this configuration overrules, and why
 - [What a panic costs](../../01_Foundations/what_a_panic_costs/README.md) — what the panic set is actually buying you
 - [Scale the denominator away](../../09_Advanced/scaled_integers/README.md) — `checked_*` and `saturating_*`, which `arithmetic_side_effects` makes mandatory
-- Erik Schwartz, [*Your clippy config should be stricter*](https://emschwartz.me/your-clippy-config-should-be-stricter/) — the argument at length, cited from the source above
+- Erik Schwartz, [*Your clippy config should be stricter* ↗](https://emschwartz.me/your-clippy-config-should-be-stricter/) — the argument at length, cited from the source above
 
 ---
 

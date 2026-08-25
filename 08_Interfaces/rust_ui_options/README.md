@@ -2,7 +2,7 @@
 
 **Level:** reference · orientation
 
-**One line:** Three names come up — [Leptos](https://leptos.dev/), [Dioxus](https://dioxuslabs.com/) and [Tauri](https://tauri.app/) — they are not competing for the same job, and for a learning project the right first answer is usually "a CLI", because the UI layer is where you stop writing Rust and start writing a framework.
+**One line:** Three names come up — [Leptos ↗](https://leptos.dev/), [Dioxus ↗](https://dioxuslabs.com/) and [Tauri ↗](https://tauri.app/) — they are not competing for the same job, and for a learning project the right first answer is usually "a CLI", because the UI layer is where you stop writing Rust and start writing a framework.
 
 ## The three, and what each is actually for
 

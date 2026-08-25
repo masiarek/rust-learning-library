@@ -401,4 +401,4 @@ fn main() {
 - [When the denominators compound](../compounding_weights/README.md) — where rounding stops being optional, and the page whose "if the rule specifies the scale" this one picks up from
 - [What `i128` is exact about](../i128_exactness/README.md) — the rational alternative, its ceiling, and what a `gcd` really costs
 - [What a float actually stores](../../01_Foundations/what_a_float_stores/README.md) — why a tie stops being a tie, which is the failure this page detects rather than prevents
-- Julia Evans, *How Integers and Floats Work* ([wizardzines.com](https://wizardzines.com/)) — the zine that prompted this thread; its fixed-point pages name the alternatives, of which this is the one the library did not have
+- Julia Evans, *How Integers and Floats Work* ([wizardzines.com ↗](https://wizardzines.com/)) — the zine that prompted this thread; its fixed-point pages name the alternatives, of which this is the one the library did not have

@@ -72,7 +72,7 @@ The `newtype_score`, `representing_a_ballot` and `six_kinds_of_zero` rows are th
 
 ## The eight jobs `Option` does
 
-The [`std::option` module docs](https://doc.rust-lang.org/core/option/) list what `Option` is actually *for*. It is a better map of the topic than any tutorial ordering, so here it is with the page that covers each job:
+The [`std::option` module docs ↗](https://doc.rust-lang.org/core/option/) list what `Option` is actually *for*. It is a better map of the topic than any tutorial ordering, so here it is with the page that covers each job:
 
 | Job | Covered by |
 |---|---|

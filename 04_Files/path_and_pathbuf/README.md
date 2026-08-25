@@ -2,7 +2,7 @@
 
 **Level:** 201 · working knowledge
 
-**One line:** [`Path`](https://doc.rust-lang.org/std/path/struct.Path.html) is to [`PathBuf`](https://doc.rust-lang.org/std/path/struct.PathBuf.html) what `&str` is to `String` — borrowed against owned — and a function that takes `impl AsRef<Path>` accepts all four spellings without the caller converting anything.
+**One line:** [`Path` ↗](https://doc.rust-lang.org/std/path/struct.Path.html) is to [`PathBuf` ↗](https://doc.rust-lang.org/std/path/struct.PathBuf.html) what `&str` is to `String` — borrowed against owned — and a function that takes `impl AsRef<Path>` accepts all four spellings without the caller converting anything.
 
 > **Stub — an outline, not a lesson.** There is no runnable example behind this page yet, so nothing on it has been through [the check that backs every other claim in this library](../../CONTRIBUTING.md). The bullets below are the questions the finished page has to answer.
 

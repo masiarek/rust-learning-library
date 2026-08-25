@@ -32,7 +32,7 @@ The precise version, and the one actually worth following:
 
 > **Don't put references in struct fields.**
 
-That is where lifetimes become infectious. A `struct Parser<'a> { input: &'a str }` puts a lifetime parameter on the type, then on everything holding it, then on every function touching those — and each new annotation is a place to get it wrong. Meanwhile `fn parse(input: &str)` needs no annotation at all, because [lifetime elision](https://doc.rust-lang.org/nomicon/lifetime-elision.html) handles the common shapes for you.
+That is where lifetimes become infectious. A `struct Parser<'a> { input: &'a str }` puts a lifetime parameter on the type, then on everything holding it, then on every function touching those — and each new annotation is a place to get it wrong. Meanwhile `fn parse(input: &str)` needs no annotation at all, because [lifetime elision ↗](https://doc.rust-lang.org/nomicon/lifetime-elision.html) handles the common shapes for you.
 
 Beginners are told "avoid references" and hear "avoid `&` in signatures", which is the one place references are free.
 
@@ -108,4 +108,4 @@ A grep for that comment later is the graduation exercise.
 - [Borrowing](../borrowing/README.md) — the rule itself, and where a borrow actually ends
 - [Ownership and moves](../ownership_and_moves/README.md) — the model the scaffold is protecting
 - [`unwrap` is a TODO](../../02_Errors/unwrap_is_a_todo/README.md) — the same "compiles quietly, waits" pattern
-- [quinedot's ownership, borrowing and lifetimes](https://quinedot.github.io/rust-learning/) — the best free treatment when the scaffold comes down
+- [quinedot's ownership, borrowing and lifetimes ↗](https://quinedot.github.io/rust-learning/) — the best free treatment when the scaffold comes down

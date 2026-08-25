@@ -2,7 +2,7 @@
 
 **Level:** 201 · working knowledge
 
-**One line:** [`serde`](https://serde.rs) splits the job in two — the derive teaches *your type* how to describe itself, and a separate crate like `serde_json` decides what the bytes look like.
+**One line:** [`serde` ↗](https://serde.rs) splits the job in two — the derive teaches *your type* how to describe itself, and a separate crate like `serde_json` decides what the bytes look like.
 
 > **Stub — an outline, not a lesson.** There is no runnable example behind this page yet, so nothing on it has been through [the check that backs every other claim in this library](../../CONTRIBUTING.md). The bullets below are the questions the finished page has to answer.
 

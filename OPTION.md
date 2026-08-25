@@ -124,7 +124,7 @@ And one page about a claim you will read elsewhere: [Shadowing and `unwrap`](01_
 
 ## The eight jobs the standard library says it does
 
-The [`std::option` module docs](https://doc.rust-lang.org/core/option/) list what `Option` is *for*, which is a better map of the topic than any tutorial ordering. That list is kept in [`01_Foundations`](01_Foundations/README.md) with the page covering each job — including the ones a first reading of the docs makes sound alike.
+The [`std::option` module docs ↗](https://doc.rust-lang.org/core/option/) list what `Option` is *for*, which is a better map of the topic than any tutorial ordering. That list is kept in [`01_Foundations`](01_Foundations/README.md) with the page covering each job — including the ones a first reading of the docs makes sound alike.
 
 ## Practising it
 

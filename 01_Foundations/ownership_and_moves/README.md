@@ -307,4 +307,4 @@ rustc --edition 2024 01_Foundations/ownership_and_moves/examples/ownership_and_m
 - [`Option` is a one-item collection](../option_as_collection/README.md) — `take()`, the standard way to move out of something you only borrow
 - [Shadowing and `unwrap`](../shadowing_and_unwrap/README.md) — why a `Copy` type survives what looks like a move
 - [What a panic costs](../what_a_panic_costs/README.md) — the same observable `Drop`, seen from the failure side: destructors still run, in reverse order, while a panic unwinds. Rule 3 holds even when the function does not finish, which is why a lock is released and a file closed — and why the *work* is still half-done
-- [The Rust Book, ch. 4 — Understanding Ownership](https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html)
+- [The Rust Book, ch. 4 — Understanding Ownership ↗](https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html)

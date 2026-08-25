@@ -2,7 +2,7 @@
 
 **Level:** 101 · for newcomers
 
-**One line:** [rustlings](https://github.com/rust-lang/rustlings) is ~100 small files that **do not compile**, and your job is the smallest change that makes each one work — which makes the compiler the teacher, in doses small enough that a red error is a puzzle rather than a wall.
+**One line:** [rustlings ↗](https://github.com/rust-lang/rustlings) is ~100 small files that **do not compile**, and your job is the smallest change that makes each one work — which makes the compiler the teacher, in doses small enough that a red error is a puzzle rather than a wall.
 
 ## Why it is foundational
 

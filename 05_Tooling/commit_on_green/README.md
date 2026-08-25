@@ -2,7 +2,7 @@
 
 **Level:** 201 · working knowledge
 
-**One line:** [savepoint](https://github.com/NamtaoProductions/savepoint) watches your files, runs your test command, and makes a git commit **on exactly one transition — failing to passing** — so a known-good state is always one `git reset` away; the price is a pile of identical commits, which is what squashing removes before anyone sees them.
+**One line:** [savepoint ↗](https://github.com/NamtaoProductions/savepoint) watches your files, runs your test command, and makes a git commit **on exactly one transition — failing to passing** — so a known-good state is always one `git reset` away; the price is a pile of identical commits, which is what squashing removes before anyone sees them.
 
 ## What it is
 
@@ -106,7 +106,7 @@ Read `git reset --soft HEAD~3` precisely, because the three modes differ in exac
 
 `--hard` is the one that eats work. Same command shape, opposite outcome.
 
-**The rule that matters: only squash what you have not shared.** Squashing rewrites history — the new commit has a different hash, so anyone who already pulled the old ones now has a divergent branch to untangle. Before a push it is free housekeeping; after a push it is something you inflict on colleagues. This library's own [CONTRIBUTING](https://github.com/masiarek/rust-learning-library/blob/master/CONTRIBUTING.md) is stricter still, and forbids history rewriting in a shared checkout outright, because a rebase there drops other people's commits into your working tree.
+**The rule that matters: only squash what you have not shared.** Squashing rewrites history — the new commit has a different hash, so anyone who already pulled the old ones now has a divergent branch to untangle. Before a push it is free housekeeping; after a push it is something you inflict on colleagues. This library's own [CONTRIBUTING ↗](https://github.com/masiarek/rust-learning-library/blob/master/CONTRIBUTING.md) is stricter still, and forbids history rewriting in a shared checkout outright, because a rebase there drops other people's commits into your working tree.
 
 Two alternatives worth knowing: `git rebase -i HEAD~10` gives you a per-commit editor (`pick`/`squash`/`reword`) when the run is not a clean suffix, and GitHub's **Squash and merge** button does the whole thing at merge time — which is why plenty of teams never squash locally at all.
 
@@ -128,7 +128,7 @@ Then squash before pushing, and the throwaway commits never existed as far as an
 
 It appears here because savepoint was prototyped in it before the Rust rewrite — a good trajectory, and worth naming.
 
-[Nushell](https://www.nushell.sh/) is a shell whose pipelines carry **structured data instead of text**. In bash, `ls | ...` hands the next command a block of characters that you then chew apart with `awk`, `cut` and `sed`, re-deriving the structure the first command already had. In Nu, `ls` yields a *table* with typed columns:
+[Nushell ↗](https://www.nushell.sh/) is a shell whose pipelines carry **structured data instead of text**. In bash, `ls | ...` hands the next command a block of characters that you then chew apart with `awk`, `cut` and `sed`, re-deriving the structure the first command already had. In Nu, `ls` yields a *table* with typed columns:
 
 ```nu
 ls | where size > 1kb | sort-by modified | first 5

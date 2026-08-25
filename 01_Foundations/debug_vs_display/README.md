@@ -519,4 +519,4 @@ The sentence written for the human:
 - [`Option` vs `Result`](../option_vs_result/README.md) — where a custom error type with a `Display` impl comes from in the first place
 - [What a panic costs](../what_a_panic_costs/README.md) — the delivery path Trap 2 is about, priced
 - [What a float actually stores](../what_a_float_stores/README.md) — why `{}` prints `1` and `{:?}` prints `1.0` for the same `f64`: `Debug` keeps the decimal point so you can see it is not an integer
-- [The `std::fmt` module docs](https://doc.rust-lang.org/std/fmt/) — the full grammar of a format string: width, precision, fill, sign, and the other traits (`LowerHex`, `Binary`, `Pointer`) the same syntax reaches
+- [The `std::fmt` module docs ↗](https://doc.rust-lang.org/std/fmt/) — the full grammar of a format string: width, precision, fill, sign, and the other traits (`LowerHex`, `Binary`, `Pointer`) the same syntax reaches

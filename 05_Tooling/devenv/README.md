@@ -2,11 +2,11 @@
 
 **Level:** 201 · working knowledge
 
-**One line:** [devenv](https://devenv.sh/) makes one file the complete definition of a project's development environment — compiler, CLI tools, system libraries, environment variables, git hooks and running databases alike — identical on every machine that opens the project; the entry fee is installing Nix, and whether that fee is worth paying is decided almost entirely by how far down that list your project actually reaches.
+**One line:** [devenv ↗](https://devenv.sh/) makes one file the complete definition of a project's development environment — compiler, CLI tools, system libraries, environment variables, git hooks and running databases alike — identical on every machine that opens the project; the entry fee is installing Nix, and whether that fee is worth paying is decided almost entirely by how far down that list your project actually reaches.
 
 ## What it is
 
-devenv is built and maintained by [Cachix](https://www.cachix.org/), and it describes itself as *"Fast, Declarative, Reproducible, and Composable Developer Environments."* Underneath it is [Nix](https://nixos.org/) — a package manager whose central idea is that a package is a pure function of its inputs, so the same inputs give byte-identical outputs on any machine, and two projects can depend on incompatible versions of the same library without either one knowing.
+devenv is built and maintained by [Cachix ↗](https://www.cachix.org/), and it describes itself as *"Fast, Declarative, Reproducible, and Composable Developer Environments."* Underneath it is [Nix ↗](https://nixos.org/) — a package manager whose central idea is that a package is a pure function of its inputs, so the same inputs give byte-identical outputs on any machine, and two projects can depend on incompatible versions of the same library without either one knowing.
 
 Nix has had that capability for twenty years and has been kept from general use by its own learning curve: a lazy functional configuration language, a module system, and a vocabulary that assumes you already have it. devenv's contribution is a front end. You write a small number of high-level options, and it generates the Nix.
 
@@ -59,7 +59,7 @@ Environment variables, a hook that runs on entry, and a git hook installed by op
 
 ## The slide is a montage — the real file is smaller
 
-Worth separating, because the two are different documents. The configuration [Tris Oaten publishes](https://namtao.com/rust) is correct, and notably plainer than the slide:
+Worth separating, because the two are different documents. The configuration [Tris Oaten publishes ↗](https://namtao.com/rust) is correct, and notably plainer than the slide:
 
 ```nix
 { pkgs, lib, config, ... }:
@@ -98,7 +98,7 @@ Three differences from the slide are worth naming, because a reader's first inst
 
 **1. The real file opens `{ pkgs, lib, config, ... }:` and the slide does not.** A devenv module is a *function* of those arguments; without the header, `pkgs.watchexec` and `lib.makeLibraryPath` are unbound identifiers. This is the difference between a Nix module and a Nix attribute set, and it is the first thing to check when a pasted config fails on a name that is obviously right.
 
-**2. The `LD_LIBRARY_PATH` block is commented out in the real file, and live on the slide** — which matters, because on the slide it lands above an `env = { … }` block and the two together are an error. Nix merges *attribute paths* freely (`a.b = 1; a.c = 2;` is one set with two keys), but mixing a path and a whole set on the same name is rejected, and, [notoriously, in only one order](https://github.com/NixOS/nix/issues/2077):
+**2. The `LD_LIBRARY_PATH` block is commented out in the real file, and live on the slide** — which matters, because on the slide it lands above an `env = { … }` block and the two together are an error. Nix merges *attribute paths* freely (`a.b = 1; a.c = 2;` is one set with two keys), but mixing a path and a whole set on the same name is rejected, and, [notoriously, in only one order ↗](https://github.com/NixOS/nix/issues/2077):
 
 ```text
 error: attribute 'x' at (string):1:12 already defined at (string):1:3
@@ -144,9 +144,9 @@ The top two rows are where most Rust projects live, and they are fully served by
 
 - **`devenv.lock` is the reproducibility, not `devenv.nix`.** The `.nix` file names inputs; the lockfile pins them to exact revisions. Commit it, and treat updating it as a reviewable event, exactly as with `Cargo.lock` or `uv.lock`.
 - **2.0 broke things, and search results predate it.** In devenv 2.0 the `git-hooks` input is no longer included by default and must be declared in `devenv.yaml`; `pre-commit` was replaced by `prek`; a native process manager replaced process-compose; and `devenv build` now emits JSON. Configurations you find online — including the slide above — may assume 1.x.
-- **CI has to install it too**, which is a cache-warming job of its own. The [`examples.yml`](https://github.com/masiarek/rust-learning-library/blob/master/.github/workflows/examples.yml) workflow here takes seconds; a cold Nix evaluation does not.
-- **Pair it with [`direnv`](https://direnv.net/) or you will forget to enter the shell**, and then debug a "missing" tool that is merely one `devenv shell` away.
-- **Nix itself is a moving target.** devenv's roadmap includes replacing its Nix evaluator with [Tvix](https://tvix.dev/), so the layer you are adopting is under active reconstruction.
+- **CI has to install it too**, which is a cache-warming job of its own. The [`examples.yml` ↗](https://github.com/masiarek/rust-learning-library/blob/master/.github/workflows/examples.yml) workflow here takes seconds; a cold Nix evaluation does not.
+- **Pair it with [`direnv` ↗](https://direnv.net/) or you will forget to enter the shell**, and then debug a "missing" tool that is merely one `devenv shell` away.
+- **Nix itself is a moving target.** devenv's roadmap includes replacing its Nix evaluator with [Tvix ↗](https://tvix.dev/), so the layer you are adopting is under active reconstruction.
 
 ## If you are coming from another language
 
@@ -166,9 +166,9 @@ The tool is good and the idea is right. It is simply aimed at a bigger problem t
 
 ## Sources
 
-- [devenv.sh](https://devenv.sh/) and its [getting started](https://devenv.sh/getting-started/) guide — tagline, feature list, installation, and commands
-- [Migrating to 2.0](https://devenv.sh/guides/migrating-to-2.0/) — the breaking changes above
-- [NixOS/nix#2077](https://github.com/NixOS/nix/issues/2077) — the order-dependent attribute-merging error, with the exact message
+- [devenv.sh ↗](https://devenv.sh/) and its [getting started ↗](https://devenv.sh/getting-started/) guide — tagline, feature list, installation, and commands
+- [Migrating to 2.0 ↗](https://devenv.sh/guides/migrating-to-2.0/) — the breaking changes above
+- [NixOS/nix#2077 ↗](https://github.com/NixOS/nix/issues/2077) — the order-dependent attribute-merging error, with the exact message
 
 ---
 

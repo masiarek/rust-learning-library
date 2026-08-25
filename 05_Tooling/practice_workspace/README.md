@@ -112,7 +112,7 @@ Three things, and they are small but real:
 
 ## What about `cargo generate`?
 
-[`cargo generate`](https://cargo-generate.github.io/cargo-generate/) fetches a template repository and expands placeholders into a new project. It is genuinely good, and it is aimed at a different problem than this one.
+[`cargo generate` ↗](https://cargo-generate.github.io/cargo-generate/) fetches a template repository and expands placeholders into a new project. It is genuinely good, and it is aimed at a different problem than this one.
 
 The distinction is **content versus configuration**. `cargo generate leptos-rs/start-trunk` produces nineteen files — components, pages, `index.html`, `Trunk.toml`, a routing skeleton — that you could not type from memory and would not want to. That is content, and a template is exactly right for it.
 

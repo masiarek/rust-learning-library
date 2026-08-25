@@ -106,19 +106,21 @@ Then add a row to [KATAS.md](KATAS.md) at the point in the sequence where the ka
 
 ## Linking
 
+- **A link that leaves the library ends its label with ` ↗`** — ``[`Sized` ↗](https://doc.rust-lang.org/std/marker/trait.Sized.html)``. An internal link never carries one, so *no arrow* means the page is still in here. Without it a column of blue text says nothing about where any row goes: four trait names side by side, three of them std docs and one a lesson two folders up, and the only way to tell was to hover. The marker sits in the Markdown rather than the site's CSS because the library is read on three surfaces — GitHub, the built site, and a plain local Markdown viewer — and a stylesheet reaches one of them. `python3 tools/check_link_style.py --fix` adds and removes them; CI runs it without `--fix`.
 - **Link a folder by naming its README**: `[label](some_folder/README.md)`, never `[label](some_folder/)`. The bare form works on GitHub and on the built site but not in a plain Markdown viewer, and MkDocs leaves it unrewritten — it ships to the page and 404s.
 - **A repo path in backticks must be a link, not bare code text.** Paths are resolved from the *page's* folder by most readers, so a root-relative path in a code span dead-ends. Put the backticks in the label and a real relative path in the href.
 - **Link a jargon term on first meaningful use**, once per page, and never to the page's own subject.
 
 ## Reading order in the sidebar
 
-Set it in `NAV_ORDER` in [`mkdocs_hooks.py`](https://github.com/masiarek/rust-learning-library/blob/master/mkdocs_hooks.py) — **never by renaming files to `01_`, `02_`…** on a page. A filename is a permanent URL; inserting one lesson would otherwise move every page after it. Numeric prefixes on *section folders* are fine (the hook strips them from the label) because folders move rarely and deliberately.
+Set it in `NAV_ORDER` in [`mkdocs_hooks.py` ↗](https://github.com/masiarek/rust-learning-library/blob/master/mkdocs_hooks.py) — **never by renaming files to `01_`, `02_`…** on a page. A filename is a permanent URL; inserting one lesson would otherwise move every page after it. Numeric prefixes on *section folders* are fine (the hook strips them from the label) because folders move rarely and deliberately.
 
 ## Before you commit
 
 ```bash
 python3 tools/run_examples.py     # examples verified, pages refilled
 python3 tools/check_katas.py      # every Practice section is indexed, every row resolves
+python3 tools/check_link_style.py # every external link carries its ↗, no internal link does
 uv run --group docs mkdocs build --strict   # the site builds clean
 ```
 
@@ -130,7 +132,7 @@ So extract the pushed tree and re-run against that:
 
 ```bash
 T=$(mktemp -d); git archive origin/master | tar -x -C "$T"
-(cd "$T" && python3 tools/check_katas.py && python3 tools/run_examples.py --check)
+(cd "$T" && python3 tools/check_katas.py && python3 tools/check_link_style.py && python3 tools/run_examples.py --check)
 ```
 
 `git archive` writes only tracked, committed content, so an in-flight folder belonging to someone else cannot make this pass and a file you forgot to `git add` cannot hide in it. Do it after you push, against `origin/master` — that is the tree CI builds and the one readers get. `--check` rather than a plain run, since the extract is a throwaway and nothing there is worth rewriting.

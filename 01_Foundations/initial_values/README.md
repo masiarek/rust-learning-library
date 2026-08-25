@@ -4,7 +4,7 @@
 
 **One line:** For "a variable with no value yet", Rust usually does not want `Option` at all — it lets you declare without initializing and proves you assigned before use.
 
-This is the one job on [`std::option`'s list](https://doc.rust-lang.org/core/option/) where the obvious reading leads most newcomers astray, so it is worth separating the case `Option` genuinely serves from the case it only appears to.
+This is the one job on [`std::option`'s list ↗](https://doc.rust-lang.org/core/option/) where the obvious reading leads most newcomers astray, so it is worth separating the case `Option` genuinely serves from the case it only appears to.
 
 ---
 
@@ -246,4 +246,4 @@ rustc --edition 2024 01_Foundations/initial_values/examples/initial_values.rs -o
 
 - [`Option` fields](../option_fields/README.md) — the case where deferring is not available
 - [Partial functions](../partial_functions/README.md) — why `iter().max()` returns `Option` in the first place
-- [`OnceLock`](https://doc.rust-lang.org/std/sync/struct.OnceLock.html) — initialize-once, for statics and lazy globals
+- [`OnceLock` ↗](https://doc.rust-lang.org/std/sync/struct.OnceLock.html) — initialize-once, for statics and lazy globals

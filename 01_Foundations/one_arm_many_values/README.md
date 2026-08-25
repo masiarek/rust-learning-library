@@ -503,4 +503,4 @@ claim you can check on every input, for a function this small, in four lines.
 - [Six kinds of zero](../six_kinds_of_zero/README.md) — a `match` over ballot markers, and the catch-all that quietly refiled two of them
 - [What a warning is asking](../what_a_warning_is_asking/README.md) — including the unreachable arm, and why the fix is rarely to silence it
 - [Bit flags](../bit_flags/README.md) — the *other* `|`, on the computing side of the `=>`
-- [Rust reference: pattern syntax](https://doc.rust-lang.org/reference/patterns.html) · [`unreachable_patterns`](https://doc.rust-lang.org/rustc/lints/listing/warn-by-default.html#unreachable-patterns)
+- [Rust reference: pattern syntax ↗](https://doc.rust-lang.org/reference/patterns.html) · [`unreachable_patterns` ↗](https://doc.rust-lang.org/rustc/lints/listing/warn-by-default.html#unreachable-patterns)

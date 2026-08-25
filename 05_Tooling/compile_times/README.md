@@ -6,7 +6,7 @@
 
 Rust's compile times are the language's most-complained-about property, and most of the advice you will find is a list of flags with no model attached. A list of flags is unusable, because the same flag that halves one project's build does nothing measurable to another's. The model is small enough to hold in your head, and once you have it the flags sort themselves.
 
-This page follows the three optimizations in [Let's Get Rusty's *How to decrease your Rust compile times by 50%*](https://youtu.be/vFp4IbC2aZ0) — reduced debug info, parallel type checking, and the Cranelift backend — and adds the arithmetic that says what each one can and cannot buy *you*.
+This page follows the three optimizations in [Let's Get Rusty's *How to decrease your Rust compile times by 50%* ↗](https://youtu.be/vFp4IbC2aZ0) — reduced debug info, parallel type checking, and the Cranelift backend — and adds the arithmetic that says what each one can and cannot buy *you*.
 
 ---
 
@@ -54,7 +54,7 @@ The parallel front end is real and it works, but it is not finished: diagnostics
 
 ## 3. Cranelift instead of LLVM — nightly, and debug builds only
 
-LLVM is a code generator tuned to emit *fast* code. [Cranelift](https://cranelift.dev/) is one tuned to emit code *fast*. For a debug build — where you do not care how the binary performs, you care how soon you can run the test — that is precisely the right trade.
+LLVM is a code generator tuned to emit *fast* code. [Cranelift ↗](https://cranelift.dev/) is one tuned to emit code *fast*. For a debug build — where you do not care how the binary performs, you care how soon you can run the test — that is precisely the right trade.
 
 ```sh
 rustup +nightly component add rustc-codegen-cranelift-preview
@@ -120,7 +120,7 @@ Both matter, and they respond differently — link time is nearly all of a small
 
 ## The knob that is not in the video
 
-Swap the **linker**. `ld64` on macOS and GNU `ld` on Linux are both slow next to [`lld`](https://lld.llvm.org/) or [`mold`](https://github.com/rui314/mold), and since link time is most of an incremental rebuild, this is often the single biggest win on the edit-compile-test loop specifically. Recent Rust has started defaulting to `lld` on x86-64 Linux; macOS has not.
+Swap the **linker**. `ld64` on macOS and GNU `ld` on Linux are both slow next to [`lld` ↗](https://lld.llvm.org/) or [`mold` ↗](https://github.com/rui314/mold), and since link time is most of an incremental rebuild, this is often the single biggest win on the edit-compile-test loop specifically. Recent Rust has started defaulting to `lld` on x86-64 Linux; macOS has not.
 
 ```toml
 # .cargo/config.toml
@@ -266,7 +266,7 @@ That is the practical lesson hiding under the arithmetic. A build optimization's
 
 ## Sources
 
-- [Let's Get Rusty — *How to decrease your Rust compile times by 50%*](https://youtu.be/vFp4IbC2aZ0) — the three knobs, in five minutes
-- [The Cargo book on `profile.debug`](https://doc.rust-lang.org/cargo/reference/profiles.html#debug) — every accepted value, and what each keeps
-- [corrode.dev — *Tips for faster Rust compile times*](https://corrode.dev/blog/tips-for-faster-rust-compile-times/) — the long version, and the best-organized list of the rest
-- [The rustc dev guide on the parallel front end](https://rustc-dev-guide.rust-lang.org/parallel-rustc.html) — what `-Z threads` actually parallelizes, and what is still serial
+- [Let's Get Rusty — *How to decrease your Rust compile times by 50%* ↗](https://youtu.be/vFp4IbC2aZ0) — the three knobs, in five minutes
+- [The Cargo book on `profile.debug` ↗](https://doc.rust-lang.org/cargo/reference/profiles.html#debug) — every accepted value, and what each keeps
+- [corrode.dev — *Tips for faster Rust compile times* ↗](https://corrode.dev/blog/tips-for-faster-rust-compile-times/) — the long version, and the best-organized list of the rest
+- [The rustc dev guide on the parallel front end ↗](https://rustc-dev-guide.rust-lang.org/parallel-rustc.html) — what `-Z threads` actually parallelizes, and what is still serial

@@ -430,4 +430,4 @@ fn main() {
 - [A shadow does not drop](../shadowing_does_not_drop/README.md) — the value that outlives the name that hid it
 - [What a warning is asking](../what_a_warning_is_asking/README.md) — `_` versus `_name`, as an answer to the compiler rather than as a timing decision
 - [Lock poisoning](../../09_Advanced/mutex_poisoning/README.md) — what a guard is protecting, and what happens when the thread holding it panics
-- [The Rust Reference — Destructors](https://doc.rust-lang.org/reference/destructors.html), which is where the drop-order rules on this page are written down
+- [The Rust Reference — Destructors ↗](https://doc.rust-lang.org/reference/destructors.html), which is where the drop-order rules on this page are written down

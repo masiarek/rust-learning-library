@@ -2,7 +2,7 @@
 
 **Level:** 201 · working knowledge
 
-**One line:** With [`clap`](https://docs.rs/clap)'s `derive` feature, a struct **is** the command-line interface: `#[derive(Parser)]` generates the parsing, the `--help` text, the `--version`, and the error message for a flag nobody defined.
+**One line:** With [`clap` ↗](https://docs.rs/clap)'s `derive` feature, a struct **is** the command-line interface: `#[derive(Parser)]` generates the parsing, the `--help` text, the `--version`, and the error message for a flag nobody defined.
 
 > **Stub — an outline, not a lesson.** There is no runnable example behind this page yet, so nothing on it has been through [the check that backs every other claim in this library](../../CONTRIBUTING.md). The bullets below are the questions the finished page has to answer.
 

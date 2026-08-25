@@ -47,7 +47,7 @@ error: let chains are only allowed in Rust 2024 or later
   |        ^^^^^^^^^^^^^^^^^
 ```
 
-Cargo passes the edition from `Cargo.toml` on every invocation, so you never meet this inside a project. By hand you pass it yourself — which is why every command in this repo reads `rustc --edition 2024 …`, and why [`tools/run_examples.py`](https://github.com/masiarek/rust-learning-library/blob/master/tools/run_examples.py) has `EDITION = "2024"` near the top rather than trusting the default.
+Cargo passes the edition from `Cargo.toml` on every invocation, so you never meet this inside a project. By hand you pass it yourself — which is why every command in this repo reads `rustc --edition 2024 …`, and why [`tools/run_examples.py` ↗](https://github.com/masiarek/rust-learning-library/blob/master/tools/run_examples.py) has `EDITION = "2024"` near the top rather than trusting the default.
 
 ### What else Cargo was quietly doing
 
@@ -80,7 +80,7 @@ echo 'fn main() { println!("hi"); }' > src/bin/scratch.rs
 cargo run --bin scratch
 ```
 
-This is the one to reach for while working through exercises — [Rustlings](https://rustlings.rust-lang.org/), say — because the scratch program is compiled exactly like the exercise beside it, with the same toolchain and the same crates in scope, and you never touch an exercise file to try something out.
+This is the one to reach for while working through exercises — [Rustlings ↗](https://rustlings.rust-lang.org/), say — because the scratch program is compiled exactly like the exercise beside it, with the same toolchain and the same crates in scope, and you never touch an exercise file to try something out.
 
 It keeps working in packages whose manifest looks unusual. Rustlings opens its `Cargo.toml` with a root-level array listing every exercise and solution:
 
@@ -289,4 +289,4 @@ And `-O` changes one line of the output above — `debug_assertions` reports `fa
 - [`if let`](../if_let/README.md) — the let chain used as an edition detector, and why it is 2024-only
 - [CONTRIBUTING.md](../../CONTRIBUTING.md) — how a lesson's example is compiled, run, and held to a recorded answer key
 - [The long way round to a STAR count](../../ROADMAP.md) — rung 10 is where the single-file rule finally retires and this repo grows a `Cargo.toml`
-- [The Cargo Book — Cargo targets](https://doc.rust-lang.org/cargo/reference/cargo-targets.html) — `autobins`, `src/bin/`, and the manifest keys behind all of the above
+- [The Cargo Book — Cargo targets ↗](https://doc.rust-lang.org/cargo/reference/cargo-targets.html) — `autobins`, `src/bin/`, and the manifest keys behind all of the above

@@ -69,10 +69,10 @@ There is a ladder of `-u` flags for turning the defaults off, one rung at a time
 
 | Crate | Version today | What it gives you |
 |---|---|---|
-| [`ignore`](https://docs.rs/ignore) | 0.4.33 | a parallel directory walker that respects `.gitignore`, `.ignore` and global git excludes |
-| [`globset`](https://docs.rs/globset) | 0.4.20 | matching many glob patterns at once, compiled into a single automaton |
-| [`grep-searcher`](https://docs.rs/grep-searcher) | 0.1.17 | line-oriented searching over a file or a stream |
-| [`memchr`](https://docs.rs/memchr) | 2.8.3 | SIMD byte and substring search — the 2.8× in the table above, mostly |
+| [`ignore` ↗](https://docs.rs/ignore) | 0.4.33 | a parallel directory walker that respects `.gitignore`, `.ignore` and global git excludes |
+| [`globset` ↗](https://docs.rs/globset) | 0.4.20 | matching many glob patterns at once, compiled into a single automaton |
+| [`grep-searcher` ↗](https://docs.rs/grep-searcher) | 0.1.17 | line-oriented searching over a file or a stream |
+| [`memchr` ↗](https://docs.rs/memchr) | 2.8.3 | SIMD byte and substring search — the 2.8× in the table above, mostly |
 
 So the row-3-to-row-4 factor is available to you in four lines of `Cargo.toml`, and the row-1-to-row-2 factor is a dependency rather than something to write. That is a more useful thing to know about Rust than any benchmark: the fast parts of the famous programs are **libraries**, versioned and documented, and the binary is a thin shell around them.
 

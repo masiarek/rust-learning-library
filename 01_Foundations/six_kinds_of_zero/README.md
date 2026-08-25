@@ -4,7 +4,7 @@
 
 **One line:** When there are more than two reasons a value is missing, `Option` is the wrong type — and the enum you write instead turns a reporting *discipline* into something the compiler enforces.
 
-A STAR ballot cell holds a digit 0–5. The [sibling star-voting-library](https://github.com/masiarek/star-voting-library) also accepts five marker characters in that same cell, and **every one of them tabulates as zero**:
+A STAR ballot cell holds a digit 0–5. The [sibling star-voting-library ↗](https://github.com/masiarek/star-voting-library) also accepts five marker characters in that same cell, and **every one of them tabulates as zero**:
 
 | Char | Means | Tallies as |
 |---|---|---|

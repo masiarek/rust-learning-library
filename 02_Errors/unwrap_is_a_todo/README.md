@@ -76,7 +76,7 @@ panic = "deny"
 
 Two things make this liveable rather than exhausting. **Tests are exempt** — `allow-unwrap-in-tests = true` in `clippy.toml`, and prototyping with `unwrap` inside a `#[test]` stays perfectly legal, which is where you should be prototyping anyway. And **clippy suggests the replacement**: index past the end and it says *consider using `.get(n)`*, which is the combinator you wanted.
 
-If you want proof rather than a lint, David Tolnay's [`no-panic`](https://docs.rs/no-panic) crate fails the **link** step if an annotated function can reach the panic handler at all. It is stricter than clippy and, being a link-time trick, prone to false positives — a sharp tool for a function that genuinely must not abort, not a project-wide policy.
+If you want proof rather than a lint, David Tolnay's [`no-panic` ↗](https://docs.rs/no-panic) crate fails the **link** step if an annotated function can reach the panic handler at all. It is stricter than clippy and, being a link-time trick, prone to false positives — a sharp tool for a function that genuinely must not abort, not a project-wide policy.
 
 ## Practice
 
@@ -247,4 +247,4 @@ both implementations agreed on all 6 inputs
 - [Strict clippy lints](../../05_Tooling/strict_lints/README.md) — the configuration that makes the compiler ask
 - [`unwrap_or_default`](../../01_Foundations/unwrap_or_default/README.md) — the combinator that removes the most unwraps for the least thought
 - [`anyhow` and context](../anyhow_and_context/README.md) — where the error goes once you stop unwrapping it
-- Tris Oaten, [*Rust: Don't Panic*](https://www.namtao.com/rust-dont-panic/) — the argument this page is built from
+- Tris Oaten, [*Rust: Don't Panic* ↗](https://www.namtao.com/rust-dont-panic/) — the argument this page is built from

@@ -103,7 +103,7 @@ Both bridges land on the same sentence: everyone already validates at the bounda
 
 ## Where this lands in a STAR count
 
-The [star-voting-library](https://github.com/masiarek/star-voting-library)'s Python engine does exactly the right thing for Python: one function, [`validate_star_rows(ballots_text, max_score=5)`](https://github.com/masiarek/star-voting-library/blob/master/STARVote_LH_tabulation_engine/starvote_larry_hastings.py), called once on the way in. Everything downstream then handles plain `int`s and trusts that call. The trust is well placed — and it is *trust*, held by the author's memory of the pipeline. Rewriting that in Rust, the newtype is where the trust turns into something the compiler carries for you. It is the first thing a STAR engine needs and the smallest, which is why it is the first rung.
+The [star-voting-library ↗](https://github.com/masiarek/star-voting-library)'s Python engine does exactly the right thing for Python: one function, [`validate_star_rows(ballots_text, max_score=5)` ↗](https://github.com/masiarek/star-voting-library/blob/master/STARVote_LH_tabulation_engine/starvote_larry_hastings.py), called once on the way in. Everything downstream then handles plain `int`s and trusts that call. The trust is well placed — and it is *trust*, held by the author's memory of the pipeline. Rewriting that in Rust, the newtype is where the trust turns into something the compiler carries for you. It is the first thing a STAR engine needs and the smallest, which is why it is the first rung.
 
 ---
 

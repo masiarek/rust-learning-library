@@ -101,4 +101,4 @@ note: for a trait to be dyn compatible it needs to allow building a vtable
 - [Returning a trait](../returning_a_trait/README.md) — the same two spellings in *return* position, where the problem is stated by the compiler rather than chosen by you
 - [Supertraits](../supertraits/README.md) — what a trait object inherits from the traits its own trait requires
 - [What a trait is](../what_a_trait_is/README.md) — the declaration both spellings are quantifying over
-- [The Book, ch. 10 — performance of code using generics](https://doc.rust-lang.org/book/ch10-01-syntax.html#performance-of-code-using-generics) — monomorphization, with the generated code written out
+- [The Book, ch. 10 — performance of code using generics ↗](https://doc.rust-lang.org/book/ch10-01-syntax.html#performance-of-code-using-generics) — monomorphization, with the generated code written out

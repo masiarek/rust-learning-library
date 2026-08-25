@@ -2,7 +2,7 @@
 
 **Level:** 201 · working knowledge
 
-**One line:** [`File::open`](https://doc.rust-lang.org/std/fs/struct.File.html#method.open) is read-only, `File::create` **truncates**, and everything else is [`OpenOptions`](https://doc.rust-lang.org/std/fs/struct.OpenOptions.html) — the mode is a decision you make, and the wrong one is not a compile error.
+**One line:** [`File::open` ↗](https://doc.rust-lang.org/std/fs/struct.File.html#method.open) is read-only, `File::create` **truncates**, and everything else is [`OpenOptions` ↗](https://doc.rust-lang.org/std/fs/struct.OpenOptions.html) — the mode is a decision you make, and the wrong one is not a compile error.
 
 > **Stub — an outline, not a lesson.** There is no runnable example behind this page yet, so nothing on it has been through [the check that backs every other claim in this library](../../CONTRIBUTING.md). The bullets below are the questions the finished page has to answer.
 

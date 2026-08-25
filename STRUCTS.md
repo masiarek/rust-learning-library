@@ -110,7 +110,7 @@ A free function that returns a `Feelings` and does nothing else is an associated
 
 **`mut self` is not a fourth receiver.** It is `self` with a mutable binding, exactly like `fn f(mut x: T)`. The caller cannot see the difference — a trait that declares `fn consume(self)` may be implemented as `fn consume(mut self)`, and calling a `mut self` method needs no `mut` on the caller's binding. Both facts are compiled, not asserted.
 
-The rarer spellings — `self: Box<Self>`, `Rc<Self>`, `Arc<Self>`, `Pin<&mut Self>` — *are* real receivers and do change what the caller must hand over. The [Reference](https://doc.rust-lang.org/reference/items/associated-items.html) gives the full grammar.
+The rarer spellings — `self: Box<Self>`, `Rc<Self>`, `Arc<Self>`, `Pin<&mut Self>` — *are* real receivers and do change what the caller must hand over. The [Reference ↗](https://doc.rust-lang.org/reference/items/associated-items.html) gives the full grammar.
 
 ### 4. The life of one instance
 

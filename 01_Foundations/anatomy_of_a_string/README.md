@@ -233,4 +233,4 @@ rustc --edition 2024 01_Foundations/anatomy_of_a_string/examples/anatomy_of_a_st
 - [Borrowing](../borrowing/README.md) — the rule that stopped `view` above
 - [Meet the byte](../meet_the_byte/README.md) — the unit `len` and `capacity` count in
 - [What an address shows](../what_an_address_shows/README.md) — which of these two places `&s` actually points at, and what a move does to each
-- [std docs — `String`](https://doc.rust-lang.org/std/string/struct.String.html) · [`std::alloc`](https://doc.rust-lang.org/std/alloc/index.html), where the buffer actually comes from
+- [std docs — `String` ↗](https://doc.rust-lang.org/std/string/struct.String.html) · [`std::alloc` ↗](https://doc.rust-lang.org/std/alloc/index.html), where the buffer actually comes from

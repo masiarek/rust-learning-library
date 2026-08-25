@@ -55,7 +55,7 @@ And the case that made `impl Trait` necessary rather than convenient: **a closur
 | How many types can come back | exactly one | any number |
 | Where the value lives | the stack | the heap |
 | Dispatch | static — the call is compiled straight to the impl | dynamic — one indirection through a vtable |
-| Code size | one copy per concrete type ([monomorphization](https://doc.rust-lang.org/book/ch10-01-syntax.html#performance-of-code-using-generics)) | one copy, shared |
+| Code size | one copy per concrete type ([monomorphization ↗](https://doc.rust-lang.org/book/ch10-01-syntax.html#performance-of-code-using-generics)) | one copy, shared |
 
 A `&dyn Trait` is a **fat pointer**: two words, one to the data and one to the vtable. The verified run below prints `8` for `&Star` and `16` for `&dyn Method`, which is that second word made visible.
 

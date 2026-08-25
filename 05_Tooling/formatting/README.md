@@ -280,12 +280,12 @@ rustfmt changed neither block: a string literal is data, not code.
 ```
 <!-- /output -->
 
-`rustfmt` rewrites **neither** block — running it over this file produces a byte-identical result — and the election still empties out, because the four spaces are inside the quotes where the formatter does not go. This is why [`indoc!`](https://docs.rs/indoc/) exists, and why an embedded YAML or SQL block is worth pulling out into its own file the moment it grows: a fixture in a `.yaml` file cannot be silently re-indented by somebody tidying up the Rust around it.
+`rustfmt` rewrites **neither** block — running it over this file produces a byte-identical result — and the election still empties out, because the four spaces are inside the quotes where the formatter does not go. This is why [`indoc!` ↗](https://docs.rs/indoc/) exists, and why an embedded YAML or SQL block is worth pulling out into its own file the moment it grows: a fixture in a `.yaml` file cannot be silently re-indented by somebody tidying up the Rust around it.
 
 </details>
 
 ## Sources
 
-- [rust-lang/rustfmt](https://github.com/rust-lang/rustfmt) — the tool, and its configuration reference at [rust-lang.github.io/rustfmt](https://rust-lang.github.io/rustfmt/)
-- [The Rust Style Guide](https://doc.rust-lang.org/style-guide/) — the conventions `rustfmt` implements, written down separately from the tool that enforces them
-- [Rustfmt — RustRover documentation](https://www.jetbrains.com/help/rust/rustfmt.html) — the source for the whole-file-versus-fragment split, and for `rustfmt` becoming the default in 2024.3
+- [rust-lang/rustfmt ↗](https://github.com/rust-lang/rustfmt) — the tool, and its configuration reference at [rust-lang.github.io/rustfmt ↗](https://rust-lang.github.io/rustfmt/)
+- [The Rust Style Guide ↗](https://doc.rust-lang.org/style-guide/) — the conventions `rustfmt` implements, written down separately from the tool that enforces them
+- [Rustfmt — RustRover documentation ↗](https://www.jetbrains.com/help/rust/rustfmt.html) — the source for the whole-file-versus-fragment split, and for `rustfmt` becoming the default in 2024.3

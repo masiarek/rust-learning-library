@@ -6,7 +6,7 @@
 
 Sum every candidate's scores. Take the top two. Between those two, whoever is preferred on more ballots wins. That is the whole method, and you could write it in an afternoon in a language you already know. Written slowly in Rust it is something better: a chain of small, concrete questions, each of which happens to be the question a Rust chapter is trying to answer.
 
-**The learning is the point.** If we reach a working engine, good — the [star-voting-library](https://github.com/masiarek/star-voting-library) gets an independent second implementation to cross-check against, which is a genuinely useful thing to own. If we stop at rung 4 and wander off into iterators for a month, that is not a failure of the plan; it *is* the plan. Every rung is a standalone lesson that stands up with no interest in elections whatsoever.
+**The learning is the point.** If we reach a working engine, good — the [star-voting-library ↗](https://github.com/masiarek/star-voting-library) gets an independent second implementation to cross-check against, which is a genuinely useful thing to own. If we stop at rung 4 and wander off into iterators for a month, that is not a failure of the plan; it *is* the plan. Every rung is a standalone lesson that stands up with no interest in elections whatsoever.
 
 ---
 

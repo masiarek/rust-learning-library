@@ -23,12 +23,12 @@ A `Draft` that does not implement `Audited` cannot be passed to `publish`, and t
 
 | Marker | Says |
 |---|---|
-| [`Sized`](https://doc.rust-lang.org/std/marker/trait.Sized.html) | the size is known at compile time |
+| [`Sized` ↗](https://doc.rust-lang.org/std/marker/trait.Sized.html) | the size is known at compile time |
 | [`Copy`](../../01_Foundations/copy_vs_clone/README.md) | duplicating the bytes is a valid duplication of the value |
-| [`Send`](https://doc.rust-lang.org/std/marker/trait.Send.html) | it is safe to move this to another thread |
-| [`Sync`](https://doc.rust-lang.org/std/marker/trait.Sync.html) | it is safe to share `&T` between threads |
+| [`Send` ↗](https://doc.rust-lang.org/std/marker/trait.Send.html) | it is safe to move this to another thread |
+| [`Sync` ↗](https://doc.rust-lang.org/std/marker/trait.Sync.html) | it is safe to share `&T` between threads |
 
-They live in [`std::marker`](https://doc.rust-lang.org/std/marker/index.html), which describes itself as *"primitive traits and types representing basic properties of types"* — a good one-line definition of the whole idea.
+They live in [`std::marker` ↗](https://doc.rust-lang.org/std/marker/index.html), which describes itself as *"primitive traits and types representing basic properties of types"* — a good one-line definition of the whole idea.
 
 ## `Sized`: the bound you never wrote
 
@@ -55,7 +55,7 @@ assert_send::<Rc<i32>>();    // E0277
 
 ## `PhantomData`: marking the type instead of the impl
 
-Sometimes the thing to mark is a type parameter the struct does not actually store. [`PhantomData<T>`](https://doc.rust-lang.org/std/marker/struct.PhantomData.html) is a zero-sized field that makes the parameter real to the type system and free at run time:
+Sometimes the thing to mark is a type parameter the struct does not actually store. [`PhantomData<T>` ↗](https://doc.rust-lang.org/std/marker/struct.PhantomData.html) is a zero-sized field that makes the parameter real to the type system and free at run time:
 
 ```rust
 struct Tagged<Unit> { value: f64, _unit: PhantomData<Unit> }

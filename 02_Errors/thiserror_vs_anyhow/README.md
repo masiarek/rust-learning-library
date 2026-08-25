@@ -8,8 +8,8 @@
 
 ## What it has to cover
 
-- [`thiserror`](https://docs.rs/thiserror) is a boilerplate remover, not a new error model: it derives `Display`, `Error` and `From` on an enum you would otherwise write by hand
-- [`anyhow`](https://docs.rs/anyhow) is a type-erased error for the top of a program, where the caller is a person
+- [`thiserror` ↗](https://docs.rs/thiserror) is a boilerplate remover, not a new error model: it derives `Display`, `Error` and `From` on an enum you would otherwise write by hand
+- [`anyhow` ↗](https://docs.rs/anyhow) is a type-erased error for the top of a program, where the caller is a person
 - Why `anyhow::Result` in a public API is a dead end: the caller can print it and nothing else
 - Error types are semver-visible — adding a variant is a breaking change unless the enum is `#[non_exhaustive]`
 - The common shape: a binary with a library half, `thiserror` inside, `anyhow` in `main`

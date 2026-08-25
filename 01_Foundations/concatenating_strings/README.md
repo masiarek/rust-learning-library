@@ -330,4 +330,4 @@ rustc --edition 2024 01_Foundations/concatenating_strings/examples/concatenating
 - [`String` vs `&str`](../string_vs_str/README.md) — why the two types exist, if the split is still new
 - [Ownership and moves](../ownership_and_moves/README.md) — the `E0382` you get from touching the left operand afterwards
 - [The anatomy of a `String`](../anatomy_of_a_string/README.md) — the capacity the `+` chain is reusing
-- [`std::ops::Add` for `String`](https://doc.rust-lang.org/std/string/struct.String.html#impl-Add%3C%26str%3E-for-String) · [`rustc --explain E0369`](https://doc.rust-lang.org/error_codes/E0369.html) · [The Rust Book, ch. 8.2](https://doc.rust-lang.org/book/ch08-02-strings.html#concatenation-with-the--operator-or-the-format-macro)
+- [`std::ops::Add` for `String` ↗](https://doc.rust-lang.org/std/string/struct.String.html#impl-Add%3C%26str%3E-for-String) · [`rustc --explain E0369` ↗](https://doc.rust-lang.org/error_codes/E0369.html) · [The Rust Book, ch. 8.2 ↗](https://doc.rust-lang.org/book/ch08-02-strings.html#concatenation-with-the--operator-or-the-format-macro)

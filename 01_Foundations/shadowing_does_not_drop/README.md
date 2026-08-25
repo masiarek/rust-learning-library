@@ -473,7 +473,7 @@ rustc --edition 2024 01_Foundations/shadowing_does_not_drop/examples/shadowing_d
 
 - **Reading a shadow as a replacement.** It replaces a *name*. The old value is still allocated, still owned, and still dropping at the end of the scope — later than the shadow that hid it, not sooner.
 - **Shadowing something large near the top of a long function.** The allocation is held to the closing brace with no handle left to release it. Bind it in an inner block, or move it into whatever consumes it.
-- **Calling `drop(x)` after shadowing `x`.** It drops the new binding. If the shadow is `Copy` the [`dropping_copy_types`](https://doc.rust-lang.org/rustc/lints/listing/warn-by-default.html) lint catches you; if it is a `String` or a `Vec` the drop is genuine, so nothing warns and the value you meant to free is untouched.
+- **Calling `drop(x)` after shadowing `x`.** It drops the new binding. If the shadow is `Copy` the [`dropping_copy_types` ↗](https://doc.rust-lang.org/rustc/lints/listing/warn-by-default.html) lint catches you; if it is a `String` or a `Vec` the drop is genuine, so nothing warns and the value you meant to free is untouched.
 - **Expecting an inner-block shadow to behave like a same-scope one.** The inner binding is destroyed at its brace. The same-scope one is not destroyed at all until the enclosing scope ends.
 - **Assuming rustc objected to the shadow.** When `E0505` or `E0502` arrives on a shadowed name, read the *"borrow later used here"* line: the complaint is about the borrow's extent, and the shadow is usually a bystander.
 
@@ -484,5 +484,5 @@ rustc --edition 2024 01_Foundations/shadowing_does_not_drop/examples/shadowing_d
 - [Shadowing](../../SHADOWING.md) — the map of all three shadowing lessons and the pages that touch it
 - [Ownership and moves](../ownership_and_moves/README.md) — who owes the free, and the `Drop` that makes this page's claims checkable
 - [Borrowing](../borrowing/README.md) — `&T`, and the last-use rule that decides how long `keep` holds the value
-- [The Rust Book, ch. 3.1 — Shadowing](https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html#shadowing)
-- [`std::mem::drop`](https://doc.rust-lang.org/std/mem/fn.drop.html) — why "dropping" is just moving a value into a function that does nothing
+- [The Rust Book, ch. 3.1 — Shadowing ↗](https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html#shadowing)
+- [`std::mem::drop` ↗](https://doc.rust-lang.org/std/mem/fn.drop.html) — why "dropping" is just moving a value into a function that does nothing

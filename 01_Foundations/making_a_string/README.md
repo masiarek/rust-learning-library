@@ -310,4 +310,4 @@ rustc --edition 2024 01_Foundations/making_a_string/examples/making_a_string.rs 
 - [`Debug` vs `Display`](../debug_vs_display/README.md) — the trait you derive and the trait you write
 - [Six kinds of string](../six_kinds_of_string/README.md) — why half the conversions above return `Result`
 - [`Copy` vs `Clone`](../copy_vs_clone/README.md) — what the accidental `to_string()` on a `String` actually costs
-- [`ToString`](https://doc.rust-lang.org/std/string/trait.ToString.html) · [`Display`](https://doc.rust-lang.org/std/fmt/trait.Display.html) · [`FromStr`](https://doc.rust-lang.org/std/str/trait.FromStr.html) · [Rust Language Cheat Sheet — String conversions](https://cheats.rs/#string-conversions)
+- [`ToString` ↗](https://doc.rust-lang.org/std/string/trait.ToString.html) · [`Display` ↗](https://doc.rust-lang.org/std/fmt/trait.Display.html) · [`FromStr` ↗](https://doc.rust-lang.org/std/str/trait.FromStr.html) · [Rust Language Cheat Sheet — String conversions ↗](https://cheats.rs/#string-conversions)

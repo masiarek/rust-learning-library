@@ -2,7 +2,7 @@
 
 **Level:** 201 · working knowledge
 
-**One line:** A read is a request to something outside your program, so it can fail *after* the file opened fine — which is why [`BufRead::lines()`](https://doc.rust-lang.org/std/io/trait.BufRead.html#method.lines) hands you an `io::Result<String>` per line rather than a `String`.
+**One line:** A read is a request to something outside your program, so it can fail *after* the file opened fine — which is why [`BufRead::lines()` ↗](https://doc.rust-lang.org/std/io/trait.BufRead.html#method.lines) hands you an `io::Result<String>` per line rather than a `String`.
 
 > **Stub — an outline, not a lesson.** There is no runnable example behind this page yet, so nothing on it has been through [the check that backs every other claim in this library](../../CONTRIBUTING.md). The bullets below are the questions the finished page has to answer.
 

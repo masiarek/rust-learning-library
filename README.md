@@ -2,7 +2,7 @@
 
 <!-- --8<-- [start:hero] -->
 
-A learning library for Rust, built the same way as its sibling [star-voting-library](https://github.com/masiarek/star-voting-library): **one idea per page, and every claim backed by a program that actually runs.**
+A learning library for Rust, built the same way as its sibling [star-voting-library ↗](https://github.com/masiarek/star-voting-library): **one idea per page, and every claim backed by a program that actually runs.**
 
 No page here hand-types what a program prints. Each lesson links a real `.rs` file; a tool compiles it, runs it, checks the output against a recorded answer key, and pastes that verified output into the page. CI fails if any of the three drift apart. So when a page says *"this prints `Some(12)`"*, that is not a promise — it is a test result.
 

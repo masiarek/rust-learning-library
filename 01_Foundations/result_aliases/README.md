@@ -30,9 +30,9 @@ The cost is one hop: a newcomer reading `io::Result<usize>` cannot see the error
 
 | Alias | Expands to | Note |
 |---|---|---|
-| [`io::Result<T>`](https://doc.rust-lang.org/std/io/type.Result.html) | `Result<T, io::Error>` | Everywhere in file, socket, and stdin code |
-| [`fmt::Result`](https://doc.rust-lang.org/std/fmt/type.Result.html) | `Result<(), fmt::Error>` | **No parameters at all** — both slots pinned |
-| [`thread::Result<T>`](https://doc.rust-lang.org/std/thread/type.Result.html) | `Result<T, Box<dyn Any + Send>>` | What a joined thread or `catch_unwind` hands back |
+| [`io::Result<T>` ↗](https://doc.rust-lang.org/std/io/type.Result.html) | `Result<T, io::Error>` | Everywhere in file, socket, and stdin code |
+| [`fmt::Result` ↗](https://doc.rust-lang.org/std/fmt/type.Result.html) | `Result<(), fmt::Error>` | **No parameters at all** — both slots pinned |
+| [`thread::Result<T>` ↗](https://doc.rust-lang.org/std/thread/type.Result.html) | `Result<T, Box<dyn Any + Send>>` | What a joined thread or `catch_unwind` hands back |
 
 `fmt::Result` is the one that looks least like a `Result` and teaches the most. It has no parameters because a `Display` impl has nothing to return on success and only one way to fail — so `T` is `()` and `E` is `fmt::Error`, and every `fmt` impl you will ever write ends in `Ok(())`.
 
@@ -72,11 +72,11 @@ That signature is worth having in your fingers: it is the shortest way to use `?
 Error: OutOfRange { got: 9, max: 5 }
 ```
 
-not `score 9 is above the 5 cap`. (Verified by running it; it is `Termination` for `Result`, which is [documented to use `Debug`](https://doc.rust-lang.org/std/process/trait.Termination.html).) If a human is meant to read that message, print it yourself and call [`std::process::exit`](https://doc.rust-lang.org/std/process/fn.exit.html), or use a wrapper type whose `Debug` delegates to `Display` — which is exactly what `anyhow::Error` does. That trap is one of *four* default paths that print `Debug` without asking; [Debug and Display](../debug_vs_display/README.md) counts them, and its kata prices both of those two fixes against each other.
+not `score 9 is above the 5 cap`. (Verified by running it; it is `Termination` for `Result`, which is [documented to use `Debug` ↗](https://doc.rust-lang.org/std/process/trait.Termination.html).) If a human is meant to read that message, print it yourself and call [`std::process::exit` ↗](https://doc.rust-lang.org/std/process/fn.exit.html), or use a wrapper type whose `Debug` delegates to `Display` — which is exactly what `anyhow::Error` does. That trap is one of *four* default paths that print `Debug` without asking; [Debug and Display](../debug_vs_display/README.md) counts them, and its kata prices both of those two fixes against each other.
 
 ## `Infallible` — an `E` with no values at all
 
-At the far end of the `E` slot sits [`std::convert::Infallible`](https://doc.rust-lang.org/std/convert/enum.Infallible.html), an enum with **no variants**. You cannot construct one, so `Err(_)` cannot be built, so a `Result<T, Infallible>` is always `Ok`.
+At the far end of the `E` slot sits [`std::convert::Infallible` ↗](https://doc.rust-lang.org/std/convert/enum.Infallible.html), an enum with **no variants**. You cannot construct one, so `Err(_)` cannot be built, so a `Result<T, Infallible>` is always `Ok`.
 
 It exists because traits force the shape on you. `FromStr` requires an `Err` type even for `String`, whose parse cannot fail; `TryFrom<u32> for u64` requires one even though every `u32` fits. Both name `Infallible` and the signature stops lying.
 
@@ -295,12 +295,12 @@ rustc --edition 2024 01_Foundations/result_aliases/examples/result_aliases.rs -o
 - **Assuming an alias is a new type.** It is not, so you cannot `impl` a trait on it, and it gives you no extra type safety. If you want a distinct type — one the compiler will keep apart from its inner type — you want a [newtype](../newtype_score/README.md) (a one-field `struct`), not an alias. That is the whole of the choice: an alias is a nickname the compiler expands and forgets, a newtype is a type it will hold you to.
 - **`main`'s `Debug` output.** Covered above, and worth repeating because it is the one that gets shipped: your `Display` impl is not what the user sees.
 - **`anyhow::Result` in a library.** Convenient for you, a dead end for your callers. Name the errors in a library; erase them in a binary.
-- **Reading `io::Result` as "a different, simpler `Result`".** It has every method the two-parameter one has, because it *is* the two-parameter one. If a method seems missing, check [`std::result::Result`](https://doc.rust-lang.org/std/result/enum.Result.html) — that is where the list lives.
+- **Reading `io::Result` as "a different, simpler `Result`".** It has every method the two-parameter one has, because it *is* the two-parameter one. If a method seems missing, check [`std::result::Result` ↗](https://doc.rust-lang.org/std/result/enum.Result.html) — that is where the list lives.
 
 ## See also
 
 - [`Option` vs `Result`](../option_vs_result/README.md) — the prior page: which of the two you want, and everything `?` does
 - [A score is not a number: the newtype](../newtype_score/README.md) — the other answer to "I want a name for this type", and the one that actually changes what compiles
-- [matklad — Study of `std::io::Error`](https://matklad.github.io/2020/10/15/study-of-std-io-error.html) — a slow read of the single error type behind `io::Result`, and the best short lesson available on designing an `E`
-- [The Rust Book, ch. 9 — Error Handling](https://doc.rust-lang.org/book/ch09-00-error-handling.html)
-- [`std::result`](https://doc.rust-lang.org/std/result/) — the method list the aliases inherit
+- [matklad — Study of `std::io::Error` ↗](https://matklad.github.io/2020/10/15/study-of-std-io-error.html) — a slow read of the single error type behind `io::Result`, and the best short lesson available on designing an `E`
+- [The Rust Book, ch. 9 — Error Handling ↗](https://doc.rust-lang.org/book/ch09-00-error-handling.html)
+- [`std::result` ↗](https://doc.rust-lang.org/std/result/) — the method list the aliases inherit

@@ -2,7 +2,7 @@
 
 **Level:** 201 · working knowledge
 
-**One line:** [`reqwest`](https://docs.rs/reqwest) makes a `GET` a two-line affair — and the first real decision is made before either line: blocking, or `async`?
+**One line:** [`reqwest` ↗](https://docs.rs/reqwest) makes a `GET` a two-line affair — and the first real decision is made before either line: blocking, or `async`?
 
 > **Stub — an outline, not a lesson.** There is no runnable example behind this page yet, so nothing on it has been through [the check that backs every other claim in this library](../../CONTRIBUTING.md). The bullets below are the questions the finished page has to answer.
 

@@ -264,4 +264,4 @@ rustc --edition 2024 01_Foundations/option_as_collection/examples/option_as_coll
 
 - [`Option` vs `Result`](../option_vs_result/README.md) — which of the two you should be reaching for in the first place
 - [`Option` fields](../option_fields/README.md) — `Option` in a type definition rather than a return type
-- [`std::mem::discriminant`](https://doc.rust-lang.org/std/mem/fn.discriminant.html) and [`Option::is_some_and`](https://doc.rust-lang.org/core/option/enum.Option.html#method.is_some_and)
+- [`std::mem::discriminant` ↗](https://doc.rust-lang.org/std/mem/fn.discriminant.html) and [`Option::is_some_and` ↗](https://doc.rust-lang.org/core/option/enum.Option.html#method.is_some_and)

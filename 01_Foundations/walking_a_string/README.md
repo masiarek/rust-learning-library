@@ -299,4 +299,4 @@ rustc --edition 2024 01_Foundations/walking_a_string/examples/walking_a_string.r
 - [String slices](../string_slices/README.md) — what those byte offsets are for, and how they panic
 - [Meet the byte](../meet_the_byte/README.md) — the `u8` that `bytes()` yields
 - [`Option` as a collection](../option_as_collection/README.md) — the `Option<u8>` the kata builds, iterated
-- [`str::split`](https://doc.rust-lang.org/std/primitive.str.html#method.split) · [`Pattern`](https://doc.rust-lang.org/std/str/pattern/trait.Pattern.html) · [`str::split_once`](https://doc.rust-lang.org/std/primitive.str.html#method.split_once)
+- [`str::split` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split) · [`Pattern` ↗](https://doc.rust-lang.org/std/str/pattern/trait.Pattern.html) · [`str::split_once` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split_once)

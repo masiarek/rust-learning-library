@@ -18,7 +18,7 @@ Worth doing first, because it explains why the three big ballot families need th
 | **Approval** | a **subset** of the candidates | a bitset (`u64`), or `HashSet<CandidateId>` |
 | **Ranked** | an **ordering** of the candidates — a permutation, and usually a *partial* one | `Vec<CandidateId>` — the order *is* the data |
 
-A score ballot has a slot per candidate whether or not the voter used it. A ranked ballot has no slots at all: its content is a sequence, and a voter who ranks two of five candidates has given you a sequence of length two, not a length-five thing with holes. Rank *ties* ("I rank these two equal") push it further, to `Vec<Vec<CandidateId>>` — a sequence of tiers. That is why a codebase cannot quietly reuse one ballot type for both families, and why the sibling [star-voting-library](https://github.com/masiarek/star-voting-library) has one parser for `5,3,0` and a different one for `A>C>B`.
+A score ballot has a slot per candidate whether or not the voter used it. A ranked ballot has no slots at all: its content is a sequence, and a voter who ranks two of five candidates has given you a sequence of length two, not a length-five thing with holes. Rank *ties* ("I rank these two equal") push it further, to `Vec<Vec<CandidateId>>` — a sequence of tiers. That is why a codebase cannot quietly reuse one ballot type for both families, and why the sibling [star-voting-library ↗](https://github.com/masiarek/star-voting-library) has one parser for `5,3,0` and a different one for `A>C>B`.
 
 Everything below is about the score ballot, the simplest of the three.
 

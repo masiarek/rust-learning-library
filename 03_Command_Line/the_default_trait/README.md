@@ -2,7 +2,7 @@
 
 **Level:** 101 → 201 · for newcomers
 
-**One line:** [`Default`](https://doc.rust-lang.org/std/default/trait.Default.html) is the value a type takes when nobody said — and `..Default::default()` is how a struct of options grows a tenth field without you editing every place that built one.
+**One line:** [`Default` ↗](https://doc.rust-lang.org/std/default/trait.Default.html) is the value a type takes when nobody said — and `..Default::default()` is how a struct of options grows a tenth field without you editing every place that built one.
 
 > **Stub — an outline, not a lesson.** There is no runnable example behind this page yet, so nothing on it has been through [the check that backs every other claim in this library](../../CONTRIBUTING.md). The bullets below are the questions the finished page has to answer.
 

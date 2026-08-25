@@ -279,4 +279,4 @@ rustc --edition 2024 01_Foundations/map_or/examples/map_or.rs -o /tmp/mo && /tmp
 - [`unwrap_or_else`](../unwrap_or_else/README.md) — the lazy one, and `or_else`, its other confusable neighbour
 - [`unwrap_or_default`](../unwrap_or_default/README.md) — when the fallback comes from the type instead
 - [`if let`](../if_let/README.md) — the shape to reach for when the branches stop being expressions
-- [`Option::map_or`](https://doc.rust-lang.org/std/option/enum.Option.html#method.map_or) · [`map_or_else`](https://doc.rust-lang.org/std/option/enum.Option.html#method.map_or_else) · [`is_some_and`](https://doc.rust-lang.org/std/option/enum.Option.html#method.is_some_and) · [`is_none_or`](https://doc.rust-lang.org/std/option/enum.Option.html#method.is_none_or)
+- [`Option::map_or` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.map_or) · [`map_or_else` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.map_or_else) · [`is_some_and` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.is_some_and) · [`is_none_or` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.is_none_or)

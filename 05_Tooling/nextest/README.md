@@ -2,7 +2,7 @@
 
 **Level:** 201 · working knowledge
 
-**One line:** [nextest](https://nexte.st/) runs each test in its own process rather than as a thread inside one — which is faster on a large suite, but the reason to care is that a test which *aborts the process* becomes one reported failure instead of taking the whole run down with it.
+**One line:** [nextest ↗](https://nexte.st/) runs each test in its own process rather than as a thread inside one — which is faster on a large suite, but the reason to care is that a test which *aborts the process* becomes one reported failure instead of taking the whole run down with it.
 
 ```sh
 cargo install --locked cargo-nextest

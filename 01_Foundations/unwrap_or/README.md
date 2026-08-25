@@ -293,4 +293,4 @@ rustc --edition 2024 01_Foundations/unwrap_or/examples/unwrap_or.rs -o /tmp/uo &
 - [`Option` vs `Result`](../option_vs_result/README.md) — why discarding the error is a bigger decision on a `Result`
 - [Initial values](../initial_values/README.md) — `unwrap_or(8080)` in its natural habitat, and the case where you want no `Option` at all
 - [Partial functions](../partial_functions/README.md) — where the `None` you are defaulting away came from
-- [`Option::unwrap_or`](https://doc.rust-lang.org/std/option/enum.Option.html#method.unwrap_or) · [`unwrap_or_else`](https://doc.rust-lang.org/std/option/enum.Option.html#method.unwrap_or_else) · [`unwrap_or_default`](https://doc.rust-lang.org/std/option/enum.Option.html#method.unwrap_or_default)
+- [`Option::unwrap_or` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.unwrap_or) · [`unwrap_or_else` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.unwrap_or_else) · [`unwrap_or_default` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.unwrap_or_default)

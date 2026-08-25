@@ -206,4 +206,4 @@ rustc --edition 2024 01_Foundations/six_kinds_of_string/examples/six_kinds_of_st
 - [`String` vs `&str`](../string_vs_str/README.md) — the owned/borrowed split this family repeats
 - [Meet the `char`](../meet_the_char/README.md) — what the UTF-8 promise buys
 - [`Path` and `PathBuf`](../../04_Files/path_and_pathbuf/README.md) — the honorary pair, in full (a stub for now)
-- [std docs — `std::ffi`](https://doc.rust-lang.org/std/ffi/index.html), where `OsString` and `CString` live and the encodings are spelled out
+- [std docs — `std::ffi` ↗](https://doc.rust-lang.org/std/ffi/index.html), where `OsString` and `CString` live and the encodings are spelled out

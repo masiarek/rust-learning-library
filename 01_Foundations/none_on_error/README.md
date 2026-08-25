@@ -4,7 +4,7 @@
 
 **One line:** `None`-on-error is right when the failure has exactly one cause — and a downgrade whenever you are discarding a `Result` that already told you which cause it was.
 
-[`std::option`'s list](https://doc.rust-lang.org/core/option/) includes *"return value for otherwise reporting simple errors, where `None` is returned on error"*. The load-bearing word is **simple**, and it is the word most easily skipped.
+[`std::option`'s list ↗](https://doc.rust-lang.org/core/option/) includes *"return value for otherwise reporting simple errors, where `None` is returned on error"*. The load-bearing word is **simple**, and it is the word most easily skipped.
 
 ---
 
@@ -261,4 +261,4 @@ rustc --edition 2024 01_Foundations/none_on_error/examples/none_on_error.rs -o /
 
 - [`Option` vs `Result`](../option_vs_result/README.md) — the "why not?" test this page applies
 - [Partial functions](../partial_functions/README.md) — the other job that looks like this one but genuinely has a single cause
-- [`Result::ok`](https://doc.rust-lang.org/std/result/enum.Result.html#method.ok) and [`Option::ok_or`](https://doc.rust-lang.org/std/option/enum.Option.html#method.ok_or)
+- [`Result::ok` ↗](https://doc.rust-lang.org/std/result/enum.Result.html#method.ok) and [`Option::ok_or` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.ok_or)

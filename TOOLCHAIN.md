@@ -68,4 +68,4 @@ Start wherever your question is; each page stands alone.
 
 ---
 
-Several of these pages exist because of a [No Boilerplate](https://www.youtube.com/@NoBoilerplate) walkthrough of the Rust tooling stack, whose recommendations — nightly by default, a strict clippy configuration, devenv for the environment — are each defensible and each carry a cost the format of a talk has no room for. Where a page disagrees with that source it says so and says why; where it agrees, it says that too.
+Several of these pages exist because of a [No Boilerplate ↗](https://www.youtube.com/@NoBoilerplate) walkthrough of the Rust tooling stack, whose recommendations — nightly by default, a strict clippy configuration, devenv for the environment — are each defensible and each carry a cost the format of a talk has no room for. Where a page disagrees with that source it says so and says why; where it agrees, it says that too.

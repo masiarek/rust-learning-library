@@ -9,7 +9,7 @@
 ## What it has to cover
 
 - Why not call the real service: it is slow, it rate-limits, it needs a key nobody should commit, and it fails for reasons your code did not cause
-- [`httpmock`](https://docs.rs/httpmock) or an equivalent: start a server on a free port, declare the route and the response, point the client at it — which only works because the URL [is a parameter](../injecting_the_base_url/README.md)
+- [`httpmock` ↗](https://docs.rs/httpmock) or an equivalent: start a server on a free port, declare the route and the response, point the client at it — which only works because the URL [is a parameter](../injecting_the_base_url/README.md)
 - Asserting the mock was actually **hit**, so a client that silently sent nothing fails instead of passing
 - The honest limit: a mock is your belief about the API, frozen. It keeps passing after the real service changes
 - What earns trust back — a stored real response as a fixture, and one integration test, run rarely and on purpose, against the live thing

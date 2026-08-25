@@ -361,5 +361,5 @@ rustc --edition 2024 01_Foundations/shadowing_and_unwrap/examples/shadowing_and_
 - [`unwrap`: the bet you are making](../what_a_panic_costs/README.md) — the other half of the pair: what unwrapping decides on your behalf
 - [`unwrap_or`](../unwrap_or/README.md) — the fallback in `let x = x.unwrap_or(…)`, and the three things it costs
 - [`Option` vs `Result`](../option_vs_result/README.md) — `let … else`, `?`, and the rest of the ways to stop holding a wrapper
-- [The Rust Book, ch. 3.1 — Shadowing](https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html#shadowing)
-- [`Option::as_ref`](https://doc.rust-lang.org/std/option/enum.Option.html#method.as_ref) and [`as_deref`](https://doc.rust-lang.org/std/option/enum.Option.html#method.as_deref) — the usual answer when a move gets in your way
+- [The Rust Book, ch. 3.1 — Shadowing ↗](https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html#shadowing)
+- [`Option::as_ref` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.as_ref) and [`as_deref` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.as_deref) — the usual answer when a move gets in your way

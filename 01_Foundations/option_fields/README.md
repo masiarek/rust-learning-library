@@ -257,4 +257,4 @@ rustc --edition 2024 01_Foundations/option_fields/examples/option_fields.rs -o /
 
 - [`Option` vs `Result`](../option_vs_result/README.md) — absence versus failure
 - [`Option` is a one-item collection](../option_as_collection/README.md) — iteration, `take()`, and what the wrapper costs
-- [`std::option` module docs](https://doc.rust-lang.org/core/option/) — the canonical list of what `Option` is for
+- [`std::option` module docs ↗](https://doc.rust-lang.org/core/option/) — the canonical list of what `Option` is for

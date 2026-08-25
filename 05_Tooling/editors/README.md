@@ -10,7 +10,7 @@ There is a recommendation at the bottom. The rest of the page is what it rests o
 
 ## What you are actually choosing
 
-When your editor underlines a borrow error two seconds after you type it, and before you have saved anything, the editor did not work that out. A separate program did: **`rust-analyzer`**, maintained by the Rust project, which reads your crate, answers questions over the [Language Server Protocol](https://microsoft.github.io/language-server-protocol/), and has no opinions about colour schemes. It is very likely already on your machine, because `rustup` ships it as a component:
+When your editor underlines a borrow error two seconds after you type it, and before you have saved anything, the editor did not work that out. A separate program did: **`rust-analyzer`**, maintained by the Rust project, which reads your crate, answers questions over the [Language Server Protocol ↗](https://microsoft.github.io/language-server-protocol/), and has no opinions about colour schemes. It is very likely already on your machine, because `rustup` ships it as a component:
 
 ```bash
 rustup which rust-analyzer     # /Users/you/.rustup/toolchains/stable-…/bin/rust-analyzer
@@ -191,7 +191,7 @@ A newer editor written in Rust by Zed Industries, GPU-accelerated, open source, 
 
 ## Neovim with LazyVim
 
-[LazyVim](https://www.lazyvim.org/) is not an editor. It is a **curated configuration** for Neovim, built on the `lazy.nvim` plugin manager, that ships a working IDE-ish setup — completion, fuzzy finding, git signs, a status line, LSP plumbing — so you do not assemble one from thirty plugins yourself. Language support arrives as **extras** you switch on: `:LazyExtras`, tick `lang.rust`, restart.
+[LazyVim ↗](https://www.lazyvim.org/) is not an editor. It is a **curated configuration** for Neovim, built on the `lazy.nvim` plugin manager, that ships a working IDE-ish setup — completion, fuzzy finding, git signs, a status line, LSP plumbing — so you do not assemble one from thirty plugins yourself. Language support arrives as **extras** you switch on: `:LazyExtras`, tick `lang.rust`, restart.
 
 Ticking that box installs `rustaceanvim` (the Rust front end proper), `crates.nvim` (versions and features inline in `Cargo.toml`), the Rust and RON tree-sitter parsers, and — if `mason.nvim` is present — the `codelldb` debug adapter. `rustaceanvim` is the interesting one: it is a fork of the old `rust-tools.nvim` that goes past ordinary LSP into the extras `rust-analyzer` offers and generic clients never ask for — expand this macro, show me the HIR or MIR, draw the crate graph, run *this* test, explain this error code.
 
@@ -324,11 +324,11 @@ A reasonable order, then:
 
 ## Sources
 
-- [LazyVim](https://www.lazyvim.org/) and its [`lang.rust` extra](https://www.lazyvim.org/extras/lang/rust) — the plugin list quoted above
-- [`rustaceanvim`](https://github.com/mrcjkb/rustaceanvim) — the Neovim version floor and the "do not also configure `lspconfig`" warning
-- [rust-analyzer](https://rust-analyzer.github.io/) — the engine behind every editor here but RustRover
-- [*Rust in Production: JetBrains*](https://serokell.io/blog/rust-in-production-jetbrains) (Serokell interview with Vitaly Bragilevsky) — the source for RustRover running its own Kotlin analyzer, and the reasoning for keeping it
-- [RustRover is released, and includes a free non-commercial option](https://blog.jetbrains.com/rust/2024/05/21/rustrover-is-released-and-includes-a-free-non-commercial-option/) and the [non-commercial licensing FAQ](https://sales.jetbrains.com/hc/en-gb/articles/18950890312210-The-free-non-commercial-licensing-FAQ)
-- [Zed's Rust documentation](https://zed.dev/docs/languages/rust)
-- [Helix: the Steel plugin-system pull request](https://github.com/helix-editor/helix/pull/8675) — still open, still not in a stable release
-- [2025 State of Rust Survey results](https://blog.rust-lang.org/2026/03/02/2025-State-Of-Rust-Survey-results) — VS Code still dominant, Zed "a remarkable jump upward (with Helix as a good second)", and agentic editors eroding the incumbents
+- [LazyVim ↗](https://www.lazyvim.org/) and its [`lang.rust` extra ↗](https://www.lazyvim.org/extras/lang/rust) — the plugin list quoted above
+- [`rustaceanvim` ↗](https://github.com/mrcjkb/rustaceanvim) — the Neovim version floor and the "do not also configure `lspconfig`" warning
+- [rust-analyzer ↗](https://rust-analyzer.github.io/) — the engine behind every editor here but RustRover
+- [*Rust in Production: JetBrains* ↗](https://serokell.io/blog/rust-in-production-jetbrains) (Serokell interview with Vitaly Bragilevsky) — the source for RustRover running its own Kotlin analyzer, and the reasoning for keeping it
+- [RustRover is released, and includes a free non-commercial option ↗](https://blog.jetbrains.com/rust/2024/05/21/rustrover-is-released-and-includes-a-free-non-commercial-option/) and the [non-commercial licensing FAQ ↗](https://sales.jetbrains.com/hc/en-gb/articles/18950890312210-The-free-non-commercial-licensing-FAQ)
+- [Zed's Rust documentation ↗](https://zed.dev/docs/languages/rust)
+- [Helix: the Steel plugin-system pull request ↗](https://github.com/helix-editor/helix/pull/8675) — still open, still not in a stable release
+- [2025 State of Rust Survey results ↗](https://blog.rust-lang.org/2026/03/02/2025-State-Of-Rust-Survey-results) — VS Code still dominant, Zed "a remarkable jump upward (with Helix as a good second)", and agentic editors eroding the incumbents

@@ -8,10 +8,10 @@
 
 ## What it has to cover
 
-- The [`Termination`](https://doc.rust-lang.org/std/process/trait.Termination.html) trait: what `main` is allowed to return, and why `E` only needs `Debug`
+- The [`Termination` ↗](https://doc.rust-lang.org/std/process/trait.Termination.html) trait: what `main` is allowed to return, and why `E` only needs `Debug`
 - What the runtime actually prints for an `Err`, and where it prints it
 - Which exit code comes out, and how that differs from a panic's
-- [`ExitCode`](https://doc.rust-lang.org/std/process/struct.ExitCode.html) when a specific number matters — an exit status a caller distinguishes
+- [`ExitCode` ↗](https://doc.rust-lang.org/std/process/struct.ExitCode.html) when a specific number matters — an exit status a caller distinguishes
 - The shape worth copying: a two-line `main` that calls `run() -> Result<…>` and does the presenting, so the error can be formatted for a person before it escapes
 
 ## The trap it exists for

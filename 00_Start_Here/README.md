@@ -34,7 +34,7 @@ Reading only The Book produces someone who can explain the borrow checker and fr
 
 **No — and you were right to be suspicious.** The redundancy is real, not hypothetical: [`10_Resources/books`](../10_Resources/books/README.md) already lists all three of these.
 
-The failure mode is specific. Two copies of the same recommendation drift the moment one is edited, nothing in CI compares them, and a reader who finds the stale one has no way to know. This library has machinery that prevents exactly that for *code* — [`run_examples.py`](https://github.com/masiarek/rust-learning-library/blob/master/tools/run_examples.py) fails the build when a page and its output disagree — and no machinery at all for prose. So prose duplication has to be prevented by structure instead.
+The failure mode is specific. Two copies of the same recommendation drift the moment one is edited, nothing in CI compares them, and a reader who finds the stale one has no way to know. This library has machinery that prevents exactly that for *code* — [`run_examples.py` ↗](https://github.com/masiarek/rust-learning-library/blob/master/tools/run_examples.py) fails the build when a page and its output disagree — and no machinery at all for prose. So prose duplication has to be prevented by structure instead.
 
 The rule this section follows, which is the one the rest of the repo already follows:
 

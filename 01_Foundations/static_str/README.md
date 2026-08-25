@@ -327,4 +327,4 @@ rustc --edition 2024 01_Foundations/static_str/examples/static_str.rs -o /tmp/st
 - [String slices](../string_slices/README.md) — the view itself, and the one way it panics
 - [How to learn lifetimes](../how_to_learn_lifetimes/README.md) — `'static` is one lifetime; this is the rest of them
 - [Scope is about names, not values](../scope_is_about_names/README.md) — what "dropped here while still borrowed" is measuring
-- [`str` (primitive)](https://doc.rust-lang.org/std/primitive.str.html) · [`String::leak`](https://doc.rust-lang.org/std/string/struct.String.html#method.leak) · [Rust by Example — `'static`](https://doc.rust-lang.org/rust-by-example/scope/lifetime/static_lifetime.html)
+- [`str` (primitive) ↗](https://doc.rust-lang.org/std/primitive.str.html) · [`String::leak` ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.leak) · [Rust by Example — `'static` ↗](https://doc.rust-lang.org/rust-by-example/scope/lifetime/static_lifetime.html)

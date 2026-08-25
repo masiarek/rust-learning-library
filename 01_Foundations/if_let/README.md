@@ -328,4 +328,4 @@ rustc --edition 2024 01_Foundations/if_let/examples/if_let.rs -o /tmp/il && /tmp
 - [`while let`](../while_let/README.md) — the same head in a loop, where the pattern failing is how it ends
 - [Partial functions](../partial_functions/README.md) — why `pop()` and `first()` return an `Option` for `while let` and `if let` to consume
 - [`Option` is a one-item collection](../option_as_collection/README.md) — the other way to handle one arm: `map`, `and_then`, `is_some_and`
-- [The Rust Reference on `if let`](https://doc.rust-lang.org/reference/expressions/if-expr.html#if-let-expressions) and [`let` statements with an `else`](https://doc.rust-lang.org/reference/statements.html#let-statements)
+- [The Rust Reference on `if let` ↗](https://doc.rust-lang.org/reference/expressions/if-expr.html#if-let-expressions) and [`let` statements with an `else` ↗](https://doc.rust-lang.org/reference/statements.html#let-statements)

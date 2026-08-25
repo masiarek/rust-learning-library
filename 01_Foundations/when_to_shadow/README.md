@@ -475,4 +475,4 @@ rustc --edition 2024 01_Foundations/when_to_shadow/examples/when_to_shadow.rs -o
 - [What a warning is asking](../what_a_warning_is_asking/README.md) — how to read the `unused_mut` that is really a bug report
 - [Initial values](../initial_values/README.md) — the other way to avoid `mut`: declare without initializing and let the compiler prove you assigned
 - [`if let`](../if_let/README.md) — `let … else`, the guard clause the unwrap-and-narrow idiom opens with
-- [The Rust Book, ch. 3.1 — Shadowing](https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html#shadowing)
+- [The Rust Book, ch. 3.1 — Shadowing ↗](https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html#shadowing)

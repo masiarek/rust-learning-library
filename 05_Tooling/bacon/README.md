@@ -2,7 +2,7 @@
 
 **Level:** 101 → 201 · working knowledge
 
-**One line:** [bacon](https://dystroy.org/bacon/) watches your files and re-runs `cargo check`, `clippy` or the tests on every save into a pane you leave open, so the answer is already on screen by the time you would have finished alt-tabbing to a terminal to ask for it.
+**One line:** [bacon ↗](https://dystroy.org/bacon/) watches your files and re-runs `cargo check`, `clippy` or the tests on every save into a pane you leave open, so the answer is already on screen by the time you would have finished alt-tabbing to a terminal to ask for it.
 
 **Should you have it? Yes** — it is the cheapest thing in this whole section. One binary, no configuration, and no change to any project:
 
@@ -55,7 +55,7 @@ Same lints, same tests, opposite ergonomics. If you find yourself wanting bacon 
 
 ## What about watchexec?
 
-[`watchexec`](https://watchexec.github.io/) is the generic version of the same idea: watch files, run *any* command. It appears in the same talk, wired into a devenv script:
+[`watchexec` ↗](https://watchexec.github.io/) is the generic version of the same idea: watch files, run *any* command. It appears in the same talk, wired into a devenv script:
 
 ```sh
 watchexec -c -e rs "cargo clippy && cargo test && cargo run"

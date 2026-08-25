@@ -4,7 +4,7 @@
 
 **One line:** A *partial* function has no answer for some of its inputs; returning `Option<T>` makes it *total*, because "no answer" becomes one of the answers.
 
-This is the mathematical justification for `Option`, and it is the reason the [`std::option` docs](https://doc.rust-lang.org/core/option/) list *"return values for functions that are not defined over their entire input range"* among its jobs. If you have ever wondered why a language would bother inventing this type, this is the answer.
+This is the mathematical justification for `Option`, and it is the reason the [`std::option` docs ↗](https://doc.rust-lang.org/core/option/) list *"return values for functions that are not defined over their entire input range"* among its jobs. If you have ever wondered why a language would bother inventing this type, this is the answer.
 
 ---
 
@@ -221,4 +221,4 @@ rustc --edition 2024 01_Foundations/partial_functions/examples/partial_functions
 - [`Option` vs `Result`](../option_vs_result/README.md) — choosing between the two wider types
 - [`Option` fields](../option_fields/README.md) — the same idea applied to data rather than functions
 - [`Option` is a one-item collection](../option_as_collection/README.md) — what the wrapper costs, and why it is usually nothing
-- [`i32::checked_div`](https://doc.rust-lang.org/std/primitive.i32.html#method.checked_div) and the rest of the `checked_*` family
+- [`i32::checked_div` ↗](https://doc.rust-lang.org/std/primitive.i32.html#method.checked_div) and the rest of the `checked_*` family

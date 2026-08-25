@@ -2,7 +2,7 @@
 
 **Level:** 101 · for newcomers
 
-**One line:** [Rust by Example](https://doc.rust-lang.org/rust-by-example/) is the official companion to The Book with the ratio inverted — runnable code with commentary, rather than prose with snippets — which makes it the wrong thing to read cover to cover and the right thing to have open in a tab.
+**One line:** [Rust by Example ↗](https://doc.rust-lang.org/rust-by-example/) is the official companion to The Book with the ratio inverted — runnable code with commentary, rather than prose with snippets — which makes it the wrong thing to read cover to cover and the right thing to have open in a tab.
 
 ## Why it is foundational
 
@@ -39,4 +39,4 @@ So: not a course. A dictionary you happen to be able to run.
 
 - [The Book](../the_book/README.md) — the argument RBE deliberately leaves out
 - [rustlings](../rustlings/README.md) — the reps
-- [cheats.rs](https://cheats.rs/) — even faster lookup once you know what you are looking for, and much denser
+- [cheats.rs ↗](https://cheats.rs/) — even faster lookup once you know what you are looking for, and much denser

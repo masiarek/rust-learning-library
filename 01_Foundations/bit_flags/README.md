@@ -126,7 +126,7 @@ impl Mode {
 
 `& x == x`, not `& x != 0`. For a single bit the two agree, which is why the wrong one spreads; for a multi-bit mask `!= 0` means *any* of those bits and `== x` means *all* of them, and the output shows them disagreeing.
 
-In real code you would reach for the [`bitflags`](https://docs.rs/bitflags/) crate, which generates exactly this — the newtype, the operators, the named `Debug`, `contains`, `intersects` — from a declaration. It is not used here because every example in this repo compiles with bare `rustc` and no dependencies, and hand-writing it once is arguably the better lesson anyway: the macro is not doing anything you have not now done yourself.
+In real code you would reach for the [`bitflags` ↗](https://docs.rs/bitflags/) crate, which generates exactly this — the newtype, the operators, the named `Debug`, `contains`, `intersects` — from a declaration. It is not used here because every example in this repo compiles with bare `rustc` and no dependencies, and hand-writing it once is arguably the better lesson anyway: the macro is not doing anything you have not now done yourself.
 
 ## If you are coming from another language
 
@@ -370,4 +370,4 @@ The counter is Trap 2 arriving on your own data structure. `X` is the bottom fie
 - [Why hexadecimal](../why_hexadecimal/README.md) — why every mask on this page is written `0x1FF` and not `511`
 - [A score is not a number](../newtype_score/README.md) — the newtype pattern `Mode` uses, at the domain level rather than the bit level
 - [What is a ballot, in memory?](../representing_a_ballot/README.md) — the other direction: when *not* to pack, and which bugs each layout makes writeable
-- Julia Evans, *How Integers and Floats Work* ([wizardzines.com](https://wizardzines.com/)) — pages 15 and 16 are the source of the TCP word and the tic-tac-toe encoding
+- Julia Evans, *How Integers and Floats Work* ([wizardzines.com ↗](https://wizardzines.com/)) — pages 15 and 16 are the source of the TCP word and the tic-tac-toe encoding

@@ -2,7 +2,7 @@
 
 **Level:** 101 · for newcomers
 
-**One line:** [*The Rust Programming Language*](https://doc.rust-lang.org/book/) by Steve Klabnik and Carol Nichols is the one resource that teaches the **model** rather than the syntax — and the reason to read it twice is that chapter 4 does not land the first time for almost anybody.
+**One line:** [*The Rust Programming Language* ↗](https://doc.rust-lang.org/book/) by Steve Klabnik and Carol Nichols is the one resource that teaches the **model** rather than the syntax — and the reason to read it twice is that chapter 4 does not land the first time for almost anybody.
 
 ## Why it is foundational
 
@@ -32,13 +32,13 @@ This is the recommendation worth taking literally, and the second read is a diff
 
 Nobody understands ownership on first contact. What happens instead is that you understand the *sentences* in chapter 4, carry on, and discover at chapter 8 that you cannot actually write anything — because understanding a rule and having it in your fingers are different states, and the gap is invisible from inside.
 
-So on the second pass, use **[the Brown University edition](https://rust-book.cs.brown.edu/)**: the identical text, with interactive quizzes and ownership diagrams inserted throughout. The quizzes are the point, and they are not decoration — they were built by researchers from the misconceptions real readers demonstrably hold, so they are *diagnostic*. A question you get wrong tells you something specific about your model, which re-reading the same paragraph will not.
+So on the second pass, use **[the Brown University edition ↗](https://rust-book.cs.brown.edu/)**: the identical text, with interactive quizzes and ownership diagrams inserted throughout. The quizzes are the point, and they are not decoration — they were built by researchers from the misconceptions real readers demonstrably hold, so they are *diagnostic*. A question you get wrong tells you something specific about your model, which re-reading the same paragraph will not.
 
-If you only have the patience for one re-read, re-read [chapter 4 there](https://rust-book.cs.brown.edu/ch04-01-what-is-ownership.html).
+If you only have the patience for one re-read, re-read [chapter 4 there ↗](https://rust-book.cs.brown.edu/ch04-01-what-is-ownership.html).
 
 ## Two other editions, for two other situations
 
-- **[The abridged Book](https://jasonwalton.ca/rust-book-abridged/)** — the same material, considerably shorter, written for people who already program in something. If The Book's pace is testing your patience rather than your understanding, this is the fix. It is not a substitute for a first read if Rust is your first systems language.
+- **[The abridged Book ↗](https://jasonwalton.ca/rust-book-abridged/)** — the same material, considerably shorter, written for people who already program in something. If The Book's pace is testing your patience rather than your understanding, this is the fix. It is not a substitute for a first read if Rust is your first systems language.
 - **`rustup doc --book`** — your offline, version-matched copy. Worth knowing about for the train.
 
 ## Chapter numbers move

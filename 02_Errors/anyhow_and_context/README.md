@@ -2,7 +2,7 @@
 
 **Level:** 201 · working knowledge
 
-**One line:** [`anyhow`](https://docs.rs/anyhow) gives an application one error type that anything converts into, and `.context("reading ballots.txt")` is what turns *"No such file or directory"* into a sentence naming the file.
+**One line:** [`anyhow` ↗](https://docs.rs/anyhow) gives an application one error type that anything converts into, and `.context("reading ballots.txt")` is what turns *"No such file or directory"* into a sentence naming the file.
 
 > **Stub — an outline, not a lesson.** There is no runnable example behind this page yet, so nothing on it has been through [the check that backs every other claim in this library](../../CONTRIBUTING.md). The bullets below are the questions the finished page has to answer.
 

@@ -2,14 +2,14 @@
 
 **Level:** 101 · for newcomers
 
-**One line:** [`std::env::args()`](https://doc.rust-lang.org/std/env/fn.args.html) is an iterator over the words the shell already split for you — and its **first** item is the path your program was invoked as, not your first argument.
+**One line:** [`std::env::args()` ↗](https://doc.rust-lang.org/std/env/fn.args.html) is an iterator over the words the shell already split for you — and its **first** item is the path your program was invoked as, not your first argument.
 
 > **Stub — an outline, not a lesson.** There is no runnable example behind this page yet, so nothing on it has been through [the check that backs every other claim in this library](../../CONTRIBUTING.md). The bullets below are the questions the finished page has to answer.
 
 ## What it has to cover
 
 - Argument zero: what it contains, why it is there, and `.skip(1)` as the idiom
-- `args()` panics on an argument that is not valid Unicode; [`args_os()`](https://doc.rust-lang.org/std/env/fn.args_os.html) does not — and an `OsString` is not a `String`, which is the whole reason [paths are their own type](../../04_Files/path_and_pathbuf/README.md)
+- `args()` panics on an argument that is not valid Unicode; [`args_os()` ↗](https://doc.rust-lang.org/std/env/fn.args_os.html) does not — and an `OsString` is not a `String`, which is the whole reason [paths are their own type](../../04_Files/path_and_pathbuf/README.md)
 - What the shell did before your program woke up: globbing, quote removal, variable expansion. `prog *.txt` never sees a `*`
 - Reaching for `args[1]` indexes a `Vec` and panics when it is missing; `.nth(1)` gives you an `Option`, which is where `ok_or` turns absence into a real error
 - Collecting once into a `Vec<String>` versus consuming the iterator in place

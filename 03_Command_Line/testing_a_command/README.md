@@ -9,9 +9,9 @@
 ## What it has to cover
 
 - Where integration tests live: `tests/`, one binary per file, seeing only your crate's public API — a different world from `#[cfg(test)]` beside the code
-- Running your own program from a test: Cargo hands it to you as `env!("CARGO_BIN_EXE_<name>")`, and [`assert_cmd`](https://docs.rs/assert_cmd) wraps that up
+- Running your own program from a test: Cargo hands it to you as `env!("CARGO_BIN_EXE_<name>")`, and [`assert_cmd` ↗](https://docs.rs/assert_cmd) wraps that up
 - Asserting the two things a caller can see: exit status, and a *substring* of the right stream
-- Fragile assertions — matching a full transcript, exact whitespace, or a path that differs per machine — and [`predicates`](https://docs.rs/predicates) as the way to say "contains" instead of "equals"
+- Fragile assertions — matching a full transcript, exact whitespace, or a path that differs per machine — and [`predicates` ↗](https://docs.rs/predicates) as the way to say "contains" instead of "equals"
 - Testing the test: break the program on purpose and confirm the test goes red, because a test that cannot fail is documentation with a green tick
 - Fixing a bug by writing the failing test first, which is the habit the whole section is really about
 

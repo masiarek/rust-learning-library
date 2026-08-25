@@ -2,9 +2,9 @@
 
 **Level:** 201 · working knowledge
 
-**One line:** Nothing in this library says which `rustc` it needs — the laptop that records the answer keys and the CI job that checks them both happen to run 1.97.1 today, and [`rust-toolchain.toml`](https://rust-lang.github.io/rustup/overrides.html#the-toolchain-file) is the four-line file that turns a coincidence into a promise.
+**One line:** Nothing in this library says which `rustc` it needs — the laptop that records the answer keys and the CI job that checks them both happen to run 1.97.1 today, and [`rust-toolchain.toml` ↗](https://rust-lang.github.io/rustup/overrides.html#the-toolchain-file) is the four-line file that turns a coincidence into a promise.
 
-Every page here rests on one claim: it does not say what a program prints, it says what a program *printed*. [`tools/run_examples.py`](https://github.com/masiarek/rust-learning-library/blob/master/tools/run_examples.py) compiles each example, runs it, and diffs the result against a recorded key, and CI fails when the three drift apart.
+Every page here rests on one claim: it does not say what a program prints, it says what a program *printed*. [`tools/run_examples.py` ↗](https://github.com/masiarek/rust-learning-library/blob/master/tools/run_examples.py) compiles each example, runs it, and diffs the result against a recorded key, and CI fails when the three drift apart.
 
 Which leaves a question the machinery never answers. **Printed by what?**
 
@@ -18,7 +18,7 @@ rustc --version    # rustc 1.97.1 (8bab26f4f 2026-07-14)
 
 `examples.yml` opens with a `rustc --version` step for exactly this reason, and on the most recent run it printed the same string — same version, same commit hash. So the recorder and the checker agree.
 
-For most of this library's life, nothing made them agree. `runs-on: ubuntu-latest` supplies whatever Rust the runner image happens to ship this month; the laptop supplies whatever `rustup` last installed. Two unpinned numbers that happened to match, with no file anywhere asserting that they should — which is the state this page was written to describe, and which it no longer describes, because writing it prompted the fix. The repository now carries a [`rust-toolchain.toml`](https://github.com/masiarek/rust-learning-library/blob/master/rust-toolchain.toml); the rest of this page is what is in it and why.
+For most of this library's life, nothing made them agree. `runs-on: ubuntu-latest` supplies whatever Rust the runner image happens to ship this month; the laptop supplies whatever `rustup` last installed. Two unpinned numbers that happened to match, with no file anywhere asserting that they should — which is the state this page was written to describe, and which it no longer describes, because writing it prompted the fix. The repository now carries a [`rust-toolchain.toml` ↗](https://github.com/masiarek/rust-learning-library/blob/master/rust-toolchain.toml); the rest of this page is what is in it and why.
 
 ## What that actually exposes — which is less than you would guess
 

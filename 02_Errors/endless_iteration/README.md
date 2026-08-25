@@ -2,7 +2,7 @@
 
 **Level:** 201 · working knowledge
 
-**One line:** [`read_line`](https://doc.rust-lang.org/std/io/trait.BufRead.html#method.read_line) reports end of input by returning `Ok(0)` — success, zero bytes — so a loop that only watches for `Err` runs forever on a finished file.
+**One line:** [`read_line` ↗](https://doc.rust-lang.org/std/io/trait.BufRead.html#method.read_line) reports end of input by returning `Ok(0)` — success, zero bytes — so a loop that only watches for `Err` runs forever on a finished file.
 
 > **Stub — an outline, not a lesson.** There is no runnable example behind this page yet, so nothing on it has been through [the check that backs every other claim in this library](../../CONTRIBUTING.md). The bullets below are the questions the finished page has to answer.
 

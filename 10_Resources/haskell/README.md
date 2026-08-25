@@ -67,10 +67,10 @@ Similarly, do not import the point-free style. `f . g . h` is idiomatic Haskell;
 
 **A few weekends.** The goal is not fluency, and you will get most of the value from the first third of one book:
 
-- **[Learn You a Haskell for Great Good!](https://learnyouahaskell.github.io/)** (Miran Lipovača) — free online, famously friendly, and the standard first book. Chapters on types, type classes, `Maybe`, and the Functor/Applicative/Monad sequence are exactly the material that pays back in Rust. Stop after monads; you have what you came for. *(The [community-maintained edition](https://learnyouahaskell.github.io/) is the one to read — the original is old and unmaintained.)*
-- **Real World Haskell** (O'Sullivan, Goerzen, Stewart) — the practical counterpart, and a cautionary tale about link rot: `realworldhaskell.org` **no longer resolves at all** (checked 2026-08-23; the domain is gone, not merely the page). What survives is the community's [up-to-date fork](https://github.com/tssm/up-to-date-real-world-haskell), which revises the 2008 text for modern GHC. Treat it as a second book, for the "how would you actually build something" question — and skip it entirely if the first one did its job.
+- **[Learn You a Haskell for Great Good! ↗](https://learnyouahaskell.github.io/)** (Miran Lipovača) — free online, famously friendly, and the standard first book. Chapters on types, type classes, `Maybe`, and the Functor/Applicative/Monad sequence are exactly the material that pays back in Rust. Stop after monads; you have what you came for. *(The [community-maintained edition ↗](https://learnyouahaskell.github.io/) is the one to read — the original is old and unmaintained.)*
+- **Real World Haskell** (O'Sullivan, Goerzen, Stewart) — the practical counterpart, and a cautionary tale about link rot: `realworldhaskell.org` **no longer resolves at all** (checked 2026-08-23; the domain is gone, not merely the page). What survives is the community's [up-to-date fork ↗](https://github.com/tssm/up-to-date-real-world-haskell), which revises the 2008 text for modern GHC. Treat it as a second book, for the "how would you actually build something" question — and skip it entirely if the first one did its job.
 
-You need `ghci` and nothing else — `brew install ghc` or [GHCup](https://www.haskell.org/ghcup/) — and most of the learning happens in the REPL rather than in projects.
+You need `ghci` and nothing else — `brew install ghc` or [GHCup ↗](https://www.haskell.org/ghcup/) — and most of the learning happens in the REPL rather than in projects.
 
 ## Is it worth it *for you*?
 

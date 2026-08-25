@@ -8,11 +8,11 @@
 
 ## What it has to cover
 
-- [`env::var`](https://doc.rust-lang.org/std/env/fn.var.html) returns a `Result`, and its two failure modes are genuinely different: not set, and set to something that is not Unicode
+- [`env::var` ↗](https://doc.rust-lang.org/std/env/fn.var.html) returns a `Result`, and its two failure modes are genuinely different: not set, and set to something that is not Unicode
 - The precedence ladder every configurable program grows — flag beats environment beats config file beats built-in default — and writing it down before it grows by accident
 - `clap`'s `env` attribute, which puts the ladder in the struct
 - Secrets: an API key on the command line is visible in the process list to every user on the machine
-- Why [`std::env::set_var`](https://doc.rust-lang.org/std/env/fn.set_var.html) is `unsafe` in the 2024 edition, and what that means for a test that sets one — the environment is process-global, and Rust's tests run in threads
+- Why [`std::env::set_var` ↗](https://doc.rust-lang.org/std/env/fn.set_var.html) is `unsafe` in the 2024 edition, and what that means for a test that sets one — the environment is process-global, and Rust's tests run in threads
 
 ## The trap it exists for
 
