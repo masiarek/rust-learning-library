@@ -1,0 +1,4 @@
+{"jsonrpc":"2.0","id":1,"result":{"resultType":"complete","tools":[{"name":"word_count","description":"Count whitespace-separated words.","inputSchema":{"type":"object","properties":{"text":{"type":"string"}},"required":["text"]}},{"name":"snake_case","description":"Rewrite CamelCase as snake_case.","inputSchema":{"type":"object","properties":{"text":{"type":"string"}},"required":["text"]}}]}}
+{"jsonrpc":"2.0","id":2,"result":{"resultType":"complete","content":[{"type":"text","text":"7"}],"isError":false}}
+{"jsonrpc":"2.0","id":3,"result":{"resultType":"complete","content":[{"type":"text","text":"borrow_checker"}],"isError":false}}
+{"jsonrpc":"2.0","id":4,"result":{"resultType":"complete","content":[{"type":"text","text":"text must not be empty"}],"isError":true}}
