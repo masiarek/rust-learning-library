@@ -24,6 +24,7 @@ These pages are not about making your program better. They are about the loop yo
 | [RustRover Code Vision](rustrover_code_vision/README.md) | 101 → 201 | The grey `1 usage · 1 implementation` line above every declaration — the right-click that hides one metric, the checkbox that hides all of them, and the three toggles that are not the same toggle |
 | [RustRover setup](rustrover_setup/README.md) | 101 → 201 | Make clippy the on-the-fly linter, teach the run configurations which workspace package you meant, and the four things the IDE needs no help with |
 | [rustup](rustup/README.md) | 101 → 201 | The `rustc` on your `PATH` is a 154-byte shim, and the five-rung rule it uses to pick the real one |
+| [Scaffolding a practice tree](scaffolding/README.md) | 201 | What a setup script should write — the workspace root, `.idea/` run configurations, and a `doctor` for the cross-file invariants no single tool owns — and the one thing it must not template |
 | [Strict clippy lints](strict_lints/README.md) | 201 | Denying `unwrap`, `panic` and indexing turns runtime aborts into compile errors — and rejects `n + 1` along the way |
 
 The one tooling page that is a *prerequisite* rather than a refinement lives in Foundations instead: [running a scratch program](../01_Foundations/rustc_without_cargo/README.md), which is how you run anything in this library at all.

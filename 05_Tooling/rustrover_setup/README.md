@@ -64,6 +64,7 @@ A fair question, and the honest answer is that the overlap is largest exactly he
 - [Choosing an editor](../editors/README.md) — the comparison, and the `rustup which` trap when a tool wants a real binary rather than a shim
 - [Strict clippy lints](../strict_lints/README.md) — the policy this setting enforces
 - [A tree of practice projects](../practice_workspace/README.md) — the layout the run configurations come from
+- [Scaffolding a practice tree](../scaffolding/README.md) — writing those run configurations into `.idea/` before the IDE has opened the project, and why the External Linters setting above is the one thing no file can carry
 
 ---
 

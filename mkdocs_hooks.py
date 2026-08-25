@@ -294,6 +294,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "rustrover_setup",
         "rustrover_code_vision",
         "neovim_setup",
+        # Then, having met all of the above: the script that writes them, and
+        # the checks that keep the files agreeing with each other afterwards.
+        "scaffolding",
         "compile_times",
         # Last, because it subsumes every rung above and costs the most.
         "devenv",

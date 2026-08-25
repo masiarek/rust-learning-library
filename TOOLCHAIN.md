@@ -47,8 +47,9 @@ Start wherever your question is; each page stands alone.
 | 12 | [Choosing an editor](05_Tooling/editors/README.md) | Which window am I going to read all of this through? |
 | 13 | [RustRover setup](05_Tooling/rustrover_setup/README.md) | How do I wire the IDE to everything above? |
 | 14 | [Neovim with LazyVim](05_Tooling/neovim_setup/README.md) | …or the other window, and the two ways it silently does nothing |
-| 15 | [Compile times](05_Tooling/compile_times/README.md) | Where do the seconds go, and which knob reaches them? |
-| 16 | [devenv](05_Tooling/devenv/README.md) | Should I declare the *whole* environment, and what does Nix cost? |
+| 15 | [Scaffolding a practice tree](05_Tooling/scaffolding/README.md) | I keep writing the same seven config files — what should a script write, and what must it not? |
+| 16 | [Compile times](05_Tooling/compile_times/README.md) | Where do the seconds go, and which knob reaches them? |
+| 17 | [devenv](05_Tooling/devenv/README.md) | Should I declare the *whole* environment, and what does Nix cost? |
 
 ## Or, by the problem you actually have
 
@@ -59,6 +60,7 @@ Start wherever your question is; each page stands alone.
 | "a tutorial told me to use nightly" | [Nightly by default](05_Tooling/nightly/README.md) |
 | "a tutorial's `use rand::…` will not compile" | [A throwaway that needs a crate](05_Tooling/scratch_with_a_crate/README.md) — nothing is missing; the file is being compiled by `rustc` rather than Cargo |
 | "my build got slower" | [Compile times](05_Tooling/compile_times/README.md), then [Adding a dependency](05_Tooling/cargo_dependencies/README.md) on what an unused crate costs |
+| "my editor, `cargo fmt` and CI disagree with each other" | [Scaffolding a practice tree](05_Tooling/scaffolding/README.md) — its `doctor` checks the cross-file invariants (nightly-only rustfmt options against the pinned channel, `max_width` against `.editorconfig`) that no single tool owns |
 | "I want fewer runtime panics" | [Strict clippy lints](05_Tooling/strict_lints/README.md), and [`expect`](01_Foundations/expect/README.md) for the position it overrules |
 | "onboarding a machine takes a day" | [devenv](05_Tooling/devenv/README.md) |
 | "I make a lot of tiny projects and copy the same config" | [A tree of practice projects](05_Tooling/practice_workspace/README.md) |
