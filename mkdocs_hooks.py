@@ -58,8 +58,10 @@ NAV_ORDER: dict[str, list[str]] = {
         "KATAS.md",
         "00_Start_Here",
         "01_Foundations",
-        # ...and the feature the rest of the language is built out of, which is
-        # why it comes straight after the foundations rather than at the end.
+        # The two features the rest of the language is built out of, which is
+        # why they come straight after the foundations rather than at the end.
+        # Enums first: a reader leaving the foundations has already used four.
+        "13_Enums",
         "12_Traits",
         # The command-line-tool arc: what a program does about failure, what it
         # is handed on the way in, and the three things outside it that can say
@@ -83,6 +85,15 @@ NAV_ORDER: dict[str, list[str]] = {
         "the_book",
         "rust_by_example",
         "rustlings",
+    ],
+    "13_Enums": [
+        "README.md",
+        # The declaration, then what a payload costs, then the two pages about
+        # what `match` does and does not check for you.
+        "what_an_enum_is",
+        "variants_that_carry_data",
+        "a_typo_becomes_a_binding",
+        "an_enum_as_a_state_machine",
     ],
     "12_Traits": [
         "README.md",
@@ -457,7 +468,10 @@ def on_nav(nav, config, files):
     for item in nav:
         if item.is_section and item.title:
             item.title = clean(item.title)
-    _order(list(nav.items) if hasattr(nav, "items") else nav, "")
+    # `nav.items` is the real list, so sort it in place. Wrapping it in
+    # `list(...)` sorted a throwaway copy, which is why the root order
+    # silently never applied while every nested folder's did.
+    _order(nav.items if hasattr(nav, "items") else nav, "")
 
     # Clean nested section labels too.
     def walk(items):

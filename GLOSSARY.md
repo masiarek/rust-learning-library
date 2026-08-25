@@ -18,7 +18,7 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Discriminant** — The number identifying which variant an enum value currently is; `None` is 0 and `Some` is 1, by declaration order. Comparable via `std::mem::discriminant`, but not extractable — and often not even stored. → [`Option` is a one-item collection](01_Foundations/option_as_collection/README.md)
 
-**Enum** — A type that is exactly one of several named variants, each optionally carrying data. `Option` and `Result` are both ordinary enums; nothing about them is built into the language.
+**Enum** — A type that is exactly one of several named variants, each optionally carrying data. `Option` and `Result` are both ordinary enums; nothing about them is built into the language. → [What an enum is](13_Enums/what_an_enum_is/README.md)
 
 **Field init shorthand** — Writing `Ballot { voter }` instead of `Ballot { voter: voter }` when the variable already has the field's name. Purely cosmetic, and worth knowing because it is what most real code looks like. → [What a struct is](01_Foundations/what_a_struct_is/README.md)
 
