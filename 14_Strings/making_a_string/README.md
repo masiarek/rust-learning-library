@@ -73,7 +73,7 @@ error[E0119]: conflicting implementations of trait `ToString` for type `Score`
             where T: std::fmt::Display, T: ?Sized;
 ```
 
-The blanket impl already covers your type, so yours would be a second one. This is the good kind of error: the language is telling you where the work goes. [`Debug` vs `Display`](../debug_vs_display/README.md) is the other half — `Debug` you derive, `Display` you write.
+The blanket impl already covers your type, so yours would be a second one. This is the good kind of error: the language is telling you where the work goes. [`Debug` vs `Display`](../../01_Foundations/debug_vs_display/README.md) is the other half — `Debug` you derive, `Display` you write.
 
 ## The call that is not a conversion
 
@@ -94,7 +94,7 @@ let m = "42".parse::<i32>().unwrap();   // turbofish says it inline
 "forty-two".parse::<i32>()              // Err(ParseIntError { kind: InvalidDigit })
 ```
 
-`parse` is `FromStr`, the mirror of `Display` — and it returns `Result`, because the text is input and input lies. `.unwrap()` there turns a typo into a panic, which is fine in a scratch program and wrong in anything a user touches. [`unwrap_or`](../unwrap_or/README.md) and [What a panic costs](../what_a_panic_costs/README.md) are the ways out.
+`parse` is `FromStr`, the mirror of `Display` — and it returns `Result`, because the text is input and input lies. `.unwrap()` there turns a typo into a panic, which is fine in a scratch program and wrong in anything a user touches. [`unwrap_or`](../../01_Foundations/unwrap_or/README.md) and [What a panic costs](../../01_Foundations/what_a_panic_costs/README.md) are the ways out.
 
 ## If you have `X` and want a `String`
 
@@ -307,9 +307,9 @@ rustc --edition 2024 01_Foundations/making_a_string/examples/making_a_string.rs 
 
 - [STRINGS.md](../../STRINGS.md) — the map: every string lesson, in reading order
 - [`String` vs `&str`](../string_vs_str/README.md) — which of the two a signature should ask for
-- [`Debug` vs `Display`](../debug_vs_display/README.md) — the trait you derive and the trait you write
+- [`Debug` vs `Display`](../../01_Foundations/debug_vs_display/README.md) — the trait you derive and the trait you write
 - [Six kinds of string](../six_kinds_of_string/README.md) — why half the conversions above return `Result`
-- [`Copy` vs `Clone`](../copy_vs_clone/README.md) — what the accidental `to_string()` on a `String` actually costs
+- [`Copy` vs `Clone`](../../01_Foundations/copy_vs_clone/README.md) — what the accidental `to_string()` on a `String` actually costs
 - [Building a `String`](../building_a_string/README.md) — `push_str`, `+` and `format!`, for when you are assembling rather than converting
 - [`ToOwned`](../../12_Traits/to_owned/README.md) — the trait behind `to_owned()`, and why `str`'s owned twin is a different type
 - [`ToString` ↗](https://doc.rust-lang.org/std/string/trait.ToString.html) · [`Display` ↗](https://doc.rust-lang.org/std/fmt/trait.Display.html) · [`FromStr` ↗](https://doc.rust-lang.org/std/str/trait.FromStr.html) · [Rust Language Cheat Sheet — String conversions ↗](https://cheats.rs/#string-conversions)

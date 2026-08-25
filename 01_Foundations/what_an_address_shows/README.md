@@ -17,7 +17,7 @@ Two different numbers come out. The obvious reading — *"the string moved"* —
 
 ## There are two addresses, and `&x` gives you the wrong one
 
-A `String` is [three words on the stack and bytes on the heap](../anatomy_of_a_string/README.md): a pointer, a length, a capacity — 24 bytes of *header* — pointing at a buffer somewhere else entirely.
+A `String` is [three words on the stack and bytes on the heap](../../14_Strings/anatomy_of_a_string/README.md): a pointer, a length, a capacity — 24 bytes of *header* — pointing at a buffer somewhere else entirely.
 
 `&x` is a `&String`. It addresses the **header**. The text lives at `x.as_ptr()`, which is a different number in a different region of memory, and nothing in the snippet above ever prints it.
 
@@ -94,6 +94,6 @@ That is a real claim about memory (`u8` values sit one byte apart), it is checka
 ## See also
 
 - [Ownership and moves](../ownership_and_moves/README.md) — what changed hands, and the three rules behind it
-- [The anatomy of a `String`](../anatomy_of_a_string/README.md) — the three words this page is addressing
+- [The anatomy of a `String`](../../14_Strings/anatomy_of_a_string/README.md) — the three words this page is addressing
 - [A name is not a place](../a_name_is_not_a_place/README.md) — the same distinction from the other side: a binding is not a storage location
 - [Meet the byte](../meet_the_byte/README.md) — the unit that distance was measured in

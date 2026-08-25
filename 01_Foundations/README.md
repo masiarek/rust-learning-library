@@ -50,16 +50,6 @@ The ideas you meet in your first week of Rust and keep using forever. Each page 
 | [When to shadow](when_to_shadow/README.md) | 201 | The judgement call the other two leave open: what shadowing buys that `mut` cannot, the five idioms worth copying, and the three bugs that compile — only one of which warns, and not about shadowing |
 | [Nothing checks a shadow](nothing_checks_a_shadow/README.md) | 201 | The tooling, not the mechanism: `rustc` has no shadowing lint, the type error that gets mistaken for one, and the single clippy lint that catches the accumulator bug — by also banning the idiom |
 | [Scope is about names, not values](scope_is_about_names/README.md) | 201 | One word, three questions: a name ends at its brace, a borrow ends at its last use, and a value dies on a schedule that five ordinary things can move — including the `_` that `rustc` denies outright on a lock |
-| [`String` vs `&str`](string_vs_str/README.md) | 101 → 201 | The owner and the view — a literal lives in the *binary*, not the stack; `&String` coerces to `&str` for free; and why parameters take `&str` while fields own `String` |
-| [String slices](string_slices/README.md) | 101 → 201 | A view is a pointer and a length — the stale byte index it replaces, the `E0502` that keeps it honest, `&s[..5]`, and the one way a slice panics: an index inside a character |
-| [The anatomy of a `String`](anatomy_of_a_string/README.md) | 101 → 201 | Three words on the stack, bytes on the heap — `len` is what you have, `capacity` is what you paid for, growth doubles, and the borrow checker's rule against a view held across a `push_str` |
-| [Making a `String`](making_a_string/README.md) | 101 → 201 | Five spellings for one conversion — and why you implement `Display`, never `ToString`, plus the `.to_string()` on a `String` that is a silent clone |
-| [Concatenating strings](concatenating_strings/README.md) | 101 → 201 | `format!`, `+` and `join` — the single `Add` impl behind all of it, and the three error codes you get from putting the wrong side on the left |
-| [Building a `String`](building_a_string/README.md) | 101 → 201 | `push_str`, `push`, and the `+` that eats its left operand — `format!` vs `write!` in a loop, and why `truncate` panics where a slice does |
-| [Meet the `char`](meet_the_char/README.md) | 101 → 201 | One Unicode scalar, four bytes as a value, 1–4 inside a `String` — why `.len()` is not "how many characters", `s[0]` refuses to compile, and `'ß'.to_uppercase()` returns *two* letters |
-| [Walking a `String`](walking_a_string/README.md) | 101 → 201 | Three item types and the split family — splits are the gaps between matches, `char_indices()` is not `chars().enumerate()`, and `split_whitespace()` silently shortens a row |
-| [`&'static str`](static_str/README.md) | 201 | On a literal it is the same type as `&str` — where the annotation starts refusing things, `const` vs `static`, and the three ways a `String` really can yield one |
-| [Six kinds of string](six_kinds_of_string/README.md) | 201 | `OsString`, `CString` and friends are not five more inventions — three promises about the bytes, each owned or borrowed, and narrowing is where a promise gets checked |
 | [A score is not a number](newtype_score/README.md) | 101 → 201 | The newtype: one private field, one validating door, and why privacy is per *module* |
 | [What is a ballot, in memory?](representing_a_ballot/README.md) | 201 | Array vs `Vec` vs tuple vs struct vs map vs flat matrix — and which bugs each one makes writeable |
 | [Six kinds of zero](six_kinds_of_zero/README.md) | 201 | Where `Option` runs out: six reasons a cell is empty, one enum, and a report the compiler audits |
@@ -67,6 +57,8 @@ The ideas you meet in your first week of Rust and keep using forever. Each page 
 | [Why hexadecimal](why_hexadecimal/README.md) | 101 → 201 | Why a byte is two hex digits and always will be — plus the three traps that follow: unpadded `{:x}` losing the byte boundary, `from_str_radix` refusing the `0x` it just printed, and hex of a negative showing two's complement |
 | [Bit flags](bit_flags/README.md) | 201 | Several values in one integer: a flag is a one-bit field and a header field is an n-bit flag — plus the zero-valued flag `&` cannot test, and the missing mask only a middle field punishes |
 | [What a float actually stores](what_a_float_stores/README.md) | 201 | The one division that ends exactness — why `0.1` is not 0.1, why the error goes both ways, and why Rust withholds `Eq` and `Ord` from `f64` |
+
+The ten lessons about text moved out of this section: they are [`14_Strings/`](../14_Strings/README.md) now, and [STRINGS.md](../STRINGS.md) is their reading order. They still lean on the ownership pages above, which is why they were here in the first place.
 
 The `newtype_score`, `representing_a_ballot` and `six_kinds_of_zero` rows are the first rungs of [the long way round](../ROADMAP.md) — a slow walk toward a working STAR count, where each step exists because it is the next thing Rust wants to teach. They stand alone as Rust lessons; the election is the excuse.
 

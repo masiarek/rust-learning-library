@@ -155,7 +155,7 @@ flowchart LR
 
 ## Ownership, borrowing, lifetimes
 
-A struct owning its fields is the default, and the reason [`String` shows up in beginner code where `&str` looks tidier](01_Foundations/string_vs_str/README.md).
+A struct owning its fields is the default, and the reason [`String` shows up in beginner code where `&str` looks tidier](14_Strings/string_vs_str/README.md).
 
 | Lesson | Level | What it teaches |
 |---|---|---|

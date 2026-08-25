@@ -58,6 +58,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "KATAS.md",
         "00_Start_Here",
         "01_Foundations",
+        "14_Strings",
         # The two features the rest of the language is built out of, which is
         # why they come straight after the foundations rather than at the end.
         # Enums first: a reader leaving the foundations has already used four.
@@ -195,6 +196,24 @@ NAV_ORDER: dict[str, list[str]] = {
         # asked to mean. Last, because it measures the borrow region, the
         # drop order and the shadow — all three already met by here.
         "scope_is_about_names",
+        "newtype_score",
+        "representing_a_ballot",
+        # The sequel: "blank is not zero" stops at two cases; markers need six.
+        "six_kinds_of_zero",
+        # Opens the numbers arc: the unit every other size is counted in.
+        "meet_the_byte",
+        # ...and how to write one down, which is the last thing before meaning.
+        "why_hexadecimal",
+        # ...and what people put in one, once they can write it down.
+        "bit_flags",
+        # Closes the numbers arc, and hands off to the 09_Advanced exactness cluster.
+        "what_a_float_stores",
+    ],
+    # Reading order for the command-line-tool arc. These sections are stubs for
+    # now — outlines with no examples behind them yet — so the order is the one a
+    # finished section would want, not the order they were written in.
+    "14_Strings": [
+        "README.md",
         # Opens the strings arc — the pair of types the ownership pages were
         # secretly about all along: one owns the text, one looks at it.
         "string_vs_str",
@@ -222,22 +241,7 @@ NAV_ORDER: dict[str, list[str]] = {
         # Closes the arc: the other four string types, and the one
         # owned/borrowed pattern all six repeat.
         "six_kinds_of_string",
-        "newtype_score",
-        "representing_a_ballot",
-        # The sequel: "blank is not zero" stops at two cases; markers need six.
-        "six_kinds_of_zero",
-        # Opens the numbers arc: the unit every other size is counted in.
-        "meet_the_byte",
-        # ...and how to write one down, which is the last thing before meaning.
-        "why_hexadecimal",
-        # ...and what people put in one, once they can write it down.
-        "bit_flags",
-        # Closes the numbers arc, and hands off to the 09_Advanced exactness cluster.
-        "what_a_float_stores",
     ],
-    # Reading order for the command-line-tool arc. These sections are stubs for
-    # now — outlines with no examples behind them yet — so the order is the one a
-    # finished section would want, not the order they were written in.
     "02_Errors": [
         "README.md",
         # Failures you did not notice: the Result you threw away, and the loop

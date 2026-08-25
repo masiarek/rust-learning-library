@@ -61,11 +61,11 @@ So the API rule almost every Rust codebase follows: **parameters take `&str`, be
 | you are writing | reach for | because |
 |---|---|---|
 | a parameter that reads text | `&str` | literals, `String`s and slices all arrive free |
-| a struct field | `String` | the struct outlives the call that built it — a `&str` field drags in [lifetimes](../how_to_learn_lifetimes/README.md) |
+| a struct field | `String` | the struct outlives the call that built it — a `&str` field drags in [lifetimes](../../01_Foundations/how_to_learn_lifetimes/README.md) |
 | a return of freshly built text | `String` | someone must own the new bytes, and it is not the callee |
 | a constant | `&'static str` | the binary already owns the bytes |
 
-The field row is why `String` fills beginner code where `&str` looks tidier — and it is the right call: own by default, borrow when a signature lets you. [What is a ballot, in memory?](../representing_a_ballot/README.md) makes that choice inside a real struct.
+The field row is why `String` fills beginner code where `&str` looks tidier — and it is the right call: own by default, borrow when a signature lets you. [What is a ballot, in memory?](../../01_Foundations/representing_a_ballot/README.md) makes that choice inside a real struct.
 
 ## `String` moves, `&str` copies
 
@@ -81,7 +81,7 @@ let big2 = big1;         // the buffer changed owners
 // println!("{big1}");   // error[E0382]: borrow of moved value: `big1`
 ```
 
-[Ownership and moves](../ownership_and_moves/README.md) is the full story of that error. The string-specific half: duplicating a `&str` duplicates a *view* — sixteen bytes that owe nothing — while duplicating a `String` would duplicate an *obligation*, two owners for one free. Same reason [a struct with a `String` field is never `Copy`](../copy_vs_clone/README.md).
+[Ownership and moves](../../01_Foundations/ownership_and_moves/README.md) is the full story of that error. The string-specific half: duplicating a `&str` duplicates a *view* — sixteen bytes that owe nothing — while duplicating a `String` would duplicate an *obligation*, two owners for one free. Same reason [a struct with a `String` field is never `Copy`](../../01_Foundations/copy_vs_clone/README.md).
 
 ## If you are coming from another language
 
@@ -229,7 +229,7 @@ rustc --edition 2024 01_Foundations/string_vs_str/examples/string_vs_str.rs -o /
 
 - [STRINGS.md](../../STRINGS.md) — the map: every string lesson, in reading order
 - [The anatomy of a `String`](../anatomy_of_a_string/README.md) — what the three words on the stack actually are
-- [Ownership and moves](../ownership_and_moves/README.md) — `E0382` in full, with a value that announces its own death
-- [Borrowing](../borrowing/README.md) — the rules every `&str` lives under
+- [Ownership and moves](../../01_Foundations/ownership_and_moves/README.md) — `E0382` in full, with a value that announces its own death
+- [Borrowing](../../01_Foundations/borrowing/README.md) — the rules every `&str` lives under
 - [The Rust Book, ch. 4.1 — The `String` Type ↗](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#the-string-type) · [ch. 8.2 — Storing UTF-8 Encoded Text ↗](https://doc.rust-lang.org/book/ch08-02-strings.html)
 - [Easy Rust, ch. 14 — Strings ↗](https://dhghomon.github.io/easy_rust/Chapter_14.html) — the gentlest second telling

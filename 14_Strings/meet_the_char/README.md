@@ -21,7 +21,7 @@ name.len()             // 4 — bytes
 name.chars().count()   // 3 — chars (Unicode scalar values)
 ```
 
-The `ë` costs two bytes in UTF-8, so byte count and char count part ways on the first accent. [Meet the byte](../meet_the_byte/README.md) already warned that `.len()` counts bytes; this page is the other half — what those bytes encode:
+The `ë` costs two bytes in UTF-8, so byte count and char count part ways on the first accent. [Meet the byte](../../01_Foundations/meet_the_byte/README.md) already warned that `.len()` counts bytes; this page is the other half — what those bytes encode:
 
 | answer | asks | costs |
 |---|---|---|
@@ -228,7 +228,7 @@ rustc --edition 2024 01_Foundations/meet_the_char/examples/meet_the_char.rs -o /
 ## See also
 
 - [STRINGS.md](../../STRINGS.md) — the map: every string lesson, in reading order
-- [Meet the byte](../meet_the_byte/README.md) — the unit; this page is what the bytes *mean*
+- [Meet the byte](../../01_Foundations/meet_the_byte/README.md) — the unit; this page is what the bytes *mean*
 - [The anatomy of a `String`](../anatomy_of_a_string/README.md) — where those bytes live
 - [Six kinds of string](../six_kinds_of_string/README.md) — the types for text that does *not* keep UTF-8's promise
 - [The Rust Book, ch. 8.2 ↗](https://doc.rust-lang.org/book/ch08-02-strings.html) — its "bytes, scalar values, grapheme clusters" section is this page's origin story

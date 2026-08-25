@@ -25,6 +25,8 @@ Already writing Rust? Two lessons to begin with:
 
 More lessons land in [`01_Foundations/`](01_Foundations/README.md) as they are written; the ones about the toolchain rather than the language — `cargo`, build profiles, compile times — in [`05_Tooling/`](05_Tooling/README.md); and the ones that assume the foundations — shared state across threads, `unsafe`, FFI — in [`09_Advanced/`](09_Advanced/README.md).
 
+[`14_Strings/`](14_Strings/README.md) sits directly after the foundations too, and used to be part of them: ten lessons on the one pattern text follows in Rust, an owner and a view. They lean on the ownership pages hard enough that they were written there, and they outgrew it.
+
 [`13_Enums/`](13_Enums/README.md) and [`12_Traits/`](12_Traits/README.md) sit directly after the foundations, because between them they are what the rest of the language is made of. Enums come first: anyone leaving the foundations has already used several of them — `Option` and `Result` among them — without being told that the feature has a name, or that a `match` which forgets a variant is a build error. Traits are the other half, and the same argument applies twice over: `Copy`, `Display`, `Iterator` and `From` all turn up in the earlier pages long before anything explains what they have in common.
 
 One section is not about Rust at all. [`11_Unix/`](11_Unix/README.md) is the shell you run the compiler from — `fzf` for picking a file instead of typing its path, `fd` and `rg` for finding one — and it earns its place because two of those three are themselves Rust programs, measured here against the Unix tools they stand in for.

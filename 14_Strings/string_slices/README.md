@@ -58,7 +58,7 @@ error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immuta
   |                                   ---- immutable borrow later used here
 ```
 
-`clear` needs `&mut s`; `word` is still holding a `&s`. [Borrowing](../borrowing/README.md) is the rule being applied — the string-specific part is that a slice is what *puts you under* that rule. An index escapes it, which is exactly the problem.
+`clear` needs `&mut s`; `word` is still holding a `&s`. [Borrowing](../../01_Foundations/borrowing/README.md) is the rule being applied — the string-specific part is that a slice is what *puts you under* that rule. An index escapes it, which is exactly the problem.
 
 ## What a slice is made of
 
@@ -347,5 +347,5 @@ rustc --edition 2024 01_Foundations/string_slices/examples/string_slices.rs -o /
 - [`String` vs `&str`](../string_vs_str/README.md) — the owner and the view, and why parameters take `&str`
 - [The anatomy of a `String`](../anatomy_of_a_string/README.md) — the buffer a slice points into
 - [Meet the `char`](../meet_the_char/README.md) — why the indices are bytes in the first place
-- [Borrowing](../borrowing/README.md) — the `E0502` above, as a rule rather than a case
+- [Borrowing](../../01_Foundations/borrowing/README.md) — the `E0502` above, as a rule rather than a case
 - [The Rust Book, ch. 4.3 — The Slice Type ↗](https://doc.rust-lang.org/book/ch04-03-slices.html) · [`str::char_indices` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.char_indices) · [`str::get` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.get)
