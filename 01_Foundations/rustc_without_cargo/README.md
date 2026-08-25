@@ -104,7 +104,7 @@ One more habit: `src/` is usually not in a Rustlings-style `.gitignore` (that fi
 |---|---|
 | One file, std only, want it gone in a minute | `rustc --edition 2024 f.rs -o /tmp/f && /tmp/f` |
 | Reading this library's examples | the same — that is all they are |
-| You want a dependency, or `cargo test`/`clippy`/`fmt` | `cargo new` |
+| You want a dependency, or `cargo test`/`clippy`/`fmt` | [`cargo new`, then `cargo add`](../../05_Tooling/scratch_with_a_crate/README.md) |
 | Poking at an idea beside an exercise you are doing | `src/bin/scratch.rs` in that package |
 | Something you will still have next week | `cargo new`, somewhere you will find it again |
 
@@ -285,6 +285,7 @@ And `-O` changes one line of the output above — `debug_assertions` reports `fa
 
 ## See also
 
+- [A throwaway that needs a crate](../../05_Tooling/scratch_with_a_crate/README.md) — the sequel to route 2: the three commands that clear the dependency wall above, and the `rustc` message that means you skipped them
 - [What a panic costs](../what_a_panic_costs/README.md) — the exit code 101 mentioned above, and what unwinding does and does not give back
 - [`if let`](../if_let/README.md) — the let chain used as an edition detector, and why it is 2024-only
 - [CONTRIBUTING.md](../../CONTRIBUTING.md) — how a lesson's example is compiled, run, and held to a recorded answer key

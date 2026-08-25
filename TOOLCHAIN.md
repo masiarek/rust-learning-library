@@ -37,17 +37,18 @@ Start wherever your question is; each page stands alone.
 | 2 | [rustup](05_Tooling/rustup/README.md) | Why is the `rustc` on my `PATH` 154 bytes, and how does it choose? |
 | 3 | [Pinning the toolchain](05_Tooling/pinning_the_toolchain/README.md) | Which compiler verified this — and how do I stop that being luck? |
 | 4 | [Nightly by default](05_Tooling/nightly/README.md) | Should I run `rustup default nightly`? |
-| 5 | [Adding a dependency](05_Tooling/cargo_dependencies/README.md) | What did `cargo add` actually write in my manifest? |
-| 6 | [A tree of practice projects](05_Tooling/practice_workspace/README.md) | Forty small projects want the same four config files — do I need a script? |
-| 7 | [Formatting](05_Tooling/formatting/README.md) | Who decides the whitespace, and which formatter just ran? |
-| 8 | [Strict clippy lints](05_Tooling/strict_lints/README.md) | Should my project be forbidden from panicking? |
-| 9 | [bacon](05_Tooling/bacon/README.md) | How do I stop asking the compiler and let it tell me? |
-| 10 | [cargo-nextest](05_Tooling/nextest/README.md) | Is `cargo test` costing me anything? |
-| 11 | [Choosing an editor](05_Tooling/editors/README.md) | Which window am I going to read all of this through? |
-| 12 | [RustRover setup](05_Tooling/rustrover_setup/README.md) | How do I wire the IDE to everything above? |
-| 13 | [Neovim with LazyVim](05_Tooling/neovim_setup/README.md) | …or the other window, and the two ways it silently does nothing |
-| 14 | [Compile times](05_Tooling/compile_times/README.md) | Where do the seconds go, and which knob reaches them? |
-| 15 | [devenv](05_Tooling/devenv/README.md) | Should I declare the *whole* environment, and what does Nix cost? |
+| 5 | [A throwaway that needs a crate](05_Tooling/scratch_with_a_crate/README.md) | My scratch file says `use rand::…` and will not compile — what is missing? |
+| 6 | [Adding a dependency](05_Tooling/cargo_dependencies/README.md) | What did `cargo add` actually write in my manifest? |
+| 7 | [A tree of practice projects](05_Tooling/practice_workspace/README.md) | Forty small projects want the same four config files — do I need a script? |
+| 8 | [Formatting](05_Tooling/formatting/README.md) | Who decides the whitespace, and which formatter just ran? |
+| 9 | [Strict clippy lints](05_Tooling/strict_lints/README.md) | Should my project be forbidden from panicking? |
+| 10 | [bacon](05_Tooling/bacon/README.md) | How do I stop asking the compiler and let it tell me? |
+| 11 | [cargo-nextest](05_Tooling/nextest/README.md) | Is `cargo test` costing me anything? |
+| 12 | [Choosing an editor](05_Tooling/editors/README.md) | Which window am I going to read all of this through? |
+| 13 | [RustRover setup](05_Tooling/rustrover_setup/README.md) | How do I wire the IDE to everything above? |
+| 14 | [Neovim with LazyVim](05_Tooling/neovim_setup/README.md) | …or the other window, and the two ways it silently does nothing |
+| 15 | [Compile times](05_Tooling/compile_times/README.md) | Where do the seconds go, and which knob reaches them? |
+| 16 | [devenv](05_Tooling/devenv/README.md) | Should I declare the *whole* environment, and what does Nix cost? |
 
 ## Or, by the problem you actually have
 
@@ -56,6 +57,7 @@ Start wherever your question is; each page stands alone.
 | "it works on my machine" | [Pinning the toolchain](05_Tooling/pinning_the_toolchain/README.md), then [devenv](05_Tooling/devenv/README.md) if the answer is a system library rather than a compiler |
 | "CI disagrees with me about formatting" | [Nightly by default](05_Tooling/nightly/README.md) — unstable `rustfmt` options are the usual cause — and [Formatting](05_Tooling/formatting/README.md) |
 | "a tutorial told me to use nightly" | [Nightly by default](05_Tooling/nightly/README.md) |
+| "a tutorial's `use rand::…` will not compile" | [A throwaway that needs a crate](05_Tooling/scratch_with_a_crate/README.md) — nothing is missing; the file is being compiled by `rustc` rather than Cargo |
 | "my build got slower" | [Compile times](05_Tooling/compile_times/README.md), then [Adding a dependency](05_Tooling/cargo_dependencies/README.md) on what an unused crate costs |
 | "I want fewer runtime panics" | [Strict clippy lints](05_Tooling/strict_lints/README.md), and [`expect`](01_Foundations/expect/README.md) for the position it overrules |
 | "onboarding a machine takes a day" | [devenv](05_Tooling/devenv/README.md) |

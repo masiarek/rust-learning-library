@@ -275,8 +275,12 @@ NAV_ORDER: dict[str, list[str]] = {
         "rustup",
         "pinning_the_toolchain",
         "nightly",
-        # Then what the build pulls in, and how to lay out many small projects
-        # so the config above is written once rather than copied per folder.
+        # Then what the build pulls in: the three commands that turn a loose
+        # .rs file into a project that can have a dependency at all, what the
+        # requirement they wrote actually permits, and how to lay out many
+        # small projects so the config above is written once rather than
+        # copied per folder.
+        "scratch_with_a_crate",
         "cargo_dependencies",
         "practice_workspace",
         # Day one, and cheap: settle the whitespace question before anything else.

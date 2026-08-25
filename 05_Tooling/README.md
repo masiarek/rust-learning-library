@@ -8,6 +8,7 @@ These pages are not about making your program better. They are about the loop yo
 
 | Lesson | Level | What it teaches |
 |---|---|---|
+| [A throwaway that needs a crate](scratch_with_a_crate/README.md) | 101 | `cargo new` + `cargo add` + `cargo run` — what *"you might be missing a crate named `rand`"* really means, and the folder, manifest and test runner the three commands write for you |
 | [A tree of practice projects](practice_workspace/README.md) | 201 | Forty exercise folders want the same four config files — a workspace shares them from the root, and `cargo new` writes the opt-in for you, so there is no script to maintain |
 | [Adding a dependency](cargo_dependencies/README.md) | 101 → 201 | `search`, `info`, `add` — and the fact that `rayon = "1.12.0"` is a *range*, not the version you got |
 | [bacon](bacon/README.md) | 101 → 201 | A pane that re-runs check, clippy or the tests on every save — the cheapest tool here, and where `watchexec` wins instead |
