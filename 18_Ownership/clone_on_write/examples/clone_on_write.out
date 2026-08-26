@@ -1,0 +1,34 @@
+1. One return type, two outcomes
+   "Ada Lovelace"     -> "Ada Lovelace"   Borrowed - nothing allocated
+   "Grace Hopper\r"   -> "Grace Hopper"   Owned    - one allocation
+   "Alan Turing"      -> "Alan Turing"    Borrowed - nothing allocated
+
+2. The borrowed arm really is the caller's bytes
+   clean(raw) points at raw's own buffer? true
+   the owned arm allocated a new one, so it cannot: "Grace Hopper"
+
+3. You do not have to match on it — Cow derefs to &str
+   len 12   upper "GRACE HOPPER"   starts_with("Grace") true
+
+4. to_mut() is the write, and the write is where the clone happens
+   start          Borrowed - nothing allocated
+   after to_mut   Owned    - one allocation   "Ada Lovelace"
+   second write   Owned    - one allocation   "Ada Lovelace!"   <- already owned, nothing cloned
+
+5. into_owned() always hands back the owned type
+   from Borrowed -> String "Alan"   (allocates here)
+   from Owned    -> String "Turing"   (just hands the buffer over)
+
+6. The tag is free: Cow<str> is no bigger than String
+   &str                  16 bytes   ptr + len
+   String                24 bytes   ptr + len + capacity
+   Cow<str>              24 bytes   <- same as String
+   Option<Cow<str>>      24 bytes   <- and a spare niche is still left over
+
+7. Not a string thing — any ToOwned pair works
+   [3, 1, 2] -> [1, 2, 3]   had to sort, so had to allocate
+   Cow<[i32]>            24 bytes
+
+8. What it buys, counted
+   clean()              1 of 3 lines allocated
+   clean_always_owned() 3 of 3 lines allocated

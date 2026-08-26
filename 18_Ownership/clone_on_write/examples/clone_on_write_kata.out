@@ -1,0 +1,16 @@
+1. Prefix every row, paying only for the ones that lack it
+   "BV2261 Ada"   -> "BV2261 Ada"           Borrowed
+   "Ben"          -> "BV2261 Ben"           Owned
+   "BV2261 Cara"  -> "BV2261 Cara"          Borrowed
+   "Dan"          -> "BV2261 Dan"           Owned
+   allocated 2 of 4 rows
+
+2. Prove the untouched row was not copied
+   points at the caller's own bytes? true
+
+3. What into_owned() costs on each arm
+   Borrowed -> into_owned() allocates now      "BV2261 Cara"
+   Owned    -> into_owned() hands the buffer over "BV2261 Dan"
+
+4. The same rows through a plain String signature, for comparison
+   allocated 4 of 4 rows — correct, and it pays every time
