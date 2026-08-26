@@ -96,6 +96,8 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **`unreachable_patterns`** — The warn-by-default lint for a `match` arm no value can reach, because an earlier arm already covers it. Fires per *alternative* rather than per arm, so a too-wide range above an or-pattern names the one alternative it swallowed. → [One arm, many values](17_Option_and_Result/one_arm_many_values/README.md)
 
+**`Cow<'a, B>`** — Clone-on-write: an enum with a `Borrowed(&'a B)` arm and an `Owned(<B as ToOwned>::Owned)` arm, so a function can return the caller's own bytes when it changed nothing and a fresh buffer when it did. `to_mut()` is the write that promotes one to the other. Costs no more than the owned type — `Cow<str>` is 24 bytes, the same as `String`. → [`Cow`: borrow until somebody writes](18_Ownership/clone_on_write/README.md)
+
 **`Copy`** — The trait marking a type that is duplicated instead of moved on assignment (`i32`, `bool`, `char`, `&T`, and `Option`s of them). A `String` cannot be `Copy`, because two owners of one allocation would mean two frees — so the test is not size but whether duplicating the bytes would duplicate an *obligation*. → [Ownership and moves](18_Ownership/ownership_and_moves/README.md), and why `if let Some(n) = opt` leaves `opt` usable for an `Option<i32>` but not an `Option<String>` → [Shadowing and `unwrap`](17_Option_and_Result/shadowing_and_unwrap/README.md), and how it differs from `Clone` → [`Copy` vs `Clone`](16_Structs/copy_vs_clone/README.md)
 
 **`while let`** — Loop for as long as the pattern keeps matching; the `None` is the exit condition. Nothing checks that the body moves toward it, so the scrutinee has to consume. → [`while let`](17_Option_and_Result/while_let/README.md)

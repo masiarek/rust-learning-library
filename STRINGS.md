@@ -76,6 +76,7 @@ Strings are the worked example half the library's ownership pages already use, s
 | [Meet the byte](19_Numbers/meet_the_byte/README.md) | 101 → 201 | The unit `len` counts in — this map's encoding arc is what those bytes *mean* |
 | [What is a ballot, in memory?](16_Structs/representing_a_ballot/README.md) | 201 | `String` fields chosen inside a real struct design |
 | [`Path` and `PathBuf`](04_Files/path_and_pathbuf/README.md) | 201 | The family's honorary pair, in full — a **stub** for now |
+| [`Cow`: borrow until somebody writes](18_Ownership/clone_on_write/README.md) | 201 | The maybe-owned string: borrow when the text needs no change, allocate only on the write |
 
 ## Still missing
 
@@ -85,7 +86,6 @@ Named honestly, because a map that only lists what exists is a map of the wrong 
 - **Searching without splitting** — `find` / `rfind` / `contains` / `starts_with`, and `Pattern` as the trait that unifies them with the split family
 - **`str` is unsized** — `?Sized`, why you only ever meet `str` behind a pointer, and what a fat pointer is
 - **The third owned form** — `Box<str>`, `Rc<str>`, `Arc<str>`: frozen text without the capacity word, and when the 8-byte saving matters
-- **`Cow<str>`** — the maybe-owned string: borrow when unchanged, allocate only when you must
 - **Raw strings and escapes** — `r"…"`, `r#"…"#`, `\u{…}`, and byte strings `b"…"`
 - **The format mini-language** — `{:>8.3}`, `{:#x}`, `{val:^width$}`: fill, align, sign, width, precision, and the `$` that makes them dynamic
 - **Comparing and sorting** — `Ord` on strings is byte order, which is not human order; case folding vs `to_lowercase`
