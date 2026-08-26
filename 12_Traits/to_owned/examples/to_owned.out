@@ -31,3 +31,9 @@
 6. Why the trait is shaped that way: Cow pays only when it must
    "one  two"   -> "one two"   owned — one allocation
    "one two"    -> "one two"   borrowed — nothing allocated
+
+7. Implementing it yourself: legal, and pointless
+   Tally { seats: 3, name: "Ada" }.to_owned() -> Tally { seats: 3, name: "Ada" }
+   type Owned = Self, so this is Clone wearing a different name.
+   Give Tally a #[derive(Clone)] and it is E0119 instead: the
+   blanket impl<T: Clone> ToOwned for T already covers it.

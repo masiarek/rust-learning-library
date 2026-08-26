@@ -20,6 +20,24 @@ fn tidy(raw: &str) -> Cow<'_, str> {
     }
 }
 
+// A user-defined type CAN implement ToOwned — but only if it is Sized and does
+// NOT implement Clone. `type Owned = Self` satisfies the `Owned: Borrow<Self>`
+// bound through the blanket `impl<T> Borrow<T> for T`, and with no `Clone` impl
+// there is nothing for the blanket `impl<T: Clone> ToOwned for T` to conflict
+// with. Add `#[derive(Clone)]` and this file stops compiling with E0119.
+#[derive(Debug)]
+struct Tally {
+    seats: i32,
+    name: String,
+}
+
+impl ToOwned for Tally {
+    type Owned = Tally;
+    fn to_owned(&self) -> Tally {
+        Tally { seats: self.seats, name: self.name.clone() }
+    }
+}
+
 fn main() {
     let name: &str = "Adam";
     let nums: &[i32] = &[3, 1, 2];
@@ -92,4 +110,13 @@ fn main() {
         };
         println!("   {:<12} -> {:<11} {}", format!("{:?}", raw), format!("{:?}", tidy(raw)), kind);
     }
+
+    println!();
+    println!("7. Implementing it yourself: legal, and pointless");
+    let t = Tally { seats: 3, name: String::from("Ada") };
+    let copy = (&t).to_owned();
+    println!("   {:?}.to_owned() -> {:?}", t, copy);
+    println!("   type Owned = Self, so this is Clone wearing a different name.");
+    println!("   Give Tally a #[derive(Clone)] and it is E0119 instead: the");
+    println!("   blanket impl<T: Clone> ToOwned for T already covers it.");
 }

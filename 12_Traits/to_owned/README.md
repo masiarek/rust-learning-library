@@ -57,6 +57,18 @@ impl<T: Clone> ToOwned for T { type Owned = T; ... }
 
 That blanket impl means every `Clone` type gets `to_owned()` for free, doing exactly what `clone()` does. So outside the unsized cases the choice is **stylistic**, and the community genuinely disagrees about it — one camp finds `.to_string()` clearer, another finds `.to_owned()` more honest about what is being bought. The rule of thumb worth keeping: `clone()` reads as *"I have a `T` and want another"*, `to_owned()` as *"I have a borrow and want to own it"*.
 
+### The argument you will meet, and its expiry date
+
+Search this question and you will find the same advice everywhere, usually word for word: *use `to_owned()` on a string literal, because `to_string()` is generic, goes through `Display`, and may allocate more than once.* That was true when it was written, in 2015. It stopped being true in **April 2016**, when [`ToString` was specialized for `str` ↗](https://github.com/rust-lang/rust/pull/32586) — the case everybody was worried about no longer runs the formatting machinery at all.
+
+Nine years later the advice is still being republished with the performance reasoning intact, sometimes quoting the original thread's own *"this may be fixed in the future with specialization"* caveat without noticing that it was. Measured on rustc 1.97.1 with `-O`, `String::from`, `.into()`, `.to_string()` and `.to_owned()` land within a couple of nanoseconds of each other on a 13-byte literal. The one real outlier is `format!("a literal")`, about 30% slower — which clippy flags anyway, as `useless_format`, for the unrelated reason that it is a formatting call with nothing to format.
+
+**Check what a benchmark was built with before believing it.** The most-linked measurement of this question prints `target/debug` in its own transcript: at `-O0` the five spellings differ by about 2%, a spread far too small to carry the conclusion drawn from it. The conclusion — `format!` is the slow one — happens to be right, but the method could not have shown it.
+
+So the performance argument is dead, and the argument that outlived it is about **documentation**. dtolnay's case, [made in that same thread in 2017 ↗](https://users.rust-lang.org/t/to-string-vs-to-owned-for-string-literals/1441/6), is that `&str` and `String` are both strings, so *"convert this string to a string"* names nothing; what actually differs is ownership, and `to_owned()` is the spelling that says so at the point where a reader is asking why the conversion is there at all. Same conclusion as the 2015 advice, reached for a reason that does not expire.
+
+One naming note, because it is a common slip: `to_` methods do **not** consume `self` — `to_owned(&self)` borrows. `into_` is the prefix that means the value is consumed.
+
 ## The trap that blanket impl sets
 
 On an `Rc` or `Arc`, `.to_owned()` clones the **pointer**, not the data:
@@ -68,6 +80,47 @@ let second = shared.to_owned();
 ```
 
 `Rc<T>` is `Clone`, so the blanket impl applies and `to_owned` *is* `clone` — which for an `Rc` means bumping the reference count. If you wanted the `String` copied, you have to dereference first: `(*shared).clone()`. Reaching for `to_owned` because it sounds like it makes an independent copy is exactly the wrong instinct here.
+
+## Can you implement it yourself?
+
+Almost never, and the two refusals are worth meeting because between them they explain the shape of the whole trait.
+
+**A type that is `Clone` cannot have one.** The blanket impl already covers it, so your impl is a second one:
+
+```text
+error[E0119]: conflicting implementations of trait `ToOwned` for type `DataRef<'_>`
+   |
+   = note: conflicting implementation in crate `alloc`:
+           - impl<T> ToOwned for T
+             where T: Clone;
+```
+
+Since essentially every ordinary type derives `Clone`, that rules out essentially every ordinary type.
+
+**A reference-like type cannot have one either**, even after you drop the `Clone`. `type Owned` is bound by `Borrow<Self>`, and a `DataOwned { text: String }` cannot hand out a `&DataRef<'_>` — there is no `DataRef` stored anywhere to lend:
+
+```text
+error[E0277]: the trait bound `DataOwned: Borrow<DataRef<'_>>` is not satisfied
+   |
+note: required by a bound in `std::borrow::ToOwned::Owned`
+```
+
+Which is why every impl in the standard library is on an **unsized referent** rather than on a reference — `str`, `CStr`, `OsStr`, `Path`, `[T]`. Those are the types that genuinely have a separate owned form and are always met through a pointer, which is the situation the trait was shaped for.
+
+What *does* compile is a `Sized` type that is not `Clone`, with `type Owned = Self` — the run below has one. The blanket `impl<T> Borrow<T> for T` satisfies the bound and nothing conflicts. It also buys nothing: it is `Clone` under a different name, and adding `#[derive(Clone)]` later turns it into the `E0119` above. If you want a `.to_owned()` method on your own type, write an inherent one and skip the trait.
+
+The genuinely blocked case is a validated wrapper — an "ASCII-only string" newtype you want to use with [`Cow`](../../18_Ownership/clone_on_write/README.md). Doing it properly needs a `#[repr(transparent)]` wrapper around `str` and an `unsafe` pointer cast in `borrow`, because `Borrow`/`ToOwned` predate GATs and there is no safe way to make a `&MyNewtype` out of a `&str`. That limitation is still open: an [`IntoOwned` pre-RFC ↗](https://internals.rust-lang.org/t/pre-rfc-intoowned-trait-that-harmonizes-cow-and-toowned/23609) from late 2025 is one attempt at harmonizing the pair, and had not converged on a signature that survives the existing blanket impls.
+
+## The trap in generic code
+
+`<&str as ToOwned>::Owned` is **`&str`**, not `String`. The blanket impl applies to the reference itself, so a bound written on the reference resolves to the wrong side of the pair:
+
+```rust
+fn foo<S, T>(s: S) -> T where S: ToOwned<Owned = T>, T: Borrow<S> { s.to_owned() }
+let _s: String = foo("hi");    // E0308: expected `String`, found `&str`
+```
+
+`S` unifies with `&str`, so `T` is `&str` and the annotation is what breaks. The fix is to take `&S` rather than `S`, so `S` is `str` and `T` is `String`. This was [filed as a diagnostics bug in 2016 ↗](https://github.com/rust-lang/rust/issues/31228) and closed in 2020 once the error learned to suggest a conversion method; the underlying surprise is unchanged, and it is the same one as section 2b above, one level of generics up.
 
 ## `clone_into`, the provided method
 
@@ -112,6 +165,12 @@ let second = shared.to_owned();
 6. Why the trait is shaped that way: Cow pays only when it must
    "one  two"   -> "one two"   owned — one allocation
    "one two"    -> "one two"   borrowed — nothing allocated
+
+7. Implementing it yourself: legal, and pointless
+   Tally { seats: 3, name: "Ada" }.to_owned() -> Tally { seats: 3, name: "Ada" }
+   type Owned = Self, so this is Clone wearing a different name.
+   Give Tally a #[derive(Clone)] and it is E0119 instead: the
+   blanket impl<T: Clone> ToOwned for T already covers it.
 ```
 <!-- /output -->
 
@@ -125,5 +184,7 @@ let second = shared.to_owned();
 - [What a trait is](../what_a_trait_is/README.md) — associated types, which are what make `Owned` possible
 
 ## Sources
+
+The long-running style thread, worth reading for how much its *reasoning* changed while its conclusion did not: [`to_string()` vs `to_owned()` for string literals ↗](https://users.rust-lang.org/t/to-string-vs-to-owned-for-string-literals/1441) (2015–2021). On implementing the trait yourself: [Stack Overflow — implement `ToOwned` for user-defined types ↗](https://stackoverflow.com/questions/72105604/implement-toowned-for-user-defined-types), whose answer is the source of the referent-not-reference framing above.
 
 The two threads this page settles, both worth reading for how much disagreement a "simple" question produced: [Stack Overflow — the difference between `clone` and `to_owned` ↗](https://stackoverflow.com/questions/22264502/in-rust-what-is-the-difference-between-clone-and-to-owned) (the accepted answer is right; the sharpest explanation is BallpointBen's comment underneath it, on deref coercion and `!Sized`) and [r/rust on the same question ↗](https://www.reddit.com/r/rust/comments/l5uih4/what_is_the_difference_between_clone_and_to_owned/) — where the top answer is correct, the "it doesn't matter" answer is nearly correct, and one upvoted reply claiming `ToOwned` is how you get the data out of an `Rc` is **wrong** in the exact way the trap section above demonstrates.
