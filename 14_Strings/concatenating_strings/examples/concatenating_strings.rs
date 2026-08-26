@@ -2,6 +2,8 @@
 //!
 //!   rustc --edition 2024 concatenating_strings.rs -o /tmp/cs && /tmp/cs
 
+use std::fmt::Write as _;
+
 fn main() {
     let first = "Ada";
     let last = "Lovelace";
@@ -72,6 +74,19 @@ fn main() {
     println!("   converts it at the argument position, so the call goes through.");
     println!("   Coercion is a call-site conversion, NOT an extra impl — which is");
     println!("   why <String as Add<&String>>::Output cannot be named: E0277.");
+
+    println!("\n6c. The rest of the family");
+    let parts = ["first", "second"];
+    let mut ext = String::from("x");
+    ext.extend(parts);
+    let mut w = String::new();
+    write!(w, "{}-{}", parts[0], parts[1]).unwrap();
+    println!("   concat!(..)              {:?}   <- COMPILE TIME, a &'static str", concat!("first", "second"));
+    println!("   s.extend([a, b])         {ext:?}");
+    println!("   [a, b].iter().collect()  {:?}", parts.iter().copied().collect::<String>());
+    println!("   String::from_iter([a,b]) {:?}", String::from_iter(parts));
+    println!("   write!(&mut s, ..)       {w:?}   <- needs `use std::fmt::Write`");
+    println!("   a.repeat(2)              {:?}", parts[0].repeat(2));
 
     println!("\n7. Which to reach for");
     println!("   two or three known pieces        -> format!");

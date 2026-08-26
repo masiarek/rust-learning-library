@@ -44,6 +44,14 @@
    Coercion is a call-site conversion, NOT an extra impl — which is
    why <String as Add<&String>>::Output cannot be named: E0277.
 
+6c. The rest of the family
+   concat!(..)              "firstsecond"   <- COMPILE TIME, a &'static str
+   s.extend([a, b])         "xfirstsecond"
+   [a, b].iter().collect()  "firstsecond"
+   String::from_iter([a,b]) "firstsecond"
+   write!(&mut s, ..)       "first-second"   <- needs `use std::fmt::Write`
+   a.repeat(2)              "firstfirst"
+
 7. Which to reach for
    two or three known pieces        -> format!
    a whole collection               -> .join(sep) / .concat()

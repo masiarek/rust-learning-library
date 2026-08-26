@@ -98,6 +98,23 @@ parts.join(", ");     // "Ada, Ben, Cara"
 
 Both work on a slice of `&str` **or** of `String`, and both walk the pieces once to size the buffer before filling it — one allocation, no growth. That is the thing a `+` chain cannot do, and the reason `join` is the right answer the moment the number of pieces stops being a number you typed.
 
+## The rest of the family
+
+Beyond `format!`, `+`, `concat` and `join`, six more spellings turn up in real code. Only the first is genuinely different in kind:
+
+| you write | what makes it different |
+|---|---|
+| `concat!("first", "second")` | a **macro, evaluated at compile time** — the result is a `&'static str` and costs nothing at run time. Literals only; it cannot see a variable |
+| `s.push_str(x)` · `s.push(c)` | appends in place, no new value — see [Building a `String`](../building_a_string/README.md) |
+| `s += x` | `AddAssign<&str>`, the same rule as `+` with no rebinding |
+| `s.extend([a, b])` | `Extend<&str>`, for feeding an iterator into a string you already have |
+| `iter.collect::<String>()` · `String::from_iter(..)` | build one *from* an iterator rather than into an existing buffer |
+| `write!(&mut s, "{a}-{b}")` | `format!` semantics into a buffer you own; needs `use std::fmt::Write` and returns a `Result` |
+
+`str::repeat(n)` is the odd one out — one piece, n times: `"ab".repeat(2)` is `"abab"`.
+
+**`concat!` is the one worth remembering**, because it is not doing the same job as the rest. It runs in the compiler, so there is no allocation and no runtime work at all — but its arguments must be literals, which is exactly why it cannot replace `format!`.
+
 ## The leading piece is the one that must be owned
 
 Because `+` only ever appends to its left operand, the **first** fragment of a sentence is the one that has to own bytes:
@@ -345,6 +362,14 @@ PART 4 — what to write
    converts it at the argument position, so the call goes through.
    Coercion is a call-site conversion, NOT an extra impl — which is
    why <String as Add<&String>>::Output cannot be named: E0277.
+
+6c. The rest of the family
+   concat!(..)              "firstsecond"   <- COMPILE TIME, a &'static str
+   s.extend([a, b])         "xfirstsecond"
+   [a, b].iter().collect()  "firstsecond"
+   String::from_iter([a,b]) "firstsecond"
+   write!(&mut s, ..)       "first-second"   <- needs `use std::fmt::Write`
+   a.repeat(2)              "firstfirst"
 
 7. Which to reach for
    two or three known pieces        -> format!
