@@ -17,6 +17,17 @@ A prompt like *"Allow running MCP?"* with `Always allow ("rustrover:read_file")`
 
 The prefix exists because tool names are only unique *within* a server, so anything aggregating several of them has to disambiguate; the specification recommends exactly this — prefix with a server identifier.
 
+The server is visible from outside the IDE, which is the quickest way to believe any of this. With RustRover open, `ps` shows the editor having launched **itself** a second time — and the agent that talks to it as a third process:
+
+```text
+$ ps -ax -o command | grep -i rustrover
+…/RustRover.app/Contents/MacOS/rustrover
+…/RustRover.app/Contents/MacOS/rustrover stdioMcpServer
+~/Library/Caches/JetBrains/RustRover<version>/acp-agents/junie/…
+```
+
+`stdioMcpServer` is the process the dialog calls `rustrover`, reading requests from the pipe on its stdin. The agent is the client. There is no third party and no network.
+
 That makes the four buttons four different-sized grants:
 
 | Button | Grants |

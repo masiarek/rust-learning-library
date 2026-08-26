@@ -8,18 +8,60 @@ This page is setup, not selection: [Choosing an editor](../editors/README.md) is
 
 ## 1. Make clippy the linter, not `cargo check`
 
-**Settings → Rust → External Linters.** Two controls matter:
+**Settings → Rust → External Linters.** Five controls, of which three are decisions:
 
-- the linter itself, a choice between **Cargo Check** and **Clippy** — the default is Cargo Check
-- **Run external linter on the fly**, which decides whether it runs in the background or only when you ask
+| Control | What it decides |
+|---|---|
+| **Run external linter on the fly** | whether it runs in the background, or only when you ask |
+| **External tool** | **Cargo Check** or **Clippy** — the default is Cargo Check |
+| **Additional arguments** | *what gets linted* — appended to `cargo check` / `cargo clippy` |
+| **Channel** | which toolchain runs it; `[default]` is whatever `rustup` resolves |
+| **Environment variables** | passed to the linter process only |
 
-Switch it to Clippy. `cargo check` answers *does this compile*, which rust-analyzer is already telling you inside the editor; clippy answers *is this right*, which nothing else in the window is saying. If you have adopted a [strict lint policy](../strict_lints/README.md), this is the setting that makes the IDE enforce it — otherwise you write against one standard all afternoon and meet the other at commit time.
+Switch the tool to Clippy. `cargo check` answers *does this compile*, which rust-analyzer is already telling you inside the editor; clippy answers *is this right*, which nothing else in the window is saying. If you have adopted a [strict lint policy](../strict_lints/README.md), this is the setting that makes the IDE enforce it — otherwise you write against one standard all afternoon and meet the other at commit time.
 
 To check what is actually active without reopening settings, hover the **linter widget in the status bar** at the bottom of the window; it names the linter and whether on-the-fly is on.
 
 One caveat worth knowing before you turn on-the-fly analysis on: it runs a real `cargo clippy`, so it takes a build lock and can save files to do it. On a large project that is a noticeable background cost, and turning it off does not lose you the feature — it becomes manual instead.
 
 Whichever linter is selected, it also reports rustc's own warnings — so a scratch file that binds five names to show five forms gets five `unused_variable`s in the console before clippy has said anything. That is a project-file decision rather than an IDE one: [the four lints a practice tree turns off](../scaffolding/README.md), and the one in the same group it must not.
+
+### What goes in *Additional arguments*
+
+`--all-targets`, and probably nothing else.
+
+That box is **scope, not policy**. It decides which code the linter compiles, and no manifest key can do that job — while everything you might otherwise be tempted to type there is policy, and policy belongs in a file your colleagues and CI can also read:
+
+| The question | Where it is answered |
+|---|---|
+| *which* lints, at what level | `[lints.clippy]` in `Cargo.toml` — or `[workspace.lints.clippy]` plus `lints.workspace = true` in each member |
+| a lint's threshold or carve-out | `clippy.toml` — `allow-unwrap-in-tests`, `too-many-arguments-threshold`, `msrv` |
+| *which code* is looked at | **this box** |
+
+The two are genuinely orthogonal, which is easiest to see by setting a policy and then watching it not reach your tests. With `len_zero = "deny"` in `[lints.clippy]`, and one offending line in the library and another inside `#[cfg(test)] mod tests`:
+
+```text
+$ cargo clippy
+error: length comparison to zero
+ --> src/lib.rs:2:5
+error: could not compile `clippy_targets` (lib) due to 1 previous error
+
+$ cargo clippy --all-targets
+error: length comparison to zero
+ --> src/lib.rs:2:5
+error: could not compile `clippy_targets` (lib) due to 1 previous error
+error: length comparison to zero
+  --> src/lib.rs:12:17
+error: could not compile `clippy_targets` (lib test) due to 2 previous errors
+```
+
+The policy was in force both times. The second run compiled a target the first one never built — note the `(lib test)` in the last line, which is the test target appearing for the first time. Denying a lint harder cannot reach code the linter is not looking at, so this flag is the only thing that makes the carve-outs in `clippy.toml` mean anything: [an `unwrap` allowed in tests](../strict_lints/README.md) is a rule about code your editor is otherwise not reading.
+
+Two things not to put in there. **`-D warnings`** is the CI form — in the IDE it repaints every warning as an error, and it is a lint level, so it belongs in the manifest anyway. And **individual `-W clippy::…` flags**, for the same reason: they are invisible to everyone who does not use your IDE, including you at the next `git clone`.
+
+**Channel** is best left at `[default]`, so the editor runs the same clippy as [your `rust-toolchain.toml`](../pinning_the_toolchain/README.md) and as CI. Pointing it at [nightly](../nightly/README.md) means the window enforces lints that stable does not, which is the [formatting disagreement](../formatting/README.md) again in a different tool.
+
+*The two transcripts above are real clippy output, captured from a throwaway `cargo new --lib` project on stable. Like the ones on the strict-lints page they are verified once rather than on every commit, since `tools/run_examples.py` compiles single `.rs` files and does not invoke clippy.*
 
 ## 2. Or run it in the terminal, which is the same thing
 
