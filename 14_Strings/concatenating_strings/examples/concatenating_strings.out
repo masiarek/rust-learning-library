@@ -37,6 +37,13 @@
    All three say one thing: `+` grows its LEFT operand, so the left
    operand has to be something that owns bytes.
 
+6b. The right operand is usually a &String, not a &str
+   String + &String -> "Hello, world!"
+   The impl is Add<&str>. &String is not &str, but deref coercion
+   converts it at the argument position, so the call goes through.
+   Coercion is a call-site conversion, NOT an extra impl — which is
+   why <String as Add<&String>>::Output cannot be named: E0277.
+
 7. Which to reach for
    two or three known pieces        -> format!
    a whole collection               -> .join(sep) / .concat()

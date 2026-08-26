@@ -63,6 +63,16 @@ fn main() {
     println!("   All three say one thing: `+` grows its LEFT operand, so the left");
     println!("   operand has to be something that owns bytes.");
 
+    println!("\n6b. The right operand is usually a &String, not a &str");
+    let left = String::from("Hello, ");
+    let right = String::from("world!");
+    let joined = left + &right;          // &right is &String — it coerces
+    println!("   String + &String -> {joined:?}");
+    println!("   The impl is Add<&str>. &String is not &str, but deref coercion");
+    println!("   converts it at the argument position, so the call goes through.");
+    println!("   Coercion is a call-site conversion, NOT an extra impl — which is");
+    println!("   why <String as Add<&String>>::Output cannot be named: E0277.");
+
     println!("\n7. Which to reach for");
     println!("   two or three known pieces        -> format!");
     println!("   a whole collection               -> .join(sep) / .concat()");

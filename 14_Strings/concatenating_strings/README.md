@@ -47,6 +47,37 @@ let full = left + " " + "Lovelace";   // "Ada Lovelace" — same heap buffer, no
 
 The `&` on the right is compulsory for the same reason the left must be owned: `&str` is the only right-hand type there is.
 
+### …but what you actually pass is a `&String`
+
+Every tutorial's version of this line has two `String`s, so the right operand is a `&String` — and `&String` is not `&str`:
+
+```rust
+let s1 = String::from("Hello, ");
+let s2 = String::from("world!");
+let s3 = s1 + &s2;                    // compiles: &String coerces to &str
+```
+
+It goes through because an argument position is a **coercion site**, and `&String` derefs to `&str` for free. The impl is still the only one there is; the compiler converted the argument to fit it.
+
+That distinction has a visible edge. Coercion happens to a *value* at a call site; a trait bound needs a real **impl** — and `String: Add<&String>` is not one. So the expression compiles while a type annotation describing it does not:
+
+```rust
+use std::ops::Add;
+// let s3: <String as Add<&String>>::Output = s1 + &s2;   // E0277
+```
+
+```text
+error[E0277]: cannot add `&String` to `String`
+  |
+  |     let s3: <String as Add<&String>>::Output = s1 + &s2;
+  |              ^^^^^^ no implementation for `String + &String`
+  |
+help: the trait `Add<&String>` is not implemented for `String`
+      but trait `Add<&str>` is implemented for it
+```
+
+The type of `s1 + &s2` is `<String as Add<&str>>::Output`, which is `String` — and writing `String` is what anybody should actually put there. This one is worth meeting once because an IDE will occasionally offer the long form as a type hint, and accepting it turns working code into `E0277` on the line that was only supposed to restate the type.
+
 ## `+=` is `push_str` with an operator
 
 ```rust
@@ -307,6 +338,13 @@ PART 4 — what to write
    &str  += &str    E0368   same missing buffer, assignment spelling
    All three say one thing: `+` grows its LEFT operand, so the left
    operand has to be something that owns bytes.
+
+6b. The right operand is usually a &String, not a &str
+   String + &String -> "Hello, world!"
+   The impl is Add<&str>. &String is not &str, but deref coercion
+   converts it at the argument position, so the call goes through.
+   Coercion is a call-site conversion, NOT an extra impl — which is
+   why <String as Add<&String>>::Output cannot be named: E0277.
 
 7. Which to reach for
    two or three known pieces        -> format!
