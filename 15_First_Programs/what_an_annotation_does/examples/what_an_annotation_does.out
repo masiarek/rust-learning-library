@@ -19,6 +19,18 @@
 3. A borrow — the annotation performs a coercion
    let r = &owned;        &alloc::string::String
    let s: &str = &owned;  &str   <- deref coercion, asked for by the annotation
+   The expression `&owned` only ever produces a &String. The annotation
+   asks for a &str, which is a different type — and String's
+   `impl Deref<Target = str>` is the permission slip that lets the
+   compiler bridge them by inserting a call. Four spellings, one result:
+      let s: &str = &owned;               the coercion (compiler-inserted)
+      let s: &str = &*owned;              what it desugars to
+      let s: &str = Deref::deref(&owned); what the `*` calls
+      let s: &str = owned.as_str();       the same thing, written out
+   same pointer in all four? true
+   String is 24 bytes on the stack (ptr, len, cap); &str is 16 (ptr, len).
+   The coercion copies no text and allocates nothing — it forgets the
+   capacity field and keeps pointing at the same bytes.
    vec![&owned]                     alloc::vec::Vec<&alloc::string::String>
    let _: Vec<&str> = vec![&owned]; alloc::vec::Vec<&str>
    A call site coerces too — shout(r) compiles and gives "HI" — so

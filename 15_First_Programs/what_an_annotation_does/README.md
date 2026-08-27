@@ -69,9 +69,28 @@ let r = &owned;           // &String
 let s: &str = &owned;     // &str — deref coercion, requested by the annotation
 ```
 
-Same expression, two types. Writing `&str` on the left asks for a [deref coercion](../../14_Strings/six_kinds_of_string/README.md) that would not otherwise happen.
+Same expression on the right, two different types on the left, and it is worth going slowly here because three separate things are happening.
 
-It is easy to overstate this, because a **call site coerces too**:
+**One.** `&owned` produces a `&String` and nothing else. Taking a reference to a `String` gives you a reference to a `String`; the expression has exactly one type, the same way `"a"` did.
+
+**Two.** `&String` and `&str` are genuinely different types, not two names for one. A `String` is three words on the stack — pointer, length, capacity — with the bytes on the heap, so `&String` is a pointer *to that struct*. A `&str` is the pointer and the length **themselves**, travelling as a pair, with no capacity and no struct to point at. Ordinarily, handing one where the other is expected is `E0308`.
+
+**Three.** It compiles anyway, because `String` carries an `impl Deref<Target = str>` — a trait with exactly one method, `fn deref(&self) -> &str`. That impl is the permission slip: it tells the compiler there is a canonical way to view a `String` as a `str`, so when a `&String` turns up where a `&str` is wanted, it may quietly insert the call rather than reject the program. That insertion is what "[deref coercion](../../14_Strings/six_kinds_of_string/README.md)" names.
+
+So these four lines are the same line, written at four levels of explicitness:
+
+```rust
+let s: &str = &owned;                // the coercion — the compiler inserts the rest
+let s: &str = &*owned;               // what it desugars to: deref, then re-borrow
+let s: &str = Deref::deref(&owned);  // what that `*` calls
+let s: &str = owned.as_str();        // the same thing, spelled as a method
+```
+
+All four hand back the **same pointer** — no allocation, no copy, not a single byte of `"hi"` moved. The only thing that changes is how much of the `String` you are still holding: 24 bytes on the stack become 16, and the capacity field is simply forgotten. Which is why the `&str` cannot grow the text and the `String` still can.
+
+The word doing the work in "coercion" is *implicit*. Rust performs one only at a **coercion site** — a `let` with a stated type, a function argument, a struct literal field, a return position — and nowhere else. That is the whole reason the annotation is what triggers it: without `: &str` on the left there is no site, nothing to coerce *toward*, and you keep the `&String` you asked for.
+
+A function argument is a coercion site too, which is why this is easy to overstate:
 
 ```rust
 fn shout(s: &str) -> String { s.to_uppercase() }
@@ -213,6 +232,18 @@ lt_b = VALUE #( ( ... ) ).              " # = take it from the target
 3. A borrow — the annotation performs a coercion
    let r = &owned;        &alloc::string::String
    let s: &str = &owned;  &str   <- deref coercion, asked for by the annotation
+   The expression `&owned` only ever produces a &String. The annotation
+   asks for a &str, which is a different type — and String's
+   `impl Deref<Target = str>` is the permission slip that lets the
+   compiler bridge them by inserting a call. Four spellings, one result:
+      let s: &str = &owned;               the coercion (compiler-inserted)
+      let s: &str = &*owned;              what it desugars to
+      let s: &str = Deref::deref(&owned); what the `*` calls
+      let s: &str = owned.as_str();       the same thing, written out
+   same pointer in all four? true
+   String is 24 bytes on the stack (ptr, len, cap); &str is 16 (ptr, len).
+   The coercion copies no text and allocates nothing — it forgets the
+   capacity field and keeps pointing at the same bytes.
    vec![&owned]                     alloc::vec::Vec<&alloc::string::String>
    let _: Vec<&str> = vec![&owned]; alloc::vec::Vec<&str>
    A call site coerces too — shout(r) compiles and gives "HI" — so

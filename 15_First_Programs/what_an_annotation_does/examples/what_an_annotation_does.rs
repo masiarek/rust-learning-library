@@ -4,6 +4,7 @@
 
 use std::collections::BTreeSet;
 use std::mem::size_of_val;
+use std::ops::Deref;
 
 /// The static type of whatever you hand it a reference to.
 /// `type_name` erases lifetimes, so `&'static str` prints as `&str`.
@@ -46,6 +47,31 @@ fn main() {
     let s: &str = &owned;
     println!("   let r = &owned;        {}", ty(&r));
     println!("   let s: &str = &owned;  {}   <- deref coercion, asked for by the annotation", ty(&s));
+    println!("   The expression `&owned` only ever produces a &String. The annotation");
+    println!("   asks for a &str, which is a different type — and String's");
+    println!("   `impl Deref<Target = str>` is the permission slip that lets the");
+    println!("   compiler bridge them by inserting a call. Four spellings, one result:");
+    let by_coercion: &str = &owned;
+    let by_deref_star: &str = &*owned;
+    let by_method_call: &str = Deref::deref(&owned);
+    let by_as_str: &str = owned.as_str();
+    println!("      let s: &str = &owned;               the coercion (compiler-inserted)");
+    println!("      let s: &str = &*owned;              what it desugars to");
+    println!("      let s: &str = Deref::deref(&owned); what the `*` calls");
+    println!("      let s: &str = owned.as_str();       the same thing, written out");
+    println!(
+        "   same pointer in all four? {}",
+        [by_deref_star, by_method_call, by_as_str]
+            .iter()
+            .all(|v| v.as_ptr() == by_coercion.as_ptr())
+    );
+    println!(
+        "   String is {} bytes on the stack (ptr, len, cap); &str is {} (ptr, len).",
+        size_of_val(&owned),
+        size_of_val(&s)
+    );
+    println!("   The coercion copies no text and allocates nothing — it forgets the");
+    println!("   capacity field and keeps pointing at the same bytes.");
     let v1 = vec![&owned];
     let v2: Vec<&str> = vec![&owned];
     println!("   vec![&owned]                     {}", ty(&v1));
