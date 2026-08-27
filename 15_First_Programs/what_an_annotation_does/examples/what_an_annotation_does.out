@@ -1,0 +1,40 @@
+1. A string literal — the annotation changes nothing
+   let a = "a";                 &str
+   let b: &str = "a";           &str
+   let c: &'static str = "a";   &str
+   same value in all three? true
+   A literal has exactly one possible type, so there is nothing for the
+   annotation to decide. (type_name erases lifetimes; all three are
+   &'static str — the lifetime half is the static_str lesson.)
+
+2. An integer literal — the annotation picks the type
+   let n = 1;         i32  size 4   <- the i32 fallback
+   let m: u8 = 1;     u8   size 1
+   let f: f64 = 1.0;  f64  size 8
+   One literal, three types. i32 is what Rust falls back to when nothing
+   else decides — and an annotation is one of the things that can decide.
+   Load-bearing, not decorative:
+      let big: u8 = 1_000_000;   // error: literal out of range for `u8`
+
+3. A borrow — the annotation performs a coercion
+   let r = &owned;        &alloc::string::String
+   let s: &str = &owned;  &str   <- deref coercion, asked for by the annotation
+   vec![&owned]                     alloc::vec::Vec<&alloc::string::String>
+   let _: Vec<&str> = vec![&owned]; alloc::vec::Vec<&str>
+   A call site coerces too — shout(r) compiles and gives "HI" — so
+   the annotation only earns its keep where nothing else offers to coerce:
+   inside a Vec, a tuple, a struct field, a return type.
+
+4. No answer without one — the annotation drives inference
+   let parsed: i32 = "42".parse().unwrap();  i32  42
+   let wide:   i64 = "42".parse().unwrap();  i64  42
+      let x = "42".parse().unwrap();   // error[E0284]: type annotations needed
+   One expression, three results — only the annotation differs:
+      let _: String        = letters.iter().collect();   "Rustacean"
+      let _: Vec<char>     = ...collect();               9 items
+      let _: BTreeSet<char> = ...collect();              8 items, {'R', 'a', 'c', 'e', 'n', 's', 't', 'u'}
+
+The rule
+   Annotate when the expression is ambiguous (a numeric literal, parse,
+   collect, into) or when you want a coercion. On "a" it is neither, so
+   `let s = "a";` and `let s: &str = "a";` are the same program.
