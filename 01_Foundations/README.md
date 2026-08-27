@@ -8,7 +8,7 @@ Read them in this order. Each section assumes the ones above it and nothing else
 
 | Section | Lessons | What it covers |
 |---|---|---|
-| [First programs](../15_First_Programs/README.md) | 8 | Running a `.rs` file at all, reading what the compiler says back, the braces every later page uses without explaining, and getting a program to print |
+| [First programs](../15_First_Programs/README.md) | 9 | Running a `.rs` file at all, reading what the compiler says back, the braces every later page uses without explaining, and getting a program to print |
 | [Structs](../16_Structs/README.md) | 8 | A type of your own: fields here, behaviour in a separate `impl` block, no constructor, and the eight errors one produces |
 | [`Option` and `Result`](../17_Option_and_Result/README.md) | 24 | No null and no exceptions — two ordinary enums, and the dozen small methods between `match` and `.unwrap()` |
 | [Ownership](../18_Ownership/README.md) | 9 | One owner per value, what a move actually transfers, borrowing, and the three questions the word "scope" collapses into one |

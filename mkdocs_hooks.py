@@ -139,6 +139,10 @@ NAV_ORDER: dict[str, list[str]] = {
         # together, and the braces that print.
         "a_block_is_an_expression",
         "braces_take_a_name",
+        # ...and the third piece of punctuation nobody defines: the `:` in
+        # `let s: &str`. On a literal it changes nothing, which is why it is
+        # easy to read as decoration; on four other shapes it decides the type.
+        "what_an_annotation_does",
         # ...and then the other half of printing, once the braces are
         # understood: which of the two traits fills them, and why only one
         # of them can be derived.

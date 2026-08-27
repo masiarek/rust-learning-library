@@ -342,6 +342,14 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Format spec** — Everything after the `:` in `{value:>width$.prec$}` — fill, alignment, width, precision, and which trait to print through. A separate small language from the capture before the colon; a trailing `$` is what marks a width or precision as a *name* rather than a literal number. Which trait `{}` and `{:?}` reach for is a different question. → [The braces take a name](15_First_Programs/braces_take_a_name/README.md), [Debug and Display](15_First_Programs/debug_vs_display/README.md)
 
+**Type annotation** — The `: Type` on a `let`, a parameter or a field. Not a comment but an *input*: the compiler solves the expression against it. On a string literal it decides nothing — `let s = "a";` and `let s: &str = "a";` are the same program — and on four other shapes it decides what the program is. → [What a type annotation does](15_First_Programs/what_an_annotation_does/README.md)
+
+**Integer fallback** — What an unsuffixed integer literal becomes when nothing else in the function decides: `i32`, and `f64` for a float. Not what `1` *means*, only what Rust settles on last, after every annotation, parameter type and later use has had its say. → [What a type annotation does](15_First_Programs/what_an_annotation_does/README.md)
+
+**Turbofish (`::<T>`)** — The `::<i32>` in `"42".parse::<i32>()` — the same information a type annotation carries, written at the call instead of on the binding. The form to reach for when the value is not being bound to a name. → [What a type annotation does](15_First_Programs/what_an_annotation_does/README.md)
+
+**`E0284`** — *type annotations needed.* Raised when an expression's type is chosen by its target and there is no target — `let x = "42".parse().unwrap();` being the one everybody meets. The `help:` line offers the fix as a hole to fill: `let x: /* Type */ = …`. → [What a type annotation does](15_First_Programs/what_an_annotation_does/README.md)
+
 **`String`** — The owned, growable text type: three words on the stack (pointer, length, capacity), UTF-8 bytes on the heap. A `Vec<u8>` that promises valid UTF-8, with the same `new` / `with_capacity` / `reserve` vocabulary. Own it in fields, build it for returns — and take `&str` in parameters. → [`String` vs `&str`](14_Strings/string_vs_str/README.md), [The anatomy of a `String`](14_Strings/anatomy_of_a_string/README.md)
 
 **String slice (`&str`)** — A borrowed view of UTF-8 text living anywhere — the binary, a `String`'s heap buffer, a stack array: one pointer plus one length, owning nothing. `Copy`, read-only, and the type every text-reading parameter should take, since literals, `String`s and slices all arrive as one for free. → [`String` vs `&str`](14_Strings/string_vs_str/README.md)
