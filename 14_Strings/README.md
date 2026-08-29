@@ -19,6 +19,19 @@ The rest of the section is what follows from the bytes underneath. `len()` count
 | [`&'static str`](static_str/README.md) | 201 | On a literal it is the same type as `&str` — where the annotation starts refusing things, `const` vs `static`, and the three ways a `String` really can yield one |
 | [Six kinds of string](six_kinds_of_string/README.md) | 201 | `OsString`, `CString` and friends are not five more inventions — three promises about the bytes, each owned or borrowed, and narrowing is where a promise gets checked |
 
+## The method reference
+
+The lessons above teach the ideas. When you know which method you want and need to know how it behaves at the edges — what it panics on, what it allocates, which of the four pattern shapes it accepts — there is a page for every one:
+
+| reference | pages | what is in it |
+|---|---|---|
+| [`str` methods](str_methods/README.md) | 83 | Everything about *reading* text: searching, splitting, trimming, case, parsing, and the byte-offset panics |
+| [`String` methods](string_methods/README.md) | 42 | Everything that needs *ownership*: building, growing, removing, capacity, and handing the allocation away |
+
+Every page carries the signature, the stability line, the trap the method is usually involved in, and a complete runnable program whose printed output is checked by CI — so nothing on them is a claim about what Rust does, only a record of what it did.
+
+The split follows the types: because `String` dereferences to `str`, every `str` method works on a `String` unchanged, which is why the borrowed side is twice the size.
+
 ## The lessons strings lean on
 
 Strings are the worked example half the ownership pages already use, so the deep explanations live there and this section links them rather than moving them:

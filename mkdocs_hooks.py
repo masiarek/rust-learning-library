@@ -312,6 +312,8 @@ NAV_ORDER: dict[str, list[str]] = {
         # unless you say so. Hands off to the 09_Advanced exactness cluster.
         "letting_the_compiler_reorder",
     ],
+    "14_Strings/str_methods": ["README.md"],
+    "14_Strings/string_methods": ["README.md"],
     "14_Strings": [
         "README.md",
         # Opens the strings arc — the pair of types the ownership pages were
@@ -341,6 +343,12 @@ NAV_ORDER: dict[str, list[str]] = {
         # Closes the arc: the other four string types, and the one
         # owned/borrowed pattern all six repeat.
         "six_kinds_of_string",
+        # The method reference: one page per method, 125 of them. It sits after
+        # the lessons and before the stubs because a stub is not a page anyone
+        # reads, and burying a reference this size under nine placeholders
+        # would hide the most-linked-to part of the section.
+        "str_methods",
+        "string_methods",
         # The nine that are outlines so far — ordered as they would be read,
         # not as they were written. Each is a real URL from the day it is a stub.
         "parsing_a_string",
@@ -562,6 +570,11 @@ LABELS = {
     "parsing_a_string": "Parsing out of a string",
     "the_format_language": "The format mini-language",
     "when_string_is_too_slow": "When `String` is too slow",
+    # The two method-reference sections. Set explicitly so the pair is
+    # symmetric: without this, FIXUPS turns `str_methods` into "`str` methods"
+    # while `string_methods` gets a plain "String methods".
+    "str_methods": "`str` methods",
+    "string_methods": "`String` methods",
     # 15_First_Programs
     "rustc_without_cargo": "Running a scratch program",
     "what_an_annotation_does": "What a type annotation does",
@@ -596,6 +609,52 @@ LABELS = {
     "control_flow_flattening": "Control-flow flattening",
     "build_systems_are_not_compilers": "A build system is not a compiler",
 }
+
+# ---------------------------------------------------------------------------
+# The str/String method reference: one folder per method, 125 of them, under
+# 14_Strings/str_methods and 14_Strings/string_methods. Every label is
+# mechanical -- `str_trim` reads `str::trim` -- so the rule is written once
+# instead of as 125 near-identical LABELS lines.
+#
+# The names are LISTED rather than derived from the `str_`/`string_` prefix,
+# because `string_vs_str`, `string_slices` and `str_is_unsized` are lessons in
+# the same section and must keep the prose labels set above. clean() is keyed
+# on the bare folder name with no path, so a prefix rule could not tell them
+# apart.
+# ---------------------------------------------------------------------------
+STR_METHODS = """
+    as_bytes as_bytes_mut as_mut_ptr as_ptr bytes ceil_char_boundary
+    char_indices chars contains encode_utf16 ends_with eq_ignore_ascii_case
+    escape_debug escape_default escape_unicode find floor_char_boundary
+    from_utf8 from_utf8_mut from_utf8_unchecked from_utf8_unchecked_mut get
+    get_mut get_unchecked get_unchecked_mut into_boxed_bytes into_string
+    is_ascii is_char_boundary is_empty len lines lines_any
+    make_ascii_lowercase make_ascii_uppercase match_indices matches parse
+    repeat replace replacen rfind rmatch_indices rmatches rsplit
+    rsplit_once rsplit_terminator rsplitn slice_mut_unchecked
+    slice_unchecked split split_ascii_whitespace split_at split_at_checked
+    split_at_mut split_at_mut_checked split_inclusive split_once
+    split_terminator split_whitespace splitn starts_with strip_circumfix
+    strip_prefix strip_suffix substr_range to_ascii_lowercase
+    to_ascii_uppercase to_lowercase to_uppercase trim trim_ascii
+    trim_ascii_end trim_ascii_start trim_end trim_end_matches trim_left
+    trim_left_matches trim_matches trim_right trim_right_matches trim_start
+    trim_start_matches
+""".split()
+
+STRING_METHODS = """
+    as_bytes as_mut_str as_mut_vec as_str capacity clear drain
+    extend_from_within from_raw_parts from_utf16 from_utf16_lossy
+    from_utf16be from_utf16be_lossy from_utf16le from_utf16le_lossy
+    from_utf8 from_utf8_lossy from_utf8_unchecked insert insert_str
+    into_boxed_str into_bytes into_raw_parts is_empty leak len new pop push
+    push_str remove replace_range reserve reserve_exact retain shrink_to
+    shrink_to_fit split_off truncate try_reserve try_reserve_exact
+    with_capacity
+""".split()
+
+LABELS.update({f"str_{m}": f"str::{m}" for m in STR_METHODS})
+LABELS.update({f"string_{m}": f"String::{m}" for m in STRING_METHODS})
 
 PREFIX = re.compile(r"^\d+[_\- ]")
 

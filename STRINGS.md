@@ -97,6 +97,17 @@ Named honestly, because a map that only lists what exists is a map of the wrong 
 
 A stub graduates by gaining an `examples/` program, losing its notice, and — if it earned one on the way — a row in [KATAS.md](KATAS.md). If you want one of these next, that is the table to point at.
 
+## Every method, one page each
+
+The lessons above are the ideas; this is the reference to reach for once you know what you are looking for.
+
+| reference | pages | covers |
+|---|---|---|
+| [`str` methods](14_Strings/str_methods/README.md) | 83 | Reading text — searching, splitting, trimming, case, parsing, escapes, and the two byte-offset panics |
+| [`String` methods](14_Strings/string_methods/README.md) | 42 | Owning text — building, growing, removing, capacity, and giving the allocation away |
+
+Each page states the signature and the stability, explains what the method does and the mistake it is usually part of, and ends with a complete program plus its verified output. `String` derefs to `str`, so every method on the first list works on a `String` too.
+
 ## Where else to learn this
 
 [Strings: links, books and videos](14_Strings/resources/README.md) collects the outside sources — the Book's ch. 8.2, *Programming Rust* ch. 17, Easy Rust ch. 14 and its video, the essays, and the external exercise sets (rustlings' `strings` and `conversions`) that map onto these lessons.
