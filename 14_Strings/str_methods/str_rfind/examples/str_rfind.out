@@ -1,0 +1,6 @@
+Some(0) Some(16)
+"doc"
+Some(("/usr/local/share", "doc"))
+Some("tar.gz") Some("gz")
+Some(3)
+None

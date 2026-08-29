@@ -1,0 +1,8 @@
+true
+true
+false
+true
+--verbose  long option "verbose"
+-v         starts_with("--") = false
+plain      starts_with("--") = false
+true

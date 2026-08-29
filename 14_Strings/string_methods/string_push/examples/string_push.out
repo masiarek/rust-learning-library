@@ -1,0 +1,8 @@
+"hi!"
+pushed 'a' -> len 1 (grew by 1)
+pushed 'é' -> len 3 (grew by 2)
+pushed '👋' -> len 7 (grew by 4)
+"abc"
+push 1 reallocated: len 1 capacity 8
+push 9 reallocated: len 9 capacity 16
+"HI"

@@ -1,0 +1,8 @@
+Some("verbose")
+None
+Some("../src")
+"src"
+Some("next")
+--verbose   long verbose
+-v          short v
+file.txt    positional file.txt

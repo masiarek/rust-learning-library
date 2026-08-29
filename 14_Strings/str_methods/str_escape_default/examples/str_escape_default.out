@@ -1,0 +1,5 @@
+tab\there \u{e9} \u{1f44b}
+tab\there é 👋
+ascii: true
+let s = "a\"b\\c\n\u{e9}";
+\u{3b1}\u{3b2}\u{3b3}

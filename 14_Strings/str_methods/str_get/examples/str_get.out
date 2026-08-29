@@ -1,0 +1,10 @@
+Some("h")
+None
+None
+Some("héllo")
+Some("llo")
+Some("hé") Some("é") Some("é")
+"h"
+panics instead: true
+Some('h')
+Some(104)

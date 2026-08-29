@@ -1,0 +1,10 @@
+ 0 -> Some(("", "héllo"))
+ 1 -> Some(("h", "éllo"))
+ 2 -> None
+ 3 -> Some(("hé", "llo"))
+ 5 -> Some(("héll", "o"))
+ 6 -> Some(("héllo", ""))
+99 -> None
+2 refused: inside a character
+99 refused: out of range
+("hé", "llo")

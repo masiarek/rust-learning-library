@@ -1,0 +1,5 @@
+hello    len=5 chars=5
+héllo    len=6 chars=5
+hi 👋     len=7 chars=4
+owner 11 / window 5
+const len = 5

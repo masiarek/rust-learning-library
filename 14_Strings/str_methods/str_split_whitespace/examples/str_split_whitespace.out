@@ -1,0 +1,9 @@
+["the", "quick", "brown", "fox"]
+["", "", "the", "", "", "quick", "\t", "brown", "\n", "fox", "", ""]
+4 vs 12 pieces
+[]
+[]
+["a", "b"]
+split(',')        ["alice", "", "42"]  -> 3 fields
+whitespace route  ["alice", "42"]  -> 2 fields, and 42 is now column 2
+4 words

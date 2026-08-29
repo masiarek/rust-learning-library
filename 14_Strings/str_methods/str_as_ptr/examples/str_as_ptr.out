@@ -1,0 +1,4 @@
+a slice at byte 2 starts 2 bytes along
+Ok("hello")
+len is carried separately: 5
+capacity 4 -> 8

@@ -1,0 +1,5 @@
+String   len 8 capacity 64
+Box<str> len 8
+String 24 bytes / Box<str> 16 bytes
+back    len 8 capacity 8
+["ADA", "GRACE"]

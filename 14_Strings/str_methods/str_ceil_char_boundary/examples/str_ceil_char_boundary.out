@@ -1,0 +1,15 @@
+offset  0 ->  0  rest "héllo wörld"
+offset  1 ->  1  rest "éllo wörld"
+offset  2 ->  3  rest "llo wörld"
+offset  3 ->  3  rest "llo wörld"
+offset  7 ->  7  rest "wörld"
+offset  8 ->  8  rest "örld"
+offset 11 -> 11  rest "ld"
+n=2: floor 1 ceil 3
+n=8: floor 8 ceil 8
+wide n=1 -> 1
+wide n=2 -> 5
+wide n=3 -> 5
+wide n=4 -> 5
+wide n=5 -> 5
+13 13

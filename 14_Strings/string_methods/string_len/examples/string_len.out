@@ -1,0 +1,6 @@
+len 6 chars 5
+len 6 capacity 64
+true
+after 'a': len 1
+after 'é': len 3
+after '👋': len 7

@@ -1,0 +1,11 @@
+budget  0 -> cut  0  ""
+budget  1 -> cut  1  "h"
+budget  2 -> cut  1  "h"
+budget  3 -> cut  3  "hé"
+budget  7 -> cut  7  "héllo "
+budget  8 -> cut  8  "héllo w"
+budget 99 -> cut 13  "héllo wörld"
+boundary at 2? false
+n=2: floor 1 <= n, ceil 3 >= n
+n=8: floor 8 <= n, ceil 8 >= n
+5 chars = "héllo" (6 bytes)

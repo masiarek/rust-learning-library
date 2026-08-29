@@ -1,0 +1,12 @@
+("he", "llo")
+("", "hello")
+("hello", "")
+mid 0 boundary=true  Some(("", "héllo"))
+mid 1 boundary=true  Some(("h", "éllo"))
+mid 2 boundary=false None
+mid 3 boundary=true  Some(("hé", "llo"))
+mid 4 boundary=true  Some(("hél", "lo"))
+mid 5 boundary=true  Some(("héll", "o"))
+mid 6 boundary=true  Some(("héllo", ""))
+None
+None

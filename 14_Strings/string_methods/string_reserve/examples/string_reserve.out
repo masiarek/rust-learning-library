@@ -1,0 +1,5 @@
+len 5 capacity 5
+after reserve(10): len 5 capacity 15 (>= 15)
+unchanged: true
+reserve 8 / reserve_exact 7
+capacity unchanged through the loop: true

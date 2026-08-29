@@ -1,0 +1,13 @@
+Ok(42)
+42
+true
+Ok(42)
+Ok(7)
+Ok(3.5)
+Ok(true)
+true
+true
+Ok(Rgb(12, 34, 56))
+red 12, green 34, blue 56
+Err("want 3 parts, got 2")
+Err("bad blue: 300")

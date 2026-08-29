@@ -1,0 +1,5 @@
+Ok("hi")
+failed at byte 1
+recovered [104, 255, 105]
+None
+"héllo" 6 bytes

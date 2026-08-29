@@ -1,0 +1,4 @@
+reserve_exact 7 / reserve 8
+true true
+len 19 capacity 19
+6 capacity changes over 6 appends

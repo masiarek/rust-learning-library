@@ -1,0 +1,6 @@
+head "hello" tail " world"
+("hello", " world")
+head capacity 64 / tail capacity 6
+taken "everything", source ""
+boundary at 2? false
+"llo"

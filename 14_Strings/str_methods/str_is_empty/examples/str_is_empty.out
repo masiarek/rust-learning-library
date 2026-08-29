@@ -1,0 +1,10 @@
+input  empty?   trimmed empty?
+""     true     true
+" "    false    true
+"   "  false    true
+"\n"   false    true
+"a"    false    false
+true
+Some("yes") -> answered
+Some("") -> asked, left blank
+None -> never asked

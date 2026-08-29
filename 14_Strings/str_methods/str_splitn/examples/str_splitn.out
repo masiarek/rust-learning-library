@@ -1,0 +1,8 @@
+["key ", " a ", " b"]
+["key ", " a = b"]
+["key ", " a ", " b"]
+[]
+["key = a = b"]
+Some(("key ", " a = b"))
+None
+["no delimiter"]

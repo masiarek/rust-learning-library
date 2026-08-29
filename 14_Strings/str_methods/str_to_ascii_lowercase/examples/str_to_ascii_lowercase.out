@@ -1,0 +1,8 @@
+"hello world"
+"cafÉ straße"
+"café straße"
+"İ" ascii 2 bytes, unicode 3 bytes
+"ß" ascii 2 bytes, unicode 2 bytes
+"ABC" ascii 3 bytes, unicode 3 bytes
+"content-type"
+"image.png"

@@ -1,0 +1,10 @@
+"b"
+"src"
+"42"
+Some("../src")
+"src"
+None
+"0042" -> "42"  (as a number: 42)
+"0" -> ""  (as a number: 0)
+"000" -> ""  (as a number: 0)
+"40" -> "40"  (as a number: 40)

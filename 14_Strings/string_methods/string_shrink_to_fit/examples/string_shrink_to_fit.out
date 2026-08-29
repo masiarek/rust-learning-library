@@ -1,0 +1,5 @@
+before len 5 capacity 64
+after  len 5 capacity 5
+"small"
+Box<str> is 16 bytes vs String's 24
+2 -> 8

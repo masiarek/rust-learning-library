@@ -1,0 +1,6 @@
+["the", "quick", "brown", "fox"]
+same as unicode: true
+["a", "b"]
+["a\u{a0}b"]
+["a", "b", "c", "d", "e", "f"]
+["2026-08-29", "INFO", "started"]

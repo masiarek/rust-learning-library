@@ -1,0 +1,6 @@
+"hello"
+"hello"
+boundary at 8? true
+budget  2 -> "h" (1 bytes)
+budget  8 -> "héllo w" (8 bytes)
+len 5 capacity 32

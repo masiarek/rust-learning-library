@@ -1,0 +1,6 @@
+[104, 195, 169, 108, 108, 111]
+6 bytes, 5 chars
+true
+first Some(104), and s is still "héllo"
+[104, 195, 169, 108, 108, 111]
+true

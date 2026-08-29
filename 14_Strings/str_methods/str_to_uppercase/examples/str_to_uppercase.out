@@ -1,0 +1,8 @@
+"HELLO"
+"ß" -> "SS"
+1 char -> 2 chars
+"ss"
+round trips: false
+"FI"
+"straße" 7 bytes / 6 chars
+"STRASSE" 7 bytes / 7 chars

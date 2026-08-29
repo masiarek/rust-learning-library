@@ -1,0 +1,5 @@
+["a", "b.c"]
+["c", "a.b"]
+["c", "b", "a"]
+Some(("a.b", "c"))
+Some("rustc") in Some("/usr/local/bin")

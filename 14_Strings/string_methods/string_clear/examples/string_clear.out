@@ -1,0 +1,7 @@
+before len 5 capacity 32
+after  len 0 capacity 32
+"alpha!" capacity 8
+"beta!" capacity 8
+"gamma!" capacity 8
+reassigned capacity 0
+cleared and shrunk: capacity 0

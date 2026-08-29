@@ -1,0 +1,4 @@
+len 6 capacity 6 -- the same values the String held: true
+"héllo"
+len 1 capacity 32
+"kept" is still owned by its binding

@@ -1,0 +1,5 @@
+true
+capacity 7
+reserve 8 / reserve_exact 7 / try_reserve 8 / try_reserve_exact 7
+true
+still usable: "ok"

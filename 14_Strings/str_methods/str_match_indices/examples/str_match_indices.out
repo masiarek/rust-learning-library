@@ -1,0 +1,6 @@
+byte  6: "in"  ..."in i"
+byte  9: "in"  ..."in s"
+byte 15: "in"  ..."in"
+[(6, "in"), (9, "in"), (15, "in")]
+["the ra", " ", " spa", ""]
+the ra[in] [in] spa[in]

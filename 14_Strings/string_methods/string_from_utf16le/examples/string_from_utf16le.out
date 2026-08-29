@@ -1,0 +1,6 @@
+Ok("hi")
+Ok("栀椀")
+true
+"\u{feff}h" first char Some('\u{feff}')
+stripped: Some("h")
+true

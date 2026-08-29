@@ -1,0 +1,6 @@
+"hello"
+"hello" capacity 5
+String   24 bytes
+Box<str> 16 bytes
+before 5 / 64
+after  5 / 5

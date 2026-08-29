@@ -1,0 +1,4 @@
+"HELLO world"
+"HELLO world"
+cut at byte 3, boundary=true
+"héLLO"

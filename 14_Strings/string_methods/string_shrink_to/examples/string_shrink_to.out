@@ -1,0 +1,7 @@
+start        len 5 capacity 100
+shrink_to 32 len 5 capacity 32
+shrink_to 0  len 5 capacity 5
+unchanged: true
+len   5 capacity  16
+len 200 capacity 200
+len   5 capacity  16

@@ -1,0 +1,8 @@
+true
+false
+capacity 1024 but empty: true
+empty true capacity 5
+false true
+Some("v") -> present
+Some("") -> present but empty
+None -> absent

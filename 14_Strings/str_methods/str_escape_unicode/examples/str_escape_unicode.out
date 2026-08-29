@@ -1,0 +1,8 @@
+\u{61}\u{62}
+\u{e9}
+debug   a\né
+default a\n\u{e9}
+unicode \u{61}\u{a}\u{e9}
+é vs é -- equal? false
+\u{e9}
+\u{65}\u{301}

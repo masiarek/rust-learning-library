@@ -1,0 +1,6 @@
+"    value"
+"value"
+"    nested\n" -> "    nested"
+"top\r\n" -> "top"
+false true
+["a", "b", "c"]

@@ -1,0 +1,6 @@
+"a,b,"  split ["a", "b", ""]  terminator ["a", "b"]
+",a,b"  split ["", "a", "b"]  terminator ["", "a", "b"]
+"a,,b"  split ["a", "", "b"]  terminator ["a", "", "b"]
+","  split ["", ""]  terminator [""]
+""  split [""]  terminator []
+split 4  terminator 3  lines 3

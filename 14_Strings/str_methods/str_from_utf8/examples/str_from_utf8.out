@@ -1,0 +1,5 @@
+Ok("hi")
+valid_up_to 1 error_len Some(1)
+None
+"hi" from a 2-byte buffer
+"compiled"

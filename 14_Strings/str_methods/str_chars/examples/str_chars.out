@@ -1,0 +1,7 @@
+['h', 'é', 'l', 'l', 'o']
+5 chars from 6 bytes
+5
+olléh
+HéLLO
+Some('é')
+1 vs 2 chars, printed é and é

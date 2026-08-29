@@ -1,0 +1,7 @@
+tab\there\n\"quoted\" \\ é 👋
+"tab\there\n\"quoted\" \\ é 👋"
+same: true
+debug   café
+default caf\u{e9}
+['a', '\\', 'n', 'b']
+\u{301}x

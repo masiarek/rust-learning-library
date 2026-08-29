@@ -1,0 +1,10 @@
+len 0 capacity 32
+len  6 capacity 32
+len 11 capacity 32
+len 16 capacity 32
+len  6 capacity  8  (from new)
+len 11 capacity 16  (from new)
+len 16 capacity 16  (from new)
+equal contents: true
+4 chars need 8 bytes
+19 / 19

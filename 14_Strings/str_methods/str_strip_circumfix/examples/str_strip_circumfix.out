@@ -1,0 +1,10 @@
+Some("hello")
+Some("tag")
+Some(" note ")
+"\"hi\"" -> Some("hi")
+"\"hi" -> None
+"hi\"" -> None
+"hi" -> None
+None
+None
+Some("hi")

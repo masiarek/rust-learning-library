@@ -1,0 +1,7 @@
+"hi"
+"h�i"
+borrowed "hi" -- input was valid
+owned    "h�i" -- something was replaced
+[104, 255, 105] -> [104, 239, 191, 189, 105]
+3 bad bytes -> 3 replacement char(s)  "���"
+2 bad bytes -> 1 replacement char(s)  "�"

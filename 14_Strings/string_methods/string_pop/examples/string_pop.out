@@ -1,0 +1,9 @@
+"café" len 5
+popped Some('é')
+"caf" len 3
+popped 'c', left "ab"
+popped 'b', left "a"
+popped 'a', left ""
+None
+len 4 capacity 32
+"olléh"

@@ -1,0 +1,5 @@
+true
+capacity 102
+refused: memory allocation failed because the computed capacity exceeded the collection's maximum
+Ok("payload")
+true
