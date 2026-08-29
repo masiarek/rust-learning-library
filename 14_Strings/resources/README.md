@@ -62,6 +62,7 @@ Every lesson in the strings arc carries one, and they are ordered to be attempte
 - [rustlings ↗](https://github.com/rust-lang/rustlings) — `strings1`/`strings2` are the smallest possible version of the `&str`-vs-`String` question, and the `conversions` set (`from_into`, `from_str`, `as_ref_mut`, `try_from_into`, `using_as`) is the machinery under [Making a `String`](../making_a_string/README.md). Do the `conversions` set right after that lesson; it is the only external exercise here that maps one-to-one onto a page.
 - [Exercism — Rust track ↗](https://exercism.org/tracks/rust) — mentored, and heavy on text problems early on ("Reverse String" is the one that teaches graphemes the hard way).
 - [practice.rs — strings ↗](https://practice.rs/compound-types/string.html) — fill-in-the-blank against a compiler, in the same house style as Rust by Example.
+- [100 Exercises — String slices ↗](https://rust-exercises.com/100-exercises/04_traits/06_str_slice) — the chapter that draws it: stack-and-heap diagrams for `String`, `&String` and `&str` side by side, then `&s[1..]` as two words pointing into somebody else's buffer. The whole course is [in the exercises hub](../../10_Resources/exercises/README.md); this is the one chapter worth reading out of order, and the diagrams are the reason.
 
 ## See also
 

@@ -21,7 +21,7 @@ The short version: do it first, do it alongside The Book, and stop when it start
 
 ## 100 Exercises to Learn Rust — the best of them
 
-[Mainmatter's course ↗](https://github.com/mainmatter/100-exercises-to-learn-rust) is a *book and a test suite in one repository*: a hundred exercises that accumulate into one real program, each with a chapter of prose and a failing test. There is a [PDF ↗](https://github.com/mainmatter/100-exercises-to-learn-rust) and a [solutions branch ↗](https://github.com/mainmatter/100-exercises-to-learn-rust/tree/solutions).
+[Mainmatter's course ↗](https://github.com/mainmatter/100-exercises-to-learn-rust) is a *book and a test suite in one repository*: a hundred exercises that accumulate into one real program, each with a chapter of prose and a failing test. There is a [PDF ↗](https://github.com/mainmatter/100-exercises-to-learn-rust) and a [solutions branch ↗](https://github.com/mainmatter/100-exercises-to-learn-rust/tree/solutions). The prose half is also readable online at [rust-exercises.com/100-exercises ↗](https://rust-exercises.com/100-exercises/) without cloning anything, which is the form to link when you want one chapter — [String slices ↗](https://rust-exercises.com/100-exercises/04_traits/06_str_slice) is the one this library sends people to most.
 
 This is the one to do properly if you are going to do one properly. It is test-driven throughout, which means it also teaches the habit this library's [strict lints](../../05_Tooling/strict_lints/README.md) page depends on — that `unwrap` in a test is fine and everywhere else is a decision.
 

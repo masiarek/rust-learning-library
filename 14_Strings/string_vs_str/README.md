@@ -231,5 +231,6 @@ rustc --edition 2024 14_Strings/string_vs_str/examples/string_vs_str.rs -o /tmp/
 - [The anatomy of a `String`](../anatomy_of_a_string/README.md) — what the three words on the stack actually are
 - [Ownership and moves](../../18_Ownership/ownership_and_moves/README.md) — `E0382` in full, with a value that announces its own death
 - [Borrowing](../../18_Ownership/borrowing/README.md) — the rules every `&str` lives under
+- [100 Exercises — String slices ↗](https://rust-exercises.com/100-exercises/04_traits/06_str_slice) — the same distinction drawn rather than described: three memory diagrams, `String` then `&String` then `&str`, with a test to make pass at the end
 - [The Rust Book, ch. 4.1 — The `String` Type ↗](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#the-string-type) · [ch. 8.2 — Storing UTF-8 Encoded Text ↗](https://doc.rust-lang.org/book/ch08-02-strings.html)
 - [Easy Rust, ch. 14 — Strings ↗](https://dhghomon.github.io/easy_rust/Chapter_14.html) — the gentlest second telling
