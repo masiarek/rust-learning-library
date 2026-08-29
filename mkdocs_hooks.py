@@ -291,6 +291,19 @@ NAV_ORDER: dict[str, list[str]] = {
         # Closes the arc: the other four string types, and the one
         # owned/borrowed pattern all six repeat.
         "six_kinds_of_string",
+        # The nine that are outlines so far — ordered as they would be read,
+        # not as they were written. Each is a real URL from the day it is a stub.
+        "parsing_a_string",
+        "searching_a_string",
+        "the_format_language",
+        "raw_strings_and_escapes",
+        "comparing_strings",
+        "str_is_unsized",
+        "boxed_str",
+        "string_api_design",
+        "when_string_is_too_slow",
+        # ...and the outside world: books, essays, the video, and the exercises.
+        "resources",
     ],
     # Reading order for the command-line-tool arc. These sections are stubs for
     # now — outlines with no examples behind them yet — so the order is the one a

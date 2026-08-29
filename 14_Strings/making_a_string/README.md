@@ -436,6 +436,7 @@ rustc --edition 2024 14_Strings/making_a_string/examples/making_a_string.rs -o /
 ## See also
 
 - [STRINGS.md](../../STRINGS.md) — the map: every string lesson, in reading order
+- [Strings: links, books and videos](../resources/README.md) — the reading list, including Easy Rust ch. 14, which covers exactly these five spellings
 - [`String` vs `&str`](../string_vs_str/README.md) — which of the two a signature should ask for
 - [`Debug` vs `Display`](../../15_First_Programs/debug_vs_display/README.md) — the trait you derive and the trait you write
 - [Six kinds of string](../six_kinds_of_string/README.md) — why half the conversions above return `Result`

@@ -4,6 +4,8 @@
 
 **One line:** The sources behind [this section](../README.md) — the normative ones first, then the essays worth the detour, then the videos.
 
+**The same page for strings is [Strings: links, books and videos](../../14_Strings/resources/README.md)** — the two sections lean on each other, and `ToOwned` and `Display` are why.
+
 ## Official
 
 - [The Reference — Items: traits ↗](https://doc.rust-lang.org/reference/items/traits.html) — the normative definition. Terse, and the only one of these that is *binding*: when two explanations disagree, this is the one that is right.

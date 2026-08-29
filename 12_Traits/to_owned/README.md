@@ -293,6 +293,7 @@ fn main() {
 - [Six kinds of string](../../14_Strings/six_kinds_of_string/README.md) — `OsString`/`Path`/`Cow` and the rest of the owned-borrowed pairs
 - [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) — the trait this one generalizes
 - [What a trait is](../what_a_trait_is/README.md) — associated types, which are what make `Owned` possible
+- [Strings: links, books and videos](../../14_Strings/resources/README.md) — where to read more, since `&str` is the case this trait exists for
 
 ## Sources
 

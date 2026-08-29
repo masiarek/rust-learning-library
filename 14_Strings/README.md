@@ -30,4 +30,6 @@ Strings are the worked example half the ownership pages already use, so the deep
 - [Meet the byte](../19_Numbers/meet_the_byte/README.md) — the unit `len` counts in
 - [`Path` and `PathBuf`](../04_Files/path_and_pathbuf/README.md) — the family's honorary pair, a **stub** for now
 
-[STRINGS.md](../STRINGS.md) is the full map: the same lessons with the question each one answers, plus the ten pages still missing.
+[STRINGS.md](../STRINGS.md) is the full map: the same lessons with the question each one answers, plus the nine topics that are still outlines rather than lessons.
+
+[Strings: links, books and videos](resources/README.md) is the reading list — the Book, *Programming Rust* ch. 17, Easy Rust, the essays, and the exercise sets outside this library that map onto these pages.

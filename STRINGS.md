@@ -78,21 +78,27 @@ Strings are the worked example half the library's ownership pages already use, s
 | [`Path` and `PathBuf`](04_Files/path_and_pathbuf/README.md) | 201 | The family's honorary pair, in full — a **stub** for now |
 | [`Cow`: borrow until somebody writes](18_Ownership/clone_on_write/README.md) | 201 | The maybe-owned string: borrow when the text needs no change, allocate only on the write |
 
-## Still missing
+## Still written as outlines
 
-Named honestly, because a map that only lists what exists is a map of the wrong territory. Each becomes a page once it has a runnable example worth reading — rough order, not a promise:
+Named honestly, because a map that only lists what exists is a map of the wrong territory. Each of these 9 is a **stub** — a real page at a real URL, carrying the questions the finished lesson has to answer and the links to its neighbours, but with no runnable example behind it yet. That is the boundary this library draws: a stub states what it does not know, and nothing on it has been through the check that backs every other claim here.
 
-- **Parsing out of a string** — `.parse()` beyond the one worked example, `FromStr` for your own type, and what to do with the `Result` that is not `.unwrap()`
-- **Searching without splitting** — `find` / `rfind` / `contains` / `starts_with`, and `Pattern` as the trait that unifies them with the split family
-- **`str` is unsized** — `?Sized`, why you only ever meet `str` behind a pointer, and what a fat pointer is
-- **The third owned form** — `Box<str>`, `Rc<str>`, `Arc<str>`: frozen text without the capacity word, and when the 8-byte saving matters
-- **Raw strings and escapes** — `r"…"`, `r#"…"#`, `\u{…}`, and byte strings `b"…"`
-- **The format mini-language** — `{:>8.3}`, `{:#x}`, `{val:^width$}`: fill, align, sign, width, precision, and the `$` that makes them dynamic
-- **Comparing and sorting** — `Ord` on strings is byte order, which is not human order; case folding vs `to_lowercase`
-- **String APIs worth copying** — `impl AsRef<str>`, `Into<String>`, and when a signature should take `impl Display`
-- **When `String` is too slow** — `with_capacity` in anger, `smallstr` / `smartstring`, and avoiding a `format!` that a literal would do
+| The page | Level | What it will answer |
+|---|---|---|
+| [Parsing out of a string](14_Strings/parsing_a_string/README.md) | 101 → 201 | `.parse()` beyond the one worked example, `FromStr` for your own type, and what to do with the `Result` that is not `.unwrap()` |
+| [Searching without splitting](14_Strings/searching_a_string/README.md) | 101 → 201 | `find` / `rfind` / `contains` / `starts_with`, and `Pattern` as the trait that unifies them with the split family |
+| [The format mini-language](14_Strings/the_format_language/README.md) | 201 | `{:>8.3}`, `{:#x}`, `{val:^width$}`: fill, align, sign, width, precision, and the `$` that makes them dynamic |
+| [Raw strings, escapes and byte strings](14_Strings/raw_strings_and_escapes/README.md) | 101 → 201 | `r"…"`, `r#"…"#`, `\u{…}`, and byte strings `b"…"` |
+| [Comparing and sorting text](14_Strings/comparing_strings/README.md) | 201 | `Ord` on strings is byte order, which is not human order; case folding vs `to_lowercase` |
+| [`str` is unsized](14_Strings/str_is_unsized/README.md) | 201 | `?Sized`, why you only ever meet `str` behind a pointer, and what a fat pointer is |
+| [The third owned form](14_Strings/boxed_str/README.md) | 201 → 301 | `Box<str>`, `Rc<str>`, `Arc<str>`: frozen text without the capacity word, and when the 8-byte saving matters |
+| [String parameters worth copying](14_Strings/string_api_design/README.md) | 201 → 301 | `impl AsRef<str>`, `Into<String>`, and when a signature should take `impl Display` |
+| [When `String` is too slow](14_Strings/when_string_is_too_slow/README.md) | 301 | `with_capacity` in anger, `smallstr` / `smartstring`, and avoiding a `format!` that a literal would do |
 
-If you want one of these next, that is the list to point at.
+A stub graduates by gaining an `examples/` program, losing its notice, and — if it earned one on the way — a row in [KATAS.md](KATAS.md). If you want one of these next, that is the table to point at.
+
+## Where else to learn this
+
+[Strings: links, books and videos](14_Strings/resources/README.md) collects the outside sources — the Book's ch. 8.2, *Programming Rust* ch. 17, Easy Rust ch. 14 and its video, the essays, and the external exercise sets (rustlings' `strings` and `conversions`) that map onto these lessons.
 
 ## Looking a term up
 
