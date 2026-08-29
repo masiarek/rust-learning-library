@@ -148,7 +148,7 @@ What changes: Python has no cost difference between naming a string and copying 
 | ABAP | | Rust |
 |---|---|---|
 | `lv_text = lv_number.` | implicit conversion | `n.to_string()` — always explicit |
-| `|{ lv_a }{ lv_b }|` | string template | `format!("{a}{b}")` |
+| `\|{ lv_a }{ lv_b }\|` | string template | `format!("{a}{b}")` |
 | `WRITE lv_date` | formatting from the runtime's rules | `impl Display` — rules you wrote |
 | a bad `MOVE` | dumps at runtime | `parse()` returns `Result` |
 

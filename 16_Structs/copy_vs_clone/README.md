@@ -58,8 +58,8 @@ One `u32`, still moves. You opt in, not the fields. `Copy` is a promise to calle
 
 **Python.** Every name binds a reference, so `b = a` never duplicates and this page's question does not arise.
 
-| Python | Rust |
-|---|---|
+| Python | | Rust |
+|---|---|---|
 | `b = a` | a reference; both usable | a **move**; `a` is dead |
 | `copy.copy` / `copy.deepcopy` | explicit | `.clone()` |
 | — | no equivalent | `Copy` |
@@ -68,13 +68,24 @@ The move is the new idea. `Clone` is `deepcopy` renamed, and `Copy` names the ty
 
 **ABAP.** Structure and internal-table assignment copies deeply, always — every ABAP type behaves like a Rust `Copy` type, so two-owners-of-one-allocation never happens.
 
-| ABAP | Rust |
-|---|---|
+| ABAP | | Rust |
+|---|---|---|
 | `ls_b = ls_a.` | copy | move, unless the type is `Copy` |
 | `REF TO` / `CREATE OBJECT` | the exception | the default for anything owning data |
 | pass a ref, agree not to touch the original | convention | enforced by the compiler |
 
 `Copy` is how you say "small enough that no agreement is needed".
+
+**C++.** The only one of the three whose default is the *opposite* of Rust's, which makes it the most useful and the most dangerous bridge.
+
+| C++ | | Rust |
+|---|---|---|
+| `auto b = a;` | the copy constructor runs, however expensive | a **move**, unless the type is `Copy` |
+| `std::move(a)` | opt *in* to moving | nothing to opt into — it is the default |
+| a moved-from object | valid but unspecified: still usable, still destroyed | gone; using it is `E0382` and no destructor runs |
+| `= delete` the copy constructor | how you forbid copying | simply do not implement `Clone` |
+
+Two traps for a C++ reader. `std::move` does not move anything — it is a cast, and if the type has no move constructor it silently selects the copy constructor instead, so the expensive thing you were avoiding happens anyway and nothing says so. And a moved-from C++ object is still *there*: reading it is legal and meaningless. Rust's moved-from binding is not in a bad state, it is not in any state — which is why Rust needs no "valid but unspecified" concept at all, and why the failure is a compile error rather than a convention you have to remember.
 
 ---
 

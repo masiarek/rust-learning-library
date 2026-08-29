@@ -114,7 +114,9 @@ That last one is the same manoeuvre as [`Option::take`](../../17_Option_and_Resu
 - **Python.** `b = a` gives you two names for one object, and CPython keeps a reference count so it knows when to free. Rust gives you **one name at a time** instead, and needs no count: the single owner is the answer to "when is this freed?". The everyday consequence is the surprise you no longer get — mutating through `b` cannot change what `a` sees, because after a move there is no `a`.
 - **ABAP.** `DATA(lt_copy) = lt_source` deep-copies the internal table: safe, and you pay for the copy every time. Rust's default is neither that deep copy nor a shared alias — it is a *transfer*, which costs nothing and leaves no second name. When you do want ABAP's behaviour you ask for it out loud, with `.clone()`, and the cost is visible at the call site rather than hidden in the assignment.
 
-Both bridges land on the same shift: the thing you used to reason about at runtime — refcounts, defensive copies — has become a fact the compiler checks before the program runs.
+- **C++.** The defaults are inverted. `auto b = a;` **copies** — the copy constructor runs, silently, however expensive it is — and you opt *out* with `std::move`. Rust moves by default and you opt *in* to the copy, out loud, with `.clone()`. The deeper difference is what is left behind: a C++ moved-from object still exists in a "valid but unspecified" state, still usable and still destroyed at the end of its scope, so reading it is legal and meaningless. Rust's moved-from binding is *gone* — touching it is `E0382` before the program runs, and no destructor fires for it. That is why Rust needs no "valid but unspecified" concept: there is nothing left to specify. (Watch for `std::move` on a type with no move constructor, too — it quietly falls back to the copy you were trying to avoid.)
+
+All three bridges land on the same shift: the thing you used to reason about at runtime — refcounts, defensive copies, valid-but-unspecified states — has become a fact the compiler checks before the program runs.
 
 ---
 
