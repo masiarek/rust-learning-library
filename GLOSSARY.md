@@ -270,6 +270,12 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **`f64::EPSILON`** — The gap between 1.0 and the next representable float (about 2.2e-16). Not a general-purpose comparison tolerance: it is far too small for large magnitudes and needlessly generous for tiny ones, so pick a tolerance from the problem instead. → [What a float actually stores](19_Numbers/what_a_float_stores/README.md)
 
+**Reassociation** — Regrouping a chain of `+` or `*` — `(a+b)+(c+d)` where you wrote `((a+b)+c)+d`. Valid on real numbers and not on floats, where each grouping rounds differently, so the compiler is forbidden from doing it to your arithmetic. It is also what unlocks vectorizing a sum, which is why there is an opt-in. → [Letting the compiler reorder a float sum](19_Numbers/letting_the_compiler_reorder/README.md)
+
+**Algebraic float methods** — `algebraic_add`, `_sub`, `_mul`, `_div`, `_rem` on `f32`/`f64`, stable since Rust 1.98: the same arithmetic, marked as safe to reassociate. Permission rather than instruction — an unoptimized build reorders nothing — and the return is always a real float, never undefined behavior. What you give up is knowing which of the legal answers you got. → [Letting the compiler reorder a float sum](19_Numbers/letting_the_compiler_reorder/README.md)
+
+**`-ffast-math`** — The C/C++ flag the algebraic methods are compared to, and the comparison is a contrast: it applies to a whole translation unit rather than one operation, and it bundles a *claim* that NaN and infinity never occur, so a program that meets one gets undefined behavior. Rust's version makes no claim about your data. → [Letting the compiler reorder a float sum](19_Numbers/letting_the_compiler_reorder/README.md)
+
 **Byte** — Eight bits, and the smallest thing in memory with an address of its own; `u8` in Rust, and the unit `size_of` reports in. Bytes of other widths existed historically and Rust cannot express them — there is no `CHAR_BIT`. → [Meet the byte](19_Numbers/meet_the_byte/README.md)
 
 **Byte literal** — `b'F'` is a `u8` (70) and `b"Sw"` is a `&[u8; 2]`, distinct from `'F'` (a `char`, four bytes) and `"Sw"` (a UTF-8 `&str`). The separate syntax exists because, unlike C, Rust's `char` is not the byte. → [Meet the byte](19_Numbers/meet_the_byte/README.md)

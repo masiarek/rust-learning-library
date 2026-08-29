@@ -239,8 +239,12 @@ NAV_ORDER: dict[str, list[str]] = {
         "why_hexadecimal",
         # ...and what people put in one, once they can write it down.
         "bit_flags",
-        # Closes the numbers arc, and hands off to the 09_Advanced exactness cluster.
+        # ...and the one type that cannot hold the value you typed.
         "what_a_float_stores",
+        # Closes the numbers arc on what follows from that: the order of a float
+        # sum is part of its answer, so the compiler may not choose it for you —
+        # unless you say so. Hands off to the 09_Advanced exactness cluster.
+        "letting_the_compiler_reorder",
     ],
     "14_Strings": [
         "README.md",

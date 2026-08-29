@@ -206,6 +206,8 @@ Two smaller instances of the same policy are worth knowing: rustc's `invalid_nan
 
 **Sorting and taking the top two** — `Ord` vs `PartialOrd` in full, `sort_by_key`, and what to do about a genuine tie — is step 5 of [the long way round](../../ROADMAP.md) and gets its own page. This page only explains *why* the trait is missing.
 
+**The order the additions happen in** is [its own page](../letting_the_compiler_reorder/README.md): because `0.1` is not 0.1, regrouping a sum changes the result, which is why `+` is pinned left-to-right and why Rust 1.98 added five methods that let you unpin it.
+
 **Making an inexact count exact** is the [Advanced exactness cluster](../../09_Advanced/README.md): [scaled integers](../../09_Advanced/scaled_integers/README.md), [what `i128` is exact about](../../09_Advanced/i128_exactness/README.md), and [when the denominators compound](../../09_Advanced/compounding_weights/README.md). Read this page first; those three assume it.
 
 ## Practice
