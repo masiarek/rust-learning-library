@@ -113,7 +113,14 @@ Then add a row to [KATAS.md](KATAS.md) at the point in the sequence where the ka
 
 ## Reading order in the sidebar
 
-Set it in `NAV_ORDER` in [`mkdocs_hooks.py` ↗](https://github.com/masiarek/rust-learning-library/blob/master/mkdocs_hooks.py) — **never by renaming files to `01_`, `02_`…** on a page. A filename is a permanent URL; inserting one lesson would otherwise move every page after it. Numeric prefixes on *section folders* are fine (the hook strips them from the label) because folders move rarely and deliberately.
+Set it in `NAV_ORDER` in [`mkdocs_hooks.py` ↗](https://github.com/masiarek/rust-learning-library/blob/master/mkdocs_hooks.py) — **never by renaming files to `01_`, `02_`…** on a page. A filename is a permanent URL; inserting one lesson would otherwise move every page after it. Numeric prefixes on *section folders* are fine, because folders move rarely and deliberately — and the hook strips them from the label, so a reader never sees them.
+
+Four things that follow from that, worth knowing before you add a page:
+
+- **A lesson missing from `NAV_ORDER` still ships** — it lands alphabetically at the bottom of its section. Nothing breaks, nothing warns, and that is exactly how four Compilers pages ended up sitting underneath the pages they come before. Add the row.
+- **The number a section shows is its reading position, not its folder prefix.** Sections listed before `SPINE_BREAK` are the course and are numbered `1.`, `2.`, `3.`… down that list; everything after it — the topic maps, the katas, the glossary — is reference, and reference is not a sequence. Move a section in the list and the numbers follow it.
+- **A label is built from the folder name, not from the page's `# H1`.** `clean()` strips the prefix, swaps underscores for spaces, and sentence-cases the rest; `FIXUPS` fixes acronyms and code words at any position; `LABELS` overrides the whole label, keyed by folder name. `LABELS` is where a page whose H1 carries a subtitle gets the short name the sidebar has room for.
+- **The footer's ← → arrows are re-threaded from the sorted tree**, so they always agree with the sidebar. MkDocs threads them *before* any hook can reorder anything, so without that step the homepage's "Next" was the glossary.
 
 ## Before you commit
 

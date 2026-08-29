@@ -87,6 +87,8 @@ Three pages, in this order, are enough to use `Option` for real:
 
 And the trap that follows the first of those: [`Some` is a constructor, not a flag](17_Option_and_Result/some_is_a_constructor/README.md) (101 → 201) — `Some(x)` is a function call whose argument is the payload, so `Some(None)` is a type error rather than *"present but empty"*.
 
+And, much later, the name for the shape all of this has: [What a monad is, and why Rust never says the word](17_Option_and_Result/what_a_monad_is/README.md) (301) — a wrapper plus a way to chain operations that return the same wrapper, which is what `Option`, `Result` and `Iterator` have in common.
+
 ## Getting the value out
 
 Eight ways, and the last two are decisions rather than accesses:
@@ -123,6 +125,7 @@ And one page about a claim you will read elsewhere: [Shadowing and `unwrap`](17_
 | [Returning `None` on error](17_Option_and_Result/none_on_error/README.md) | 201 | Why `input.parse().ok()` is usually a downgrade: four distinct causes arriving as one `None` |
 | [Zero wins is not zero games](17_Option_and_Result/wrong_guard/README.md) | 201 | Returning `Result` does not mean you guarded the input that actually has no answer |
 | [The `Result` you are reading is probably an alias](17_Option_and_Result/result_aliases/README.md) | 201 | `io::Result<T>` is `Result<T, io::Error>` — how to expand one and read what can fail |
+| [Six kinds of zero](17_Option_and_Result/six_kinds_of_zero/README.md) | 201 | Two variants are not enough either: when a value can be missing for six different reasons, the enum you write instead makes the compiler keep them apart |
 
 Past that point the topic is no longer `Option`: how a failure travels out of a program is [Errors](02_Errors/README.md), whose pages are stubs for now.
 

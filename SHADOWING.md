@@ -20,7 +20,7 @@ println!("{spaces}");  // 3
 
 That is legal, and the second line is **not** an assignment. `spaces` is not being changed from a string into a number — a number cannot be put in a string's storage. A *new variable* is declared, of a different type, and it takes over the name for the rest of the scope. The old one is untouched.
 
-Three consequences follow, and everything on the four pages below is one of them.
+Three consequences follow, and everything on the five pages below is one of them.
 
 **It can change the type, so a name can survive a conversion.** This is the whole point. `input` stays `input` through `&str` → trimmed `&str` → `u32`, instead of becoming `input_raw`, `input_trimmed`, `input_num` — names that re-encode in text what the compiler already knows.
 

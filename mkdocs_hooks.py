@@ -56,6 +56,7 @@ FIXUPS = {
     "json": "JSON",
     "llvm": "LLVM",
     "mcp": "MCP",
+    "rust": "Rust",
     "ui": "UI",
     "url": "URL",
     "arc": "`Arc`",
@@ -176,6 +177,12 @@ NAV_ORDER: dict[str, list[str]] = {
         "the_linker",
         # ...and the same permission aimed backwards.
         "control_flow_flattening",
+        # The four stubs, in the order the section README lists them — so the
+        # sidebar and that page cannot disagree about what comes next.
+        "targets_and_triples",
+        "compiled_or_interpreted",
+        "reading_a_compilation_failure",
+        "build_systems_are_not_compilers",
     ],
     "15_First_Programs": [
         "README.md",
@@ -283,6 +290,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # asked to mean. Last, because it measures the borrow region, the
         # drop order and the shadow — all three already met by here.
         "scope_is_about_names",
+        # Last, as the section README has it: the type that refuses to decide
+        # between owning and borrowing until the data makes it.
+        "clone_on_write",
     ],
     "19_Numbers": [
         "README.md",
@@ -412,6 +422,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "rustrover_setup",
         "rustrover_code_vision",
         "neovim_setup",
+        # ...and the protocol that wires an agent into the window just
+        # configured, which is also a small Rust program in its own right.
+        "what_mcp_is",
         # Then, having met all of the above: the script that writes them, and
         # the checks that keep the files agreeing with each other afterwards.
         "scaffolding",
@@ -477,101 +490,188 @@ NAV_ORDER: dict[str, list[str]] = {
     ],
 }
 
-# Folder names whose label the word-by-word caser cannot get right.
+# Labels the sentence-caser cannot reach on its own: proper names, code
+# identifiers, and the folders whose section README already gives them a shorter
+# name than their own H1. Keyed by ON-DISK FOLDER NAME — which only works
+# because `clean()` is handed that name rather than MkDocs's rendering of it.
 LABELS = {
-    # The compiler section: the title-caser would say "Llvm and Its Ir".
-    "llvm_and_its_ir": "LLVM and its IR",
-    "what_a_compiler_does": "What a compiler does",
-    "what_the_optimizer_does": "What the optimizer does",
-    "the_linker": "The linker",
-    "control_flow_flattening": "Control-flow flattening",
-    "targets_and_triples": "Targets and triples",
-    "compiled_or_interpreted": "Compiled or interpreted",
-    "reading_a_compilation_failure": "Reading a compilation failure",
-    "build_systems_are_not_compilers": "A build system is not a compiler",
-    # A product name that is lowercase on purpose; the title-caser would say "Devenv".
-    "devenv": "devenv",
-    "neovim_setup": "Neovim with LazyVim",
-    "practice_workspace": "A tree of practice projects",
-    "rustrover_setup": "RustRover setup",
-    "nextest": "cargo-nextest",
-    "bacon": "bacon",
-    # Likewise: the tool is spelled lowercase everywhere it appears.
-    "rustup": "rustup",
-    "if_let": "`if let`",
-    "while_let": "`while let`",
+    # The sections. Folder names are Title_Cased so a file listing reads well;
+    # the sidebar follows each section page's own `# H1` instead.
+    "00_Start_Here": "Start here",
+    "03_Command_Line": "Command line",
+    "15_First_Programs": "First programs",
+    "19_Numbers": "Numbers and bytes",
+    # 00_Start_Here — three product names, one of them lowercase on purpose.
+    "the_book": "The Book",
+    "rust_by_example": "Rust by Example",
+    "rustlings": "rustlings",
+    # 02_Errors
+    "unwrap_is_a_todo": "`unwrap` is a TODO",
+    "keep_going_or_stop": "Keep going, or stop",
     "main_returns_result": "`main` can return a `Result`",
     "stderr_and_exit_status": "Standard error, and exit status",
     "not_every_error_is_io_error": "Not every error is an `io::Error`",
     "anyhow_and_context": "`anyhow` and context",
     "thiserror_vs_anyhow": "`thiserror` vs `anyhow`",
-    "flags_by_hand": "Flags by hand",
+    # 03_Command_Line
+    "command_line_arguments": "Command-line arguments",
     "clap_derive": "Deriving a parser with `clap`",
     "the_default_trait": "The `Default` trait",
+    # 04_Files
     "path_and_pathbuf": "`Path` and `PathBuf`",
-    "string_vs_str": "`String` vs `&str`",
-    "anatomy_of_a_string": "The anatomy of a `String`",
-    "meet_the_char": "Meet the `char`",
-    "string_slices": "String slices",
-    "making_a_string": "Making a `String`",
-    "concatenating_strings": "Concatenating strings",
-    "building_a_string": "Building a `String`",
-    "walking_a_string": "Walking a `String`",
-    "static_str": "`&'static str`",
     "temp_dirs_in_tests": "Temporary directories in tests",
+    # 05_Tooling — three tools are spelled lowercase wherever they appear, and
+    # several pages have a long subtitled H1 the sidebar has no room for.
+    "bacon": "bacon",
+    "rustup": "rustup",
+    "devenv": "devenv",
+    "nextest": "cargo-nextest",
+    "editors": "Choosing an editor",
+    "nightly": "Nightly by default",
+    "scratch_with_a_crate": "A throwaway that needs a crate",
+    "cargo_dependencies": "Adding a dependency",
+    "practice_workspace": "A tree of practice projects",
+    "strict_lints": "Strict clippy lints",
+    "scaffolding": "Scaffolding a practice tree",
+    "rustrover_setup": "RustRover setup",
+    "rustrover_code_vision": "RustRover Code Vision",
+    "neovim_setup": "Neovim with LazyVim",
+    # 06_Data · 07_Clients
     "serde_derive": "Deriving `Serialize` and `Deserialize`",
     "json_round_trip": "The round trip",
-    "a_type_instead_of_a_vec": "A type instead of a `Vec`",
     "http_with_reqwest": "An HTTP request",
-    "injecting_the_base_url": "Injecting the base URL",
+    # 09_Advanced
+    "one_person_one_vote": "One person, one vote",
+    # 10_Resources — a topic page on the shelf, named for the shelf so it is not
+    # mistaken for the Structs section.
+    "structs": "Structs: the shelf",
+    # 12_Traits
+    "trait_in_scope": "A trait must be in scope",
+    "to_owned": "`ToOwned`",
+    # 14_Strings
+    "string_vs_str": "`String` vs `&str`",
+    "anatomy_of_a_string": "The anatomy of a `String`",
+    "making_a_string": "Making a `String`",
+    "building_a_string": "Building a `String`",
+    "walking_a_string": "Walking a `String`",
+    "meet_the_char": "Meet the `char`",
+    "static_str": "`&'static str`",
+    "parsing_a_string": "Parsing out of a string",
+    "the_format_language": "The format mini-language",
+    "when_string_is_too_slow": "When `String` is too slow",
+    # 15_First_Programs
+    "rustc_without_cargo": "Running a scratch program",
+    "what_an_annotation_does": "What a type annotation does",
+    "debug_vs_display": "`Debug` and `Display`",
+    "what_dbg_does": "What `dbg!` does",
+    # 16_Structs
+    "impl_blocks": "`impl` blocks",
+    "struct_update": "Struct update syntax",
+    "copy_vs_clone": "`Copy` vs `Clone`",
+    "newtype_score": "A score is not a number",
+    "representing_a_ballot": "What is a ballot, in memory?",
+    # 17_Option_and_Result — these are method names, so they are code.
+    "some_and_none": "`Some` and `None`",
+    "some_is_a_constructor": "`Some` is a constructor",
+    "if_let": "`if let`",
+    "while_let": "`while let`",
+    "unwrap_or": "`unwrap_or`",
+    "unwrap_or_else": "`unwrap_or_else`",
+    "unwrap_or_default": "`unwrap_or_default`",
+    "map_or": "`map_or`",
+    "expect": "`expect`",
+    "none_on_error": "Returning `None` on error",
+    "option_as_collection": "`Option` as a collection",
+    "shadowing_and_unwrap": "Shadowing and `unwrap`",
+    "wrong_guard": "Zero wins is not zero games",
+    # 18_Ownership
+    "shadowing_does_not_drop": "A shadow does not drop",
+    "clone_on_write": "`Cow`, clone on write",
+    # 20_Compilers
+    "llvm_and_its_ir": "LLVM and its IR",
+    "control_flow_flattening": "Control-flow flattening",
+    "build_systems_are_not_compilers": "A build system is not a compiler",
 }
 
-PREFIX = re.compile(r"^\d+[_\-]")
+PREFIX = re.compile(r"^\d+[_\- ]")
 
 
-def clean(label: str) -> str:
-    """`01_Foundations` -> `Foundations`; `option_vs_result` -> `Option vs Result`."""
-    if label in LABELS:
-        return LABELS[label]
-    label = PREFIX.sub("", label)
-    label = label.replace("_", " ").replace("-", " ")
-    words = [w for w in label.split() if w]
+def clean(name: str) -> str:
+    """`01_Foundations` -> "Foundations"; `option_vs_result` -> "`Option` vs `Result`".
+
+    Takes the **on-disk folder name**, not the title MkDocs derived from it. See
+    the module docstring: that distinction is the difference between this map
+    working and doing nothing at all.
+    """
+    if name in LABELS:
+        return LABELS[name]
+    words = PREFIX.sub("", name).replace("_", " ").replace("-", " ").split()
     out = []
-    for w in words:
-        titled = w[:1].upper() + w[1:]
-        # Keep an explicitly capitalised word (README, STAR) as the author wrote it.
-        out.append(FIXUPS.get(titled, w if w.isupper() else titled))
+    for i, word in enumerate(words):
+        fixed = FIXUPS.get(word.lower())
+        if fixed is not None:
+            out.append(fixed)
+        elif word.isupper():  # README, STAR — spelled that way on purpose
+            out.append(word)
+        elif i == 0:
+            out.append(word[:1].upper() + word[1:])
+        else:
+            # Sentence case, which is the house style of every page's own H1.
+            out.append(word)
     return " ".join(out)
+
+
+def _src(item) -> str | None:
+    """A nav item's source path, slash-separated."""
+    if item.is_page and item.file is not None:
+        return item.file.src_path.replace("\\", "/")
+    return None
+
+
+def _dirname(item) -> str | None:
+    """The on-disk folder a section is built from: `15_First_Programs`."""
+    if item.is_section and item.children:
+        src = _src(item.children[0])
+        if src and "/" in src:
+            return src.rsplit("/", 2)[-2]
+    return None
+
+
+def _name_of(item) -> str | None:
+    """An item's NAV_ORDER key: a file name, or a section's folder name."""
+    src = _src(item)
+    if src is not None:
+        return src.rsplit("/", 1)[-1]
+    return _dirname(item)
 
 
 def _folder_of(item) -> str:
     """Repo-relative folder path a nav item's children live in."""
-    src = None
-    if item.is_page:
-        src = item.file.src_path
-    elif item.is_section and item.children:
-        first = item.children[0]
-        if first.is_page:
-            src = first.file.src_path
-        elif first.is_section:
-            return ""
+    src = _src(item)
+    if src is None and item.is_section and item.children:
+        src = _src(item.children[0])
     if not src:
         return ""
     return src.rsplit("/", 1)[0] if "/" in src else ""
+
+
+def _label_sections(items) -> None:
+    """Retitle every section from its folder name, at any depth."""
+    for item in items:
+        if item.is_section:
+            name = _dirname(item)
+            if name:
+                item.title = clean(name)
+            _label_sections(item.children)
 
 
 def _order(items, folder: str) -> None:
     """Sort `items` in place to match NAV_ORDER[folder], then walk deeper."""
     order = NAV_ORDER.get(folder)
     if order:
+
         def key(item):
-            name = None
-            if item.is_page:
-                name = item.file.src_path.rsplit("/", 1)[-1]
-            elif item.is_section and item.children and item.children[0].is_page:
-                # A section is named by the folder its index page sits in.
-                parts = item.children[0].file.src_path.split("/")
-                name = parts[-2] if len(parts) > 1 else None
+            name = _name_of(item)
             if name in order:
                 return (0, order.index(name))
             return (1, item.title or "")
@@ -583,22 +683,57 @@ def _order(items, folder: str) -> None:
             _order(item.children, _folder_of(item))
 
 
+def _number_the_spine(items) -> None:
+    """Prefix `N. ` to each root section listed before SPINE_BREAK.
+
+    The digits on disk record the order the sections were *written*; these count
+    reading position, which is the only order a reader has any use for. Pages are
+    left alone — the reference shelf is a shelf, not a sequence.
+    """
+    order = NAV_ORDER[""]
+    spine = set(order[: order.index(SPINE_BREAK)]) if SPINE_BREAK in order else set()
+    n = 0
+    for item in items:
+        if item.is_section and _name_of(item) in spine:
+            n += 1
+            item.title = f"{n}. {item.title}"
+
+
+def _relink(nav) -> None:
+    """Rebuild nav.pages and the footer's ← → chain from the sorted tree.
+
+    MkDocs threads previous/next inside `get_navigation()`, which runs *before*
+    any `on_nav` hook, so reordering the tree here leaves every footer arrow
+    pointing along the old alphabetical order — the homepage's "Next" was the
+    Glossary, and Foundations' was Errors. Rebuilt from the tree the reader sees.
+    """
+    pages = []
+
+    def walk(items):
+        for item in items:
+            if item.is_page:
+                pages.append(item)
+            elif item.is_section:
+                walk(item.children)
+
+    walk(nav.items if hasattr(nav, "items") else nav)
+    for page in pages:
+        page.previous_page = None
+        page.next_page = None
+    for prev, nxt in zip(pages, pages[1:]):
+        prev.next_page = nxt
+        nxt.previous_page = prev
+    if hasattr(nav, "pages"):
+        nav.pages = pages
+
+
 def on_nav(nav, config, files):
-    for item in nav:
-        if item.is_section and item.title:
-            item.title = clean(item.title)
     # `nav.items` is the real list, so sort it in place. Wrapping it in
     # `list(...)` sorted a throwaway copy, which is why the root order
     # silently never applied while every nested folder's did.
-    _order(nav.items if hasattr(nav, "items") else nav, "")
-
-    # Clean nested section labels too.
-    def walk(items):
-        for it in items:
-            if it.is_section:
-                if it.title:
-                    it.title = clean(it.title)
-                walk(it.children)
-
-    walk(nav)
+    items = nav.items if hasattr(nav, "items") else nav
+    _label_sections(items)
+    _order(items, "")
+    _number_the_spine(items)
+    _relink(nav)
     return nav
