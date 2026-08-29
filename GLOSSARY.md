@@ -12,9 +12,17 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Associated function** — A function in an `impl` block that does *not* take `self`, called as `Type::name(..)`. `Ballot::new` is one; so is `String::from`. Rust has no constructor syntax, so `new` is only a convention. A method is the same thing with `self` as the first parameter. → [What a struct is](16_Structs/what_a_struct_is/README.md)
 
+**Basic block** — A straight-line run of instructions with one entry at the top and one exit at the bottom. The unit an optimizer, a disassembler and an obfuscator all work in: LLVM IR names them `bb1`, `bb2`, and a branch is the only way out of one. → [LLVM and its IR](20_Compilers/llvm_and_its_ir/README.md)
+
 **`Box<dyn Error>`** — A type-erased error: any error can convert into it, so unrelated failures can flow through one function. What applications reach for when nothing downstream will `match` on the cause. → [`Option` vs `Result`](17_Option_and_Result/option_vs_result/README.md)
 
 **`Clone`** — An explicit duplicate, via `.clone()`. May allocate and may run your own code, and is always visible in the source — which is the point, since an allocation you can see is one you can question. `#[derive(Clone)]` clones each field, and `Copy` requires it. → [`Copy` vs `Clone`](16_Structs/copy_vs_clone/README.md)
+
+**`const` evaluation** — Your code, executed by the compiler during the build rather than by your program at run time. A `const fn` used as an array length forces it; anything that would panic becomes a build error instead. → [What a compiler does before your program runs](20_Compilers/what_a_compiler_does/README.md)
+
+**Control-flow flattening** — An obfuscation pass that cuts every basic block loose, numbers it, and parks it under one dispatcher loop driven by a state variable. Behaviour is unchanged and the control-flow graph stops describing the program — which also defeats the decompiler that would have read it for you. → [Control-flow flattening](20_Compilers/control_flow_flattening/README.md)
+
+**Control-flow graph (CFG)** — Basic blocks as nodes, branches as edges. The picture every optimizer pass and every disassembler works from, and the thing an obfuscator exists to make meaningless. → [LLVM and its IR](20_Compilers/llvm_and_its_ir/README.md)
 
 **Discriminant** — The number identifying which variant an enum value currently is; `None` is 0 and `Some` is 1, by declaration order. Comparable via `std::mem::discriminant`, but not extractable — and often not even stored. → [`Option` is a one-item collection](17_Option_and_Result/option_as_collection/README.md)
 
@@ -40,9 +48,21 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Let chain** — Several `let` bindings and conditions joined with `&&` in one `if let` head, each binding visible to the next. Stable since Rust 1.88 and only in edition 2024. → [`if let`](17_Option_and_Result/if_let/README.md)
 
+**Linker** — The separate program that turns object files into one executable, matching each symbol a file *needs* against a definition somewhere else. Not part of rustc, which is why its errors have no error code, no span, and platform-specific wording. → [The linker](20_Compilers/the_linker/README.md)
+
+**LLVM** — Four things under one name: the umbrella project (Clang, LLD, LLDB), the library rustc links, the IR, and the optimizer-plus-generator pipeline. Rust's compiler is a front end on top of it; everything below the IR is shared with C++ and Swift. → [LLVM and its IR](20_Compilers/llvm_and_its_ir/README.md)
+
+**LLVM IR** — A typed, machine-independent assembly language: rustc's output and LLVM's input. The waist of the hourglass — one front end per language above it, one back end per chip below. → [LLVM and its IR](20_Compilers/llvm_and_its_ir/README.md)
+
 **Lock poisoning** — A `Mutex`/`RwLock` remembering that a thread panicked while holding its exclusive guard, so every later `lock()` returns `Err`. Not an error the lock hit: a warning that the invariant behind it may be half-restored. → [Lock poisoning](09_Advanced/mutex_poisoning/README.md)
 
 **Method** — An associated function whose first parameter is `self`, `&self` or `&mut self`, so it can be called with a dot. `b.total()` is sugar for `Ballot::total(&b)`. The receiver you choose decides what the caller keeps: `&self` and `&mut self` hand it back, `self` consumes it. → [`impl` blocks](16_Structs/impl_blocks/README.md)
+
+**Name mangling** — Encoding a function's module path and generic arguments into its symbol, so two functions named `new` produce different symbols. `_RNvCs...` is Rust's v0 scheme; `#[unsafe(no_mangle)]` opts out and is how a Rust function becomes callable from C. → [The linker](20_Compilers/the_linker/README.md)
+
+**Object file** — Machine code plus two lists: the symbols this file defines, and the ones it still needs. Not a program until a linker has filled in the second list. → [The linker](20_Compilers/the_linker/README.md)
+
+**Opaque predicate** — A condition that always takes the same branch for a reason no local analysis can see — `n * (n - 1) % 2 == 0` is always true because one of two consecutive integers is even. Obfuscation uses them to guard code that never runs but cannot be pruned. → [Control-flow flattening](20_Compilers/control_flow_flattening/README.md)
 
 **`PoisonError`** — What a poisoned `lock()` returns. It carries the guard, so nothing is lost — `into_inner()` hands you the data anyway, which makes `.unwrap()` a decision rather than the only option. → [Lock poisoning](09_Advanced/mutex_poisoning/README.md)
 
@@ -387,3 +407,4 @@ Short definitions. Every entry links to the page that explains it properly — a
 **`E0277`** — "the trait bound was not satisfied", and for structs it is four unrelated problems wearing one number: no `Display` for `{}`, no `Debug` for `{:?}`, a `str` field that has no *size*, and a derived `Eq` with no `PartialEq` under it. The code identifies the shape of the complaint, never the fix — the `note:` line does. → [When a struct refuses](16_Structs/when_a_struct_refuses/README.md)
 
 **Alternate flag** — What `{:#?}` sets and `{:?}` does not, readable inside an impl as `f.alternate()`. A derived `Debug` and anything built with `f.debug_struct()` honour it; a hand-written `write!` chain silently ignores it, so both forms print identically — and `dbg!`, which is hard-wired to `{:#?}`, quietly gets the flat one. → [What `dbg!` does](15_First_Programs/what_dbg_does/README.md)
+

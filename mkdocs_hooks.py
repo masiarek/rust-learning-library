@@ -84,6 +84,10 @@ NAV_ORDER: dict[str, list[str]] = {
         "07_Clients",
         "08_Interfaces",
         "09_Advanced",
+        # What is underneath all of it: rustc is one front end on a stack
+        # that is mostly not Rust, and three of its four stages are
+        # somebody else's program.
+        "20_Compilers",
         "10_Resources",
         # The shell the compiler is run from — not Rust, but two of its three
         # tools are written in it, which is the section's reason for existing.
@@ -123,6 +127,18 @@ NAV_ORDER: dict[str, list[str]] = {
     ],
     "01_Foundations": [
         "README.md",
+    ],
+    "20_Compilers": [
+        "README.md",
+        # The compile-time/run-time line first, since every later page
+        # assumes it; then the middle stage, then the machinery it runs
+        # on, then the stage that is nobody's compiler.
+        "what_a_compiler_does",
+        "what_the_optimizer_does",
+        "llvm_and_its_ir",
+        "the_linker",
+        # ...and the same permission aimed backwards.
+        "control_flow_flattening",
     ],
     "15_First_Programs": [
         "README.md",
@@ -411,6 +427,16 @@ NAV_ORDER: dict[str, list[str]] = {
 
 # Folder names whose label the word-by-word caser cannot get right.
 LABELS = {
+    # The compiler section: the title-caser would say "Llvm and Its Ir".
+    "llvm_and_its_ir": "LLVM and its IR",
+    "what_a_compiler_does": "What a compiler does",
+    "what_the_optimizer_does": "What the optimizer does",
+    "the_linker": "The linker",
+    "control_flow_flattening": "Control-flow flattening",
+    "targets_and_triples": "Targets and triples",
+    "compiled_or_interpreted": "Compiled or interpreted",
+    "reading_a_compilation_failure": "Reading a compilation failure",
+    "build_systems_are_not_compilers": "A build system is not a compiler",
     # A product name that is lowercase on purpose; the title-caser would say "Devenv".
     "devenv": "devenv",
     "neovim_setup": "Neovim with LazyVim",
