@@ -39,6 +39,36 @@ Every lesson explains; some of them also ask you to type. Those exercises are co
 
 There is also a slow, optional thread running through them: [**the long way round to a STAR count**](ROADMAP.md), which sequences a handful of lessons so that each one is the next thing Rust wants to teach, and the running example happens to be a voting method. Every rung stands alone; the election is the excuse.
 
+## The course, in order
+
+The sidebar is sorted **alphabetically**, because that is how you find a section you can already name. This is the other question — *what should I read next?* — and it is the order these were written to be read in:
+
+| # | section | what it is for |
+|---|---|---|
+| 1 | [Start here](00_Start_Here/README.md) | The three outside courses this library is a companion to |
+| 2 | [Foundations](01_Foundations/README.md) | The map of a first week, pointing into the six sections below |
+| 3 | [First programs](15_First_Programs/README.md) | Running a `.rs` file at all, and what the punctuation in it means |
+| 4 | [Structs](16_Structs/README.md) | A compound type of your own, before the two the library leans on |
+| 5 | [`Option` and `Result`](17_Option_and_Result/README.md) | The two enums everything returns, and the dozen ways to open them |
+| 6 | [Ownership](18_Ownership/README.md) | Who owns the value — moves, borrows, and what a shadow does |
+| 7 | [Strings](14_Strings/README.md) | Text: the owner and the view, and the bytes underneath |
+| 8 | [Numbers and bytes](19_Numbers/README.md) | The unit all of that is counted in, down to the float that cannot hold your value |
+| 9 | [Enums](13_Enums/README.md) | The feature `Option` and `Result` were made of all along |
+| 10 | [Traits](12_Traits/README.md) | The other half the language is built from — and how a call reaches one |
+| 11 | [Errors](02_Errors/README.md) | What a failure does on its way out of a program |
+| 12 | [Command line](03_Command_Line/README.md) | What the program was handed on the way in |
+| 13 | [Files](04_Files/README.md) | The filesystem — the first thing outside the program that can say no |
+| 14 | [Tooling](05_Tooling/README.md) | `cargo` and the rest of the toolchain, rather than the language |
+| 15 | [Data](06_Data/README.md) | Serialization, and the round trip through JSON |
+| 16 | [Clients](07_Clients/README.md) | The network — the last thing outside the program that can say no |
+| 17 | [Interfaces](08_Interfaces/README.md) | Putting a face on it |
+| 18 | [Advanced](09_Advanced/README.md) | What needs the foundations: threads, `unsafe`, FFI |
+| 19 | [Compilers](20_Compilers/README.md) | The layer under all of it, three quarters of which is not Rust |
+| 20 | [Resources](10_Resources/README.md) | Books, essays and exercises outside this library |
+| 21 | [Unix](11_Unix/README.md) | The shell you run the compiler from — two of its three tools are Rust |
+
+Nothing enforces this order and no page depends on it; skipping around is fine. It is here because a sidebar can be sorted one way only, and A–Z answers the more common question.
+
 ## How the library works
 
 ```

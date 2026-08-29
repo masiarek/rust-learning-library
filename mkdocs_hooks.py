@@ -15,11 +15,13 @@ Three jobs:
    the names a caser cannot get right (`llvm_and_its_ir` → "LLVM and its IR",
    `if_let` → "`if let`").
 2. **Order the sections** — `NAV_ORDER` states the intended reading order per
-   folder, keyed by folder path, listing children by their on-disk name. At the
-   root, everything before `SPINE_BREAK` is the course, and each of its sections
-   gets a visible `N.` so the sidebar reads as the sequence it is; after the
-   break is the reference shelf — the topic maps, the katas, the glossary — which
-   is not a sequence and is not numbered.
+   folder, keyed by folder path, listing children by their on-disk name. The
+   **root is the exception**: it sorts alphabetically, because the question a
+   reader asks of a top-level list is "where is the section I can already name",
+   and A–Z answers it. Only Home and Start here are pinned. The reading order
+   that used to live here, as a numbered `1.`–`21.`, is now a table on the
+   homepage under "The course, in order" — a sidebar can be sorted one way, and
+   this was the less common question.
 3. **Re-thread previous/next** — MkDocs computes the footer's ← → chain *before*
    a hook can reorder anything, so without this the sidebar and the footer
    disagreed on every page: the homepage's "Next" was the Glossary (alphabetically
@@ -43,6 +45,7 @@ handed `01 `.
 
 from __future__ import annotations
 
+import pathlib
 import re
 
 # Words a sentence-caser gets wrong: acronyms, and the identifiers that read
@@ -69,68 +72,26 @@ FIXUPS = {
     "vec": "`Vec`",
 }
 
-# Sentinel in NAV_ORDER[""]: sections listed before it are the numbered course,
-# sections after it are the reference shelf. It is not a file and never renders.
-SPINE_BREAK = "--- reference ---"
-
 # Reading order per folder path. Children named by on-disk name; anything not
 # listed sorts alphabetically after the listed ones.
 NAV_ORDER: dict[str, list[str]] = {
-    # The root. The course first, in the order it is meant to be read; the
-    # numbers the sidebar shows count position in THIS list, not the digits on
-    # the folders, which record only the order the sections happened to be
-    # written. Reference pages — the maps, the katas, the glossary — come after
-    # SPINE_BREAK and are not numbered, because they are not a sequence.
+    # The root is sorted ALPHABETICALLY, not in reading order (changed
+    # 2026-08-29 at Adam's request: "it is easier to find using alphabet
+    # sorting"). Only the two doors are pinned -- Home, then Start here, which
+    # would otherwise land under S in the middle of the list.
+    #
+    # Everything else is sorted by `_root_key` below: sections first, then the
+    # loose reference pages, each run A-Z. Nothing else belongs in this list;
+    # adding a section needs no edit here at all, which is the other reason for
+    # the change -- the hand-kept order was a file every new section had to
+    # touch.
+    #
+    # The reading order it replaced is NOT lost: it is a numbered table on the
+    # homepage, under "The course, in order". If you reorder the course, that
+    # table is the place to do it.
     "": [
         "index.md",
         "00_Start_Here",
-        "01_Foundations",
-        # The foundations, split into the arcs its NAV_ORDER comments
-        # already described: run it, then your own types, then the two
-        # enums everything returns, then who owns the value, then text,
-        # then the bytes under all of it.
-        "15_First_Programs",
-        "16_Structs",
-        "17_Option_and_Result",
-        "18_Ownership",
-        "14_Strings",
-        "19_Numbers",
-        # The two features the rest of the language is built out of, which is
-        # why they come straight after the foundations rather than at the end.
-        # Enums first: a reader leaving the foundations has already used four.
-        "13_Enums",
-        "12_Traits",
-        # The command-line-tool arc: what a program does about failure, what it
-        # is handed on the way in, and the three things outside it that can say
-        # no — the filesystem, a saved file, a server.
-        "02_Errors",
-        "03_Command_Line",
-        "04_Files",
-        "05_Tooling",
-        "06_Data",
-        "07_Clients",
-        "08_Interfaces",
-        "09_Advanced",
-        # What is underneath all of it: rustc is one front end on a stack
-        # that is mostly not Rust, and three of its four stages are
-        # somebody else's program.
-        "20_Compilers",
-        "10_Resources",
-        # The shell the compiler is run from — not Rust, but two of its three
-        # tools are written in it, which is the section's reason for existing.
-        "11_Unix",
-        # Below: pages that sequence lessons living somewhere else and own
-        # nothing themselves. They are last because the course above is what to
-        # read first, and the front page links every one of them in context.
-        SPINE_BREAK,
-        "OPTION.md",
-        "STRUCTS.md",
-        "STRINGS.md",
-        "SHADOWING.md",
-        "TOOLCHAIN.md",
-        "KATAS.md",
-        "ROADMAP.md",
-        "GLOSSARY.md",
     ],
     "00_Start_Here": [
         "README.md",
@@ -746,20 +707,63 @@ def _order(items, folder: str) -> None:
             _order(item.children, _folder_of(item))
 
 
-def _number_the_spine(items) -> None:
-    """Prefix `N. ` to each root section listed before SPINE_BREAK.
+ARTICLE = re.compile(r"^(?:the|a|an)\s+")
+H1 = re.compile(r"^#\s+(.+?)\s*$", re.MULTILINE)
 
-    The digits on disk record the order the sections were *written*; these count
-    reading position, which is the only order a reader has any use for. Pages are
-    left alone — the reference shelf is a shelf, not a sequence.
+
+def _sort_text(title: str) -> str:
+    """Sort key for a sidebar label, as a reader would alphabetise it.
+
+    Three normalisations, each earning its place:
+
+    * **Strip Markdown.** Labels carry code spans, and a raw sort puts
+      "`Option` and `Result`" first because a backtick sorts before every
+      letter.
+    * **Strip the ordering prefix**, so `01_Foundations` files under F.
+    * **Strip a leading article**, the way a library catalogue does. Six of the
+      eight reference pages are named "The ... map", so sorting on the literal
+      string files six of them under T and hides the one word that tells them
+      apart.
     """
-    order = NAV_ORDER[""]
-    spine = set(order[: order.index(SPINE_BREAK)]) if SPINE_BREAK in order else set()
-    n = 0
-    for item in items:
-        if item.is_section and _name_of(item) in spine:
-            n += 1
-            item.title = f"{n}. {item.title}"
+    t = PREFIX.sub("", title.replace("`", "").replace("&", "")).strip().lower()
+    return ARTICLE.sub("", t)
+
+
+def _page_title(item) -> str:
+    """A nav page's visible label, which MkDocs has not computed yet.
+
+    `page.title` is filled in when the page is *rendered*, which happens long
+    after `on_nav`, so at sort time it is None for every page whose title comes
+    from its own `# H1`. Sorting on that put "The Option map" above "The long
+    way round…" and looked correct only because the filenames beneath them
+    happened to be alphabetical. Read the H1 instead.
+    """
+    if item.title:
+        return item.title
+    src = getattr(item.file, "abs_src_path", None) if item.file else None
+    if src:
+        try:
+            m = H1.search(pathlib.Path(src).read_text(encoding="utf-8"))
+        except OSError:
+            return ""
+        if m:
+            return m.group(1)
+    return ""
+
+
+def _root_key(item):
+    """Alphabetical, with the two doors pinned and sections above loose pages.
+
+    Keeping sections ahead of the topic maps preserves the sidebar's shape --
+    folders, then the .md pages that only sequence other folders -- so A-Z
+    changes where things are without changing what kind of thing they are.
+    """
+    name = _name_of(item)
+    pinned = NAV_ORDER[""]
+    if name in pinned:
+        return (0, pinned.index(name), "")
+    text = item.title if item.is_section else _page_title(item)
+    return (1 if item.is_section else 2, 0, _sort_text(text or ""))
 
 
 def _relink(nav) -> None:
@@ -796,7 +800,11 @@ def on_nav(nav, config, files):
     # silently never applied while every nested folder's did.
     items = nav.items if hasattr(nav, "items") else nav
     _label_sections(items)
-    _order(items, "")
-    _number_the_spine(items)
+    # The root sorts alphabetically; every folder below it keeps the reading
+    # order NAV_ORDER states, because a lesson sequence IS a sequence.
+    items.sort(key=_root_key)
+    for item in items:
+        if item.is_section:
+            _order(item.children, _folder_of(item))
     _relink(nav)
     return nav
