@@ -9,6 +9,7 @@ The back half is names rather than values. Shadowing, scope, and lifetimes are t
 | Lesson | Level | What it teaches |
 |---|---|---|
 | [Ownership and moves](ownership_and_moves/README.md) | 101 | A move transfers *responsibility*, not bytes — the three rules, made visible by a value that announces its own death |
+| [There is no `Move` trait](no_move_trait/README.md) | 201 | Moving is the default, so there is no trait to implement — `Copy` is the opt-out that stops it, and the compiler says so as an absence: *"does not implement the `Copy` trait"* |
 | [What an address shows](what_an_address_shows/README.md) | 201 | `&x` addresses the three-word header, not the text — so a move changes the number without relocating a byte, and a `Copy` does the same thing while nothing moves at all |
 | [Borrowing](borrowing/README.md) | 101 → 201 | `&T` and `&mut T`, the many-readers-or-one-writer rule, and the last-use rule that decides which order compiles |
 | [How to learn lifetimes](how_to_learn_lifetimes/README.md) | 201 | Is *"clone everything"* good advice? Mostly yes — with three amendments, the sharpest being that cloning to dodge a *mutation* error compiles and silently does nothing |

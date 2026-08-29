@@ -1,0 +1,25 @@
+
+──── A plain type moves, and no trait was consulted
+  b = Moves(5), and b.0 = 5
+  `Moves` implements Debug and nothing else — and it still moved.
+  Reading `a` now is error[E0382]: borrow of moved value.
+
+──── `Copy` is the opt-out, and it changes what `=` means
+  c = Copies(5), d = Copies(5)   both still usable (c.0 = 5)
+  The only difference between the two types is the derive.
+
+──── The opt-out added nothing to the value
+  size_of::<Moves>()  = 1
+  size_of::<Copies>() = 1
+  Same bytes, same layout. `Copy` is a marker: it carries no data
+  and no code, it only tells the compiler what `let d = c;` does.
+
+──── `move` the KEYWORD is a capture mode, not a trait either
+  closure says: captured by value
+  `move` here answers 'borrow or take?' for the closure's captures.
+  It is not a bound, cannot appear after a `:`, and implements nothing.
+
+──── So the question 'is this type movable?' has no answer
+  Every type is. The real question is whether it is `Copy`,
+  and the compiler answers that one in the negative:
+  "... which does not implement the `Copy` trait".
