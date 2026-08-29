@@ -267,6 +267,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "README.md",
         # Opens the ownership arc — the next thread after the Option run.
         "ownership_and_moves",
+        # ...and the trait that is not there, which is why the default needed
+        # naming in the first place.
+        "no_move_trait",
         # ...and the thing everyone tries first to SEE a move happen, which
         # shows the header moving and the bytes staying put.
         "what_an_address_shows",
@@ -585,6 +588,7 @@ LABELS = {
     "shadowing_and_unwrap": "Shadowing and `unwrap`",
     "wrong_guard": "Zero wins is not zero games",
     # 18_Ownership
+    "no_move_trait": "There is no `Move` trait",
     "shadowing_does_not_drop": "A shadow does not drop",
     "clone_on_write": "`Cow`, clone on write",
     # 20_Compilers
