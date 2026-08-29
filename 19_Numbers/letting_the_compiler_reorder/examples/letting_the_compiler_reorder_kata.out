@@ -1,0 +1,19 @@
+PART 1 — two groupings, one target
+  0.8 as written    = 0.80000000000000004441
+  left to right     = 0.79999999999999993339   == 0.8 ? false
+  pairwise          = 0.80000000000000004441   == 0.8 ? true
+  the pairwise grouping is the one the optimizer would reach for,
+  and on this input it happens to land on the literal exactly.
+
+PART 2 — does asking for it get it?
+  algebraic_add     = 0.79999999999999993339   == 0.8 ? false
+  no. `algebraic_add` permits the regrouping, it does not perform it,
+  and an unoptimized build has no reason to bother. If you need a
+  particular grouping, write the grouping — that is what PART 1 did.
+
+PART 3 — what you may rely on
+  every legal answer sits in [0.79999999999999993339, 0.80000000000000004441]
+  width of that window = 1.1102230246251565e-16
+  so an assertion on the WINDOW holds under any regrouping:
+    (algebraic - 0.8).abs() < 1e-12  ->  true
+    algebraic == 0.8                 ->  false   (a bet on the optimizer)

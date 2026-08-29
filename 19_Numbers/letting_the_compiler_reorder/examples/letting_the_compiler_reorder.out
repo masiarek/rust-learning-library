@@ -1,0 +1,31 @@
+1. THE SAME TEN NUMBERS, TWO GROUPINGS
+   left to right = 0.99999999999999988898   == 1.0 ? false
+   in pairs      = 1.00000000000000000000   == 1.0 ? true
+   nothing was rounded twice and nothing is a bug: 0.1 is not 0.1,
+   so where you put the parentheses decides which errors cancel.
+
+2. WHY THE COMPILER IS NOT ALLOWED TO CHOOSE FOR YOU
+   (1e16 + -1e16) + 1 = 1
+   1e16 + (-1e16 + 1) = 0
+   three values, one operator, two answers — one of which lost the 1.
+   the same holds for multiplication, where the gap is a range limit:
+   (1e300 * 1e300) * 1e-300 = inf
+   1e300 * (1e300 * 1e-300) = 1e300
+   so `+` and `*` are evaluated left-associatively, always, and an
+   optimizer that regrouped a loop for speed would be changing results.
+
+3. THE 1.98 METHODS SAY 'GO AHEAD'
+   fold with `+`             = 0.99999999999999988898
+   fold with `algebraic_add` = 0.99999999999999988898
+   identical here — and that is the lesson, not a failure.
+   this program is built without -O, so nothing reordered anything.
+   the methods grant permission; the optimizer is what spends it.
+
+4. THE FIVE OF THEM
+   algebraic_add  algebraic_sub  algebraic_mul  algebraic_div  algebraic_rem
+   on f32 and f64 alike:
+     2.5_f32.algebraic_mul(4.0) = 10
+     7.0_f64.algebraic_div(2.0) = 3.5
+     7.0_f64.algebraic_rem(2.0) = 1
+   each returns a real f32/f64, never a poison value and never UB.
+   what it does not return is a promise about WHICH valid answer.
