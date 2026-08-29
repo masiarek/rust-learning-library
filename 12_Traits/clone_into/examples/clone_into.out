@@ -33,3 +33,14 @@
 7. The two spellings point opposite ways
    "source".clone_into(&mut dst) -> dst = "source"
    dst.clone_from(&other)        -> dst = "other"
+
+8. The shape clippy actually flags — and whether it pays
+   fixture default "default_value" is 13 bytes
+   override        "override_value" is 14 bytes
+   capacity the fixture handed over: 13
+   assignment  (one byte short)               alloc 1   realloc 0
+   clone_into  (one byte short)               alloc 0   realloc 1
+   assignment  (default already fits)         alloc 1   realloc 0
+   clone_into  (default already fits)         alloc 0   realloc 0
+   one byte short, the rewrite trades an alloc for a realloc.
+   give the default room and the same rewrite is free.

@@ -153,4 +153,45 @@ fn main() {
     println!("   \"source\".clone_into(&mut dst) -> dst = {dst:?}");
     dst.clone_from(&String::from("other")); //  receiver is the DESTINATION
     println!("   dst.clone_from(&other)        -> dst = {dst:?}");
+
+    println!();
+    println!("8. The shape clippy actually flags — and whether it pays");
+    // A test fixture overriding one field: the canonical `assigning_clones`
+    // site. Whether the rewrite buys anything is decided by two byte counts
+    // nobody looks at, so measure both before believing the suggestion.
+    println!("   fixture default {:?} is {} bytes", DEFAULT_FIELD, DEFAULT_FIELD.len());
+    println!("   override        {:?} is {} bytes", OVERRIDE, OVERRIDE.len());
+
+    let mut short = fixture(DEFAULT_FIELD);
+    println!("   capacity the fixture handed over: {}", short.field.capacity());
+    measure("assignment  (one byte short)", || {
+        short.field = OVERRIDE.to_owned()
+    });
+    let mut short2 = fixture(DEFAULT_FIELD);
+    measure("clone_into  (one byte short)", || {
+        OVERRIDE.clone_into(&mut short2.field)
+    });
+
+    let mut roomy = fixture(DEFAULT_FIELD_FITS);
+    measure("assignment  (default already fits)", || {
+        roomy.field = OVERRIDE.to_owned()
+    });
+    let mut roomy2 = fixture(DEFAULT_FIELD_FITS);
+    measure("clone_into  (default already fits)", || {
+        OVERRIDE.clone_into(&mut roomy2.field)
+    });
+    println!("   one byte short, the rewrite trades an alloc for a realloc.");
+    println!("   give the default room and the same rewrite is free.");
+}
+
+const DEFAULT_FIELD: &str = "default_value"; //      13 bytes
+const DEFAULT_FIELD_FITS: &str = "default_value!"; // 14, the width of the override
+const OVERRIDE: &str = "override_value"; //          14 bytes
+
+struct Fixture {
+    field: String,
+}
+
+fn fixture(default: &str) -> Fixture {
+    Fixture { field: default.to_owned() }
 }

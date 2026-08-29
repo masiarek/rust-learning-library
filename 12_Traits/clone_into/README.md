@@ -121,6 +121,33 @@ error[E0502]: cannot borrow `name` as mutable because it is also borrowed as imm
 
 That was filed as [clippy#12444 ↗](https://github.com/rust-lang/rust-clippy/issues/12444) in March 2024, labelled `I-suggestion-causes-error`, and fixed by teaching the lint to bail out when the source borrows from the target. Verified on the pinned toolchain: clippy no longer suggests the rewrite for the snippet above. Two notes for reading the lint in the wild — it is **pedantic**, not warn-by-default, so it fires only if you asked for it; and when it does fire, it says *"may be inefficient"*, which is the honest word given the three ways above that it does not pay.
 
+### Where you will actually meet the lint
+
+A test fixture overriding one field is the canonical `assigning_clones` site:
+
+```rust
+#[derive(Default)]
+struct Data {
+    field: String,
+}
+
+fn test_data() -> Data {
+    Data { field: "default_value".to_string() }
+}
+
+#[test]
+fn test() {
+    let mut data = test_data();
+    data.field = "override_value".to_owned();   // the flagged shape
+}
+```
+
+**The lint stays silent here.** Clippy skips `assigning_clones` inside a `#[test]` function; the identical statement in an ordinary module one scope over is reported. It is test-ness that decides it, not module-ness — so a codebase can hold hundreds of these and see nothing, which is fine, since test setup is where the saving matters least.
+
+**Applying the suggestion would buy nothing.** `"default_value"` is 13 bytes and `"override_value"` is 14, so the fixture hands over a buffer one byte too small, and the rewrite trades one allocation for one reallocation. Widen the default to 14 and the same rewrite is free. Section 8 of the run below measures both. Nothing about the source says which case you are in — two string literals decide it — which is what *"may be inefficient"* in the lint's own wording is being careful about.
+
+**The `#[derive(Default)]` is unused, and it is hiding a louder lint.** `test_data()` builds every field by hand, so nothing calls it. Write `Data::default()` there instead and clippy reports [`field_reassign_with_default` ↗](https://rust-lang.github.io/rust-clippy/master/index.html#field_reassign_with_default) — *"field assignment outside of initializer for an instance created with `Default::default()`"* — which is **warn-by-default**, unlike the pedantic one above. A fixture function suppresses it by putting a function call between the default and the override.
+
 ## If you are coming from another language
 
 - **Python.** `lst[:] = other` against `lst = list(other)` is the same distinction, and Python makes it visible the same way: `id(lst)` survives the first and changes under the second. Everything that holds a reference to that list sees the update in the first case and keeps the stale object in the second — so in Python the choice is usually about aliasing and only incidentally about allocation. Rust inverts the emphasis. The aliasing question is settled by the borrow checker before you get here, so `clone_into` is left arguing purely about cost, which is why it is a `perf` idea rather than a correctness one. There is no counterpart for text at all: `str` is immutable, so a Python string buffer cannot be refilled, and the pattern to reach for is `io.StringIO` or a `bytearray`. And note what Python does not have — a `list.clear(); list.extend(other)` reuses the list object but the *elements* are references, so nothing corresponds to `[T]`'s reuse of the contained values' own buffers.
@@ -170,6 +197,17 @@ That was filed as [clippy#12444 ↗](https://github.com/rust-lang/rust-clippy/is
 7. The two spellings point opposite ways
    "source".clone_into(&mut dst) -> dst = "source"
    dst.clone_from(&other)        -> dst = "other"
+
+8. The shape clippy actually flags — and whether it pays
+   fixture default "default_value" is 13 bytes
+   override        "override_value" is 14 bytes
+   capacity the fixture handed over: 13
+   assignment  (one byte short)               alloc 1   realloc 0
+   clone_into  (one byte short)               alloc 0   realloc 1
+   assignment  (default already fits)         alloc 1   realloc 0
+   clone_into  (default already fits)         alloc 0   realloc 0
+   one byte short, the rewrite trades an alloc for a realloc.
+   give the default room and the same rewrite is free.
 ```
 <!-- /output -->
 
