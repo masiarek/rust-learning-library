@@ -1,0 +1,24 @@
+1. Four loops. Two of them reuse the buffer, two only look like it.
+   buf = row.to_owned()                   alloc 5   realloc 0
+   row.clone_into(&mut buf)               alloc 0   realloc 0
+   buf.clear(); buf.push_str(row)         alloc 0   realloc 0
+   buf = String::from(row)                alloc 5   realloc 0
+   Assignment REPLACES the String — the old buffer is freed and a new
+   one bought. Only 2 and 3 write into the buffer that is already there,
+   and 3 is literally what str's clone_into impl does:
+       fn clone_into(&self, target: &mut String) {
+           target.clear();
+           target.push_str(self);
+       }
+
+2. `mut` on the binding is not reuse of the buffer
+   loop 1 and loop 4 both wrote through `let mut`, and both paid.
+   the buffer is reused by the METHOD you call, not by the binding.
+
+3. The trap: a derived Clone gives you none of this
+   derived:      dst.clone_from(&src)     alloc 1   realloc 0
+   hand-written: dst.clone_from(&src)     alloc 0   realloc 0
+   both landed the same text: "a name long enough to live on the heap"
+   #[derive(Clone)] emits `clone` and nothing else, so `clone_from`
+   falls back to the default `*self = source.clone()` and allocates.
+   The 64 bytes sitting in dst were never touched.

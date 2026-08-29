@@ -1,0 +1,35 @@
+1. Same result, different cost
+   s.to_owned()                               alloc 1   realloc 0
+   s.clone_into(&mut buf)  (buf has room)     alloc 0   realloc 0
+   both produced "Ada Lovelace" — one of them bought a new buffer to do it
+
+2. Where it pays: a loop with a reusable buffer
+   4 rows, a fresh String each time           alloc 4   realloc 0
+   4 rows, one buffer refilled                alloc 0   realloc 0
+   the second loop allocates once — before the loop, not in it
+
+3. It is not magic: the buffer has to be big enough
+   clone_into an empty String                 alloc 1   realloc 0
+   clone_into a 4-byte String                 alloc 0   realloc 1
+   an empty target allocates; a too-small one grows. Neither is free.
+
+4. The saving exists only where the impl overrides the default
+   #[derive(Clone)] struct: clone_from        alloc 1   realloc 0
+   hand-written clone_from: clone_from        alloc 0   realloc 0
+   the derive was asked to do this in 2022 and libs-api said no —
+   write clone_from by hand if you want it (rust#98374, wontfix)
+
+5. On a slice of Strings, the INNER buffers are reused too
+   Vec<String> to_owned                       alloc 5   realloc 0
+   Vec<String> clone_into (roomy slots)       alloc 0   realloc 0
+   to_owned bought 5 buffers: the Vec, then one String each.
+   clone_into bought none — [T]'s impl clones into the slots in place.
+
+6. What you trade for it: the buffer keeps its high-water mark
+   after a 300-byte row: capacity 300
+   after a 4-byte row:   capacity 300 , len 4
+   a long-lived buffer holds the largest row it ever saw.
+
+7. The two spellings point opposite ways
+   "source".clone_into(&mut dst) -> dst = "source"
+   dst.clone_from(&other)        -> dst = "other"
