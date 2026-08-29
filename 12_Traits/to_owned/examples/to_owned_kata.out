@@ -1,0 +1,22 @@
+1. Four receivers, four different owned twins
+   &str     .to_owned() -> alloc::string::String
+   &[i32]   .to_owned() -> alloc::vec::Vec<i32>
+   &Path    .to_owned() -> std::path::PathBuf
+   &String  .to_owned() -> alloc::string::String
+   One method name, four answers: `type Owned` is chosen by the source.
+
+2. So it is NOT a stringifying operation
+   42.to_owned()  -> 42   (i32)
+   42.to_string() -> "42" (alloc::string::String)
+   `to_string` is about TEXT. `to_owned` is about OWNERSHIP.
+   They coincide on a &str and nowhere else.
+
+3. The trap: on an Rc it clones the POINTER
+   type          alloc::rc::Rc<alloc::string::String>
+   strong_count  2
+   same buffer?  true
+   the real copy is (*shared).clone() -> "ballot"
+
+4. Why `Owned: Borrow<Self>` is in the trait
+   shout(&a) = "ADA"   <- String lends a &str back
+   the bound is the round trip, and it is what makes Cow possible.

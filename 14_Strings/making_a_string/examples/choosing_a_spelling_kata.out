@@ -1,0 +1,24 @@
+1. Source is a &str -> ownership is the only thing changing
+   to_owned()     "Ada"
+   String::from() "Ada"   <- same From impl, constructor-shaped
+
+2. Source is not a string -> to_owned() is not a candidate
+   42.to_string()      "42"
+   true.to_string()    "true"
+   'x'.to_string()     "x"
+   Score(4).to_string() "4 stars"  <- free, because Score implements Display
+   42.to_owned() compiles and gives back an i32. Not text, never was.
+
+3. Source is already a String -> none of them
+   &have          "Ben"   <- a view costs nothing
+   have.to_string() would allocate a SECOND buffer for the same bytes.
+   If you want a copy, write .clone() so the reader can see you meant it.
+
+4. Destination fixed by a signature -> .into()
+   cast("Ada", Score(5))                "Ada scored 5 stars"
+   cast(String::from("Ben"), Score(1))  "Ben scored 1 star"
+   Bare `let x = "Ada".into();` is E0282 — nothing names the target.
+
+5. Several pieces -> format!
+   format!("{a} vs {b}")  "Ada vs Ben"
+   format!("{a}") alone is clippy's useless_format: nothing to format.

@@ -86,6 +86,22 @@ let copy = owned.to_string();     // a full clone. Second heap buffer.
 
 Same shape as `&str`'s: `.to_string()` and `.to_owned()` on a `&str` are equivalent today — the standard library specialises `str`'s `to_string` so it does not run the formatting machinery — so pick on readability, not speed.
 
+## So which one — `to_string()` or `to_owned()`?
+
+Speed does not decide it, and no benchmark will: the performance argument you will meet everywhere [expired in 2016](../../12_Traits/to_owned/README.md#the-argument-you-will-meet-and-its-expiry-date). What decides it is one question — **what is the source?**
+
+`to_owned()` is not a stringifying operation. It is the borrowed → owned conversion, and what it hands back is whatever the *source's* owned twin happens to be: `&[i32]` gives a `Vec<i32>`, `&Path` gives a `PathBuf`, and `42.to_owned()` gives you an `i32`. It produces a `String` in the single case where you started with a `&str`. `to_string()` is about text, always, for anything that implements `Display`.
+
+So the rule fits in three lines:
+
+| the source is | write | because |
+|---|---|---|
+| a `&str` | `to_owned()` | both work; the only thing changing is ownership, and that is the word for it |
+| anything else | `to_string()` | `to_owned()` was never a candidate — it does not make text |
+| already a `String` | neither | see the section above — you have it already |
+
+That is [dtolnay's argument ↗](https://users.rust-lang.org/t/to-string-vs-to-owned-for-string-literals/1441/6) arrived at from the other end: `&str` and `String` are both strings, so *"convert this string to a string"* names nothing that is happening, while *"take ownership of it"* names exactly what is. `String::from(s)` says the same thing in constructor form, and `.into()` says it once a signature has named the destination — [the second kata below](#practice) drills the choice across every source.
+
 ## Coming back the other way
 
 ```rust
@@ -240,6 +256,120 @@ Debug is the other one, and it is NOT free:
    Display is for users and you write it; Debug is for you and you derive it.
 
 What you did NOT have to write: ToString, and it would not compile if you tried.
+```
+<!-- /output -->
+
+</details>
+
+---
+
+**Let the source pick the spelling.** Convert six things to a `String` — a `&str`, an `i32`, a `bool`, a `char`, a type of your own with a `Display` impl, and two pieces that have to be joined — and for each one write down which of the five spellings you were *entitled* to use, not merely which one compiles.
+
+Then answer three questions out of what you wrote. Which source admits both `to_owned()` and `to_string()`, and why only that one? What does `42.to_owned()` actually return, and why is that not a bug? And what has to be true of the surrounding code before a bare `.into()` will compile at all?
+
+<details markdown="1">
+<summary><strong>Solution</strong></summary>
+
+<!-- source:choosing_a_spelling_kata -->
+*[`choosing_a_spelling_kata.rs`](examples/choosing_a_spelling_kata.rs) in full — pasted here by `tools/run_examples.py` from the file CI compiles and runs.*
+
+```rust
+//! Kata solution: the SOURCE decides the spelling, not taste.
+//!
+//!   rustc --edition 2024 choosing_a_spelling_kata.rs -o /tmp/cask && /tmp/cask
+
+use std::fmt;
+
+#[derive(Debug)]
+struct Score(u8);
+
+impl fmt::Display for Score {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{} star{}", self.0, if self.0 == 1 { "" } else { "s" })
+    }
+}
+
+// The one place `.into()` is plainly the right call: the signature names the
+// destination, so the caller does not have to. Both a &str and a String go in.
+fn cast(voter: impl Into<String>, score: Score) -> String {
+    format!("{} scored {}", voter.into(), score)
+}
+
+fn main() {
+    println!("1. Source is a &str -> ownership is the only thing changing");
+    let borrowed: &str = "Ada";
+    let owned = borrowed.to_owned();
+    let built = String::from(borrowed);
+    println!("   to_owned()     {owned:?}");
+    println!("   String::from() {built:?}   <- same From impl, constructor-shaped");
+
+    println!();
+    println!("2. Source is not a string -> to_owned() is not a candidate");
+    let n = 42;
+    let flag = true;
+    let ch = 'x';
+    let score = Score(4);
+    println!("   42.to_string()      {:?}", n.to_string());
+    println!("   true.to_string()    {:?}", flag.to_string());
+    println!("   'x'.to_string()     {:?}", ch.to_string());
+    println!("   Score(4).to_string() {:?}  <- free, because Score implements Display", score.to_string());
+    println!("   42.to_owned() compiles and gives back an i32. Not text, never was.");
+
+    println!();
+    println!("3. Source is already a String -> none of them");
+    let have = String::from("Ben");
+    let view: &str = &have;                 // free
+    println!("   &have          {view:?}   <- a view costs nothing");
+    println!("   have.to_string() would allocate a SECOND buffer for the same bytes.");
+    println!("   If you want a copy, write .clone() so the reader can see you meant it.");
+
+    println!();
+    println!("4. Destination fixed by a signature -> .into()");
+    println!("   cast(\"Ada\", Score(5))                {:?}", cast("Ada", Score(5)));
+    println!("   cast(String::from(\"Ben\"), Score(1))  {:?}", cast(String::from("Ben"), Score(1)));
+    // Without a destination, `.into()` has nothing to aim at:
+    //     let x = "Ada".into();
+    //     error[E0282]: type annotations needed
+    println!("   Bare `let x = \"Ada\".into();` is E0282 — nothing names the target.");
+
+    println!();
+    println!("5. Several pieces -> format!");
+    let a = "Ada";
+    let b = "Ben";
+    println!("   format!(\"{{a}} vs {{b}}\")  {:?}", format!("{a} vs {b}"));
+    println!("   format!(\"{{a}}\") alone is clippy's useless_format: nothing to format.");
+}
+```
+<!-- /source -->
+
+<!-- output:choosing_a_spelling_kata -->
+*Verified output of [`choosing_a_spelling_kata.rs`](examples/choosing_a_spelling_kata.rs) — regenerated by `tools/run_examples.py`, never hand-typed.*
+
+```text
+1. Source is a &str -> ownership is the only thing changing
+   to_owned()     "Ada"
+   String::from() "Ada"   <- same From impl, constructor-shaped
+
+2. Source is not a string -> to_owned() is not a candidate
+   42.to_string()      "42"
+   true.to_string()    "true"
+   'x'.to_string()     "x"
+   Score(4).to_string() "4 stars"  <- free, because Score implements Display
+   42.to_owned() compiles and gives back an i32. Not text, never was.
+
+3. Source is already a String -> none of them
+   &have          "Ben"   <- a view costs nothing
+   have.to_string() would allocate a SECOND buffer for the same bytes.
+   If you want a copy, write .clone() so the reader can see you meant it.
+
+4. Destination fixed by a signature -> .into()
+   cast("Ada", Score(5))                "Ada scored 5 stars"
+   cast(String::from("Ben"), Score(1))  "Ben scored 1 star"
+   Bare `let x = "Ada".into();` is E0282 — nothing names the target.
+
+5. Several pieces -> format!
+   format!("{a} vs {b}")  "Ada vs Ben"
+   format!("{a}") alone is clippy's useless_format: nothing to format.
 ```
 <!-- /output -->
 
