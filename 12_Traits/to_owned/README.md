@@ -21,8 +21,10 @@ Two different owned types, one method name. `Clone` cannot express that: its sig
 ```rust
 pub trait ToOwned {
     type Owned: Borrow<Self>;
-    fn to_owned(&self) -> Self::Owned;              // required
-    fn clone_into(&self, target: &mut Self::Owned)  // provided
+    fn to_owned(&self) -> Self::Owned;                 // required
+    fn clone_into(&self, target: &mut Self::Owned) {   // provided
+        *target = self.to_owned();                     // the default just allocates
+    }
 }
 ```
 
@@ -97,13 +99,15 @@ error[E0119]: conflicting implementations of trait `ToOwned` for type `DataRef<'
 
 Since essentially every ordinary type derives `Clone`, that rules out essentially every ordinary type.
 
-**A reference-like type cannot have one either**, even after you drop the `Clone`. `type Owned` is bound by `Borrow<Self>`, and a `DataOwned { text: String }` cannot hand out a `&DataRef<'_>` — there is no `DataRef` stored anywhere to lend:
+**A reference-like type has nowhere to put one either**, even after you drop the `Clone`. `type Owned` is bound by `Borrow<Self>`, and a `DataOwned { text: String }` cannot hand out a `&DataRef<'_>` — there is no `DataRef` stored anywhere to lend:
 
 ```text
 error[E0277]: the trait bound `DataOwned: Borrow<DataRef<'_>>` is not satisfied
    |
 note: required by a bound in `std::borrow::ToOwned::Owned`
 ```
+
+Be precise about what that error proves, because it is easy to over-read: the type checker is refusing the *missing bound*, not the design. Write `impl Borrow<DataRef<'_>> for DataOwned` with a `todo!()` body and the `ToOwned` impl compiles perfectly well — the wall is one step further on, at the moment you have to write a `borrow` that returns a reference to a `DataRef` the `DataOwned` never stored. So the blocker is semantic rather than syntactic, and no compiler error will state it for you.
 
 Which is why every impl in the standard library is on an **unsized referent** rather than on a reference — `str`, `CStr`, `OsStr`, `Path`, `[T]`. Those are the types that genuinely have a separate owned form and are always met through a pointer, which is the situation the trait was shaped for.
 
@@ -118,9 +122,12 @@ The genuinely blocked case is a validated wrapper — an "ASCII-only string" new
 ```rust
 fn foo<S, T>(s: S) -> T where S: ToOwned<Owned = T>, T: Borrow<S> { s.to_owned() }
 let _s: String = foo("hi");    // E0308: expected `String`, found `&str`
+
+fn bar<S: ?Sized, T>(s: &S) -> T where S: ToOwned<Owned = T>, T: Borrow<S> { s.to_owned() }
+let s: String = bar("hi");     // "hi"
 ```
 
-`S` unifies with `&str`, so `T` is `&str` and the annotation is what breaks. The fix is to take `&S` rather than `S`, so `S` is `str` and `T` is `String`. This was [filed as a diagnostics bug in 2016 ↗](https://github.com/rust-lang/rust/issues/31228) and closed in 2020 once the error learned to suggest a conversion method; the underlying surprise is unchanged, and it is the same one as section 2b above, one level of generics up.
+`S` unifies with `&str`, so `T` is `&str` and the annotation is what breaks. The fix is to take `&S` rather than `S`, so `S` is `str` and `T` is `String` — and then **`S: ?Sized` is not optional**, because `str` is precisely the unsized case the trait exists for. Leave it off and the signature that was supposed to be the fix fails on its own bound instead: *"the size for values of type `str` cannot be known at compilation time … required by an implicit `Sized` bound in `foo`"*. Two errors, one cause, and the second is the page's whole thesis arriving as a compiler message. This was [filed as a diagnostics bug in 2016 ↗](https://github.com/rust-lang/rust/issues/31228) and closed in 2020 once the error learned to suggest a conversion method; the underlying surprise is unchanged, and it is the same one as section 2b above, one level of generics up.
 
 ## `clone_into`, the provided method
 
