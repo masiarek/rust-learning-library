@@ -122,6 +122,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "supertraits",
         "marker_traits",
         "to_owned",
+        "clone_into",
         "resources",
     ],
     "01_Foundations": [

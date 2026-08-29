@@ -131,7 +131,7 @@ let s: String = bar("hi");     // "hi"
 
 ## `clone_into`, the provided method
 
-`clone_into(&self, target: &mut Self::Owned)` writes into a buffer you already have instead of allocating a new one. `str`'s impl overrides it to reuse the `String`'s existing capacity — the run below fills a 64-byte buffer and the capacity does not move. Same family as [`mem::take`](../../GLOSSARY.md): the standard library's habit of offering the in-place spelling beside the allocating one.
+`clone_into(&self, target: &mut Self::Owned)` writes into a buffer you already have instead of allocating a new one. `str`'s impl overrides it to reuse the `String`'s existing capacity — the run below fills a 64-byte buffer and the capacity does not move. Same family as [`mem::take`](../../GLOSSARY.md): the standard library's habit of offering the in-place spelling beside the allocating one. It has [a page of its own](../clone_into/README.md), where the saving is counted rather than described — and where the argument order turns out to run opposite to `Clone::clone_from`.
 
 ## The verified output
 
@@ -287,6 +287,7 @@ fn main() {
 
 ## See also
 
+- [`clone_into`](../clone_into/README.md) — the other half of this trait: filling a buffer you already own, and what that is worth measured in allocations
 - [Making a `String`](../../14_Strings/making_a_string/README.md) — the five spellings that produce a `String`, and which to prefer; this page is the trait *behind* one of them
 - [Concatenating strings](../../14_Strings/concatenating_strings/README.md) — where `s1.to_owned() + s2` comes from: `+` needs an owned left operand
 - [`String` vs `&str`](../../14_Strings/string_vs_str/README.md) — the owned/borrowed pair this trait converts between

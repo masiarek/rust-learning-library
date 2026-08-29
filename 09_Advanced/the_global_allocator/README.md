@@ -312,6 +312,7 @@ rustc --edition 2024 09_Advanced/the_global_allocator/examples/the_global_alloca
 - [When `String` is too slow](../../14_Strings/when_string_is_too_slow/README.md) — the page whose "measure first" advice this one makes possible
 - [Building a `String`](../../14_Strings/building_a_string/README.md) — `push_str` vs `format!` in a loop, which is the kata above in lesson form
 - [Making a `String`](../../14_Strings/making_a_string/README.md) — the five spellings, now priced
+- [`clone_into`](../../12_Traits/clone_into/README.md) — this page's counter put to work: refilling one buffer instead of buying a new one per row
 - [`Cow`: borrow until somebody writes](../../18_Ownership/clone_on_write/README.md) — not allocating at all, which beats allocating cheaply
 - [What an address shows](../../18_Ownership/what_an_address_shows/README.md) — the other way to watch memory, from the value's side
 - [`std::alloc` ↗](https://doc.rust-lang.org/std/alloc/) · [`GlobalAlloc` ↗](https://doc.rust-lang.org/std/alloc/trait.GlobalAlloc.html) — the module and the contract

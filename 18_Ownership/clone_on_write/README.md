@@ -243,6 +243,7 @@ rustc --edition 2024 18_Ownership/clone_on_write/examples/clone_on_write.rs -o /
 ## See also
 
 - [`ToOwned`](../../12_Traits/to_owned/README.md) — the trait that supplies the owned arm, and the reason `Cow` needs it rather than `Clone`
+- [`clone_into`](../../12_Traits/clone_into/README.md) — the method `Cow::clone_from` calls, and the reason it was stabilized at all
 - [Ownership and moves](../ownership_and_moves/README.md) — the one-owner rule this type bends without breaking
 - [Borrowing](../borrowing/README.md) — where the `'a` on the borrowed arm comes from
 - [The anatomy of a `String`](../../14_Strings/anatomy_of_a_string/README.md) — pointer, length, capacity: the 24 bytes the table above compares against

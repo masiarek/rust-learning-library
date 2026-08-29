@@ -15,6 +15,7 @@ The section starts from the declaration and works outward — what goes in a tra
 | [Supertraits](supertraits/README.md) | 201 | `trait Shout: Display` is a bound, not a parent — what the default bodies may spend, the `E0277` that lands on the `impl` line, and trait upcasting, stable since 1.86 |
 | [Marker traits](marker_traits/README.md) | 201 | Traits with no methods: `Sized` as the bound you never wrote, `?Sized`, `Send`/`Sync` as auto traits nobody implements, and `PhantomData` |
 | [`ToOwned`](to_owned/README.md) | 201 | `Clone` generalized to borrowed data: why `str` cannot be `Clone` at all, why `.clone()` on a `&str` quietly does nothing, and the `Rc` that `to_owned` does not deep-copy |
+| [`clone_into`](clone_into/README.md) | 201 | The provided method beside `to_owned`: refilling a buffer instead of allocating one, counted — plus the three ways it does not pay, and the backwards argument order that blocked it for five years |
 | [Links and videos](resources/README.md) | reference | The reading behind the section |
 
 Three trait pages live outside this folder, because they are met long before anyone goes looking for a traits section: [`Copy` vs `Clone`](../16_Structs/copy_vs_clone/README.md), [Debug and Display](../15_First_Programs/debug_vs_display/README.md), and [the `Default` trait](../03_Command_Line/the_default_trait/README.md). They stay where they are; this section links them rather than moving them.
