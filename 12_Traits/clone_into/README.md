@@ -38,7 +38,7 @@ fn clone_into(&self, target: &mut String) {
 }
 ```
 
-`clone_into` was added in [PR 41009 ↗](https://github.com/rust-lang/rust/pull/41009) in April 2017 and stabilized in **1.63.0**, August 2022. The five-year gap is the subject of the last section.
+`clone_into` was added in [PR 41009 ↗](https://github.com/rust-lang/rust/pull/41009) in April 2017 and stabilized in **1.63.0** in August 2022. Five years, and the objection that held it up was raised in the pull request that introduced it.
 
 ## What it saves, counted
 
