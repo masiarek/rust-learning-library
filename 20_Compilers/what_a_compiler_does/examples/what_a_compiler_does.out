@@ -1,0 +1,4 @@
+compile time: SLOTS = 55
+compile time: counters.len() = 55
+run time:     triangular(n) = 55
+both agree:   true

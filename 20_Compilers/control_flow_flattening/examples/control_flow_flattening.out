@@ -1,0 +1,8 @@
+classify( -7) = negative  flattened = negative  agree = true
+classify( -1) = negative  flattened = negative  agree = true
+classify(  0) = zero      flattened = zero      agree = true
+classify(  1) = positive  flattened = positive  agree = true
+classify( 42) = positive  flattened = positive  agree = true
+opaque predicate held for all 1000 inputs: true
+a - (-b) matched a + b on 1,000,000 pairs: true
+(a^b) + 2*(a&b) matched a + b on 1,000,000 pairs: true
