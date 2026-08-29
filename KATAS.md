@@ -115,6 +115,6 @@ Three things, in this order:
    ```
 
    Neither is hand-typed, so a solution cannot quietly stop compiling — which is the one failure a practice page must never ship.
-3. **Add a row above**, at the position in the sequence where it should be attempted.
+3. **Add a row above**, at the position in the sequence where it should be attempted — *inside* the table, not merely above `## Adding one`. Two paragraphs of prose sit between the last row and that heading, and a row dropped after them renders as a second one-row table with no header. `check_katas.py` does not catch it: the row parses, its links resolve, and the numbering still reads in order, so the gate passes on a page that looks broken.
 
 The mechanics of the markers, and the rest of the house conventions, are in [CONTRIBUTING.md](CONTRIBUTING.md).
