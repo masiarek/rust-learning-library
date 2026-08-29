@@ -1,4 +1,4 @@
-# Strings
+# The strings map
 
 **Level:** reference · the map
 

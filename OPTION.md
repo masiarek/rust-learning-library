@@ -1,4 +1,4 @@
-# Option
+# The `Option` map
 
 **Level:** reference · the map
 

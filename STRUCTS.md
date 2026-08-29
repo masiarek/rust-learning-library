@@ -1,4 +1,4 @@
-# Structs
+# The structs map
 
 **Level:** reference · the map
 

@@ -1,4 +1,4 @@
-# Shadowing
+# The shadowing map
 
 **Level:** reference · the map
 

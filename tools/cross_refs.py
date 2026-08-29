@@ -48,6 +48,7 @@ MAPS = {
     "STRUCTS.md": ("struct", "Struct"),
     "STRINGS.md": ("String", "str", "&str"),
     "SHADOWING.md": ("shadow", "Shadowing"),
+    "TOOLCHAIN.md": ("toolchain", "rustup", "rustfmt", "clippy"),
 }
 
 FENCE = re.compile(r"^\s*(```|~~~)")
