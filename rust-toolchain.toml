@@ -36,6 +36,6 @@
 # The editor shows no language server and no useful reason. Verified here.
 
 [toolchain]
-channel = "1.97.1"
+channel = "1.98.0"
 profile = "minimal"
 components = ["rustfmt", "clippy", "rust-analyzer"]
