@@ -13,6 +13,7 @@ Each page is still one idea with a program you can compile and run beside it.
 | [When the denominators compound](compounding_weights/README.md) | 301 | The proportional count the companion trick cannot reach — why its denominators compound out of the previous round's, why the width you need is a property of the ballots, and what a fixed-width rational really runs out of |
 | [Did the rounding decide it?](interval_arithmetic/README.md) | 301 | The question the other four do not ask — bracket each rounded term instead of storing it, and find out whether your choice of scale or the ballots picked the winner; sound but not complete, so *decided* is a proof and *undecided* is only about that scale |
 | [What a union is](what_a_union_is/README.md) | 301 | Fields on top of each other instead of side by side — why the write is safe and the read is not, why the field type decides whether a bad read is merely wrong or undefined, and why an `enum` is this with the tag already checked |
+| [The global allocator](the_global_allocator/README.md) | 301 | Where every heap byte comes from — swapping in a counter that turns `String`'s capacity ladder into events you can see, the three rules that keep such a measurement honest, and why the five ways to make a `String` all cost exactly one allocation |
 
 ## Planned
 

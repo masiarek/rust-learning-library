@@ -10,7 +10,7 @@
 
 ## What this page has to answer
 
-- Measure first: what to actually count — allocations, not lines — and why a `cargo bench` at `-O0` has told you nothing (a mistake the [`ToOwned`](../../12_Traits/to_owned/README.md) page documents in the wild).
+- Measure first: what to actually count — allocations, not lines — and why a `cargo bench` at `-O0` has told you nothing (a mistake the [`ToOwned`](../../12_Traits/to_owned/README.md) page documents in the wild). [The global allocator](../../09_Advanced/the_global_allocator/README.md) is the tool: it already counts, so this page's job is deciding what to point it at.
 - `with_capacity` in anger: the reallocation ladder from [the anatomy page](../anatomy_of_a_string/README.md), and how to know the size up front.
 - Not allocating at all — `write!` into an existing buffer, returning `&str` from an owned input, and `Cow` for the branch that does not change anything.
 - `format!("{x}")` where a `.to_owned()` would do, and clippy's `useless_format`; the cost is real but small, and the readability cost is the bigger one.
@@ -21,6 +21,7 @@
 - [The anatomy of a `String`](../anatomy_of_a_string/README.md)
 - [Building a `String`](../building_a_string/README.md)
 - [`Cow`: borrow until somebody writes](../../18_Ownership/clone_on_write/README.md)
+- [The global allocator](../../09_Advanced/the_global_allocator/README.md) — the counter that makes every claim on this page checkable
 - [The third owned form](../boxed_str/README.md)
 - [STRINGS.md](../../STRINGS.md) — the map this page is a gap in
 - [Strings: links, books and videos](../resources/README.md) — where to read about it in the meantime

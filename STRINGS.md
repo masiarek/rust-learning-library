@@ -77,6 +77,7 @@ Strings are the worked example half the library's ownership pages already use, s
 | [What is a ballot, in memory?](16_Structs/representing_a_ballot/README.md) | 201 | `String` fields chosen inside a real struct design |
 | [`Path` and `PathBuf`](04_Files/path_and_pathbuf/README.md) | 201 | The family's honorary pair, in full — a **stub** for now |
 | [`Cow`: borrow until somebody writes](18_Ownership/clone_on_write/README.md) | 201 | The maybe-owned string: borrow when the text needs no change, allocate only on the write |
+| [The global allocator](09_Advanced/the_global_allocator/README.md) | 301 | Where the bytes on the heap come from — and how to count a `String`'s allocations instead of inferring them from `capacity()` |
 
 ## Still written as outlines
 

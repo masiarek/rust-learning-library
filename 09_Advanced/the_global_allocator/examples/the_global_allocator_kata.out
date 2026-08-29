@@ -1,0 +1,23 @@
+Six ballots, one line of output, four ways to build it.
+Predict the allocation counts before reading them.
+
+   via_collect    alloc  8  realloc  0   len 41
+   via_push       alloc  1  realloc  3   len 41
+   guessed (40)   alloc  1  realloc  1   len 41
+   exact (41)     alloc  1  realloc  0   len 41
+
+via_collect pays for a String PER ROW, plus the Vec holding them,
+plus the final joined buffer — and every one of those is freed
+immediately. The work is real; the result is thrown away.
+
+via_push keeps one buffer and lets it grow: no per-row String at
+all, and the reallocs are the 8/16/32 ladder doing its job.
+
+with_capacity only helps if the number is right. 40 was a guess,
+the line is 41 bytes, and being ONE byte short bought back the
+reallocation the call existed to avoid. 41 costs one allocation
+and nothing else.
+
+The lesson is not 'always call with_capacity'. It is that the
+difference between these four was a guess until something counted
+— including the guess that with_capacity had worked.

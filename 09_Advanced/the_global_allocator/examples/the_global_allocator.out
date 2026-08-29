@@ -1,0 +1,54 @@
+1. Every heap byte in the program comes from ONE place
+   The default is std::alloc::System — malloc/free here. Swapping in
+   a wrapper that counts is the whole of `#[global_allocator]`.
+
+2. A String growing, as ALLOCATION EVENTS rather than capacity numbers
+   String::new() + 3 push_str         alloc 1  realloc 2  free 0  bytes 32
+   final len 19 capacity 32
+   capacity went 0 -> 8 -> 16 -> 32: one alloc to buy the first
+   buffer, then a realloc at each jump. The empty String cost nothing.
+
+3. with_capacity collapses the ladder to a single purchase
+   String::with_capacity(32) + 3      alloc 1  realloc 0  free 0  bytes 32
+   final len 19 capacity 32
+   Same text, same result, one trip to the allocator instead of three.
+
+4. What does and does not go to the heap
+   let n: i64 = 42                    alloc 0  realloc 0  free 0  bytes 0
+   let s: &str = "a literal"          alloc 0  realloc 0  free 0  bytes 0
+   Box::new(42_i64)                   alloc 1  realloc 0  free 0  bytes 8
+   vec![0_u8; 100]                    alloc 1  realloc 0  free 0  bytes 100
+   A literal is already in the binary; an i64 lives on the stack.
+   Neither one asks the allocator for anything.
+
+5. The accidental clone, now countable
+   &owned  (a view)                   alloc 0  realloc 0  free 0  bytes 0
+   owned.to_string()                  alloc 1  realloc 0  free 0  bytes 13
+   `.to_string()` on a String is a second buffer for the same bytes.
+   The borrow is free. That is the whole argument, in one column.
+
+6. The five spellings, priced
+   "equal vote".to_owned()            alloc 1  realloc 0  free 0  bytes 10
+   String::from("equal vote")         alloc 1  realloc 0  free 0  bytes 10
+   "equal vote".to_string()           alloc 1  realloc 0  free 0  bytes 10
+   let _: String = "...".into()       alloc 1  realloc 0  free 1  bytes 10
+   format!("equal vote")              alloc 1  realloc 0  free 0  bytes 10
+   Five identical rows. Even format!, because std has a fast path
+   for a format string with no arguments: it compiles down to the
+   same .to_owned(). Allocation count cannot tell these apart at
+   all, so `to_string` vs `to_owned` really is a documentation
+   question — this is the column that retires the 2015 benchmark.
+   The `free 1` is not a fact about `.into()`: that closure drops
+   its String inside the measured region while the others hand
+   theirs back. Where a value dies decides who is charged for it.
+
+7. What this counter can and cannot tell you
+   Deltas around a known region: trustworthy, and the numbers above
+   are the same on every platform because String's growth is Rust's
+   policy, not the C library's.
+   Process-wide totals: NOT printed here on purpose. They include
+   the runtime's own startup and stdout's buffers, which differ
+   between macOS and Linux — an answer key full of those would fail
+   in CI for a reason that has nothing to do with your program.
+   And it counts calls, not live bytes: frees trail allocs while
+   values are still alive, so this is not a leak detector.

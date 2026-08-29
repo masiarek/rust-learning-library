@@ -227,6 +227,7 @@ rustc --edition 2024 14_Strings/anatomy_of_a_string/examples/anatomy_of_a_string
 
 ## See also
 
+- [The global allocator](../../09_Advanced/the_global_allocator/README.md) — the capacity ladder above, watched from the allocator's side: `0 → 8 → 16 → 32` is one allocation and two reallocations, and you can count them
 - [STRINGS.md](../../STRINGS.md) — the map: every string lesson, in reading order
 - [`String` vs `&str`](../string_vs_str/README.md) — who owns, who looks
 - [Meet the `char`](../meet_the_char/README.md) — what those heap bytes encode

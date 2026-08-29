@@ -1,61 +1,87 @@
 """Build-time fixes that would otherwise cost a pinned plugin dependency.
 
 MkDocs derives a sidebar *section* label from the folder name on disk, so
-`01_Foundations/` would read as "01 Foundations". The numeric prefix is there to
-set reading order in a file listing; it should not be visible in the nav.
+`01_Foundations/` reads as "01 Foundations" — ordering prefix and all. That
+number exists to keep a file listing tidy; in the nav it is noise, and here it
+is worse than noise, because reading order is not creation order. The sidebar
+ran 00, 01, 15, 16, 17, 18, 14, 19, 13, 12, 02, 03 … — which looks broken and
+was in fact correct.
 
-Two jobs:
+Three jobs:
 
 1. **Clean section labels** — strip the ordering prefix, turn underscores into
-   spaces, and fix acronym casing (`option_vs_result` → "Option vs Result").
+   spaces, sentence-case the result (the house style of every page's own `# H1`:
+   "What a struct is", not "What a Struct Is"), and apply `LABELS` / `FIXUPS` to
+   the names a caser cannot get right (`llvm_and_its_ir` → "LLVM and its IR",
+   `if_let` → "`if let`").
 2. **Order the sections** — `NAV_ORDER` states the intended reading order per
-   folder, keyed by folder path, listing children by their on-disk name.
+   folder, keyed by folder path, listing children by their on-disk name. At the
+   root, everything before `SPINE_BREAK` is the course, and each of its sections
+   gets a visible `N.` so the sidebar reads as the sequence it is; after the
+   break is the reference shelf — the topic maps, the katas, the glossary — which
+   is not a sequence and is not numbered.
+3. **Re-thread previous/next** — MkDocs computes the footer's ← → chain *before*
+   a hook can reorder anything, so without this the sidebar and the footer
+   disagreed on every page: the homepage's "Next" was the Glossary (alphabetically
+   first at the root), and Foundations' was Errors rather than the First programs
+   it actually hands the reader to. The chain is rebuilt from the sorted tree.
 
-Why order here rather than by renaming files: a filename is a permanent URL.
-Renumbering `03_` to `04_` to insert a lesson would move every page after it and
+Why order here rather than by renaming folders: a folder name is a permanent URL.
+Renumbering `03_` to `04_` to insert a lesson would move every page under it and
 break any link anyone ever saved. Ordering is presentation, so it belongs in the
-presentation layer. Unlisted pages keep their alphabetical slot at the bottom, so
-adding a page needs no edit here.
+presentation layer — the numbers the reader sees included. They count reading
+position; the ones on disk are just what the folder happens to be called.
+
+**The label is computed from the on-disk folder name, not from the title MkDocs
+derived from it.** That distinction is the whole reason two of these jobs were
+silently doing nothing for as long as the file has existed: by the time a hook
+sees a section, `dirname_to_title()` has already turned `llvm_and_its_ir` into
+"Llvm and its ir", so a `LABELS` map keyed by folder name — as this one always
+was — matched nothing at all, and `PREFIX`, which looks for `01_`, was being
+handed `01 `.
 """
 
 from __future__ import annotations
 
 import re
 
-# Words the naive title-caser gets wrong, and terms with a fixed spelling.
+# Words a sentence-caser gets wrong: acronyms, and the identifiers that read
+# better as code. Keyed by the lowercased word, applied at any position.
 FIXUPS = {
-    "Vs": "vs",
-    "And": "and",
-    "Or": "or",
-    "The": "the",
-    "To": "to",
-    "A": "a",
-    "In": "in",
-    "Of": "of",
-    "Api": "API",
-    "Cli": "CLI",
-    "Io": "I/O",
-    "Ffi": "FFI",
-    "Rc": "Rc",
-    "Arc": "Arc",
-    "Cow": "Cow",
-    "I128": "`i128`",
-    "Option": "`Option`",
-    "Result": "`Result`",
+    "api": "API",
+    "cli": "CLI",
+    "ffi": "FFI",
+    "http": "HTTP",
+    "io": "I/O",
+    "json": "JSON",
+    "llvm": "LLVM",
+    "mcp": "MCP",
+    "ui": "UI",
+    "url": "URL",
+    "arc": "`Arc`",
+    "cow": "`Cow`",
+    "i128": "`i128`",
+    "option": "`Option`",
+    "rc": "`Rc`",
+    "result": "`Result`",
+    "str": "`str`",
+    "vec": "`Vec`",
 }
+
+# Sentinel in NAV_ORDER[""]: sections listed before it are the numbered course,
+# sections after it are the reference shelf. It is not a file and never renders.
+SPINE_BREAK = "--- reference ---"
 
 # Reading order per folder path. Children named by on-disk name; anything not
 # listed sorts alphabetically after the listed ones.
 NAV_ORDER: dict[str, list[str]] = {
+    # The root. The course first, in the order it is meant to be read; the
+    # numbers the sidebar shows count position in THIS list, not the digits on
+    # the folders, which record only the order the sections happened to be
+    # written. Reference pages — the maps, the katas, the glossary — come after
+    # SPINE_BREAK and are not numbered, because they are not a sequence.
     "": [
         "index.md",
-        "OPTION.md",
-        "SHADOWING.md",
-        "STRUCTS.md",
-        "STRINGS.md",
-        "TOOLCHAIN.md",
-        "ROADMAP.md",
-        "KATAS.md",
         "00_Start_Here",
         "01_Foundations",
         # The foundations, split into the arcs its NAV_ORDER comments
@@ -92,6 +118,17 @@ NAV_ORDER: dict[str, list[str]] = {
         # The shell the compiler is run from — not Rust, but two of its three
         # tools are written in it, which is the section's reason for existing.
         "11_Unix",
+        # Below: pages that sequence lessons living somewhere else and own
+        # nothing themselves. They are last because the course above is what to
+        # read first, and the front page links every one of them in context.
+        SPINE_BREAK,
+        "OPTION.md",
+        "STRUCTS.md",
+        "STRINGS.md",
+        "SHADOWING.md",
+        "TOOLCHAIN.md",
+        "KATAS.md",
+        "ROADMAP.md",
         "GLOSSARY.md",
     ],
     "00_Start_Here": [
@@ -435,6 +472,8 @@ NAV_ORDER: dict[str, list[str]] = {
         # Layout rather than arithmetic: the other thing `unsafe` buys you, and
         # the enum that already gives it to you safely.
         "what_a_union_is",
+        # ...and where the bytes those layouts occupy actually came from.
+        "the_global_allocator",
     ],
 }
 
