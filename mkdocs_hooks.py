@@ -59,6 +59,7 @@ FIXUPS = {
     "json": "JSON",
     "llvm": "LLVM",
     "mcp": "MCP",
+    "opentelemetry": "OpenTelemetry",
     "rust": "Rust",
     "ui": "UI",
     "url": "URL",
@@ -461,6 +462,27 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...and where the bytes those layouts occupy actually came from.
         "the_global_allocator",
     ],
+    "21_Observability": [
+        "README.md",
+        # The case for doing any of it, then the three signals it is made of.
+        "why_observability_matters",
+        "the_three_pillars",
+        # What a Rust program actually emits: a line, an interval, and the
+        # async trap that makes the interval harder here than elsewhere.
+        "structured_logging",
+        "spans_not_lines",
+        "instrumenting_async",
+        # ...and the same loss of context one boundary further out.
+        "context_propagation",
+        # The third signal, which is the one with a bill attached.
+        "metrics_and_cardinality",
+        # Where it all lands: the spec, the collector, and the budget.
+        "what_opentelemetry_is",
+        "where_the_data_goes",
+        "sampling",
+        # Last, because it is the only recommendation in the section.
+        "what_to_instrument",
+    ],
 }
 
 # Labels the sentence-caser cannot reach on its own: proper names, code
@@ -570,6 +592,9 @@ LABELS = {
     "llvm_and_its_ir": "LLVM and its IR",
     "control_flow_flattening": "Control-flow flattening",
     "build_systems_are_not_compilers": "A build system is not a compiler",
+    # 21_Observability
+    "spans_not_lines": "A span is not a log line",
+    "what_to_instrument": "What to instrument first",
 }
 
 # ---------------------------------------------------------------------------

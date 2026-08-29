@@ -33,6 +33,8 @@ One section is not about Rust at all. [`11_Unix/`](11_Unix/README.md) is the she
 
 Five sections in between follow one long arc: **turning a snippet into a program somebody else runs.** [`02_Errors/`](02_Errors/README.md) is what a failure does on its way out; [`03_Command_Line/`](03_Command_Line/README.md) is what the program was handed on the way in; and [`04_Files/`](04_Files/README.md), [`06_Data/`](06_Data/README.md) and [`07_Clients/`](07_Clients/README.md) are the three things outside it that can say no. **Those pages are stubs today** — one outline and a set of questions per page, with no runnable example behind them yet, each marked as such at the top. They exist so the arc has a shape, and a permanent URL, before the prose does; a page graduates by acquiring an example and losing its notice.
 
+[`21_Observability/`](21_Observability/README.md) picks up where that arc ends: the program is now the service somebody else calls, and the only account of what happened to one request is whatever it chose to write down — a span, a structured line, a counter, and a header carrying the trace to the next process. Stubs as well, and the hardest ones here to finish, because every checked example in this library compiles with `rustc` alone and observability in Rust is a crate story. The section README says how it intends to close that gap rather than skip it.
+
 Five topics are big enough to have a map of their own rather than a single page: [**OPTION.md**](OPTION.md), [**SHADOWING.md**](SHADOWING.md), [**STRUCTS.md**](STRUCTS.md), [**STRINGS.md**](STRINGS.md) and [**TOOLCHAIN.md**](TOOLCHAIN.md) each collect every lesson on their subject in reading order, and say what the idea is before the syllabus starts. The first four cross section boundaries because the lessons do; the fifth sorts one section by the problem you actually have.
 
 Every lesson explains; some of them also ask you to type. Those exercises are collected in [**KATAS.md**](KATAS.md), which is the only place they are ordered — each kata itself sits on the page for the topic it teaches, with a solution CI compiles and runs.
@@ -61,11 +63,12 @@ The sidebar is sorted **alphabetically**, because that is how you find a section
 | 14 | [Tooling](05_Tooling/README.md) | `cargo` and the rest of the toolchain, rather than the language |
 | 15 | [Data](06_Data/README.md) | Serialization, and the round trip through JSON |
 | 16 | [Clients](07_Clients/README.md) | The network — the last thing outside the program that can say no |
-| 17 | [Interfaces](08_Interfaces/README.md) | Putting a face on it |
-| 18 | [Advanced](09_Advanced/README.md) | What needs the foundations: threads, `unsafe`, FFI |
-| 19 | [Compilers](20_Compilers/README.md) | The layer under all of it, three quarters of which is not Rust |
-| 20 | [Resources](10_Resources/README.md) | Books, essays and exercises outside this library |
-| 21 | [Unix](11_Unix/README.md) | The shell you run the compiler from — two of its three tools are Rust |
+| 17 | [Observability](21_Observability/README.md) | What the service says about itself, once somebody else depends on it |
+| 18 | [Interfaces](08_Interfaces/README.md) | Putting a face on it |
+| 19 | [Advanced](09_Advanced/README.md) | What needs the foundations: threads, `unsafe`, FFI |
+| 20 | [Compilers](20_Compilers/README.md) | The layer under all of it, three quarters of which is not Rust |
+| 21 | [Resources](10_Resources/README.md) | Books, essays and exercises outside this library |
+| 22 | [Unix](11_Unix/README.md) | The shell you run the compiler from — two of its three tools are Rust |
 
 Nothing enforces this order and no page depends on it; skipping around is fine. It is here because a sidebar can be sorted one way only, and A–Z answers the more common question.
 
