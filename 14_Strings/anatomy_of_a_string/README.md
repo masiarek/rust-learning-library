@@ -236,3 +236,15 @@ rustc --edition 2024 14_Strings/anatomy_of_a_string/examples/anatomy_of_a_string
 - [What an address shows](../../18_Ownership/what_an_address_shows/README.md) — which of these two places `&s` actually points at, and what a move does to each
 - [100 Exercises — String slices ↗](https://rust-exercises.com/100-exercises/04_traits/06_str_slice) — the same three words drawn as a diagram, and what a `&str` into the middle of them carries instead of a capacity
 - [std docs — `String` ↗](https://doc.rust-lang.org/std/string/struct.String.html) · [`std::alloc` ↗](https://doc.rust-lang.org/std/alloc/index.html), where the buffer actually comes from
+
+## Po polsku
+
+`String` to trzy słowa maszynowe na stosie — wskaźnik, długość (`len`) i pojemność (`capacity`) — a sam tekst leży na stercie. Dlatego `size_of::<String>()` wynosi 24 bajty niezależnie od tego, czy trzymasz w nim jedno słowo, czy całą książkę, i dlatego przeniesienie własności (*move*) kopiuje **trzy słowa, nigdy bajtów tekstu**. `&str` to ten sam obrazek bez pojemności: wskaźnik i długość, bez prawa do rozbudowy i bez obowiązku zwolnienia pamięci.
+
+Jeśli miałeś na studiach `std::vector` z C++, to znasz już połowę tej strony pod polskimi nazwami: `size()`/`capacity()`, `reserve()`, `shrink_to_fit()` i **koszt zamortyzowany** przy podwajaniu tablicy dynamicznej. Rust nazywa to tak samo, tylko po angielsku. Jedna rzecz jest tu jednak inna dla polskiego tekstu: **pojemność liczy się w bajtach, nie w literach**. „zażółć gęślą jaźń” ma siedemnaście znaków, ale zajmuje **26 bajtów** — dziewięć liter z ogonkiem lub kreską liczy się po dwa — więc `String::with_capacity(17)` i tak dokupi bufor po drodze. Rezerwując miejsce z góry, licz bajty gotowego napisu, a nie litery na palcach.
+
+Z tego samego C++ pochodzi też najlepsza intuicja do błędu `E0502`: **unieważnienie iteratorów przy realokacji**. `push_str` może przenieść bufor pod nowy adres i zwolnić stary, a wycinek łańcucha zrobiony wcześniej wskazywałby wtedy w zwolnioną pamięć. W C++ to jest niezdefiniowane zachowanie, które trzeba pamiętać; w Ruscie pożyczanie zamienia to w komunikat kompilatora — *cannot borrow `s` as mutable because it is also borrowed as immutable* — i program po prostu się nie buduje.
+
+Ostatnia pułapka jest nazewnicza: `String` **nie jest** „wektorem znaków”, tylko `Vec<u8>` z obietnicą poprawnego UTF-8. Obietnica jest sprawdzana raz, przy wejściu (`String::from_utf8` zwraca `Err` dla śmieci), i właśnie dlatego żadna metoda `str` nie musi jej sprawdzać ponownie w środku.
+
+**Szukaj po polsku:** pojemność a długość · tablica dynamiczna koszt zamortyzowany · unieważnienie iteratorów przy realokacji · `rust String capacity vs len` · `rust with_capacity`

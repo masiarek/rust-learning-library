@@ -86,3 +86,13 @@ trait Fresh {
 - [What a struct is](../../16_Structs/what_a_struct_is/README.md) — the type with no behaviour in it, which is the gap this fills
 - [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) — a marker trait that changes what `=` means, beside one you call
 - [Implementing `Iterator`](../../24_Iterators/implementing_iterator/README.md) — required versus provided methods at scale: write one method, and seventy-five arrive
+
+## Po polsku
+
+Po polsku mówi się na to **cecha** (*trait*) — powiedz tak raz, a potem używaj słowa `trait`, bo to słowo kluczowe i to ono pojawia się w każdym komunikacie kompilatora. Cecha nazywa **zachowanie, które typ obiecuje mieć**, i sama nie przechowuje niczego: `Dog` dostaje metodę `twice()`, której nie definiuje, od czegoś, co nie ma ani jednego pola. Widać to w wydruku powyżej — `size_of::<Star>()` to zero bajtów, mimo że `Star` implementuje całą cechę. Obietnica nic nie waży.
+
+Reguła, którą warto wynieść z tej strony jako pierwszą, brzmi: **decyduje średnik.** Sygnatura zakończona średnikiem to żądanie — kompilator zmusi każdego implementującego do napisania ciała (odpowiednik metody abstrakcyjnej z Javy). Sygnatura z ciałem to podarunek: domyślna implementacja, którą można wziąć albo zastąpić. Ta sama zasada obowiązuje stałe powiązane, tyle że rolę średnika gra brak `=`. Typy powiązane są jedynym wyjątkiem bez stanu pośredniego — cecha może ich tylko zażądać, nigdy ich nie definiuje.
+
+Na koniec dwie rzeczy, które polski czytelnik przynosi ze sobą z Javy i które trzeba odłożyć. Po pierwsze, cecha **nie jest klasą bazową**: nie ma pól, więc nie ma czego dziedziczyć ani do czego się odwoływać przez `super`, a dwa typy implementujące tę samą cechę nie dzielą ani jednego bajtu układu w pamięci. Do interfejsu też jej niezupełnie blisko — bliższym krewnym jest klasa typów (*type class*) z Haskella, skąd ta konstrukcja pochodzi. Po drugie, uważaj na parę `Self` i `self`: po polsku obie chce się przeczytać jako „ja”, a to dwie różne rzeczy — `Self` z wielkiej litery oznacza **typ**, który właśnie implementuje cechę (dlatego `fn fresh() -> Self` buduje raz `Star`, a raz `Approval`), natomiast `self` z małej to konkretna wartość. Funkcja bez `self` jest funkcją powiązaną: nie ma po czym postawić kropki, więc wywołuje się ją na typie. A błąd, na który trafisz najczęściej, to `E0277` — jeden kod na cztery zupełnie różne skargi, więc czytaj nie tylko numer, ale i zdanie pod nim.
+
+**Szukaj po polsku:** cechy w Ruscie · metoda domyślna · stała powiązana · `rust trait vs interface` · `rust Self vs self` · `rust E0277 trait bound`

@@ -27,3 +27,11 @@ Reading two atomics and assuming the pair is consistent. Each load is atomic; th
 - [Spawning a thread](../spawning_a_thread/README.md) · [Channels](../channels/README.md) — the "share nothing" alternative to all three
 - [Sharing across threads: `Arc`](../../18_Ownership/sharing_across_threads/README.md) — the pointer every one of these lives behind
 - [`std::sync::atomic` ↗](https://doc.rust-lang.org/std/sync/atomic/) · [Comprehensive Rust: Shared State ↗](https://google.github.io/comprehensive-rust/concurrency/shared-state.html)
+
+## Po polsku
+
+Polski czytelnik zwykle spotyka `RwLock` wcześniej niż Rusta — na wykładzie z systemów operacyjnych, jako **problem czytelników i pisarzy**: wielu czytających może wejść naraz, piszący musi być sam. Rustowe `read()` i `write()` to dokładnie ta konstrukcja, razem ze znanym z tamtego wykładu skutkiem ubocznym — **zagłodzeniem pisarza** (*writer starvation*), którego biblioteka standardowa nie obiecuje uniknąć, bo politykę sprawiedliwości ustala prymityw systemowy pod spodem. Warto przy okazji odwrócić folklor: `RwLock` nie jest „szybszym `Mutex`em”. Wygrywa dopiero wtedy, gdy czytających jest wielu, zapisy są rzadkie, a sekcja krytyczna jest na tyle długa, że dodatkowa księgowość się zwraca — przy krótkiej sekcji zwykły `Mutex` bywa szybszy.
+
+Operacje atomowe (*atomics*) to druga odpowiedź i drugie źródło nieporozumień. `AtomicUsize` chroni **jedno słowo maszynowe** — to nie jest miniaturowa blokada, tylko pojedyncza wartość, którą procesor potrafi zmienić w całości. Stąd pułapka, dla której ta strona istnieje: dwa odczyty atomowe **nie są atomowe razem**, więc wątek może zobaczyć nową wartość jednego licznika i starą drugiego. W chwili, gdy dwie wartości muszą się zgadzać, potrzebna była blokada, a powstający błąd jest nieregularny i nie odtwarza się pod debuggerem. `Ordering` (`Relaxed`, `Acquire`, `Release`, `SeqCst`) to nie „poziom bezpieczeństwa”, tylko pytanie, wokół czego wolno tę operację przestawić — kto zna `std::memory_order` z C++, spotyka ten sam model pamięci pod inną nazwą; kto nie zna, zostaje przy `SeqCst`.
+
+**Szukaj po polsku:** problem czytelników i pisarzy · zagłodzenie pisarza · operacje atomowe · model pamięci · `rust RwLock vs Mutex performance` · `rust atomic Ordering SeqCst Relaxed`

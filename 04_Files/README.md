@@ -13,3 +13,9 @@ The filesystem is the first thing outside your program that you are likely to ta
 | [Temporary directories in tests](temp_dirs_in_tests/README.md) | 201 → 301 | A test that writes to a fixed path cannot run twice at once — and the fix deletes itself if you drop the handle |
 
 The string half of this story — [`String` against `&str`](../14_Strings/string_vs_str/README.md), and [the slice that panics mid-character](../14_Strings/string_slices/README.md) — is in [Strings](../14_Strings/README.md), where it belongs.
+
+## Po polsku
+
+System plików to zwykle pierwsza rzecz poza programem, z którą program rozmawia, i pierwsze miejsce, w którym upór Rusta przy typach zaczyna na siebie zarabiać: ścieżka (*path*) ma własny typ i nie jest łańcuchem znaków, brak pliku to co innego niż plik pusty, a uchwyt do pliku (*file handle*) zamyka się sam, gdy wychodzi z zasięgu. Ten ostatni punkt zaskakuje najczęściej — nie ma tu ani `close()`, ani bloku `finally`, bo zamknięcie pliku to zwykłe wypuszczenie zasobu, czyli dokładnie to, co polskie materiały o C++ nazywają RAII. Warto też wiedzieć, dlaczego strony w tym rozdziale są na razie szkicami: każdy przykład w tej bibliotece jest w CI porównywany z zapisanym wzorcowym wyjściem, a wszystko, co dotyka systemu plików, jest z natury niedeterministyczne — nazwa katalogu tymczasowego, kolejność wpisów w katalogu i uprawnienia potrafią różnić się przy każdym uruchomieniu.
+
+**Szukaj po polsku:** obsługa plików w Ruscie · ścieżka a łańcuch znaków · wypuszczenie zasobu RAII · `rust std::fs` · `rust file closed when dropped`

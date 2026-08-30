@@ -23,3 +23,9 @@ A green suite against a mock is evidence about the mock. That is worth having an
 - [Injecting the base URL](../injecting_the_base_url/README.md) — the precondition for any of this
 - [Testing a command](../../03_Command_Line/testing_a_command/README.md) — the other end of the same program, tested the same way
 - [Deserializing a response](../deserializing_a_response/README.md) — what the fixture is actually exercising
+
+## Po polsku
+
+Po polsku nazywa się to różnie — atrapa, makieta, zaślepka, namiastka — ale w praktyce, i przede wszystkim w wyszukiwarce, liczy się jedno słowo: `mock`, odmieniane po polsku (*zamockować serwer*, *strzał w mocka*). Warto o tym wiedzieć, zanim się zacznie szukać, bo „atrapa serwera HTTP” nie znajdzie prawie niczego, a `rust httpmock` znajdzie wszystko. Sedno tej lekcji jest jednak niewygodne i lepiej nazwać je wprost: **zielony pasek testów na atrapie jest dowodem na atrapę, a nie na API** — mock zamraża twoje przekonanie o tym, co serwis odpowiada, a zamrożone przekonanie przechodzi testy również wtedy, gdy prawdziwy serwis dawno się zmienił. Część tej straty odrabiają dwie rzeczy: asercja, że atrapa **została trafiona** (klient, który po cichu nie wysłał nic, przechodzi test równie ładnie jak działający), oraz zapisana prawdziwa odpowiedź jako *fixture* i jeden test integracyjny, puszczany rzadko i świadomie przeciwko żywemu serwisowi.
+
+**Szukaj po polsku:** mockowanie w testach · testy integracyjne a jednostkowe · `rust httpmock` · `rust wiremock crate` · `rust mock http server test`

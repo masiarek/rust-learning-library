@@ -60,3 +60,9 @@ Some("gamma")
 - [`str::lines`](../str_lines/README.md) — the newline-aware version
 
 [`str::rsplit_terminator` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.rsplit_terminator)
+
+## Po polsku
+
+Nazwa mówi wszystko, jeśli przeczytać ją dosłownie: w `rsplit_terminator` separator jest **zakończeniem** elementu, a nie rozdzielaczem między elementami — dlatego `"alpha\nbeta\ngamma\n"` ma trzy pola, a nie cztery. Pułapka jest w przedrostku `r`: odwraca on kolejność **przechodzenia**, ale nie to, który pusty kawałek znika. Zawsze wypada ten po *ostatnim* separatorze, bo to cecha samego łańcucha znaków, a nie kierunku, z którego go czytamy — stąd `",a".rsplit_terminator(',')` daje `["a", ""]`: wiodąca pustka przeżywa i po prostu przychodzi na końcu. Jeśli intuicja podpowiada, że „skoro czytam od tyłu, to i pustka ucieka z drugiej strony”, to właśnie ta jedna linijka wyjścia jest kontrprzykładem wartym zapamiętania.
+
+**Szukaj po polsku:** separator jako zakończenie elementu · puste pola przy dzieleniu łańcucha · iteracja od końca · `rust rsplit_terminator` · `rust split_terminator trailing empty`

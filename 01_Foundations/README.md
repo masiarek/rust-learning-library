@@ -50,3 +50,13 @@ Rough order, not a promise. Each becomes a page once it has a runnable example w
 - **Error handling in the large** — `thiserror` for libraries, `anyhow` for applications, building on [`Option` vs `Result`](../17_Option_and_Result/option_vs_result/README.md)
 - **Iterators** — laziness, and why the loop you would write by hand is usually slower
 - **`Rc`, `RefCell`, and friends** — what to reach for when the borrow checker says no and you are sure you are right
+
+## Po polsku
+
+To nie jest lekcja, tylko mapa: siedem działów ułożonych tak, że każdy zakłada znajomość poprzednich. Po polsku nazwałbyś je kolejno: pierwsze programy, kontrola przepływu sterowania, struktury, `Option` i `Result`, własność, łańcuchy znaków, liczby i bajty. Nazwy katalogów i odnośników zostają angielskie i tak ma zostać — adres pliku to jest dokładnie to, co wpisujesz w `rg` i co widzisz w pasku przeglądarki, więc tłumaczenie go zepsułoby jedyną rzecz, do której służy.
+
+Warto od razu wiedzieć, gdzie kończy się materiał po polsku. Tour of Rust, jedyny obszerny polski kurs Rusta, ma przetłumaczone rozdziały 1–5 — czyli mniej więcej trzy pierwsze wiersze tej tabeli plus własność i pożyczanie; `Option` i `Rezultat` pojawiają się tam tylko przy okazji typów generycznych, a dalej strony są już po angielsku. Ta krawędź wypada niefortunnie, bo dwadzieścia cztery lekcje o `Option` i `Result`, cały dział o obsłudze błędów i wszystko o cechach (*traits*) leży już za nią. Nie są to działy nadobowiązkowe — reszta biblioteki stoi właśnie na nich. Brak polskiego kursu nie jest tu żadną wskazówką co do ważności, tylko informacją o tym, dokąd ktoś zdążył dojść z tłumaczeniem.
+
+Jedno pojęcie z tabeli „osiem zadań `Option`” polski czytelnik zna raczej z matematyki niż z programowania: **funkcja częściowa** (*partial function*) to funkcja określona tylko na części dziedziny. I o tę intuicję dokładnie chodzi — `first()` na pustej liście albo pierwiastek z liczby ujemnej nie mają odpowiedzi, a `Option<T>` zamienia taką funkcję w **całkowitą**: odpowiedź jest zawsze, tylko jedną z możliwych odpowiedzi jest `None`. Skojarz oba określenia, bo myśli się wygodniej po polsku, ale wyszukiwarka odpowie dopiero na *partial function*.
+
+**Szukaj po polsku:** kurs Rusta po polsku · funkcja częściowa a całkowita · obsługa błędów w Ruscie · `rust std option module docs` · `rust book table of contents`

@@ -23,3 +23,9 @@ Injection reads as test scaffolding, so it gets skipped in "real" code and retro
 - [Mocking a server](../mocking_a_server/README.md) — the thing this makes possible
 - [Testing a command](../../03_Command_Line/testing_a_command/README.md) — the same argument one level up: parameters, not constants
 - [Optional function arguments](../../17_Option_and_Result/optional_arguments/README.md) — the five shapes a "usually this, sometimes that" argument can take
+
+## Po polsku
+
+„Wstrzykiwanie zależności” (*dependency injection*) brzmi po polsku ciężko i ciągnie za sobą skojarzenia ze Springa albo .NET-a: kontener, adnotacje, konfiguracja. Tutaj nie ma nic z tych rzeczy — chodzi o jeden ruch, **zamianę decyzji na parametr**. `const BASE_URL` u góry pliku to jedna linijka, która raz na zawsze przesądza, dokąd funkcja wyśle żądanie; ten sam adres jako pole struktury to też jedna linijka i nie przesądza niczego, a testowalność jest tego skutkiem, nie celem. Kolejność przeróbki warto zapamiętać, bo prowadzi od najprostszego: wolna funkcja → funkcja z adresem w argumencie → struktura trzymająca klienta i adres, z żądaniem jako metodą; skąd potem bierze się prawdziwy adres (wartość domyślna, zmienna środowiskowa, flaga) rozstrzyga znana skądinąd drabinka pierwszeństwa. Uwaga na pokusę, która wygląda niewinnie: dorobiona furtka pod `#[cfg(test)]` zamiast parametru sprawia, że kod produkcyjny i kod przetestowany to od tej chwili **dwie różne ścieżki** — czyli dokładnie to, czego test miał nie dopuścić.
+
+**Szukaj po polsku:** wstrzykiwanie zależności · testowalność kodu · stała a parametr funkcji · `rust dependency injection without a framework` · `rust must_use attribute`

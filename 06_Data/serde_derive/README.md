@@ -23,3 +23,9 @@ Deriving both traits makes a struct part of a **file format**. Rename a field an
 - [The round trip](../json_round_trip/README.md) — the test that catches exactly the breakage above
 - [The `Default` trait](../../03_Command_Line/the_default_trait/README.md) — what `#[serde(default)]` reaches for when a field is missing
 - [Debug and Display](../../15_First_Programs/debug_vs_display/README.md) — three ways to turn a value into text, and the audience each one has
+
+## Po polsku
+
+W Javie czy Pythonie serializacja opiera się na refleksji: biblioteka w czasie działania programu ogląda pola obiektu i sama wie, co zapisać. W Ruscie **refleksji nie ma**, więc `#[derive(Serialize, Deserialize)]` niczego nie „ogląda” — to makro proceduralne, które w czasie kompilacji dopisuje do twojego typu kod przechodzący pole po polu. Stąd bierze się podział na dwa crate'y, który na początku wygląda na komplikację, a jest zaletą: `serde` uczy *twój typ* opisywać samego siebie, a dopiero `serde_json` (albo `toml`, `serde_yaml`, `rmp-serde`) decyduje, jak wyglądają bajty — jeden `derive`, wszystkie formaty; w `Cargo.toml` trzeba tylko pamiętać o `features = ["derive"]`, bo bez tej flagi kompilator narzeka na brakujące makro, a nie na brakującą flagę. Pułapka, o której ta strona jest naprawdę: od chwili wpisania tego `derive` twoja struktura **jest formatem pliku** — zmiana nazwy pola to zmiana formatu i wczorajszy zapis przestaje się wczytywać, a w kodzie nie ma ani jednej linijki, która by o tym uprzedzała.
+
+**Szukaj po polsku:** serializacja serde · makro proceduralne · brak refleksji w Ruscie · `rust serde derive feature` · `cannot find derive macro Serialize`

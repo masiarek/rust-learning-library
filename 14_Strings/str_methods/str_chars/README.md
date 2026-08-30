@@ -70,3 +70,11 @@ Some('é')
 - [`str::split_whitespace`](../str_split_whitespace/README.md) — when the unit you want is a word, not a character
 
 [`str::chars` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.chars)
+
+## Po polsku
+
+Polskie słowo „znak” jest szersze niż `char`: `char` to **skalar Unicode**, a nie to, co czytelnik pokazuje palcem jako jedną literę. Zwykle się to nie rozjeżdża, bo w postaci znormalizowanej NFC każda polska litera — ą, ć, ę, ł, ń, ó, ś, ź, ż — jest jednym skalarem i `"żółw".chars().count()` daje 4. Ale ten sam tekst w NFD (tak bywa z tekstem skopiowanym z macOS-a albo wyjętym z bazy o innej normalizacji) rozkłada się na literę bazową plus znak łączący, więc ta sama funkcja odpowie 6, a `chars().rev()` oderwie wtedy diakrytyk od jego litery i doklei go do sąsiedniej. Domyka to jeden ładny szczegół: `ł` jako jedyna z tych liter nie ma rozkładu kanonicznego i w NFD zostaje sobą.
+
+Kiedy naprawdę chodzi o „to, co widzi czytelnik”, potrzebna jest segmentacja na grafemy — w `std` jej nie ma, mieszka w crate'cie `unicode-segmentation`. I jeszcze jedno przyzwyczajenie z Pythona warte porzucenia: `s[i]` tutaj nie istnieje, bo żeby dojść do znaku *i*, trzeba zdekodować wszystkie wcześniejsze; `s.chars().nth(i)` mówi to wprost i jest O(n).
+
+**Szukaj po polsku:** skalar Unicode a grafem · normalizacja NFC NFD · znaki łączące · `rust str chars` · `rust unicode-segmentation graphemes`

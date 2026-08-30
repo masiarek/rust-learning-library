@@ -342,3 +342,13 @@ fn main() {
 ## Sources
 
 [Operator Overloading ↗](https://doc.rust-lang.org/rust-by-example/trait/ops.html) in Rust by Example, and [`std::ops` ↗](https://doc.rust-lang.org/std/ops/index.html), whose module page lists every operator and the trait behind it.
+
+## Po polsku
+
+W polskiej literaturze — najczęściej tej o C++ — mówi się o **przeciążaniu operatorów** i to dobre określenie, tyle że w Ruscie odrobinę za słabe. `a + b` nie jest tu operatorem, który ktoś przeciążył, tylko dosłownie wywołaniem `Add::add(a, b)`: metody cechy (*trait*) `Add` z `std::ops`. Dlatego w grze jest `type Output`, czyli typ powiązany (*associated type*), i dlatego żaden z trzech typów nie musi być taki sam — `Instant + Duration` daje `Instant`, `Instant - Instant` daje `Duration`, a `String + &str` daje `String`. Wybór `Output` jest decyzją projektową, nie formalnością.
+
+Dwie rzeczy zaskakują kogoś, kto przychodzi z C++ albo Pythona. Po pierwsze, **nie ma symetrii ani wywołania odwrotnego**: `impl Mul<i32> for Points` daje `p * 3` i tylko tyle, a `3 * p` wymaga osobnej, zupełnie niezwiązanej implementacji `impl Mul<Points> for i32`. W Pythonie załatwiłby to `__rmul__`, tutaj nie ma takiego mechanizmu — a brak implementacji to błąd kompilacji, nie `TypeError` w czasie działania. Ta druga implementacja jest przy tym legalna mimo reguły sieroty (*orphan rule*), bo reguła patrzy na **całą** implementację, a typ lokalny występuje w niej jako parametr. Po drugie, nic nie jest tu „w komplecie”: `+=` to osobna cecha `AddAssign`, `.sum()` wymaga `Sum`, `&p * 3` to jeszcze jedna implementacja. Ta rozwlekłość jest zaletą — to przez nią `Points + Seats` nie skompiluje się przez przypadek.
+
+Polska rada z podręczników brzmi zwykle „nie nadużywaj przeciążania” i jest nie do użycia, bo nie mówi, gdzie przebiega granica. Ta strona daje zamiast niej jedno konkretne pytanie: **czy każdy czytelnik zgadnie ten sam wynik, nie zaglądając do `impl`?** Przykład jest wyborczy i po polsku brzmi wyjątkowo klarownie — frekwencja 80% rano i 40% wieczorem to ani 120%, ani 60%, tylko 44%, bo trzeba ją zważyć liczbą głosujących w każdej porze. Poprawna odpowiedź potrzebuje argumentu, którego operator nie ma gdzie przyjąć, więc `Turnout` nie dostaje `Add`, tylko metodę `combine(other, voters)` — z nazwą i podpisem, które mówią, co się dzieje. Operator ukrywa pytanie, nazwana metoda je zadaje. Ta sama logika tłumaczy zresztą, dlaczego `[]` na `HashMap`ie panikuje, zamiast zwrócić `Option`: `Index::index` zwraca referencję `&Self::Output` i nie ma gdzie zmieścić `None`.
+
+**Szukaj po polsku:** przeciążanie operatorów · typy powiązane · reguła sieroty · `rust std::ops Add trait` · `rust orphan rule impl Mul<Points> for i32`

@@ -23,3 +23,9 @@
 - [Meet the `char`](../meet_the_char/README.md)
 - [STRINGS.md](../../STRINGS.md) — the map this page is a gap in
 - [Strings: links, books and videos](../resources/README.md) — where to read about it in the meantime
+
+## Po polsku
+
+Wszystkie te metody przyjmują `Pattern`, więc `char`, `&str` i domknięcie (*closure*) są w nich wymienne — ale `find` niesie pułapkę, którą widać dopiero na polskim tekście: zwraca przesunięcie w **bajtach**, a nie numer znaku. `"żółw".find('w')` to `6`, nie `3`, bo trzy pierwsze litery zajmują po dwa bajty; jest to dokładnie ta liczba, której oczekuje `&s[..i]`, i dokładnie nie ta, którą wypada pokazać użytkownikowi jako „pozycję litery”. Druga pułapka siedzi we wzorcu zbudowanym z domknięcia: `'ą'.is_alphabetic()` zwraca `true`, bo pyta Unicode, ale `'ą'.is_ascii_alphabetic()` zwraca `false` — wzorzec oparty na metodach `is_ascii_*` po cichu przeoczy polskie litery. I jeszcze jedno z listy powyżej, warte zapamiętania osobno: `strip_prefix` niemal zawsze jest tym, co miało się na myśli, pisząc `starts_with`, bo oddaje resztę łańcucha zamiast kazać ją odcinać ręcznie.
+
+**Szukaj po polsku:** wyszukiwanie w łańcuchu znaków · pozycja w bajtach a numer znaku · `rust str find Pattern` · `rust strip_prefix` · `rust regex crate`

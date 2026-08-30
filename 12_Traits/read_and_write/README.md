@@ -29,3 +29,11 @@ A `BufWriter` flushes on drop and **discards the error if that flush fails** —
 - [Standard error, and exit status](../../02_Errors/stderr_and_exit_status/README.md) — the two writers a program has by default
 - [Temporary directories in tests](../../04_Files/temp_dirs_in_tests/README.md) — what you need *less* of once a function takes `impl Read`
 - [`std::io::Read` ↗](https://doc.rust-lang.org/std/io/trait.Read.html) · [Comprehensive Rust: `Read` and `Write` ↗](https://google.github.io/comprehensive-rust/std-traits/read-and-write.html)
+
+## Po polsku
+
+Sedno `Read` i `Write` jest takie, że to **cechy** (*traits*), a nie typy: `&[u8]` implementuje `Read`, a `Vec<u8>` implementuje `Write`, więc funkcja przyjmująca `impl Read` daje się przetestować na danych trzymanych w pamięci i uruchomić na pliku bez żadnej różnicy w kodzie. Polskie materiały mówią zwykle o „strumieniach wejścia/wyjścia”, co podsuwa złą intuicję — tutaj nie ma klasy strumienia ani hierarchii dziedziczenia, są dwie cechy z jedną wymaganą metodą każda (`read`, `write`) i całą wygodną resztą (`read_to_string`, `write_all`, `lines`) dobudowaną na nich jako metody domyślne.
+
+Pułapka, dla której ta strona istnieje, jest cicha: `BufWriter` opróżnia bufor przy wypuszczeniu zasobu (*drop*) i **gubi błąd**, jeśli to opróżnienie się nie powiedzie — `Drop` nie ma jak zwrócić `Result`. Program, który zapisze raport i nigdy nie wywoła jawnie `flush()`, potrafi zakończyć się kodem wyjścia 0, zostawiając ucięty plik. Druga rzecz do zapamiętania to `write` z krótkim zapisem — wolno mu zapisać mniej bajtów, niż mu podano — oraz to, że `std::io::Write` i `std::fmt::Write` są dwiema różnymi cechami o tych samych nazwach metod, więc błąd o brakującym imporcie potrafi wskazywać nie tę, o którą chodziło.
+
+**Szukaj po polsku:** strumienie wejścia/wyjścia w Ruscie · buforowanie zapisu · `rust BufWriter flush on drop` · `rust impl Read for testing` · `rust io::Write vs fmt::Write`

@@ -83,3 +83,13 @@ You need `ghci` and nothing else — `brew install ghc` or [GHCup ↗](https://w
 - [What a monad is](../../17_Option_and_Result/what_a_monad_is/README.md) — the same idea without leaving Rust
 - [`Option` vs `Result`](../../17_Option_and_Result/option_vs_result/README.md) — `Maybe` and `Either`, renamed and put to work
 - [Books](../books/README.md) — the Rust shelf
+
+## Po polsku
+
+Rust wziął z Haskella bardzo dużo, a potem **zdjął z tego nazwy**. To jest cała teza tej strony: górna połowa tabeli powyżej to zwykłe przemianowania (`Maybe` → `Option`, `Either` → `Result`, `fmap` → `map`, `>>=` → `and_then`), a dopiero dwa ostatnie wiersze to miejsca, w których Rust przestaje być Haskellem w klamrach — leniwa ewaluacja została **odrzucona świadomie**, a odśmiecanie pamięci (*garbage collection*) **zastąpione** własnością i pożyczaniem. Rozróżnienie „to jest przemianowane” od „to jest wymienione” daje większość korzyści z tego side questu. I uczciwie: Haskell nie jest do niczego potrzebny, żeby dobrze pisać w Ruscie.
+
+Polski czytelnik trafia tu zwykle z drugiej strony niż zakłada tekst powyżej. Programowanie funkcyjne bywa u nas osobnym przedmiotem na studiach — w Haskellu albo w ML-u — więc częsty przypadek to nie „idź się nauczyć drugiego języka”, tylko „miałem to na trzecim semestrze i pamiętam jako teorię do egzaminu”. Wtedy kierunek się odwraca i robi się prosto: monady, funktory i klasy typów już znasz, brakuje wyłącznie **mapowania nazw**. `Maybe` to `Option`, `Either` to `Result` (tyle że strona błędu dostała konkretne zadanie), klasy typów to cechy (*traits*) — z jedną różnicą, której Haskell nie ma, czyli koherencją i regułą `orphan rule`; `>>=` to `and_then`, notacja `do` to operator `?`, ograniczony do typów implementujących `Try`. Jedna praktyczna konsekwencja przy szukaniu: dokumentacja Rusta **nigdy nie powie „monada”**, więc szukanie po tym słowie nic nie da — szukaj `and_then`, `Option::map`, `?` operator, a nazwę trzymaj w głowie jako klucz do zrozumienia, nie do wyszukiwarki.
+
+Dwóch rzeczy nie przenoś. Leniwej ewaluacji tu nie ma i nie ma jej szukać — Rust liczy gorliwie wszędzie poza adapterami iteratorów, a wycieki pamięci wynikające z lenistwa to specjalność wyłącznie Haskella. Styl bezpunktowy (*point-free*) też zostaw: `f . g . h` jest idiomatyczne po tamtej stronie, a po rustowemu czyta się gorzej niż domknięcie, które miało zastąpić. I najważniejsze rozstrzygnięcie „czy teraz”: jeśli wciąż walczysz z borrow checkerem, to jeszcze nie teraz. Własność jest tą jedyną naprawdę nową ideą Rusta, o której Haskell nie ma nic do powiedzenia — ten sam problem rozwiązuje odśmiecaczem.
+
+**Szukaj po polsku:** programowanie funkcyjne · monada · klasy typów · `rust and_then monad` · `learn you a haskell`

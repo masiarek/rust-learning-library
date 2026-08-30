@@ -23,3 +23,9 @@
 - [`Cow`: borrow until somebody writes](../../18_Ownership/clone_on_write/README.md)
 - [STRINGS.md](../../STRINGS.md) — the map this page is a gap in
 - [Strings: links, books and videos](../resources/README.md) — where to read about it in the meantime
+
+## Po polsku
+
+To na razie szkic, a nie gotowa lekcja — ale sama myśl jest krótka: `String` trzyma trzy słowa maszynowe (wskaźnik, długość, pojemność), a skoro tekst, którego i tak nie zamierzasz rozbudowywać, nie potrzebuje zapasowego miejsca, to trzecie słowo można wyrzucić i dostać `Box<str>` — te same bajty na stercie, ale wartość mniejsza o 8 bajtów, za to bez `push_str`. Konwersje w obie strony (`into_boxed_str` / `into_string`) są tanie, więc wybór między nimi to zwykle kwestia liczby przechowywanych wartości, a nie mikrooptymalizacji. Warianty `Rc<str>` i `Arc<str>` idą krok dalej i są w Ruscie standardowym sposobem na internowanie napisów: wielu właścicieli, jeden bufor, zero kopii tekstu — w odróżnieniu od `Rc<String>`, który jest wskaźnikiem na wskaźnik i kopii i tak nie oszczędza. Stąd pułapka warta zapamiętania: `.to_owned()` na inteligentnym wskaźniku klonuje **wskaźnik**, a nie tekst pod nim.
+
+**Szukaj po polsku:** inteligentny wskaźnik · zliczanie referencji · internowanie napisów · `rust Box<str> vs String` · `rust Rc<str> Arc<str>`

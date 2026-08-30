@@ -78,3 +78,9 @@ wide n=5 -> 5
 - [`str::char_indices`](../str_char_indices/README.md) — every boundary, enumerated
 
 [`str::ceil_char_boundary` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.ceil_char_boundary)
+
+## Po polsku
+
+`ceil_char_boundary` zaokrągla **w górę** do najbliższej granicy znaku (*char boundary*), więc potrafi oddać offset większy niż ten, o który prosisz — o jeden bajt przy polskiej literze diakrytycznej, o trzy przy emoji. To rozstrzyga, kiedy go używać: przy twardym limicie bajtów (kolumna w bazie, ramka protokołu) potrzebujesz `floor_char_boundary`, bo `ceil` ten limit przekroczy; `ceil` pasuje wtedy, gdy offset wyznacza **początek** czegoś, czego nie wolno naciąć — pomijasz nagłówek o długości co najmniej *n* bajtów albo wznawiasz skanowanie od pozycji nie wcześniejszej niż znana. Jest jeszcze asymetria warta zapamiętania: dla offsetu spoza łańcucha `floor` przycina wynik do `len()`, a `ceil` **panikuje**, bo powyżej `len()` żadnej granicy już nie ma.
+
+**Szukaj po polsku:** granica znaku w UTF-8 · zaokrąglanie do granicy znaku · bezpieczne przycinanie łańcucha · `rust ceil_char_boundary` · `rust byte index is not a char boundary`

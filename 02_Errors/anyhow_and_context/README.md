@@ -24,3 +24,9 @@ Context is added where the error is *created* — the deepest, least informed fr
 - [Not every error is an `io::Error`](../not_every_error_is_io_error/README.md) — why an application wants one type in the first place
 - [`thiserror` vs `anyhow`](../thiserror_vs_anyhow/README.md) — the line this crate belongs on the far side of
 - [Debug and Display](../../15_First_Programs/debug_vs_display/README.md) — which of the two the chain prints, and where
+
+## Po polsku
+
+Sedno tej strony to jedno spostrzeżenie: `io::Error` mówi, **co** się stało, ale nigdy nie mówi, **z czym** — nie nosi w sobie ścieżki, na której poległ, więc komunikat *„No such file or directory”* jest prawdziwy i zupełnie bezużyteczny. Kontekst dokłada się warstwami w drodze **na zewnątrz**, a nie w miejscu powstania błędu, bo najgłębsza ramka wie najmniej: „wczytywanie konfiguracji” → „odczyt ballots.txt” → *„No such file or directory”*, gdzie każda warstwa dopisuje to, co tylko ona wiedziała. Wariant `.with_context(|| …)` dostaje domknięcie (*closure*) i skleja napis dopiero wtedy, gdy błąd faktycznie wystąpi — w pętli to różnica między jedną sklejką łańcucha a milionem. Cena, uczciwie: `anyhow::Error` ma wymazany typ (*type-erased*), więc odzyskanie konkretnej przyczyny wymaga `downcast_ref` — i właśnie dlatego jest to narzędzie aplikacji, a nie biblioteki.
+
+**Szukaj po polsku:** kontekst błędu · łańcuch przyczyn błędu · `rust anyhow context` · `rust io error does not include path` · `rust anyhow downcast_ref`

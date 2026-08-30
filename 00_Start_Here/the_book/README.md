@@ -57,3 +57,13 @@ The chapter *names* are stable; the numbers are not. That is why the [rustlings 
 - [rustlings](../rustlings/README.md) — the exercises to run alongside, chapter by chapter
 - [Rust by Example](../rust_by_example/README.md) — for looking up syntax mid-chapter
 - [`Option` vs `Result`](../../17_Option_and_Result/option_vs_result/README.md) — this library on the chapter 6 and 9 material, with the output proved
+
+## Po polsku
+
+Polskie tłumaczenie The Book istnieje i jest dobre: [*Język Programowania Rust* ↗](https://github.com/beling/book-pl), wymienione w oficjalnym dodatku z tłumaczeniami. Rozdział 4 — ten, o którym ta strona mówi, że *jest* książką — jest przełożony w całości i trzyma to samo słownictwo, co reszta tej biblioteki: własność, stos i sterta, łańcuch znaków. Ma jednak granicę i pada ona dokładnie w najgorszym możliwym miejscu względem rady „przeczytaj rozdziały 1–10”: po polsku są rozdziały **1–9**, a rozdział 10 — typy generyczne, cechy (*traits*) i czasy życia — jest tam nadal po angielsku. Czyli z dziesięciu zalecanych dostajesz dziewięć, a przełączenie na angielski wypada na rozdziale, w którym polska terminologia i tak jest najsłabiej ustalona.
+
+Ostrzeżenie z sekcji o numeracji rozdziałów dotyczy tego tłumaczenia podwójnie, bo stara numeracja jest w nim **zamrożona**. Polska wersja ma rozdział 17 = programowanie obiektowe, 18 = wzorce, 19 = zagadnienia zaawansowane — czyli układ sprzed edycji 2024, zanim `async` wszedł na siedemnastkę i przesunął resztę. W praktyce: „rozdział 19” w polskim tekście i *chapter 19* w dzisiejszej angielskiej książce to dwa różne rozdziały, a odsyłacz „§18.3 o składni wzorców” w polskim tłumaczeniu jest trafny, w dzisiejszym oryginale prowadzi już gdzie indziej. Nazwy rozdziałów są stabilne, numery nie — więc powołuj się na nazwę, po polsku tym bardziej.
+
+Rada „przeczytaj dwa razy” układa się przez to naturalnie na dwa języki, i warto ją tak właśnie potraktować, zamiast uznać pierwsze (droższe) przejście za załatwienie sprawy. Pierwszy raz po polsku, dokąd tłumaczenie sięga; drugi raz po angielsku w wydaniu Browna, które **istnieje wyłącznie po angielsku** i którego quizy są diagnostyczne — sprawdzają twój model własności, a nie znajomość angielskiego, więc pomylona odpowiedź mówi coś konkretnego o tym, co dalej rozumiesz źle. Do tego `rustup doc --book` daje kopię offline w wersji zgodnej z twoim kompilatorem — po angielsku, ale zawsze tę właściwą.
+
+**Szukaj po polsku:** Język Programowania Rust · własność rozdział 4 · numeracja rozdziałów edycja 2024 · `rust book brown edition quizzes` · `rustup doc --book`

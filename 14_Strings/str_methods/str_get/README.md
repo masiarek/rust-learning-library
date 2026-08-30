@@ -72,3 +72,9 @@ Some(104)
 - [`str::chars`](../str_chars/README.md) — when you wanted a character, not a range
 
 [`str::get` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.get)
+
+## Po polsku
+
+Dla polskiego tekstu `get` przestaje być wariantem `&s[a..b]` „dla ostrożnych” i staje się domyślnym narzędziem, bo indeksy w `str` liczą **bajty, nie litery**: w „żółw” bajt numer 1 wypada w środku `ż`, więc `&s[0..1]` kładzie program paniką, a `s.get(0..1)` grzecznie zwraca `None`. Obie możliwe wpadki — wyjście poza zakres i trafienie w środek znaku wielobajtowego — `get` zamienia w to samo `None`, co jest wygodne, ale znaczy też, że samo `None` nie mówi, która z nich zaszła; od odróżniania są `is_char_boundary()` i `len()`. Nie ma natomiast `s.get(0)` zwracającego znak i nie jest to przeoczenie: `str` nie implementuje `Index<usize>`, bo pojedynczy bajt polskiej litery to pół litery. Jeśli przychodzisz z Pythona, gdzie `s[0]` daje znak, to właśnie tę różnicę trzeba sobie przestawić — po znak sięgasz przez `chars()`, po bajt przez `as_bytes()`.
+
+**Szukaj po polsku:** indeksowanie łańcucha po bajtach · granica znaku · wycinek łańcucha · `rust str get vs index panic` · `rust byte index not char index`

@@ -63,3 +63,13 @@ Not cheat sheets by name, but the same job with a program behind the numbers:
 - [Books](../books/README.md) — the reading shelf, where cheats.rs also appears under *On the desk*
 - [Official docs](../official_docs/README.md) — when the question has a normative answer rather than a quick one
 - [Resources](../README.md) — the map of all five shelves, organised by the moment you are in
+
+## Po polsku
+
+Ściągawka (*cheat sheet*) ma jedno zadanie: odpowiedzieć na pytanie „jak to się nazywa?” szybciej niż wyszukiwarka. Kłopot, o którym jest ta strona, polega na tym, że **zamrożona ściągawka nie wygląda na zamrożoną** — tabela sprzed ośmiu lat wygląda dokładnie tak samo jak tabela sprzed tygodnia. Dla rysunku pamięci (`Box`, `Vec`, `Rc`) to nie szkodzi, bo to, co rysuje, się nie ruszyło; dla listy adapterów iteratora to dyskwalifikacja — arkusz Daniela Keepa stanął na Ruscie 1.17 i nie zna ani `step_by`, ani `copied`, ani `reduce`, ani `map_while`. Stąd nawyk wart wyrobienia: najpierw poszukaj daty albo numeru wersji na górze arkusza, a nazwę metody potwierdź w dokumentacji `std`, która jako jedyna nie może się zdezaktualizować.
+
+Polskiego czytelnika ta pułapka dotyczy mocniej niż angielskiego, i to nie z powodu języka, tylko objętości: materiałów o Ruscie po polsku jest niewiele i prawie żaden nie jest utrzymywany — Tour of Rust po polsku urywa się na rozdziale 5, a spora część polskich wpisów blogowych opisuje jeszcze stan sprzed edycji 2018. Dlatego dobry podział pracy wygląda tak: **po polsku szukaj wyjaśnień** (dlaczego coś działa właśnie tak), **po angielsku szukaj nazw** (jak się to nazywa i jak się to dziś pisze). Ściągawka jest ze swojej natury spisem nazw, więc niech będzie angielska i aktualna — `cheats.rs` plus `std`.
+
+Jedna rzecz, której nie należy czytać dosłownie z żadnego rysunku: dwie ściągawki z tej strony rysują to samo `Vec` w różnej kolejności pól (`ptr, cap, len` u Leviena, `ptr, len, capacity` na cheats.rs) i **żadna nie jest błędna**, bo kolejność pól w `Vec` nie jest przez Rusta gwarantowana. Taki rysunek to odpowiedź na pytanie „z czego składa się ta wartość”, a nie układ bajtów, na którym można polegać — od gwarantowanego układu jest `#[repr(C)]`, którego `Vec` nie ma.
+
+**Szukaj po polsku:** ściągawka Rust · rozmieszczenie w pamięci · `rust cheat sheet` · `cheats.rs` · `rust std collections which to use`

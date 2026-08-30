@@ -62,3 +62,9 @@ fn main() {
 - [`str::make_ascii_uppercase`](../str_make_ascii_uppercase/README.md) — the edit that cannot
 
 [`str::from_utf8_unchecked_mut` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.from_utf8_unchecked_mut)
+
+## Po polsku
+
+To jedyna metoda w tej rodzinie, przy której podpisujesz umowę **z obu stron**: bajty muszą być poprawnym UTF-8 na wejściu, bo nikt tego nie sprawdza, i muszą nim nadal być w chwili, gdy pożyczenie się kończy, bo wynikiem jest `&mut str` i wolno przez niego pisać. Drugiego warunku bezpieczne metody `&mut str` nie złamią — działają ASCII na ASCII i nie zmieniają długości w bajtach; złamać go można dopiero sięgając głębiej, przez `as_bytes_mut()`. Dlatego jest to zarazem najrzadziej potrzebna metoda z całej czwórki: `from_utf8_mut` kosztuje jedno liniowe przejście po buforze i zdejmuje z ciebie **połowę** umowy, więc jeśli nie umiesz wskazać palcem miejsca, w którym te bajty powstały już jako tekst, bierz wersję sprawdzaną.
+
+**Szukaj po polsku:** niezmiennik typu · referencja mutowalna · niezdefiniowane zachowanie · `rust from_utf8_unchecked_mut` · `rust as_bytes_mut invariant`

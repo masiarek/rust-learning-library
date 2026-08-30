@@ -86,3 +86,13 @@ So finish it, or do not; either is fine. But when it starts feeling like filling
 - [The Book](../the_book/README.md) — the chapters this table maps onto
 - [Exercises](../../10_Resources/exercises/README.md) — what to do after, and the other tracks
 - [Katas](../../KATAS.md) — this library's own, one per lesson
+
+## Po polsku
+
+Warto nazwać wprost, czego rustlings uczy naprawdę, bo dla uczącego się po polsku to nie do końca to samo, co dla Amerykanina: **umiejętności czytania komunikatów `rustc`**. Kompilator odzywa się wyłącznie po angielsku i nic tego nie zmieni — nie ma polskiej wersji diagnostyki, `rustlings hint` też jest po angielsku. Dobra wiadomość jest taka, że to język zamknięty: kilkadziesiąt powtarzalnych formuł, które po dwudziestym ćwiczeniu rozpoznaje się z jednego rzutu oka (`borrow of moved value`, `expected …, found …`, `does not live long enough`). Stąd jedna konkretna rada na start: czytaj **cały** komunikat, nie samą czerwoną linijkę. Rozwiązanie stoi zwykle niżej, w wierszach `help:` i `note:`, i to właśnie te wiersze polski czytelnik odruchowo pomija jako „resztę tekstu po angielsku”.
+
+Instalacja to miejsce, w którym polskojęzyczne poradniki starzeją się najszybciej. Krążąca po blogach i materiałach kursowych linijka `curl … install.sh | bash` **już nie działa** — instalator usunięto, adres zwraca 404. Aktualna droga to `cargo install rustlings`, potem `rustlings init`, a samo `rustlings` uruchamia tryb czuwania. Tabela poleceń na tej stronie odpowiada wersji 6.5.0, więc jeśli znaleziony poradnik pokazuje inne polecenia niż te, jest po prostu starszy od narzędzia — sprawdź `rustlings --help`, zanim uznasz, że coś jest zepsute u ciebie.
+
+Na koniec granica, o której mówi sekcja *Where it stops*, po polsku dotyczy czegoś jeszcze. Około sześćdziesiątego ćwiczenia poprawiasz cudze, prawie gotowe programy — a ćwiczenie z luką do wypełnienia nigdy nie każe ci niczego **nazwać**: ani typu, ani funkcji, ani modułu. Nazywanie jest dokładnie tą częścią, w której obcy język zaczyna kosztować, więc odkładanie własnego programu na później oznacza odkładanie jedynego ćwiczenia, które ten koszt oswaja. Kiedy rustlings zacznie przypominać wypełnianie formularza, to jest sygnał, żeby napisać coś swojego.
+
+**Szukaj po polsku:** ćwiczenia z Rusta · jak czytać komunikaty kompilatora Rust · `cargo install rustlings` · `rustlings hint` · `rust error index E0382`

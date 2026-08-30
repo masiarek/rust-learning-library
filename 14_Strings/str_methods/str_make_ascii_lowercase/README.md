@@ -74,3 +74,9 @@ fn main() {
 - [`String::as_mut_str`](../../string_methods/string_as_mut_str/README.md) — where the `&mut str` comes from
 
 [`str::make_ascii_lowercase` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.make_ascii_lowercase)
+
+## Po polsku
+
+Dla polskiego tekstu cała treść tej metody siedzi w jej nazwie: `ascii` znaczy **wyłącznie `A`–`Z`**, więc `"ŁÓDŹ".make_ascii_lowercase()` daje `"ŁÓdŹ"` — zamienione jedno `D`, reszta nietknięta, bo `Ł`, `Ó` i `Ź` leżą poza ASCII. To nie przeoczenie biblioteki, tylko warunek pracy w miejscu (*in place*): litera ASCII zajmuje dokładnie jeden bajt, podmiana nie zmienia więc długości, a `&mut str` swojej długości zmienić nie umie. Dlatego `make_lowercase` nie istnieje w ogóle — pełne odwzorowanie Unicode potrafi wydłużyć łańcuch (w przykładzie powyżej `İSTANBUL` rośnie z 9 do 10 bajtów), a to wymaga przejścia przez `String`: `s = s.to_lowercase();`. Praktyczny wniosek: do polskich napisów bierz `to_lowercase()`, a `make_ascii_lowercase()` zostaw temu, do czego naprawdę służy — nagłówkom HTTP, kluczom protokołów i innym rzeczom z definicji zapisanym w ASCII; zwraca `()`, więc łańcuchować jej i tak się nie da.
+
+**Szukaj po polsku:** zamiana na małe litery · polskie znaki diakrytyczne w Ruscie · wielkość liter Unicode · `rust make_ascii_lowercase vs to_lowercase` · `rust &mut str in place`

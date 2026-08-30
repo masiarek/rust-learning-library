@@ -23,3 +23,9 @@ Both approaches fail on a changed API; they differ in *when*. Structs fail loudl
 - [Deriving `Serialize` and `Deserialize`](../../06_Data/serde_derive/README.md) — the derive, and the attributes that survive somebody else's naming
 - [Mocking a server](../mocking_a_server/README.md) — where a stored real response earns its keep
 - [`Option` vs `Result`](../../17_Option_and_Result/option_vs_result/README.md) — absent, or failed? The field that is missing has to pick one
+
+## Po polsku
+
+Deserializacja (*deserialization*) cudzego JSON-a to wybór strategii, a nie kwestia gustu: albo odwzorowujesz cały kształt odpowiedzi strukturami — wiernie, samodokumentująco i z tuzinem typów, których nigdy ręcznie nie stworzysz — albo bierzesz `serde_json::Value` i wskaźnikiem JSON Pointer (`/current/temperature`) sięgasz po te dwa pola, o które naprawdę ci chodziło. Rzecz w tym, że zmiany cudzego API nie przetrwa żadna z tych dróg; różnią się **kiedy** się o tym dowiesz — struktura wywala się głośno, zaraz na granicy programu i z nazwą pola w komunikacie, a pointer po cichu zwraca `None`, po czym dalej płynie wartość domyślna i cichy zły wynik. Osobno warto zapamiętać rozróżnienie, które po polsku zwykle zlewa się w jedno „brak wartości”, zwłaszcza gdy przychodzi się od SQL-a albo ABAP-a: **klucza nie ma w odpowiedzi w ogóle**, **klucz jest, a w nim `null`** i **klucz jest z wartością pustą** to trzy różne zdarzenia, a `Option` razem z `#[serde(default)]` służą właśnie do ich odróżnienia. Do tego `#[serde(rename = "…")]` na wypadek, gdy cudza nazwa pola nie jest legalnym identyfikatorem Rusta — w cudzym API to raczej reguła niż wyjątek.
+
+**Szukaj po polsku:** deserializacja JSON w Ruscie · parsowanie odpowiedzi API · `rust serde_json Value pointer` · `rust serde default vs Option` · `rust serde rename field`

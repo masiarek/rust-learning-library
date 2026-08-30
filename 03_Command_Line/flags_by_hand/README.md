@@ -23,3 +23,9 @@ Hand-rolled flag parsing does not fail loudly; it fails by *quietly not implemen
 - [Command-line arguments](../command_line_arguments/README.md) — where the strings come from
 - [Deriving a parser with `clap`](../clap_derive/README.md) — the same job, declared instead of written
 - [Testing a command](../testing_a_command/README.md) — how you find out that `--` case is broken
+
+## Po polsku
+
+Flaga to po prostu argument zaczynający się od myślnika, a największą wartością tej lekcji jest **słownictwo**, bo po polsku ono nie jest ustalone: *positional argument* to argument pozycyjny, *short* i *long flag* to flaga krótka i długa, *switch* Microsoft tłumaczy jako „przełącznik”, a całą resztę nazywa się u nas zbiorczo „parametrami”. Dochodzi do tego pamięć DOS-u — pokolenie wychowane na `dir /w` ma w głowie ukośnik, nie myślnik — więc konwencji uniksowych trzeba się tu nauczyć świadomie, zamiast zakładać, że się je zna. Są cztery i żaden polski poradnik nie wylicza ich w jednym miejscu: `--` kończy parsowanie flag, `-abc` znaczy trzy krótkie flagi naraz, `--out=plik` znaczy to samo co `--out plik`, a samotny `-` oznacza wejście standardowe. Właśnie dlatego ręcznie pisany parser zawodzi po cichu: program, który potraktuje `-` jak nazwę pliku albo połknie `--`, jest zepsuty w sposób, którego autor własnym testem nie wykryje — bo autor wie, co chciał wpisać.
+
+**Szukaj po polsku:** flagi i przełączniki · argument pozycyjny · ręczne parsowanie argumentów · `posix utility argument syntax` · `gnu long options double dash`

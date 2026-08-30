@@ -23,3 +23,9 @@
 - [Injecting the base URL](../injecting_the_base_url/README.md) — the very next thing to do to this code, before it is written twice
 - [Deserializing a response](../deserializing_a_response/README.md) — what to do with the body
 - [`anyhow` and context](../../02_Errors/anyhow_and_context/README.md) — three failure modes that all deserve to say which URL they were fetching
+
+## Po polsku
+
+Po polsku mówi się „błąd 404” — i właśnie dlatego tak łatwo tu wpaść w pułapkę, przed którą ta strona ostrzega: dla `reqwest` odpowiedź `404` **nie jest** żadnym `Err`. Żądanie się powiodło, tylko serwer odpowiedział „nie”, więc dostajesz `Ok`, a dopiero jawne `error_for_status()` zamienia status spoza `2xx` w błąd — bez tego HTML strony „nie znaleziono” wjeżdża prosto do parsera JSON-a i wywala się dużo dalej, z komunikatem nie na temat. Druga decyzja zapada jeszcze przed pierwszą linijką kodu: blocking czy `async` — i tu warto uważać na słowo *runtime*, bo polskie „środowisko uruchomieniowe” podsuwa skojarzenie z JVM albo .NET-em, a chodzi o zwykły crate (`tokio`), który sam dokładasz do `Cargo.toml`. Jedno żądanie z narzędzia w wierszu poleceń nie potrzebuje go wcale; tysiąc równoległych — jak najbardziej.
+
+**Szukaj po polsku:** żądanie HTTP w Ruscie · programowanie asynchroniczne w Ruscie · `rust reqwest error_for_status` · `rust reqwest blocking vs async` · `rust reqwest timeout`

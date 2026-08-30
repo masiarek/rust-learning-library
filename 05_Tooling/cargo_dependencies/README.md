@@ -70,3 +70,13 @@ Neither is required for anything. `search` + `info` + `add` is the whole job; th
 - [Pinning the toolchain](../pinning_the_toolchain/README.md) — the same lock-versus-range idea, applied to the compiler
 - [Running a scratch program](../../15_First_Programs/rustc_without_cargo/README.md) — what `cargo new` set up, and what `rustc` does without it
 - [Compile times](../compile_times/README.md) — why an unused dependency is not free
+
+## Po polsku
+
+Najważniejsza rzecz na tej stronie jest pułapką dla oka: `rayon = "1.12.0"` **nie znaczy** „użyj wersji 1.12.0”. Goły napis z wersją to w Cargo tak zwane **wymaganie z daszkiem** (*caret requirement*), czyli skrót od `^1.12.0` — „cokolwiek od 1.12.0 wzwyż, byle poniżej 2.0.0”. Obejmuje więc także wydania, których jeszcze nikt nie opublikował. Kto przychodzi z Pythona i czyta ten zapis jak `==1.12.0` z `requirements.txt`, właśnie zgodził się na coś zupełnie innego, i stąd bierze się klasyczne „przecież wczoraj się budowało”.
+
+Dlatego pliki są dwa i dzielą się rolami: `Cargo.toml` mówi, **na co się zgadzasz**, a `Cargo.lock` zapisuje, **co faktycznie zbudowałeś i przetestowałeś**. Oba trafiają do repozytorium — dla aplikacji zawsze, a przy bibliotekach dzisiejsze zalecenie też brzmi „tak”. Bez pliku blokującego ten sam kod jest na dwóch maszynach innym programem. Aktualizacja to świadoma decyzja, a nie efekt uboczny budowania: `cargo update` przesuwa wersje wewnątrz dozwolonych zakresów i przepisuje `Cargo.lock`, a `cargo update -n` uruchamia to samo **na sucho** — mówi, co by się przesunęło, i nie zmienia niczego.
+
+Trzecia rzecz, po polsku prawie nieopisana, to skrót **MSRV** — *minimum supported Rust version*, czyli najstarszy kompilator, który dana zależność obsługuje. Wypisuje go `cargo info` w polu `rust-version`, i jest to jedyne pole, które warto przeczytać **przed** `cargo add`: crate z `rust-version: 1.80` po cichu podnosi wymagania całego twojego projektu. Samo polecenie `cargo info` jest przy tym na tyle nowe (weszło na stałe w Ruście 1.82), że starsze polskie poradniki go nie znają i każą szukać tych informacji ręcznie na crates.io.
+
+**Szukaj po polsku:** wersjonowanie semantyczne · czy commitować Cargo.lock · `cargo caret requirement` · `rust MSRV rust-version` · `cargo update --dry-run`

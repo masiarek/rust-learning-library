@@ -70,3 +70,9 @@ sum = 532
 - [`str::char_indices`](../str_char_indices/README.md) — characters plus sliceable byte offsets
 
 [`str::bytes` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.bytes)
+
+## Po polsku
+
+Dla polskiego tekstu różnica między `bytes()` a `chars()` nie jest ciekawostką, tylko codziennością: w UTF-8 każde ą, ć, ę, ł, ń, ó, ś, ź, ż zajmuje **dwa bajty**, więc `"żółw".bytes().count()` daje 7, a `"żółw".chars().count()` — 4. `bytes()` to strumieniowa wersja `as_bytes()`: te same dane, tylko jako iterator, więc weź wycinek, kiedy chcesz indeksować albo przekazać go dalej, a iterator, kiedy chcesz doczepić `filter`, `rev` czy `sum`. Bajty są właściwą jednostką do sumy kontrolnej i do skanowania czystego ASCII (`b'0'..=b'9'` porównuje się szybciej, niż dekoduje znaki) — do liczenia liter w polskim tekście nie nadają się nigdy.
+
+**Szukaj po polsku:** polskie znaki w UTF-8 · bajty a znaki · iterator po bajtach · `rust str bytes vs chars` · `rust utf-8 byte length`

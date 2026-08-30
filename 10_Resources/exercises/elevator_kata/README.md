@@ -112,3 +112,13 @@ Three things that cost more than they look:
 - [The long way round to a STAR count](../../../ROADMAP.md) — this library's own build-something-instead
 - [masiarek/elevator_kata ↗](https://github.com/masiarek/elevator_kata) — the Rust attempt this page was written for
 - [emilybache/Lift-Kata ↗](https://github.com/emilybache/Lift-Kata) — starting code in seven languages (C++, C#, Go, Java, JS, PHP, Python) — Rust not among them
+
+## Po polsku
+
+Po polsku winda jest jedna, a po angielsku dwie — brytyjski *lift* i amerykański *elevator* — i to jest część kłopotu opisanego na tej stronie. Szukając raz „lift kata”, raz „elevator kata”, trafia się na trzy różne zadania, które z daleka wyglądają na jedno, a nie dają się złożyć w jeden model danych: wersja z Codewars ma pasażerów i pojemność, ale **nie ma czasu** (liczy się wsadowo, do końca), wersja Emily Bache ma czas, drzwi i DING, ale **nie modeluje pasażerów** w ogóle. Typ `Lift`, który miałby obsłużyć obie, kończy z polem `capacity`, którego nikt nie czyta, i z metodą `tick()`, której części wywołujących nie wolno wywołać. Wybierz jedną wersję, zanim nazwiesz pierwszy typ.
+
+Wspólna jest dokładnie jedna rzecz — czysta funkcja bez czasu, drzwi i ludzi: „jestem tu, jadę w tę stronę, mam jeszcze do obsłużenia te piętra — gdzie zatrzymam się następnym razem?”. Warto ją napisać osobno, z własnymi testami, bo każda reguła każdej wersji kata jest regułą o **tej** odpowiedzi. Dwie decyzje typologiczne, które od razu ustawiają rozwiązanie: kierunek to wyliczenie (*enum*) `Direction`, a nie `bool going_up` (bo `false` nie mówi, czy „w dół”, czy „nie wiadomo”), a wynik to `Option<u32>`, gdzie `None` znaczy „nie ma dokąd jechać”. W polskiej numeracji pięter tę drugą różnicę widać wyjątkowo dobrze: parter to nie jest „piętro 0”, tylko osobna nazwa — i tak samo `None` to nie jest zero. `Option` wymusza tę różnicę w typie, więc kompilator nie pozwoli o niej zapomnieć.
+
+Kolejność budowania jest tu ważniejsza niż algorytm, bo czas jest najtrudniejszą częścią i najdłużej niepotrzebną. Zostań w modelu wsadowym aż polityka jazdy będzie poprawna, a `tick()` dodaj dopiero jako krok szósty — i traktuj to jako punkt kontrolny: **jeśli dodanie czasu psuje testy polityki, to znaczy, że czas wyciekł do polityki**. I jedna rzecz, którą łatwo zrobić odruchowo, a która kosztuje najwięcej: nie wyciszaj ostrzeżeń przez `dead_code = "allow"` w `Cargo.toml`. W projekcie budowanym od zaślepki w górę lista ostrzeżeń kompilatora *jest* listą rzeczy do zrobienia.
+
+**Szukaj po polsku:** kata windy · symulacja zdarzeniowa · `elevator kata` · `lift kata` · `rust BTreeSet range`

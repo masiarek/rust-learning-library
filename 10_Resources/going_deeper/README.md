@@ -61,3 +61,13 @@ See also this library's [cargo-nextest](../../05_Tooling/nextest/README.md) page
 
 - [Books](../books/README.md) — the general shelf
 - [Exercises](../exercises/README.md) — practice tracks
+
+## Po polsku
+
+To jest półka „na później”, i to nie w znaczeniu „trudniejsze”, tylko **dziedzinowe**: każdy dział tutaj jest osobnym tematem, a nie kolejnym rozdziałem kursu. Reguła porządkująca całą stronę brzmi: sięgasz po nie, kiedy masz konkretny problem, a nie w kolejności spisu treści. Przeczytanie książki o `async`, zanim napisało się program, który faktycznie na coś czeka, daje **słownictwo, a nie umiejętność** — różnica jest niewidoczna dla samego czytającego i doskonale widoczna dla kompilatora przy pierwszej próbie napisania czegokolwiek.
+
+Jeden wyjątek od reguły „najpierw pisz”, i dlatego stoi na tej stronie pierwszy: `unsafe`. To jedyne miejsce w Ruscie, w którym pomyłka nie jest błędem kompilacji, tylko błędem w programie, który się zbudował i działa — więc tu czytanie przed pisaniem naprawdę się opłaca. Warto przy okazji rozbroić odruch tłumaczeniowy: `unsafe` **nie znaczy „niebezpieczny kod”**. To deklaracja odpowiedzialności — „biorę na siebie niezmienniki, których kompilator w tym miejscu już nie sprawdza”. Blok `unsafe` niczego nie wyłącza i nie osłabia; przenosi obowiązek dowodu z kompilatora na autora. Samego słowa nie tłumacz nawet w myślach, bo w kodzie, w komunikatach i w każdym wyniku wyszukiwania i tak stoi `unsafe`.
+
+Podobne ostrzeżenie dotyczy `async`: to osobny dialekt języka, z własnymi trudnościami (`Pin`, ograniczenia `Send` w poprzek punktów `await`, czasy życia wewnątrz `Future`), z których prawie żadna nie jest trudnością zwykłego Rusta. Naucz się najpierw zwykłego. Na koniec praktyczna uwaga o tym, jak Rust wchodzi do pracy: najczęściej nie przez „projekt w Ruscie”, tylko przez jeden moduł — rozszerzenie do istniejącego programu w Pythonie napisane w PyO3. To decyzja o jednym module, a nie o języku całego zespołu, więc bywa jedyną, którą da się przeforsować.
+
+**Szukaj po polsku:** niebezpieczny Rust · programowanie asynchroniczne · `rustonomicon` · `rust async await tokio` · `pyo3 python rust`

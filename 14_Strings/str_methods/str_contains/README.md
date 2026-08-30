@@ -70,3 +70,9 @@ true true
 - [`str::matches`](../str_matches/README.md) — every occurrence, not just whether there is one
 
 [`str::contains` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.contains)
+
+## Po polsku
+
+`contains` to czytelniejsza forma `find(..).is_some()`, a jej argument jest **wzorcem** (`Pattern`) w czterech postaciach: `char`, `&str`, `&[char]` („którykolwiek z tych znaków”) i domknięcie `FnMut(char) -> bool`. Dla polskiego tekstu najważniejsze jest jednak to, że porównanie idzie **bajt po bajcie, a nie językowo**: `"Łódź".contains("łódź")` to `false`, a jeśli zmniejszasz wielkość liter po obu stronach, sięgnij po `to_lowercase()`, nie po `to_ascii_lowercase()` — ta druga zostawi `Ł` i `Ó` nietknięte, bo nie są znakami ASCII. Drugiej pułapki nie widać wcale: nic tu nie normalizuje, więc `ź` zapisane jednym skalarem nie dopasuje się do `z` z łączącym akcentem, choć na ekranie wyglądają identycznie — dane z różnych źródeł trzeba znormalizować wcześniej, np. crate'em `unicode-normalization`.
+
+**Szukaj po polsku:** wyszukiwanie podłańcucha · wzorzec Pattern w Ruscie · normalizacja Unicode · `rust str contains case insensitive` · `rust unicode-normalization`

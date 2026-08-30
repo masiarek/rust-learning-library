@@ -51,3 +51,9 @@ identical: true
 - [`str::slice_mut_unchecked`](../str_slice_mut_unchecked/README.md) — the other deprecated name
 
 [`str::slice_unchecked` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.slice_unchecked)
+
+## Po polsku
+
+Ta nazwa jest wycofana (*deprecated*) od Rusta 1.29 i powód jest czysto ergonomiczny: dwie luźne liczby `usize` można podać w odwrotnej kolejności, a zakresu `a..b` już tak łatwo nie odwrócisz — dlatego dziś pisze się `get_unchecked(a..b)`. Sam kontrakt się nie zmienił i to on jest tu ważny dla polskiego czytelnika: przesunięcia liczy się w **bajtach**, nie w znakach, a każda polska litera diakrytyczna (ą, ć, ę, ł, ń, ó, ś, ź, ż) zajmuje w UTF-8 dwa bajty — dokładnie jak `é` w przykładzie, gdzie `0..3` wycina `"hé"`, a nie trzy litery. Przy zwykłym indeksowaniu takie pudło kończy się paniką z komunikatem o granicy znaku (*char boundary*); przy `unsafe` nie ma żadnej kontroli, więc kończy się zachowaniem niezdefiniowanym (*undefined behaviour*), które może objawić się dopiero kilka funkcji dalej.
+
+**Szukaj po polsku:** przesunięcia w bajtach a znaki · granica znaku UTF-8 · metoda wycofana · `rust slice_unchecked deprecated` · `rust str byte index char boundary`

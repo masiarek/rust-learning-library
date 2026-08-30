@@ -71,3 +71,9 @@ the ra[in] [in] spa[in]
 - [`str::replace`](../str_replace/README.md) — when the goal is substitution rather than inspection
 
 [`str::match_indices` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.match_indices)
+
+## Po polsku
+
+`match_indices` zwraca pary `(usize, &str)`, a ta liczba to **przesunięcie w bajtach**, nie numer znaku — różnica, której w Pythonie nie ma i o którą w polskim tekście łatwo się potknąć: w `"żaba żaba"` drugie wystąpienie zaczyna się na bajcie 6, choć na znaku 5, bo `ż` zajmuje w UTF-8 dwa bajty. To nie usterka, tylko sedno metody: offset pochodzi z prawdziwego dopasowania, więc z definicji leży na granicy znaku i wycinek `&s[i..i + m.len()]` nigdy nie wywoła paniki — inaczej niż indeks policzony na piechotę. Gdy chcesz pokazać człowiekowi „znaleziono na pozycji N", przelicz to osobno przez `s[..i].chars().count()`; a jeżeli interesuje cię tekst *pomiędzy* trafieniami, to dokładnie to, co zwróciłby `split()` z tym samym wzorcem.
+
+**Szukaj po polsku:** pozycja znaku a pozycja bajtu · wyszukiwanie wszystkich wystąpień · przesunięcie w bajtach · `rust match_indices byte offset` · `rust find all occurrences in string`

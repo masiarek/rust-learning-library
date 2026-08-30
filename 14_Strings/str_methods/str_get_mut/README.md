@@ -64,3 +64,9 @@ true
 - [`String::as_mut_str`](../../string_methods/string_as_mut_str/README.md) — where the mutable borrow starts
 
 [`str::get_mut` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.get_mut)
+
+## Po polsku
+
+`get_mut` odmawia dokładnie w tych samych dwóch przypadkach co `get` i zwraca `Option<&mut str>`, a to, co wolno z wynikiem zrobić, jest z rozmysłem wąskie: przeróbki ASCII w miejscu i nic, co zmienia długość — `&mut str` siedzi w cudzym buforze i nie ma jak go rozepchnąć. Stąd typowy zapis `if let Some(part) = s.get_mut(6..)`: referencja mutowalna trzyma pożyczenie tak długo, jak sama żyje, więc wygodnie zamknąć je w bloku `if let` i pozwolić mu skończyć się na klamrze. Realne zastosowanie to rekord o stałym układzie — podnieść do wielkich liter kolumny `11..` bez kopiowania bufora — i tu jedno ostrzeżenie dla polskich danych: te „kolumny” liczone są w bajtach, więc jedno „ł” we wcześniejszym polu przesuwa cały układ o bajt i zakres, który wczoraj działał, dziś zwróci `None` albo trafi w nie to pole.
+
+**Szukaj po polsku:** zasięg pożyczenia · edycja w miejscu · rekord o stałym układzie · `rust str get_mut` · `rust &mut str ascii only`

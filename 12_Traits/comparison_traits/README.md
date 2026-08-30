@@ -27,3 +27,9 @@
 - [Marker traits](../marker_traits/README.md) — `Eq` and `Ord` are nearly markers: promises with no code
 - [Operators are traits](../operators_are_traits/README.md) — the other half of "an operator is a trait call"
 - [`PartialEq` ↗](https://doc.rust-lang.org/std/cmp/trait.PartialEq.html) · [`Ord` ↗](https://doc.rust-lang.org/std/cmp/trait.Ord.html) · [Comprehensive Rust: Comparisons ↗](https://google.github.io/comprehensive-rust/std-traits/comparisons.html)
+
+## Po polsku
+
+Przedrostek `Partial` czyta się tu wprost przez słownik polskiej matematyki dyskretnej i to jest największa przewaga polskiego czytelnika na tej stronie: `Eq` żąda **zwrotności** (relacja równoważności), `Ord` żąda porządku **liniowego** (całkowitego), a `f64` nie spełnia żadnego z tych warunków, bo `NaN != NaN` — dlatego ma `PartialEq` i `PartialOrd`, ale ani `Eq`, ani `Ord`. Skutek praktyczny jest taki, że brak `Ord` zgłasza się jako `E0277` **na pojemniku, a nie na porównaniu**: `sort()` wymaga `Ord`, klucze `HashMap` wymagają `Eq + Hash`, klucze `BTreeMap` — `Ord`. Pułapka, dla której ta strona w ogóle powstała, jest zaś zupełnie przyziemna: `#[derive(PartialOrd)]` porównuje pola **w kolejności deklaracji**, więc przestawienie `name` przed `score` przy refaktorze po cichu zmienia sens każdego sortowania w programie — bez błędu i bez ostrzeżenia. Uwaga na koniec: strona jest na razie szkicem (*stub*), bez uruchamialnego przykładu, więc jej tezy nie przeszły jeszcze weryfikacji, której poddawana jest reszta biblioteki.
+
+**Szukaj po polsku:** porządek częściowy a liniowy · relacja równoważności i zwrotność · `rust derive PartialOrd field order` · `rust f64 does not implement Ord` · `E0277 trait bound Ord is not satisfied`

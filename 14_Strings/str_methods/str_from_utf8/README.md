@@ -76,3 +76,9 @@ None
 - [`String::from_utf8_lossy`](../../string_methods/string_from_utf8_lossy/README.md) — replacing bad bytes instead of failing
 
 [`str::from_utf8` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.from_utf8)
+
+## Po polsku
+
+`str::from_utf8` sprawdza tablicę bajtów i zwraca `Result<&str, Utf8Error>` — bez kopiowania, bo w razie powodzenia dostajesz wycinek łańcucha (*string slice*) nad **tymi samymi** bajtami, tylko zinterpretowanymi jako tekst. Dla polskiego tekstu najciekawsze jest to, co niesie `Utf8Error`: każda litera z ogonkiem lub kreską zajmuje w UTF-8 dwa bajty, więc czytając strumień porcjami o stałym rozmiarze prędzej czy później przetniesz „ż” na pół — i wtedy `error_len()` zwraca `None`, co znaczy „dane się urwały, dosyłaj resztę”, a nie „dane są zepsute” (to jest `Some(n)`, plus `valid_up_to()` mówiące, ile bajtów było dobrych). Pomylenie tych dwóch przypadków to klasyczny sposób na odrzucenie całkiem poprawnego wejścia; jeśli zamiast błędu wolisz podstawić znak zastępczy `U+FFFD` i liczyć dalej, to już zadanie dla `String::from_utf8_lossy`.
+
+**Szukaj po polsku:** kodowanie UTF-8 · polskie znaki diakrytyczne w UTF-8 · walidacja bajtów · `rust str::from_utf8 Utf8Error` · `rust error_len valid_up_to`

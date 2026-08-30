@@ -91,3 +91,13 @@ A `&dyn Trait` is a **fat pointer**: two words, one to the data and one to the v
 - [What a trait is](../what_a_trait_is/README.md) — the declaration being returned
 - [Nullable pointers](../../17_Option_and_Result/nullable_pointers/README.md) — `Box` in its other role, making a recursive type possible
 - [`String` vs `&str`](../../14_Strings/string_vs_str/README.md) — the same owned/borrowed split, one layer down
+
+## Po polsku
+
+Nawyk z Javy albo C# jest tu dokładnie odwrotny do tego, czego wymaga Rust: tam zwrócenie interfejsu jest rzeczą zupełnie normalną, bo każdy obiekt i tak jest referencją o stałym rozmiarze. W Ruscie `-> Method` nie przechodzi, ponieważ miejsce wywołania musi znać **rozmiar** zwracanej wartości, zanim funkcja się w ogóle wykona — a `Star` i `BlocStar` mają różne rozmiary, więc „zwraca `Method`” nie odpowiada na to pytanie. `Box<dyn Method>` odpowiada: wartość ląduje na stercie, a wraca wskaźnik, który zawsze waży tyle samo. Rust każe tę alokację zapisać jawnie, zamiast wstawiać ją po cichu za plecami programisty.
+
+Drugie zaklęcie, `impl Trait`, bywa streszczane jako „jakiś typ wybierany w czasie działania” — i to jest nieporozumienie warte zapamiętania. Kompilator doskonale wie, że wraca `Star`; nie wie tego **wywołujący**. Funkcja zachowuje przez to swobodę zmiany zdania bez ruszania sygnatury, wartość zostaje na stosie, wywołanie jest rozstrzygane statycznie i żadnej tablicy metod wirtualnych nie ma. W pozycji argumentu `impl Trait` to po prostu typ generyczny użyty dokładnie raz — a płaci się za to turbofishem: nie ma parametru typu do nazwania, więc `count::<File>(f)` się nie skompiluje.
+
+Jest jednak przypadek, w którym `impl Trait` nie jest wygodą, tylko koniecznością: **domknięcie (*closure*) nie ma nazwy typu**, więc zanim ten zapis powstał, zwrócenie domknięcia oznaczało opakowanie go w `Box`. Warto też zapamiętać liczby z wydruku powyżej: `&Star` waży 8 bajtów, a `&dyn Method` szesnaście, bo referencja do obiektu cechy (*trait object*) jest **grubym wskaźnikiem** — jedno słowo maszynowe na dane, drugie na tablicę metod wirtualnych. To drugie słowo widać na wydruku i to ono jest całą ceną dynamicznego wywołania.
+
+**Szukaj po polsku:** obiekt cechy · gruby wskaźnik · tablica metod wirtualnych · `rust impl Trait vs Box dyn Trait` · `rust return trait object` · `rust Sized return value`

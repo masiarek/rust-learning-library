@@ -72,3 +72,9 @@ split  4
 - [`str::lines_any`](../str_lines_any/README.md) — the deprecated older spelling
 
 [`str::lines` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.lines)
+
+## Po polsku
+
+`lines()` robi dwie rzeczy, których `split('\n')` nie robi: usuwa `\r` stojący tuż przed `\n` i traktuje końcowy znak nowej linii jako **zakończenie** wiersza, a nie separator — więc `"a\nb\n"` to dwa wiersze, nie trzy. Z polskiej perspektywy ważniejsze jest to pierwsze, bo praktycznie każdy plik, który przeszedł przez Windows (Notatnik, eksport CSV z Excela, `core.autocrlf` w gicie), kończy wiersze sekwencją CRLF, a `\r` doklejony na końcu wycinka łańcucha (*string slice*) jest w `println!` niewidoczny i po cichu psuje każde porównanie w rodzaju `wiersz == "tak"` — pokaże go dopiero `{:?}`. Samotny `\r` (stare Mac OS 9) nie jest tu końcem wiersza, a same wiersze są pożyczane z oryginalnego łańcucha, więc nic się nie alokuje.
+
+**Szukaj po polsku:** podział tekstu na wiersze · znaki końca wiersza CRLF · powrót karetki · `rust str lines vs split` · `rust strip trailing carriage return`

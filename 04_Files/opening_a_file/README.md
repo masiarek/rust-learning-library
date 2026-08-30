@@ -23,3 +23,9 @@
 - [Missing is not empty](../missing_is_not_empty/README.md) — the `NotFound` that is not a failure
 - [`anyhow` and context](../../02_Errors/anyhow_and_context/README.md) — putting the filename back into the error
 - [Readers are fallible](../../02_Errors/readers_are_fallible/README.md) — everything that can still go wrong after this succeeded
+
+## Po polsku
+
+Najgroźniejsza jest tu sama nazwa: po polsku „utwórz plik” brzmi jak „załóż go, jeśli jeszcze nie istnieje”, tymczasem `File::create` otwiera do zapisu i **obcina** istniejący plik do zera bajtów już w chwili otwarcia, zanim zapiszesz choćby jeden swój bajt. Kto zna C albo Pythona, ma gotową intuicję — `create` to `fopen(ścieżka, "w")`, `open` to `"r"` (tylko odczyt, plik musi istnieć), a wszystko poza tym: dopisywanie, odczyt z zapisem, `create_new`, składa się z metod na `OpenOptions`, czyli z tych samych flag rozpisanych na słowa. Druga niespodzianka to `io::Error`, który **nie niesie ze sobą ścieżki**: komunikat mówi „No such file or directory” i ani słowa o tym, o który plik chodzi, więc nazwę trzeba dołożyć samemu — po to istnieje `.context(...)`. Uchwytu za to nie zamyka się ręcznie, bo nie ma `close()` — robi to `Drop` przy wyjściu z zasięgu — ale `BufWriter` bez `flush()` potrafi zgubić końcówkę danych i o tym trzeba pamiętać.
+
+**Szukaj po polsku:** otwieranie pliku w Ruscie · tryby otwarcia pliku · dopisywanie do pliku · `rust File::create truncates` · `rust OpenOptions append`

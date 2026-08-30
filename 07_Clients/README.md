@@ -11,3 +11,9 @@ The last thing outside your program, and the least cooperative: a service you do
 | [Injecting the base URL](injecting_the_base_url/README.md) | 201 → 301 | The constant that makes a client untestable, and the parameter that does not |
 | [Mocking a server](mocking_a_server/README.md) | 301 | What a fake server proves, what it cannot, and the test that passes against an API that no longer exists |
 | [Units are types](units_are_types/README.md) | 201 | A number whose meaning lives in a comment, versus one the compiler will not let you add to a different kind |
+
+## Po polsku
+
+Ten dział zaczyna się tam, gdzie kończy się kontrola nad własnym programem: po drugiej stronie jest cudzy serwis, sieć zawodząca inaczej niż dysk (nie „nie ma pliku”, tylko timeout, `503` i odpowiedź, która przyszła, ale w innym kształcie niż w dokumentacji) oraz JSON zaprojektowany przez kogoś innego — dlatego dopiero tutaj obsługa błędów, dane i testowanie muszą zadziałać naraz. Druga rzecz, o której warto wiedzieć od razu: te strony to na razie **zalążki** (*stubs*), dokładnie w tym sensie, co zalążek artykułu na Wikipedii, i akurat w tym dziale najtrudniej je dokończyć — obietnica tej biblioteki, że każdy wynik wypisał program uruchamiany przez CI, kłóci się z przykładem chodzącym do sieci, bo taki przykład nie jest powtarzalny. Dowód poprawności trzeba więc zdobyć inaczej i to jest temat dwóch lekcji z tabeli powyżej: wstrzyknięcia adresu bazowego oraz atrapy serwera.
+
+**Szukaj po polsku:** klient HTTP w Ruscie · obsługa błędów sieciowych · mockowanie serwera w testach · `rust reqwest example` · `rust mock http server test`

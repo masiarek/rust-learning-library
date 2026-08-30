@@ -23,3 +23,9 @@ The wrapper is easy to build and easy to overbuild. Every method you forward (`l
 - [A score is not a number](../../16_Structs/newtype_score/README.md) — the same move on a single value: one private field, one validating door
 - [`Path` and `PathBuf`](../../04_Files/path_and_pathbuf/README.md) — the owned/borrowed pair this struct has to choose between
 - [What is a ballot, in memory?](../../16_Structs/representing_a_ballot/README.md) — choosing the shape of the data, and which bugs each shape makes writeable
+
+## Po polsku
+
+To jest ruch znany z katalogu refaktoryzacji jako „wprowadź obiekt”: skoro `load` i `save` biorą za każdym razem tę samą parę — ścieżkę i `Vec<Memo>` — to ta para jest w rzeczywistości jednym bytem, a cztery luźne funkcje stają się strukturą z metodami. Specyficznie rustowa jest tu kwestia własności: struktura **przechowuje** `PathBuf`, czyli typ, który dane posiada, ale w drzwiach przyjmuje `impl AsRef<Path>`, żeby wołający mógł podać `&str`, `String` albo `&Path` — pożyczać wygodnie jest na wejściu, natomiast trzymać u siebie można tylko to, co się ma na własność. Do tego dochodzi wybór `self` w metodach: `&self` czyta, `&mut self` zmienia zawartość, a samo `self` przejmuje strukturę na własność, czyli po takim wywołaniu wołający już jej nie ma. I to, o co tej stronie chodzi naprawdę: opakowanie, które tylko przekazuje dalej `len`, `iter` i `push`, jest podatkiem, a nie abstrakcją — powodem do zawijania `Vec` jest **niezmiennik** („wczytane stąd, zapisane tam samo”), a jeśli niezmiennika nie ma, to `Vec<Memo>` był już dobrą odpowiedzią.
+
+**Szukaj po polsku:** wzorzec newtype · niezmiennik typu · refaktoryzacja wprowadź obiekt · `rust impl AsRef<Path> PathBuf` · `rust newtype wrapper Vec`

@@ -23,3 +23,9 @@
 - [The `Result` you are reading is probably an alias](../../17_Option_and_Result/result_aliases/README.md) — `io::Result<T>` expanded, and how to find out what `E` really is
 - [Endless iteration](../endless_iteration/README.md) — the other half of the same loop: how it ends, and how it fails to
 - [Keep going, or stop](../keep_going_or_stop/README.md) — what to do with the bad row once you have stopped throwing it away
+
+## Po polsku
+
+To, że plik otworzył się poprawnie, wcale nie znaczy, że da się go doczytać do końca — dlatego `lines()` zwraca `io::Result<String>` osobno dla **każdej linii**, a nie jeden wynik na cały plik. Polskiego czytelnika spotyka przy tym przyczyna, której anglojęzyczny kolega może nie zobaczyć nigdy: plik zapisany w `windows-1250` albo `ISO-8859-2`, z jednym „ż” czy „ł”, **nie jest** poprawnym UTF-8, więc odczyt przewraca się na `ErrorKind::InvalidData` w środku skądinąd zdrowego pliku. I tu czai się pułapka tej strony — `.flatten()` oraz `.filter_map(Result::ok)` usuwają błąd kompilacji, ale robią to, zamieniając „dysk padł w połowie” na „plik był krótszy, niż jest”, a program wypisuje mniejszą liczbę z pełnym przekonaniem. Zliczanie, które po cichu gubi wiersze, jest gorsze od takiego, które się zatrzymuje, bo w samym wyniku nie zostaje żaden ślad po tym, że coś poszło źle.
+
+**Szukaj po polsku:** kodowanie ISO-8859-2 a UTF-8 · odczyt pliku linia po linii · `rust BufRead lines io::Result` · `rust ErrorKind::InvalidData` · `rust flatten hides errors`

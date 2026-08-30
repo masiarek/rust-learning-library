@@ -27,3 +27,9 @@ The compiler reports the failure at the `spawn`, but the cause is a field you ca
 - [Interior mutability](../interior_mutability/README.md) — `Cell` and `RefCell`, the two everyday types that are not `Sync`
 - [Lock poisoning](../mutex_poisoning/README.md) — the `Mutex` whose `Sync` is doing the work
 - [`Send` ↗](https://doc.rust-lang.org/std/marker/trait.Send.html) · [Comprehensive Rust: `Send` and `Sync` ↗](https://google.github.io/comprehensive-rust/concurrency/send-sync.html)
+
+## Po polsku
+
+`Send` i `Sync` to dwie cechy (*traits*) bez metod i nie tłumaczy się ich na polski — to nazwy, które wypisze kompilator, a `Sync` w dodatku myli, bo nie ma nic wspólnego z `synchronized` znanym z Javy: mówi tylko tyle, że `&T` wolno pokazać innemu wątkowi (formalnie `T: Sync` wtedy i tylko wtedy, gdy `&T: Send`). Nikt ich nie implementuje ręcznie — kompilator nadaje je automatycznie każdemu typowi, którego wszystkie pola je mają, więc uczyć się warto nie listy typów, które je mają, tylko krótkiej listy wyjątków: `Rc` nie jest ani `Send`, ani `Sync` (jego licznik referencji to zwykła liczba, aktualizowana nieatomowo — i stąd `Arc`), a `Cell` i `RefCell` nie są `Sync`. Pułapka, dla której ta strona istnieje, siedzi w czytaniu błędu: kompilator pokaże palcem `thread::spawn`, ale winowajcą jest pole schowane trzy poziomy głębiej w przechwyconym domknięciu, więc taki komunikat czyta się **od tyłu** — od niespełnionego ograniczenia `T: Send` do typu, który je złamał. Kiedy lekarstwem okazuje się `Mutex`, wynika to z jednego zdania: `Mutex<T>` jest `Sync`, ilekroć `T` jest `Send`.
+
+**Szukaj po polsku:** cechy znacznikowe · wątki w Ruscie · zliczanie referencji · `rust Send Sync auto trait` · `rust Rc cannot be sent between threads safely`

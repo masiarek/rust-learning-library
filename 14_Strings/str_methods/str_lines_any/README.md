@@ -49,3 +49,9 @@ identical: true
 - [`str::lines`](../str_lines/README.md) — the method to use
 
 [`str::lines_any` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.lines_any)
+
+## Po polsku
+
+`lines_any` to nie osobna metoda, tylko nazwa historyczna: do Rusta 1.4 `lines()` dzielił tekst wyłącznie po `\n`, a `\r\n` rozumiał dopiero `lines_any()`. Od 1.4 obie robią dokładnie to samo, więc cała migracja polega na skasowaniu `_any` — nie ma tu czego przepisywać. Przy okazji dobrze zapamiętać, co w Ruscie znaczy „przestarzała" (*deprecated*): metoda nadal się kompiluje i nie zniknie, bo zabrania tego gwarancja stabilności biblioteki standardowej — dostajesz jedynie ostrzeżenie `use of deprecated method`, wyciszone w przykładzie powyżej atrybutem `#![allow(deprecated)]`. Jeśli trafiłeś tutaj ze starszego polskiego poradnika, który radzi `lines_any()` do plików z Windows, to rada nieaktualna od 2015 roku.
+
+**Szukaj po polsku:** metoda przestarzała · gwarancja stabilności Rusta · `rust deprecated method warning` · `rust lines_any vs lines`

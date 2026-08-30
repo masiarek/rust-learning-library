@@ -27,3 +27,11 @@ Both bugs pass every test you would think to write, because a test with three li
 
 - [Readers are fallible](../readers_are_fallible/README.md) — the `Result` this loop is failing to look at
 - [`while let`](../../17_Option_and_Result/while_let/README.md) — the loop whose exit condition is a pattern, and the one bug it can have: a body that never makes progress
+
+## Po polsku
+
+Rust rozdziela tu dwie rzeczy, które polskie zdanie zlepia w jedno. „Nie udało się nic przeczytać” znaczy po polsku równie dobrze „plik się skończył”, jak i „odczyt padł” — a `read_line` mówi to dwiema zupełnie różnymi wartościami: `Ok(0)` to **sukces**, w którym przeczytano zero bajtów, czyli koniec wejścia, a awaria przychodzi osobno, jako `Err`. Stąd bierze się pętla `while let Ok(_) = reader.read_line(&mut buf)`, która wygląda poprawnie i kręci się w nieskończoność dokładnie wtedy, gdy plik się skończy: pilnuje wyłącznie tego, czy nie było błędu, a koniec danych błędem nie jest. Warunek wyjścia jest twój i brzmi `n == 0` — nikt go za ciebie nie postawi.
+
+Druga usterka siedzi w tej samej linijce i jest czysto nazewnicza: `read_line` **dopisuje** do bufora, a nie nadpisuje go. Bez `buf.clear()` w każdym obrocie bufor puchnie przez całą długość pliku, a program dalej działa — tyle że coraz wolniej i z coraz dziwniejszą zawartością. Obie przechodzą każdy test, który przyszedłby ci do głowy, bo test na trzech linijkach poprawnego pliku kończy się przypadkiem. Ujawnia je dopiero **brak** danych: pusty plik, zamknięty potok. Lekarstwem nie jest defensywny kod, tylko jeden test, którego wejściem jest nic.
+
+**Szukaj po polsku:** koniec pliku EOF · nieskończona pętla odczytu · `rust read_line returns Ok(0)` · `rust read_line appends to buffer` · `rust BufRead lines`

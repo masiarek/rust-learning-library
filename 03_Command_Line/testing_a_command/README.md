@@ -24,3 +24,9 @@ A test suite that only calls functions passes on a program whose `main` reads `a
 - [Standard error, and exit status](../../02_Errors/stderr_and_exit_status/README.md) — the two things an integration test is asserting on
 - [Deriving a parser with `clap`](../clap_derive/README.md) — `try_parse_from` tests the interface without starting a process
 - [Temporary directories in tests](../../04_Files/temp_dirs_in_tests/README.md) — the moment a command test needs a filesystem of its own
+
+## Po polsku
+
+Test jednostkowy dowodzi funkcji; dopiero uruchomienie samego binarium dowodzi **programu** — parsowania argumentów, kodu wyjścia i tego, którym strumieniem wyszła dana linia. W Ruście podział na testy jednostkowe i integracyjne nie jest konwencją nazewniczą, jak w JUnicie czy w pytest, tylko granicą kompilacji: moduł `#[cfg(test)]` obok kodu widzi także elementy prywatne, a każdy plik w katalogu `tests/` jest osobnym crate'em i widzi wyłącznie publiczne API — czyli dokładnie tyle, ile widzi obcy użytkownik; ścieżkę do własnego binarium poda ci Cargo w `env!("CARGO_BIN_EXE_<nazwa>")`, a `assert_cmd` opakuje to w asercje na kod wyjścia i na **fragment** właściwego strumienia. Jedna pułapka dotyczy polskich zespołów mocniej niż innych: komunikat pochodzący z systemu (`std::io::Error`) na polskim Windowsie przychodzi po polsku — „Nie można odnaleźć określonego pliku” zamiast *No such file or directory* — więc test porównujący pełny tekst zaświeci się na czerwono tylko u części zespołu, i właśnie po to jest `predicates` z „zawiera” zamiast „równa się”. Na koniec nawyk, o który w tej lekcji naprawdę chodzi: zepsuj program celowo i sprawdź, czy test się czerwieni, bo test, który nie potrafi upaść, jest dokumentacją z zielonym znaczkiem.
+
+**Szukaj po polsku:** testy integracyjne w Ruście · kod wyjścia programu · strumień błędów · `rust CARGO_BIN_EXE integration test` · `rust assert_cmd predicates`

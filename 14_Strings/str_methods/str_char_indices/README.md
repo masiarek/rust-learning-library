@@ -78,3 +78,9 @@ just that char: "é"
 - [`str::substr_range`](../str_substr_range/README.md) — the offsets of a slice you already hold
 
 [`str::char_indices` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.char_indices)
+
+## Po polsku
+
+Różnica między `char_indices()` a `chars().enumerate()` to dokładnie ten błąd, który w polskich danych wychodzi natychmiast, a w angielskich nie wyjdzie nigdy: `enumerate` numeruje znaki po kolei, `char_indices` podaje **przesunięcie w bajtach**, a te dwie liczby rozjeżdżają się przy pierwszej literze z diakrytykiem. W `"Łukasz"` trzecia litera ma numer porządkowy 2, ale offset 3 — i wycinek wzięty po numerze albo panikuje komunikatem `byte index ... is not a char boundary`, albo po cichu tnie w złym miejscu. Stąd reguła: jeżeli liczba ma trafić do `&s[..]`, bierzemy ją z `char_indices()`, bo tylko ona ma gwarancję trafienia w granicę znaku. Offset wskazuje **początek** znaku, a jego koniec to `i + c.len_utf8()` — i właśnie tak wycina się z łańcucha pojedynczą literę.
+
+**Szukaj po polsku:** przesunięcie w bajtach · granica znaku · polskie znaki a indeksowanie łańcucha · `rust char_indices vs chars enumerate` · `rust byte index is not a char boundary`

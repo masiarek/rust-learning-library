@@ -69,3 +69,13 @@ Two things a toolchain carries beyond the compiler, and they are not the same ki
 ---
 
 *No generated output block: the sizes and paths above were read off the machine this library is written on, and would differ on yours — an answer key cannot hold a filesystem.*
+
+## Po polsku
+
+Polskie kursy zwykle zaczynają się zdaniem „zainstaluj Rusta przez rustupa” i na tym temat zamykają — a właśnie tutaj siedzi cały mechanizm. `rustc`, którego masz na `PATH`, nie jest kompilatorem: to licząca 154 bajty nakładka (*shim*), która przy **każdym** wywołaniu z osobna ustala, który prawdziwy `toolchain` ma się uruchomić, i dopiero jego wywołuje. Samego słowa `toolchain` nie warto tłumaczyć — „zestaw narzędzi” powiedz raz, dla zrozumienia, a potem pisz `toolchain`, bo to podkomenda (`rustup toolchain list`) i nazwa pliku `rust-toolchain.toml`; przetłumaczony nie znajdzie się w żadnym komunikacie ani wyniku wyszukiwania.
+
+Wybór toolchaina to drabinka pięciu szczebli, którą lepiej czytać po prawej kolumnie tabeli niż po numerach: od najwęższego i najlepiej widocznego (`cargo +nightly build` — widać go w poleceniu, które właśnie piszesz) do najszerszego i najmniej widocznego (`rustup default`, ustawiony pół roku temu i nieobecny nigdzie w pobliżu kodu, na który wpływa). Szczeble 3 i 4 rozstrzyga dodatkowo bliskość katalogu, więc `rust-toolchain.toml` w podkatalogu wygrywa z tym w katalogu głównym repozytorium. Gdy wersja kompilatora zaskakuje, pytanie brzmi nie „jaka wersja”, tylko „dlaczego ta” — i odpowiada na nie `rustup show`, który dopisuje uzasadnienie: `active because: it's the default toolchain`. Warto też zapamiętać, że `nightly` to nazwa, której znaczenie zmienia się w nocy — projekt, który naprawdę potrzebuje nightly, przypina konkretną datę (`nightly-2026-08-11`).
+
+Najczęstsza awaria nie polega na tym, że przypięcie wersji nie działa, tylko na tym, że nikt do niego nie zajrzał: skrypt woła kompilator ścieżką bezwzględną, obraz Dockera ma toolchain wbudowany, IDE ma na sztywno wpisaną ścieżkę do `rustc` — i nakładka, jedyne miejsce, które w ogóle czyta `rust-toolchain.toml`, nie uruchamia się ani razu. Kto debugował to samo w `pyenv` (skrypt wołający `/usr/bin/python3` omija menedżer wersji), zna ten błąd na pamięć; tutaj jest identyczny, zmieniają się tylko nazwy.
+
+**Szukaj po polsku:** instalacja Rusta rustup · wersje kompilatora Rust · przypinanie wersji toolchaina · `rustup show active toolchain` · `rustup override vs rust-toolchain.toml`

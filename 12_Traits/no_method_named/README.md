@@ -308,3 +308,18 @@ The three causes, in the order the compiler rules them out:
 - [What a trait is](../what_a_trait_is/README.md) — the declaration all of this is reaching into
 - [Making a `String`](../../14_Strings/making_a_string/README.md) — `.to_string()` from the other side, once `Display` is in place
 - [Reading a compilation failure](../../20_Compilers/reading_a_compilation_failure/README.md) — which of four programs produced the message you are holding
+
+## Po polsku
+
+`E0599` to jeden kod błędu na trzy zupełnie różne pomyłki — metody nikt nie napisał, cecha (*trait*) nie jest zaimportowana, albo typ jej nie implementuje — a nagłówek za każdym razem brzmi tak samo: *no method named …*. Polska intuicja podpowiada „nie ma takiej metody”, kompilator mówi jednak coś węższego: **nie było jej na liście kandydatów**. Lista powstaje z metod własnych (*inherent*) typu odbiorcy plus metod wszystkich `trait`ów, które akurat są w zasięgu i których ograniczenia (*bounds*) ten typ spełnia. Cztery przyczyny to cztery różne powody, dla których coś na tę listę nie trafiło — i dlatego nie czyta się nagłówka, tylko linijkę `help:` pod nim:
+
+- **brak linijki `help:`** — nikt tej metody nigdy nie napisał; napisz `impl` albo popraw literówkę
+- `items from traits can only be used if the trait is in scope` — implementacja istnieje, brakuje `use`
+- `items from traits can only be used if the trait is implemented and in scope` — cecha jest w zasięgu, twój typ jej nie implementuje; `impl` albo `derive`
+- `the following trait bounds were not satisfied` — metoda pochodzi z ogólnej implementacji (*blanket impl*), a twój typ nie spełnia jej ograniczenia
+
+Dwa środkowe wiersze różnią się jedną wtrąconą frazą — `is implemented and` — i to jest dokładnie ten moment, w którym czytanie komunikatu po łebkach kosztuje pół godziny, bo wskazują one na przeciwne poprawki. `use` dla cechy, której i tak nie implementujesz, nie da nic; `impl` cechy, która jest już zaimplementowana i tylko nieimportowana, też nie da nic. Warto sobie ten fragment przeczytać w oryginale do końca, zamiast rozpoznawać go z kształtu — a jeśli angielskie zdanie umyka, `rustc --explain E0599` wypisuje ten sam opis offline (choć obejmuje tylko pierwszą przyczynę).
+
+Czwarty przypadek najłatwiej przegapić, bo nagłówek nie mówi wtedy *no method named* w ogóle, tylko `Report doesn't implement std::fmt::Display`. `to_string` nie jest niczyją ręcznie napisaną metodą — std ma jedną ogólną implementację dla każdego `T: Display` — więc cecha, którą trzeba zaimplementować, **nie jest tą, z której metoda pochodzi**; linijka `which is required by` mówi to wprost. Na koniec rzecz, która porządkuje myślenie: `E0599` nigdy nie znaczy „istnieje, ale nie wolno ci jej wywołać”. Metoda prywatna to osobny kod, `E0624`. Kto przychodzi z ABAP-a, ma tu odwrotny nawyk, bo tam jeden komunikat — *Method "…" is unknown or PROTECTED or PRIVATE* — skleja oba przypadki w jedno zdanie.
+
+**Szukaj po polsku:** metoda nie została znaleziona · cecha musi być w zasięgu · `rust E0599 no method named` · `rust trait not in scope` · `rust E0624 private method`

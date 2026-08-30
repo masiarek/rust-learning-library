@@ -23,3 +23,9 @@
 - [Six kinds of string](../six_kinds_of_string/README.md)
 - [STRINGS.md](../../STRINGS.md) — the map this page is a gap in
 - [Strings: links, books and videos](../resources/README.md) — where to read about it in the meantime
+
+## Po polsku
+
+Z tej listy jeden szczegół dotyczy polskiego tekstu bezpośrednio: `\x` kończy się na `\x7F`, czyli dokładnie na ASCII, a każda polska litera diakrytyczna leży wyżej — `"\xF3"` się nie skompiluje, `ó` zapisuje się jako `"\u{F3}"`, a `ł` jako `"\u{142}"`. W łańcuchu bajtowym `b"…"` jest jednocześnie luźniej i ciaśniej: `\xNN` sięga tam do `\xFF`, ale wpisanie `ł` wprost jest błędem (*non-ASCII character in byte string literal*), bo `b"…"` to `&[u8; N]` bez żadnej obietnicy UTF-8 — i właśnie po to istnieje. Surowy łańcuch `r"…"` przydaje się natomiast tam, gdzie ukośnik ma zostać ukośnikiem: `"C:\temp\nowe"` to w rzeczywistości `C:`, tabulator, `emp`, nowa linia i `owe`, podczas gdy `r"C:\temp\nowe"` jest tym, co widać.
+
+**Szukaj po polsku:** surowe łańcuchy znaków · sekwencje ucieczki · polskie znaki diakrytyczne w kodzie · `rust raw string literal` · `rust byte string literal b""`

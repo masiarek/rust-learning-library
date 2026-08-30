@@ -23,3 +23,9 @@
 - [Opening a file](../opening_a_file/README.md) — the first thing you do with a path
 - [Command-line arguments](../../03_Command_Line/command_line_arguments/README.md) — where the non-UTF-8 filename problem starts
 - [A score is not a number](../../16_Structs/newtype_score/README.md) — the same idea one level down: a type that refuses to be confused with the thing it wraps
+
+## Po polsku
+
+`Path` ma się do `PathBuf` tak, jak wycinek łańcucha `&str` do `String`: pierwszy jest pożyczony, drugi trzyma dane na własność. Osobny typ nie jest kaprysem — ścieżka nie jest łańcuchem znaków, bo nazwa pliku to na Uniksie ciąg bajtów, a w Windowsie UTF-16, i żadna z nich nie musi być poprawnym UTF-8. Polski czytelnik trafia na to szybciej niż inni: plik `sprawozdanie_ąćę.txt` przyniesiony ze starego dysku w Latin-2 albo CP-1250 jest dokładnie taką nazwą, której nie da się przedstawić jako `String` — dlatego pod spodem siedzi `OsStr`, dlatego `println!("{}", path)` się nie kompiluje, a `path.display()` jest wyjściem awaryjnym, które świadomie gubi to, czego nie umie pokazać. Drugą pułapką jest `join`, które **nie jest sklejaniem łańcuchów**: gdy `base.join(dane_od_użytkownika)` dostanie ścieżkę bezwzględną, zaczynającą się od `/` albo od `C:\`, baza po prostu znika z wyniku — i tak w jednym wywołaniu metody powstaje podatność typu path traversal.
+
+**Szukaj po polsku:** ścieżki w Ruscie · nazwa pliku spoza UTF-8 · `rust Path vs PathBuf` · `rust PathBuf join absolute path` · `rust AsRef<Path> parameter`

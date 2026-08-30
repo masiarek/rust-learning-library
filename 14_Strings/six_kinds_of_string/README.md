@@ -207,3 +207,19 @@ rustc --edition 2024 14_Strings/six_kinds_of_string/examples/six_kinds_of_string
 - [Meet the `char`](../meet_the_char/README.md) — what the UTF-8 promise buys
 - [`Path` and `PathBuf`](../../04_Files/path_and_pathbuf/README.md) — the honorary pair, in full (a stub for now)
 - [std docs — `std::ffi` ↗](https://doc.rust-lang.org/std/ffi/index.html), where `OsString` and `CString` live and the encodings are spelled out
+
+## Po polsku
+
+Ruch, który wykonuje ta strona, warto powtórzyć po polsku, bo znika po nim cały zarzut: przestań liczyć **typy**, zacznij liczyć **obietnice składane bajtom**. Obietnice są trzy, a każda ma wersję na własność i wersję pożyczoną — czyli ten sam podział, który znasz już z pary `String` / `&str`:
+
+- **poprawne UTF-8, sprawdzone przy wejściu** — `String` / `&str`, czyli każdy zwykły tekst;
+- **cokolwiek podał system operacyjny** — `OsString` / `&OsStr`, czyli nazwy plików, zmienne środowiskowe, argumenty z `args_os`;
+- **żadnego bajtu zerowego w środku, jeden na końcu** — `CString` / `&CStr`, czyli granica z kodem w C.
+
+Środkowy wiersz bywa w angielskich materiałach traktowany jak ciekawostka dla programistów systemowych. Dla polskiego czytelnika jest to wiersz najzwyklejszy z możliwych, bo my mamy pełne dyski plików nazwanych w czasach CP1250 i ISO-8859-2. Nazwa `sprawozdanie_wrzesień.txt` zapisana kiedyś na Windowsie to na dysku bajt `0xF1` w miejscu `ń` — a `0xF1` samo w sobie **nie jest** poprawnym UTF-8, więc `to_str()` na takiej nazwie zwróci `None`. To nie jest spreparowany przypadek testowy jak `0xF5` z ćwiczenia powyżej; to zawartość archiwum ZIP od współpracownika. W języku, który przepycha każdy tekst przez jeden typ, kończy się to albo wyjątkiem w środku pętli po katalogu, albo — gorzej — cicho, czyli **krzakami**: `wrzesie?.txt`, `wrzesieÅ„.txt`, i tak dalej. `OsString` jest typem, dzięki któremu ta nazwa w ogóle przejdzie przez program bez uszczerbku, choć nigdy nie stała się tekstem.
+
+Stąd druga rzecz, którą trzeba czytać uważnie: `to_string_lossy()` jest **jednokierunkowe**. Wstawia `�` w miejsce tego, czego nie umie odczytać, i robi to jawnie — co jest właściwym zachowaniem w linii logu i całkiem niewłaściwym dla ścieżki, którą zamierzasz jeszcze otworzyć. Otworzysz wtedy nazwę, której na dysku nie ma. Reguła praktyczna: `OsString` trzymaj w zmiennych i przekazuj do funkcji plikowych, a konwertuj dopiero do wyświetlenia — i nigdy z powrotem.
+
+Zauważ jeszcze asymetrię, na której cała ta rodzina stoi. Rozluźnianie obietnicy (`&str` → `OsString`) jest darmowe i milczące, bo idzie w stronę mniejszej wiedzy o bajtach. Zacieśnianie (`&OsStr` → `&str`) musi coś sprawdzić, więc sygnatura mówi to wprost: dostajesz `Option`, gdy odpowiedź brzmi „to nie jest tekst”, albo `Result`, gdy da się wskazać winny bajt (`CString::new` podaje nawet jego pozycję). Ten `Option` to nie utrudnienie — to jedyna szczera odpowiedź na pytanie „czy ta nazwa pliku jest tekstem?”, na które istnieje prawdziwe *nie*. Polskich nazw dla `OsString` i `CString` nie ma w obiegu i nie ma sensu ich wymyślać; mów po prostu „`OsString`, czyli tekst od systemu”, a szukaj po angielsku.
+
+**Szukaj po polsku:** kodowanie nazw plików CP1250 · krzaki zamiast polskich znaków · ISO-8859-2 a UTF-8 · `rust OsString vs String` · `rust to_string_lossy` · `rust CString interior nul`

@@ -66,3 +66,9 @@ Some("rustc") in Some("/usr/local/bin")
 - [`str::rfind`](../str_rfind/README.md) — just the offset of the last delimiter
 
 [`str::rsplitn` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.rsplitn)
+
+## Po polsku
+
+W `rsplitn` dzieją się naraz dwie rzeczy i warto je rozdzielić, bo pomylenie ich jest źródłem całego zamieszania: `n` ogranicza liczbę **kawałków** (nie cięć), a ponieważ cięcia liczone są od prawej, nierozcięta reszta to **początek** łańcucha znaków; osobno od tego iterator wydaje kawałki od prawej do lewej. Dlatego `"a.b.c".rsplitn(2, '.')` to `["c", "a.b"]`, a nie oczekiwane przez wielu `["a.b", "c"]` — najpierw ostatnie pole, reszta na koniec. To odróżnia `rsplitn` od zwykłego `rsplit`, gdzie kierunek zmienia tylko kolejność, a nie to, *co* dostajesz. Jeśli zależy Ci na parze w kolejności czytania, dla `n == 2` czytelniejszy jest `rsplit_once`, który do tego odróżnia brak separatora (`None`) od pustego pola.
+
+**Szukaj po polsku:** ograniczenie liczby części przy dzieleniu · nierozcięta reszta łańcucha · `rust rsplitn` · `rust splitn vs rsplitn` · `rust rsplitn reversed order`

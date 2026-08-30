@@ -292,3 +292,21 @@ At `deny` that same line is a build failure on code with no defect. `nursery` me
 - [RustRover setup](../rustrover_setup/README.md) — the settings that are not project files, including the one `doctor` reminds you about
 - [bacon](../bacon/README.md) — what `bacon.toml` is for
 - [A throwaway that needs a crate](../scratch_with_a_crate/README.md) — the opposite end: when one `cargo new` is the whole answer and none of this applies
+
+## Po polsku
+
+Angielskie *scaffolding* to dosłownie „rusztowanie”, ale po polsku w tym znaczeniu mówi się raczej o generatorze albo szkielecie projektu — i właśnie ta pierwsza intuicja jest tu myląca, bo cała strona broni tezy odwrotnej: **szablon kopiuje konfigurację, a `workspace` ją współdzieli**. Czterdzieści wygenerowanych katalogów z ćwiczeniami to czterdzieści kopii polityki lintów, w którą wierzyłeś w marcu; `workspace` poprawia jedną linijkę w katalogu głównym drzewa i zmienia wszystkie czterdzieści, łącznie z tymi najstarszymi. Samego słowa `workspace` nie warto tłumaczyć — „przestrzeń robocza” myli się z pojęciem z IDE, a tu chodzi o konkretną sekcję `[workspace]` w `Cargo.toml`. Dlatego skrypt z tej strony **nie** generuje ćwiczeń: woła prawdziwe `cargo new`, a Cargo samo dopisuje `edition.workspace = true` i `[lints] workspace = true`, bo widzi odpowiednie tabele w katalogu głównym.
+
+Bez właściciela zostają natomiast trzy rzeczy i to one są uzasadnieniem dla skryptu:
+
+- **katalog główny drzewa** — siedem plików, których nie napisze za ciebie żadne narzędzie i których po pół roku nikt nie pamięta;
+- **`.idea/`** — leży całkowicie poza Cargo, więc żaden mechanizm dziedziczenia tam nie sięga; tej części `workspace` nie zastąpi nigdy;
+- **rozjazd między tym, co pliki deklarują, a tym, co faktycznie jest zainstalowane na maszynie** — jedyna pozycja, która zarabia na siebie po każdej zmianie, a nie raz na początku.
+
+Najciekawsza kategoria na tej stronie to awarie, które nie krzyczą. `rustfmt` na kanale `stable` po prostu **pomija** opcje dostępne tylko na nightly (`group_imports`, `imports_granularity`…), a ostrzeżenia o tym idą na stderr, gdzie pipeline je połyka — objawem jest czerwony `cargo fmt --check` w CI na różnicy, której autor nie potrafi odtworzyć u siebie, bo u niego formatowanie „zawsze działa”. Stąd reguła, nie preferencja: opcje tylko-nightly w `rustfmt.toml` wymagają przypięcia nightly w `rust-toolchain.toml`, u wszystkich, na laptopie i na runnerze. Z tej samej rodziny są jeszcze dwie: `[workspace.lints.rust]` wpisane do manifestu pakietu nie jest **nigdy** czytane (i odwrotnie — `[lints.rust]` w korzeniu nie dotyczy niczego), a `type` i `factoryName` w `.idea/runConfigurations/*.xml` wpisane inaczej niż dokładnie `CargoCommandRunConfiguration` i `Cargo Command` dają pustą listę konfiguracji uruchomieniowych i ani jednej linijki w logu.
+
+Drzewo ćwiczeń jest przy tym jedynym miejscem, gdzie linty się **od**kręca, a nie dokręca — i warto zobaczyć, dlaczego akurat cztery, a nie cała grupa. Plik ćwiczeniowy istnieje po to, żeby pokazać formę (pięć sposobów na zrobienie `String`a, każdy przypisany do nazwy, której nikt potem nie czyta), więc `unused_variables` strzela pięć razy w sześciolinijkowym programie robiącym dokładnie to, co miał robić — a odmawianie tej podpowiedzi pięć razy dziennie uczy jedynego nawyku, którego żadna polityka lintów nie przetrwa: że ostrzeżenia to tapeta. Kuszące jest wyciszenie całej grupy `unused`, którą sam kompilator podaje w stopce komunikatu, ale siedzi w niej `unused_must_use`, czyli zignorowany `Result` — a to porzucony błąd, nie nieprzeczytana nazwa. To nie jest ten sam rodzaj szumu i tylko jeden z nich w ogóle jest szumem.
+
+Na koniec pojęcie, które warto mieć nazwane po polsku, bo bez nazwy trudno o nie zapytać: `doctor` sprawdza **niezmienniki międzyplikowe**. Cargo nie czyta `rustfmt.toml`, `rustfmt` nie czyta `.editorconfig`, a IDE czyta `.editorconfig` i nie czyta `rustfmt.toml` — każde narzędzie zachowuje się poprawnie, a drzewo mimo to jest niespójne, i zauważyć to może wyłącznie coś, co czyta wszystkie te pliki naraz.
+
+**Szukaj po polsku:** workspace w Ruście · szkielet projektu cargo · niespójna konfiguracja projektu Rust · `cargo workspace lints inheritance` · `rustfmt unstable options nightly only` · `rust-toolchain.toml pin nightly`

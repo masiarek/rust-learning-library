@@ -34,3 +34,13 @@ Two things follow, and the section is mostly about the second. An enum lets you 
 ## Not yet written
 
 The rest of the map, listed here rather than as empty pages so the gaps are visible: **enums with a lifetime parameter** (`enum Token<'a>`, which is the other thing those brackets hold), **`#[non_exhaustive]`** and what it does to a downstream crate's `match`, **explicit discriminants and `repr`** (`enum Code { Ok = 200 }`, `repr(u8)`, and converting an integer *back* with `TryFrom`), **custom error enums** with `Display`, `Error` and `From` (the `thiserror` shape, by hand first), **implementing `Display` for an enum** — the `match` inside `fmt`, which is the usual first hand-written trait impl — and **match guards and binding `@`**.
+
+## Po polsku
+
+Polska nazwa jest tu pierwszą pułapką. „Typ wyliczeniowy” zna każdy z C, Pascala albo Javy i znaczy tam dokładnie tyle, ile mówi: **wyliczenie nazw**, czyli garść stałych całkowitych z ładniejszymi etykietami. Rustowe wyliczenie (*enum*) to co innego — typ sumaryczny (*sum type*), czyli unia z etykietą, w której **każdy wariant może nieść własne dane, własnego kształtu**. Dlatego `Option`, `Result` i `Cow` nie są wbudowane w język, tylko są zwyczajnymi wyliczeniami z biblioteki standardowej, i dlatego pierwszy odruch przyniesiony z C — „to i tak w gruncie rzeczy liczba” — trzeba tutaj odłożyć na bok.
+
+Druga rzecz, i o niej jest większość tego rozdziału: `match` na wyliczeniu musi obsłużyć **każdy** wariant, więc dorzucenie wariantu pół roku później zamienia się w błąd kompilacji (`E0004`) w każdym miejscu, które ma od tej chwili dziurę. To zamienia dyscyplinę, o której trzeba pamiętać, w listę, którą wylicza kompilator — odpowiednik `grepa` po całym projekcie, tyle że kompletny i nie do pominięcia. Cztery lekcje z poziomu 201 są w istocie czterema sposobami, na jakie tę gwarancję da się stracić: wygodnym `_`, literówką pod `use Enum::*`, dwoma argumentami typu `bool` zamiast dwóch wyliczeń i wreszcie `_` w tablicy przejść automatu. Zdanie do zapamiętania brzmi więc: **wyczerpujące dopasowanie nie jest tym, co daje wyliczenie, tylko tym, z czego `match` może zrezygnować.**
+
+Na koniec uwaga nawigacyjna, bo układ rozdziału bywa mylący: lekcji o `Option` i `Result` tu nie ma, choć to najzwyklejsze wyliczenia z dwoma wariantami — mieszkają w `17_Option_and_Result`, bo spotyka się je pierwszego dnia, a nie przy okazji teorii typów. Polskie tłumaczenie Tour of Rust mówi o „Opcji” i „Rezultacie”, ale w kodzie, w komunikatach kompilatora i w wyszukiwarce zostają angielskie — tak samo jak `enum`, `match` i `derive`.
+
+**Szukaj po polsku:** typ wyliczeniowy · typ sumaryczny · dopasowanie wyczerpujące · `rust enum sum type` · `rust E0004 non-exhaustive patterns`

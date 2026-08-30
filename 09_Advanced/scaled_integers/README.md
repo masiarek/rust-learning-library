@@ -394,3 +394,21 @@ Three things worth taking from that run.
 **The fix has a bill.** Deriving the scale correctly for seven seats grows `l` to 5,342,931,457,063,200, and the number of ballots that fit in `i64` falls from 792,015 to **345**. Fixing an exactness bug uncovered an overflow bug, which is the usual way these two travel; in `i128` the same election still has room for 6.4e21 ballots, and that is the whole argument for the wider type in one number.
 
 </details>
+
+## Po polsku
+
+Polski czytelnik zna już połowę tej sztuczki, tylko pod inną nazwą: **kwoty trzyma się w groszach**. Zasada „nigdy nie licz pieniędzy na `float`” jest w polskich materiałach księgowych i bazodanowych tak stara, że nikt jej już nie uzasadnia — a uzasadnienie jest dokładnie takie, jak na tej stronie. Różnica jest jedna i to ona jest tematem lekcji: przy groszach skalą jest potęga dziesiątki, bo mianownik zawsze wynosi sto. Tutaj mianowniki to 5, 6, 7 … 30 — dwadzieścia sześć konkretnych liczb, znanych **zanim** padnie pierwszy głos — więc skalą jest ich **NWW** (najmniejsza wspólna wielokrotność, *lcm*). Po przemnożeniu wszystkiego przez `l` dzielenie `l / den` jest dzieleniem bez reszty, żaden ułamek nie powstaje, a **NWD** (*gcd*) nie odzywa się w trakcie liczenia ani razu.
+
+Warto też nazwać po polsku to, na czym `f64` przegrywa, bo to nie jest „niedokładność”. 8,9e-16 to znakomicie dokładna odpowiedź na pytanie, ile wynosi 1205/168. Tyle że liczenie głosów nie pyta o wartość sumy, tylko o to, czy dwie sumy są **równe** — a równość to jedyne pytanie, na które liczby zmiennoprzecinkowe nie potrafią odpowiedzieć. Skutek jest gorszy niż zły wynik: **remis przestaje być remisem**, drabinka rozstrzygania remisów w ogóle nie rusza, żaden test nie pęka i nikt się nie dowiaduje. Stąd trzy reprezentacje i jedna decyzja:
+
+- `f64` — szybka i po cichu nieprawdziwa;
+- ułamki (`Ratio`, w Pythonie `fractions.Fraction`) — dokładne, ale każda operacja to `gcd` i obiekt na stercie;
+- liczby całkowite po przeskalowaniu — dokładne i szybkie, pod jednym warunkiem.
+
+Ten warunek jest ostrzejszy, niż się wydaje: nie wystarczy, że mianowniki są ograniczone — waga musi być **przeliczana z całkowitego stanu w każdej rundzie**, a nie mnożona przez wagę z rundy poprzedniej. W RRV waga to `C / (C + S)`, gdzie `S` jest liczbą całkowitą, więc zbiór mianowników da się wypisać z góry; w Allocated Score każda runda dokłada nowy czynnik, mianowniki się mnożą i żadne pojedyncze `l` ich nie pokryje. Dlatego `assert!(l % den == 0)` nie jest ozdobą: `l / den` to dzielenie całkowite, więc gdy warunek przestanie obowiązywać, program **nie padnie** — po cichu obetnie wynik i policzy do końca. Kata na dole strony pokazuje najgorszy wariant tej awarii: zwycięzca się nie zmienia, więc żaden test na wynik nigdy by tego nie złapał.
+
+Dwie rzeczy są specyficznie Rustowe. Po pierwsze `i128` jest zwykłym typem prostym — nie `BigInteger`, nie klasa, nie alokacja — i to on sprawia, że skala rzędu 2,3 biliona mieści się razem z milionem kart do głosowania, podczas gdy w `i64` pięciomandatowe liczenie przepełnia się już poniżej 800 tysięcy głosów. Po drugie **przepełnienie (*overflow*) jest w Ruscie decyzją**, i to taką, którą łatwo przeoczyć: to samo `a * b` panikuje w kompilacji `debug`, a w `release` się **zawija**, więc kod przechodzi wszystkie testy i dopiero na produkcji daje ujemną sumę głosów. `checked_mul` zwraca `Option`, `saturating_mul` przycina, `wrapping_mul` zawija świadomie — tylko samo `*` nie mówi, o co ci chodziło.
+
+Na koniec liczba warta zapamiętania przy każdej dyskusji „przepiszmy to na Rusta”: przepisanie ułamków jeden do jednego dało 6,6×, a zmiana reprezentacji — 32× w Ruscie i **15× w samym Pythonie**, bez zmiany języka. Większa część wygranej leżała w algorytmie i była dostępna przez cały czas.
+
+**Szukaj po polsku:** arytmetyka stałoprzecinkowa · kwoty w groszach · najmniejsza wspólna wielokrotność · przepełnienie zmiennej · `rust checked_mul overflow release build` · `rust i128 exact fixed point arithmetic`

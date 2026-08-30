@@ -24,3 +24,9 @@
 - [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md)
 - [STRINGS.md](../../STRINGS.md) — the map this page is a gap in
 - [Strings: links, books and videos](../resources/README.md) — where to read about it in the meantime
+
+## Po polsku
+
+`"42".parse()` to nie rzutowanie w stylu `as`, tylko wywołanie cechy (*trait*) `FromStr` — a to znaczy, że kompilator nie ma skąd wziąć typu docelowego i trzeba mu go podać turbofishem (`parse::<i32>()`) albo adnotacją zmiennej, inaczej zobaczysz `E0282: type annotations needed`. Wynikiem jest `Result`, bo tekst przychodzi z zewnątrz i bywa nieprawdziwy: `"+42"` przejdzie, `" 42 "` już nie — `parse` nie przycina białych znaków, od tego jest osobne `.trim()`. Dla polskiego czytelnika czai się tu jeszcze jedna pułapka, o której angielska strona nie wspomina, bo jej autor jej nie ma: `"3,14".parse::<f64>()` zwraca `Err`, ponieważ Rust zna wyłącznie kropkę dziesiętną i nie ogląda się na ustawienia lokalne — liczby wyeksportowane z polskiego Excela trzeba poprawić przed parsowaniem, a nie po nim.
+
+**Szukaj po polsku:** parsowanie łańcucha znaków · konwersja tekstu na liczbę · `rust parse FromStr` · `rust ParseIntError kind` · `rust turbofish`

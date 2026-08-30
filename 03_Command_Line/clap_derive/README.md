@@ -24,3 +24,9 @@ A derived parser is so cheap that it becomes the *specification* of the program 
 - [Flags by hand](../flags_by_hand/README.md) — the work this is replacing, and the conventions it gets right for free
 - [Testing a command](../testing_a_command/README.md) — testing the parser and testing the program are two different tests
 - [Comments that compile](../../15_First_Programs/comments_that_compile/README.md) — why a `///` above a field can turn into help text at all
+
+## Po polsku
+
+Atrybut `#[derive(Parser)]` z crate'a `clap` sprawia, że struktura (*struct*) **jest** interfejsem programu: z jednego typu powstaje parsowanie argumentów, tekst `--help`, `--version` i komunikat o fladze, której nikt nie zdefiniował. Jeśli znasz adnotacje z Javy albo atrybuty z C#, to najbliższa analogia — z tą różnicą, że `derive` jest makrem proceduralnym działającym **w czasie kompilacji**, więc pomoc programu istnieje, zanim program w ogóle wystartuje; nic się jednak nie wydarzy, dopóki w `Cargo.toml` nie włączysz `features = ["derive"]`, bo to jest *cargo feature*, a nie osobna biblioteka. Odwzorowanie typów warto zapamiętać w całości — `bool` to przełącznik, `Option<T>` to argument opcjonalny, `Vec<T>` zbiera powtórzenia, zwykłe `T` jest wymagane — a komentarze dokumentacyjne `///` stają się tekstem pomocy, co dla polskiego autora oznacza realną decyzję, bo `clap` własnych komunikatów nie tłumaczy i `error: unexpected argument` zostanie po angielsku niezależnie od tego, w jakim języku opiszesz pola. Największa pułapka jest przy tym nietechniczna: ta struktura to publiczny interfejs — zmiana nazwy pola zmienia nazwę flagi, a dodanie pola wymaganego psuje wszystkie cudze skrypty.
+
+**Szukaj po polsku:** parsowanie argumentów w Ruście · makra proceduralne · atrybuty i `derive` · `rust clap derive Parser` · `rust cargo features derive`

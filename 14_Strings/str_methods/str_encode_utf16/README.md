@@ -70,3 +70,9 @@ Ok("a👋b")
 - [`str::len`](../str_len/README.md) — the UTF-8 byte count, different again
 
 [`str::encode_utf16` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.encode_utf16)
+
+## Po polsku
+
+Rust mówi w UTF-8, ale Windows, Java i JavaScript trzymają tekst w UTF-16 — `encode_utf16` jest mostem na zewnątrz, a `String::from_utf16` mostem z powrotem. Dla polskiego tekstu ten most jest wyjątkowo spokojny: wszystkie nasze litery leżą w BMP, więc każda zajmuje dokładnie jedną jednostkę `u16` i liczba jednostek pokrywa się z liczbą znaków — i właśnie dlatego pułapka bez trudu przechodzi przez testy. Wystarczy jedno emoji, żeby pojawiła się **para zastępcza** (*surrogate pair*): jeden `char` zapisany dwiema jednostkami, a wtedy ten sam tekst ma trzy różne „długości” — bajty UTF-8, znaki i jednostki UTF-16 — i to ta trzecia jest tą, którą raportuje API Windowsa. Iterator tylko pożycza, więc nic nie jest alokowane aż do `collect`; funkcje `…W` z WinAPI chcą bufora zakończonego zerem, czyli `s.encode_utf16().chain(std::iter::once(0)).collect::<Vec<u16>>()`.
+
+**Szukaj po polsku:** para zastępcza · surogaty w UTF-16 · UTF-16 a UTF-8 · `rust encode_utf16 windows` · `rust surrogate pair`

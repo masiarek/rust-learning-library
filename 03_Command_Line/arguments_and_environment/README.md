@@ -23,3 +23,9 @@ The environment is the one input that is not visible in the code, the arguments,
 - [Command-line arguments](../command_line_arguments/README.md) — the other half of the program's input
 - [Deriving a parser with `clap`](../clap_derive/README.md) — where the precedence ladder gets declared instead of coded
 - [Testing a command](../testing_a_command/README.md) — why a test that sets an environment variable is not automatically safe to run in parallel
+
+## Po polsku
+
+Ta lekcja stawia pytanie, które w polskich materiałach rzadko pada wprost: co powinno trafić do argumentu, a co do zmiennej środowiskowej (*environment variable*). Test jest praktyczny — argument widać w liście procesów (`ps`) i w historii powłoki, więc ścieżka do pliku owszem, ale klucz API już nie; z tego rozdziału sam z siebie wyrasta porządek pierwszeństwa, który lepiej zapisać, niż wyhodować przypadkiem: flaga bije zmienną środowiskową, ta bije plik konfiguracyjny, a ten wartość domyślną. Dla polskiego czytelnika najbardziej znajomym „wejściem, którego nie widać” są `LANG` i `LC_ALL` — to samo polecenie na dwóch maszynach potrafi inaczej posortować listę z ogonkami; w Ruście akurat `std` celowo nie czyta ustawień regionalnych, więc taka niespodzianka przychodzi zwykle z zewnętrznego narzędzia w potoku, a nie z `format!`. Dwie rzeczy warto zapamiętać dosłownie: `env::var` zwraca `Result`, a jego dwa błędy są naprawdę różne (zmiennej nie ustawiono albo ustawiono ją na coś, co nie jest poprawnym Unicode), oraz `std::env::set_var` jest w edycji 2024 oznaczone jako `unsafe` — środowisko jest globalne dla całego procesu, a testy Rusta biegną w wątkach.
+
+**Szukaj po polsku:** zmienne środowiskowe · ustawienia regionalne · kolejność pierwszeństwa konfiguracji · `rust std::env::var` · `rust set_var unsafe edition 2024`

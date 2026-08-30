@@ -64,3 +64,9 @@ fn main() {
 - [`String::as_mut_str`](../../string_methods/string_as_mut_str/README.md) — where the `&mut str` comes from
 
 [`str::make_ascii_uppercase` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.make_ascii_uppercase)
+
+## Po polsku
+
+To lustrzane odbicie `make_ascii_lowercase`, z tym samym ograniczeniem i z tego samego powodu: `ß` → `SS` wydłużyłoby łańcuch, a `&mut str` długości zmienić nie może, więc `ß` zostaje po cichu nietknięte. Dla polskiego czytelnika najciekawszy jest ostatni przykład ze strony — „title case po ASCII-owemu", czyli `word.as_mut_str()[..1].make_ascii_uppercase()`. Na `"rust"` to działa, ale na `"ładny"` **panikuje**: `ł` zajmuje w UTF-8 dwa bajty, więc bajt numer 1 nie leży na granicy znaku (`byte index 1 is not a char boundary`) — i dokładnie tak samo skończy się każde polskie słowo zaczynające się od `ą ć ę ł ń ó ś ź ż`. Że to panika, a nie cichy zły wynik, jest tu akurat dobrą wiadomością; do podniesienia pierwszej litery używaj iteratora znaków (`chars()`), a `make_ascii_uppercase()` zostaw danym, które są ASCII z definicji.
+
+**Szukaj po polsku:** granica znaku UTF-8 · pierwsza litera wielka w Ruscie · indeksowanie łańcucha bajtami · `rust char boundary panic` · `rust capitalize first letter`

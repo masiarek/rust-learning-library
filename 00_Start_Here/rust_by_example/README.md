@@ -41,3 +41,11 @@ So: not a course. A dictionary you happen to be able to run.
 - [rustlings](../rustlings/README.md) — the reps
 - [Rust by Example, page by page](../../RUST_BY_EXAMPLE.md) — RBE's 24 chapters mapped onto the lessons here, chapter by chapter, with the gaps named
 - [cheats.rs ↗](https://cheats.rs/) — even faster lookup once you know what you are looking for, and much denser
+
+## Po polsku
+
+Z całej tej sekcji Rust by Example ma najniższy próg językowy, bo treść niesie tu **uruchamialny program**, a proza jest tylko podpisem pod nim — kod nie wymaga tłumaczenia, a przycisk uruchamiania odpowiada w tym samym języku każdemu. Dla uczącego się po polsku dochodzi do tego drugie zastosowanie, którego angielski czytelnik nie potrzebuje: to najszybszy sposób sprawdzenia, czy dobrze zrozumiałeś polskie wyjaśnienie. Zmień jedną linijkę, uruchom, zobacz, czy kompilator się zgadza — cztery sekundy zamiast szukania drugiego opisu tego samego. Ten sam zbiór masz offline i w wersji zgodnej z twoim kompilatorem: `rustup doc --rust-by-example`.
+
+Cena jest dokładnie tam, gdzie strona ją stawia — RBE pokazuje **co**, rzadko **dlaczego** — i po polsku ta cena jest wyższa, niż się wydaje. Z samego kodu wyniesiesz konstrukcję, ale nie jej **nazwę**, a nazwa jest tym, co się wpisuje w wyszukiwarkę i co pozwala o coś zapytać. Nazwy są angielskie: `match`, `impl`, `trait`, do tego domknięcie (*closure*) i wycinek (*slice*). Kto uczy się wyłącznie z przykładów, kończy jako ktoś, kto rozpoznaje wszystko i nie potrafi nazwać niczego — model i słownictwo bierz z The Book i z lekcji w tej bibliotece, składnię stąd.
+
+**Szukaj po polsku:** przykłady kodu w Ruscie · składnia Rusta · `rust by example` · `rustup doc --rust-by-example` · `cheats.rs`

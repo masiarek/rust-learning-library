@@ -49,3 +49,11 @@ The rest are offline copies, listed by title so they can be found again:
 - *Method overloading (kinda), and advanced trait usage* — Quick Rust
 - *Easy Rust 063–070, 072–073* — the traits arc: introduction, reading an implementation, implementing `Display`, a longer trait, traits built on other traits, trait bounds, understanding `From`, implementing `From` (twice), and `AsRef`
 - *Easy Rust 071 — type aliases and new types* — sits inside that run but is a different topic; the newtype half is what makes it belong ([a score is not a number](../../16_Structs/newtype_score/README.md) covers the same ground)
+
+## Po polsku
+
+Ta strona jest listą źródeł, a przy cechach (*traits*) trzeba powiedzieć wprost, dlaczego wszystkie są angielskie: [Tour of Rust ↗](https://tourofrust.com/TOC_pl.html), jedyny obszerny polski kurs Rusta, jest przetłumaczony do rozdziału 5, a cechy zaczynają się w rozdziale 7. Polskie wpisy blogowe o `trait`ach istnieją, ale są krótkie i prawie nigdy nie dochodzą do tego, co naprawdę boli — do obiektów cech (*trait objects*), reguły sieroty (*orphan rule*) i tego, co konkretnie siedzi w tablicy metod wirtualnych. Ta lista nie jest angielska z niedbalstwa; innej po prostu nie ma.
+
+Warto też zauważyć, że kolejność na tej stronie jest hierarchią, a nie kaprysem redakcyjnym. The Reference jest **wiążący**: kiedy Book, esej i wpis na blogu mówią co innego, rację ma Reference. Book uczy, eseje tłumaczą „dlaczego”, a katalog testów kompilatora odpowiada na pytanie „czy to się w ogóle skompiluje i co dokładnie wypisze, gdy nie” — dlatego link do niego jest przypięty do konkretnego commita, bo katalog zdążył się przenieść. Jeśli masz przeczytać tylko dwie pozycje z tej listy, weź esej Aarona Turona z 2015 roku (skąd cechy zamiast interfejsów i co daje spójność) oraz stronę quinedota o `dyn Trait` — po polsku odpowiednika żadnej z nich nie ma.
+
+**Szukaj po polsku:** cechy w Ruscie · obiekt cechy · `rust trait object dyn` · `rust orphan rule coherence` · `rust trait vtable`

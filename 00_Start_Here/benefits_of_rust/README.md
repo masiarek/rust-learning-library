@@ -75,3 +75,19 @@ Google's speaker notes suggest asking the room which languages they already writ
 - [Comprehensive Rust in the shelf](../../10_Resources/books/README.md) — what the course is good at, and the one cost of its slide format
 - [C and C++](../../31_C_and_Cpp/README.md) — the nine bugs the first two tables prevent, each one compiled and run
 - [Undefined behaviour](../../GLOSSARY.md) — the term the second table is really about
+
+## Po polsku
+
+Ta strona nie streszcza listy zalet, tylko ją sortuje: dwadzieścia punktów rozpada się na trzy zupełnie różne rodzaje twierdzeń — takie, gdzie dowodem jest **nieudana kompilacja**, takie, gdzie dowodem jest **spisane zachowanie w czasie działania**, i takie, gdzie chodzi po prostu o wygodę. W polskich omówieniach Rust przyjeżdża zwykle jako jedno słowo — „bezpieczny” — i to jest pierwszy kłopot, bo polskie *bezpieczny* skleja dwa angielskie: *safe* i *secure*. Rust jest bezpieczny **pamięciowo** (*memory-safe*), co jest twierdzeniem o zarządzaniu pamięcią, a nie o bezpieczeństwie systemu. Nie chroni przed wstrzyknięciem SQL, źle dobraną kryptografią ani sekretem w repozytorium. Jeśli w polskiej dyskusji ma paść jedno zdanie, niech to będzie „bezpieczny pamięciowo”, z przymiotnikiem.
+
+Druga tabela na tej stronie mówi o czymś, czego polska nazwa myli jeszcze bardziej. *Undefined behaviour* tłumaczy się jako „zachowanie niezdefiniowane” albo „nieokreślone”, co brzmi jak „nieprzewidywalne”, „losowe” — a znaczy coś ostrzejszego: standard **odmawia powiedzenia**, co się stanie, więc optymalizator ma prawo założyć, że taka sytuacja nigdy nie zachodzi, i wyciąć kod, który zakłada inaczej. Dlatego te dwa punkty — sprawdzanie zakresu tablicy i przepełnienie liczby całkowitej — nie są w tabeli jako „Rust jest bezpieczniejszy”, tylko jako „Rust to zapisał”. Zapisane zachowanie bywa nieprzyjemne (`v[9]` kończy program paniką), ale jest jedno i to samo przy każdym uruchomieniu.
+
+Z „drobnego druku” trzy pozycje warto znać po polsku dokładnie, bo w każdej polskie nazewnictwo dokłada się do pomyłki:
+
+- **„Brak wyścigów danych” to nie „brak błędów współbieżności”.** Po polsku słowo „wyścig” obsługuje i *data race*, i *race condition*, a to nie to samo. Wyścig danych — dwa wątki, jedno miejsce w pamięci, co najmniej jeden zapis, brak synchronizacji — jest tym, co wykluczają `Send` i `Sync`. Zakleszczenie (*deadlock*), zgubiona aktualizacja przy dwóch osobnych blokadach i zwykły błąd w kolejności twoich własnych operacji kompilują się bez jednego ostrzeżenia.
+- **„Przepełnienie jest zdefiniowane” definiuje je jako dwie różne rzeczy.** Kompilacja `debug` panikuje, `release` zawija wartość — więc błąd potrafi przejść wszystkie testy i zawinąć się dopiero na produkcji. To jedyny wniosek z tego wiersza, który naprawdę trzeba zapamiętać.
+- **Wszystko powyżej dotyczy Rusta bezpiecznego.** `unsafe` otwiera z powrotem każde drzwi z pierwszej tabeli — i o to w tym słowie kluczowym chodzi. Gwarancja nie polega na tym, że drzwi są zamknięte, tylko na tym, że są **opisane**: `grep unsafe` znajduje wszystkie miejsca, w których kompilator przestał sprawdzać.
+
+Praktyczny wniosek na polskie dyskusje o Ruscie: kłóć się kodem błędu, nie przymiotnikiem. „Rust jest bezpieczny” to slogan, który druga strona odbije równie ogólnym zdaniem. „Ten program się nie skompiluje, `E0502`, i oto komunikat” to argument, który da się sprawdzić w trzydzieści sekund, jest identyczny w każdym języku i nie wymaga niczyjego zaufania. Kody błędów, nazwy cech (`Send`, `Sync`, `Copy`) i słowa kluczowe zostają po angielsku właśnie dlatego, że są adresem, pod który można pójść.
+
+**Szukaj po polsku:** bezpieczeństwo pamięci w Ruscie · wyścig danych a zakleszczenie · zachowanie niezdefiniowane · przepełnienie liczby całkowitej Rust · `rust memory safety guarantees` · `rust overflow debug vs release`

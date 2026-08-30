@@ -102,3 +102,11 @@ That is the whole idea and not the whole story — the field is a claim about va
 - [`ToOwned`](../to_owned/README.md) — what `Sized` being implicit costs `str`
 - [A score is not a number](../../16_Structs/newtype_score/README.md) — the same "make it unwriteable" instinct, without generics
 - [What a trait is](../what_a_trait_is/README.md) — the ordinary kind, with methods in it
+
+## Po polsku
+
+Cecha znacznikowa (*marker trait*) nie ma ani jednej metody — nie mówi, co typ potrafi, tylko orzeka o nim coś, co jest prawdą. To jeden z niewielu przypadków, w których polskie słowo trafia lepiej niż angielskie: `trait` bez metod nie jest żadnym „interfejsem”, tylko dosłownie **cechą** typu, w tym samym potocznym sensie co cecha charakteru. Czytelnik z Javy zna to jako interfejs znacznikowy (`Serializable`, `Cloneable`) i warto od razu zobaczyć różnicę: tam znacznik sprawdza się przez `instanceof` w czasie działania i da się go obejść, tu jest to zwykłe ograniczenie (*bound*) na parametrze generycznym, więc typ bez niego po prostu się nie kompiluje — `E0277`, zero dodanych metod i zero dodanych bajtów.
+
+Dwie rzeczy z tej strony sprawiają najwięcej kłopotu. Pierwsza to `Sized`, ograniczenie, którego nigdy nie napisałeś: każde `fn f<T>(x: T)` znaczy w istocie `fn f<T: Sized>(x: T)`, bo wartość przekazywana przez wartość musi mieć rozmiar. Dlatego istnieje `?Sized` — jedyne miejsce w języku, gdzie w ograniczeniu pojawia się `?`, i **nie** znaczy ono „opcjonalny”, tylko „nie wymagam tego”. Stąd bierze się zaskoczenie z `.clone()` na `&str`: `Clone` wymaga `Sized`, `str` nie jest `Sized`, więc klonuje się referencja, a nie łańcuch znaków. Druga to cechy automatyczne (*auto traits*) — `Send` i `Sync` nadaje kompilator sam, na podstawie pól, i w bezpiecznym kodzie nie da się napisać `impl Send for …`. `Rc<i32>` i `Arc<i32>` zajmują tyle samo bajtów; to, że jeden przejdzie do innego wątku, a drugi nie, jest obietnicą, nie bajtem w pamięci. Zapytać o nią można tylko kompilatora — `fn assert_send<T: Send>() {}` i wywołanie, które albo się kompiluje, albo nie.
+
+**Szukaj po polsku:** cecha znacznikowa · interfejs znacznikowy · ograniczenia typów generycznych · `rust marker trait` · `rust ?Sized` · `rust auto trait Send Sync`

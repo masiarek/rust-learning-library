@@ -23,3 +23,9 @@ Both of these are one-line decisions, and both defaults are wrong half the time.
 - [Opening a file](../opening_a_file/README.md) — where the `ErrorKind` comes from
 - [`unwrap_or_default`](../../17_Option_and_Result/unwrap_or_default/README.md) — the fallback that is right here and dangerous next door
 - [Six kinds of zero](../../17_Option_and_Result/six_kinds_of_zero/README.md) — the same lesson in another domain: empty has more than one reason
+
+## Po polsku
+
+Po polsku obie sytuacje wpadają w to samo zdanie — „nic tam nie ma” znaczy zarówno „pliku nie ma”, jak i „plik jest, tylko pusty” — a to są dwa różne fakty i tylko jeden z nich jest błędem. Dlatego w obsłudze błędów nie pytamy, *czy* błąd wystąpił, tylko *jakiego jest rodzaju*: dopasowanie wzorca na `e.kind()` z `ErrorKind::NotFound` oddziela pierwsze uruchomienie programu, gdy pliku z danymi jeszcze nie ma i pusta kolekcja jest poprawną odpowiedzią, od braku uprawnień albo uszkodzonego nośnika. Pokusą jest tu jednolinijkowiec `unwrap_or_default()`, który zamienia na wartość domyślną **każdy** błąd odczytu: jest na miejscu, gdy naprawdę chodzi o „pliku jeszcze nie ma”, i jest katastrofą, gdy plik istnieje, lecz nie dało się go przeczytać — program rusza z pustymi danymi i przy najbliższym zapisie po cichu kasuje dorobek użytkownika. Odwrotny domyślny wybór jest równie zły: uznanie `NotFound` za błąd krytyczny sprawia, że program nie potrafi wystartować ani razu.
+
+**Szukaj po polsku:** brak pliku a pusty plik · obsługa błędów wejścia/wyjścia · rodzaj błędu io · `rust ErrorKind::NotFound` · `rust match io::Error kind`

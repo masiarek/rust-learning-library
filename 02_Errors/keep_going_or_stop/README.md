@@ -23,3 +23,9 @@ The two policies look identical on a file with no errors, which is every file du
 - [Readers are fallible](../readers_are_fallible/README.md) — where the iterator of `Result`s comes from
 - [Returning `None` on error](../../17_Option_and_Result/none_on_error/README.md) — the same loss one level down: four distinct causes arriving as one `None`
 - [The long way round](../../ROADMAP.md) — rung 7 is this idea with ballots in it
+
+## Po polsku
+
+Wybór „przerwać na pierwszym błędnym wierszu czy przerobić resztę i zdać raport na końcu” jest decyzją **projektową**, a nie kwestią obsługi błędów — i w Ruscie zapisuje się ją w typie zwracanym, nie w komentarzu. Najbardziej zaskakuje `collect::<Result<Vec<T>, E>>()`: ten sam `collect`, tylko z innym typem docelowym, zamienia iterator wartości `Result` w jeden `Result` i zatrzymuje się na pierwszym `Err` — wygląda to jak magia, a jest zwyczajną implementacją cechy `FromIterator`. Adnotacja typu bywa tu więc regułą biznesową, co brzmi dziwacznie dopiero do momentu, gdy zobaczysz wariant przeciwny: rozdzielenie obu połówek, żeby wywołujący dostał i dobre wiersze, i listę odrzuconych — z numerami linii, bo bez nich komunikat jest tylko wzruszeniem ramion. Najniebezpieczniejszy jest `filter_map(Result::ok)`, uczciwy wyłącznie wtedy, gdy „pomiń śmieci” naprawdę stoi w specyfikacji; w każdym innym przypadku to cicha utrata danych, która wychodzi na jaw przy imporcie czterdziestu tysięcy wierszy, a nie na trzech poprawnych linijkach z czasu pisania kodu.
+
+**Szukaj po polsku:** walidacja wsadowa · cicha utrata danych · `rust collect Result Vec` · `rust iterator of results partition` · `rust filter_map Result::ok`

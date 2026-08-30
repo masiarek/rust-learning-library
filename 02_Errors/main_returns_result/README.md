@@ -23,3 +23,9 @@
 - [Debug and Display](../../15_First_Programs/debug_vs_display/README.md) — the two traits, two audiences, and the default paths that print the wrong one
 - [Standard error, and exit status](../stderr_and_exit_status/README.md) — where that message goes, and the number beside it
 - [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md) — the other way a program stops, and its own exit code
+
+## Po polsku
+
+`fn main() -> Result<(), E>` to najtańsza obsługa błędów w Ruscie — `?` działa na najwyższym poziomie i nie trzeba pisać ani jednego `match`a — i dokładnie dlatego tyle programów wychodzi z nią na produkcję. Haczyk polega na tym, że środowisko uruchomieniowe wypisuje przy `Err` postać **`Debug`**, a nie starannie ułożone zdanie z `Display`: użytkownik dostaje `Error: Io(Os { code: 2, kind: NotFound, message: "No such file or directory" })`, czyli zrzut struktury, który wymienia wszystko oprócz nazwy pliku, o który chodziło. Zauważ przy okazji, że nawet w całkowicie polskojęzycznym programie ten wiersz zaczyna się angielskim `Error:` — wypisuje go biblioteka standardowa przez cechę (*trait*) `Termination` i nie da się tego ani przetłumaczyć, ani przeformatować. Stąd wzorzec wart skopiowania: dwuwierszowy `main`, który woła `run() -> Result<…>` i sam decyduje, jak pokazać błąd człowiekowi, zanim ten wymknie się na zewnątrz.
+
+**Szukaj po polsku:** kod wyjścia programu · Debug kontra Display · `rust main returns Result` · `rust Termination trait` · `rust ExitCode`

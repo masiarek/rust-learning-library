@@ -20,3 +20,13 @@
 ## Where this arc goes
 
 The order is deliberate: the first two pages are about failures you did not notice, the middle three about failures that reach the user, and the last three about the type they travel in. That is roughly the order a real program acquires them — you write the happy path, discover it lies, then discover the lie was structural.
+
+## Po polsku
+
+Największa pułapka jest tu terminologiczna, a nie techniczna. Polskie materiały o Javie, C# czy Pythonie mówią o **obsłudze wyjątków** — rzucaniu, łapaniu, bloku `try`/`catch` — i to jest pierwsza fraza, którą polski czytelnik wpisuje w wyszukiwarkę. W Ruscie nie ma jednak czego szukać pod tym hasłem: wyjątków nie ma w ogóle, błąd jest zwykłą **wartością zwracaną** (`Result`), a `panic!` to nie wyjątek, tylko przerwanie programu, którego nie łapie się dla kontroli przepływu. Dlatego ten dział nazywa się „obsługa błędów”, nie „obsługa wyjątków”, a po angielsku szuka się `rust error handling`, nigdy `rust exceptions`.
+
+Drugie rozróżnienie jest tym, czym ta sekcja różni się od [Foundations](../01_Foundations/README.md): tam poznajesz *typy* (`Option`, `Result`, `?`), tutaj **drogę błędu na zewnątrz programu** — od odczytu, który go wyprodukował, przez funkcję, która nie umiała go obsłużyć, aż po zdanie czytane przez człowieka i liczbę testowaną przez skrypt powłoki. Dwa słowa z tego końca trasy zostają po angielsku, bo tak nazywa je system: `stderr` (strumień błędów, obok `stdout`) i *exit status* — kod wyjścia, w którym **zero znaczy sukces**, odwrotnie niż podpowiada intuicja z wartości logicznych, gdzie zero to fałsz. Skrypt powłoki nie czyta twojego komunikatu; czyta tę jedną liczbę.
+
+Kolejność lekcji w tabeli nie jest przypadkowa i warto ją czytać po kolei: najpierw awarie, których w ogóle nie zauważyłeś, potem takie, które docierają do użytkownika, a na końcu typ, w którym błąd podróżuje. Mniej więcej w tej kolejności prawdziwy program je zdobywa — najpierw piszesz ścieżkę szczęśliwą, potem odkrywasz, że kłamie, a potem, że kłamstwo było strukturalne.
+
+**Szukaj po polsku:** obsługa błędów w Ruscie · dlaczego Rust nie ma wyjątków · kod wyjścia programu · `rust error handling` · `rust Result vs panic`

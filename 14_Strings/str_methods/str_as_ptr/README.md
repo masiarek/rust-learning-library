@@ -70,3 +70,9 @@ capacity 4 -> 8
 - [`str::substr_range`](../str_substr_range/README.md) — answers 'is this a view into that' safely
 
 [`str::as_ptr` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.as_ptr)
+
+## Po polsku
+
+`as_ptr` zwraca surowy wskaźnik (*raw pointer*) `*const u8` na pierwszy bajt — czyli tylko połowę tego, czym jest `&str`, bo druga połowa to długość trzymana obok wskaźnika, a nie w danych. Dla kogoś, kto przychodzi z C, to jest właśnie ta pułapka: tam łańcuch *kończy się* bajtem zerowym, tutaj żadnego terminatora nie ma, więc `s.as_ptr()` przekazany funkcji oczekującej `char *` czyta poza koniec tekstu — do FFI służy `CString`, nie ten wskaźnik. Druga pułapka jest cichsza: surowego wskaźnika nie pilnuje borrow checker, więc nic nie krzyknie, gdy przeżyje on swój łańcuch albo realokację po `push_str` — dostajesz zwisający wskaźnik bez jednego ostrzeżenia. W bezpiecznym kodzie prawie zawsze chodziło ci o `as_bytes`.
+
+**Szukaj po polsku:** surowy wskaźnik · wskaźnik plus długość · `rust str as_ptr` · `rust CString null terminated FFI` · `rust raw pointer dangling`

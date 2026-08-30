@@ -51,3 +51,13 @@ And [the long way round to a STAR count](../../ROADMAP.md) is this library's own
 - [Katas](../../KATAS.md) — this library's own practice track, in order
 - [Books](../books/README.md) — when you would rather read than type
 - [A tree of practice projects](../../05_Tooling/practice_workspace/README.md) — where to put all of this on disk
+
+## Po polsku
+
+Cztery ścieżki z tej strony to nie cztery alternatywy do wyboru, tylko **cztery kolejne etapy**, i cała rzecz polega na tym, żeby nie wybierać ich według trudności. Typowa pomyłka wygląda tak: „po co mam poprawiać literówki w stu malutkich plikach, wezmę od razu makra proceduralne” — po czym `proc-macro-workshop` skutecznie przekonuje człowieka, że Rust jest nie dla niego. To jest wniosek o kolejności, a nie o zdolnościach. Porządek jest prosty: najpierw rustlings (pierwszy tydzień), potem *100 Exercises* jako jedyny kurs, który warto zrobić porządnie od początku do końca, Rust By Practice wyrywkowo — wtedy, gdy już wiesz, **czego** nie rozumiesz — a na końcu własny program, bo tylko on wymaga podejmowania decyzji, a nie wypełniania luk.
+
+Żadna z tych ścieżek nie ma polskiej wersji i to mniejszy problem, niż się wydaje, bo rustlings to w gruncie rzeczy **rozmowa z kompilatorem**: czytasz komunikat `rustc`, poprawiasz jedną linijkę, uruchamiasz ponownie. Angielskiego jest tam zaskakująco mało i wciąż tego samego — `expected`, `mismatched types`, `borrow of moved value`, `cannot borrow as mutable` — więc po stu ćwiczeniach zna się ten słownik na pamięć, co jest osobną korzyścią, nie kosztem. Praktyczna rada: kod błędu (`E0308`) traktuj jak klucz wyszukiwania, bo jest niezależny od języka i prowadzi do tej samej odpowiedzi niezależnie od tego, w czym pytasz; `rustlings hint` jest od podpowiedzi, a `rustc --explain E0308` od dłuższego wyjaśnienia po angielsku.
+
+Jako lekturę towarzyszącą pierwszemu tygodniowi dobrze działa Tour of Rust po polsku (rozdziały 1–5 są przetłumaczone), a od rozdziału 6 i tak przechodzi się na *The Book*. Nie warto czekać z ćwiczeniami na polski kurs — on nie powstanie w tym tempie, w jakim zmienia się język.
+
+**Szukaj po polsku:** ćwiczenia z Rusta · kurs Rusta po polsku · `rustlings` · `100 exercises to learn rust` · `rustc --explain`

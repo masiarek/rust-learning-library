@@ -54,3 +54,9 @@ identical: true
 - [`str::slice_unchecked`](../str_slice_unchecked/README.md) — the other deprecated name
 
 [`str::slice_mut_unchecked` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.slice_mut_unchecked)
+
+## Po polsku
+
+To mutowalny bliźniak `slice_unchecked` — również wycofany (*deprecated*) w Ruście 1.29 na rzecz `get_unchecked_mut(a..b)` — ale ma jedno ograniczenie własne, o którym łatwo zapomnieć: zwrócony `&mut str` **nie może zmienić długości**. Wolno przez niego pisać tylko w miejsce, bajt za bajt, i dlatego jedyne, co się tu realnie robi, to metody z rodziny `ascii`, jak `make_ascii_uppercase`. Dla polskiego tekstu to od razu widać jako pułapka: `make_ascii_uppercase` przerobi `a` na `A`, ale `ż` zostawi nietknięte, bo dotyka wyłącznie zakresu ASCII — na „żółw” zadziała dokładnie w zerowym stopniu. Do zmiany wielkości polskich liter potrzebne jest `to_uppercase`, które zwraca nowy `String`, a nie zapisuje w istniejący wycinek; a ponieważ wersja `unchecked` niczego nie sprawdza, błędne przesunięcie w bajtach nie skończy się tu paniką, tylko zachowaniem niezdefiniowanym (*undefined behaviour*).
+
+**Szukaj po polsku:** mutowalny wycinek łańcucha · zmiana wielkości polskich liter · metoda wycofana · `rust get_unchecked_mut` · `rust make_ascii_uppercase non-ascii`

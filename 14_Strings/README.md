@@ -47,3 +47,13 @@ Strings are the worked example half the ownership pages already use, so the deep
 [STRINGS.md](../STRINGS.md) is the full map: the same lessons with the question each one answers, plus the nine topics that are still outlines rather than lessons.
 
 [Strings: links, books and videos](resources/README.md) is the reading list — the Book, *Programming Rust* ch. 17, Easy Rust, the essays, and the exercise sets outside this library that map onto these pages.
+
+## Po polsku
+
+Tekst w Ruscie to dwa typy i jeden podział: `String` jest właścicielem swoich bajtów (łańcuch znaków, dane na stercie, można je rozbudowywać), a `&str` to tylko podgląd na cudzy tekst — wycinek łańcucha (*string slice*), czyli para „wskaźnik + długość”. Stąd praktyczna reguła całego działu: parametr funkcji bierze `&str`, bo chce tylko czytać, a pole struktury trzyma `String`, bo musi przeżyć wywołanie, które je stworzyło. Literał w kodzie nie leży ani na stosie, ani na stercie — siedzi w samym pliku wykonywalnym, dlatego ma typ `&'static str`.
+
+Reszta niespodzianek bierze się z tego, że te bajty są w UTF-8 — i tu polski czytelnik ma trudniej niż angielski, bo trafia na nie od pierwszego dnia, a nie w egzotycznym przykładzie. Każde `ą ć ę ł ń ó ś ź ż` zajmuje **dwa** bajty, więc `"żółw".len()` daje 7, a nie 4. `s[0]` w ogóle się nie kompiluje (nie ma indeksowania po znakach), a `&s[0..1]` na słowie „żółw” kompiluje się znakomicie i **panikuje w czasie działania**: *byte index 1 is not a char boundary*. To jedyne miejsce w tym dziale, gdzie kompilator nie pilnuje za ciebie — dlatego do liczenia „liter” służy `.chars().count()`, a do cięcia w bezpiecznych miejscach `char_indices()`. Uwaga na skróty myślowe: `char` to jeden skalar Unicode, a nie „jedna litera na ekranie”, więc emoji ze znacznikiem koloru skóry to nadal kilka `char`ów.
+
+Sam dział jest zbudowany dwuwarstwowo i warto to wiedzieć, zanim zaczniesz szukać: **lekcje** (tabela na górze) tłumaczą pojęcia, a **dokumentacja metod** — 83 strony dla `str` i 42 dla `String` — odpowiada na pytanie „co ta metoda robi na brzegach, na czym panikuje, co alokuje”. Podział przebiega dokładnie po typach: `String` dereferencjonuje się do `str`, więc każda metoda `str` działa też na `String` i dlatego strona pożyczona jest dwa razy grubsza. Materiałów po polsku o łańcuchach jest niewiele — polskie tłumaczenie Tour of Rust kończy się na rozdziale 5, a tekst to rozdział 6 — więc do wyszukiwarki i tak wpisuje się angielskie hasła.
+
+**Szukaj po polsku:** łańcuchy znaków w Ruscie · wycinek łańcucha · kodowanie UTF-8 a polskie znaki · `rust String vs &str` · `rust byte index is not a char boundary`

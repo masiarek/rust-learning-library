@@ -100,3 +100,13 @@ bacon and a [strict clippy configuration](../strict_lints/README.md) are designe
 - [cargo-nextest](../nextest/README.md) — the test runner behind the `t` job, if you install it
 - [Compile times](../compile_times/README.md) — bacon shortens the loop; that page shortens the build inside it
 - [A tree of practice projects](../practice_workspace/README.md) — one `bacon` at the workspace root covers every exercise
+
+## Po polsku
+
+`bacon` pilnuje plików i po każdym zapisie uruchamia od nowa `cargo check`, `clippy` albo testy w panelu, który zostawiasz otwarty. Nie kompiluje niczego więcej niż trzeba: domyślne zadanie to `check`, które sprawdza, czy kod się kompiluje, ale nie produkuje pliku wykonywalnego — dlatego odpowiedź pojawia się szybciej, niż zdążyłbyś przełączyć okno. Koszt wdrożenia jest zerowy w sensie dosłownym: jeden plik binarny na twojej maszynie, żadnego pliku w repozytorium, więc nie ma z kim tego uzgadniać ani czego usuwać. Druga rzecz, która wygląda na drobiazg, a nią nie jest: `bacon` pokazuje **pierwszy** błąd i liczbę pozostałych, zamiast ściany tekstu. Pierwszy błąd jest zwykle jedynym prawdziwym, a reszta to jego konsekwencje — nawyk czytania całego wydruku od góry do dołu kosztuje początkujących najwięcej czasu.
+
+Warto zapamiętać rozróżnienie, które ta strona stawia najmocniej, bo po polsku nie ma na nie utartego słowa: `bacon` należy do **pętli wewnętrznej** (*inner loop*) — jest interaktywny, ma stan i nigdy się nie kończy. Żadna z tych cech nie jest pożądana w automatyzacji, gdzie zadanie brzmi „uruchom raz, zdecyduj, zgłoś wynik”. W skrypcie czy w CI pisze się to samo wprost — `cargo clippy --all-targets -- -D warnings` i `cargo nextest run` — czyli dokładnie te polecenia, które `bacon` wywoływał za ciebie. Jeżeli kiedykolwiek zechcesz wstawić `bacon` do skryptu, to znak, że potrzebujesz polecenia `cargo`, które siedzi pod spodem.
+
+Dwie uwagi praktyczne. Po pierwsze, jeżeli używasz rust-analyzera, `cargo check` po zapisie już masz — to, co `bacon` dokłada, to `clippy` i **testy** puszczane w tym samym rytmie oraz niezależność od edytora. Po drugie, wyszukiwanie: hasło „bacon” w polskiej wyszukiwarce prowadzi prosto do boczku, więc pytaj o `bacon rust` albo od razu o `dystroy bacon`. Alternatywa `watchexec` jest ogólniejsza — uruchamia dowolne polecenie na dowolnych plikach — i wygrywa wtedy, gdy pętla ma się kończyć uruchomieniem programu, a nie samym sprawdzeniem.
+
+**Szukaj po polsku:** pętla zwrotna · przebudowa po zapisie · `bacon rust` · `cargo check vs cargo build` · `watchexec rust`

@@ -64,3 +64,9 @@ fn main() {
 - [`String::as_mut_vec`](../../string_methods/string_as_mut_vec/README.md) — the owned equivalent
 
 [`str::from_utf8_mut` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.from_utf8_mut)
+
+## Po polsku
+
+`str::from_utf8_mut` to ta sama kontrola co `from_utf8`, tylko nad `&mut [u8]`: obietnica poprawnego UTF-8 jest sprawdzana **raz**, przy wejściu, a potem masz `&mut str` i możesz przerabiać bufor w miejscu, bez kopiowania. Cena jest taka, że bezpieczne API `&mut str` sprowadza się w praktyce do przeróbek ASCII — tylko one na pewno nie zmieniają liczby bajtów i nie mogą złamać obietnicy — i to jest pułapka dla polskiego tekstu: `make_ascii_uppercase()` na buforze z „żółw” da „żółW”, bo litery z ogonkiem i kreską nie są ASCII i metoda ich po prostu nie dotyka. Do prawdziwej zmiany wielkości liter trzeba `to_uppercase()`, które alokuje nowy `String`, bo w Unicode zmiana wielkości potrafi zmienić długość w bajtach — a tego edycja w miejscu z definicji nie udźwignie. Pamiętaj też, że referencja mutowalna trzyma bufor wyłącznie dla siebie przez cały czas życia `&mut str`: do surowych bajtów w międzyczasie nie zajrzysz.
+
+**Szukaj po polsku:** zmiana wielkości liter · edycja w miejscu · referencja mutowalna · `rust from_utf8_mut` · `rust make_ascii_uppercase non-ascii`

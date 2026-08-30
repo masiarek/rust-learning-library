@@ -38,3 +38,13 @@ Rough order, not a promise:
 - **Clippy** — the lints worth arguing with, and `#[allow]` as a comment that the compiler checks
 - **Workspaces** — one `target/`, one lockfile, many crates, and the split that actually speeds a build up
 - **`cargo add` and semver** — what a caret requirement really permits, and what `cargo update` is allowed to do to you
+
+## Po polsku
+
+Ten dział nie uczy języka, tylko **łańcucha narzędzi** (*toolchain*) — czyli tego, w czym programista siedzi przez cały dzień: edytuj, zbuduj, uruchom. Rozróżnienie jest ważne, bo polskojęzyczne materiały o Ruscie opisują niemal wyłącznie sam język (Tour of Rust po polsku urywa się na rozdziale 5. i o `cargo` nie mówi nic), a pytania, które realnie zatrzymują początkującego, brzmią raczej „dlaczego to się buduje trzy minuty” i „skąd wziąć ten crate”. Odpowiedzi na nie są tutaj, nie w rozdziale o własności.
+
+Dla kogoś, kto przychodzi z C++ albo z Pythona, największą niespodzianką bywa to, jak **mało** jest tu narzędzi do wyboru. Jedno polecenie `cargo` robi to, co tam rozkłada się na make lub CMake, pip, venv, pytest i generator dokumentacji: buduje, uruchamia testy, pobiera zależności, składa dokumentację. Nie ma pliku budowania, który trzeba by napisać ręcznie, i nie ma decyzji „którego menedżera pakietów użyć” — jest `Cargo.toml`. Cenę za to płaci się w jednym miejscu, w czasie kompilacji, i dlatego kilka stron w tym dziale ([Compile times](compile_times/README.md), [bacon](bacon/README.md), [cargo-nextest](nextest/README.md)) dotyczy wyłącznie skracania oczekiwania, a nie pisania lepszego kodu.
+
+Praktyczna uwaga na start: szukanie po polsku prawie nic tu nie da. Komunikaty `cargo` i `rustup` są po angielsku, nazwy podkomend są angielskimi słowami i to ich trzeba używać w wyszukiwarce — polskie „kompilacja Rusta wolno działa” zwróci garść wpisów blogowych, a `rust slow compile times` zwróci odpowiedź. Jeśli nie wiesz, od której strony zacząć, mapa [TOOLCHAIN.md](../TOOLCHAIN.md) układa je według problemu, który faktycznie masz, a nie według poziomu trudności.
+
+**Szukaj po polsku:** łańcuch narzędzi · zależności w Cargo · `the cargo book` · `rust slow compile times` · `rustup manage toolchains`

@@ -18,3 +18,9 @@ Rough order, not a promise:
 - **`zoxide`** — a `cd` that learns which directories you actually use, and the shell hook that makes it work
 - **`eza` and `delta`** — the other two Rust replacements worth the install, and the one place `delta` changes what `git` reports rather than how it looks
 - **Reading a `PATH`** — why `which` and `command -v` can disagree, and what a shell function shadowing a real binary looks like from the inside
+
+## Po polsku
+
+Ten rozdział nie uczy Rusta, tylko powłoki (*shell*), z której uruchamiasz kompilator — a trafił do biblioteki dlatego, że na pytanie „co się właściwie pisze w Ruscie?” najuczciwszą odpowiedzią nie jest żaden framework webowy, tylko `fd` i `ripgrep`: narzędzia wiersza poleceń, które zastąpiły uniksowe `find` i `grep` i należą dziś do najczęściej instalowanych programów napisanych w tym języku. Polskie kursy Rusta pokazują zwykle sam język, znacznie rzadziej to, do czego bywa realnie używany, więc ta perspektywa potrafi zaskoczyć. Warto też trzymać osobno dwa rozdziały, które łatwo pomylić: `05_Tooling` opisuje pętlę *wewnątrz* projektu (edytuj — zbuduj — uruchom), a ten rozdział minutę wcześniejszą, zanim w ogóle znajdziesz plik, linię i polecenie wpisane wczoraj.
+
+**Szukaj po polsku:** narzędzia wiersza poleceń w Ruscie · powłoka uniksowa · zamienniki grep i find · `ripgrep vs grep benchmark` · `rust cli tools`

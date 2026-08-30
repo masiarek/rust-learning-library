@@ -68,3 +68,9 @@ true
 - [`String::from_utf8_unchecked`](../../string_methods/string_from_utf8_unchecked/README.md) — the owning version
 
 [`str::from_utf8_unchecked` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.from_utf8_unchecked)
+
+## Po polsku
+
+`from_utf8_unchecked` niczego nie sprawdza — po prostu każe patrzeć na te same bajty jak na `&str`. Koszt pomyłki warto nazwać dokładnie: to nie jest „zepsuty napis”, tylko **niezdefiniowane zachowanie** (*undefined behaviour*), bo kolejne metody `str` mają prawo pominąć sprawdzanie granic znaków właśnie dlatego, że ten niezmiennik uznają za dany. `unsafe` nie znaczy tu „kod niebezpieczny”, tylko „kompilator przestaje sprawdzać, umowę podpisujesz ty”, a umowa ma jeden punkt: bajty **już** są poprawnym UTF-8. Oszczędzasz jedno liniowe przejście po buforze, więc jedynym uczciwym uzasadnieniem jest pochodzenie danych — bajty wyszły przed chwilą z `&str` przez `as_bytes()` — a nie „przecież sprawdzałem je wcześniej”: jeśli od tamtej pory cokolwiek mogło do bufora pisać, tamto sprawdzenie jest już nieważne.
+
+**Szukaj po polsku:** niezdefiniowane zachowanie · niezmiennik typu · kontrakt bezpieczeństwa · `rust from_utf8_unchecked UB` · `rust unsafe safety contract`

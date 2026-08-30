@@ -28,3 +28,9 @@ Exit status is invisible during development, because you are reading the output 
 
 - [`main` can return a `Result`](../main_returns_result/README.md) — the shortest path to a non-zero status, and what it prints on the way
 - [Testing a command](../../03_Command_Line/testing_a_command/README.md) — asserting the status and the stream from an integration test
+
+## Po polsku
+
+Cała różnica między komunikatem, który psuje potok, a takim, który go nie psuje, to jedna litera: `eprintln!` zamiast `println!`. Standardowe wyjście (`stdout`) niesie **odpowiedź**, standardowe wyjście błędów (`stderr`) wszystko, co chcesz o tej odpowiedzi powiedzieć — a sprawdza się to jednym poleceniem, `prog > out.txt`, po którym błędy nadal widać na ekranie; ostrzeżenie wypuszczone na `stdout` policzy się w `prog plik | wc -l` jako dana. Osobno stoi jedna liczba, czyli kod wyjścia: zero to sukces, cokolwiek innego to porażka i na tym praktycznie kończy się konwencja — z tym że jest to **jedyna** rzecz, którą widzi skrypt powłoki, `Makefile` albo krok w CI, więc program wypisujący `error: nie ma takiego pliku` i kończący się zerem melduje sukces wszystkim poza człowiekiem. Na koniec zasadzka, która potrafi zjeść nawet poprawnie wypisany komunikat: `process::exit` kończy proces **natychmiast**, bez destruktorów i bez opróżnienia buforów, więc zdanie oddane do własnego `BufWriter`-a może nigdy nie dotrzeć na ekran.
+
+**Szukaj po polsku:** standardowe wyjście błędów · kod wyjścia programu · `rust eprintln vs println` · `rust process::exit no destructors` · `bash $? exit status`

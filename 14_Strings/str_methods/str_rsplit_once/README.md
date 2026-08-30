@@ -65,3 +65,9 @@ Some(("/usr/local/bin", "rustc"))
 - [`str::strip_suffix`](../str_strip_suffix/README.md) — when the right-hand side is a known constant
 
 [`str::rsplit_once` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.rsplit_once)
+
+## Po polsku
+
+Przedrostek `r` w `rsplit_once` (od *reverse*) odwraca wyłącznie kierunek **szukania** separatora — nie kolejność tego, co dostajesz. Krotka zawsze wraca w kolejności czytania, `(przed, po)`, więc `"a.b.c".rsplit_once('.')` to `Some(("a.b", "c"))`; to właśnie różni tę metodę od `rsplitn`, której iterator wypluwa najpierw *ostatnie* pole. Drugi szczegół, dla którego w ogóle warto sięgać po `Option` zamiast po `rfind`: brak separatora to `None`, a separator na samym początku to `Some(("", "hidden"))` — „nie ma kropki” i „lewa strona jest pusta” są tu rozróżnialne, czego zwykłe szukanie indeksu nie daje. Do nazw plików i tak lepszy jest `Path`, który zna reguły systemu plików, nieznane gołemu wycinkowi łańcucha (*string slice*).
+
+**Szukaj po polsku:** dzielenie łańcucha od końca · ostatnie wystąpienie separatora · rozdzielanie nazwy i rozszerzenia · `rust rsplit_once` · `rust split string at last occurrence`

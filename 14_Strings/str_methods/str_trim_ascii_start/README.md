@@ -60,3 +60,9 @@ fn main() {
 - [`str::split_ascii_whitespace`](../str_split_ascii_whitespace/README.md) — the same ASCII restriction, for splitting
 
 [`str::trim_ascii_start` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.trim_ascii_start)
+
+## Po polsku
+
+`trim_ascii_start` ścina z początku wycinka łańcucha (*string slice*) wyłącznie pięć bajtów białych znaków ASCII — spację, `\t`, `\n`, `\r` i `\x0C` — a w zamian daje coś, czego unikodowy `trim_start` nie potrafi: działa w kontekście `const`, więc nagłówek można przyciąć już na etapie kompilacji. Dla polskiego tekstu wynika z tego jedna bardzo konkretna pułapka: polska typografia każe stawiać twardą spację (`U+00A0`, *non-breaking space*) po spójnikach jednoliterowych, a tekst wklejony z edytora czy ze strony bywa nią poprzedzony — `trim_ascii_start` takiej spacji nie widzi i zostawi ją na początku. Ograniczenie do ASCII dotyczy przy tym samych białych znaków, nie treści: ą, ć, ę i reszta ogonków przechodzą przez tę metodę bez szwanku. Stąd prosty podział: format, którego alfabet znasz z góry (nagłówek protokołu, linia logu) — `trim_ascii_start`; tekst, który pisał człowiek — `trim_start`.
+
+**Szukaj po polsku:** twarda spacja w tekście · białe znaki ASCII · funkcje `const` w Ruscie · `rust trim_ascii_start const fn` · `rust ascii whitespace vs unicode whitespace`

@@ -248,3 +248,19 @@ both implementations agreed on all 6 inputs
 - [`unwrap_or_default`](../../17_Option_and_Result/unwrap_or_default/README.md) — the combinator that removes the most unwraps for the least thought
 - [`anyhow` and context](../anyhow_and_context/README.md) — where the error goes once you stop unwrapping it
 - Tris Oaten, [*Rust: Don't Panic* ↗](https://www.namtao.com/rust-dont-panic/) — the argument this page is built from
+
+## Po polsku
+
+Ta strona nie mówi „nie używaj `unwrap`”, tylko wyjaśnia, **skąd on się u ciebie wziął** — a odpowiedź jest niewygodnie prozaiczna: z pierwszego przykładu na stronie crate'a. README `serde` rozpakowuje dwa razy w swoim sztandarowym przykładzie, README `regex` już w pierwszym, w linijce z `Regex::new`. To nie są niechlujne biblioteki, a Rust Book wprost taki zapis błogosławi: w przykładzie `unwrap` jest zastępnikiem miejsca, w którym twoja aplikacja obsłuży błąd po swojemu. Dla kogoś, kto czyta dokumentację w drugim języku, pokusa jest jeszcze silniejsza — wklejasz fragment, który *działa*, zamiast rekonstruować go z opisu — więc warto nazwać, co się właśnie stało: `unwrap` to `todo!()` z wartością zwracaną. Cała różnica polega na tym, że `todo!()` sam się zgłasza, a `unwrap()` kompiluje się po cichu, jedzie na produkcję i czeka.
+
+Pomaga też przestać nazywać tę operację „rozpakowaniem”. `unwrap` niczego nie wyjmuje ze środka — on **twierdzi**, że wartość tam jest, i z góry zgadza się na to, że jeśli jej nie ma, program ma się przewrócić. Sposoby na panikę są trzy i każdy naprawia się inaczej:
+
+- panika **umyślna** — `panic!`, `assert!`, `todo!`, `unimplemented!`, `unreachable!`;
+- panika **przypadkowa** — indeks poza końcem `Vec`, wycinek łańcucha ucięty w połowie znaku, przepełnienie liczby w kompilacji `debug`, dzielenie przez zero;
+- **rozpakowanie** `Err` albo `None` — `unwrap`, `expect` i wszystko, co się nimi kończy.
+
+Tylko trzecia wygląda na pomyłkę, a najgroźniejsza jest druga: `v[i]` nie *wygląda* na wywołanie zdolne ubić proces. I tu polski tekst zmienia rachunek prawdopodobieństwa, bo wycinek łańcucha (*slice*) tnie się po **bajtach**, a nie po znakach. Dla `"żółw"` `len()` zwraca **7**, a `chars().count()` — 4, ponieważ `ż`, `ó` i `ł` zajmują po dwa bajty; `&"żółw"[0..3]` wywraca program komunikatem `end byte index 3 is not a char boundary; it is inside 'ó' (bytes 2..4 of string)`. W tekście angielskim, czyli w czystym ASCII, identyczny kod przeżyje latami i nikt się nie dowie, że jest miną. Dlatego z listy lintów w `Cargo.toml` najważniejszy dla nas jest `indexing_slicing = "deny"` — pilnuje właśnie tej niewidocznej kategorii, a nie `unwrap`ów, które i tak widać gołym okiem.
+
+Na koniec dwie rzeczy warte zrobienia z tą wiedzą. Po pierwsze, usunięcie paniki nie zawsze polega na podmianie na kombinator: „użyj `unwrap_or`” jest tylko połową odpowiedzi, bo tam, gdzie stoi `assert!`, naprawą bywa zmiana **sygnatury** — funkcja zwraca `Result`, a decyzję podejmuje wywołujący. Po drugie, jeśli już coś zostawiasz, zostaw `expect` z powodem, dla którego uwierzyłeś, że to nie może zawieść — i zauważ, że jego treść **może być po polsku**, w odróżnieniu od `Display`: ten komunikat czyta programista, nie użytkownik. Resztę zleć narzędziom: `cargo build` nie odezwie się nigdy, clippy odezwie się po dopisaniu kilku wierszy do `Cargo.toml`, a `allow-unwrap-in-tests = true` zostawia prototypowanie z `unwrap`em w `#[test]` całkowicie legalnym — czyli dokładnie tam, gdzie i tak powinno się prototypować.
+
+**Szukaj po polsku:** panika w Ruscie · polskie znaki a bajty w łańcuchu · `rust unwrap in production` · `rust byte index is not a char boundary` · `clippy unwrap_used deny`

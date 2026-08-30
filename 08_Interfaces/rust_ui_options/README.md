@@ -47,3 +47,13 @@ The honest warning about starting at stage 2 or 3: reactive UI is a substantial 
 - [A tree of practice projects](../../05_Tooling/practice_workspace/README.md) — where a staged project like this would live, and how a shared library crate works
 - [An HTTP request](../../07_Clients/http_with_reqwest/README.md) — the other half of a client, if the app ever talks to something
 - [The long way round to a STAR count](../../ROADMAP.md) — the lessons sequenced so the running example is a voting method
+
+## Po polsku
+
+Najczęstsze nieporozumienie przy wybieraniu „GUI do Rusta” bierze się z zestawiania trzech nazw w jednym rzędzie, a one nie startują w tym samym biegu. **Leptos** i **Dioxus** to frameworki interfejsu — one rysują. **Tauri** nie rysuje niczego: to okno z `WebView` i backend napisany w Ruscie, więc Leptos albo Dioxus może działać *w środku* Tauri. Pytanie „Leptos czy Tauri” nie ma sensu; „Leptos czy Dioxus” ma. Dioxus faktycznie buduje na iOS i Androida (`dx serve --platform ios`), ale rysuje przez `WebView`, więc aplikacja nie wygląda ani nie zachowuje się jak natywna — a najdroższą częścią nie jest Rust, tylko postawienie Xcode, SDK i NDK.
+
+Rada tej strony jest jednak inna niż „wybierz framework”: przy projekcie do nauki pierwszą odpowiedzią jest zwykle **CLI, bez żadnego frameworka**. Cała metoda STAR mieści się w zwykłym Ruscie — zamodelowanie karty do głosowania tak, żeby nieprawidłowej po prostu nie dało się zbudować, rozstrzygnięcie, czym właściwie jest remis, i obsługa zepsutego wejścia na granicy programu. Dopiero potem Leptos skompilowany do WebAssembly daje pliki statyczne (żadnego serwera ani bazy), a kod liczący z etapu pierwszego staje się zwykłym crate'em bibliotecznym, z którego korzystają obie wersje.
+
+Warto to potraktować poważnie, bo pułapka jest cicha: walka z borrow checkerem wewnątrz obsługi zdarzeń — gdzie własność wartości wjeżdża do domknięcia (*closure*) i już z niego nie wraca — uczy frameworka, nie Rusta. Odpowiedź prawie zawsze brzmi „sklonuj to”, i nie dowiadujesz się przy tym, dlaczego.
+
+**Szukaj po polsku:** interfejs graficzny w Ruscie · Rust i WebAssembly · `leptos vs dioxus` · `tauri webview rust backend` · `dioxus dx serve platform ios`

@@ -24,3 +24,9 @@ The crates are not rivals, so "which is better" has no answer — and picking on
 - [`anyhow` and context](../anyhow_and_context/README.md) — the application side, in detail
 - [Not every error is an `io::Error`](../not_every_error_is_io_error/README.md) — the problem both crates are answering
 - [`Option` vs `Result`](../../17_Option_and_Result/option_vs_result/README.md) — Steps 8 and 9: designing the `E`, and deciding not to
+
+## Po polsku
+
+Pytanie „który crate jest lepszy” jest tu źle postawione, bo te dwa ze sobą nie konkurują — a ich nazwy są właściwie odpowiedzią, nie znakami firmowymi: `thiserror` to *ten konkretny błąd*, `anyhow` to *byle jakoś, bylebym mógł to wypisać*. `thiserror` nie wprowadza żadnego nowego modelu błędów; generuje z atrybutów `Display`, `Error` i `From` na wyliczeniu, które i tak napisałbyś ręcznie — model zostaje ten sam, znika wyłącznie powtarzalny kod (*boilerplate*). `anyhow` stoi na przeciwnym końcu programu, tam gdzie wywołującym jest człowiek, a jedyną pozostałą decyzją jest treść komunikatu; w publicznym API biblioteki `anyhow::Result` to ślepa uliczka, bo odbiorca może już tylko wypisać to, co dostał. Właściwe pytanie brzmi więc: **czy ktokolwiek dalej w łańcuchu ma jeszcze jakąś decyzję do podjęcia** — jeśli tak, nazwij błędy (pamiętając, że typ błędu jest widoczny w semver, więc dodanie wariantu bez `#[non_exhaustive]` łamie zgodność); jeśli nie, wymaż je i nie udawaj, że jest inaczej.
+
+**Szukaj po polsku:** obsługa błędów w bibliotece · własne typy błędów · `rust thiserror vs anyhow` · `rust anyhow in public api` · `rust non_exhaustive semver`

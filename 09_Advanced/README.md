@@ -27,3 +27,13 @@ Rough order, not a promise. The three that used to sit here — `Send`/`Sync`, `
 
 - **FFI beyond a union** — `extern "C"`, `#[repr(C)]`, and what a raw pointer across the boundary obliges you to prove
 - **Macros** — `macro_rules!` and the procedural kind, once [what the `!` means](../25_Control_Flow/macros/README.md) has been said at 101
+
+## Po polsku
+
+„Zaawansowany” brzmi po polsku jak zapowiedź trudniejszej składni, i akurat tutaj znaczy coś innego. Żadna z tych stron nie jest trudniejsza w czytaniu niż strony z `01_Foundations` — zaawansowane jest to, że **błąd kosztuje więcej, a kompilator pomaga mniej**. W `unsafe` nie znika borrow checker (działa dalej, w środku bloku), znika tylko kilka konkretnych gwarancji; przy FFI i przy surowych wskaźnikach to ty bierzesz na siebie dowód, którego dotąd wymagał od ciebie kompilator. Wątki są w tym rozdziale z tego samego powodu: `spawn` wymusza `'static`, `thread::scope` pozwala pożyczyć zamiast klonować, a `Mutex::lock()` zwraca `Result` nie bez przyczyny — twoje `.unwrap()` podejmuje wtedy decyzję za kogoś innego.
+
+Rozdział ma jeden garb, którego nie znajdziesz w typowym „advanced Rust”: **cztery strony pod rząd o dokładności liczenia** — skalowanie mianowników, co właściwie jest dokładne w `i128`, co się dzieje, gdy mianowniki narastają z rundy na rundę, i arytmetyka przedziałowa, która jako jedyna pyta, czy o wyniku nie zdecydowało zaokrąglenie. To nie jest teoria liczb dla ozdoby: liczenie głosów na `f64` potrafi rozstrzygnąć remis w złą stronę, a „dokładny” to po polsku, tak samo jak po angielsku, słowo używane na trzy różne sposoby naraz.
+
+Praktyczna uwaga do czytania tabeli: pozycje oznaczone **Stub** to celowo zapisane granice tematu, a nie gotowe lekcje — po polsku najbliższe będzie „szkic”. I nie szukaj polskich odpowiedników nazw z tej tabeli: `Send`, `Sync`, `unsafe`, `union` i cała reszta to słowa kluczowe albo nazwy typów, więc odmieniamy je po polsku („w `unsafe`”, „przez `Mutex`a”), ale nie tłumaczymy.
+
+**Szukaj po polsku:** wielowątkowość w Ruscie · arytmetyka dokładna zamiast zmiennoprzecinkowej · `rust unsafe what it turns off` · `rust thread scope borrow` · `rust mutex poisoning`

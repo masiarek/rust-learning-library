@@ -27,3 +27,11 @@
 - [Lock poisoning](../mutex_poisoning/README.md) — the threaded counterpart, and what its `Result` is telling you
 - [What `unsafe` turns off](../what_unsafe_turns_off/README.md) — the `UnsafeCell` underneath, and why a safe API over a small unsafe core is the pattern
 - [`RefCell` ↗](https://doc.rust-lang.org/std/cell/struct.RefCell.html) · [Comprehensive Rust: Interior Mutability ↗](https://google.github.io/comprehensive-rust/borrowing/interior-mutability.html)
+
+## Po polsku
+
+Mutowalność wewnętrzna (*interior mutability*) niczego nie omija — **przenosi sprawdzanie reguł pożyczania z czasu kompilacji do czasu działania programu**. Przymiotnik „wewnętrzna” dotyczy wnętrza typu, a nie referencji: `&Cell<T>` i `&RefCell<T>` to wciąż zwykłe referencje współdzielone, tylko że typ, na który wskazują, bierze na siebie odpowiedzialność za bezpieczną zmianę. `Cell<T>` nie wydaje żadnych referencji (`get` kopiuje wartość na zewnątrz, `set` do środka), więc nie ma czego pilnować; `RefCell<T>` wydaje prawdziwe referencje i je zlicza — i to jest ta droższa połowa.
+
+Pułapka jest też nazewnicza. Metody nazywają się `borrow()` i `borrow_mut()`, ale to **nie** jest pożyczanie w sensie kontrolera pożyczeń (*borrow checker*) — to zwykłe wywołanie metody, a złamanie reguły nie kończy się błędem kompilacji, tylko paniką `already borrowed: BorrowMutError` na ścieżce, po której testy mogą nigdy nie przejść. Kod się kompiluje, a program pada. Warto o tym pamiętać zwłaszcza przy `Rc<RefCell<T>>` — to najczęstszy kształt w kodzie przenoszonym z Pythona czy Javy, gdzie „współdzielony i mutowalny obiekt” był po prostu domyślnym sposobem myślenia. Żaden z tych typów nie jest `Sync`, więc w wielu wątkach odpowiednikiem jest `Mutex`: ten sam pomysł, tylko z czekaniem zamiast paniki.
+
+**Szukaj po polsku:** mutowalność wewnętrzna · referencja współdzielona · `rust Cell vs RefCell` · `already borrowed BorrowMutError` · `rust Rc RefCell pattern`

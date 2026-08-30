@@ -83,3 +83,13 @@ External material explains the language. The pages in this library are the ones 
 ## See also
 
 [Books](../books/README.md) · [Exercises](../exercises/README.md) · [Going deeper](../going_deeper/README.md) · [the shelf front page](../README.md)
+
+## Po polsku
+
+Struktury (*structs*) to temat, w którym darmowych materiałów jest najwięcej, a rozrzut jakości największy: ta sama godzina kupuje albo jeden rozdział z quizami sprawdzającymi, czy naprawdę rozumiesz, albo czwarty film tłumaczący `impl` na innych nazwach zmiennych. Stąd reguła tej strony — **przeczytaj jedną rzecz** — i dla kogoś, kto czyta w drugim języku, jest ona ważniejsza, a nie mniej ważna, bo pokusa dalszego szukania „czegoś łatwiejszego” jest większa, a każdy znaleziony materiał po polsku wydaje się cenniejszy, niż jest. Akurat tutaj polski materiał naprawdę istnieje: rozdział 3 Tour of Rust jest przetłumaczony i daje całe słownictwo (struktura, struktura krotkowa, pusta struktura). Rozsądna trasa to wziąć stamtąd nazwy, a zrozumienie z rozdziału 5 *The Book* w wydaniu Browna — tym z quizami — i na tym poprzestać.
+
+Trzy rzeczy zaskakują najbardziej, jeśli `struct` spotkało się wcześniej w C, C++ albo w Javie, a taka jest typowa droga na polskich studiach. Po pierwsze, **metody nie mieszkają w strukturze**: struktura ma wyłącznie pola, a metody stoją osobno, w bloku `impl`, którego może być więcej niż jeden. To nie jest klasa z inną składnią, to dwie osobne deklaracje o tym samym typie. Po drugie, `pub` na strukturze **nie mówi nic o jej polach**, a prywatność w Ruscie jest per **moduł**, nie per typ — inny typ z tego samego modułu widzi twoje prywatne pola, co jest dokładnie odwrotnie niż w Javie i C++. Po trzecie, kolejność pól i wyrównanie w zwykłej strukturze Rusta **nie są gwarantowane**; nawyk z C, że deklaracja opisuje układ bajtów, przenosi się tu po cichu i błędnie — od gwarancji jest `#[repr(C)]`. Wszystkie trzy to pytania z dobrą odpowiedzią, więc idź do dokumentacji referencyjnej, a nie do filmu.
+
+Na koniec dwie uwagi o starzeniu się materiałów, bo w tym temacie działa ono inaczej niż gdzie indziej. Struktury nie zmieniły się od lat, więc starszy artykuł czy film **jest tu zwykle nadal poprawny** — inaczej niż przy iteratorach, gdzie milczenie o nowych metodach dyskwalifikuje ściągawkę. Za to same adresy potrafią umrzeć po cichu: krążący po sieci link `practice.rs/compound-types/struct.html` zwraca 404, choć strona główna tej domeny odpowiada normalnie, więc domena wygląda zdrowo, a link głęboki nie żyje. Żywy adres to `practice.course.rs`.
+
+**Szukaj po polsku:** struktury w Ruscie · struktura krotkowa · `rust struct impl block` · `rust struct update syntax` · `rust repr(C)`

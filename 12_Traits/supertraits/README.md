@@ -95,3 +95,13 @@ That second line is newer than most of the material written about supertraits: *
 - [A trait must be in scope](../trait_in_scope/README.md) — `E0599`, the other missing-method error, and how to tell them apart
 - [Static vs dynamic dispatch](../static_vs_dynamic_dispatch/README.md) — the vtable that carries the supertrait's methods
 - [Debug and Display](../../15_First_Programs/debug_vs_display/README.md) — the supertrait used above, and why it cannot be derived
+
+## Po polsku
+
+Nazwa *supertrait* podsuwa „cechę nadrzędną”, a stąd już tylko krok do dziedziczenia — i to jest dokładnie ta pomyłka, której ta strona ma zapobiec. `trait Shout: Display` niczego nad niczym nie ustawia: ten dwukropek to **ten sam dwukropek**, co w `fn f<T: Display>`, czyli zwykłe ograniczenie o treści „`Self` musi implementować `Display`”. Reszta wynika już z tego jednego odczytania — nie ma dziedziczonych pól (cechy nie mają pól), nie ma nadpisywania (to dwa osobne bloki `impl` na tym samym typie), kolejność zapisu nic nie znaczy, a kilka wymagań łączy się plusem, dokładnie jak w klauzuli `where`.
+
+Umowa, którą się przy tym zawiera, jest prosta: implementujący jest ci winien `Display`, więc twoja cecha (*trait*) może go wydać w swoich domyślnych ciałach metod. Dlatego `impl Shout for Dog {}` jest puste — cała praca siedzi w sąsiedniej implementacji `Display`. Gdy się o niej zapomni, błąd wyląduje na linijce `impl Shout for Cat {}`, a nie w miejscu wywołania, i będzie to `E0277` z nazwą brakującej cechy oraz wskazaniem ograniczenia, które jej zażądało. Tę parę warto rozróżniać na pamięć: `E0277` mówi „typ nie spełnia ograniczenia”, a `E0599` — „takiej metody tu nie ma”, co zwykle znaczy, że cechy nie wprowadzono do zasięgu przez `use`.
+
+I rzecz, której nie znajdziesz w żadnym materiale starszym niż 2025 rok: **rzutowanie w górę obiektów cech** (*trait upcasting*), czyli przejście z `&dyn Shout` na `&dyn Display`, było niestabilne przez lata i trafiło do stabilnego Rusta dopiero w wersji 1.86. Każdy poradnik napisany wcześniej — polski czy angielski — powie, że potrzebujesz `nightly`. Już nie potrzebujesz.
+
+**Szukaj po polsku:** cecha nadrzędna · ograniczenia typów w Ruscie · `rust supertrait` · `rust E0277 trait bound not satisfied` · `rust trait upcasting`
