@@ -92,6 +92,8 @@ The sidebar is sorted **alphabetically**, because that is how you find a section
 
 Nothing enforces this order and no page depends on it; skipping around is fine. It is here because a sidebar can be sorted one way only, and A–Z answers the more common question.
 
+Skipping around is fine; **moving a row is not always.** Nothing enforces the order mechanically, but parts of it are load-bearing prose: row 9 opens *"The unit all of that is counted in"*, a back-reference to the bytes in row 8, and row 8 follows Ownership because the strings arc opens on *"the pair of types the ownership pages were secretly about all along"*. A section's own README is the other constraint — what it links to as *where it goes next* has to come after it. Check those before inserting or reordering, because none of them is a link and `mkdocs --strict` cannot see any of it.
+
 ## How the library works
 
 ```
