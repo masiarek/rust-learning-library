@@ -57,7 +57,7 @@ That is not a hypothetical. *Idiomatic Rust*'s teaching linked list is `Rc<RefCe
 
 An `Rc<T>` derefs to `&T` and stops there:
 
-```text
+```text title="Abridged — real rustc output, without the file-and-line header"
 error[E0596]: cannot borrow data in an `Rc` as mutable
   |
 5 |     roster.push("Cara".to_string());
