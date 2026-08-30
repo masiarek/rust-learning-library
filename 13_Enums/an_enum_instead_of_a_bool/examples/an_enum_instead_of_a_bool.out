@@ -1,0 +1,32 @@
+two bools, called as intended:
+  print_page(true, false)            -> both sides / black and white
+two bools, arguments swapped -- compiles, prints the wrong job:
+  print_page(false, true)            -> single side / colour
+
+two enums, called as intended:
+  print_page(Sides::Both, Output::BlackAndWhite)
+                                     -> both sides / black and white
+two enums, arguments swapped -- does not compile:
+  print_page(Output::BlackAndWhite, Sides::Single)
+                                     -> error[E0308], with a fix-it
+
+states the type permits, with 3 shades:
+  bool + shade   (AND)  6 states, 2 of them break the comment
+  Color          (OR )  4 states, every one meaningful
+    monochrome: true  fg: Black  ok
+    monochrome: true  fg: Red    contradicts the comment
+    monochrome: true  fg: White  contradicts the comment
+    monochrome: false fg: Black  ok
+    monochrome: false fg: Red    ok
+    monochrome: false fg: White  ok
+
+and with a real RgbColor (16777216 colours):
+  bool + RgbColor  33554432 states, 16777215 of them break the comment
+  Color            16777217 states
+
+sizes:
+  bool        1
+  Sides       1
+  Output      1
+  PropsBool   2
+  PropsEnum   1
