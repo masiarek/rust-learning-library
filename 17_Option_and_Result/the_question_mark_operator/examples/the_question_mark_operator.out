@@ -1,0 +1,48 @@
+1. The same function, written twice
+   Ada=5        by match Ok(5)   with ? Ok(5)
+   Ben=2        by match Ok(2)   with ? Ok(2)
+   Cara=oops    by match Err("err")   with ? Err("err")
+   Dev          by match Ok(0)   with ? Ok(0)
+   Identical answers. What `?` removed was nine lines of arms that
+   did nothing but hand the value on or hand the error back.
+
+2. What `?` expands to
+   count.parse::<u32>()?
+   ==  match count.parse::<u32>() {
+           Ok(v)  => v,
+           Err(e) => return Err(From::from(e)),
+       }
+   Three things, not one: unwrap the happy path, RETURN on the sad
+   one, and convert the error while leaving.
+
+3. The conversion is the half people miss
+   Ada=5        -> 5
+   Ben=2        -> 2
+   Cara=oops    -> count is not a number: invalid digit found in string
+   Dev          -> row has no '=': "Dev"
+   `strict_score` returns TallyError, but its last `?` was applied to
+   a ParseIntError, and nobody wrote a conversion at that spot — the
+   `impl From<ParseIntError> for TallyError` did it, silently.
+
+4. `?` works on Option too, and means something different
+   initial("Ada=5") = Some('A')
+   initial("Ben=2") = Some('B')
+   initial("Cara=oops") = Some('C')
+   initial("Dev") = None
+   Here `?` returns None early. Same punctuation, same shape, but
+   there is no conversion step: `None` carries nothing to convert.
+   You cannot mix them in one function — `?` on an Option inside a
+   fn returning Result is E0277, not an automatic Ok/Err guess.
+
+5. Box<dyn Error>: one return type that accepts every `?`
+   total(all four rows)   = Err("count is not a number: invalid digit found in string")
+   total(the good two)    = Ok(7)
+   Every error type implementing Error converts into Box<dyn Error>,
+   so `?` accepts all of them. Convenient at the top of a program,
+   and lossy in a library: the caller gets a message, not a type.
+
+6. What `?` is not
+   It is not `unwrap`. It never panics; it returns.
+   It does not catch anything — a panic inside the call still unwinds.
+   And it is not free of design: every `?` you write is a decision that
+   THIS function does not handle that error, and the caller must.

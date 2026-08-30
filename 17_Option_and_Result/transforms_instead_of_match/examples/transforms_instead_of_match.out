@@ -1,0 +1,54 @@
+1. The shape: a `match` whose arms put the value back
+   match { Some(n) => Some(n * 2), None => None } = Some(6)
+   cast.map(|n| n * 2)                            = Some(6)
+   same answer: true
+   The method is not shorter by accident — `map` NAMES the shape:
+   change the payload, leave the Some/None decision alone.
+
+2. `map` or `and_then`? Ask what your closure returns
+   the closure returns u32          -> map      -> Some(6)
+   the closure returns Option<u32>  -> map      -> Some(None)   nested!
+   the closure returns Option<u32>  -> and_then -> None   flat
+   Some(4).and_then(half) = Some(2)   Some(3).and_then(half) = None
+   `and_then` is the one that may say "and now it is missing".
+
+3. Crossing between the two types
+   Option -> Result   cast.ok_or("no ballot")   = Ok(3)
+                      blank.ok_or("no ballot")  = Err("no ballot")
+   Result -> Option   parse("12").ok()          = Some(12)
+                      parse("x").ok()           = None   the WHY is gone
+   `.ok()` is a downgrade: four different parse failures all arrive
+   as one indistinguishable None. Cross that way on purpose only.
+
+4. `map_err` — the same value, a different error type
+   parse("x").map_err(|e| format!("bad count: {e}")) = Err("bad count: invalid digit found in string")
+   parse("12").map_err(..)                            = Ok(12)   untouched
+
+5. Eager or lazy: the `_else` suffix is not decoration
+   Some(3).unwrap_or(expensive_default())      builds = 1
+   Some(3).unwrap_or_else(|| expensive())      builds = 0
+   The value was never used either time. The eager form built it anyway,
+   because an argument is evaluated before the call it is an argument to.
+   Same split: ok_or / ok_or_else, or / or_else, map_or / map_or_else.
+
+6. The rest of the vocabulary, on one line each
+   filter   Some(3).filter(|n| n % 2 == 0)  = None   keep it only if
+   or       blank.or(Some(9))               = Some(9)   first one present
+   xor      Some(3).xor(Some(9))            = None   exactly one, or None
+   zip      Some(3).zip(Some(9))            = Some((3, 9))   both, or None
+   replace  slot.replace(9) -> Some(3), slot is now Some(9)
+   take     slot.take()     -> Some(9), slot is now None
+
+7. `as_ref()` — when `&self` owns nothing it may give away
+   voted.shout()  = YES
+   silent.shout() = (no ballot)
+   Without as_ref(): E0507, cannot move out of `self.ballot` which is
+   behind a shared reference. as_ref() rewrites &Option<String> into
+   Option<&String>, so the Option is rebuilt around a borrow.
+   voted.name is still ours afterwards: Ada
+
+8. Where a `match` is still the right answer
+   7 is a landslide
+   Three outcomes, a guard, and different WORK per arm — no single
+   transform expresses that. The advice is to stop writing the matches
+   that only rewrap, not to stop writing `match`.
