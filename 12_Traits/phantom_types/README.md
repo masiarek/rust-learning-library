@@ -96,7 +96,7 @@ The same tag on a function signature turns a runtime check into a type error:
 fn star_runoff_pair(ballot: &Ballot<Star>) -> (u8, u8) { /* … */ }
 ```
 
-```text
+```text title="Abridged — real rustc output, without the repeated signature and the note block"
 error[E0308]: mismatched types
     |
     |     let _ = star_runoff_pair(&approval);
