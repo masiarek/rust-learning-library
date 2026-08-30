@@ -2,7 +2,7 @@
 
 **Level:** 101 → 201 · working knowledge
 
-**One line:** Everything the other tooling pages set up in files — the pinned compiler, the lint policy, the workspace — RustRover reads on its own; the three things it does *not* do by default are run clippy instead of `cargo check`, know which package in a workspace you meant, and print a path in a warning that names the file.
+**One line:** Everything the other tooling pages set up in files — the pinned compiler, the lint policy, the workspace — RustRover reads on its own; the three things it does *not* do by default are run clippy instead of `cargo check`, know which package in a workspace you meant, and print a path in a warning that names the file. Two more are the window's own defaults rather than Rust's: a documentation panel that renders itself unreadable, and a Build panel that reopens on every run.
 
 This page is setup, not selection: [Choosing an editor](../editors/README.md) is where the comparison lives, along with the toolchain-location trap that costs everyone an hour once. What follows assumes you have picked RustRover and want it agreeing with the [practice tree](../practice_workspace/README.md).
 
@@ -134,7 +134,79 @@ What a fresh compile *does* print, and a cached one does not, is worth knowing a
 
 That line carries the full path already. It appears only when something was actually compiled, so the run that surprises you — warnings replayed from cache, `Finished in 0.02s`, and no `Compiling` line above them — is exactly the run with nothing but `src/main.rs` on screen. `cargo build -v` prints `Fresh untitled v0.1.0 (…)` in its place, at the cost of the whole rustc command line with it.
 
-## 5. The things you do not have to configure
+## 5. Make the documentation window readable
+
+`F1` on a symbol opens the documentation, and it can come up as a dark grey panel with the code samples inside it in dark red and dark blue. Nothing is broken: **the panel's background comes from the IDE theme, and the code fragments inside it from the editor color scheme.** Those are two settings, and only one of them follows macOS.
+
+*Settings → Appearance & Behavior → Appearance*:
+
+| Control | What it sets |
+|---|---|
+| **Theme:** | window chrome — menus, tabs, tool windows, and the documentation panel's background |
+| **Editor color scheme:** | syntax colours, in the editor *and* inside the documentation panel |
+| **Sync with OS** | whether the **theme** follows the system light/dark setting |
+
+So: macOS in dark mode, *Sync with OS* on, and a light editor scheme picked deliberately — the theme half flips, the scheme half stays, and light-scheme syntax colours end up painted on a dark panel. Two files say which is which, faster than opening the dialog, both under `~/Library/Application Support/JetBrains/RustRover<version>/options/`:
+
+```xml
+<!-- laf.xml -->
+<laf themeId="Islands Dark" />
+
+<!-- colors.scheme.xml -->
+<global_color_scheme name="_@user_Github" />
+```
+
+`_@user_Github` is a user-edited copy of the Github scheme, and its `parent_scheme` is `Default` — light. One line dark, one line light is the diagnosis.
+
+**The trap is in the fix.** Choosing a new **Theme:** also rewrites **Editor color scheme:** to that theme's default — silently, in the same dialog, before you press Apply — so a scheme you chose on purpose goes away and takes its font size with it. Set the scheme back on the same visit. The pairing is then remembered per theme:
+
+```xml
+<!-- laf.xml -->
+<lafs-to-previous-schemes>
+  <laf-to-scheme laf="Islands Dark" scheme="_@user_Github" />
+</lafs-to-previous-schemes>
+```
+
+To have both halves follow macOS rather than pinning one polarity, the cog beside **Sync with OS** opens *Preferred Theme and Editor Color Scheme*, which carries **For Light OS** and **For Dark OS** rows for the scheme as well as the theme. Filling in only the theme rows is the state above.
+
+## 6. Stop the Build panel opening on every run
+
+Run the program and a **Build** tool window opens across the bottom of the frame, with `Sync` and `Build Output` tabs. Closing it does not stick — the next run re-activates it.
+
+It is not the run. There are two cargo invocations on screen, in two different tool windows:
+
+```text
+Build:  cargo build --color=always --message-format=json-diagnostic-rendered-ansi --package untitled --bin untitled --profile dev
+Run:    cargo run --color=always --package untitled --bin untitled --profile dev
+```
+
+The first is a **Before launch → Build** task on the run configuration — the same list section 3 suggests hanging a clippy step on — and `--message-format=json-diagnostic-rendered-ansi` is what it is there for: the structured diagnostics the Build window turns into clickable entries.
+
+Remove it and the panel stops opening: *Run → Edit Configurations… → Before launch →* select **Build** → **−**. The program still compiles, because `cargo run` builds; what moves is where a compile error is reported — cargo's own text in the Run console, rather than a structured entry in Build.
+
+**Doing it once does it once.** The templates dialog says as much itself — *"Changing a template does not affect the existing configurations"* — and the reverse holds too, so both halves need doing: **Edit configuration templates…**, at the bottom-left of the same dialog, then Cargo, then the same **−**.
+
+An empty `<method>` element is what *no before-launch task* looks like:
+
+```xml
+<!-- .idea/workspace.xml -->
+<component name="RunManager">
+  <configuration name="Run" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+    …
+    <method v="2" />
+  </configuration>
+  <configuration default="true" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+    …
+    <method v="2" />
+  </configuration>
+</component>
+```
+
+The second, carrying `default="true"`, is the template. Both sit in `workspace.xml` — under `RunManager`, the per-user half of `.idea/` — because the configuration's **Store as project file** box is unchecked; tick it and the configuration moves to `.idea/runConfigurations/<name>.xml` under `ProjectRunConfigurationManager`, which is the half that belongs in git.
+
+Which is why a scaffolded tree never has this problem: the configurations [`rust_scaffold.py`](../scaffolding/README.md) writes there carry the same empty `<method v="2" />` already. It is the standalone `cargo new` project — `untitled` again, the one section 4 is also about — that ships with the step attached.
+
+## 7. The things you do not have to configure
 
 Worth knowing so you do not go looking:
 
@@ -156,4 +228,4 @@ A fair question, and the honest answer is that the overlap is largest exactly he
 
 ---
 
-*Settings paths verified against the [RustRover external linters documentation ↗](https://www.jetbrains.com/help/rust/rust-external-linters.html) rather than by driving the IDE; menu wording moves between releases, so treat the names as a route rather than a transcript.*
+*Sections 1–4 have their settings paths verified against the [RustRover external linters documentation ↗](https://www.jetbrains.com/help/rust/rust-external-linters.html) rather than by driving the IDE; menu wording moves between releases, so treat those names as a route rather than a transcript. Sections 5 and 6 are the other way round — every label, dialog and file fragment in them was read off RustRover **2026.2.1** (`262.9437.161`) on macOS while making the changes, and the two `.idea/workspace.xml` fragments are that project's file after the edit.*
