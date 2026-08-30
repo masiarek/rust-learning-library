@@ -408,3 +408,8 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Alternate flag** — What `{:#?}` sets and `{:?}` does not, readable inside an impl as `f.alternate()`. A derived `Debug` and anything built with `f.debug_struct()` honour it; a hand-written `write!` chain silently ignores it, so both forms print identically — and `dbg!`, which is hard-wired to `{:#?}`, quietly gets the flat one. → [What `dbg!` does](15_First_Programs/what_dbg_does/README.md)
 
+**Phantom type** — A type parameter that appears in a struct's declaration and in none of its data, so two taggings of identical bytes become unrelated types. The tag is checked by the compiler and gone by run time, which is what makes mixing metres with feet, or an Approval ballot with a STAR count, unwriteable rather than merely wrong. → [Phantom types](12_Traits/phantom_types/README.md)
+
+**`PhantomData<T>`** — The zero-sized field that carries a phantom parameter. Not a way to silence the compiler but a claim to it: `PhantomData<T>` says the struct owns a `T`, `PhantomData<fn() -> T>` that it merely produces one, `PhantomData<*const T>` that it only points at one — same size, different variance and drop behaviour. → [Phantom types](12_Traits/phantom_types/README.md)
+
+**`E0392`** — "type parameter is never used": a generic parameter declared and then referred to by nothing. Its three suggested fixes are the whole decision — delete it, store something of that type, or keep it deliberately with a `PhantomData` field. → [Phantom types](12_Traits/phantom_types/README.md)

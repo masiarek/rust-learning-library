@@ -65,6 +65,8 @@ struct Feet;
 
 `Tagged<Metres>` and `Tagged<Feet>` are different types that cannot be added together, and `size_of::<Tagged<Metres>>()` is 8 — exactly the `f64`. Same family as [the newtype](../../16_Structs/newtype_score/README.md), one level more general: the newtype gives one type a private door, `PhantomData` gives a whole family of them.
 
+That is the whole idea and not the whole story — the field is a claim about variance and drop rather than a way to silence `E0392`, and an `impl` block can be written for one tag alone. [Phantom types](../phantom_types/README.md) is the page for both.
+
 ## The verified output
 
 <!-- output:marker_traits -->

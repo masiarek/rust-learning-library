@@ -122,6 +122,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "static_vs_dynamic_dispatch",
         "supertraits",
         "marker_traits",
+        # ...and its neighbour in std::marker: the parameter with no data
+        # behind it, which only makes sense once markers are in hand.
+        "phantom_types",
         "to_owned",
         "clone_into",
         "resources",

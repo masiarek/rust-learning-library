@@ -1,0 +1,29 @@
+1. One struct, two types
+   Ballot<Star>     total 8   max 5
+   Ballot<Approval> total 2   max 1
+   `star_runoff_pair(&approval)` is E0308: expected `Ballot<Star>`,
+   found `Ballot<Approval>`. The two share every byte and no type.
+
+2. The specialization is concrete, not generic
+   impl Ballot<Star> { .. }     method_name = STAR
+   impl Ballot<Approval> { .. } method_name = Approval
+   Neither name is stored anywhere: `Ballot` has one field, a Vec.
+   runoff pair of the STAR ballot = (5, 3)
+
+3. The tag costs nothing
+   size_of::<Vec<u8>>()             = 24
+   size_of::<Ballot<Star>>()        = 24
+   size_of::<Ballot<Approval>>()    = 24
+   size_of::<PhantomData<Star>>()   = 0
+
+4. What the phantom field CLAIMS — all three are zero-sized
+   PhantomData<Vec<u8>>          = 0   owns a Vec<u8>
+   PhantomData<fn() -> Vec<u8>>  = 0   merely produces one
+   PhantomData<*const Vec<u8>>   = 0   only points at one
+   Same size, three different promises about variance and drop.
+
+5. Typestate: the tag moves with the value
+   issue() -> mark() -> cast() = [5, 2, 0]
+   `blank.mark(..)` took `self`, so `blank` is moved-from: using it
+   again is E0382. And `Paper<Blank>` has no `cast` at all — an
+   unmarked paper cannot reach the ballot box, by construction.
