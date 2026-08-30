@@ -223,8 +223,8 @@ This is the chapter this library covers most heavily: two sections, thirty-odd p
 
 | RBE page | Here | Note |
 |---|---|---|
-| [Threads ↗](https://doc.rust-lang.org/rust-by-example/std_misc/threads.html) · [Testcase: map-reduce ↗](https://doc.rust-lang.org/rust-by-example/std_misc/threads/testcase_mapreduce.html) | ◐ | [Sharing across threads](18_Ownership/sharing_across_threads/README.md) and [lock poisoning](09_Advanced/mutex_poisoning/README.md); `spawn`/`join` itself has no page |
-| [Channels ↗](https://doc.rust-lang.org/rust-by-example/std_misc/channels.html) | · | Not covered |
+| [Threads ↗](https://doc.rust-lang.org/rust-by-example/std_misc/threads.html) · [Testcase: map-reduce ↗](https://doc.rust-lang.org/rust-by-example/std_misc/threads/testcase_mapreduce.html) | ✓ | [Spawning a thread](09_Advanced/spawning_a_thread/README.md) — and `thread::scope`, which RBE does not cover; then [`Arc`](18_Ownership/sharing_across_threads/README.md) and [lock poisoning](09_Advanced/mutex_poisoning/README.md) |
+| [Channels ↗](https://doc.rust-lang.org/rust-by-example/std_misc/channels.html) | ✓ | [Channels](09_Advanced/channels/README.md) — `mpsc`, the `Sender` you kept, and bounded backpressure |
 | [Path ↗](https://doc.rust-lang.org/rust-by-example/std_misc/path.html) | ◐ | [`Path` and `PathBuf`](04_Files/path_and_pathbuf/README.md) — stub |
 | [File I/O ↗](https://doc.rust-lang.org/rust-by-example/std_misc/file.html) · [open ↗](https://doc.rust-lang.org/rust-by-example/std_misc/file/open.html) · [create ↗](https://doc.rust-lang.org/rust-by-example/std_misc/file/create.html) · [read_lines ↗](https://doc.rust-lang.org/rust-by-example/std_misc/file/read_lines.html) | ◐ | [Files](04_Files/README.md) — five stubs, including [reading lines efficiently](04_Files/reading_lines_efficiently/README.md), which is RBE's "more efficient approach" |
 | [Child processes ↗](https://doc.rust-lang.org/rust-by-example/std_misc/process.html) · [Pipes ↗](https://doc.rust-lang.org/rust-by-example/std_misc/process/pipe.html) · [Wait ↗](https://doc.rust-lang.org/rust-by-example/std_misc/process/wait.html) | · | Not covered |
@@ -267,9 +267,8 @@ Ordered by what it costs a reader who came here from RBE:
 
 1. **Flow of control has no runnable page.** **`25_Control_Flow/`** *(in flight)* is eight stubs, and `if`/`match`/`for` are the first things anyone needs. Highest-value gap in the library.
 2. **`macro_rules!`** — one stub, and RBE's five pages are the best short treatment anywhere.
-3. **Threads and channels.** `Arc` and `Mutex` are taught; `spawn`, `join` and `mpsc` are not.
-4. **`let-else`, `@` bindings, slice patterns.** Pattern matching beyond one arm.
-5. **Child processes, filesystem operations, FFI.** All three are stubs or absent.
+3. **`let-else`, `@` bindings, slice patterns.** Pattern matching beyond one arm.
+4. **Child processes, filesystem operations, FFI.** All three are stubs or absent.
 
 ## See also
 

@@ -543,6 +543,11 @@ NAV_ORDER: dict[str, list[str]] = {
     ],
     "09_Advanced": [
         "README.md",
+        # Starting a thread and handing it work, before anything about sharing:
+        # scope and a channel cover most of what a program actually needs.
+        "spawning_a_thread",
+        "channels",
+        # ...and then the lock, and the Result it hands you.
         "mutex_poisoning",
         "one_person_one_vote",
         "scaled_integers",
