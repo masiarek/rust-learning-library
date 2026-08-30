@@ -28,9 +28,10 @@
    #[cfg(test)]         the item does not exist in a normal build
    #[cfg(unix)]         nor on Windows
    #[cfg(feature = "x")] nor unless the feature is on
-   Built for macos — and this line was compiled either way,
-   because cfg!() is an expression: both branches type-check, and
-   one is replaced by a literal. #[cfg] deletes; cfg!() chooses.
+   cfg!(unix) compiled on BOTH platforms — the branch not taken
+   still had to type-check, and only then was replaced by a literal.
+   #[cfg] deletes; cfg!() chooses. Which is why a cfg! branch cannot
+   rot and a #[cfg] one can: nobody compiles the deleted arm.
 
 5. The four lint levels, and the one to avoid
    allow / warn / deny / forbid, innermost wins — except `forbid`,

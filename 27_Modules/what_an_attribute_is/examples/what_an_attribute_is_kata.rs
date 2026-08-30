@@ -83,10 +83,10 @@ fn main() {
     println!("   #[cfg(test)]         the item does not exist in a normal build");
     println!("   #[cfg(unix)]         nor on Windows");
     println!("   #[cfg(feature = \"x\")] nor unless the feature is on");
-    println!("   Built for {} — and this line was compiled either way,",
-             std::env::consts::OS);
-    println!("   because cfg!() is an expression: both branches type-check, and");
-    println!("   one is replaced by a literal. #[cfg] deletes; cfg!() chooses.");
+    println!("   cfg!(unix) compiled on BOTH platforms — the branch not taken");
+    println!("   still had to type-check, and only then was replaced by a literal.");
+    println!("   #[cfg] deletes; cfg!() chooses. Which is why a cfg! branch cannot");
+    println!("   rot and a #[cfg] one can: nobody compiles the deleted arm.");
 
     println!();
     println!("5. The four lint levels, and the one to avoid");

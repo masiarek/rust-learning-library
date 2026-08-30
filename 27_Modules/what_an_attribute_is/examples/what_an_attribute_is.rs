@@ -81,14 +81,15 @@ fn main() {
     println!("4. `cfg`: compiled or not compiled at all");
     println!("   #[cfg(test)] on the tests module above means it does not exist in");
     println!("   this binary — not that it is skipped at run time.");
-    println!("   Built for: {}", std::env::consts::OS);
-    if cfg!(debug_assertions) {
-        println!("   cfg!(debug_assertions) is true — this is a debug build");
-    } else {
-        println!("   cfg!(debug_assertions) is false — this is --release");
-    }
+    println!("   cfg!(test) here = {}   <- this binary was not built with --test",
+             cfg!(test));
     println!("   `#[cfg(…)]` removes code; `cfg!(…)` is an expression that becomes");
-    println!("   a literal true or false. The second still type-checks both sides.");
+    println!("   a literal true or false. The second still type-checks both sides,");
+    println!("   which is why a `cfg!(windows)` branch cannot rot on a Mac.");
+    println!("   (Nothing here prints the target OS on purpose: every example in");
+    println!("   this library has a recorded answer key, and `env::consts::OS` says");
+    println!("   \"macos\" on the author's machine and \"linux\" in CI. That is the");
+    println!("   determinism rule, and it is easier to break than it looks.)");
 
     println!();
     println!("5. The rest, in one line each");

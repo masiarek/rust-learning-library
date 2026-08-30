@@ -31,10 +31,14 @@
 4. `cfg`: compiled or not compiled at all
    #[cfg(test)] on the tests module above means it does not exist in
    this binary — not that it is skipped at run time.
-   Built for: macos
-   cfg!(debug_assertions) is true — this is a debug build
+   cfg!(test) here = false   <- this binary was not built with --test
    `#[cfg(…)]` removes code; `cfg!(…)` is an expression that becomes
-   a literal true or false. The second still type-checks both sides.
+   a literal true or false. The second still type-checks both sides,
+   which is why a `cfg!(windows)` branch cannot rot on a Mac.
+   (Nothing here prints the target OS on purpose: every example in
+   this library has a recorded answer key, and `env::consts::OS` says
+   "macos" on the author's machine and "linux" in CI. That is the
+   determinism rule, and it is easier to break than it looks.)
 
 5. The rest, in one line each
    #[test]           this fn is a test; rustc --test collects it

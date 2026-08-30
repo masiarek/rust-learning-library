@@ -130,10 +130,14 @@ Two more derive rules worth knowing before they bite: `#[derive(Default)]` on an
 4. `cfg`: compiled or not compiled at all
    #[cfg(test)] on the tests module above means it does not exist in
    this binary — not that it is skipped at run time.
-   Built for: macos
-   cfg!(debug_assertions) is true — this is a debug build
+   cfg!(test) here = false   <- this binary was not built with --test
    `#[cfg(…)]` removes code; `cfg!(…)` is an expression that becomes
-   a literal true or false. The second still type-checks both sides.
+   a literal true or false. The second still type-checks both sides,
+   which is why a `cfg!(windows)` branch cannot rot on a Mac.
+   (Nothing here prints the target OS on purpose: every example in
+   this library has a recorded answer key, and `env::consts::OS` says
+   "macos" on the author's machine and "linux" in CI. That is the
+   determinism rule, and it is easier to break than it looks.)
 
 5. The rest, in one line each
    #[test]           this fn is a test; rustc --test collects it
@@ -245,10 +249,10 @@ fn main() {
     println!("   #[cfg(test)]         the item does not exist in a normal build");
     println!("   #[cfg(unix)]         nor on Windows");
     println!("   #[cfg(feature = \"x\")] nor unless the feature is on");
-    println!("   Built for {} — and this line was compiled either way,",
-             std::env::consts::OS);
-    println!("   because cfg!() is an expression: both branches type-check, and");
-    println!("   one is replaced by a literal. #[cfg] deletes; cfg!() chooses.");
+    println!("   cfg!(unix) compiled on BOTH platforms — the branch not taken");
+    println!("   still had to type-check, and only then was replaced by a literal.");
+    println!("   #[cfg] deletes; cfg!() chooses. Which is why a cfg! branch cannot");
+    println!("   rot and a #[cfg] one can: nobody compiles the deleted arm.");
 
     println!();
     println!("5. The four lint levels, and the one to avoid");
@@ -296,9 +300,10 @@ fn main() {
    #[cfg(test)]         the item does not exist in a normal build
    #[cfg(unix)]         nor on Windows
    #[cfg(feature = "x")] nor unless the feature is on
-   Built for macos — and this line was compiled either way,
-   because cfg!() is an expression: both branches type-check, and
-   one is replaced by a literal. #[cfg] deletes; cfg!() chooses.
+   cfg!(unix) compiled on BOTH platforms — the branch not taken
+   still had to type-check, and only then was replaced by a literal.
+   #[cfg] deletes; cfg!() chooses. Which is why a cfg! branch cannot
+   rot and a #[cfg] one can: nobody compiles the deleted arm.
 
 5. The four lint levels, and the one to avoid
    allow / warn / deny / forbid, innermost wins — except `forbid`,
