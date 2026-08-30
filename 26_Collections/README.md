@@ -12,6 +12,7 @@ Two of them are built into the language and have no `use` line: the tuple and th
 | [Grids and nested `Vec`s](vec_of_vecs/README.md) | 201 | One allocation per row, rows that are clones rather than aliases, and the `*` that `iter_mut` needs |
 | [`HashMap`](the_hashmap/README.md) | 101 → 201 | `entry` is the method the counting loop wants, and the iteration order is different every run |
 | [`HashSet`](the_hashset/README.md) | 101 → 201 | Membership, four set operations, and the `bool` that `insert` hands back |
+| [`BTreeMap` and `BTreeSet`](sorted_collections/README.md) | 101 → 201 | The sorted pair: collecting into one *is* the sort, `range` asks what a hash map cannot, and it orders by the key when what you wanted sorted was the value |
 | [`Box`](the_box/README.md) | 201 | One value on the heap: a type that contains itself, and a size known only at run time |
 | [`Vec` methods](vec_methods/README.md) | reference | One page per method — all 46 on stable, plus the three `IntoIterator` impls |
 
@@ -25,8 +26,8 @@ Two of them are built into the language and have no `use` line: the tuple and th
 | part of any of those, passed to a function | a **slice**, `&[T]` |
 | a grid, rows all the same length | a **flat `Vec`** and a width — see [grids](vec_of_vecs/README.md) |
 | a grid whose rows differ in length | a **`Vec<Vec<T>>`** |
-| a key that finds a value | a **`HashMap`** — or `BTreeMap` if you need it sorted |
-| "have I seen this before?" | a **`HashSet`** |
+| a key that finds a value | a **`HashMap`** — or a **[`BTreeMap`](sorted_collections/README.md)** if you need it sorted |
+| "have I seen this before?" | a **`HashSet`** — or a **[`BTreeSet`](sorted_collections/README.md)** to get the answers back in order |
 | one value too big for the stack, or a type that contains itself | a **`Box`** |
 
 `String` and `&str` are the seventh and eighth entries in that table, and they have [a section of their own](../14_Strings/README.md).

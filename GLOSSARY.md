@@ -452,7 +452,9 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **`entry` API** — `*map.entry(k).or_insert(0) += 1`: one hash lookup that inserts a default if the key is absent and hands back a `&mut` to the value either way. The counting loop written any other way costs two or three lookups, and written with `insert` is silently wrong. → [`HashMap`](26_Collections/the_hashmap/README.md)
 
-**Hash randomisation** — std's `HashMap` seeds its hasher per process, so two runs iterate in different orders. A defence against hash-flooding, and the reason anything printed or compared must be sorted first — or come from a `BTreeMap`, which is ordered by key by construction. → [`HashMap`](26_Collections/the_hashmap/README.md)
+**Hash randomisation** — std's `HashMap` seeds its hasher per process, so two runs iterate in different orders. A defence against hash-flooding, and the reason anything printed or compared must be sorted first — or come from a [`BTreeMap`](26_Collections/sorted_collections/README.md), which is ordered by key by construction. → [`HashMap`](26_Collections/the_hashmap/README.md)
+
+**Total order (`Ord`) against partial (`PartialOrd`)** — A `BTreeMap` key must be totally ordered: every two values compare, and the comparison is consistent. `f64` is not, because `NaN` compares `false` against everything including itself — so a float-keyed `BTreeMap` is refused, and the refusal lands on the first `insert` rather than the declaration, since `new` and `len` need no `Ord`. → [`BTreeMap` and `BTreeSet`](26_Collections/sorted_collections/README.md)
 
 **Module** — A namespace *and* a privacy boundary. Items are private by default, and "private" means to this module **and its descendants** — so a child sees up through `super::`, a parent cannot see in, and everything sharing a module can reach the private fields of everything else in it. When an invariant escapes, the module is the access list to audit, not the callers. → [Modules and visibility](27_Modules/modules_and_visibility/README.md)
 
