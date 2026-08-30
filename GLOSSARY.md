@@ -40,7 +40,7 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **`Infallible`** — An enum with no variants, used as the `E` of a `Result` that cannot fail (`String`'s `FromStr`, `u64::try_from(u32)`). Because `Err` cannot be built, the compiler drops the tag and the `Result` costs what the value costs. → [The `Result` you are reading is probably an alias](17_Option_and_Result/result_aliases/README.md)
 
-**`From`** — The conversion trait. `?` calls it implicitly to turn one error type into the function's own, which is what makes custom error enums and `Box<dyn Error>` ergonomic. → [`Option` vs `Result`](17_Option_and_Result/option_vs_result/README.md)
+**`From`** — The conversion trait. `?` calls it implicitly to turn one error type into the function's own, which is what makes custom error enums and `Box<dyn Error>` ergonomic. → [`From` and `Into`](29_Conversion/from_and_into/README.md), [`Option` vs `Result`](17_Option_and_Result/option_vs_result/README.md)
 
 **`if let`** — A `match` with only the arm you care about. Sugar for the two-arm version, at the price of the compiler no longer checking that you covered every variant. → [`if let`](17_Option_and_Result/if_let/README.md)
 
@@ -164,7 +164,7 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Move** — Transferring ownership. The bytes do not travel; what changes is who owes the free, and therefore when it happens. The source variable becomes unusable by name. → [Ownership and moves](18_Ownership/ownership_and_moves/README.md)
 
-**`Drop`** — The code that runs when a value's owner goes out of scope. Implementing it is the easiest way to *watch* ownership, since the value announces its own death. → [Ownership and moves](18_Ownership/ownership_and_moves/README.md)
+**`Drop`** — The code that runs when a value's owner goes out of scope. Implementing it is the easiest way to *watch* ownership, since the value announces its own death. It cannot return anything, cannot fail, and is not guaranteed to run — leaking is safe. → [`Drop`, and what RAII buys](12_Traits/drop_and_raii/README.md), [Ownership and moves](18_Ownership/ownership_and_moves/README.md)
 
 **Drop order** — Within a scope, *locals* drop in **reverse declaration order** — but a struct's **fields** drop in **declaration order**, so two values that died in the right sequence as locals flip the moment you move them into one struct, with no diagnostic. Five ordinary things move a drop off the scope end entirely: a move, `drop(x)`, a temporary (end of statement), `let _ =` (immediately), and being a field of something else. The consequence people miss: a shadowed value is declared *before* the shadow, so it dies *after* it — which is why shadowing a lock guard leaves the first lock held. → [Scope is about names, not values](18_Ownership/scope_is_about_names/README.md), [A shadow does not drop](18_Ownership/shadowing_does_not_drop/README.md), [When to shadow](18_Ownership/when_to_shadow/README.md)
 
@@ -304,7 +304,7 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Endianness** — The order the bytes of a multi-byte number are stored in: big-endian puts the most significant first, little-endian the least. A single byte has none. Name it explicitly at any boundary with `to_be_bytes` / `to_le_bytes` rather than letting `to_ne_bytes` bake in this CPU's preference. → [Meet the byte](19_Numbers/meet_the_byte/README.md)
 
-**Fat pointer** — A reference carrying a second word beside the address: `&str` and `&[T]` add a length (16 bytes on a 64-bit target), `&dyn Trait` adds a vtable pointer. It is why `size_of::<&str>()` is not 8. → [Meet the byte](19_Numbers/meet_the_byte/README.md)
+**Fat pointer** — A reference carrying a second word beside the address: `&str` and `&[T]` add a length (16 bytes on a 64-bit target), `&dyn Trait` adds a vtable pointer. It is why `size_of::<&str>()` is not 8. → [Arrays and slices](26_Collections/arrays_and_slices/README.md), [Meet the byte](19_Numbers/meet_the_byte/README.md)
 
 **Shift masking** — With overflow checks off, `a << b` uses `b` modulo the type's bit width, so `1u8 << 8` is `1u8 << 0` — the same expression that panics in a debug build silently returns a wrong answer in release. `checked_shl` is the honest form whenever the shift amount is not a visible literal. → [Meet the byte](19_Numbers/meet_the_byte/README.md)
 
@@ -334,7 +334,7 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Doc comment** — `///` or `//!`, and not a comment: the compiler parses it into a `#[doc = "..."]` attribute on an item, so it must have an item to attach to. `//!` is *inner* (it documents what it is inside, hence the top of a file); `///` is *outer* (it documents the item below it). → [Comments that compile](15_First_Programs/comments_that_compile/README.md)
 
-**Doctest** — A fenced code block inside a doc comment, which `cargo test` compiles and runs like any other test. The reason documentation examples in Rust cannot quietly rot into ones that no longer compile — the only kind of comment any language checks. → [Comments that compile](15_First_Programs/comments_that_compile/README.md)
+**Doctest** — A fenced code block inside a doc comment, which `cargo test` compiles and runs like any other test. Each is its own crate linked against yours, so it sees the public API only — an integration test that is also the documentation. The reason Rust's examples cannot quietly rot into ones that no longer compile. → [The example that is a test](28_Testing/doc_tests/README.md), [Comments that compile](15_First_Programs/comments_that_compile/README.md)
 
 **`unused_doc_comments`** — The warn-by-default lint for a `///` that attached to a statement or expression rather than an item. Worth knowing by name because it is the quiet failure: the doc comment parsed, the build succeeded, and nothing will ever read what you wrote. → [Comments that compile](15_First_Programs/comments_that_compile/README.md)
 
@@ -441,3 +441,55 @@ Short definitions. Every entry links to the page that explains it properly — a
 **`E0106`** — "missing lifetime specifier": an output borrows and the signature does not say from which input. The `help:` line is the whole diagnosis — *"the signature does not say whether it is borrowed from `a` or `b`"* — and it is missing from the **signature**, not the body, which the compiler refuses to consult because a signature is a contract with every caller. → [Lifetime annotations](18_Ownership/lifetime_annotations/README.md)
 
 **`E0716`** — "temporary value dropped while borrowed": a temporary freed at the end of its statement, held by a borrow used after it. Often a signature problem rather than a call-site one — tying two parameters to one `'a` when the answer borrows from only one of them demands that the other live just as long. → [Lifetime annotations](18_Ownership/lifetime_annotations/README.md)
+
+**Tuple** — A struct whose fields are numbered instead of named, written the way its value is: `(i32, i32)`. Length and element types are part of the type, so a pattern cannot match the wrong shape; comparison is field by field, left to right, which makes a tuple a free sort key. Readable for about two fields — `row.2` in a function two files away is a comment nobody wrote. → [Tuples](26_Collections/tuples/README.md)
+
+**Array (`[T; N]`)** — A fixed-length block of one type, laid out inline with no header, and a **separate type for every length** — which is why it almost never appears in a signature. `Copy` when `T` is. → [Arrays and slices](26_Collections/arrays_and_slices/README.md)
+
+**Slice (`&[T]`)** — A borrowed view of a run of elements: a pointer and a length, so one function serves an array of any length, a `Vec`, or part of either. The length moved out of the *type* and into the *value*, which is the whole trick. Take `&[T]` in a signature, never `&Vec<T>`. → [Arrays and slices](26_Collections/arrays_and_slices/README.md)
+
+**Amortised growth** — `Vec` doubles its capacity when it fills, so *n* pushes cost O(*n*) in total rather than O(*n*²), at the price of copying everything already stored each time it grows. `with_capacity` and `collect` over a known-length iterator skip the copying entirely. The exact sequence is std's choice, not a language guarantee. → [`Vec`](26_Collections/the_vec/README.md)
+
+**`entry` API** — `*map.entry(k).or_insert(0) += 1`: one hash lookup that inserts a default if the key is absent and hands back a `&mut` to the value either way. The counting loop written any other way costs two or three lookups, and written with `insert` is silently wrong. → [`HashMap`](26_Collections/the_hashmap/README.md)
+
+**Hash randomisation** — std's `HashMap` seeds its hasher per process, so two runs iterate in different orders. A defence against hash-flooding, and the reason anything printed or compared must be sorted first — or come from a `BTreeMap`, which is ordered by key by construction. → [`HashMap`](26_Collections/the_hashmap/README.md)
+
+**Module** — A namespace *and* a privacy boundary. Items are private by default, and "private" means to this module **and its descendants** — so a child sees up through `super::`, a parent cannot see in, and everything sharing a module can reach the private fields of everything else in it. When an invariant escapes, the module is the access list to audit, not the callers. → [Modules and visibility](27_Modules/modules_and_visibility/README.md)
+
+**`pub(crate)` / `pub(super)`** — Visibility narrower than `pub`: anywhere in this crate, or the parent module and its descendants. `pub` itself is relative — it publishes an item to the same audience the module already had, so a `pub fn` in a private module is public to nobody. → [Modules and visibility](27_Modules/modules_and_visibility/README.md)
+
+**`use`** — A shortcut, not an import: it binds a name in this module and loads, compiles and links nothing. `as` renames (the fix for a collision), braces bring several names from one path, and `*` is the glob whose ambiguity error lands at the *use site*, months later. → [Bringing names in with `use`](27_Modules/the_use_declaration/README.md)
+
+**Crate root** — `src/main.rs` for a binary, `src/lib.rs` for a library. That file *is* the crate's top module, so `crate::` starts there. A package with both is two crates: a library, and a binary that uses it by name. → [One module per file](27_Modules/one_module_per_file/README.md)
+
+**Attribute** — Metadata the compiler acts on, in five families: `derive`, the lint levels, `cfg`, the test markers, and the codegen/API set (`inline`, `repr`, `must_use`, `non_exhaustive`). `#[…]` applies to the item below it and `#![…]` to the item it is inside; a doc comment is one too, since `///` is `#[doc = "…"]`. → [What an attribute is](27_Modules/what_an_attribute_is/README.md)
+
+**`forbid` vs `deny`** — Both make a lint an error; only `forbid` refuses to be relaxed by an inner `allow`, which is itself then an error. So `#![forbid(unsafe_code)]` is a promise worth making and `#![forbid(warnings)]` is a trap. → [What an attribute is](27_Modules/what_an_attribute_is/README.md)
+
+**Const promotion** — Taking a reference to a `const` gives the value an anonymous `static` to live in, because a substituted value has no address of its own. Two `&MAX` may therefore compare equal — an observation about the build, not a guarantee. A `static`'s single address *is* a guarantee. → [`const` and `static`](27_Modules/const_and_static/README.md)
+
+**`const fn`** — A function callable in a const context. May branch, loop, index and do arithmetic; may not allocate, call a non-const function, or read a `static`. Marking one is a promise about what it does not do and part of your public API — un-`const`-ing it later is a breaking change. → [`const` and `static`](27_Modules/const_and_static/README.md)
+
+**Unit test / integration test** — A unit test lives in a `#[cfg(test)] mod tests` inside `src/` and can reach private items; an integration test is a file directly in `tests/`, compiled as a **separate crate**, so it sees only the public API. The choice is decided by one question — can the behaviour be observed from outside? → [Where a test goes](28_Testing/where_a_test_goes/README.md)
+
+**`should_panic`** — Marks a test that passes by panicking. Without `expected = "…"` it passes on *any* panic, including one introduced by the refactor the test existed to catch. → [Where a test goes](28_Testing/where_a_test_goes/README.md)
+
+**`From` / `Into`** — The infallible conversion pair. Implement `From`; `Into` arrives free through a blanket impl, and the reflexive `From<T> for T` is why `impl Into<T>` in an argument also accepts a `T`. `?` calls `From::from` on the error, which is what makes an error enum with one impl per variant the standard shape. → [`From` and `Into`](29_Conversion/from_and_into/README.md)
+
+**`TryFrom` / `TryInto`** — The same pair plus a `type Error`, for a conversion allowed to refuse. `u8::try_from(300i32)` reports what `300i32 as u8` swallows. For text, implement `FromStr` instead and get `.parse()`. → [`TryFrom` and `TryInto`](29_Conversion/tryfrom_and_tryinto/README.md)
+
+**Orphan rule** — You may implement a trait for a type when the trait or the type (or a type parameter of the impl) is local to your crate. `impl From<Vec<u8>> for String` is `E0117` because neither is; the way round it is a newtype. Coherence is the reason: two crates could otherwise write the same impl differently. → [`From` and `Into`](29_Conversion/from_and_into/README.md)
+
+**`as` cast** — The built-in conversion that always succeeds, and therefore loses data four ways without saying so: narrowing keeps the low bits, signedness reinterprets them, float→int truncates then saturates (`NaN` → 0), and int→float rounds. Reach for `From` when it cannot fail and `TryFrom` when it can. → [Casting with `as`](29_Conversion/casting_with_as/README.md)
+
+**`checked_` / `wrapping_` / `saturating_`** — The three named arithmetic behaviours, each replacing the default — which panics in debug and wraps in release, the one case where the two profiles disagree about the answer. Only `checked_` hands the decision back, as an `Option`. → [Casting with `as`](29_Conversion/casting_with_as/README.md)
+
+**RAII** — *Resource acquisition is initialisation*: a value acquires the resource when it is created and releases it in `Drop`, so there is nothing for the caller to remember and no `finally` to write. It survives an early `return` and a panic. In Rust it is not a pattern but the way every value already works — `String`, `File` and `MutexGuard` are all this. → [`Drop`, and what RAII buys](12_Traits/drop_and_raii/README.md)
+
+**Operator overloading** — Every operator is a trait: `a + b` is `Add::add(a, b)`, `v[i]` is `*v.index(i)`. `type Output` means none of the three types has to match, each operator is one trait for one *pair* of types (so `3 * p` needs a second impl after `p * 3`), and the test for whether to implement one is whether every reader would guess the same answer. → [Operators are traits](12_Traits/operators_are_traits/README.md)
+
+**Scoped thread** — `thread::scope` guarantees every thread it started has finished before it returns, so the closures may **borrow** local data — no `Arc`, no clone, and the borrow checker still helping. The right default for a fan-out over data you already have; `spawn` needs `'static` precisely because it offers no such guarantee. → [Spawning a thread](09_Advanced/spawning_a_thread/README.md)
+
+**`mpsc` channel** — Multi-producer, single-consumer: `Sender` is `Clone`, `Receiver` is not, and `send` **moves** the value, so at every moment it has exactly one owner and nothing needs a lock. The receiver's loop ends when the *last* `Sender` drops — which is why a `Sender` you kept hangs a program that has finished its work, with no error message at all. (Not the toolchain sense of *channel*, which is `stable`/`beta`/`nightly`.) → [Channels](09_Advanced/channels/README.md)
+
+**Backpressure** — What a bounded channel gives you: `sync_channel(n)` blocks the producer once *n* values are queued, so it runs at the consumer's speed. An unbounded channel with a fast producer and a slow consumer is a memory leak with good manners. → [Channels](09_Advanced/channels/README.md)
