@@ -60,11 +60,10 @@ An `Rc<T>` derefs to `&T` and stops there:
 ```text
 error[E0596]: cannot borrow data in an `Rc` as mutable
   |
-4 |     roster.push("Ben".to_string());
+5 |     roster.push("Cara".to_string());
   |     ^^^^^^ cannot borrow as mutable
   |
-  = help: trait `DerefMut` is required to modify through a dereference,
-          but it is not implemented for `Rc<Vec<String>>`
+  = help: trait `DerefMut` is required to modify through a dereference, but it is not implemented for `Rc<Vec<String>>`
 ```
 
 Two ways forward, and they answer different questions.
