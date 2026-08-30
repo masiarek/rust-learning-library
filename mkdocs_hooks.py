@@ -560,6 +560,8 @@ NAV_ORDER: dict[str, list[str]] = {
         "interval_arithmetic",
         # Layout rather than arithmetic: the other thing `unsafe` buys you, and
         # the enum that already gives it to you safely.
+        # The keyword itself, before the two features that need it.
+        "what_unsafe_turns_off",
         "what_a_union_is",
         # ...and where the bytes those layouts occupy actually came from.
         "the_global_allocator",

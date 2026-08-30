@@ -245,7 +245,7 @@ This is the chapter this library covers most heavily: two sections, thirty-odd p
 
 | RBE page | Here | Note |
 |---|---|---|
-| [Unsafe Operations ↗](https://doc.rust-lang.org/rust-by-example/unsafe.html) | ◐ | [The global allocator](09_Advanced/the_global_allocator/README.md) and [what a union is](09_Advanced/what_a_union_is/README.md) are `unsafe` in use; the four powers `unsafe` grants have no page yet |
+| [Unsafe Operations ↗](https://doc.rust-lang.org/rust-by-example/unsafe.html) | ✓ | [What `unsafe` turns off](09_Advanced/what_unsafe_turns_off/README.md) — the five powers, and the four rules that stay on; then [a union](09_Advanced/what_a_union_is/README.md) and [the global allocator](09_Advanced/the_global_allocator/README.md) as two of them in use |
 | [Inline assembly ↗](https://doc.rust-lang.org/rust-by-example/unsafe/asm.html) | · | Not covered |
 
 ## 23. Compatibility
