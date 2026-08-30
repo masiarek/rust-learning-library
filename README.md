@@ -27,6 +27,8 @@ Already writing Rust? Two lessons to begin with:
 
 [`13_Enums/`](13_Enums/README.md) and [`12_Traits/`](12_Traits/README.md) sit directly after the foundations, because between them they are what the rest of the language is made of. Enums come first: anyone leaving the foundations has already used several of them — `Option` and `Result` among them — without being told that the feature has a name, or that a `match` which forgets a variant is a build error. Traits are the other half, and the same argument applies twice over: `Copy`, `Display`, `Iterator` and `From` all turn up in the earlier pages long before anything explains what they have in common.
 
+[`22_Generics/`](22_Generics/README.md) follows both, because it needs both: `<T>` is how one definition serves every type, and a trait is what tells the compiler which types are allowed. It is also the section that explains the brackets in `Option<T>`, `Vec<T>` and `Result<T, E>` — read a hundred times by then, and nowhere defined.
+
 One section is not about Rust at all. [`11_Unix/`](11_Unix/README.md) is the shell you run the compiler from — `fzf` for picking a file instead of typing its path, `fd` and `rg` for finding one — and it earns its place because two of those three are themselves Rust programs, measured here against the Unix tools they stand in for.
 
 [`20_Compilers/`](20_Compilers/README.md) is the layer under all of it. Most of what turns a `.rs` file into a binary was not written for Rust — rustc parses and borrow-checks, and then LLVM optimizes, LLVM generates machine code, and a linker nobody on the Rust team maintains finishes the job. The section covers the compile-time/run-time line, what an optimizer is allowed to do to your loop, what LLVM actually is, what the linker does with the blanks rustc leaves, and the same machinery aimed backwards as obfuscation.
@@ -57,18 +59,19 @@ The sidebar is sorted **alphabetically**, because that is how you find a section
 | 8 | [Numbers and bytes](19_Numbers/README.md) | The unit all of that is counted in, down to the float that cannot hold your value |
 | 9 | [Enums](13_Enums/README.md) | The feature `Option` and `Result` were made of all along |
 | 10 | [Traits](12_Traits/README.md) | The other half the language is built from — and how a call reaches one |
-| 11 | [Errors](02_Errors/README.md) | What a failure does on its way out of a program |
-| 12 | [Command line](03_Command_Line/README.md) | What the program was handed on the way in |
-| 13 | [Files](04_Files/README.md) | The filesystem — the first thing outside the program that can say no |
-| 14 | [Tooling](05_Tooling/README.md) | `cargo` and the rest of the toolchain, rather than the language |
-| 15 | [Data](06_Data/README.md) | Serialization, and the round trip through JSON |
-| 16 | [Clients](07_Clients/README.md) | The network — the last thing outside the program that can say no |
-| 17 | [Observability](21_Observability/README.md) | What the service says about itself, once somebody else depends on it |
-| 18 | [Interfaces](08_Interfaces/README.md) | Putting a face on it |
-| 19 | [Advanced](09_Advanced/README.md) | What needs the foundations: threads, `unsafe`, FFI |
-| 20 | [Compilers](20_Compilers/README.md) | The layer under all of it, three quarters of which is not Rust |
-| 21 | [Resources](10_Resources/README.md) | Books, essays and exercises outside this library |
-| 22 | [Unix](11_Unix/README.md) | The shell you run the compiler from — two of its three tools are Rust |
+| 11 | [Generics](22_Generics/README.md) | `<T>`: one definition per idea, instead of one per type it is used with |
+| 12 | [Errors](02_Errors/README.md) | What a failure does on its way out of a program |
+| 13 | [Command line](03_Command_Line/README.md) | What the program was handed on the way in |
+| 14 | [Files](04_Files/README.md) | The filesystem — the first thing outside the program that can say no |
+| 15 | [Tooling](05_Tooling/README.md) | `cargo` and the rest of the toolchain, rather than the language |
+| 16 | [Data](06_Data/README.md) | Serialization, and the round trip through JSON |
+| 17 | [Clients](07_Clients/README.md) | The network — the last thing outside the program that can say no |
+| 18 | [Observability](21_Observability/README.md) | What the service says about itself, once somebody else depends on it |
+| 19 | [Interfaces](08_Interfaces/README.md) | Putting a face on it |
+| 20 | [Advanced](09_Advanced/README.md) | What needs the foundations: threads, `unsafe`, FFI |
+| 21 | [Compilers](20_Compilers/README.md) | The layer under all of it, three quarters of which is not Rust |
+| 22 | [Resources](10_Resources/README.md) | Books, essays and exercises outside this library |
+| 23 | [Unix](11_Unix/README.md) | The shell you run the compiler from — two of its three tools are Rust |
 
 Nothing enforces this order and no page depends on it; skipping around is fine. It is here because a sidebar can be sorted one way only, and A–Z answers the more common question.
 

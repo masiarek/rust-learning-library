@@ -132,6 +132,18 @@ NAV_ORDER: dict[str, list[str]] = {
     "01_Foundations": [
         "README.md",
     ],
+    "22_Generics": [
+        "README.md",
+        # The brackets first, then the error everyone meets next, then what a
+        # `T` is allowed to do...
+        "what_a_generic_is",
+        "when_the_compiler_cannot_infer",
+        "where_the_bound_goes",
+        # ...and then the two shapes that need all three: the same parameter
+        # on an enum, and the type that contains itself.
+        "generic_enums",
+        "a_generic_recursive_type",
+    ],
     "20_Compilers": [
         "README.md",
         # The compile-time/run-time line first, since every later page
@@ -437,6 +449,9 @@ NAV_ORDER: dict[str, list[str]] = {
     "10_Resources": [
         "README.md",
         "books",
+        # Books argue; these define. Second, because the question "what does
+        # Rust actually do here" arrives the moment the first book is closed.
+        "official_docs",
         "exercises",
         "going_deeper",
         "haskell",

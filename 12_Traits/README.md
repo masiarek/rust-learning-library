@@ -21,6 +21,8 @@ The section starts from the declaration and works outward — what goes in a tra
 
 Three trait pages live outside this folder, because they are met long before anyone goes looking for a traits section: [`Copy` vs `Clone`](../16_Structs/copy_vs_clone/README.md), [Debug and Display](../15_First_Programs/debug_vs_display/README.md), and [the `Default` trait](../03_Command_Line/the_default_trait/README.md). They stay where they are; this section links them rather than moving them.
 
+**Trait bounds** live outside it too, in [Where the bound goes](../22_Generics/where_the_bound_goes/README.md) — because the question they answer is a question about a generic (*what may this `T` do?*) rather than about a trait, and because the page's real subject is the placement: on the `impl` that spends the bound, never on the struct.
+
 ## Not yet written
 
-The topics below are the rest of the map, in rough order of when you need them. They are listed here rather than as empty pages so the gaps are visible without pretending to be lessons: **trait bounds** (`T: Trait`, `where`, and multiple bounds with `+`), **associated types** and how they differ from generic parameters, the **orphan rule** and coherence, **blanket impls**, **negative impls**, **trait aliases**, and **async traits**.
+The topics below are the rest of the map, in rough order of when you need them. They are listed here rather than as empty pages so the gaps are visible without pretending to be lessons: **associated types** and how they differ from generic parameters, the **orphan rule** and coherence, **blanket impls**, **negative impls**, **trait aliases**, and **async traits**.

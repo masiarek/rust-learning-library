@@ -188,7 +188,7 @@ Named honestly, because a map that only lists what exists is a map of the wrong 
 
 - **Destructuring a struct** — in a `let`, in a `match` arm, and in a function parameter
 - **Comparing structs** — `PartialEq` / `Eq` / `PartialOrd` / `Ord`, and the derive that compares fields in declaration order
-- **Generic structs** — `Point<T>`, and the trait bound that lets you add two of them
+- **Generic structs** — now [`22_Generics/`](22_Generics/README.md): the parameter list, the `E0282` when nothing fills it in, and where the trait bound belongs. Still missing from there: operator overloading, so `Point<T> + Point<T>` needs `T: Add<Output = T>`
 - **Implementing a trait for your struct** — including default methods, and why this replaces inheritance
 - **A reference in a field** — `E0106` in full, `struct User<'a>`, and what `'static` does and does not promise
 - **Enum variants that carry structs** — the nesting that makes a state machine, and matching it

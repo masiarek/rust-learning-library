@@ -413,3 +413,12 @@ Short definitions. Every entry links to the page that explains it properly — a
 **`PhantomData<T>`** — The zero-sized field that carries a phantom parameter. Not a way to silence the compiler but a claim to it: `PhantomData<T>` says the struct owns a `T`, `PhantomData<fn() -> T>` that it merely produces one, `PhantomData<*const T>` that it only points at one — same size, different variance and drop behaviour. → [Phantom types](12_Traits/phantom_types/README.md)
 
 **`E0392`** — "type parameter is never used": a generic parameter declared and then referred to by nothing. Its three suggested fixes are the whole decision — delete it, store something of that type, or keep it deliberately with a `PhantomData` field. → [Phantom types](12_Traits/phantom_types/README.md)
+
+**Generic (`<T>`)** — A type the caller fills in. One definition serves every type, and the compiler settles which at compile time by stamping out a copy per type used — so `Container<u8>` is one byte, `Container<u8>` and `Container<String>` are unrelated types, and neither pays anything at run time. → [What a generic is](22_Generics/what_a_generic_is/README.md)
+
+**Trait bound** — The `: Trait` on a generic parameter, and the complete list of what the body may do with it. An unbounded `T` can be stored, moved and dropped and nothing else. Rust checks the generic body once against its bounds rather than at each instantiation, so the error lands on the definition rather than on somebody's call site — and the bound belongs on the `impl` block that spends it, never on the struct. → [Where the bound goes](22_Generics/where_the_bound_goes/README.md)
+
+**`where` clause** — The bound moved below the signature. Identical to the inline form for a bare parameter, and the *only* spelling available when the subject is not one: `where Vec<T>: Debug` and `where T::Item: Clone` cannot be written inside the angle brackets at all. → [Where the bound goes](22_Generics/where_the_bound_goes/README.md)
+
+**Argument-position `impl Trait`** — `fn f(v: impl Display)`, the parameter that is never named. Two of them are two *independent* types, where `<T: Display>` used twice is one type twice — and with no `T` to name, the caller cannot turbofish it. → [Where the bound goes](22_Generics/where_the_bound_goes/README.md)
+

@@ -25,9 +25,11 @@ Two things follow, and the section is mostly about the second. An enum lets you 
 - [`Option` is a one-item collection](../17_Option_and_Result/option_as_collection/README.md) — the discriminant, and when the tag is free
 - [Nullable pointers](../17_Option_and_Result/nullable_pointers/README.md) — `Option<Box<T>>`, and recursive types
 - [What a union is](../09_Advanced/what_a_union_is/README.md) — the untagged version, and the desync only it can have
+- [Generic enums](../22_Generics/generic_enums/README.md) — `<T>` on an enum, and the two parameters `Result<T, E>` is made of
+- [A generic recursive type](../22_Generics/a_generic_recursive_type/README.md) — an enum that contains itself, and the `Box` that gives it a size
 
 [OPTION.md](../OPTION.md) is the full reading order for `Option` itself.
 
 ## Not yet written
 
-The rest of the map, listed here rather than as empty pages so the gaps are visible: **generic enums** (`enum Tree<T>`, and why a recursive one needs a `Box`), **`#[non_exhaustive]`** and what it does to a downstream crate's `match`, **explicit discriminants and `repr`** (`enum Code { Ok = 200 }`, `repr(u8)`, and converting an integer *back* with `TryFrom`), **custom error enums** with `Display`, `Error` and `From` (the `thiserror` shape, by hand first), **implementing `Display` for an enum** — the `match` inside `fmt`, which is the usual first hand-written trait impl — and **match guards and binding `@`**.
+The rest of the map, listed here rather than as empty pages so the gaps are visible: **enums with a lifetime parameter** (`enum Token<'a>`, which is the other thing those brackets hold), **`#[non_exhaustive]`** and what it does to a downstream crate's `match`, **explicit discriminants and `repr`** (`enum Code { Ok = 200 }`, `repr(u8)`, and converting an integer *back* with `TryFrom`), **custom error enums** with `Display`, `Error` and `From` (the `thiserror` shape, by hand first), **implementing `Display` for an enum** — the `match` inside `fmt`, which is the usual first hand-written trait impl — and **match guards and binding `@`**.
