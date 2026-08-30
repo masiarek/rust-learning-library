@@ -170,7 +170,7 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Dangling reference** — A reference that outlives the value it points at. Rust makes it unwriteable (`E0505` when a borrowed value would be freed, `E0106` when a function tries to return one); C and C++ compile the same shape silently. → [A shadow does not drop](18_Ownership/shadowing_does_not_drop/README.md)
 
-**Undefined behaviour** — A program the language standard declines to define at all, so no output is the "right" one. The reason C's use-after-free can print nothing on one run and the correct answer on the next, and the reason such a program can never have a recorded answer key. → [A shadow does not drop](18_Ownership/shadowing_does_not_drop/README.md)
+**Undefined behaviour** — A program the language standard declines to define at all, so no output is the "right" one. The reason C's use-after-free can print nothing on one run and the correct answer on the next, and the reason such a program can never have a recorded answer key. → [C and C++](31_C_and_Cpp/README.md) · [A shadow does not drop](18_Ownership/shadowing_does_not_drop/README.md)
 
 **Partial move** — Moving one field out of a struct, leaving the other fields readable but the struct as a whole unusable. Ownership is tracked per field, not per variable. → [Ownership and moves](18_Ownership/ownership_and_moves/README.md)
 

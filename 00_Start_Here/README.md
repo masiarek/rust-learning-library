@@ -16,7 +16,7 @@ If you do nothing else on this page, do this:
 
 Steps 1–3 happen together, not in sequence. Step 4 is the one nobody does and the one that pays most.
 
-Before any of that, or instead of it if you are still deciding: [Benefits of Rust](benefits_of_rust/README.md) takes the twenty selling points Google's course opens with and says what the evidence is behind each one — which are compiler refusals, which are run-time behaviours you can watch, and which six are narrower than the one-line version.
+Before any of that, or instead of it if you are still deciding: [Benefits of Rust](benefits_of_rust/README.md) takes the twenty selling points Google's course opens with and says what the evidence is behind each one — which are compiler refusals, which are run-time behaviours you can watch, and which six are narrower than the one-line version. If you already write C or C++, read it beside [C and C++](../31_C_and_Cpp/README.md), which compiles and runs the nine bugs those refusals are a reply to.
 
 ## Why *these* three
 
