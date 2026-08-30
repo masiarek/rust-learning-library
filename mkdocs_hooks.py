@@ -271,6 +271,10 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...and the thing everyone tries first to SEE a move happen, which
         # shows the header moving and the bytes staying put.
         "what_an_address_shows",
+        # ...and then the model behind that demonstration, generalised off
+        # String: which kinds of value live where, and one table pricing
+        # move / Copy / clone / Arc::clone against the heap side.
+        "stack_and_heap",
         "borrowing",
         # ...and the scaffold most people are told to use while it lands.
         "how_to_learn_lifetimes",
