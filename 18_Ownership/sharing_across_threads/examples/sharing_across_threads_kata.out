@@ -1,0 +1,44 @@
+Part 1 — three refusals, three fixes.
+
+  (a) `Rc` into thread::spawn
+      error[E0277]: `Rc<Vec<String>>` cannot be sent between threads safely
+      the trait `Send` is not implemented for `Rc<Vec<String>>`
+      Fix: Arc. Same API, same size, atomic count.
+      the thread saw 2 names
+
+  (b) pushing through a shared `Arc<Vec<u32>>`
+      error[E0596]: cannot borrow data in an `Arc` as mutable
+      Fix: Arc<Mutex<T>>. Arc grants the ownership, Mutex the write.
+      four threads wrote [0, 1, 2, 3]
+
+  (c) forgetting the per-thread clone
+      error[E0382]: use of moved value: `shared`
+      The first `move` closure took the only Arc; the second had none.
+      Fix: one Arc::clone per spawn, made before the loop body ends.
+      three threads returned [42, 42, 42]
+      strong_count is back to 1 now they have all joined
+
+Part 2 — predict the two totals.
+
+  fetch_add is one indivisible step, so the answer is arithmetic:
+    8 x 5000 = 40000, and it counted 40000
+
+  load-then-store is three steps, so a scheduler can split it.
+  Scripted on one thread, the interleaving looks like this:
+    A reads 0, B reads 0, both write 1 -> counter says 1
+
+  Run that across 8 real threads and updates go missing:
+    counted <= 40000? true
+    The actual number is NOT printed here, on purpose: it differs
+    every run, so no answer key could hold it. That is the same
+    fact as the bug — a lost update is not reproducible, which is
+    why you cannot test your way to noticing one.
+
+Part 3 — the Arc you can delete.
+
+  thread::scope summed [41, 17, 88, 5] to 151 with no Arc at all,
+  and `precincts` is still usable here: 4
+
+  The rule to carry away: Arc is for threads that OUTLIVE the
+  borrow. A scoped thread cannot, so it needs no owner and no
+  count. Reach for the scope first and pay for the Arc second.

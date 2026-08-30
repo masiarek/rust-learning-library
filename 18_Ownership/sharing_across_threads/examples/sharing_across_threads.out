@@ -1,0 +1,44 @@
+1. The same count as `Rc`, and one owner per thread
+   after Arc::new                     1
+   four clones, no thread started yet 5
+     thread 0 sees 3 names
+     thread 1 sees 3 names
+     thread 2 sees 3 names
+     thread 3 sees 3 names
+   after every thread joined          1
+   The count is the same mechanism as `Rc`'s. Only the increment differs.
+
+2. What `atomic` is paying for
+   A read-modify-write is three steps, and a scheduler may split it.
+   Here is that interleaving, executed in order on one thread:
+     A reads 0, B reads 0, A writes 1, B writes 1
+     two increments, and the counter says 1
+   `fetch_add` is the same three steps made indivisible:
+     two increments, and the counter says 2
+   Lose one of those on a REFERENCE count and you free a live value.
+   That is the bug `Arc` exists to make impossible, and the reason
+   `Rc` is not merely discouraged across threads but refused.
+
+3. `fetch_add` under real contention
+   8 threads x 1000 increments = 8000
+   Exact, every run. The load/store version above would not be.
+
+4. `Arc` grants the ownership; `Mutex` grants the write
+   8 threads wrote into one Vec: [0, 10, 20, 30, 40, 50, 60, 70]
+   `Arc<T>` alone hands out `&T`, so it cannot be pushed to at all.
+   Neither type substitutes for the other, and the borrow rule
+   moves to run time: two live `lock()`s on one thread deadlock.
+
+5. When no counting is needed at all
+   thread::scope borrowed [41, 17, 88, 5] with no Arc: total 151
+   A scoped thread cannot outlive the borrow, so the compiler needs
+   no `'static` and you need no owner per thread. Reach for this
+   first; `Arc` is for the threads that DO outlive the scope.
+
+6. Same size, different promise
+   size_of::<Rc<i32>>()  = 8
+   size_of::<Arc<i32>>() = 8
+   Identical values, identical layout. `Send` is the difference,
+   and it is a promise the compiler tracks, not a byte in the value.
+   What `Arc` does NOT change: it still hands out `&T`, and two
+   `Arc`s pointing at each other still leak, exactly as `Rc` does.
