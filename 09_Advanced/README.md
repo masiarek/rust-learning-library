@@ -14,6 +14,7 @@ Each page is still one idea with a program you can compile and run beside it.
 | [What `i128` is exact about](i128_exactness/README.md) | 301 | The three different properties "exact" gets used for, which one a 128-bit integer actually has, what widening costs per operation — and why `fractions.Fraction` is a different trade rather than a slower one |
 | [When the denominators compound](compounding_weights/README.md) | 301 | The proportional count the companion trick cannot reach — why its denominators compound out of the previous round's, why the width you need is a property of the ballots, and what a fixed-width rational really runs out of |
 | [Did the rounding decide it?](interval_arithmetic/README.md) | 301 | The question the other four do not ask — bracket each rounded term instead of storing it, and find out whether your choice of scale or the ballots picked the winner; sound but not complete, so *decided* is a proof and *undecided* is only about that scale |
+| [What `unsafe` turns off](what_unsafe_turns_off/README.md) | 301 | The five powers it grants and the nothing else it turns off — the borrow checker still runs inside the block; `split_at_mut` as a safe API over a small unsafe core; `unsafe fn` vs `unsafe {}` after edition 2024; and why the audit unit is the module, because a safe line three away is what makes the block sound |
 | [What a union is](what_a_union_is/README.md) | 301 | Fields on top of each other instead of side by side — why the write is safe and the read is not, why the field type decides whether a bad read is merely wrong or undefined, and why an `enum` is this with the tag already checked |
 | [The global allocator](the_global_allocator/README.md) | 301 | Where every heap byte comes from — swapping in a counter that turns `String`'s capacity ladder into events you can see, the three rules that keep such a measurement honest, and why the five ways to make a `String` all cost exactly one allocation |
 
@@ -24,4 +25,3 @@ Rough order, not a promise:
 - **`Send` and `Sync`** — the two traits that decide what may cross a thread boundary, and why you almost never write them yourself
 - **`RwLock` and atomics** — the two rungs between a `Mutex` and a channel, and the question of which one your problem actually is
 - **Interior mutability** — `Cell`, `RefCell`, and the runtime borrow check you are opting into
-- **`unsafe`** — what it does and does not turn off, and why the unit of review is the module rather than the block

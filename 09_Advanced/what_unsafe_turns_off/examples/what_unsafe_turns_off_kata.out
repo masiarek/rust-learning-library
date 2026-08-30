@@ -1,0 +1,43 @@
+1. Your split_at_mut, checked against std's
+   mine: [5, 3, 0] | [4, 2, 1]
+   std : [5, 3, 0] | [4, 2, 1]
+   agree: true
+
+2. The safe line the unsafe block depends on
+   split_at_mut(&mut a, 99) -> mid must be within the slice
+   The assert turned a bad argument into a panic. DELETE it and the
+   same unsafe block — unchanged, still with its SAFETY comment —
+   builds a slice out of memory the allocation does not own. That is
+   undefined behaviour, not a panic and not a wrong number: the
+   Reference lists producing an invalid value as UB, and there is no
+   defined outcome to demonstrate.
+
+3. The same shape, one module wide
+   current() = 10
+   after advance(), current() = 20
+   `current` reads without a bounds check, and is SAFE to call,
+   because `head < 4` is maintained by `new` and `advance`.
+
+4. And the door in the same module
+   `pub fn set_head(&mut self, head: usize)` is a safe function that
+   assigns head directly. set_head(0) is called above and is fine —
+   `current()` = 10 — and `r.set_head(99)` compiles exactly the same,
+   needs no unsafe at the call site, and makes the NEXT `current()`
+   read out of bounds. The unsafe block is unchanged and now unsound,
+   and the difference between the two calls is one literal.
+   So `set_head` is wrong in one of two ways, and both fixes are one
+   line:
+     - make it private, or
+     - make it check: try_set_head(9) = false, try_set_head(2) = true
+   current() after try_set_head(2) = 30
+   Marking it `unsafe fn` is the third option, and the honest one
+   when the caller genuinely can know more than the type does.
+
+5. What this makes the unit of review
+   Not the `unsafe` block: every line that can reach the same
+   private state. `slots` and `head` are private, so the audit is
+   the MODULE — and that is the argument for keeping a module that
+   contains `unsafe` small enough to read in one sitting.
+   The `// SAFETY:` comment is the other half: it names the
+   invariant, so the person deleting an assert three lines away has
+   something to notice.

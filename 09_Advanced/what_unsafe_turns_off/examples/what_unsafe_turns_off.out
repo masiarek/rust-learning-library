@@ -1,0 +1,55 @@
+1. The five things `unsafe` lets you do, and nothing else
+   a. dereference a raw pointer
+   b. call an `unsafe fn`
+   c. implement an `unsafe trait`  (Send, Sync, and your own)
+   d. read a field of a `union`
+   e. access or modify a mutable `static`
+   That is the whole list. Everything else — the borrow checker,
+   type checking, lifetimes on references, move semantics — is still
+   on inside an `unsafe` block. It is not "turn off Rust".
+
+2. Making a raw pointer is safe; using one is not
+   let p: *const u32 = &x;   <- safe, no unsafe needed
+   p.is_null() = false
+   *p                        <- E0133 without an unsafe block
+   unsafe { *p } = 5
+   Creating a pointer cannot break anything. DEREFERENCING one is
+   where the promise is made, which is why that is the operation the
+   keyword guards.
+
+3. What the block is actually for
+   split_at_mut(&mut scores, 3) -> two &mut into one array
+   after writing through both: [50, 3, 0, 40, 2, 1]
+   Safe Rust cannot express this: the borrow checker sees two &mut
+   borrows of the same slice and refuses, because it cannot know the
+   ranges are disjoint. The `assert!` above is the proof it lacks —
+   and the SAFETY comment says which invariant the block depends on.
+   (std has this as slice::split_at_mut, written the same way.)
+
+4. `unsafe fn` versus `unsafe {}` — two different jobs
+   unsafe { … }  I have checked the contract here.
+   unsafe fn      CALLING me has a contract; read the # Safety doc.
+   In edition 2024 the body of an `unsafe fn` is no longer implicitly
+   an unsafe block, so the two are finally separate. Omit the inner
+   block and rustc says so, with the sentence that explains the whole
+   change: "an unsafe function restricts its caller, but its body is
+   safe by default" — the `unsafe_op_in_unsafe_fn` lint, warn by
+   default under rust_2024_compatibility.
+   get_unchecked(&scores, 1) = 3
+
+5. The unit of review is the module, not the block
+   `split_at_mut` is sound because of the `assert!` three lines above
+   the block — safe code. Delete the assert, and the unsafe block is
+   unchanged and now unsound. So an `unsafe` block's correctness can
+   depend on any safe code that can reach the same private state,
+   which is every line in its module.
+   Two consequences worth acting on: keep modules containing `unsafe`
+   SMALL, and write a `// SAFETY:` comment naming the invariant, so
+   the next reader knows what they must not break.
+
+6. And what it still does not buy you
+   v = [1, 2, 3] — inside an unsafe block, `let a = v; let b = v;` is
+   still E0382 use-after-move; `&mut v` twice is still E0499; a
+   reference still cannot outlive its referent. `unsafe` does not
+   relax one rule of the borrow checker. It moves five specific
+   obligations from the compiler to you, and leaves the rest.
