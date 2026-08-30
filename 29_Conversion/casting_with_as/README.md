@@ -315,7 +315,7 @@ fn main() {
 - [`From` and `Into`](../from_and_into/README.md) — the one to use when the conversion cannot fail
 - [What a float actually stores](../../19_Numbers/what_a_float_stores/README.md) — why 2²⁴ + 1 is not representable in an `f32`
 - [Meet the byte](../../19_Numbers/meet_the_byte/README.md) — the bits that narrowing keeps
-- [Values](../../15_First_Programs/values/README.md) — where the widths come from in the first place
+- [What a type annotation does](../../15_First_Programs/what_an_annotation_does/README.md) — where a bare `10` gets its width from, before any cast is involved
 - [Strict clippy](../../05_Tooling/strict_lints/README.md) — `cast_possible_truncation` and friends turn every one of these into a warning you have to answer
 
 ## Sources
