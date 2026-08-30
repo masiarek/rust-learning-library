@@ -105,7 +105,7 @@ This library's own [Ownership](../../18_Ownership/README.md) section covers the 
 
 ## On the desk
 
-- **[cheats.rs ↗](https://cheats.rs/)** — **Reference.** One enormous page covering the language and the standard library, including the memory-layout diagrams nothing else has. The thing to keep in a tab.
+- **[cheats.rs ↗](https://cheats.rs/)** — **Reference.** One enormous page covering the language and the standard library, including the memory-layout diagrams nothing else has. The thing to keep in a tab; [Cheat sheets](../cheat_sheets/README.md) covers it and its rivals properly.
 - **[Rust Cookbook ↗](https://rust-lang-nursery.github.io/rust-cookbook/)** — **Dated.** Task-shaped recipes ("read a CSV", "make an HTTP request") with working code. The recipes still compile; several pin crate versions from a previous era, so treat the *shape* as current and the dependency list as history.
 - **[The Little Book of Rust Macros ↗](https://veykril.github.io/tlborm/)** — **Reference.** The maintained fork of Daniel Keep's original, and the only complete free treatment of `macro_rules!`. Dense. Pair with [MacroKata ↗](https://tfpk.github.io/macrokata/) for the exercises.
 - **[Error Handling in Rust ↗](https://nrc.github.io/error-docs/)** — **Reference.** Nick Cameron on the whole design space — `Result`, panics, error types, the crates. Short and clear, and it answers the "`anyhow` or `thiserror`?" question properly. This library's [`Option` and `Result`](../../17_Option_and_Result/README.md) section covers the same material with the output proved.

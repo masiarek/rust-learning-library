@@ -16,7 +16,7 @@ Most wasted reading is a category error — opening a tutorial when the question
 | **Books** | *Why is it shaped this way?* | [Books](books/README.md) |
 | **Exercises** | *Can I actually write it?* | [Exercises](exercises/README.md) |
 | **Domain material** | *How does this work for async / embedded / macros?* | [Going deeper](going_deeper/README.md) |
-| **Lookup** | *What is the name of the thing I want?* | [cheats.rs ↗](https://cheats.rs/) and [`std` ↗](https://doc.rust-lang.org/std/) |
+| **Lookup** | *What is the name of the thing I want?* | [Cheat sheets](cheat_sheets/README.md) — and [`std` ↗](https://doc.rust-lang.org/std/) |
 
 The two that get confused are the first two. A book *argues*; a reference *defines*. "Struct fields are laid out in declaration order" is a reasonable-sounding sentence from a tutorial and [explicitly not guaranteed ↗](https://doc.rust-lang.org/nomicon/repr-rust.html) by the language — no third tutorial would have caught that, and one line of the Nomicon does.
 
@@ -26,6 +26,7 @@ The two that get confused are the first two. A book *argues*; a reference *defin
 |---|---|
 | [Books](books/README.md) | reading — every Rust book worth naming, with a verdict on each and what the verdict is based on |
 | [Official docs](official_docs/README.md) | the definitive answer — `std`, the Reference, the Nomicon, the error index, the RFCs |
+| [Cheat sheets](cheat_sheets/README.md) | looking something up — which sheets are maintained, which are frozen, and what the frozen ones stopped knowing |
 | [Exercises](exercises/README.md) | typing — the practice tracks, and which one suits which stage |
 | [Going deeper](going_deeper/README.md) | a specific domain — unsafe, embedded, async, macros, testing, performance |
 | [Why Haskell](haskell/README.md) | curiosity — what Rust borrowed, renamed, and deliberately left behind |
@@ -45,7 +46,7 @@ The two that get confused are the first two. A book *argues*; a reference *defin
 | wanting to type rather than read | [rustlings](../00_Start_Here/rustlings/README.md) first, then [100 Exercises ↗](https://rust-exercises.com/100-exercises/) |
 | stuck on lifetimes specifically | [quinedot's guide ↗](https://quinedot.github.io/rust-learning/) — the best free treatment of the topic |
 | deciding whether a book is worth buying | [Books](books/README.md) — and the short answer is usually *no, the free one is better* |
-| looking something up mid-edit | [cheats.rs ↗](https://cheats.rs/) |
+| looking something up mid-edit | [cheats.rs ↗](https://cheats.rs/) — the [shelf](cheat_sheets/README.md) says why that one and not the others |
 
 ## Three notes on this shelf
 

@@ -122,6 +122,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # function has to hand one back.
         "what_a_trait_is",
         "trait_in_scope",
+        # ...and what the compiler says when a call finds nothing: one error
+        # code over four causes, of which "not in scope" is only the second.
+        "no_method_named",
         # ...and the traits every earlier page has been calling without the
         # syntax admitting it: `+` is one, and so is `[]`.
         "operators_are_traits",
@@ -626,6 +629,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # Books argue; these define. Second, because the question "what does
         # Rust actually do here" arrives the moment the first book is closed.
         "official_docs",
+        # Lookup, third: the moment after "what does Rust do here" is "what is
+        # the thing called", and one page answers it faster than search does.
+        "cheat_sheets",
         "exercises",
         "going_deeper",
         "haskell",
