@@ -44,6 +44,8 @@ Read what it recorded before committing. `--update` accepts whatever the program
 
 **Stems are unique repo-wide.** A Markdown block names a bare stem with no path, so two `examples/basics.rs` in different folders is an error the tool refuses rather than guesses at.
 
+**The fences with no answer key are a separate, deliberately narrow gate.** `run_examples.py` reaches `examples/*.rs` and nothing else, so every other Rust block on a page — the snippet in the prose, the four-line illustration — is a claim nothing checks. [`tools/check_fences.py`](tools/check_fences.py) compiles those, as library crates so an item-level fragment passes and a bare statement does not, and it runs **only over the trees named in its `SCOPE`**. That restriction is the point rather than an unfinished edge: run repo-wide it fails 142 of the 178 pages that carry a hand-authored fence, and almost none of them are wrong, because a lesson about `let` opens with `let x = 5;` on purpose. The difference is what the page promised — a reference page's fence is a complete demonstration you can paste, a teaching page's is an illustration of one line — and no compiler can see which. Measure a candidate tree with `--survey <path>` before adding it to `SCOPE`; two escape hatches, ```rust,ignore and ```rust,compile_fail, borrow rustdoc's meanings.
+
 **Examples must be deterministic.** The recorded `.out` is an answer key, so an example that reads the clock, the environment, the filesystem, or a random number prints something different on your machine than in CI, and the check fails for a reason that has nothing to do with the lesson. Simulate those inputs instead — a small hard-coded table reads better on the page anyway, because the reader can see the data the output came from.
 
 **And no local gate can catch a machine-dependent one.** `std::env::consts::OS`, `cfg!(target_os = …)`, `size_of::<usize>()`, a path separator: each is a *constant* on your machine, so the example is perfectly reproducible there and the key matches every time you re-check it — including in the extracted-tree run at the bottom of this page, which is a different tree on the same machine. Only CI ever asks the question that matters. An attributes page printed `env::consts::OS` to illustrate `#[cfg]` and reddened the examples workflow for four commits while every local gate stayed green; the docs deploy stayed green too, which is the trap the CI section below already names. So when an example's output could conceivably differ on another platform, assume it does and pick something that cannot — `cfg!(test)` is false in every non-`--test` build everywhere, and makes the same point.
@@ -152,6 +154,7 @@ Four things that follow from that, worth knowing before you add a page:
 
 ```bash
 python3 tools/run_examples.py     # examples verified, pages refilled
+python3 tools/check_fences.py     # the fences no answer key covers still compile
 python3 tools/check_katas.py      # every Practice section is indexed, every row resolves
 python3 tools/check_link_style.py # every external link carries its ↗, no internal link does
 python3 tools/check_redirects.py  # every retired URL still lands somewhere that exists
@@ -166,7 +169,7 @@ So extract the pushed tree and re-run against that:
 
 ```bash
 T=$(mktemp -d); git archive origin/master | tar -x -C "$T"
-(cd "$T" && python3 tools/check_katas.py && python3 tools/check_link_style.py && python3 tools/check_redirects.py && python3 tools/run_examples.py --check)
+(cd "$T" && python3 tools/check_katas.py && python3 tools/check_link_style.py && python3 tools/check_redirects.py && python3 tools/check_fences.py && python3 tools/run_examples.py --check)
 ```
 
 `git archive` writes only tracked, committed content, so an in-flight folder belonging to someone else cannot make this pass and a file you forgot to `git add` cannot hide in it. Do it after you push, against `origin/master` — that is the tree CI builds and the one readers get. `--check` rather than a plain run, since the extract is a throwaway and nothing there is worth rewriting.

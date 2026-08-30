@@ -22,6 +22,8 @@ jobs:
         run: rustc --version
       - name: Compile, run, and check every example against its answer key
         run: python3 tools/run_examples.py --check
+      - name: Compile the hand-authored fences no answer key covers
+        run: python3 tools/check_fences.py
       - name: Check the kata index against the Practice sections
         run: python3 tools/check_katas.py
       - name: Check that every external link is marked as external
