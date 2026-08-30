@@ -244,6 +244,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # The two consumers worth knowing properly, in that order: fold is
         # what collect is a special case of.
         "fold_and_reduce",
+        # ...and collect twice: the everyday decision to materialize, then the
+        # general machinery the annotation is really choosing between.
+        "collect_into_a_vec",
         "collect_and_fromiterator",
         # A lookup table rather than a lesson, so it sits after the spine.
         "adapters_by_job",
