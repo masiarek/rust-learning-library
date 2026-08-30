@@ -9,6 +9,13 @@ fn needs_string(s: String) -> usize {
     s.len()
 }
 
+fn variant(c: &Cow<'_, str>) -> &'static str {
+    match c {
+        Cow::Borrowed(_) => "Cow::Borrowed — STILL borrowed",
+        Cow::Owned(_) => "Cow::Owned",
+    }
+}
+
 // The reason `Owned: Borrow<Self>` is in the trait: generic code can take
 // either half of the pair and only pay for an allocation on the branch that
 // needs one.
@@ -22,9 +29,9 @@ fn tidy(raw: &str) -> Cow<'_, str> {
 
 // A user-defined type CAN implement ToOwned — but only if it is Sized and does
 // NOT implement Clone. `type Owned = Self` satisfies the `Owned: Borrow<Self>`
-// bound through the blanket `impl<T> Borrow<T> for T`, and with no `Clone` impl
-// there is nothing for the blanket `impl<T: Clone> ToOwned for T` to conflict
-// with. Add `#[derive(Clone)]` and this file stops compiling with E0119.
+// bound through the blanket `impl<T: ?Sized> Borrow<T> for T`, and with no `Clone`
+// impl there is nothing for the blanket `impl<T: Clone> ToOwned for T` to
+// conflict with. Add `#[derive(Clone)]` and this file stops compiling with E0119.
 #[derive(Debug)]
 struct Tally {
     seats: i32,
@@ -119,4 +126,15 @@ fn main() {
     println!("   type Owned = Self, so this is Clone wearing a different name.");
     println!("   Give Tally a #[derive(Clone)] and it is E0119 instead: the");
     println!("   blanket impl<T: Clone> ToOwned for T already covers it.");
+
+    println!();
+    println!("8. The same trap on a Cow — the instance clippy catches by default");
+    // A `Cow<str>` derefs to `str`, so `to_owned()` reads like it produces the
+    // owned half. Method lookup takes the receiver type first, `Cow` is Clone,
+    // so the blanket impl wins and hands back another Cow in the same variant.
+    let borrowed: Cow<'_, str> = Cow::Borrowed("ballot");
+    let same = borrowed.to_owned();
+    println!("   Cow::Borrowed.to_owned()   -> {}", variant(&same));
+    println!("   Cow::Borrowed.into_owned() -> {:?}, a String", borrowed.into_owned());
+    println!("   to_owned clones the Cow. into_owned is what makes it owned.");
 }

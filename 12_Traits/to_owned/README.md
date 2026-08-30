@@ -61,15 +61,26 @@ That blanket impl means every `Clone` type gets `to_owned()` for free, doing exa
 
 ### The argument you will meet, and its expiry date
 
-Search this question and you will find the same advice everywhere, usually word for word: *use `to_owned()` on a string literal, because `to_string()` is generic, goes through `Display`, and may allocate more than once.* That was true when it was written, in 2015. It stopped being true in **April 2016**, when [`ToString` was specialized for `str` ↗](https://github.com/rust-lang/rust/pull/32586) — the case everybody was worried about no longer runs the formatting machinery at all.
+Search this question and you will find the same advice everywhere, usually word for word: *use `to_owned()` on a string literal, because `to_string()` is generic, goes through `Display`, and may allocate more than once.* That was true when it was written, in 2015. It stopped being true in **April 2016**, when [`ToString` was specialized for `str` ↗](https://github.com/rust-lang/rust/pull/32586), which shipped in 1.9 that May — the case everybody was worried about no longer runs the formatting machinery at all.
 
-Nine years later the advice is still being republished with the performance reasoning intact, sometimes quoting the original thread's own *"this may be fixed in the future with specialization"* caveat without noticing that it was. Measured on rustc 1.97.1 with `-O`, `String::from`, `.into()`, `.to_string()` and `.to_owned()` land within a couple of nanoseconds of each other on a 13-byte literal. The one real outlier is `format!("a literal")`, about 30% slower — which clippy flags anyway, as `useless_format`, for the unrelated reason that it is a formatting call with nothing to format.
+A decade later the advice is still being republished with the performance reasoning intact, sometimes quoting the original thread's own *"this may be fixed in the future with specialization"* caveat without noticing that the same thread answered it in May 2016: *"Now that specialization for `str::to_string()` has landed, we can safely say that `to_string()` has the same performance as `to_owned()`."*
 
-**Check what a benchmark was built with before believing it.** The most-linked measurement of this question prints `target/debug` in its own transcript: at `-O0` the five spellings differ by about 2%, a spread far too small to carry the conclusion drawn from it. The conclusion — `format!` is the slow one — happens to be right, but the method could not have shown it.
+Measured at `-O` on 1.97.1 and 1.98, `String::from`, `.into()`, `.to_string()`, `.to_owned()` **and `format!("a literal")`** all land between 56 and 61 ns on a 13-byte literal. `format!` is in that list because a template with nothing in it never reaches the formatting machinery:
+
+```rust
+// alloc::fmt::format
+args.as_str().map_or_else(|| format_inner(args), crate::borrow::ToOwned::to_owned)
+```
+
+A literal-only `format!` has an `as_str()`, so it *is* `to_owned`. What costs about a third more is a `format!` that formats something: `format!("{}", s)` for an `s` the optimizer cannot see through took 77 ns against 58. Clippy flags the literal one anyway, as `useless_format`, for a reason that was never about speed — it is a formatting call with nothing to format.
+
+**Check what a benchmark was built with before believing it.** The most-linked measurement of this question prints `target/debug` in its own transcript: at `-O0` the five spellings differ by about 2%, a spread far too small to carry the conclusion drawn from it. The conclusion — `format!` is the slow one — is half right, and the method could not have shown which half.
+
+**And check what the optimizer could see.** The same `format!("{}", s)` measures 77 ns when `s` is hidden behind a `black_box` and 56 when it is a literal the compiler folds — one expression, a quarter apart, decided by the harness rather than by the code under test.
 
 So the performance argument is dead, and the argument that outlived it is about **documentation**. dtolnay's case, [made in that same thread in 2017 ↗](https://users.rust-lang.org/t/to-string-vs-to-owned-for-string-literals/1441/6), is that `&str` and `String` are both strings, so *"convert this string to a string"* names nothing; what actually differs is ownership, and `to_owned()` is the spelling that says so at the point where a reader is asking why the conversion is there at all. Same conclusion as the 2015 advice, reached for a reason that does not expire.
 
-One naming note, because it is a common slip: `to_` methods do **not** consume `self` — `to_owned(&self)` borrows. `into_` is the prefix that means the value is consumed.
+One naming note, because it is a common slip: `to_` methods do **not** consume `self` — `to_owned(&self)` borrows, and `into_` is the prefix that means consumed. The rule relaxes on `Copy` types, where consuming costs the caller nothing: `f64::to_bits(self)` takes `self` by value.
 
 ## The trap that blanket impl sets
 
@@ -82,6 +93,10 @@ let second = shared.to_owned();
 ```
 
 `Rc<T>` is `Clone`, so the blanket impl applies and `to_owned` *is* `clone` — which for an `Rc` means bumping the reference count. If you wanted the `String` copied, you have to dereference first: `(*shared).clone()`. Reaching for `to_owned` because it sounds like it makes an independent copy is exactly the wrong instinct here.
+
+A `Cow` is caught by the same mechanism and lands somewhere worse: `cow.to_owned()` returns another `Cow` in the **same variant**, so a `Cow::Borrowed` is still borrowed afterwards. Section 8 of the run below watches it not happen. `into_owned()` is the method that makes a `Cow` owned.
+
+Clippy has both cases, and how loudly it says so tracks how wrong the result is. The `Cow` one is [`suspicious_to_owned` ↗](https://rust-lang.github.io/rust-clippy/master/index.html#suspicious_to_owned), **warn-by-default** — *"this `to_owned` call clones the `Cow<'_, str>` itself and does not cause its contents to become owned"*, offering `into_owned()` or `clone()` depending on which you meant. The `Rc` one is [`implicit_clone` ↗](https://rust-lang.github.io/rust-clippy/master/index.html#implicit_clone), pedantic and therefore silent unless you asked for it — *"implicitly cloning a `Rc` by calling `to_owned` on its dereferenced type"*, suggesting `r.clone()`. The split is fair: on the `Cow` you did not get what the name implies, while on the `Rc` you got exactly the right value under a misleading spelling.
 
 ## Can you implement it yourself?
 
@@ -107,11 +122,11 @@ error[E0277]: the trait bound `DataOwned: Borrow<DataRef<'_>>` is not satisfied
 note: required by a bound in `std::borrow::ToOwned::Owned`
 ```
 
-Be precise about what that error proves, because it is easy to over-read: the type checker is refusing the *missing bound*, not the design. Write `impl Borrow<DataRef<'_>> for DataOwned` with a `todo!()` body and the `ToOwned` impl compiles perfectly well — the wall is one step further on, at the moment you have to write a `borrow` that returns a reference to a `DataRef` the `DataOwned` never stored. So the blocker is semantic rather than syntactic, and no compiler error will state it for you.
+Be precise about what that error proves, because it is easy to over-read: the type checker is refusing the *missing bound*, not the design. Add `impl<'a> Borrow<DataRef<'a>> for DataOwned` with a `todo!()` body and the `ToOwned` impl compiles perfectly well. (Name the lifetime. The elided `Borrow<DataRef<'_>>` spelling is rejected for a signature mismatch — `found fn(&'1 DataOwned) -> &'1 DataRef<'1>` against an expected `&'1 DataRef<'3>` — which is about elision, not about this design.) The wall is one step further on, at the moment you have to write a `borrow` that returns a reference to a `DataRef` the `DataOwned` never stored. So the blocker is semantic rather than syntactic, and no compiler error will state it for you.
 
 Which is why every impl in the standard library is on an **unsized referent** rather than on a reference — `str`, `CStr`, `OsStr`, `Path`, `[T]`. Those are the types that genuinely have a separate owned form and are always met through a pointer, which is the situation the trait was shaped for.
 
-What *does* compile is a `Sized` type that is not `Clone`, with `type Owned = Self` — the run below has one. The blanket `impl<T> Borrow<T> for T` satisfies the bound and nothing conflicts. It also buys nothing: it is `Clone` under a different name, and adding `#[derive(Clone)]` later turns it into the `E0119` above. If you want a `.to_owned()` method on your own type, write an inherent one and skip the trait.
+What *does* compile is a `Sized` type that is not `Clone`, with `type Owned = Self` — the run below has one. The blanket `impl<T: ?Sized> Borrow<T> for T` satisfies the bound and nothing conflicts. It also buys nothing: it is `Clone` under a different name, and adding `#[derive(Clone)]` later turns it into the `E0119` above. If you want a `.to_owned()` method on your own type, write an inherent one and skip the trait.
 
 The genuinely blocked case is a validated wrapper — an "ASCII-only string" newtype you want to use with [`Cow`](../../18_Ownership/clone_on_write/README.md). Doing it properly needs a `#[repr(transparent)]` wrapper around `str` and an `unsafe` pointer cast in `borrow`, because `Borrow`/`ToOwned` predate GATs and there is no safe way to make a `&MyNewtype` out of a `&str`. That limitation is still open: an [`IntoOwned` pre-RFC ↗](https://internals.rust-lang.org/t/pre-rfc-intoowned-trait-that-harmonizes-cow-and-toowned/23609) from late 2025 is one attempt at harmonizing the pair, and had not converged on a signature that survives the existing blanket impls.
 
@@ -127,7 +142,7 @@ fn bar<S: ?Sized, T>(s: &S) -> T where S: ToOwned<Owned = T>, T: Borrow<S> { s.t
 let s: String = bar("hi");     // "hi"
 ```
 
-`S` unifies with `&str`, so `T` is `&str` and the annotation is what breaks. The fix is to take `&S` rather than `S`, so `S` is `str` and `T` is `String` — and then **`S: ?Sized` is not optional**, because `str` is precisely the unsized case the trait exists for. Leave it off and the signature that was supposed to be the fix fails on its own bound instead: *"the size for values of type `str` cannot be known at compilation time … required by an implicit `Sized` bound in `foo`"*. Two errors, one cause, and the second is the page's whole thesis arriving as a compiler message. This was [filed as a diagnostics bug in 2016 ↗](https://github.com/rust-lang/rust/issues/31228) and closed in 2020 once the error learned to suggest a conversion method; the underlying surprise is unchanged, and it is the same one as section 2b above, one level of generics up.
+`S` unifies with `&str`, so `T` is `&str` and the annotation is what breaks. The fix is to take `&S` rather than `S`, so `S` is `str` and `T` is `String` — and then **`S: ?Sized` is not optional**, because `str` is precisely the unsized case the trait exists for. Leave it off and the signature that was supposed to be the fix fails on its own bound instead: *"the size for values of type `str` cannot be known at compilation time … required by an implicit `Sized` bound in `bar`"*. Two errors, one cause, and the second is the page's whole thesis arriving as a compiler message. This was [filed as a diagnostics bug in 2016 ↗](https://github.com/rust-lang/rust/issues/31228) and closed in 2020 once the error learned to suggest a conversion method; the underlying surprise is unchanged, and it is the same one as section 2b above, one level of generics up.
 
 ## `clone_into`, the provided method
 
@@ -178,6 +193,11 @@ let s: String = bar("hi");     // "hi"
    type Owned = Self, so this is Clone wearing a different name.
    Give Tally a #[derive(Clone)] and it is E0119 instead: the
    blanket impl<T: Clone> ToOwned for T already covers it.
+
+8. The same trap on a Cow — the instance clippy catches by default
+   Cow::Borrowed.to_owned()   -> Cow::Borrowed — STILL borrowed
+   Cow::Borrowed.into_owned() -> "ballot", a String
+   to_owned clones the Cow. into_owned is what makes it owned.
 ```
 <!-- /output -->
 

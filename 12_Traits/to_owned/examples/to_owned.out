@@ -37,3 +37,8 @@
    type Owned = Self, so this is Clone wearing a different name.
    Give Tally a #[derive(Clone)] and it is E0119 instead: the
    blanket impl<T: Clone> ToOwned for T already covers it.
+
+8. The same trap on a Cow — the instance clippy catches by default
+   Cow::Borrowed.to_owned()   -> Cow::Borrowed — STILL borrowed
+   Cow::Borrowed.into_owned() -> "ballot", a String
+   to_owned clones the Cow. into_owned is what makes it owned.
