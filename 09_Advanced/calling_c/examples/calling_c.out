@@ -1,0 +1,21 @@
+1. The call itself
+   abs(-7) from C = 7   no unsafe block: declared `safe`
+   (-7i32).abs()  = 7   same answer, no boundary crossed
+
+2. The data is the part that costs
+   &str    "Ferris"  6 bytes, length carried beside the pointer
+   CString "Ferris"  7 bytes, length is wherever the 0 turns up
+
+3. So C gets asked a question Rust already knew the answer to
+   strlen(..) = 6   walks the bytes looking for the 0
+   name.len() = 6   reads a field
+
+4. And the conversion can fail
+   CString::new refused: interior NUL at byte 3
+
+5. Coming back the other way
+   CStr::from_ptr(..) = "Ferris"
+   ..borrowed from c_name, which must outlive it
+
+6. And out again
+   rust_double(21) = 42   exported to C as `rust_double`

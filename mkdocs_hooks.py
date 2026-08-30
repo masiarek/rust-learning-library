@@ -172,6 +172,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "vec_methods",
         "the_hashmap",
         "the_hashset",
+        # ...then the sorted pair, read after the hash ones because the page is
+        # largely about what ordering buys over them and what it costs.
+        "sorted_collections",
         # ...and last the one that is a pointer rather than a container.
         "the_box",
     ],
@@ -686,6 +689,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # the enum that already gives it to you safely.
         # The keyword itself, before the two features that need it.
         "what_unsafe_turns_off",
+        # FFI sits after `unsafe`, which it needs, and before the
+        # union, which is the layout half of the same boundary.
+        "calling_c",
         "what_a_union_is",
         # ...and where the bytes those layouts occupy actually came from.
         "the_global_allocator",

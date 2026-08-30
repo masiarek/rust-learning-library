@@ -147,9 +147,11 @@ Stack Overflow's [2023 survey ↗](https://survey.stackoverflow.co/2023/#section
 
 The strikethrough joke in the original — ~~4~~ ~~5~~ ~~6~~ ~~7~~ 8 — spans a rename. 2023 is the year the survey replaced *"loved"* with *"admired"* and introduced the admired-versus-desired framing, so the streak is counted across a metric that changed names and presentation partway through. Worth knowing before you put the streak in a slide.
 
-## What is still missing
+## The half of bullet four with no number
 
-The other half of bullet four — *seamless C interop* — has no lesson here yet, the same gap [Benefits of Rust](../benefits_of_rust/README.md) names in its own table. The nearest pages are [What a union is](../../09_Advanced/what_a_union_is/README.md) and [The linker](../../20_Compilers/the_linker/README.md), and the correction that page already carries is the one to keep: the *call* costs nothing, the *data* often does, because `&str` has to become a NUL-terminated `CString` and that allocates and copies.
+Bullet four is two claims sharing a comma, and only one of them was counted. *"Dozens of platforms"* has 330 behind it. *"Seamless C interop"* has nothing — no benchmark, no survey, no bug database — and it is the one claim on the list where that is the right answer rather than a gap, because what is being promised is the **absence** of a layer: no marshalling step, no generated shim, no runtime to start first. You cannot measure something that is not there; you can only go and look at what the call compiles to.
+
+So it gets a page instead of a number: [Calling C](../../09_Advanced/calling_c/README.md), which does the round trip and prices the part the slogan leaves out. The short version, and the correction to carry: **the call is free, the data is not.** A `&str` is a pointer and a length; a C string is a pointer and a terminator; so every string that crosses is allocated and copied, and `CString::new` can fail outright on text that was perfectly legal a line earlier.
 
 ## Why this page has no answer key
 

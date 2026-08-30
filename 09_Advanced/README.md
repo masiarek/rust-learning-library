@@ -15,6 +15,7 @@ Each page is still one idea with a program you can compile and run beside it.
 | [When the denominators compound](compounding_weights/README.md) | 301 | The proportional count the companion trick cannot reach — why its denominators compound out of the previous round's, why the width you need is a property of the ballots, and what a fixed-width rational really runs out of |
 | [Did the rounding decide it?](interval_arithmetic/README.md) | 301 | The question the other four do not ask — bracket each rounded term instead of storing it, and find out whether your choice of scale or the ballots picked the winner; sound but not complete, so *decided* is a proof and *undecided* is only about that scale |
 | [What `unsafe` turns off](what_unsafe_turns_off/README.md) | 301 | The five powers it grants and the nothing else it turns off — the borrow checker still runs inside the block; `split_at_mut` as a safe API over a small unsafe core; `unsafe fn` vs `unsafe {}` after edition 2024; and why the audit unit is the module, because a safe line three away is what makes the block sound |
+| [Calling C](calling_c/README.md) | 301 | *"No overhead FFI"* is a claim about the **call** — `extern "C"` is an ordinary call instruction with no marshalling layer. The data is the bill: a `&str` carries a length and a C string carries a terminator, so every string that crosses is allocated and copied, and the conversion can fail. Plus edition 2024's `unsafe extern` and its `safe fn`, and the unbounded lifetime `CStr::from_ptr` hands back |
 | [What a union is](what_a_union_is/README.md) | 301 | Fields on top of each other instead of side by side — why the write is safe and the read is not, why the field type decides whether a bad read is merely wrong or undefined, and why an `enum` is this with the tag already checked |
 | [Interior mutability](interior_mutability/README.md) | 301 | Writing through a `&T` — `Cell` and `RefCell` move the borrow check from compile time to run time, which buys the shapes the static checker cannot prove and costs a panic instead of an error. Stub |
 | [`Send` and `Sync`](send_and_sync/README.md) | 301 | The two methodless traits that decide what may cross a thread boundary, why nobody writes either, and why the error always names a type three layers inside the closure. Stub |
@@ -23,9 +24,8 @@ Each page is still one idea with a program you can compile and run beside it.
 
 ## Planned
 
-Rough order, not a promise. The three that used to sit here — `Send`/`Sync`, `RwLock` and atomics, and interior mutability — are stubs in the table above now, which is the same list with their boundaries written down.
+Rough order, not a promise. The three that used to sit here — `Send`/`Sync`, `RwLock` and atomics, and interior mutability — are stubs in the table above now, which is the same list with their boundaries written down. FFI has since left this list for the table: [Calling C](calling_c/README.md).
 
-- **FFI beyond a union** — `extern "C"`, `#[repr(C)]`, and what a raw pointer across the boundary obliges you to prove
 - **Macros** — `macro_rules!` and the procedural kind, once [what the `!` means](../25_Control_Flow/macros/README.md) has been said at 101
 
 ## Po polsku
