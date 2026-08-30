@@ -68,26 +68,27 @@ The sidebar is sorted **alphabetically**, because that is how you find a section
 | 7 | [Ownership](18_Ownership/README.md) | Who owns the value — moves, borrows, and what a shadow does |
 | 8 | [Strings](14_Strings/README.md) | Text: the owner and the view, and the bytes underneath |
 | 9 | [Numbers and bytes](19_Numbers/README.md) | The unit all of that is counted in, down to the float that cannot hold your value |
-| 10 | [Pattern matching](30_Pattern_Matching/README.md) | A pattern is a shape, not a comparison — one feature wearing six syntaxes |
-| 11 | [Enums](13_Enums/README.md) | The feature `Option` and `Result` were made of all along |
-| 12 | [Traits](12_Traits/README.md) | The other half the language is built from — and how a call reaches one |
-| 13 | [Generics](22_Generics/README.md) | `<T>`: one definition per idea, instead of one per type it is used with |
-| 14 | [Closures](23_Closures/README.md) | A function that carries values with it, and the three traits that say how often you may call it |
-| 15 | [Iterators](24_Iterators/README.md) | The sequence that computes nothing until somebody asks, and the three doors onto a collection |
-| 16 | [Errors](02_Errors/README.md) | What a failure does on its way out of a program |
-| 17 | [Command line](03_Command_Line/README.md) | What the program was handed on the way in |
-| 18 | [Files](04_Files/README.md) | The filesystem — the first thing outside the program that can say no |
-| 19 | [Tooling](05_Tooling/README.md) | `cargo` and the rest of the toolchain, rather than the language |
-| 20 | [Data](06_Data/README.md) | Serialization, and the round trip through JSON |
-| 21 | [Clients](07_Clients/README.md) | The network — the last thing outside the program that can say no |
-| 22 | [Observability](21_Observability/README.md) | What the service says about itself, once somebody else depends on it |
-| 23 | [Interfaces](08_Interfaces/README.md) | Putting a face on it |
-| 24 | [Advanced](09_Advanced/README.md) | What needs the foundations: threads, `unsafe`, FFI |
-| 25 | [Compilers](20_Compilers/README.md) | The layer under all of it, three quarters of which is not Rust |
-| 26 | [Resources](10_Resources/README.md) | Books, essays and exercises outside this library |
-| 27 | [Unix](11_Unix/README.md) | The shell you run the compiler from — two of its three tools are Rust |
-| 28 | [C and C++](31_C_and_Cpp/README.md) | Nine bugs the compiler refuses to build — read it any time after Ownership |
-| 29 | [Debugging](32_Debugging/README.md) | The map to what is left over once the compiler has caught the rest — read it the first time something surprises you |
+| 10 | [Collections](26_Collections/README.md) | The six types a program is made of — and why a function should take `&[T]`, not `&Vec<T>` |
+| 11 | [Pattern matching](30_Pattern_Matching/README.md) | A pattern is a shape, not a comparison — one feature wearing six syntaxes |
+| 12 | [Enums](13_Enums/README.md) | The feature `Option` and `Result` were made of all along |
+| 13 | [Traits](12_Traits/README.md) | The other half the language is built from — and how a call reaches one |
+| 14 | [Generics](22_Generics/README.md) | `<T>`: one definition per idea, instead of one per type it is used with |
+| 15 | [Closures](23_Closures/README.md) | A function that carries values with it, and the three traits that say how often you may call it |
+| 16 | [Iterators](24_Iterators/README.md) | The sequence that computes nothing until somebody asks, and the three doors onto a collection |
+| 17 | [Errors](02_Errors/README.md) | What a failure does on its way out of a program |
+| 18 | [Command line](03_Command_Line/README.md) | What the program was handed on the way in |
+| 19 | [Files](04_Files/README.md) | The filesystem — the first thing outside the program that can say no |
+| 20 | [Tooling](05_Tooling/README.md) | `cargo` and the rest of the toolchain, rather than the language |
+| 21 | [Data](06_Data/README.md) | Serialization, and the round trip through JSON |
+| 22 | [Clients](07_Clients/README.md) | The network — the last thing outside the program that can say no |
+| 23 | [Observability](21_Observability/README.md) | What the service says about itself, once somebody else depends on it |
+| 24 | [Interfaces](08_Interfaces/README.md) | Putting a face on it |
+| 25 | [Advanced](09_Advanced/README.md) | What needs the foundations: threads, `unsafe`, FFI |
+| 26 | [Compilers](20_Compilers/README.md) | The layer under all of it, three quarters of which is not Rust |
+| 27 | [Resources](10_Resources/README.md) | Books, essays and exercises outside this library |
+| 28 | [Unix](11_Unix/README.md) | The shell you run the compiler from — two of its three tools are Rust |
+| 29 | [C and C++](31_C_and_Cpp/README.md) | Nine bugs the compiler refuses to build — read it any time after Ownership |
+| 30 | [Debugging](32_Debugging/README.md) | The map to what is left over once the compiler has caught the rest — read it the first time something surprises you |
 
 Nothing enforces this order and no page depends on it; skipping around is fine. It is here because a sidebar can be sorted one way only, and A–Z answers the more common question.
 
