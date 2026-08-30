@@ -233,6 +233,7 @@ And a collection you collect into is a claim about your element type, checked at
 
 ## See also
 
+- [Collect the iterator into a `Vec`](../collect_into_a_vec/README.md) — the prior question: whether to materialize at all, and what the `Vec` is bought with
 - [`fold` and `reduce`](../fold_and_reduce/README.md) — what to use when the duplicates have to combine rather than overwrite
 - [Iterators are lazy](../iterators_are_lazy/README.md) — `collect` is the consumer that makes the chain run
 - [Implementing `Iterator`](../implementing_iterator/README.md) — `size_hint`, and why `from_iter` takes an `IntoIterator`

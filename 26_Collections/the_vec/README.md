@@ -15,7 +15,7 @@ fn main() {
 }
 ```
 
-`vec![5, 3, 0]` is the same thing in one line, and `(1..=100).collect()` is the same thing when the values come from somewhere.
+`vec![5, 3, 0]` is the same thing in one line, and [`(1..=100).collect()`](../../24_Iterators/collect_into_a_vec/README.md) is the same thing when the values come from somewhere.
 
 ## Three numbers, and none of them is the data
 
@@ -309,6 +309,7 @@ fn main() {
 - [Stack and heap](../../18_Ownership/stack_and_heap/README.md) — what the pointer points at, and what it costs to follow
 - [Ownership and moves](../../18_Ownership/ownership_and_moves/README.md) — why `let v2 = v1;` leaves `v1` unusable
 - [`iter`, `iter_mut`, `into_iter`](../../24_Iterators/iter_iter_mut_into_iter/README.md) — the three doors onto a `Vec`, and which one consumes it
+- [Collect the iterator into a `Vec`](../../24_Iterators/collect_into_a_vec/README.md) — the other way one of these gets built, and the six questions that never needed it
 - [Building a `String`](../../14_Strings/building_a_string/README.md) — the same capacity story, for text
 
 ## Sources
