@@ -100,6 +100,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "the_book",
         "rust_by_example",
         "rustlings",
+        # ...and the fourth: a syllabus rather than a text, listed last
+        # because it is the one you reach for once you want an ORDER.
+        "comprehensive_rust",
     ],
     "13_Enums": [
         "README.md",
@@ -721,6 +724,7 @@ LABELS = {
     "the_book": "The Book",
     "rust_by_example": "Rust by Example",
     "rustlings": "rustlings",
+    "comprehensive_rust": "Comprehensive Rust",
     # 02_Errors
     "unwrap_is_a_todo": "`unwrap` is a TODO",
     "keep_going_or_stop": "Keep going, or stop",

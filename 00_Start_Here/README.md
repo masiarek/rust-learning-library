@@ -16,6 +16,8 @@ If you do nothing else on this page, do this:
 
 Steps 1–3 happen together, not in sequence. Step 4 is the one nobody does and the one that pays most.
 
+**A fourth, if you want the order decided for you.** [Comprehensive Rust](comprehensive_rust/README.md) is Google's four-day class, published as a book — the only resource here written to be *taught*, so every slide carries a duration and a block of speaker notes. Use it as the spine and The Book for the parts it moves past in five minutes; its page here maps every chapter onto this library, and says which two things it has that this library does not.
+
 Before any of that, or instead of it if you are still deciding: [Benefits of Rust](benefits_of_rust/README.md) takes the twenty selling points Google's course opens with and says what the evidence is behind each one — which are compiler refusals, which are run-time behaviours you can watch, and which six are narrower than the one-line version. If you already write C or C++, read it beside [C and C++](../31_C_and_Cpp/README.md), which compiles and runs the nine bugs those refusals are a reply to.
 
 ## Why *these* three
@@ -27,6 +29,7 @@ They are not three ranked options where you pick the best. They are three differ
 | [**The Book**](the_book/README.md) | the *model* — why ownership exists, what the compiler is protecting | making you type; you can read it all and write nothing | rustlings |
 | [**Rust by Example**](rust_by_example/README.md) | the *syntax*, runnable and editable in the page | the model — it shows what, rarely why | The Book |
 | [**rustlings**](rustlings/README.md) | the *reps* — the compiler as teacher, in small doses | breadth and depth; it is drills, not understanding | The Book |
+| [**Comprehensive Rust**](comprehensive_rust/README.md) | the *order* — a four-day syllabus with a duration and an instructor's notes on every slide | depth without the instructor; a slide is the visible half of a lesson | The Book |
 
 Reading only The Book produces someone who can explain the borrow checker and freezes at an empty `main`. Doing only rustlings produces someone who can fix other people's programs. Only Rust by Example produces someone who knows the syntax for a thing without knowing when to want it.
 
