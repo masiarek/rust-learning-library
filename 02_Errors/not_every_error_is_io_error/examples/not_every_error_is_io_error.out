@@ -1,0 +1,53 @@
+1. One function, two error types
+   read_sheet -> io::Error       parse -> ParseIntError
+   Declaring the function `-> Result<u32, ParseIntError>` and using `?`
+   on the read is E0277: "`?` couldn't convert the error", because the
+   conversion `?` performs is `From`, and nobody wrote that impl.
+
+2. Answer 1 — erase it: Box<dyn Error>
+   ballots.txt  Ok(5)
+   torn.txt     Err("invalid digit found in string")
+   gone.txt     Err("no such file or directory")
+   Compiles the moment you write it, and every error converts. What
+   the caller can now do is print. That is the whole list.
+
+3. ...and the escape hatch that proves the cost
+   downcast_ref::<io::Error>()     = Some(NotFound)
+   downcast_ref::<ParseIntError>() = None
+   It works, and notice what it is: a run-time type test, one per
+   candidate, that the compiler cannot check you finished. Add a new
+   failure upstream and every caller silently falls through.
+
+4. Answer 2 — name it: an enum with one variant per decision
+   ballots.txt  Ok(5)
+   torn.txt     the count is not a number <- invalid digit found in string
+   gone.txt     could not read the tally sheet <- no such file or directory
+   Same three inputs. Now the failures have names, and each one still
+   carries the error it came from, so the chain survives.
+
+5. Which is the point: the caller can DECIDE
+   ballots.txt  counted 5
+   torn.txt     one bad count — skipping the row
+   gone.txt     no sheet yet — starting a fresh tally at 0
+   Four arms, four different recoveries — and the match is exhaustive,
+   so adding a variant makes the compiler visit every caller.
+
+6. What it cost to write
+   the enum                  5 lines   you write this either way
+   impl Display              9 lines   \
+   impl Error (source)       9 lines    | derived from attributes
+   impl From<io::Error>      5 lines    | by `thiserror`
+   impl From<ParseIntError>  5 lines   /
+   -------------------------------
+   33 lines, 28 of them mechanical. That is what the crate removes —
+   and it does not change the model above by one byte.
+
+7. So which one
+   A library: name them. Its callers have decisions to make, and the
+   enum IS the API — mark it #[non_exhaustive] or adding a variant is
+   a breaking change.
+   A binary: erase them. The caller is a person, the decision is what
+   to print, and Box<dyn Error> (or anyhow) says exactly that.
+   The common shape is both: a library half that names, a main that
+   erases. Picking by habit is how a library ends up unable to tell
+   its callers 'file missing' from 'file malformed'.

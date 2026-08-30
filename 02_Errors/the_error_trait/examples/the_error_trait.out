@@ -1,0 +1,49 @@
+1. The trait, in full
+   pub trait Error: Debug + Display {
+       fn source(&self) -> Option<&(dyn Error + 'static)> { None }
+   }
+   That is all of the stable surface. Two supertraits you must satisfy,
+   one method with a default. `impl Error for T {}` is a real impl.
+
+2. The two supertraits are two audiences
+   Display  {}    quorum not met: 41 ballots cast, 60 needed
+   Debug    {:?}  QuorumNotMet { cast: 41, needed: 60 }
+   Display is the sentence a person reads. Debug is what `unwrap`
+   prints, and what the runtime prints for an `Err` out of `main`.
+   Writing only one of them is not a shortcut — it is E0277.
+
+3. `source()` is what makes an error chain
+   with source():    could not read the tally sheet ballots.txt
+     caused by: no such file or directory
+   without source(): could not read the tally sheet ballots.txt
+   Same struct, same fields, same Display. The second one is holding
+   the cause and not handing it on, so the reader is told the WHAT
+   and never the WHY. Overriding source() is four lines.
+
+4. Which is why Display names one layer only
+   each layer's Display: could not read the tally sheet ballots.txt
+   the cause's Display:  no such file or directory
+   If the outer Display had written "could not read ballots.txt: no
+   such file or directory", the chain would print that sentence and
+   then repeat its second half. Say what only THIS layer knew.
+
+5. The house style for a Display, and why it is not taste
+   lowercase, no trailing period, no "error:" prefix:
+     good  "quorum not met: 41 ballots cast, 60 needed"
+     bad   "Error: Quorum not met."
+   The bad one composes into: "error: Error: Quorum not met.: ..."
+   std follows the same rule: no such file or directory
+
+6. What implementing Error buys you
+   Box<dyn Error> from any Error, via a blanket From impl:
+     could not read the tally sheet ballots.txt
+   so `?` accepts your type in any fn returning Box<dyn Error>.
+   and downcast_ref gets the type back: Some("ballots.txt")
+   downcast to the wrong type: false
+
+7. What it does NOT buy you
+   No automatic chain printing: `{}` on an error prints ONE layer.
+   The loop in `report()` above is what every program writes, because
+   Error::sources() is still unstable (error_iter, issue 58520).
+   No backtrace on stable, no automatic context, and no `From` impls
+   — those are the three gaps thiserror and anyhow exist to fill.
