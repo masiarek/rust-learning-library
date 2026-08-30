@@ -28,9 +28,9 @@ Write `split(':')` with a `char` rather than `split(":")` with a one-character s
 | You wrote | Because |
 |---|---|
 | `parts.len()` | an iterator has no length until it has been walked |
-| `parts[1]`, `parts.last()` | random access; an iterator only goes forward, one step at a time |
-| `parts.sort_unstable()` | sorting cannot begin until the last item has arrived |
-| `parts.join(", ")` | same reason — it is a **slice** method, not an adapter |
+| `parts[1]`, [`parts.last()` ↗](https://doc.rust-lang.org/std/primitive.slice.html#method.last) | random access; an iterator only goes forward, one step at a time |
+| [`parts.sort_unstable()` ↗](https://doc.rust-lang.org/std/primitive.slice.html#method.sort_unstable) | sorting cannot begin until the last item has arrived |
+| [`parts.join(", ")` ↗](https://doc.rust-lang.org/std/primitive.slice.html#method.join) | same reason — it is a **slice** method, not an adapter |
 | two passes over the pieces | an iterator is spent once; the `Vec` can be read as often as you like |
 | `struct Ballot { names: Vec<String> }` | a field has to hold a value, and a half-run pipeline is not one |
 

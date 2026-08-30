@@ -6,14 +6,14 @@
 
 | iterator | item | on `"bête noir  d'Arrrgh "` |
 |---|---|---|
-| `.bytes()` | `u8` | 21 items |
-| `.chars()` | `char` | 20 items |
-| `.char_indices()` | `(usize, char)` | 20 items, offsets 0, 1, 3, 4… |
-| `.split(' ')` | `&str` | 5 — `["bête", "noir", "", "d'Arrrgh", ""]` |
-| `.split_terminator(' ')` | `&str` | 4 — the trailing empty is dropped |
-| `.split_whitespace()` | `&str` | 3 — runs collapse, ends trimmed |
-| `.splitn(3, ' ')` | `&str` | 3 — the remainder stays whole |
-| `.matches("rr")` | `&str` | 1 |
+| [`.bytes()` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.bytes) | `u8` | 21 items |
+| [`.chars()` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.chars) | `char` | 20 items |
+| [`.char_indices()` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.char_indices) | `(usize, char)` | 20 items, offsets 0, 1, 3, 4… |
+| [`.split(' ')` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split) | `&str` | 5 — `["bête", "noir", "", "d'Arrrgh", ""]` |
+| [`.split_terminator(' ')` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split_terminator) | `&str` | 4 — the trailing empty is dropped |
+| [`.split_whitespace()` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split_whitespace) | `&str` | 3 — runs collapse, ends trimmed |
+| [`.splitn(3, ' ')` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.splitn) | `&str` | 3 — the remainder stays whole |
+| [`.matches("rr")` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.matches) | `&str` | 1 |
 | `.split("rr")` | `&str` | 2 |
 
 ---
