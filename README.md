@@ -85,6 +85,7 @@ The sidebar is sorted **alphabetically**, because that is how you find a section
 | 26 | [Resources](10_Resources/README.md) | Books, essays and exercises outside this library |
 | 27 | [Unix](11_Unix/README.md) | The shell you run the compiler from — two of its three tools are Rust |
 | 28 | [C and C++](31_C_and_Cpp/README.md) | Nine bugs the compiler refuses to build — read it any time after Ownership |
+| 29 | [Debugging](32_Debugging/README.md) | The map to what is left over once the compiler has caught the rest — read it the first time something surprises you |
 
 Nothing enforces this order and no page depends on it; skipping around is fine. It is here because a sidebar can be sorted one way only, and A–Z answers the more common question.
 
