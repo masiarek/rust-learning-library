@@ -10,6 +10,7 @@ Two things follow, and the section is mostly about the second. An enum lets you 
 |---|---|---|
 | [What an enum is](what_an_enum_is/README.md) | 101 → 201 | The declaration, the four shapes of variant, behaviour in an `impl` block, and the `E0004` you get for free when a variant is added — plus why a fieldless enum casts to an integer and a payload-carrying one does not |
 | [Variants that carry data](variants_that_carry_data/README.md) | 201 | Product versus sum, counted rather than asserted; what the payload costs, measured; and the niche that makes `Option<Box<T>>` the same eight bytes as the pointer |
+| [An enum instead of a bool](an_enum_instead_of_a_bool/README.md) | 201 | Two `bool` parameters accept the backwards call and two enums do not — plus the newtype that also refuses it without naming either state, and the two clippy lints that stay quiet under four bools |
 | [A typo becomes a binding](a_typo_becomes_a_binding/README.md) | 201 | Under `use Enum::*`, a mistyped arm is a catch-all variable, not an error — zero warnings, and the two lints that look like they should catch it do not |
 | [An enum as a state machine](an_enum_as_a_state_machine/README.md) | 201 | `match (state, event)`: the compiler enumerates the whole transition table, names the cells you left out, and stops the moment you write `_` |
 
