@@ -96,6 +96,7 @@ NAV_ORDER: dict[str, list[str]] = {
     ],
     "00_Start_Here": [
         "README.md",
+        "benefits_of_rust",
         "the_book",
         "rust_by_example",
         "rustlings",

@@ -16,6 +16,8 @@ If you do nothing else on this page, do this:
 
 Steps 1–3 happen together, not in sequence. Step 4 is the one nobody does and the one that pays most.
 
+Before any of that, or instead of it if you are still deciding: [Benefits of Rust](benefits_of_rust/README.md) takes the twenty selling points Google's course opens with and says what the evidence is behind each one — which are compiler refusals, which are run-time behaviours you can watch, and which six are narrower than the one-line version.
+
 ## Why *these* three
 
 They are not three ranked options where you pick the best. They are three different **kinds** of resource, and the reason to use all three is that each one's weakness is another one's whole purpose:
@@ -58,5 +60,6 @@ Use it as the third voice. When The Book's explanation has not landed and rustli
 ## See also
 
 - [The Book](the_book/README.md) · [Rust by Example](rust_by_example/README.md) · [rustlings](rustlings/README.md)
+- [Benefits of Rust](benefits_of_rust/README.md) — the twenty claims, sorted by the kind of evidence behind each
 - [Running a scratch program](../15_First_Programs/rustc_without_cargo/README.md) — this library's first lesson, and the one to read before any of the above if `rustc` itself is new
 - [Resources](../10_Resources/README.md) — the full shelf, for after
