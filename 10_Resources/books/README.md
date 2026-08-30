@@ -61,6 +61,8 @@ The Book is argued for properly in [**Start here**](../../00_Start_Here/the_book
 
 **[Rust By Practice ↗](https://practice.rs/)** — **Read it for** drilling a specific chapter. Exercises with in-browser answers, organised by topic rather than as a course. Thinner than the two above; useful when one idea has not stuck.
 
+**[Tour of Rust ↗](https://tourofrust.com/TOC_en.html)** — **Read it for** a first look before you install anything. Richard Anaya's ten chapters, Hello World to modules, with the explanation on one side of the page and an editable, runnable pane on the other — so every claim is one click away from being tested, and nothing has to be installed to try it. It is a *tour*: it shows a feature and moves on, with no exercises and little argument about why, which is what makes it the thing to do **before** The Book rather than instead of it. Translated into seventeen languages besides English, Polish among them, which nothing else on this page is.
+
 **[Easy Rust ↗](https://dhghomon.github.io/easy_rust/)** — **Read it for** simple English. Dave MacLeod wrote it in deliberately restricted vocabulary for readers whose first language is not English, and there is nothing else like it. Last substantially updated in 2021, so some idiom has moved; his [Month of Lunches](#the-friendly-paid-on-ramps) is the maintained descendant.
 
 **[Rust 101 ↗](https://rust-lang.guide/)** — **Unvetted.** A guided path through the official material rather than new prose. Harmless; adds little if you already have The Book open.
@@ -151,6 +153,7 @@ When this page runs out:
 - **[ctjhoa/rust-learning ↗](https://github.com/ctjhoa/rust-learning)** — a very large curated list of articles, books and talks.
 - **[Awesome Rust ↗](https://github.com/rust-unofficial/awesome-rust)** — crates and applications, not learning material. For *"is there a crate for this"*.
 - **[rust-edu.org ↗](https://rust-edu.org/)** — teaching materials and the academic side.
+- **[ImplFerris/LearnRust ↗](https://github.com/ImplFerris/LearnRust)** — a beginner-to-advanced roadmap of links, and the only list here that takes *video* seriously: YouTube courses and project-based series sit beside the books. Curated rather than vetted — every entry carries a one-line description and no verdict, which is the difference between it and this page.
 
 ---
 

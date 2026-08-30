@@ -24,7 +24,7 @@
 - [Rust traits: a deep dive ↗](https://blog.logrocket.com/rust-traits-a-deep-dive/) — long-form tour of the whole surface.
 - [What are traits in Rust? ↗](https://www.educative.io/answers/what-are-traits-in-rust) — a short answer page, useful as a refresher.
 - [A half-hour to learn Rust ↗](https://fasterthanli.me/articles/a-half-hour-to-learn-rust) — not a traits article; the whirlwind tour that puts traits in context with everything around them.
-- [Easy Rust — ch. 34, traits ↗](https://fongyoong.github.io/easy_rust/Chapter_34.html) — the written companion to the Easy Rust videos below.
+- [Easy Rust — ch. 34, traits ↗](https://dhghomon.github.io/easy_rust/Chapter_34.html) — the written companion to the Easy Rust videos below.
 - [When Rust hurts ↗](https://mmapped.blog/posts/15-when-rust-hurts.html) — the critical piece: where the trait system makes a design harder rather than easier. Worth reading precisely because it is not advocacy.
 - [Felix Knorr — traits (2023) ↗](https://felix-knorr.net/posts/2023-04-17-traits.html)
 - [My Rust journey: traits ↗](https://dev.to/henrybarreto/my-rust-journey-traits-4lpc) — one person's write-up.

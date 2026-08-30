@@ -6,6 +6,20 @@ The first five pages are not Rust *features* at all. They are the loop you will 
 
 The language itself begins at [variables](variables/README.md), and the three pages there answer one question between them: what is on each side of a `let`, and who chose the type in the middle.
 
+## Never written any Rust at all?
+
+These pages start at the compiler rather than at the language, and they assume you have at least *seen* Rust — so if you have not, an hour in one of the three below first will make everything after it read much less tersely. They are three different shapes and any one of them is enough; none of them is a course you have to finish.
+
+| | What it is | Why this one |
+|---|---|---|
+| [Tour of Rust ↗](https://tourofrust.com/TOC_en.html) | ten short chapters, explanation on one side of the page and an editable, runnable pane on the other | nothing to install — you change the code in the page and watch what breaks |
+| [Rust in Easy English ↗](https://dhghomon.github.io/easy_rust/Chapter_3.html) | sixty-odd concepts in deliberately restricted English, one example each | written for readers whose first language is not English, and the shortest route to *recognising* the syntax below |
+| [Rust for the Polyglot Programmer ↗](https://www.chiark.greenend.org.uk/~ianmdlvl/rust-polyglot/index.html) | the delta, for someone who already knows three languages | spends no pages on what programming is and all of them on what is different here |
+
+Then the three that stay open in a tab forever — [The Book](../00_Start_Here/the_book/README.md), [Rust by Example](../00_Start_Here/rust_by_example/README.md) and [the standard library ↗](https://doc.rust-lang.org/std/). [Start here](../00_Start_Here/README.md) is the argument for the order to read them in, [the shelf](../10_Resources/books/README.md) carries a verdict on each, and [ImplFerris's roadmap ↗](https://github.com/ImplFerris/LearnRust) is there for anyone who would rather browse a list than be told.
+
+## The lessons
+
 | Lesson | Level | What it teaches |
 |---|---|---|
 | [Running a scratch program](rustc_without_cargo/README.md) | 101 | `rustc` alone, `cargo new`, and `src/bin/` — rustc's edition-2015 default, and what Cargo was quietly doing for you |
