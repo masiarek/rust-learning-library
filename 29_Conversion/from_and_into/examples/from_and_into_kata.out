@@ -1,0 +1,37 @@
+1. Both directions, written once each
+   Score::from(4u8)      = Score(4)
+   u8 from that Score    = 4
+   String from it        = "4/5"
+
+2. What the orphan rule actually says
+   impl From<u8> for Score     OK   — Score is local
+   impl From<Score> for u8     OK   — Score is local
+   impl From<Score> for String OK   — Score is local
+   impl From<Vec<u8>> for String    E0117: "only traits defined in
+   the current crate can be implemented for types defined outside
+   of the crate". Neither Vec nor String is ours, so this impl
+   could be written twice, in two crates, with different answers.
+   The way round it is a newtype: wrap one side in a local struct.
+
+3. `impl Into<T>` in an argument position
+   record(("Ada", 4))                 -> Ada scored 4/5
+   record(Ballot { .. })              -> Ben scored 3/5
+   The second call works because of the reflexive impl — From<T> for
+   T exists for every T — so `Into<Ballot>` accepts a Ballot and
+   converts nothing. That is why this signature is a superset of
+   taking `Ballot` directly, and costs the caller nothing.
+
+4. Where the bound goes, and what it costs
+   `fn record<B: Into<Ballot>>(b: B)` is monomorphised once per
+   argument type, so the convenience is paid for in code size, not
+   at run time. Taking `Ballot` and making the caller write
+   `.into()` is one generic parameter cheaper and one keystroke
+   more — which is the trade, and it is why std's own APIs use
+   `impl Into<String>` sparingly.
+
+5. The conversion that should not be a From at all
+   Score::from(200u8) = Score(5)   <- clamped, silently
+   `From` promises success, so this impl had to choose between
+   clamping and panicking, and it chose the one that loses data
+   quietly. A score arriving as 200 is a bug in the caller, and the
+   right trait for reporting it is TryFrom.

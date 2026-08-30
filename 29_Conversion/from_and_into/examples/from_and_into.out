@@ -1,0 +1,37 @@
+1. One impl, two call syntaxes
+   Score::from(4u8) = Score(4)
+   let b: Score = 4u8.into() = Score(4)   same value: true
+   `Into` is never implemented by hand. std has a blanket impl —
+   `impl<T, U: From<T>> Into<U> for T` — so writing From gives you
+   both, and writing Into gives you one.
+
+2. Which one to write in a signature
+   takes_score(Score::from(3)) = 3
+   takes_anything(3u8)         = 3
+   takes_anything(Score(3))    = 3
+   `impl Into<T>` in an argument accepts the converted type too,
+   because From<T> for T is implemented for every T. That is the
+   reflexive impl, and it is why `.into()` sometimes converts nothing.
+
+3. The conversion clamps, which is a decision this impl made
+   Score::from(9u8) = Score(5)   <- 9 became 5, silently
+   `From` must not fail: the trait has no error type, so any input
+   the conversion cannot honour has to be forced into range or
+   panicked on. When neither is acceptable, the trait you want is
+   TryFrom.
+
+4. Where From earns its place: the `?` operator
+   read_cell("4") = Ok(Score(4))
+   read_cell("x") = Err(not a number: "x")
+   read_cell("9") = Err(9 is above the 0-5 range)
+   Two helper functions, two unrelated error types, and `?` converted
+   each one on the way out — because `?` calls From::from on the error
+   whenever the types differ. Delete the two impls and both `?` lines
+   stop compiling with E0277, whose first line is exactly the sentence
+   you want: "`?` couldn't convert the error to `TallyError`", followed
+   by "the trait `From<BadNumber>` is not implemented for `TallyError`".
+
+5. The conversions you already use
+   String::from("Ada") = "Ada", "Ada".into() = "Ada"
+   u64::from(42u32) = 42 — every widening integer conversion is a From
+   impl, which is why `as` is never needed for one that cannot lose data.

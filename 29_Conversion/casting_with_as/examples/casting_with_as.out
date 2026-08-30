@@ -1,0 +1,51 @@
+1. Narrowing keeps the low bits and drops the rest
+   300u32 as u8   = 44   (300 = 0b1_0010_1100; the low 8 bits are 0b0010_1100)
+   256u32 as u8   = 0
+   1000u32 as u8  = 232
+   No panic, no warning, no Result. In a debug build too: this is
+   not an arithmetic overflow, it is a defined truncation.
+
+2. Signedness is a reinterpretation of the same bits
+   -1i32 as u32   = 4294967295
+   -1i8 as u8     = 255
+   200u8 as i8    = -56
+   255u8 as i8    = -1
+   Two's complement, unchanged, read the other way round. A length
+   that went negative and was cast to usize becomes about 18
+   quintillion, which is how a bounds check gets passed by accident.
+
+3. Float to integer saturates, and NaN becomes zero
+   3.9f64 as i32     = 3   (truncates toward zero, never rounds)
+   -3.9f64 as i32    = -3
+   1e10f64 as i32    = 2147483647   <- saturates at i32::MAX
+   -1e10f64 as i32   = -2147483648   <- and at i32::MIN
+   f64::NAN as i32   = 0
+   Saturation has been the defined behaviour since Rust 1.45; before
+   that this was undefined and produced whatever LLVM felt like.
+
+4. Integer to float loses precision without saying so
+   16_777_217i64 as f32 = 16777216
+   back again:            16777216
+   f32 has 24 bits of mantissa, so 2^24 + 1 is not representable and
+   the nearest value is 2^24. The cast is silent in both directions.
+   i64::MAX as f64 as i64 = 9223372036854775807
+   i64::MAX               = 9223372036854775807
+
+5. The non-numeric casts, which are the safe ones
+   'A' as u32   = 65
+   '€' as u32   = 8364
+   65u8 as char = A   <- only u8 may be cast to char, and always fits
+   true as i32  = 1, false as i32 = 0
+   A `char` is a Unicode scalar value, so char -> u32 never loses
+   anything. The reverse needs char::from_u32, which returns Option:
+   char::from_u32(0xD800) = None   <- a surrogate is not a scalar value
+
+6. What to write instead
+   widening, cannot fail   u64::from(n)         From
+   narrowing, might fail   u8::try_from(n)?     TryFrom
+   truncation is intended  n as u8              as, with a comment
+   float to int, rounded   n.round() as i64     say which rounding
+   The rule of thumb: if you cannot say out loud what `as` does to
+   the out-of-range case, you wanted try_from.
+   u8::try_from(200i32)  = Ok(200)
+   u8::try_from(300i32)  = Err(TryFromIntError(PosOverflow))

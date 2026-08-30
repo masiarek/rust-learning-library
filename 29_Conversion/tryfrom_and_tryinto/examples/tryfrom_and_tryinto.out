@@ -1,0 +1,35 @@
+1. One impl, two call syntaxes, one of them fallible
+   Score::try_from(4) = Ok(Score(4))
+   Score::try_from(9) = Err(ScoreOutOfRange(9))
+   4u8.try_into()     = Ok(Score(4))
+   `TryInto` comes free from `TryFrom`, exactly as `Into` comes free
+   from `From` — same blanket impl, one Result deeper.
+
+2. The difference from From, in one line
+   From has no error type, so a conversion that cannot honour its
+   input must clamp, wrap or panic. TryFrom has `type Error`, so it
+   can hand the bad value back and let the caller decide.
+
+3. std's own, which you will meet first
+   u8::try_from(300i32)  = Err(TryFromIntError(PosOverflow))
+   u8::try_from(200i32)  = Ok(200)
+   u8::try_from(-1i32)   = Err(TryFromIntError(NegOverflow))
+   i32::try_from(9u64)   = Ok(9)
+   The error is `TryFromIntError`, and it carries nothing — the
+   failure has exactly one cause, so there is nothing to report.
+   Compare that with ScoreOutOfRange above, which keeps the value.
+
+4. Collecting into a Result stops at the first refusal
+   read_ballot([5, 3, 0])    = Ok([Score(5), Score(3), Score(0)])
+   read_ballot([5, 9, 0])    = Err(ScoreOutOfRange(9))
+   `Vec<Result<T, E>>` collected into `Result<Vec<T>, E>` is one of
+   the most useful shapes in std: it short-circuits, so the third
+   cell is never converted, and the caller gets one error rather
+   than a vector of them.
+
+5. The trap: `as` is the same conversion with the check deleted
+   u8::try_from(300) = Err(TryFromIntError(PosOverflow))
+   300 as u8         = 44
+   Both are "convert i32 to u8". One reports that it could not; the
+   other returns 44 and says nothing. Reach for `as` when truncation
+   is what you meant, and for try_from when it is not.

@@ -1,0 +1,35 @@
+1. The good line
+   parse_line("5,3,0")    = Ok([Score(5), Score(3), Score(0)])
+   `.parse()` reached FromStr, FromStr reached TryFrom, and collect
+   turned Vec<Result<_>> into Result<Vec<_>>.
+
+2. The three ways one line can be wrong
+   5,x,0        -> Err("x" is not a number)
+   5,9,0        -> Err(9 is outside 0-5)
+   5, 3 ,0      -> Ok([5, 3, 0])
+   The third is not an error: FromStr trims, so whitespace is fine.
+   Deciding that is part of writing the impl, and it is written down
+   in one place instead of at every call site.
+
+3. The same lines through `as`
+   5,x,0        -> [5, 0, 0]
+   5,9,0        -> [5, 9, 0]
+   Both produce a full, plausible, wrong ballot. `x` became a zero
+   score — indistinguishable from a real zero — and 9 became 9,
+   which is not a legal score at all: the `as u8` cast let it past
+   the type that exists to prevent exactly that.
+
+4. Two traits, and which to implement
+   TryFrom<u32> for Score  -> Score::try_from(4u32), 4u32.try_into()
+   FromStr     for Score   -> "4".parse::<Score>()
+   Implementing FromStr also gives you `.parse()` inside iterator
+   chains, as `map(str::parse)` above — which is why `TryFrom<&str>`
+   is the wrong choice for a type parsed out of text.
+
+5. The error type is the deliverable
+   "9".parse::<Score>() error = 9 is outside 0-5
+   debug form: OutOfRange(9)
+   ScoreError keeps the offending value, so the message can name it.
+   std's TryFromIntError does not, because there is only ever one
+   thing to say. Decide which of those your caller needs before you
+   write `type Error = String`.

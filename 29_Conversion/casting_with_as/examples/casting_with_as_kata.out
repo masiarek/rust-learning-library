@@ -1,0 +1,51 @@
+1. Turnout, computed four ways, and only two of them right
+   voted = 4, eligible = 6
+   voted / eligible * 100                = 0
+   voted * 100 / eligible                = 66
+   (voted as f64 / eligible as f64) * 100 = 66.7
+   (voted / eligible) as f64 * 100        = 0.0
+   The first and last are the same bug: integer division happened
+   BEFORE the widening, so 4/6 was 0 and the cast preserved it
+   perfectly. `as` cannot repair a value that was already lost.
+   Note the third line uses f64::from, not `as` — for a widening
+   that cannot fail there is a From impl, and using it means the
+   compiler rejects the day someone changes u32 to u64.
+
+2. The index that went negative
+   position = -1, position as usize = 18446744073709551615
+   scores.get(that) = None   <- .get still refuses
+   The guard that lets it through is the one written in the SIGNED
+   world and cast afterwards:
+     if position < scores.len() as i32 { scores[position as usize] }
+   -1 < 3 is true, so the guard passes, and the index is then the
+   20-digit number above.
+   running exactly that: panicked
+   Two fixes. Compare in the unsigned world — usize::try_from(position)
+   = Err(TryFromIntError(NegOverflow)) — or keep the index a usize from the start
+   and let the type make a negative one unrepresentable.
+
+3. The count that stopped counting
+   250u8, three saturating_adds of 5 -> 255   (u8::MAX = 255)
+   250u8.wrapping_add(10)            -> 4
+   250u8.checked_add(10)             -> None
+   `250 + 10` on a u8 PANICS in a debug build and wraps in release,
+   which is the one case where debug and release disagree about the
+   answer. The three named methods each pick one behaviour and say
+   so, and one of them is the only one that lets the caller decide.
+
+4. The money that did not add up
+   in cents (i64):   600 -> 6.00
+   0.1 + 0.2 in f64: 0.30000000000000004
+   0.1 + 0.2 == 0.3: false
+   Not a casting bug, but the reason the first line exists: money
+   is counted in the smallest unit as an integer, and converted to
+   a decimal string only for display.
+
+5. The rule, as a table you can apply without thinking
+   u32 -> u64     f64::from / u64::from    cannot fail, so From
+   i64 -> u8      u8::try_from(n)?         can fail, so TryFrom
+   f64 -> i64     n.round() as i64         say which rounding first
+   u64 -> f64     n as f64                 lossy above 2^53, and
+                                           there is no From for it
+   The last row is the honest exception: some conversions are lossy
+   and unavoidable, and `as` is what you have. Write the comment.
