@@ -250,3 +250,15 @@ rustc --edition 2024 18_Ownership/clone_on_write/examples/clone_on_write.rs -o /
 - [The anatomy of a `String`](../../14_Strings/anatomy_of_a_string/README.md) — pointer, length, capacity: the 24 bytes the table above compares against
 - [Six kinds of string](../../14_Strings/six_kinds_of_string/README.md) — `Cow<str>` in its place among the owned/borrowed pairs
 - [`Cow` ↗](https://doc.rust-lang.org/std/borrow/enum.Cow.html) · [`ToOwned` ↗](https://doc.rust-lang.org/std/borrow/trait.ToOwned.html)
+
+## Po polsku
+
+`Cow` to skrót od *clone on write*, po polsku „kopiowanie przy zapisie”. Nazwa jest myląca o tyle, że sugeruje jakiś magiczny mechanizm — a `Cow` to zwykłe wyliczenie (*enum*) z dwoma wariantami: `Borrowed` (pożyczone) i `Owned` (posiadane na własność).
+
+Po co? Żeby jedna funkcja mogła zwrócić albo pożyczone dane, albo nowe, i **nie musiała decydować z góry**. Klasyczny przykład to funkcja „usuń białe znaki z końca”: jeśli nie ma czego usuwać, oddaj wycinek wejścia bez kopiowania; jeśli jest, zbuduj nowy `String`. Bez `Cow` trzeba wybrać jedno albo drugie — albo zawsze kopiować (marnotrawstwo), albo zawsze pożyczać (nie da się, bo czasem trzeba coś zmienić).
+
+Moment, od którego metoda bierze nazwę, to `to_mut()`: dopiero **wtedy** wariant `Borrowed` zamienia się w `Owned` i faktycznie następuje kopiowanie. Sam znacznik wariantu jest darmowy — nie powiększa struktury ponad to, co i tak zajmowałaby.
+
+W polskiej literaturze „copy on write” częściej spotyka się w kontekście systemów operacyjnych (`fork()` i strony pamięci) niż typów Rustowych — to ta sama idea, tylko na innym poziomie.
+
+**Szukaj po polsku:** kopiowanie przy zapisie · `Cow` Rust · wyliczenia z danymi · `rust Cow to_mut`

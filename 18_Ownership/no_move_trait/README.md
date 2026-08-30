@@ -155,3 +155,15 @@ rustc --edition 2024 18_Ownership/no_move_trait/examples/no_move_trait.rs -o /tm
 - [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) — the opt-out in full, and why a struct is never `Copy` by accident
 - [`String` vs `&str`](../../14_Strings/string_vs_str/README.md) — the other half of the same confusion: `let b = a;` duplicates a `&str` because `&T` is `Copy`, not because a literal "lives on the stack"
 - [`Copy` ↗](https://doc.rust-lang.org/std/marker/trait.Copy.html) and [E0382 ↗](https://doc.rust-lang.org/error_codes/E0382.html) — the trait, and the error that names its absence
+
+## Po polsku
+
+Częste pytanie kogoś, kto przyszedł z C++: „gdzie jest cecha (*trait*) `Move`?”. Nie ma jej i nie będzie. **Przenoszenie (*move*) jest zachowaniem domyślnym każdego typu w Ruscie** — nie ma czego implementować, żeby typ dało się przenieść.
+
+To, co istnieje, to rezygnacja z przenoszenia: cecha `Copy`. Typ, który implementuje `Copy`, przy przypisaniu jest kopiowany bit po bicie zamiast przenoszony. Dlatego komunikat kompilatora opisuje przeniesienie jako **brak**: *„does not implement the `Copy` trait”*. Warto się z tym oswoić, bo to typowy sposób, w jaki `rustc` mówi o rzeczach domyślnych — nazywa nie to, co się stało, tylko czego zabrakło, żeby stało się coś innego.
+
+Uwaga na pułapkę językową: słowo kluczowe `move` (jak w `move || { … }` przy domknięciach i wątkach) to **coś zupełnie innego** niż przeniesienie własności jako mechanizm. Słowo kluczowe każe domknięciu przejąć przechwycone zmienne na własność zamiast je pożyczyć. Po polsku obie rzeczy nazywa się „przeniesieniem”, więc w zdaniu trzeba dopowiedzieć, o które chodzi.
+
+Nie da się też zaimplementować `Copy` dla dowolnego typu — typ, który posiada zasób (`String`, `Vec`, cokolwiek z `Drop`), tego nie dostanie, i to nie jest ograniczenie do obejścia, tylko cała gwarancja.
+
+**Szukaj po polsku:** przenoszenie własności Rust · cecha Copy · `rust move semantics` · `rust Copy vs Clone` · `E0382`

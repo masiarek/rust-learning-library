@@ -301,3 +301,15 @@ rustc --edition 2024 18_Ownership/borrowing/examples/borrowing.rs -o /tmp/br && 
 - [`while let`](../../17_Option_and_Result/while_let/README.md) — a loop that has to look before it consumes, which turns out to be a borrow question
 - [`Option` is a one-item collection](../../17_Option_and_Result/option_as_collection/README.md) — `take()`, the standard way to get a value *out* of something you only borrowed
 - [The Rust Book, ch. 4.2 — References and Borrowing ↗](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html)
+
+## Po polsku
+
+Pożyczanie (*borrowing*) to sposób na skorzystanie z danych bez przejmowania ich na własność. Tour of Rust tłumaczy to jako „Pożyczanie Zasobu Przy Pomocy Referencji” i to dobra intuicja: referencja `&T` jest jak wypożyczenie książki z biblioteki — możesz czytać, ale właściciel się nie zmienia i książkę trzeba oddać, zanim biblioteka ją zutylizuje.
+
+Reguła jest jedna i zawsze warto ją cytować w tej formie: **wielu czytających albo jeden piszący, nigdy jedno i drugie naraz.** `&T` to referencja współdzielona, `&mut T` to referencja mutowalna (wyłączna). Uwaga na częsty błąd tłumaczenia: `&T` bywa nazywane „referencją niemutowalną”, co jest mylące — `&` znaczy **współdzielona**, a nie „niezmienna”. Przez `&Cell<T>` czy `&Mutex<T>` da się pisać jak najbardziej.
+
+Najtrudniejsza część nie jest jednak w regule, tylko w pytaniu **kiedy pożyczenie się kończy**. Od czasu NLL (*non-lexical lifetimes*) pożyczenie kończy się w miejscu **ostatniego użycia** referencji, a nie na zamykającym nawiasie klamrowym. To dlatego kod, który „powinien” się nie kompilować według starszych polskich poradników, kompiluje się bez problemu — sporo materiałów po polsku opisuje jeszcze stan sprzed 2018 roku.
+
+Zwisająca referencja (*dangling reference*) nie jest w bezpiecznym Ruscie czymś, co można popełnić — kompilator odrzuca taki program, zamiast pozwolić mu paść w czasie działania. To jest właśnie ta gwarancja, za którą płaci się nauką kontrolera pożyczeń.
+
+**Szukaj po polsku:** pożyczanie w Ruscie · referencje mutowalne · kontroler pożyczeń · `rust borrow checker` · `rust NLL non-lexical lifetimes`

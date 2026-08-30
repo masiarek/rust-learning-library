@@ -36,3 +36,32 @@ The last three pages are the ways out of a copy the one-owner rule would otherwi
 - [Interior mutability](../09_Advanced/interior_mutability/README.md) — the one way to write through a `&T`, and what moving the borrow check to run time costs
 
 [SHADOWING.md](../SHADOWING.md) is the full reading order for the names half.
+
+## Po polsku
+
+To jest ten dział, w którym Rust przestaje przypominać inne języki, i zarazem jedyny, dla którego istnieje porządny polski materiał: [Tour of Rust ↗](https://tourofrust.com/TOC_pl.html) ma przetłumaczony cały rozdział 5, „Koncepcje Własności i Pożyczania Danych”. Warto go przejść równolegle — ta biblioteka trzyma się jego terminologii.
+
+Słownik, na którym opiera się reszta działu:
+
+| English | Polski |
+|---|---|
+| ownership | własność (posiadanie danych) |
+| owner | właściciel |
+| move | przeniesienie własności |
+| borrow, borrowing | pożyczanie |
+| reference | referencja |
+| mutable reference | referencja mutowalna |
+| scope | zasięg |
+| drop | wypuszczenie zasobu |
+| lifetime | czas życia |
+| shadowing | przesłanianie |
+| stack / heap | stos / sterta |
+| borrow checker | *borrow checker* (nie tłumaczymy) |
+
+Trzy reguły własności, w formie do zapamiętania: **każda wartość ma dokładnie jednego właściciela; właściciel jest tylko jeden naraz; gdy właściciel wychodzi z zasięgu, wartość zostaje wypuszczona.** Reguła pożyczania jest jedna: **wielu czytających albo jeden piszący, nigdy jedno i drugie naraz.**
+
+Dwa ostrzeżenia dla czytającego po polsku. Po pierwsze, „przeniesienie” nie oznacza, że dane wędrują w pamięci — przenosi się **odpowiedzialność za zwolnienie**, a bajty zostają na miejscu. Po drugie, sporo polskich materiałów opisuje jeszcze stan sprzed 2018 roku, w którym pożyczenie trwało do końca bloku. Od czasu NLL (*non-lexical lifetimes*) kończy się przy **ostatnim użyciu** referencji, i to zmienia odpowiedź na pytanie „dlaczego to się nie kompiluje” w bardzo wielu przykładach.
+
+Druga połowa działu dotyczy **nazw**, nie wartości — przesłanianie, zasięg i czasy życia to trzy różne pytania, które polszczyzna (podobnie jak angielski) skleja w jedno „wychodzi z zasięgu”. Strona [Zasięg dotyczy nazw](scope_is_about_names/README.md) rozdziela je na trzy.
+
+**Szukaj po polsku:** własność i pożyczanie w Ruscie · przenoszenie własności · kontroler pożyczeń · czasy życia · `rust ownership borrowing` · `rust NLL`

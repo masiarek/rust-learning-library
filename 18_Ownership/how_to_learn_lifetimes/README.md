@@ -110,3 +110,17 @@ A grep for that comment later is the graduation exercise.
 - [`unwrap` is a TODO](../../02_Errors/unwrap_is_a_todo/README.md) — the same "compiles quietly, waits" pattern
 - [Implementing `Iterator`](../../24_Iterators/implementing_iterator/README.md) — the common case where amendment 1 has to be set aside on purpose: a borrowing iterator *is* a struct holding a reference
 - [quinedot's ownership, borrowing and lifetimes ↗](https://quinedot.github.io/rust-learning/) — the best free treatment when the scaffold comes down
+
+## Po polsku
+
+Rada, którą początkujący dostaje najczęściej, brzmi: *nie używaj referencji, kopiuj i klonuj wszystko, słuchaj kompilatora*. To dobra rada podana z lekko złego powodu. Zwykle uzasadnia się ją tym, że „klonowanie jest tanie”. Nie o to chodzi — chodzi o to, że klonowanie **usuwa pytanie o czas życia** (*lifetime*), a nie o to, ile kosztuje.
+
+Ta strona dodaje trzy poprawki, z których druga jest najważniejsza dla kogoś uczącego się po polsku, bo dotyczy błędu, którego kompilator **nie** złapie:
+
+1. Naprawdę chodzi o „nie wstawiaj referencji do **struktur**”. Referencje w argumentach funkcji są zupełnie w porządku i uczysz się ich od pierwszego dnia.
+2. **Klonowanie po to, żeby coś zmienić, to cichy błąd.** Program się kompiluje, uruchamia i nie robi nic — bo zmieniasz kopię, którą zaraz wyrzucisz. To jedyny przypadek z tej listy, w którym kompilator ci nie pomoże.
+3. Słuchaj kompilatora — poza sytuacją, w której podpowiada `'static`. To prawie nigdy nie jest właściwa odpowiedź, a jedynie najprostsza, jaką kompilator umie zaproponować.
+
+Brakującym elementem rady jest **warunek wyjścia**: kiedy przestać klonować. Odpowiedź: gdy zaczynasz klonować w pętli, albo gdy klon trafia do struktury, która i tak żyje krócej niż oryginał.
+
+**Szukaj po polsku:** czasy życia w Ruscie · klonowanie zamiast referencji · `rust lifetimes for beginners` · `rust 'static lifetime`

@@ -97,3 +97,15 @@ That is a real claim about memory (`u8` values sit one byte apart), it is checka
 - [The anatomy of a `String`](../../14_Strings/anatomy_of_a_string/README.md) — the three words this page is addressing
 - [A name is not a place](../a_name_is_not_a_place/README.md) — the same distinction from the other side: a binding is not a storage location
 - [Meet the byte](../../19_Numbers/meet_the_byte/README.md) — the unit that distance was measured in
+
+## Po polsku
+
+`&x` na zmiennej typu `String` daje adres **trzysłowowego nagłówka na stosie**, a nigdy adres tekstu na stercie. To rozróżnienie decyduje o tym, jak czytać popularne demonstracje „udowadniające” przenoszenie własności przez wypisanie adresu.
+
+Po przeniesieniu adres się zmienia — i to nie dlatego, że przeniósł się choćby jeden bajt napisu `"hello world"`. Przeniósł się nagłówek: skopiowano trzy słowa w nowe miejsce na stosie, a stara nazwa przestała obowiązywać. Bufor ze znakami leży dokładnie tam, gdzie leżał.
+
+Co gorsza, **zmieniony adres i tak niczego nie dowodzi**. Rozmieszczenie zmiennych na stosie to decyzja kompilatora, wolno mu ją zmienić między kompilacjami, a przy włączonej optymalizacji obie wersje programu często zwracają ten sam adres albo nie mają adresu w ogóle. Dowód oparty na adresie jest dowodem opartym na szczególe implementacyjnym.
+
+Dlatego żaden przykład w tej bibliotece nie wypisuje adresu jako argumentu w sporze. Tam, gdzie trzeba pokazać, że dwie nazwy odnoszą się do różnych miejsc, robi to kontroler pożyczeń — i to jest dowód, który nie zależy od tego, jak akurat skompilował się program.
+
+**Szukaj po polsku:** adres zmiennej Rust · reprezentacja `String` w pamięci · `rust String memory layout` · `{:p}` formatowanie wskaźnika

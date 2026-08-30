@@ -570,3 +570,13 @@ fn main() {
 - [Ownership and moves](../ownership_and_moves/README.md) — drop order, which is what the two `Drop` blocks above are showing
 - [Scope is about names](../scope_is_about_names/README.md) — the three questions one word answers, and the reason `E0506` above stops mattering at the borrow's *last use* rather than at a brace
 - [A block is an expression](../../15_First_Programs/a_block_is_an_expression/README.md) — the escape hatch this page reaches for twice: `{ }` scopes the work and still hands back the value
+
+## Po polsku
+
+`mut` i przesłanianie (*shadowing*) to dwa różne mechanizmy, które polskie materiały często wrzucają do jednego worka pod hasłem „zmienna zmienna”. Różnica jest konkretna: `mut` pozwala **pisać do tego samego miejsca** w pamięci, a przesłanianie tworzy **nowe miejsce** i przenosi na nie nazwę. Poprzednia wartość dalej żyje — po prostu nie ma już jak się do niej odwołać po nazwie.
+
+Naturalny odruch, żeby to pokazać, to wypisanie adresu (`{:p}`) przed i po. To najsłabszy z możliwych dowodów: zmieniony adres niczego nie dowodzi, bo kompilator może rozłożyć zmienne na stosie jak mu wygodnie, a przy `-O` obie wersje zwykle kompilują się do tego samego kodu. Mocniejszy dowód daje **kontroler pożyczeń** (*borrow checker*): weź referencję do starej wartości, a potem przesłoń nazwę. Przy przesłonięciu referencja dalej działa, bo stare miejsce istnieje. Przy `mut` ten sam układ czterech linijek dostaje `E0506` — bo zapis idzie w miejsce, które ktoś właśnie pożyczył.
+
+Warto zapamiętać sformułowanie: **mutowalność jest cechą wiązania (*binding*), nie wartości.** W polskim tłumaczeniu „zmienna mutowalna” akcent pada na słowo „zmienna”, co sugeruje, że to wartość jest jakaś szczególna. Nie jest — `mut` mówi tylko tyle, że przez *tę nazwę* wolno pisać.
+
+**Szukaj po polsku:** przesłanianie zmiennych Rust · zmienne mutowalne w Ruscie · wiązanie a wartość · `rust shadowing vs mut` · `E0506`

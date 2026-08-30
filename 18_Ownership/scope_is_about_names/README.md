@@ -431,3 +431,19 @@ fn main() {
 - [What a warning is asking](../../15_First_Programs/what_a_warning_is_asking/README.md) — `_` versus `_name`, as an answer to the compiler rather than as a timing decision
 - [Lock poisoning](../../09_Advanced/mutex_poisoning/README.md) — what a guard is protecting, and what happens when the thread holding it panics
 - [The Rust Reference — Destructors ↗](https://doc.rust-lang.org/reference/destructors.html), which is where the drop-order rules on this page are written down
+
+## Po polsku
+
+Polskie „wyjść z zasięgu” (albo „z zakresu”) obsługuje w Ruscie **trzy różne pytania**, a odpowiedzi przychodzą w trzech różnych momentach:
+
+1. **Do kiedy mogę użyć tej nazwy?** — do zamykającego nawiasu klamrowego.
+2. **Kiedy wartość zostaje zwolniona?** — gdy jej *właściciel* wychodzi z zasięgu, co nie musi być w tym samym miejscu.
+3. **Do kiedy pożyczenie ma znaczenie?** — do **ostatniego użycia** referencji, zwykle znacznie wcześniej niż koniec bloku.
+
+Nierozróżnianie tych trzech to źródło większości nieporozumień wokół kontrolera pożyczeń. Klasyczny objaw: ktoś twierdzi, że kod się nie skompiluje, „bo referencja żyje do końca funkcji” — a on się kompiluje, bo od NLL pożyczenie kończy się przy ostatnim użyciu.
+
+Zasięg dotyczy **nazw**, nie wartości. Wartość przeniesiona gdzie indziej przeżyje koniec bloku, w którym powstała jej pierwsza nazwa; wartość, której nazwę przesłonięto, żyje dalej bez nazwy.
+
+Drobiazg, który zaskakuje: `let _ = value;` **natychmiast wypuszcza** wartość, a `let _name = value;` trzyma ją do końca bloku. Samo `_` nie jest nazwą, tylko wzorcem, który niczego nie wiąże — dlatego strażnik `MutexGuard` przypisany do `_` odblokowuje muteks od razu, co jest jednym z klasycznych zakleszczeń „ale ja przecież przypisałem go do zmiennej”.
+
+**Szukaj po polsku:** zasięg zmiennej Rust · wypuszczanie zasobów · `rust NLL` · `rust MutexGuard let underscore deadlock`

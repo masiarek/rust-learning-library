@@ -321,3 +321,17 @@ Part 3 — predict which of seven lines allocates, then count.
 - [A generic recursive type](../../22_Generics/a_generic_recursive_type/README.md) — the case where `Box` is not an optimisation but the only way the type compiles
 
 Two neighbouring topics a reader arriving from a memory-model chapter will look for, and where they live: **reference cycles and `Weak`** are on [the `Rc` page](../reference_counting/README.md#the-one-leak-safe-rust-still-permits), and **`Send` and `Sync`** are in [marker traits](../../12_Traits/marker_traits/README.md).
+
+## Po polsku
+
+Stos (*stack*) i sterta (*heap*) to podział znany z C, ale Rust wprowadza jedną różnicę, która zaskakuje: **nie ma słowa kluczowego, które umieszcza wartość na stercie.** Nie ma `new`. `let` zawsze tworzy miejsce na stosie, a to, czy w tym miejscu leżą **dane**, czy **wskaźnik do danych**, jest cechą typu.
+
+`String` i `Vec<T>` to trzy słowa maszynowe na stosie — wskaźnik, długość, pojemność — plus bufor na stercie. `[u8; 1024]` to kilobajt leżący w całości na stosie. `Box<T>` to jedno słowo na stosie i wartość na stercie. Tego nie widać w składni `let`, tylko w typie.
+
+To jest właśnie mechanizm, który wycenia każde przeniesienie, kopiowanie i klonowanie, jakie kiedykolwiek napiszesz. Przeniesienie `String` kopiuje trzy słowa i nie dotyka sterty. `clone()` kopiuje bufor. Ta sama składnia, dwa zupełnie różne rachunki.
+
+`size_of::<T>()` pokazuje **tylko część na stosie** i nic nie mówi o stercie — `size_of::<String>()` to 24 na 64-bitowej maszynie niezależnie od tego, czy łańcuch jest pusty, czy ma megabajt.
+
+Uwaga na tłumaczenie: polskie „sterta” bywa mylone ze strukturą danych *kopiec* (też „heap” po angielsku, np. w kopcu binarnym). To dwa różne pojęcia o tej samej angielskiej nazwie.
+
+**Szukaj po polsku:** stos i sterta · alokacja pamięci w Ruscie · `Box` Rust · `rust stack vs heap` · `size_of`

@@ -198,3 +198,15 @@ With two lifetimes that call compiles and the temporary is dropped on schedule. 
 - [Scope is about names](../scope_is_about_names/README.md) — the three things "out of scope" is asked to mean, one of which is the borrow region `'a` names
 - [Where the bound goes](../../22_Generics/where_the_bound_goes/README.md) — the same infectiousness one concept over: a constraint on the struct that every later `impl` repeats
 - [`Cow`](../clone_on_write/README.md) — the type that refuses to choose between owning and borrowing, and the annotation it needs to do it
+
+## Po polsku
+
+Adnotacje czasu życia (*lifetime annotations*) to prawdopodobnie najczęściej źle rozumiany element składni Rusta, a polskie tłumaczenie „czas życia zmiennej” sprzyja nieporozumieniu. `<'a>` **niczego nie przedłuża**. Nie jest to deklaracja „niech to żyje tak długo” — to nazwanie **zależności** między czasami życia, które i tak już istnieją, żeby kompilator mógł odrzucić układ, w którym jedno przeżywa drugie.
+
+Analogia, która pomaga: `<'a>` jest jak zmienna typowa `<T>`. `T` nie tworzy typu, tylko nazywa go, żeby dało się powiedzieć „ten sam typ tu i tu”. `'a` nie tworzy czasu życia, tylko nazywa go, żeby dało się powiedzieć „wynik nie przeżyje tego argumentu”.
+
+Większość sygnatur nie potrzebuje żadnej adnotacji — reguły elizji (*lifetime elision*) wypełniają je za ciebie. Adnotacja pojawia się dopiero wtedy, gdy kompilator nie umie zgadnąć, który z kilku argumentów wiąże się z wynikiem. W strukturze sprawa wygląda inaczej: tam `'a` staje się **częścią typu**, i od tego momentu każdy, kto tej struktury używa, musi się z tym czasem życia liczyć. To właśnie dlatego rada „nie wstawiaj referencji do struktur” jest tak skuteczna.
+
+`'static` to nie osobny mechanizm, tylko najdłuższy możliwy czas życia — trwający tyle, co cały program.
+
+**Szukaj po polsku:** adnotacje czasu życia · czasy życia w Ruscie · elizja czasów życia · `rust lifetime elision` · `E0106`

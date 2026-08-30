@@ -362,3 +362,15 @@ Part 3 — the back edge, and whether Drop runs.
 - [`ToOwned`](../../12_Traits/to_owned/README.md) — where the same misreading bites hardest
 - [The global allocator](../../09_Advanced/the_global_allocator/README.md) — the counting allocator section 2 measures with
 - [`Rc` ↗](https://doc.rust-lang.org/std/rc/struct.Rc.html) · [`Weak` ↗](https://doc.rust-lang.org/std/rc/struct.Weak.html) · [`RefCell` ↗](https://doc.rust-lang.org/std/cell/struct.RefCell.html)
+
+## Po polsku
+
+`Rc<T>` (od *reference counted* — ze zliczaniem referencji) daje jednej wartości **wielu właścicieli**, licząc ich. `Rc::clone` kopiuje wskaźnik i zwiększa licznik o jeden — i **nie dotyka danych**. To najtańszy `.clone()` w Ruscie i zarazem najczęściej źle odczytywany, bo słowo „klonowanie” w polskich materiałach niemal zawsze znaczy „głęboka kopia”.
+
+Stąd konwencja, którą warto stosować: pisz `Rc::clone(&x)`, a nie `x.clone()`. To dokładnie to samo wywołanie, ale forma z nazwą typu **mówi czytelnikowi, że to tanie** — że kopiowany jest wskaźnik i licznik, a nie zawartość.
+
+Dane pod `Rc` są **tylko do odczytu**. Współdzielenie oznacza brak zapisu — żeby pisać, trzeba dołożyć mutowalność wewnętrzną (`Cell`, `RefCell`), a przy wielu wątkach sięgnąć po `Arc` z `Mutex`em.
+
+`Rc` to również jedyne miejsce, gdzie bezpieczny Rust wciąż pozwala na **wyciek pamięci**: dwa obiekty wskazujące na siebie nawzajem nigdy nie zejdą do zera i nigdy nie zostaną zwolnione. Lekarstwem jest `Weak` — referencja, która nie liczy się do licznika. Warto wiedzieć, że wyciek pamięci nie jest w Ruscie uznawany za naruszenie bezpieczeństwa; niebezpieczne jest użycie zwolnionej pamięci, nie jej niezwolnienie.
+
+**Szukaj po polsku:** zliczanie referencji · `Rc` Rust · cykle referencji · mutowalność wewnętrzna · `rust Rc Weak reference cycle`

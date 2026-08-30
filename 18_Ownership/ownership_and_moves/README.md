@@ -311,3 +311,19 @@ rustc --edition 2024 18_Ownership/ownership_and_moves/examples/ownership_and_mov
 - [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md) — the same observable `Drop`, seen from the failure side: destructors still run, in reverse order, while a panic unwinds. Rule 3 holds even when the function does not finish, which is why a lock is released and a file closed — and why the *work* is still half-done
 - [The `move` keyword](../../23_Closures/the_move_keyword/README.md) — the same move, performed by a closure capturing the value, and the two errors that demand it
 - [The Rust Book, ch. 4 — Understanding Ownership ↗](https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html)
+
+## Po polsku
+
+Własność (*ownership*) to pojęcie, od którego zaczyna się cały Rust, a Tour of Rust poświęca mu cały rozdział 5 — „Koncepcje Własności i Pożyczania Danych”. Trzy reguły, które warto umieć wyrecytować:
+
+1. Każda wartość ma dokładnie jednego **właściciela**.
+2. Właściciel może być w danej chwili tylko jeden.
+3. Gdy właściciel wychodzi z zasięgu, wartość zostaje **wypuszczona** (*dropped*) — pamięć wraca do systemu.
+
+Przeniesienie własności (*move*) to **nie kopiowanie i nie zwalnianie** — to przekazanie **odpowiedzialności**. Bajty zostają tam, gdzie były; zmienia się tylko to, kto je zwolni, a więc i kiedy. To sformułowanie warto sobie zapamiętać po polsku, bo tłumaczenia często mówią „wartość zostaje przeniesiona”, co sugeruje wędrówkę danych w pamięci. Nic nie wędruje.
+
+Liczby całkowite „zachowują się inaczej” nie dlatego, że są małe, tylko dlatego, że implementują `Copy`. To rozróżnienie jest ważne: `i32` nie jest wyjątkiem od reguł własności, tylko typem, który z przenoszenia zrezygnował.
+
+Rzecz, która zaskakuje nawet po przeczytaniu podręcznika: **własność jest śledzona per pole, nie per zmienna.** Można przenieść jedno pole struktury i dalej używać pozostałych.
+
+**Szukaj po polsku:** własność w Ruscie · przenoszenie własności · posiadanie danych · `rust ownership rules` · `E0382 borrow of moved value`

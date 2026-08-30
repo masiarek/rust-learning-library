@@ -476,3 +476,19 @@ rustc --edition 2024 18_Ownership/when_to_shadow/examples/when_to_shadow.rs -o /
 - [Initial values](../../17_Option_and_Result/initial_values/README.md) — the other way to avoid `mut`: declare without initializing and let the compiler prove you assigned
 - [`if let`](../../17_Option_and_Result/if_let/README.md) — `let … else`, the guard clause the unwrap-and-narrow idiom opens with
 - [The Rust Book, ch. 3.1 — Shadowing ↗](https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html#shadowing)
+
+## Po polsku
+
+Reguła w jednym zdaniu: **przesłaniaj, gdy nowe wiązanie to to samo pojęcie w nowej postaci; sięgnij po drugą nazwę, gdy to inna rzecz.** I nigdy nie przesłaniaj czegoś, co trzyma zasób.
+
+Idiomatyczne zastosowania są trzy i wszystkie mieszczą się w regule: konwersja typu przy zachowaniu znaczenia (`let age = age.parse::<u32>()?;` — dalej wiek, tylko już liczba), zawężenie wartości (`let input = input.trim();`), oraz „rozpakowanie” (`let cfg = cfg.unwrap_or_default();`).
+
+Trzy błędy, które się kompilują, i żaden nie zostanie zgłoszony:
+
+- przesłonięcie zmiennej **inną rzeczą** o tej samej nazwie, przez co dalszy kod czyta co innego, niż autor sądzi;
+- przesłonięcie w gałęzi `if`, przez co poza gałęzią wraca stara wartość, choć wygląda na zaktualizowaną;
+- przesłonięcie strażnika (`MutexGuard`, `File`), które przedłuża trzymanie zasobu do końca bloku, zamiast go zwolnić.
+
+Kompilator łapie tylko jeden przypadek: gdy typy się nie zgadzają. Kiedy się zgadzają — a przy przesłanianiu „tej samej rzeczy w nowej postaci” bardzo często się zgadzają — nie dostaniesz nic. Tym, co by to złapało, jest przegląd kodu albo test, nie `rustc`.
+
+**Szukaj po polsku:** kiedy stosować przesłanianie · idiomatyczny Rust przesłanianie · `rust shadowing best practices` · `clippy::shadow_reuse`

@@ -486,3 +486,15 @@ rustc --edition 2024 18_Ownership/shadowing_does_not_drop/examples/shadowing_doe
 - [Borrowing](../borrowing/README.md) — `&T`, and the last-use rule that decides how long `keep` holds the value
 - [The Rust Book, ch. 3.1 — Shadowing ↗](https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html#shadowing)
 - [`std::mem::drop` ↗](https://doc.rust-lang.org/std/mem/fn.drop.html) — why "dropping" is just moving a value into a function that does nothing
+
+## Po polsku
+
+Przesłanianie zabiera **nazwę**, a nie **wartość**. Przesłonięty `String` dalej żyje, dalej jest posiadany i dalej można go pożyczać — dlatego referencja wzięta przed przesłonięciem działa również po nim.
+
+To rozróżnienie ma konkretny koszt praktyczny: **przesłoniętej wartości nie da się zwolnić wcześniej**. Skoro nazwa zniknęła, nie ma jak wywołać na niej `drop()`, a wartość poczeka do końca bloku. Jeśli trzymała otwarty plik, blokadę albo połączenie, trzyma je dalej. Stąd rada, żeby nie przesłaniać niczego, co posiada zasób.
+
+Dwa mechanizmy wyglądają tu podobnie i warto je rozdzielić po polsku: **przypisanie** (`s = String::from("nowy")`) *wypuszcza* starą wartość i wstawia nową w to samo miejsce — jeśli typ ma `Drop` z efektami ubocznymi, odpalą się właśnie tam. **Przesłonięcie** (`let s = …`) nie wypuszcza niczego; buduje obok drugie miejsce.
+
+Dla kogoś z C++ to zaskoczenie w drugą stronę: tam wyjście nazwy z zasięgu i wywołanie destruktora to jedno zdarzenie. W Ruscie to dwie rzeczy, które zwykle zachodzą razem, ale nie muszą.
+
+**Szukaj po polsku:** przesłanianie a wypuszczanie zasobów · kolejność wypuszczania · `rust drop order` · `rust shadowing does not drop`

@@ -538,3 +538,13 @@ rustc --edition 2024 18_Ownership/nothing_checks_a_shadow/examples/nothing_check
 - [Ownership and moves](../ownership_and_moves/README.md) — the rule that *is* enforced, and why it turns the same shape into `E0382`
 - [`shadow_reuse` ↗](https://rust-lang.github.io/rust-clippy/master/index.html#shadow_reuse), [`shadow_same` ↗](https://rust-lang.github.io/rust-clippy/master/index.html#shadow_same), [`shadow_unrelated` ↗](https://rust-lang.github.io/rust-clippy/master/index.html#shadow_unrelated) — the three lints, and the `restriction` group they sit in
 - [The Rust Book, ch. 3.1 — Shadowing ↗](https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html#shadowing)
+
+## Po polsku
+
+`rustc` **nie ma ostrzeżenia dla przesłoniętej zmiennej**. To zaskakuje, bo z doświadczenia wygląda, jakby coś tego pilnowało — ale tym „czymś” jest zwykły **błąd typów**, na który źle napisane przesłonięcie zwykle po drodze wpada. Kiedy typy się zgadzają, nic już nie stoi między tobą a złą odpowiedzią.
+
+Trzy linty widzą przesłanianie, ale żaden nie jest domyślnie włączony, a ten użyteczny (`clippy::shadow_unrelated`) należy do grupy `restriction` — czyli takiej, która nie jest rekomendowana do włączania na całym projekcie, bo generuje mnóstwo szumu na idiomatycznym kodzie. To jest realny koszt, nie formalność: włączenie go oznacza sprzeciwianie się stylowi, którym napisana jest sama biblioteka standardowa.
+
+Ciekawostka terminologiczna, przez którą po polsku łatwo się pogubić: przesłaniane są nie tylko zmienne, ale i **elementy** (*items*) — funkcje, typy, moduły. A część społeczności twierdzi, że `let x = x + 1;` w ogóle nie jest przesłanianiem w klasycznym sensie, bo nie ma tu dwóch zasięgów, tylko dwa kolejne wiązania w jednym. Spór jest o nazwę, nie o zachowanie.
+
+**Szukaj po polsku:** przesłanianie zmiennych · lint clippy shadow · `clippy::shadow_unrelated` · `rust shadowing lint`

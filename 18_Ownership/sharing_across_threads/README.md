@@ -350,3 +350,15 @@ Part 3 — the Arc you can delete.
 - [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) — the trait both counters are implementing
 - [Ownership and moves](../ownership_and_moves/README.md) — the rule a thread boundary enforces most visibly
 - [`Arc` ↗](https://doc.rust-lang.org/std/sync/struct.Arc.html) · [`Mutex` ↗](https://doc.rust-lang.org/std/sync/struct.Mutex.html) · [`thread::scope` ↗](https://doc.rust-lang.org/std/thread/fn.scope.html) · [`Send` ↗](https://doc.rust-lang.org/std/marker/trait.Send.html)
+
+## Po polsku
+
+`Arc<T>` (*atomically reference counted*) to `Rc<T>` z licznikiem atomowym. Różnica nie jest uwagą o wydajności — to powód, dla którego jeden z nich kompiluje się przez granicę wątku, a drugi nie.
+
+Komunikat kompilatora wskazuje cechę `Send` (albo `Sync`) i to jest właściwe miejsce, żeby zacząć czytać. `Rc` nie jest `Send`, bo jego licznik to zwykła liczba: dwa wątki zwiększające ją jednocześnie mogą zgubić inkrementację, a to prowadzi do przedwczesnego zwolnienia pamięci. Atomowość jest dokładnie tym, za co płaci `Arc` — i płaci realnie, więc w kodzie jednowątkowym używa się `Rc`.
+
+Podział ról, który warto zapamiętać jednym zdaniem: **`Arc` daje współwłasność, `Mutex` daje prawo zapisu.** Same `Arc<T>` nie pozwala pisać, bo współdzielone znaczy tylko do odczytu — stąd wszechobecne `Arc<Mutex<T>>`.
+
+Kolejność też jest istotna: klonuje się `Arc` **przed** `spawn`, raz na wątek, i przenosi klon do domknięcia przez `move`. Próba sklonowania w środku domknięcia oznacza pożyczenie oryginału przez granicę wątku, czyli dokładnie ten błąd, którego się unikało.
+
+**Szukaj po polsku:** wątki w Ruscie · `Arc Mutex` · cechy `Send` i `Sync` · `rust Arc vs Rc` · `E0277 cannot be sent between threads safely`
