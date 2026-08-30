@@ -2,7 +2,7 @@
 
 **Level:** 101 → 201 · for newcomers
 
-**One line:** Functions go in an `impl` block beside the struct, not in it. Associated function vs method = whether the first parameter is `self`.
+**One line:** Functions go in an `impl` block beside the struct, not in it — and a method is an associated function that happens to take `self`.
 
 ```text title="Real rustc output"
 error: functions are not allowed in struct definitions
@@ -32,14 +32,18 @@ The second box can be reopened later, and via traits for types you did not defin
 
 ## Associated function vs method
 
+Everything in an `impl` block is an **associated function**. A **method** is one whose first parameter is a `self` receiver — a subset, not the other half.
+
 | | first parameter | called as |
 |---|---|---|
 | **associated function** | none | `Ballot::new("Ada")` |
 | **method** | `self` / `&self` / `&mut self` | `ballot.total()` |
 
 ```rust
-ballot.total()  ==  Ballot::total(&ballot)   // the dot is sugar
+ballot.total()  ==  Ballot::total(&ballot)   // the dot is sugar; both are Ballot:: items
 ```
+
+Those row labels are the everyday shorthand, and it reads the two as disjoint. The Reference does not: *"there are associated functions (including methods)"*, and *"associated functions whose first parameter is named `self` are called methods"* — [Associated Items ↗](https://doc.rust-lang.org/reference/items/associated-items.html). Worth knowing before an error message or a std page says "an associated function that is a method" and it looks like a contradiction.
 
 "Standalone, called like `Foo::bar()`" = no instance to hang the call on, so you name the **type**.
 
