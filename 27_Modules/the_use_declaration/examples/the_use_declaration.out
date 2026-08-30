@@ -1,0 +1,42 @@
+1. `use` binds a name; the item was already there
+   `use std::collections::HashMap as Table` -> Table::new() = {"Ada": 3}
+   Deleting the `use` line does not remove HashMap from the program.
+   It only means you have to spell std::collections::HashMap in full.
+   Nothing is compiled, loaded or linked by a `use`.
+
+2. `as` renames, and is the fix for a collision
+   `use std::fmt::Write` and `use std::io::Write` in one file is
+   E0252: "the name `Write` is defined multiple times". Rename one.
+   with fmt::Write in scope as FmtWrite: "12 ballots"
+   rustc even offers the fix: "you can use `as` to change the
+   binding name of the import". Note what this `use` bought — a
+   TRAIT in scope is what makes `write!` on a String resolve at all,
+   even though the name FmtWrite never appears again.
+
+3. Braces bring several names from one path
+   use election::ballots::{count, spoiled};
+   count() = 12, spoiled() = 1
+   `{self, …}` also brings the module itself, so you can write both
+   `ballots::count()` and `count()`.
+
+4. Importing enum variants, and when not to
+   use election::Method::{self, Approval, Star};
+   describe(Star)     = score then automatic runoff
+   describe(Approval) = approve as many as you like
+   describe(Method::Plurality) = pick one
+   Bare `Star` reads well inside a match on one enum, and badly in a
+   file with three enums that each have a `Star`. `Option`'s Some and
+   None are in the prelude for exactly this reason — they are common
+   enough that the ambiguity never arises.
+
+5. The glob, and why it is rare
+   `use election::Method::*;` compiles and is discouraged: a new
+   variant upstream can silently shadow a local name, and a reader
+   cannot tell where a bare `Star` came from. The two accepted uses
+   are a prelude module (`use my_crate::prelude::*`) and the inside
+   of a test module (`use super::*`), where the source is obvious.
+
+6. What is already in scope without any `use` at all
+   Vec, String, Option, Result, Box, Some, None, Ok, Err and the
+   traits listed in std::prelude are injected into every module.
+   Everything else needs a path or a use: {"Ada": 3} needed one.

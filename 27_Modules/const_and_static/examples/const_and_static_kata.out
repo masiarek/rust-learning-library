@@ -1,0 +1,41 @@
+1. Where they may appear, and where they may not
+   const QUORUM: u32 = quorum(450);  ->  226
+   const N: u32 = some_fn();         ->  E0015 unless some_fn is const
+   static as an array length: [u8; SCALE.len()] is fine, because
+   SCALE is a const. A `static`'s value cannot be used that way.
+   [u8; SCALE.len()] built: [0, 1, 2, 3, 4, 5]
+
+2. The address question, measured
+   &SCALE[0] twice   (const):  true
+   &METHODS[0] twice (static): true
+   Both true, and only the second is guaranteed. Taking a reference
+   to a const promotes the value into an anonymous static, and rustc
+   may share one or emit several — so equality here is an
+   observation about this build, not a rule. The static is a rule.
+   Box::new(SCALE) twice, same address: false
+   Two copies, because the const was substituted into each Box.
+
+3. What a const fn may not do
+   quorum(450)         = 226   compile time or run time, either
+   quorum_message(450) = 226 of 450   run time only
+   The second allocates a String, and allocation is not allowed in a
+   const context. Neither is calling a non-const fn, or reading a
+   `static`. Marking a function `const` is a PROMISE about what it
+   does not do, and it is part of your public API: un-consting one
+   later is a breaking change.
+
+4. Associated consts, which is where most consts belong
+   Election::DEFAULT_SEATS = 1
+   Election::seats(0)  = 1
+   Election::seats(50) = 10
+   Namespaced under the type, so two types can each have a MAX_SEATS
+   and neither has to be MAX_SEATS_FOR_ELECTION. A trait can declare
+   one too, which is how `u8::MAX` and `f64::EPSILON` are written.
+
+5. The rule
+   const   unless you can say why the address matters.
+   static  for a large table, an FFI symbol, or shared mutable state
+           behind a Mutex / OnceLock / atomic.
+   A const array of 10_000 entries copied into three call sites is
+   30_000 entries in the binary. That is the one case where the
+   default is wrong, and the fix is one keyword.

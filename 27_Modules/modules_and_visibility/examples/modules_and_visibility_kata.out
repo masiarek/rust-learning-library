@@ -1,0 +1,37 @@
+1. The leaky version
+   leaky::Score::new(9) = None   <- the constructor works
+   ...and then: s.value = 200 -> Score { value: 200 }
+   A `pub` field makes the constructor advice, not a rule. Nothing
+   in the type system stops the assignment, because there is no
+   invariant recorded anywhere — only a habit.
+
+2. The sealed version
+   sealed::Score::new(4) = Score { value: 4 }, .value() = 4
+   t.value = 200      -> E0616: field `value` of struct `Score` is private
+   sealed::Score { value: 9 } -> E0451: field `value` of struct
+   `Score` is private — you cannot even write the literal.
+
+3. The door that is still open, and it is inside the module
+   sealed::from_raw(200) = Score { value: 200 }   <- 200 on a 0-5 scale
+   `from_raw` is inside `sealed`, so the private field is visible to
+   it, and it is `pub`, so it is visible to everyone. Privacy is per
+   MODULE, not per struct: every line in the same file as the type
+   can construct one. That is the thing to check when an invariant
+   escapes — not the callers, the module.
+   sealed::clamped(200) = Score { value: 5 }   <- the same door, honestly labelled
+
+4. What actually closes it
+   a. Delete from_raw, or make it private — then the only way in is
+      new() and clamped(), and both enforce the range.
+   b. pub(crate) it, if the crate's own tests need the shortcut but
+      no downstream user should have it.
+   c. Move the type into a module of its own with NOTHING else in
+      it. The smaller the module, the fewer lines can reach the
+      private field — which is the real argument for one type per
+      module in a library.
+
+5. The reading that generalises
+   `pub struct` publishes the TYPE. Each field is published
+   separately, and a private field is what makes a constructor the
+   only entrance. Then check who shares the module with it, because
+   that list — not the `pub` keywords — is the real access list.

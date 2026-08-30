@@ -1,0 +1,41 @@
+1. Derived Ord compares fields in declaration order
+   name first : ["Ada", "Ben", "Cara"]
+   score first: ["Cara", "Ben", "Ada"]
+   Same data, same derive, opposite answers. Moving a field up is a
+   one-line diff that reads as cosmetic and silently reorders every
+   sort, every BTreeMap and every binary search over the type.
+   If the order matters, write the impl:
+     impl Ord for ByName { fn cmp(&self, o: &Self) -> Ordering { … } }
+   and then the diff that changes it is the one that says so.
+
+2. `derive(Default)` on an enum needs `#[default]`
+   Config::default() = Config { seats: 0, method: Star, strict: false }
+   with one field changed: Config { seats: 0, method: Approval, strict: false }
+   Without `#[default]` on a variant, deriving Default for an enum is
+   E0665, "`#[derive(Default)]` on enum with no `#[default]`" — the
+   compiler cannot guess which variant is the zero. For a struct it
+   can: every field's own Default.
+
+3. `#[must_use]` turns a discarded value into a warning
+   tally(&[5, 3, 0]) = 8
+   Writing `tally(&scores);` on its own line warns: "unused return
+   value of `tally` that must be used", and offers `let _ = ...` as
+   the way to say you meant it. It is the mechanism behind
+   the warning you have already met on Result and on iterator
+   adapters — `#[must_use]` sits on the TYPE there, not the method.
+
+4. Attributes that change what is compiled, not how
+   #[cfg(test)]         the item does not exist in a normal build
+   #[cfg(unix)]         nor on Windows
+   #[cfg(feature = "x")] nor unless the feature is on
+   Built for macos — and this line was compiled either way,
+   because cfg!() is an expression: both branches type-check, and
+   one is replaced by a literal. #[cfg] deletes; cfg!() chooses.
+
+5. The four lint levels, and the one to avoid
+   allow / warn / deny / forbid, innermost wins — except `forbid`,
+   which cannot be relaxed by an inner `allow` (that is itself an
+   error). So a crate-wide `#![forbid(unsafe_code)]` is a real
+   promise, and a crate-wide `#![forbid(warnings)]` is a trap: the
+   day one generated macro trips a new lint, nobody can allow it
+   locally. Use deny for style, forbid for safety properties.

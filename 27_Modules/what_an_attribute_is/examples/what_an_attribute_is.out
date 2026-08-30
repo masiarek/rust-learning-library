@@ -1,0 +1,47 @@
+1. `derive` writes the impl you would have written
+   Debug:      Score(4)
+   Copy:       a is still usable after `let b = a`: Score(4) Score(4)
+   PartialEq:  a == b is true
+   Ord:        sorted [4, 1, 3] -> [Score(1), Score(3), Score(4)]
+   Default:    Score::default() = Score(0)
+   Eight traits, no bodies. Each one is a real impl block the
+   compiler generated, and each has a rule: derived Ord compares
+   fields in DECLARATION ORDER, so reordering a struct's fields is
+   a behaviour change.
+
+2. Inner and outer, and how to tell them apart
+   #[attr]   applies to the item BELOW it       (outer)
+   #![attr]  applies to the item it is INSIDE   (inner)
+   The `!` is the whole difference, and an inner attribute has to be
+   the first thing in its file or block. `//!` and `///` follow the
+   same rule, because a doc comment IS an attribute — `#[doc = "…"]`.
+
+3. The lint family: allow, warn, deny, forbid
+   #[allow(dead_code)] on never_called() is why this program has no
+   warnings. The four levels differ in what they do and in whether
+   an inner scope may override them:
+     allow   say nothing
+     warn    print, keep compiling
+     deny    error
+     forbid  error, and an inner allow is itself an error
+   They nest, so a crate-level `#![deny(warnings)]` can be relaxed
+   on one function — which is the whole reason to prefer deny over
+   forbid.
+
+4. `cfg`: compiled or not compiled at all
+   #[cfg(test)] on the tests module above means it does not exist in
+   this binary — not that it is skipped at run time.
+   Built for: macos
+   cfg!(debug_assertions) is true — this is a debug build
+   `#[cfg(…)]` removes code; `cfg!(…)` is an expression that becomes
+   a literal true or false. The second still type-checks both sides.
+
+5. The rest, in one line each
+   #[test]           this fn is a test; rustc --test collects it
+   #[derive(…)]      generate these impls
+   #[non_exhaustive] downstream crates may not match it exhaustively
+                     or build it with a struct literal: Star
+   #[inline]         a hint, not an instruction: doubled(21) = 42
+   #[must_use]       warn if the return value is dropped
+   #[repr(C)]        lay this type out the way C would
+   #[deprecated]     warn at every use, with a message

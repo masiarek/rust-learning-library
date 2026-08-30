@@ -1,0 +1,37 @@
+1. Private by default, at every level
+   election::SEATS            = 3
+   election::QUORUM           -> E0603: "constant `QUORUM` is private"
+   election::seats_and_quorum() = (3, 10)
+   The module can read its own private items and hand the values
+   out. What is private is the NAME, not the data.
+
+2. Privacy is one-way: children see up, parents do not see in
+   ballots::quorum_from_child() = 10
+   A child module reaches its parent's private items through
+   `super::`. The parent cannot reach a child's private items at
+   all — which is the whole reason a module is a useful boundary.
+
+3. `pub` is relative, and `pub(super)` / `pub(crate)` say how far
+   election::tally::total()          = 60
+   election::tally::internal_total() -> E0603: "function
+   `internal_total` is private" — same code as QUORUM above, because
+   pub(super) stops at `election` and main is outside it.
+   pub            as far as whoever can see the module
+   pub(crate)     anywhere in this crate, nowhere outside it
+   pub(super)     the parent module and its descendants
+   pub(in path)   one named ancestor module
+
+4. A public struct with private fields
+   r.winner   = Ada   <- pub field
+   r.margin   -> E0616: "field `margin` of struct `Result` is private"
+   r.margin() = 7   <- the accessor is the door that stayed open
+   Fields are private individually, so `pub struct` says nothing
+   about them. This is what stops a caller building a Result with
+   a margin that does not match the ballots.
+
+5. Paths: `crate::`, `super::`, `self::`
+   crate::election::SEATS  = 3   absolute, from the crate root
+   self::election::SEATS   = 3   relative to this module
+   super::               one level up — used inside a module, and
+                         an error at the crate root, where there is
+                         nothing above.

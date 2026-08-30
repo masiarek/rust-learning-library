@@ -1,0 +1,34 @@
+1. Two traits called Write, both needed
+   fmt::Write on a String : "3 seats"
+   io::Write on a Vec<u8> : "3 seats"
+   Without the `as` renames this file is E0252, "the name `Write` is
+   defined multiple times". rustc even writes the fix for you:
+   "you can use `as` to change the binding name of the import".
+   Note that FmtWrite is never NAMED below — bringing the trait into
+   scope is the entire job, because `write!` on a String needs it.
+
+2. Two globs, one ambiguous name
+   `use election::*;` and `use other::*;` both bring in SEATS.
+   This compiles. Writing a bare `SEATS` does not:
+   E0659: "`SEATS` is ambiguous", "ambiguous because of multiple
+   glob imports of a name in the same module".
+   election::SEATS = 3, other::SEATS = 99
+   The error arrives at the USE SITE, not at the import — so a glob
+   can sit there harmlessly for months and then break the day
+   somebody adds a name upstream.
+
+3. What the glob did bring in unambiguously
+   describe() = one race   <- from election, via the glob
+   tiebreak() = lot        <- from other, via the other glob
+   Method::Star == Method::Approval: false
+   Which is the glob's actual cost: a reader cannot tell where
+   `describe` or `Method` came from without grepping both modules.
+
+4. The two places a glob is fine
+   a. `use my_crate::prelude::*` — a module that exists to be
+      glob-imported, whose contents are a documented API.
+   b. `use super::*` at the top of a #[cfg(test)] module — the
+      source is the file you are already reading, and the tests
+      want everything in it, private items included.
+   Both share one property: there is exactly one place the names
+   can have come from.

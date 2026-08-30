@@ -1,0 +1,42 @@
+1. Both are compile-time values, and neither may be `let`
+   MAX_SCORE = 5, METHOD = STAR, SEATS = 4
+   Both need an explicit type — there is no inference at item level.
+   Both are SCREAMING_SNAKE_CASE by convention, and rustc warns if
+   they are not.
+
+2. The difference is whether it HAS an address
+   &METHOD == &METHOD (static): true
+   &MAX_SCORE == &MAX_SCORE (const): true
+   Both true, and only the first one is a promise. A `static` IS a
+   single object at a fixed address, guaranteed. A `const` is a value
+   substituted at each use, and `&MAX_SCORE` has no address to take —
+   so rustc CONST-PROMOTES it into an anonymous static, and is free
+   to share one or make several. Do not build anything on that `true`.
+   Where the substitution is visible is a const that is not promoted:
+   Box::new(MAX_SCORE) twice, same address: false
+   Two separate values, because the const was copied into each.
+
+3. Which to reach for
+   const   a value with a name: limits, scales, tuning knobs. The
+           default, and what you want almost every time.
+   static  when the address matters: a large table you do not want
+           copied into every use site, an FFI symbol, or anything
+           whose identity is part of its meaning.
+   A const of a big array is duplicated at each use; a static is not.
+
+4. `const fn`, and what it may not do
+   seats_for(450) = 4 — evaluated at compile time, so it can
+   initialise a const. A const fn may branch, loop and do arithmetic,
+   and may not allocate, call a non-const fn, or read a static.
+   It is still an ordinary function at run time: seats_for(50) = 1
+
+5. Associated consts, and `static mut`
+   Ballot::SCALE   = 0-5
+   Ballot::describe() = STAR on a 0-5 scale
+   `static mut` exists and is mutable global state: every access is
+   `unsafe`, and in the 2024 edition even `&COUNT` inside an unsafe
+   block is refused — "creating a shared reference to mutable
+   static", from the deny-by-default `static_mut_refs` lint, with
+   `&raw const COUNT` offered as the replacement. What you want
+   instead is a `static` holding a Mutex, a OnceLock or an atomic —
+   safe, because those are the types that make sharing sound.

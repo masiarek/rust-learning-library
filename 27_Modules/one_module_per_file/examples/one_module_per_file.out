@@ -1,0 +1,45 @@
+1. The tree above, as files
+   src/
+     main.rs              <- the crate root: `mod election;`
+     election.rs          <- `mod ballots;` and `mod tally;`
+     election/
+       ballots.rs
+       tally.rs
+   Or, in the older layout that still works:
+     election/mod.rs      instead of election.rs
+   Both are supported. `election.rs` beside `election/` is the
+   2018-edition form and the one to use; `mod.rs` is what you will
+   meet in older code, and a directory full of files called mod.rs
+   is why it was changed.
+
+2. `mod election;` is a declaration
+   It says "there is a module called election, its contents are in
+   the file next door". It is NOT #include, and NOT an import: the
+   file is compiled as part of this crate exactly once, and a second
+   `mod election;` elsewhere is E0428, a duplicate definition.
+   A .rs file nobody declares is not compiled at all — the most
+   common way a new file appears to do nothing.
+
+3. The paths do not change when you split
+   election::summary() = 12 ballots, 60 points
+   election::tally::total() = 60
+   Those two lines are identical in both layouts. The module tree
+   is a property of the `mod` declarations, not of the directories,
+   which is why moving a module between file and block is a pure
+   refactor.
+
+4. The crate root, and what `crate::` means
+   A binary's root is src/main.rs; a library's is src/lib.rs. That
+   file IS the crate's top module, so an item declared there is at
+   `crate::name` and needs no module of its own.
+   crate::election::ballots::count() = 12
+   A package with both files is two crates — a library and a binary
+   that uses it by name, not by path. That is why `use my_crate::…`
+   appears in main.rs and `use crate::…` inside lib.rs.
+
+5. What decides where an item lives
+   Not the file. `pub` and the module tree decide visibility, and
+   the file layout is a convenience for humans on top of it. So the
+   question when splitting is never "which file is this in" but
+   "which module can see it" — and a 900-line file with three
+   `mod` blocks has exactly the same answer as three files.

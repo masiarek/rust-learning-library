@@ -1,0 +1,40 @@
+1. The tree, as files
+   src/main.rs                     mod election;
+   src/election.rs                 mod ballots;  mod tally;
+   src/election/ballots.rs         mod spoiled;
+   src/election/ballots/spoiled.rs
+   src/election/tally.rs
+   Note ballots.rs is BOTH a module and a directory's parent. That
+   is the whole 2018 change: a file beside a folder of the same
+   name, instead of mod.rs inside it.
+
+2. Four ways to name the same function
+   from spoiled  : super::count()                    = 12
+   from spoiled  : crate::election::ballots::count() = 12
+   from tally    : super::ballots::count()           = 12
+   from main     : election::ballots::count()        = 12
+   All four resolve to one function. The path is relative to where
+   you are STANDING in the module tree, and the tree came from the
+   `mod` declarations rather than from the directories.
+
+3. Running them
+   spoiled::share()          = 0.0833
+   spoiled::share_absolute() = 0.0833
+   election::tally::total()       = 60
+   election::tally::total_twice() = 120
+
+4. Which form to reach for
+   crate::  when the item is far away, or the module might move.
+            Absolute paths survive a rename of the module you are IN.
+   super::  for a sibling, once. Two `super::super::` in a row is a
+            sign the tree is wrong, not that you need a third.
+   self::   rarely; it disambiguates a module path from a local name.
+   a `use`  when the same path appears more than twice in a file.
+
+5. The failure that has no error message
+   Add src/election/recount.rs and forget `mod recount;` in
+   election.rs, and the file is simply not part of the crate. It is
+   not compiled, so its syntax errors do not appear, its tests do
+   not run, and nothing warns. `cargo build` succeeds. That is the
+   most common "why is my code not running" in a new Rust project,
+   and the answer is always the missing declaration.
