@@ -531,6 +531,8 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...but first: why there is an unwrap there at all, which is almost
         # never a decision and almost always a paste from a crate's own README.
         "unwrap_is_a_todo",
+        # ...then what an error type even IS, before asking which one to write.
+        "the_error_trait",
         "not_every_error_is_io_error",
         "anyhow_and_context",
         "thiserror_vs_anyhow",
@@ -748,6 +750,7 @@ LABELS = {
     "keep_going_or_stop": "Keep going, or stop",
     "main_returns_result": "`main` can return a `Result`",
     "stderr_and_exit_status": "Standard error, and exit status",
+    "the_error_trait": "What makes a type an error",
     "not_every_error_is_io_error": "Not every error is an `io::Error`",
     "anyhow_and_context": "`anyhow` and context",
     "thiserror_vs_anyhow": "`thiserror` vs `anyhow`",
