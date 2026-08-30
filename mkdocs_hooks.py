@@ -144,6 +144,23 @@ NAV_ORDER: dict[str, list[str]] = {
         "generic_enums",
         "a_generic_recursive_type",
     ],
+    "23_Functional": [
+        "README.md",
+        # Closures first, because every iterator adapter takes one. The
+        # declaration, then the classification the compiler cares about, then
+        # the keyword that is blamed for that classification and does not
+        # decide it.
+        "what_a_closure_is",
+        "three_closure_traits",
+        "the_move_keyword",
+        # ...then iterators, opening on the property that explains the rest:
+        # nothing runs until a consumer asks.
+        "iterators_are_lazy",
+        "iter_iter_mut_into_iter",
+        # Last, because it needs both halves: writing `next` yourself, and
+        # the lifetime a borrowing iterator carries.
+        "implementing_iterator",
+    ],
     "20_Compilers": [
         "README.md",
         # The compile-time/run-time line first, since every later page
@@ -554,6 +571,12 @@ LABELS = {
     "rustrover_setup": "RustRover setup",
     "rustrover_code_vision": "RustRover Code Vision",
     "neovim_setup": "Neovim with LazyVim",
+    # 23_Functional
+    "23_Functional": "Functional Rust",
+    "the_move_keyword": "The `move` keyword",
+    "iter_iter_mut_into_iter": "`iter`, `iter_mut`, `into_iter`",
+    "implementing_iterator": "Implementing `Iterator`",
+    "three_closure_traits": "The three closure traits",
     # 06_Data · 07_Clients
     "serde_derive": "Deriving `Serialize` and `Deserialize`",
     "json_round_trip": "The round trip",

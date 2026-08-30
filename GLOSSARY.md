@@ -192,7 +192,7 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **`unwrap_or`** — Replace `None`/`Err` with a default you supply. The default is an ordinary argument, so it is evaluated on every call, needed or not; and once applied, nothing downstream can tell it from a real value. → [`unwrap_or`](17_Option_and_Result/unwrap_or/README.md)
 
-**`FnOnce`** — The loosest of the three closure traits: callable at most once, and therefore allowed to consume what it captured. Every fallback closure is `FnOnce`, which is why `unwrap_or_else(move || owned)` can hand out an owned value. → [`unwrap_or_else`](17_Option_and_Result/unwrap_or_else/README.md)
+**`FnOnce`** — The loosest of the three closure traits, and the one *every* closure implements: callable at most once, and therefore allowed to consume what it captured. Every fallback closure is `FnOnce`, which is why `unwrap_or_else(move || owned)` can hand out an owned value. → [The three closure traits](23_Functional/three_closure_traits/README.md)
 
 **`or_else`** — Try another source and stay inside the wrapper: `Option` → `Option`. The one to reach for when there is a second and third place to look; its neighbour `unwrap_or_else` ends the chain with a plain value instead. → [`unwrap_or_else`](17_Option_and_Result/unwrap_or_else/README.md)
 
@@ -422,3 +422,14 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Argument-position `impl Trait`** — `fn f(v: impl Display)`, the parameter that is never named. Two of them are two *independent* types, where `<T: Display>` used twice is one type twice — and with no `T` to name, the caller cannot turbofish it. → [Where the bound goes](22_Generics/where_the_bound_goes/README.md)
 
+**Closure** — A function that also carries the variables it mentioned from the scope around it. The compiler writes an anonymous struct with one field per capture, so a closure's size is exactly what it captured — zero bytes if that is nothing — and no two closures share a type, however identical their text. → [What a closure is](23_Functional/what_a_closure_is/README.md)
+
+**`Fn` / `FnMut`** — The two tighter closure traits, sitting above `FnOnce` on a supertrait ladder: `Fn` takes `&self` so it is repeatable and may not mutate its captures, `FnMut` takes `&mut self` so it is repeatable and may. What a closure gets is decided by what its body does with the captures — read, mutate, or move out — and never by the `move` keyword. → [The three closure traits](23_Functional/three_closure_traits/README.md)
+
+**`move` (on a closure)** — Captures by value rather than by reference. It answers a lifetime question — a closure that outlives the scope it was written in cannot hold a borrow of it — and decides nothing about which `Fn` trait the closure implements. On a `Copy` type it copies, silently, which is the one `move` bug that compiles and does nothing. → [The `move` keyword](23_Functional/the_move_keyword/README.md)
+
+**Adapter / consumer** — The two halves of an iterator chain. An **adapter** (`map`, `filter`, `take`, `zip`) returns another iterator and computes nothing; a **consumer** (`collect`, `sum`, `find`, `for_each`) returns something else and is what actually runs the chain — for as long as it needs an answer, which is why `find` may call your closure once where `collect` calls it for every item. → [Iterators are lazy](23_Functional/iterators_are_lazy/README.md)
+
+**`IntoIterator`** — The trait a `for` loop actually requires. `Vec` implements it three times — for `Vec<T>`, `&Vec<T>` and `&mut Vec<T>` — which is what makes `for x in v`, `for x in &v` and `for x in &mut v` three different loops with three different item types, and what keeps the collection re-iterable instead of turning it into a one-shot iterator. → [`iter`, `iter_mut`, `into_iter`](23_Functional/iter_iter_mut_into_iter/README.md)
+
+**`size_hint`** — An iterator's optional estimate of how many items are left. The default is `(0, None)` and `collect` believes it, so the `Vec` grows by doubling; writing three honest lines of `size_hint` turns nine items collected into one allocation of exactly nine instead of a walk up to sixteen. → [Implementing `Iterator`](23_Functional/implementing_iterator/README.md)

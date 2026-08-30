@@ -108,4 +108,5 @@ A grep for that comment later is the graduation exercise.
 - [Borrowing](../borrowing/README.md) — the rule itself, and where a borrow actually ends
 - [Ownership and moves](../ownership_and_moves/README.md) — the model the scaffold is protecting
 - [`unwrap` is a TODO](../../02_Errors/unwrap_is_a_todo/README.md) — the same "compiles quietly, waits" pattern
+- [Implementing `Iterator`](../../23_Functional/implementing_iterator/README.md) — the common case where amendment 1 has to be set aside on purpose: a borrowing iterator *is* a struct holding a reference
 - [quinedot's ownership, borrowing and lifetimes ↗](https://quinedot.github.io/rust-learning/) — the best free treatment when the scaffold comes down
