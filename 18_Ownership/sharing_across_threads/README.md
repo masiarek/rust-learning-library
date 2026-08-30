@@ -22,6 +22,7 @@
 ## See also
 
 - [`Rc`: the clone that copies a pointer](../reference_counting/README.md) — the single-threaded original, and the counter this page makes atomic
+- [Marker traits](../../12_Traits/marker_traits/README.md) — `Send` itself: `assert_send::<Arc<i32>>()` compiles and `assert_send::<Rc<i32>>()` does not, on two values of identical size
 - [Mutex poisoning](../../09_Advanced/mutex_poisoning/README.md) — what happens to `Arc<Mutex<T>>` when a thread panics while holding the lock
 - [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) — the trait both counters are implementing
 - [Ownership and moves](../ownership_and_moves/README.md) — the rule a thread boundary enforces most visibly

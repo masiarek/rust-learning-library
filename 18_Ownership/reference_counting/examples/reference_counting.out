@@ -1,0 +1,49 @@
+1. The count is the whole mechanism
+   after Rc::new                      1
+   after Rc::clone                    2
+   a third owner, inside a block      3
+   the block ended, so its owner left 2
+   The value is freed at zero, not at the end of any one owner's scope.
+
+2. What the clone copied: nothing
+   (*roster).clone()                  alloc 4
+   Rc::clone(&roster)                 alloc 0
+   same allocation as the original?
+     Rc::clone   true
+     deep clone  false   <- a separate Vec, and separate Strings inside it
+   One Vec buffer plus one buffer per String, against nothing at all.
+
+3. `Rc::clone(&x)` and `x.clone()` are the same call
+   Rc<String>, cloned with .clone():
+     strong_count 2   same String? true
+   The String was NOT cloned. `Rc<T>` implements `Clone` itself, so
+   method resolution finds it first and never reaches `String::clone`.
+   Both spellings compile to that. Only one of them says so on the line.
+   To reach the String you have to ask: (*name).clone() = "Ada"
+
+4. An `Rc` hands out `&T`, so uniqueness is what buys a write
+   strong_count 1 -> get_mut gave a &mut, pushed: [1, 2, 3, 4]
+   strong_count 2 -> get_mut is None
+   Shared and mutable is the pair Rust never hands out for free.
+
+5. `Rc<RefCell<T>>` is how a shared value gets written to
+   two owners wrote through the same cell: 8
+   `Rc` grants the ownership; `RefCell` grants the write. Neither
+   substitutes for the other, and the borrow rule moves to run time.
+
+6. The one leak safe Rust still permits
+   a <-> b, back edge STRONG:
+     b's back edge: strong -> a, an owner
+     while alive: strong a 2  b 2   weak a 0
+     leaving the scope, so both locals are about to drop:
+     ...nothing printed. Each still holds the other at 1, so neither
+     reaches zero. Both nodes are unreachable and never freed.
+   a <-> b, back edge WEAK:
+     b's back edge: weak -> a, upgrade() gave Some
+     while alive: strong a 1  b 2   weak a 1
+     leaving the scope, so both locals are about to drop:
+     drop ran for a
+     drop ran for b
+     Both ran. A `Weak` does not own, so the loop never closes.
+   `Rc::downgrade` makes one; `upgrade()` returns an Option, because
+   the value it points at may already be gone.

@@ -1,0 +1,44 @@
+Part 1 — predict the count at four points.
+
+  (a) let roster = Rc::new(..)        predicted 1  actual 1
+  (b) two Tally::new(&roster)         predicted 3  actual 3
+  (c) a third, inside a block         predicted 4  actual 4
+  (d) the block ended                 predicted 3  actual 3
+
+  The count tracks OWNERS, not uses. `morning` and `evening` are
+  still alive at (d), so the roster is; `_absentee` is not, so its
+  share went back. The Vec is freed when the last one leaves, and
+  no single owner's scope decides that.
+
+  Three Tally values, one roster, three names stored once:
+    morning leader Ada   evening leader Cara
+
+Part 2 — swap one Rc::clone for a deep clone. Which numbers move?
+
+  Rc::strong_count(&roster)   3   <- unchanged: a deep clone
+                                   makes a value with NO owner in
+                                   common with this one.
+  same buffer as the roster?  false
+  Three fresh Strings and a fresh Vec, so a name edited here would
+  not be seen by any Tally. That divergence is the bug the count
+  was preventing, and it compiles either way.
+
+Part 3 — the back edge, and whether Drop runs.
+
+  With `precinct: RefCell<Rc<Precinct>>` the prediction is NOTHING
+  prints: the precinct owns each voter and each voter owns the
+  precinct, so both counts stop at 1 and neither reaches zero.
+  `Weak` breaks it — a voter can SEE its precinct without owning it:
+
+    Ada can still reach her precinct: Some("Riverside")
+    strong precinct 1   weak precinct 2   strong Ada 2
+    leaving the block:
+     drop ran for precinct Riverside
+     drop ran for voter Ada
+     drop ran for voter Ben
+
+  All three ran, in owner order: the precinct's count hit zero
+  first, which dropped its Vec, which dropped the voters.
+  The rule to carry away: a cycle needs every edge to be an owner,
+  so make exactly one of them an observer. Child-to-parent is
+  almost always the one to demote.
