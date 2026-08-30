@@ -1,0 +1,16 @@
+  1. Ada
+  2. Ben
+  3. Cara
+length 3
+
+size_of::<Box<ListNode<i32>>>()          8
+size_of::<Option<Box<ListNode<i32>>>>()  8
+size_of::<NextNode<i32>>()               8
+
+size_of::<ListNode<i32>>()               16
+size_of::<ListNode<[u8; 64]>>()          72
+size_of::<BoxedData<[u8; 64]>>()         16
+
+ListNode<&str> of 3, ListNode<u8> of 2
+the hand-rolled spelling walks the same way: 1 then 0
+BoxedData holds 64 bytes behind one more pointer

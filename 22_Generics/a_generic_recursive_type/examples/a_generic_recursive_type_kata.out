@@ -1,0 +1,4 @@
+names   ["Ada", "Ben", "Cara"]
+length  3
+scores  [5, 3, 0]
+first   Ada

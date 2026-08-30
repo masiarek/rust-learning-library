@@ -1,0 +1,16 @@
+filled with Ada          filled: true
+reserved                 filled: false
+empty                    filled: false
+
+Slot::<u8>::Empty is Empty, filled: false
+
+     4 -> score 4
+     9 -> rejected: 9 is above the 0-5 range
+  five -> rejected: "five": invalid digit found in string
+
+size_of::<Slot<u8>>()           2
+size_of::<Slot<u64>>()          16
+size_of::<Either<u8, String>>() 24
+size_of::<String>()             24
+
+Result<u8, u8> is a real type: Err(3)

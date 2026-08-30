@@ -1,0 +1,11 @@
+a Container<Handle> is fine: Handle(7)
+duplicate() on Container<String>: "Ada" "Ada"
+
+1! two! 3.5!
+two independent types: 1/two
+
+Pair<Handle>  built and printable: Pair { left: Handle(1), right: Handle(2) }
+              and readable:        1 2
+Pair<String>  cloneable:          Pair { left: "yes", right: "no" }
+
+Shared<Handle> cloned by hand: value 9, 2 owners

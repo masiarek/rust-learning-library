@@ -1,0 +1,14 @@
+text    Thought is free.
+count   4
+scores  [5, 3, 0]
+
+size_of::<u8>()                   1
+size_of::<Container<u8>>()        1
+size_of::<Container<i64>>()       8
+size_of::<Container<[u8; 16]>>()  16
+
+largest(&[3, 9, 4])         9
+largest(&['a', 'q', 'f'])   q
+largest(&[0.5, 0.25])       0.5
+
+a Vec<Container<u8>> holds 2 of them, and nothing else

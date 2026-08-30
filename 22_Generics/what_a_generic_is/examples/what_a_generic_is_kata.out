@@ -1,0 +1,5 @@
+ballot          Pair { left: "Ada", right: 5 }
+ballot.swap()   Pair { left: 5, right: "Ada" }
+same type twice Pair { left: 3, right: 5 }
+nested          Pair { left: ['a', 'b'], right: Pair { left: 1, right: "one" } }
+sizes: Pair<u8, u8> 2 · Pair<u8, u64> 16
