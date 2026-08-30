@@ -26,3 +26,5 @@ jobs:
         run: python3 tools/check_katas.py
       - name: Check that every external link is marked as external
         run: python3 tools/check_link_style.py
+      - name: Check the redirect map still points at pages that exist
+        run: python3 tools/check_redirects.py

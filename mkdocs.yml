@@ -83,6 +83,34 @@ plugins:
   # Built into mkdocs-material — no extra dependency. Builds tags.md into a
   # browse-by-tag index from each page's `tags:` front matter.
   - tags
+  # A page's URL is a promise. Folders here are permanent addresses, and when
+  # one does move — deliberately, and rarely — this is what keeps the old
+  # address working instead of handing a reader a 404 they cannot debug.
+  #
+  # Both sides are source paths, not URLs: `old/README.md: new/README.md`, and
+  # the plugin writes a redirect stub at the old page's built location. Three
+  # rules, each of them a way this goes wrong quietly:
+  #
+  #   1. An entry is PERMANENT. Deleting one un-breaks nothing and re-breaks
+  #      every link anybody saved. Entries accumulate; they do not get tidied.
+  #   2. The key is a historical path and must never be updated. If a page
+  #      moves twice, add a SECOND entry from the first old path to the newest
+  #      one — redirects do not chain.
+  #   3. Every destination must exist on disk. `mkdocs build --strict` does not
+  #      check that, so tools/check_redirects.py does.
+  - redirects:
+      redirect_maps:
+        # 2026-08-29: the Functional Rust section was split an hour after it
+        # was published, once it was clear that "Functional Rust" is not a name
+        # a reader looking for iterators would ever click. Closures kept the
+        # folder (renamed), iterators got their own.
+        23_Functional/README.md: 23_Closures/README.md
+        23_Functional/what_a_closure_is/README.md: 23_Closures/what_a_closure_is/README.md
+        23_Functional/three_closure_traits/README.md: 23_Closures/three_closure_traits/README.md
+        23_Functional/the_move_keyword/README.md: 23_Closures/the_move_keyword/README.md
+        23_Functional/iterators_are_lazy/README.md: 24_Iterators/iterators_are_lazy/README.md
+        23_Functional/iter_iter_mut_into_iter/README.md: 24_Iterators/iter_iter_mut_into_iter/README.md
+        23_Functional/implementing_iterator/README.md: 24_Iterators/implementing_iterator/README.md
 
 markdown_extensions:
   - admonition

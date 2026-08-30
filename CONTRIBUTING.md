@@ -114,6 +114,28 @@ Then add a row to [KATAS.md](KATAS.md) at the point in the sequence where the ka
 - **A repo path in backticks must be a link, not bare code text.** Paths are resolved from the *page's* folder by most readers, so a root-relative path in a code span dead-ends. Put the backticks in the label and a real relative path in the href.
 - **Link a jargon term on first meaningful use**, once per page, and never to the page's own subject.
 
+## Moving a page
+
+Folder names are permanent URLs, which is why [reading order lives in a hook](#reading-order-in-the-sidebar) rather than in filenames. Sometimes a page moves anyway — a section outgrows its name, an arc gets split — and then the old URL has to keep working, because the reader who saved it has no way to guess where it went and no error message that helps.
+
+Add an entry to `redirect_maps` in `mkdocs.yml`, one per moved page, both sides written as **source paths**:
+
+```yaml
+23_Functional/iterators_are_lazy/README.md: 24_Iterators/iterators_are_lazy/README.md
+```
+
+The plugin writes a redirect stub at the old page's built location — for a folder README that is its `index.html`, so both `…/old_page/` and `…/old_page/index.html` keep resolving, and any `#anchor` is carried across.
+
+Three things about an entry, each of which is a way this fails quietly:
+
+- **It is permanent.** Deleting one un-breaks nothing and re-breaks every link anyone saved. Entries accumulate; they are not tidied up later.
+- **The key is a historical path and never changes.** If a page moves a second time, add a second entry from the *first* old path to the newest one. Redirects do not chain: `a → b` and `b → c` leaves anyone holding `a` at a page that no longer exists.
+- **The destination must exist.** `mkdocs build --strict` will not tell you it does not — it checks links between pages that *are* there, and a redirect map is a statement about pages that are not.
+
+`python3 tools/check_redirects.py` enforces the last two, plus the one YAML will not: a **duplicate key**, which the loader resolves by silently keeping the last value, so one of the two moves it claims to cover is not covered.
+
+Do the whole move in one commit — `git mv`, the link rewrites, the redirect entries — and grep for the old path afterwards, including in `mkdocs_hooks.py`, `GLOSSARY.md`, `KATAS.md` and the course table in the root README. Those four are the ones nothing else will catch.
+
 ## Reading order in the sidebar
 
 Set it in `NAV_ORDER` in [`mkdocs_hooks.py` ↗](https://github.com/masiarek/rust-learning-library/blob/master/mkdocs_hooks.py) — **never by renaming files to `01_`, `02_`…** on a page. A filename is a permanent URL; inserting one lesson would otherwise move every page after it. Numeric prefixes on *section folders* are fine, because folders move rarely and deliberately — and the hook strips them from the label, so a reader never sees them.
@@ -131,6 +153,7 @@ Four things that follow from that, worth knowing before you add a page:
 python3 tools/run_examples.py     # examples verified, pages refilled
 python3 tools/check_katas.py      # every Practice section is indexed, every row resolves
 python3 tools/check_link_style.py # every external link carries its ↗, no internal link does
+python3 tools/check_redirects.py  # every retired URL still lands somewhere that exists
 uv run --group docs mkdocs build --strict   # the site builds clean
 ```
 
@@ -142,7 +165,7 @@ So extract the pushed tree and re-run against that:
 
 ```bash
 T=$(mktemp -d); git archive origin/master | tar -x -C "$T"
-(cd "$T" && python3 tools/check_katas.py && python3 tools/check_link_style.py && python3 tools/run_examples.py --check)
+(cd "$T" && python3 tools/check_katas.py && python3 tools/check_link_style.py && python3 tools/check_redirects.py && python3 tools/run_examples.py --check)
 ```
 
 `git archive` writes only tracked, committed content, so an in-flight folder belonging to someone else cannot make this pass and a file you forgot to `git add` cannot hide in it. Do it after you push, against `origin/master` — that is the tree CI builds and the one readers get. `--check` rather than a plain run, since the extract is a throwaway and nothing there is worth rewriting.

@@ -14,7 +14,14 @@ package = false
 # The MkDocs site build. To change a docs dependency, edit here and run `uv lock`.
 # mkdocs-same-dir is pinned exactly: it is the plugin that lets the docs root be
 # the repo root, and it is the one most likely to break the whole build silently.
+#
+# mkdocs-redirects is pinned exactly for a different reason. Later releases pull
+# in `properdocs`, a package that impersonates MkDocs itself; the sibling
+# star-voting-library investigated that and capped at the last release free of
+# it, and this pin matches. Raising it means checking what `uv lock` resolves,
+# not just that the build still passes.
 docs = [
     "mkdocs-material>=9.5",
     "mkdocs-same-dir==0.1.3",
+    "mkdocs-redirects==1.2.2",
 ]
