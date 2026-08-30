@@ -17,3 +17,28 @@
    Both printed the same numbers above, so correctness is never the
    question. The question is one machine-code copy per type and a
    direct call, or one copy shared and an indirect one.
+
+5. Dynamic dispatch does NOT check the type at run time
+   A trait object carries no type tag. The vtable is picked once,
+   where the `&dyn` is made; the call is one indirect jump through
+   it. Asking a `&dyn Processor` what it is does not even compile:
+     p.is::<Risc>()
+     error[E0599]: no method named `is` found for reference
+                   `&Box<dyn Processor>` in the current scope
+   Run-time type identity is opt-in, via std::any::Any, which is
+   the trait whose vtable does carry a TypeId:
+     downcast_ref::<Risc>() -> Some("Risc")   ::<Cisc>() -> None
+     downcast_ref::<Risc>() -> None   ::<Cisc>() -> Some("Cisc")
+   So `dyn` costs an indirect call and a lost inline. It does not
+   cost a type lookup, because no lookup happens.
+
+6. The two-way framing hides a third strategy: an enum
+   Risc computes 6 and 7 as 13
+   Cisc computes 6 and 7 as 42
+   One collection, two behaviours, and no vtable: the `match` is
+   an ordinary branch the optimiser can see through.
+   size_of::<AnyProcessor>() = 1, against 16 for a Box<dyn Processor>:
+   the value itself, inline, rather than a pointer pair.
+   What it costs: the list of implementors is closed. Nobody else's
+   crate can add a variant, and each new one edits every match.
+   `dyn` is what you reach for when that list must stay open.

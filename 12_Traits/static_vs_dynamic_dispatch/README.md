@@ -68,6 +68,57 @@ note: for a trait to be dyn compatible it needs to allow building a vtable
 
 **This used to be called *object safety*, and every book, blog post and Stack Overflow answer still calls it that.** The compiler renamed it to *dyn compatibility*, so a learner who searches the words in front of them finds nothing, and a learner who searches the literature finds a term the compiler never prints. They are the same concept. The other common disqualifier is a method returning `Self` by value, for the same reason: the caller of a `dyn` method cannot know how big the answer is.
 
+## `dyn` does not check the type at run time
+
+The cost of dynamic dispatch is one indirect call and everything the optimiser can no longer see through. It is **not** a run-time check of what the value is, and a good deal of writing about `dyn` says otherwise.
+
+There is nothing to check with. A trait object has no type tag: the vtable pointer is chosen once, where the `&dyn` is built, and after that the call is a load and a jump. Ask a trait object what it is and the compiler has no answer to give you:
+
+```text
+error[E0599]: no method named `is` found for reference `&Box<dyn Animal>` in the current scope
+  |
+9 |         if p.is::<Dog>() { }
+  |              ^^ method not found in `&Box<dyn Animal>`
+```
+
+Run-time type identity is opt-in, and its name is [`std::any::Any` ↗](https://doc.rust-lang.org/std/any/trait.Any.html) — the one trait whose vtable carries a `TypeId`, which is what makes `downcast_ref::<T>()` able to answer:
+
+```rust
+let boxed: Box<dyn Any> = Box::new(Risc);
+println!("{:?}", boxed.downcast_ref::<Risc>().is_some());  // true
+```
+
+`Any` is worth knowing about and worth reaching for rarely: a `match` on a downcast chain is a type switch, which is the shape `dyn` existed to replace.
+
+## The third strategy the two-way framing hides: an enum
+
+Static or dynamic is the usual question, and it skips the answer that is often right — one `enum` with a variant per implementor, and a `match` in the trait impl.
+
+```rust
+enum AnyProcessor { Risc(Risc), Cisc(Cisc) }
+
+impl Processor for AnyProcessor {
+    fn compute(&self, x: i64, y: i64) -> i64 {
+        match self {
+            AnyProcessor::Risc(p) => p.compute(x, y),
+            AnyProcessor::Cisc(p) => p.compute(x, y),
+        }
+    }
+}
+```
+
+That buys the heterogeneous `Vec` — the thing generics could not do — while keeping every call static and every value inline: one byte here, against sixteen for a `Box<dyn Processor>`. The `match` is an ordinary branch, not a vtable load. The [`enum_dispatch` ↗](https://docs.rs/enum_dispatch/latest/enum_dispatch/) crate writes the boilerplate for you.
+
+What it costs is **openness**. The variant list is closed and lives in your crate, so nobody else's code can join in, and each new implementor edits every `match`. That is the real question behind all three:
+
+| | who may implement | decided | the call |
+|---|---|---|---|
+| `<P: Trait>` | anyone | compile time | direct, inlinable |
+| `enum` + `match` | you, in this crate | run time | a branch |
+| `dyn Trait` | anyone, including a plugin loaded later | run time | indirect, through a vtable |
+
+Reach for the enum when the set of implementors is genuinely closed — a token kind, a message type, a ballot format. Reach for `dyn` when it is not, or when the enum's variants would differ so much in size that every value pays for the largest.
+
 ## The verified output
 
 <!-- output:static_vs_dynamic_dispatch -->
@@ -93,6 +144,31 @@ note: for a trait to be dyn compatible it needs to allow building a vtable
    Both printed the same numbers above, so correctness is never the
    question. The question is one machine-code copy per type and a
    direct call, or one copy shared and an indirect one.
+
+5. Dynamic dispatch does NOT check the type at run time
+   A trait object carries no type tag. The vtable is picked once,
+   where the `&dyn` is made; the call is one indirect jump through
+   it. Asking a `&dyn Processor` what it is does not even compile:
+     p.is::<Risc>()
+     error[E0599]: no method named `is` found for reference
+                   `&Box<dyn Processor>` in the current scope
+   Run-time type identity is opt-in, via std::any::Any, which is
+   the trait whose vtable does carry a TypeId:
+     downcast_ref::<Risc>() -> Some("Risc")   ::<Cisc>() -> None
+     downcast_ref::<Risc>() -> None   ::<Cisc>() -> Some("Cisc")
+   So `dyn` costs an indirect call and a lost inline. It does not
+   cost a type lookup, because no lookup happens.
+
+6. The two-way framing hides a third strategy: an enum
+   Risc computes 6 and 7 as 13
+   Cisc computes 6 and 7 as 42
+   One collection, two behaviours, and no vtable: the `match` is
+   an ordinary branch the optimiser can see through.
+   size_of::<AnyProcessor>() = 1, against 16 for a Box<dyn Processor>:
+   the value itself, inline, rather than a pointer pair.
+   What it costs: the list of implementors is closed. Nobody else's
+   crate can add a variant, and each new one edits every match.
+   `dyn` is what you reach for when that list must stay open.
 ```
 <!-- /output -->
 
@@ -102,3 +178,4 @@ note: for a trait to be dyn compatible it needs to allow building a vtable
 - [Supertraits](../supertraits/README.md) — what a trait object inherits from the traits its own trait requires
 - [What a trait is](../what_a_trait_is/README.md) — the declaration both spellings are quantifying over
 - [The Book, ch. 10 — performance of code using generics ↗](https://doc.rust-lang.org/book/ch10-01-syntax.html#performance-of-code-using-generics) — monomorphization, with the generated code written out
+- [LogRocket — disambiguating Rust traits: `Copy`, `Clone` and `Dynamic` ↗](https://blog.logrocket.com/disambiguating-rust-traits-copy-clone-dynamic/) — a clear introduction whose cost section says `dyn` values "have to be checked for their type at runtime". They are not; the `E0599` above is what asking actually gets you. Its closing refactor is the enum above, filed under the wrong name — an enum and a `match` is not monomorphization, which is what the *generic* half of this page does

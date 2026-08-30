@@ -31,3 +31,19 @@
    #[derive(Copy)] on a struct that also impls Drop
      error[E0184]: `Copy` not allowed on types with destructors
      -> a destructor runs once per value; copies would run it twice.
+
+6. "Copy is shallow, Clone is deep" — both halves are false
+   after copying `one` into `two` and editing `two`:
+     one  Precinct { id: 3, registered: 100 }
+     two  Precinct { id: 3, registered: 999 }
+     same address? false   <- Copy duplicates the BITS, it never aliases
+   Rc::clone(&shared):
+     same allocation? true   strong_count 2
+     (*shared).clone() gives a separate Vec? true
+   So `Clone` promises a value you may keep — not a depth.
+   `Rc` clones a pointer, `String` clones a buffer, and a Copy
+   type's derived clone is the same memcpy `=` already does:
+     one.clone() = Precinct { id: 3, registered: 100 }   (no allocation, nothing to free)
+   The axis is not deep vs shallow. It is WHO ASKS:
+     Copy  the compiler, silently, at every `=`
+     Clone you, in writing, at one call site

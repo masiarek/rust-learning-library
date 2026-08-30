@@ -25,6 +25,30 @@ It is **"duplicating is just a `memcpy`, and afterwards nobody owns anything ext
 
 One `String` field disqualifies the whole struct. Copying it bit-for-bit duplicates the *pointer*: two owners, two frees. Not discouraged — unrepresentable.
 
+## "`Copy` is shallow, `Clone` is deep" — both halves are false
+
+A framing borrowed from languages where the choice really is how far a copy reaches. It gets both traits backwards.
+
+**`Copy` is not a reference to the original.** It is a `memcpy`, so the two values are separate memory that happens to hold the same bits. If `let two = one;` produced an alias, editing `two` would change `one` — that is Python's `b = a`, and it is what `Copy` exists *not* to be.
+
+```rust
+let mut two = one;      // Copy
+two.registered = 999;   // one.registered is still 100
+```
+
+**`Clone` is not a promise of depth.** It is a promise of an independently *owned* value, and how far that reaches is the type's business. `Rc::clone` copies a pointer and bumps a count — the shallowest clone there is, and the idiomatic one in any shared-ownership code:
+
+```rust
+let counted = Rc::clone(&shared);   // Rc::ptr_eq(&shared, &counted) is true
+let independent = (*shared).clone();  // this is the one that duplicates the data
+```
+
+`String::clone` allocates, `Rc::clone` does not, `&T::clone` copies a pointer — one trait, three depths. Nothing in the trait says which you get, so read the type, not the method name. ([`ToOwned`](../../12_Traits/to_owned/README.md) is where that `Rc` trap bites hardest.)
+
+The performance claim rides along with it — *`Copy` is faster than `Clone`, because cloning allocates.* A derived `Clone` on a `Copy` type is the same `memcpy` the `=` was already doing, and `one.clone()` on a `Precinct` allocates nothing. Allocation is a property of `String` and `Vec`, not of either trait.
+
+Depth is not the axis. **Who asks** is: the compiler, silently, at every `=`; or you, in writing, at one call site.
+
 ## Three refusals, three codes
 
 ```text
@@ -262,9 +286,49 @@ The rule to carry away:
    #[derive(Copy)] on a struct that also impls Drop
      error[E0184]: `Copy` not allowed on types with destructors
      -> a destructor runs once per value; copies would run it twice.
+
+6. "Copy is shallow, Clone is deep" — both halves are false
+   after copying `one` into `two` and editing `two`:
+     one  Precinct { id: 3, registered: 100 }
+     two  Precinct { id: 3, registered: 999 }
+     same address? false   <- Copy duplicates the BITS, it never aliases
+   Rc::clone(&shared):
+     same allocation? true   strong_count 2
+     (*shared).clone() gives a separate Vec? true
+   So `Clone` promises a value you may keep — not a depth.
+   `Rc` clones a pointer, `String` clones a buffer, and a Copy
+   type's derived clone is the same memcpy `=` already does:
+     one.clone() = Precinct { id: 3, registered: 100 }   (no allocation, nothing to free)
+   The axis is not deep vs shallow. It is WHO ASKS:
+     Copy  the compiler, silently, at every `=`
+     Clone you, in writing, at one call site
 ```
 <!-- /output -->
 
 ## See also
 
 - [STRUCTS.md](../../STRUCTS.md) · [Struct update syntax](../struct_update/README.md) · [Ownership and moves](../../18_Ownership/ownership_and_moves/README.md) · [Borrowing](../../18_Ownership/borrowing/README.md)
+- [LogRocket — disambiguating Rust traits: `Copy`, `Clone` and `Dynamic` ↗](https://blog.logrocket.com/disambiguating-rust-traits-copy-clone-dynamic/) — where the deep/shallow framing above comes from, stated outright: *`Copy`* "creates a shallow copy, a new reference to the original value", *`Clone`* "creates a deep copy". Section 6 of the run below is that sentence tested. Its code says `#[Derive(Copy, Clone)]`, which does not compile — the attribute is lowercase
+- [`Rc`: the clone that copies a pointer](../../18_Ownership/reference_counting/README.md) — the clone that duplicates a pointer and a count, not the data; and [`Arc`](../../18_Ownership/sharing_across_threads/README.md) for the same thing across threads
+- [`Cow`: borrow until somebody writes](../../18_Ownership/clone_on_write/README.md) — the clone deferred until a write actually needs one
+
+## Sources
+
+### The same word in four books
+
+Four Manning books from 2024 all explain `clone`, and no two of them mean the same thing by it. Together they cover the trait; one at a time, each reads like the definition.
+
+| Book | Where `clone` lives | What it means, there |
+|---|---|---|
+| **Idiomatic Rust** — Brenden Matthews | §10.5 *Too many clones* (p. 216); ch. 9, *Immutability* (p. 189) | Both verdicts, from one author. Ch. 10 files it as an antipattern — a crutch for not thinking about ownership — then points at ch. 9, where he recommends it as the simple way to get immutable data. The rule he actually gives is *informed and deliberate*, not *avoid*. |
+| **Learn Rust in a Month of Lunches** — David MacLeod | §2.8 *Copy types* (p. 42); §11.4 `Cow` (p. 215); §11.5 `Rc` (p. 219); §12.3 `Arc` (p. 249) | Cost, and the way out of it. The only one of the four that answers "I am cloning too much" with a *type* rather than with advice: reach for `Rc`, whose clone copies the pointer and nothing else. |
+| **Code Like a Pro in Rust** — Brenden Matthews | ch. 5, *Working with memory* — §5.3 *Deep copying* (p. 97), §5.4 *Avoiding copies* (p. 99), §5.6 *Reference counting* (p. 103), §5.7 *Clone on write* (p. 106) | Depth. The sharpest statement of the deep-copy reading: a derived `Clone` recurses, so one `.clone()` on a `Vec` duplicates everything inside it. |
+| **Write Powerful Rust Macros** — Sam Van Overmeire | §5.1.2 *Recreating the struct*; §6.4.5 *An alternative approach* | Getting rid of it. `clone` shows up because `parse_macro_input!` moves the `TokenStream` and the macro still has to give it back; the builder chapter then starts at *clone everything*, finds that this restricts the macro to `Clone` or `Copy` types, and ends by consuming `self` instead — needing no clone at all. |
+
+Only two of them are about copying data. MacLeod's `Rc` and Matthews' `Cow` are about *not* copying it, and Van Overmeire's is about a design that stops asking.
+
+### Where a flattened summary goes wrong
+
+Side-by-side comparisons of these four books circulate, and they get this exact seam wrong. One credits *Idiomatic Rust* with a detailed `LinkedList` example demonstrating deep copying. The book's `LinkedList` is `Rc<RefCell<ListItem<T>>>`, built in ch. 3 to teach `Iterator` and `IntoIterator`; every `.clone()` in it — on `cur_iter`, on `head`, on `next` — bumps a reference count and copies no list data at all. It is the *shallowest* clone in the book, and the summary reports it as the deepest.
+
+That is not a careless reading so much as the predictable one: `.clone()` is spelled identically whichever it does, so a summary written from the method name alone has nothing to go on. MacLeod's chapter gives the fix in one line of style — write `Rc::clone(&item)` rather than `item.clone()`, so the call says which thing is being cloned. Same code, same cost, and no longer misreadable.

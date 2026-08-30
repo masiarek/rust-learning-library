@@ -2,6 +2,8 @@
 //!
 //!   rustc --edition 2024 copy_vs_clone.rs -o /tmp/cvc && /tmp/cvc
 
+use std::rc::Rc;
+
 // Clone only. Duplicating is possible, but you must ask for it by name.
 #[derive(Debug, Clone)]
 struct Ballot {
@@ -70,4 +72,31 @@ fn main() {
     println!("   #[derive(Copy)] on a struct that also impls Drop");
     println!("     error[E0184]: `Copy` not allowed on types with destructors");
     println!("     -> a destructor runs once per value; copies would run it twice.");
+
+    println!("\n6. \"Copy is shallow, Clone is deep\" — both halves are false");
+    let one = Precinct { id: 3, registered: 100 };
+    let mut two = one; //                Copy. If this were a reference to `one`...
+    two.registered = 999; //             ...this line would change `one` as well.
+    println!("   after copying `one` into `two` and editing `two`:");
+    println!("     one  {one:?}");
+    println!("     two  {two:?}");
+    println!("     same address? {}   <- Copy duplicates the BITS, it never aliases",
+             std::ptr::eq(&one, &two));
+
+    let shared = Rc::new(Ballot { voter: "Cara".to_string(), scores: vec![3, 3] });
+    let counted = Rc::clone(&shared); // the most idiomatic clone in Rust, and it copies nothing
+    println!("   Rc::clone(&shared):");
+    println!("     same allocation? {}   strong_count {}",
+             Rc::ptr_eq(&shared, &counted), Rc::strong_count(&shared));
+    let independent: Ballot = (*shared).clone(); // THIS one deep-copies
+    println!("     (*shared).clone() gives a separate Vec? {}",
+             shared.scores.as_ptr() != independent.scores.as_ptr());
+    println!("   So `Clone` promises a value you may keep — not a depth.");
+    println!("   `Rc` clones a pointer, `String` clones a buffer, and a Copy");
+    println!("   type's derived clone is the same memcpy `=` already does:");
+    let cloned_precinct = one.clone();
+    println!("     one.clone() = {cloned_precinct:?}   (no allocation, nothing to free)");
+    println!("   The axis is not deep vs shallow. It is WHO ASKS:");
+    println!("     Copy  the compiler, silently, at every `=`");
+    println!("     Clone you, in writing, at one call site");
 }
