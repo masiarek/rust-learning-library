@@ -128,7 +128,7 @@ Look again at the tally above: four warnings, and it still **exited `0`**. Nothi
 Two more things worth knowing about the boundary:
 
 - **Some things are unconditional errors**, not lints at all — the borrow checker, type mismatches, `unsafe` misuse. No level to set, no `allow`. If you can `#[allow]` it, it was a lint.
-- **`clippy` picks up where `rustc` stops.** `rustc`'s lints are mostly about code that is *wrong or dead*; clippy's ~700 are about code that works but is not how Rust is written (`if x { true } else { false }`, a manual loop that wanted `.sum()`). Same level system, same `#[allow(clippy::name)]` syntax, and `cargo clippy` runs it. Reach for it once `cargo build` is quiet.
+- **`clippy` picks up where `rustc` stops.** `rustc`'s lints are mostly about code that is *wrong or dead*; clippy's several hundred are about code that works but is not how Rust is written (`if x { true } else { false }`, a manual loop that wanted `.sum()`). Same level system, same `#[allow(clippy::name)]` syntax, and `cargo clippy` runs it. Reach for it once `cargo build` is quiet. Both counts, printed from the pinned toolchain rather than quoted: [Measured claims](../../00_Start_Here/measured_claims/README.md).
 
 ## If you are coming from another language
 

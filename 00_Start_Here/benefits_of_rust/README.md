@@ -71,6 +71,7 @@ Google's speaker notes suggest asking the room which languages they already writ
 ## See also
 
 - [Start here](../README.md) — the plan, and the three free resources it is built around
+- [Measured claims](../measured_claims/README.md) — the other list: six claims that arrive with a number attached, and what each number counted
 - [Comprehensive Rust in the shelf](../../10_Resources/books/README.md) — what the course is good at, and the one cost of its slide format
 - [C and C++](../../31_C_and_Cpp/README.md) — the nine bugs the first two tables prevent, each one compiled and run
 - [Undefined behaviour](../../GLOSSARY.md) — the term the second table is really about

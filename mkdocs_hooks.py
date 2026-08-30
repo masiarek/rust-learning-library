@@ -97,6 +97,10 @@ NAV_ORDER: dict[str, list[str]] = {
     "00_Start_Here": [
         "README.md",
         "benefits_of_rust",
+        # The counterpart list: same job, other evidence. Google's twenty are
+        # compiler refusals; cheats.rs's six are citations, so the two pages
+        # sit together and neither restates the other.
+        "measured_claims",
         "the_book",
         "rust_by_example",
         "rustlings",
@@ -161,6 +165,11 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...then the three that grow, in the order a program needs them...
         "the_vec",
         "vec_of_vecs",
+        # ...then the per-method reference for the one type a program uses most.
+        # It sits directly under its two lessons rather than at the end of the
+        # section, because a reader who wants `Vec::drain` arrives from `the_vec`
+        # and should not have to scroll past the hash maps to find it.
+        "vec_methods",
         "the_hashmap",
         "the_hashset",
         # ...and last the one that is a pointer rather than a container.
@@ -467,6 +476,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "let_else",
         "binding_at",
     ],
+    "26_Collections/vec_methods": ["README.md"],
     "14_Strings/str_methods": ["README.md"],
     "14_Strings/string_methods": ["README.md"],
     "14_Strings": [
@@ -830,6 +840,8 @@ LABELS = {
     # while `string_methods` gets a plain "String methods".
     "str_methods": "`str` methods",
     "string_methods": "`String` methods",
+    # 26_Collections — the third method reference, same shape as the pair above.
+    "vec_methods": "`Vec` methods",
     # 15_First_Programs
     "rustc_without_cargo": "Running a scratch program",
     "what_an_annotation_does": "What a type annotation does",
@@ -911,7 +923,22 @@ STRING_METHODS = """
     with_capacity
 """.split()
 
+# The Vec method reference: one folder per method, 47 of them, under
+# 26_Collections/vec_methods. Same mechanical rule, and LISTED for the same
+# reason -- `vec_of_vecs` is a lesson in the same section and clean() sees only
+# the bare folder name, so a `vec_` prefix rule would relabel it "Vec::of vecs".
+VEC_METHODS = """
+    append as_mut_ptr as_mut_slice as_ptr as_slice capacity clear dedup
+    dedup_by dedup_by_key drain extend_from_slice extend_from_within
+    extract_if from_raw_parts insert insert_mut into_boxed_slice
+    into_flattened into_iter into_raw_parts is_empty leak len new pop pop_if
+    push push_mut remove reserve reserve_exact resize resize_with retain
+    retain_mut set_len shrink_to shrink_to_fit spare_capacity_mut splice
+    split_off swap_remove truncate try_reserve try_reserve_exact with_capacity
+""".split()
+
 LABELS.update({f"str_{m}": f"str::{m}" for m in STR_METHODS})
+LABELS.update({f"vec_{m}": f"Vec::{m}" for m in VEC_METHODS})
 LABELS.update({f"string_{m}": f"String::{m}" for m in STRING_METHODS})
 
 PREFIX = re.compile(r"^\d+[_\- ]")
