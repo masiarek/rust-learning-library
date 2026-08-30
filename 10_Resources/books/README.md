@@ -2,7 +2,7 @@
 
 **Level:** reference · the shelf
 
-**One line:** About seventy Rust books exist, roughly a dozen are worth anyone's time, and which dozen depends entirely on what you already know — so every entry here carries a verdict and the reason for it.
+**One line:** Around seventy Rust books are named below, roughly a dozen are worth anyone's time, and which dozen depends entirely on what you already know — so every entry carries a verdict and the reason for it.
 
 **Publication facts checked 2026-08-29** against the publisher's own page, and every link on this page answered on the same date. Two publishers refuse automated requests: Packt's pages were confirmed in a browser instead, and O'Reilly's storefront could not be reached from here at all — so its two print-only titles link their **official code repository**, which resolves, states the edition, and is the more useful link for a programmer anyway. What was *not* checked, and cannot be, is the verdict — see the next section, which says exactly what a verdict here is worth.
 
