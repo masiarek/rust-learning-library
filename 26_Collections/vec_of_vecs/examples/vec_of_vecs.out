@@ -1,0 +1,38 @@
+1. Three ways to hold a 4x4 grid of u8
+   [[u8; 4]; 4]          0 allocations — every byte is inline
+   vec![vec![0; 4]; 4]   5 allocations — one per row, plus the outer Vec
+   vec![0; 16]           1 allocation  — one block, indexed r * W + c
+   The nested form is the only one that can have rows of different
+   lengths, and the only one that pays for the privilege.
+
+2. Contiguous, or a pointer chase per row
+   [[u8; 4]; 4]: row 1 begins 4 bytes after row 0 — one block, no gaps
+   size_of_val(&fixed) = 16 bytes, all of it the data
+   the outer Vec is 3 usizes wide — ptr, len, cap, and none of the data
+   Reading nested[r][c] follows two pointers; flat[r * W + c] follows one.
+   flat[2 * W + 2] is the cell nested[2][2] names: 0
+
+3. Printing: `{:?}` is one line, not a picture
+   println!("{:?}", grid) gives you this, all on one line:
+   [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 5, 0], [0, 0, 0, 0]]
+   A grid on the screen needs a loop — the Debug impl never wraps:
+     0 0 0 0
+     0 0 0 0
+     0 0 5 0
+     0 0 0 0
+   `{:#?}` wraps, but one element per line — sixteen lines for this grid.
+
+4. Updating through iter_mut: the `*` is the whole lesson
+   after *cell = r * W + c:
+      0  1  2  3
+      4  5  6  7
+      8  9 10 11
+     12 13 14 15
+   `cell` is a &mut u8. Assigning to it repoints the binding, which is
+   both a type error and, if it compiled, not what you meant.
+
+5. The rows are clones, not aliases
+   rows[0] and rows[1] share a buffer? false
+   after rows[0][0] = 9 -> [[9, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+   vec![elem; n] CLONES elem n times. Python's [[0]*4]*4 stores the
+   same list four times, so the same assignment changes every row.

@@ -255,6 +255,7 @@ fn main() {
 ## See also
 
 - [`Vec`](../the_vec/README.md) — the growable one, which derefs to exactly the slice type on this page
+- [Grids and nested `Vec`s](../vec_of_vecs/README.md) — `[[T; N]; M]` against `Vec<Vec<T>>`, and `chunks` turning one block back into rows
 - [Tuples](../tuples/README.md) — the other built-in compound type, for fields of *different* types
 - [String slices](../../14_Strings/string_slices/README.md) — `&str` is `&[u8]` with a promise about its contents, and the same half-open ranges
 - [Borrowing](../../18_Ownership/borrowing/README.md) — why a slice cannot outlive what it points at

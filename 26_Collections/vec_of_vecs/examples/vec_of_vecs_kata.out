@@ -1,0 +1,43 @@
+1. The same 3x3 grid, two shapes, one cell set
+   Vec<Vec<u8>>
+     0 0 0
+     0 5 0
+     0 0 0
+   Flat
+     0 0 0
+     0 5 0
+     0 0 0
+   `chunks(width)` is what turns the flat block back into rows —
+   a borrowed view per row, with no allocation and no copying.
+
+2. The bill at scale: a 1000-row grid
+   vec![vec![0; 1000]; 1000]  -> 1001 allocations
+   Flat::new(1000, 1000)      -> 1 allocation
+   1000000 cells either way (1000 rows x 1000 wide, and 1000000 in one block).
+   One allocation per row, plus the outer Vec. What those thousand
+   extra allocations buy is rows that need not agree on a length.
+
+3. What only Vec<Vec<T>> can do: rows of different lengths
+   ragged
+     1
+     2 2
+     3 3 3 3
+   Row lengths: [1, 2, 4]
+   [[u8; 3]; 3] cannot express this at all — the length is in the
+   type. Flat cannot either without a second Vec of row offsets.
+   If your rows are always the same length, that is a fact the
+   nested form is paying to keep flexible.
+
+4. The flat form's real cost: the width can go missing
+   f.set(2, 2, 9) -> index 8 in a 9-long Vec
+   Without the assert, f.set(0, 5, 9) writes index 5 — which is
+   row 1 column 2, a real cell, silently. The nested form gets an
+   out-of-bounds panic for free, because each row knows its own len.
+   with the assert in place, f.set(0, 5, 9) panics: true
+
+5. vec![row; 3] clones — it does not alias
+   [[7, 0, 0], [0, 0, 0], [0, 0, 0]]
+   Identical to vec![vec![0; 3]; 3], which is that written short.
+   Python's [[0] * 3] * 3 stores one list three times, so the same
+   assignment shows up in all three rows. Rust has no way to write
+   that by accident: sharing needs Rc<RefCell<_>> and says so.

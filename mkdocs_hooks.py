@@ -157,6 +157,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "arrays_and_slices",
         # ...then the three that grow, in the order a program needs them...
         "the_vec",
+        "vec_of_vecs",
         "the_hashmap",
         "the_hashset",
         # ...and last the one that is a pointer rather than a container.
@@ -729,6 +730,7 @@ LABELS = {
     "break_and_continue": "`break` and `continue`",
     # 26_Collections — the type names read as code.
     "the_vec": "`Vec`",
+    "vec_of_vecs": "Grids and nested `Vec`s",
     "the_hashmap": "`HashMap`",
     "the_hashset": "`HashSet`",
     "the_box": "`Box`",

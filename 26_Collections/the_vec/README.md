@@ -305,6 +305,7 @@ fn main() {
 ## See also
 
 - [Arrays and slices](../arrays_and_slices/README.md) — the type `Vec` derefs to, and where its methods actually live
+- [Grids and nested `Vec`s](../vec_of_vecs/README.md) — what `vec![vec![0; w]; h]` allocates, and the flatter thing most grids should be
 - [`Box`](../the_box/README.md) — one value on the heap, where `Vec` is many
 - [Stack and heap](../../18_Ownership/stack_and_heap/README.md) — what the pointer points at, and what it costs to follow
 - [Ownership and moves](../../18_Ownership/ownership_and_moves/README.md) — why `let v2 = v1;` leaves `v1` unusable
