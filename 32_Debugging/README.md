@@ -34,6 +34,7 @@ The everyday tool, and the one with the most surprises in it.
 | Page | What it answers |
 |---|---|
 | [Reading a compilation failure](../20_Compilers/reading_a_compilation_failure/README.md) | Which of four programs produced your message — parser, type checker, borrow checker, linker — because the fix is different in each |
+| ["No method named …"](../12_Traits/no_method_named/README.md) | One error code over four unrelated bugs, and the `help:` line that separates them — including the case where the trait to implement is not the trait the method came from |
 | [C and C++: the bugs Rust is a reply to](../31_C_and_Cpp/README.md) | Nine runtime bugs, each watched happening in C and then refused by `rustc`. The best argument for reading errors instead of running debuggers |
 
 ## Once somebody else depends on it

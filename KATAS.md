@@ -136,6 +136,7 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K116 | [The same fan-out three ways — sequential, `spawn` plus `Arc`, and `scope`, then the E0373 that explains why the middle one exists](09_Advanced/spawning_a_thread/README.md#practice) | [Spawning a thread](09_Advanced/spawning_a_thread/README.md) | 201 → 301 |
 | K117 | [A three-stage pipeline, and the drop that ends it — then reproduce the classic mpsc hang without hanging](09_Advanced/channels/README.md#practice) | [Channels](09_Advanced/channels/README.md) | 201 → 301 |
 | K118 | [The safe line the unsafe block depends on — write `split_at_mut`, delete its assert, then find the ordinary `pub fn` that makes an unchecked read unsound](09_Advanced/what_unsafe_turns_off/README.md#practice) | [What `unsafe` turns off](09_Advanced/what_unsafe_turns_off/README.md) | 301 |
+| K119 | [Three calls, three causes — one `E0599` each, and only one of them is fixed by implementing the trait the method came from](12_Traits/no_method_named/README.md#practice) | ["No method named …"](12_Traits/no_method_named/README.md) | 201 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -269,12 +270,13 @@ The table above is the order to attempt them in. This is the same katas grouped 
 
 - K81 · [Which defence catches a silent catch-all](13_Enums/a_typo_becomes_a_binding/README.md#practice)
 
-**[Traits](12_Traits/README.md)** — 4 katas
+**[Traits](12_Traits/README.md)** — 5 katas
 
 - K85 · [Predict the owned twin before you run it](12_Traits/to_owned/README.md#practice)
 - K87 · [Four loops that all look like reuse](12_Traits/clone_into/README.md#practice)
 - K114 · [Four impls for one `*`, and an operator that should not exist](12_Traits/operators_are_traits/README.md#practice)
 - K115 · [Three drop orders, and the guard released one line early](12_Traits/drop_and_raii/README.md#practice)
+- K119 · [Three calls, three causes](12_Traits/no_method_named/README.md#practice)
 
 **[Generics](22_Generics/README.md)** — 2 katas
 
