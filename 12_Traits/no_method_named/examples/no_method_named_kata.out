@@ -1,0 +1,8 @@
+1. inherent method written  -> p.turnout() = 81.2%
+2. std::fmt::Write imported -> log = "812 of 1000 voted — provisional"
+3. Display implemented      -> s.to_string() = "station 7 (Ada Falls)"
+
+The three causes, in the order the compiler rules them out:
+  1. no such method anywhere               -> write it
+  2. trait implemented, but not in scope   -> import it
+  3. trait (or its bound) not implemented  -> implement it

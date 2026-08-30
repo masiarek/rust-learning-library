@@ -1,0 +1,14 @@
+1. The method EXISTS because an inherent impl wrote it
+   b.doubled() = 10
+
+2. The trait is IN SCOPE, so its method appears on a type std wrote
+   text.lines().count() = 3
+   collected            = ["first", "second", "third"]
+
+3. The trait is IMPLEMENTED, so .clone() exists on our own type
+   original = Ballot { voter: "Ada", star: 5 }
+   clone    = Ballot { voter: "Ada", star: 0 }
+
+4. The BOUND is satisfied, so the blanket impl hands us .to_string()
+   b.to_string() = Ada gave 5 star(s)
+   ^ nothing here implements ToString; implementing Display did it.
