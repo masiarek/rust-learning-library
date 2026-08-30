@@ -13,6 +13,7 @@ The back half is names rather than values. Shadowing, scope, and lifetimes are t
 | [What an address shows](what_an_address_shows/README.md) | 201 | `&x` addresses the three-word header, not the text — so a move changes the number without relocating a byte, and a `Copy` does the same thing while nothing moves at all |
 | [Borrowing](borrowing/README.md) | 101 → 201 | `&T` and `&mut T`, the many-readers-or-one-writer rule, and the last-use rule that decides which order compiles |
 | [How to learn lifetimes](how_to_learn_lifetimes/README.md) | 201 | Is *"clone everything"* good advice? Mostly yes — with three amendments, the sharpest being that cloning to dodge a *mutation* error compiles and silently does nothing |
+| [Lifetime annotations](lifetime_annotations/README.md) | 201 | `<'a>` names a relationship rather than granting a duration — `E0106` and what its help line is asking, the three elision rules that make most signatures need nothing, and why a second lifetime permits *more* programs than reusing one |
 | [A name is not a place](a_name_is_not_a_place/README.md) | 201 | What separates a shadow from `mut`, proved with the borrow checker rather than with addresses: the shadow compiles and the `mut` spelling is `E0506`, because one is a declaration and the other is a write |
 | [A shadow does not drop](shadowing_does_not_drop/README.md) | 201 | What shadowing does to the value underneath: nothing — it is still alive, still borrowable, and it drops *after* the shadow that hid it, with no name left to release it early |
 | [When to shadow](when_to_shadow/README.md) | 201 | The judgement call the other two leave open: what shadowing buys that `mut` cannot, the five idioms worth copying, and the three bugs that compile — only one of which warns, and not about shadowing |
@@ -29,5 +30,6 @@ The last three pages are the ways out of a copy the one-owner rule would otherwi
 - [Strings](../14_Strings/README.md) — the worked example most of these pages already use
 - [Structs](../16_Structs/copy_vs_clone/README.md) — `Copy` vs `Clone`, which decides what `=` means
 - [`ToOwned`](../12_Traits/to_owned/README.md) — `Clone` generalized to borrowed data
+- [`&'static str`](../14_Strings/static_str/README.md) — the longest lifetime, filed with the strings because that is where you meet it: the `E0597` that only bites off a non-literal, and why `T: 'static` the bound does not mean "lives forever"
 
 [SHADOWING.md](../SHADOWING.md) is the full reading order for the names half.

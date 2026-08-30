@@ -1,0 +1,30 @@
+1. `'a` ties the answer to both arguments
+   longest(&long, &short) = a long string
+   `'a` is the SHORTER of the two lifetimes, not a duration the
+   annotation hands out — move `short` into an inner scope and
+   the identical signature gives E0597.
+
+2. Most signatures need no annotation — elision fills the hole
+   first_word("Call me Ishmael") = Call
+   first_word(&novel)            = Call
+   One input reference, one output: there is only one source it
+   could borrow from, so the compiler writes `'a` for you.
+
+3. On a struct the parameter becomes part of the type
+   excerpt.part  = Call me Ishmael
+   excerpt.shout() = Call me Ishmael
+   size_of::<Excerpt>() = 16   the same as the &str it holds (16)
+   `impl<'a> Excerpt<'a>` declares it and then uses it — the same
+   say-it-twice shape as `impl<T> Container<T>`.
+
+4. Two lifetimes say more than one
+   trimmed_to(&kept, &temporary) = the part we keep
+   The delimiter was a temporary, freed at the end of that very
+   statement, and the answer outlives it. Write both parameters as
+   `'a` and the same line is E0716: the temporary would have to
+   live as long as the borrow it has nothing to do with.
+
+5. `'static` is not a different kind of thing, just the longest
+   longest(&long, literal) = lives as long as the program
+   A `&'static str` is accepted wherever `&'a str` is wanted,
+   because 'static outlives every 'a. The reverse never holds.
