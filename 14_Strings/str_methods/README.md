@@ -8,6 +8,8 @@ These pages are a **reference**, not a course. If you have not met `String` and 
 
 Every page has the same shape: a one-line summary, the signature, the stability line, the prose, then a **complete runnable program and its verified output**. Nothing on any of these pages is hand-typed output — [`tools/run_examples.py`](../../CONTRIBUTING.md) compiles each example, runs it, and fails the build if what the page shows is not what the program printed.
 
+Where a page prints a table of inputs and results, the input column is built with `format!("{s:?}")` and then padded as a plain `String`. The obvious spelling, `{s:<7?}`, compiles and silently does nothing: width and alignment reach every `Debug` impl as `Formatter` state, and the one for `&str` never reads it — so the arrows do not line up and nothing warns you. That trap has [its own section](../../15_First_Programs/debug_vs_display/README.md) on the `Debug` and `Display` page.
+
 The signature block is a `text` fence rather than a `rust` one on purpose: a bare `pub fn …` is not something you can paste into a file, and the [house rule](../../CONTRIBUTING.md) is that the first `rust` block on a page must compile. The first `rust` block here is always the real example.
 
 ## The pattern argument

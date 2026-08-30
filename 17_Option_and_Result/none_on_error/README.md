@@ -150,14 +150,14 @@ fn main() {
 
     println!("Option — the caller cannot tell a typo from a policy limit:");
     for raw in lines {
-        println!("  {raw:>7?} -> {:?}", seats_lossy(raw));
+        println!("  {:>7} -> {:?}", format!("{raw:?}"), seats_lossy(raw));
     }
 
     println!("\nResult — every one of them can be answered differently:");
     for raw in lines {
         match seats(raw) {
-            Ok(n) => println!("  {raw:>7?} -> {n} seats"),
-            Err(e) => println!("  {raw:>7?} -> {e}"),
+            Ok(n) => println!("  {:>7} -> {n} seats", format!("{raw:?}")),
+            Err(e) => println!("  {:>7} -> {e}", format!("{raw:?}")),
         }
     }
 
@@ -175,18 +175,18 @@ fn main() {
 
 ```text
 Option — the caller cannot tell a typo from a policy limit:
-  "3" -> Some(3)
-  "" -> None
+      "3" -> Some(3)
+       "" -> None
   "three" -> None
-  "0" -> None
-  "99" -> None
+      "0" -> None
+     "99" -> None
 
 Result — every one of them can be answered differently:
-  "3" -> 3 seats
-  "" -> no seat count was given
+      "3" -> 3 seats
+       "" -> no seat count was given
   "three" -> not a whole number: invalid digit found in string
-  "0" -> an election with 0 seats elects nobody
-  "99" -> 99 seats is past the 20 this ballot supports
+      "0" -> an election with 0 seats elects nobody
+     "99" -> 99 seats is past the 20 this ballot supports
 
 The one case where None was right all along:
   ballots.iter().position(|b| *b == "cara") -> None

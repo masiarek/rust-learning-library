@@ -14,6 +14,7 @@
 - Named and positional arguments — `{name}`, `{0}`, and the captured-identifier form that made most `format!("{}", x)` calls obsolete.
 - `$` for dynamic width and precision: `{val:>width$}` and `{val:.prec$}`, which is how you right-align a column whose width you computed.
 - `{:?}` vs `{}` vs `{:#?}` — the [`Debug`/`Display`](../../15_First_Programs/debug_vs_display/README.md) split, and the pretty-printed form worth knowing.
+- Why `{s:<8?}` pads nothing: the spec is state on the `Formatter`, and an impl has to *ask* for it — [`Debug for str` never does](../../15_First_Programs/debug_vs_display/README.md), while `Debug` for a number does, and a `Vec` passes your width down to its elements.
 - The numeric ones: `{:#x}`, `{:#b}`, `{:e}`, and what `{:.2}` does to a float that is exactly halfway.
 - `write!` into a `String` versus `format!`, and why the first one belongs in a loop.
 

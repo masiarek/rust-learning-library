@@ -12,7 +12,7 @@ fn main() {
     // Recovering a token's position for an error message.
     for tok in text.split_whitespace() {
         let at = text.substr_range(tok).map(|r| r.start);
-        println!("{tok:<4?} column {:?}", at);
+        println!("{:<5} column {:?}", format!("{tok:?}"), at);
     }
 
     // The whole string is a substring of itself.

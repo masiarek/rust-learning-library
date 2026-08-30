@@ -1,8 +1,8 @@
-"a.b.c" -> Some(("a.b", "c"))
-"noext" -> None
-".hidden" -> Some(("", "hidden"))
+"a.b.c"     -> Some(("a.b", "c"))
+"noext"     -> None
+".hidden"   -> Some(("", "hidden"))
 "trailing." -> Some(("trailing", ""))
 Some(("/usr/local/bin", "rustc"))
 ["rustc", "/usr/local/bin"]
 "example.com:8080" -> Some(("example.com", "8080"))
-"::1:9000" -> Some(("::1", "9000"))
+"::1:9000"         -> Some(("::1", "9000"))

@@ -24,7 +24,7 @@ The empty string yields no pieces at all.
 ```rust
 fn main() {
     for input in ["a\nb\n", "a\nb", "", "\n"] {
-        println!("{input:<7?} -> {:?}", input.split_inclusive('\n').collect::<Vec<&str>>());
+        println!("{:<8} -> {:?}", format!("{input:?}"), input.split_inclusive('\n').collect::<Vec<&str>>());
     }
 
     // Nothing is discarded, so the pieces rebuild the original.
@@ -39,7 +39,7 @@ fn main() {
     // Telling a terminated last line from an unterminated one.
     for input in ["a\nb\n", "a\nb"] {
         let last = input.split_inclusive('\n').last().unwrap();
-        println!("{input:<7?} last piece {last:?} terminated={}", last.ends_with('\n'));
+        println!("{:<8} last piece {last:?} terminated={}", format!("{input:?}"), last.ends_with('\n'));
     }
 }
 ```
@@ -50,14 +50,14 @@ fn main() {
 
 ```text
 "a\nb\n" -> ["a\n", "b\n"]
-"a\nb" -> ["a\n", "b"]
-"" -> []
-"\n" -> ["\n"]
+"a\nb"   -> ["a\n", "b"]
+""       -> []
+"\n"     -> ["\n"]
 ["alpha\r\n", "beta\n", "gamma"]
 round trip: true
 ["alpha", "beta", "gamma"]
 "a\nb\n" last piece "b\n" terminated=true
-"a\nb" last piece "b" terminated=false
+"a\nb"   last piece "b" terminated=false
 ```
 <!-- /output -->
 

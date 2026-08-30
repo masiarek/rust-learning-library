@@ -34,8 +34,8 @@ fn main() {
 
     // Length is always preserved.
     for s in ["ß", "ﬁ", "abc"] {
-        println!("{s:<4?} ascii {} bytes, unicode {} bytes",
-                 s.to_ascii_uppercase().len(), s.to_uppercase().len());
+        println!("{:<5} ascii {} bytes, unicode {} bytes",
+                 format!("{s:?}"), s.to_ascii_uppercase().len(), s.to_uppercase().len());
     }
 
     // Hex digits: an ASCII-by-definition alphabet.
@@ -51,8 +51,8 @@ fn main() {
 "HELLO"
 "STRAßE" vs "STRASSE"
 true
-"ß" ascii 2 bytes, unicode 2 bytes
-"ﬁ" ascii 3 bytes, unicode 2 bytes
+"ß"   ascii 2 bytes, unicode 2 bytes
+"ﬁ"   ascii 3 bytes, unicode 2 bytes
 "abc" ascii 3 bytes, unicode 3 bytes
 "1F4A9"
 ```

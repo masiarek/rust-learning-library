@@ -1,6 +1,6 @@
 "  GET /index.html"
 "GET /index.html"
-"ok\n" -> "ok"
+"ok\n"   -> "ok"
 "ok\r\n" -> "ok"
-"ok" -> "ok"
+"ok"     -> "ok"
 "value" (5 bytes)

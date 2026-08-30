@@ -1,8 +1,8 @@
 "key=value" -> Some(("key", "value"))
-"key=a=b" -> Some(("key", "a=b"))
-"=v" -> Some(("", "v"))
-"k=" -> Some(("k", ""))
-"bare" -> None
+"key=a=b"   -> Some(("key", "a=b"))
+"=v"        -> Some(("", "v"))
+"k="        -> Some(("k", ""))
+"bare"      -> None
 [("a", "1"), ("b", "2")]
 Some(("left", "right"))
 Some(("one", "two :: three"))

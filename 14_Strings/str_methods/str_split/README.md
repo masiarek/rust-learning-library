@@ -34,7 +34,7 @@ Pieces are borrowed from the original string; nothing is allocated. The pattern 
 ```rust
 fn main() {
     for input in ["a,b,c", "a,,c", ",a", "a,", ""] {
-        println!("{input:<7?} -> {:?}", input.split(',').collect::<Vec<&str>>());
+        println!("{:<7} -> {:?}", format!("{input:?}"), input.split(',').collect::<Vec<&str>>());
     }
 
     // n matches, n+1 pieces — always.
@@ -60,10 +60,10 @@ fn main() {
 
 ```text
 "a,b,c" -> ["a", "b", "c"]
-"a,,c" -> ["a", "", "c"]
-",a" -> ["", "a"]
-"a," -> ["a", ""]
-"" -> [""]
+"a,,c"  -> ["a", "", "c"]
+",a"    -> ["", "a"]
+"a,"    -> ["a", ""]
+""      -> [""]
 3 matches, 4 pieces
 ["a", "b", "c"]
 ["a", "b", "c"]

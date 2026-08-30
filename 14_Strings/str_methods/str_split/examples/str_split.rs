@@ -1,6 +1,6 @@
 fn main() {
     for input in ["a,b,c", "a,,c", ",a", "a,", ""] {
-        println!("{input:<7?} -> {:?}", input.split(',').collect::<Vec<&str>>());
+        println!("{:<7} -> {:?}", format!("{input:?}"), input.split(',').collect::<Vec<&str>>());
     }
 
     // n matches, n+1 pieces — always.

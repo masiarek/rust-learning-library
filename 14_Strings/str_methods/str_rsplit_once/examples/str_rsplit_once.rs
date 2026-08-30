@@ -1,6 +1,6 @@
 fn main() {
     for name in ["a.b.c", "noext", ".hidden", "trailing."] {
-        println!("{name:<10?} -> {:?}", name.rsplit_once('.'));
+        println!("{:<11} -> {:?}", format!("{name:?}"), name.rsplit_once('.'));
     }
 
     // Reading order, unlike rsplitn.
@@ -10,6 +10,6 @@ fn main() {
 
     // host:port, where the host may itself contain colons.
     for addr in ["example.com:8080", "::1:9000"] {
-        println!("{addr:<18?} -> {:?}", addr.rsplit_once(':'));
+        println!("{:<18} -> {:?}", format!("{addr:?}"), addr.rsplit_once(':'));
     }
 }

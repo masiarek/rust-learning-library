@@ -53,14 +53,14 @@ fn main() {
 
     println!("Option — one sad answer for four different problems:");
     for raw in cells {
-        println!("  {raw:>3?} -> {:?}", score_option(raw));
+        println!("  {:>3} -> {:?}", format!("{raw:?}"), score_option(raw));
     }
 
     println!("\nResult — the caller can tell them apart, and tell the voter:");
     for raw in cells {
         match score_result(raw) {
-            Ok(n) => println!("  {raw:>3?} -> counted as {n}"),
-            Err(e) => println!("  {raw:>3?} -> rejected: {e}"),
+            Ok(n) => println!("  {:>3} -> counted as {n}", format!("{raw:?}")),
+            Err(e) => println!("  {:>3} -> rejected: {e}", format!("{raw:?}")),
         }
     }
 

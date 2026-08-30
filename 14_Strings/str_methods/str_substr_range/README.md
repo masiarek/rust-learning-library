@@ -38,7 +38,7 @@ fn main() {
     // Recovering a token's position for an error message.
     for tok in text.split_whitespace() {
         let at = text.substr_range(tok).map(|r| r.start);
-        println!("{tok:<4?} column {:?}", at);
+        println!("{:<5} column {:?}", format!("{tok:?}"), at);
     }
 
     // The whole string is a substring of itself.
@@ -55,8 +55,8 @@ fn main() {
 None
 but find() matches by content: Some(8)
 "let" column Some(0)
-"x" column Some(4)
-"=" column Some(6)
+"x"   column Some(4)
+"="   column Some(6)
 "42;" column Some(8)
 Some(0..11)
 ```

@@ -1,5 +1,5 @@
-"a,b,"  fwd ["a", "b"]  rev ["b", "a"]
-",a,b"  fwd ["", "a", "b"]  rev ["b", "a", ""]
-"a,,b"  fwd ["a", "", "b"]  rev ["b", "", "a"]
+"a,b,"   fwd ["a", "b"]            rev ["b", "a"]
+",a,b"   fwd ["", "a", "b"]        rev ["b", "a", ""]
+"a,,b"   fwd ["a", "", "b"]        rev ["b", "", "a"]
 ["a", ""]
 Some("gamma")

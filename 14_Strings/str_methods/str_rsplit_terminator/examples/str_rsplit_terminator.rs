@@ -1,7 +1,8 @@
 fn main() {
     for input in ["a,b,", ",a,b", "a,,b"] {
-        println!("{input:<7?}  fwd {:<20?}  rev {:?}",
-                 input.split_terminator(',').collect::<Vec<&str>>(),
+        println!("{:<7}  fwd {:<20}  rev {:?}",
+                 format!("{input:?}"),
+                 format!("{:?}", input.split_terminator(',').collect::<Vec<&str>>()),
                  input.rsplit_terminator(',').collect::<Vec<&str>>());
     }
 

@@ -5,7 +5,7 @@ fn main() {
 
     // \r\n both go, since both are ASCII whitespace.
     for raw in ["ok\n", "ok\r\n", "ok"] {
-        println!("{raw:<7?} -> {:?}", raw.trim_ascii_end());
+        println!("{:<8} -> {:?}", format!("{raw:?}"), raw.trim_ascii_end());
     }
 
     // const.

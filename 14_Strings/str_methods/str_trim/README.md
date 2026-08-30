@@ -42,8 +42,8 @@ fn main() {
 
     // The input-handling reason it exists.
     for field in ["", "   ", " x "] {
-        println!("{field:<5?} empty={:<5} trimmed empty={}",
-                 field.is_empty(), field.trim().is_empty());
+        println!("{:<5} empty={:<5} trimmed empty={}",
+                 format!("{field:?}"), field.is_empty(), field.trim().is_empty());
     }
 }
 ```
@@ -58,7 +58,7 @@ fn main() {
 "a  b"
 "hi" from a 6-byte owner
 "hi"
-"" empty=true  trimmed empty=true
+""    empty=true  trimmed empty=true
 "   " empty=false trimmed empty=true
 " x " empty=false trimmed empty=false
 ```

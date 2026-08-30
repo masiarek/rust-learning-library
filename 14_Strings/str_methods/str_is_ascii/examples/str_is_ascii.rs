@@ -1,12 +1,12 @@
 fn main() {
     for s in ["hello", "héllo", "", "123!@#"] {
-        println!("{s:<8?} ascii={}", s.is_ascii());
+        println!("{:<8} ascii={}", format!("{s:?}"), s.is_ascii());
     }
 
     // The guard that picks the right family.
     for s in ["Content-Type", "Größe"] {
         let lowered = if s.is_ascii() { s.to_ascii_lowercase() } else { s.to_lowercase() };
-        println!("{s:<14?} -> {lowered:?}");
+        println!("{:<14} -> {lowered:?}", format!("{s:?}"));
     }
 
     // For ASCII, the two rulers agree and every offset is a boundary.

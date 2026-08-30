@@ -1,7 +1,7 @@
 "HELLO"
 "STRAßE" vs "STRASSE"
 true
-"ß" ascii 2 bytes, unicode 2 bytes
-"ﬁ" ascii 3 bytes, unicode 2 bytes
+"ß"   ascii 2 bytes, unicode 2 bytes
+"ﬁ"   ascii 3 bytes, unicode 2 bytes
 "abc" ascii 3 bytes, unicode 3 bytes
 "1F4A9"

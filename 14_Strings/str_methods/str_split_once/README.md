@@ -26,7 +26,7 @@ This is the parsing shape that removes the byte arithmetic from [`find`](../str_
 ```rust
 fn main() {
     for line in ["key=value", "key=a=b", "=v", "k=", "bare"] {
-        println!("{line:<10?} -> {:?}", line.split_once('='));
+        println!("{:<11} -> {:?}", format!("{line:?}"), line.split_once('='));
     }
 
     // The miss is a None you have to handle.
@@ -50,10 +50,10 @@ fn main() {
 
 ```text
 "key=value" -> Some(("key", "value"))
-"key=a=b" -> Some(("key", "a=b"))
-"=v" -> Some(("", "v"))
-"k=" -> Some(("k", ""))
-"bare" -> None
+"key=a=b"   -> Some(("key", "a=b"))
+"=v"        -> Some(("", "v"))
+"k="        -> Some(("k", ""))
+"bare"      -> None
 [("a", "1"), ("b", "2")]
 Some(("left", "right"))
 Some(("one", "two :: three"))

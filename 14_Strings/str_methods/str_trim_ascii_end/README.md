@@ -27,7 +27,7 @@ fn main() {
 
     // \r\n both go, since both are ASCII whitespace.
     for raw in ["ok\n", "ok\r\n", "ok"] {
-        println!("{raw:<7?} -> {:?}", raw.trim_ascii_end());
+        println!("{:<8} -> {:?}", format!("{raw:?}"), raw.trim_ascii_end());
     }
 
     // const.
@@ -44,9 +44,9 @@ fn main() {
 ```text
 "  GET /index.html"
 "GET /index.html"
-"ok\n" -> "ok"
+"ok\n"   -> "ok"
 "ok\r\n" -> "ok"
-"ok" -> "ok"
+"ok"     -> "ok"
 "value" (5 bytes)
 ```
 <!-- /output -->

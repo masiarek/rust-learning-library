@@ -32,13 +32,13 @@ fn main() {
 
     // Line endings: this reports whether the line was terminated.
     for raw in ["done\n", "done"] {
-        println!("{raw:<7?} -> {:?}", raw.strip_suffix('\n'));
+        println!("{:<8} -> {:?}", format!("{raw:?}"), raw.strip_suffix('\n'));
     }
 
     // Balanced unquoting: both ends, or nothing.
     for q in ["\"hi\"", "\"hi", "hi"] {
         let inner = q.strip_prefix('"').and_then(|s| s.strip_suffix('"'));
-        println!("{q:<6?} -> {inner:?}");
+        println!("{:<8} -> {inner:?}", format!("{q:?}"));
     }
 
     // Once, not repeatedly.
@@ -55,10 +55,10 @@ fn main() {
 Some("main")
 None
 "done\n" -> Some("done")
-"done" -> None
+"done"   -> None
 "\"hi\"" -> Some("hi")
-"\"hi" -> None
-"hi" -> None
+"\"hi"   -> None
+"hi"     -> None
 Some("a//")
 "a"
 ```

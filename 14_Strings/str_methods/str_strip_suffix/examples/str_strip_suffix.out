@@ -1,9 +1,9 @@
 Some("main")
 None
 "done\n" -> Some("done")
-"done" -> None
+"done"   -> None
 "\"hi\"" -> Some("hi")
-"\"hi" -> None
-"hi" -> None
+"\"hi"   -> None
+"hi"     -> None
 Some("a//")
 "a"

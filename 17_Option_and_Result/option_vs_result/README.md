@@ -239,14 +239,14 @@ fn main() {
 
     println!("Option — one sad answer for four different problems:");
     for raw in cells {
-        println!("  {raw:>3?} -> {:?}", score_option(raw));
+        println!("  {:>3} -> {:?}", format!("{raw:?}"), score_option(raw));
     }
 
     println!("\nResult — the caller can tell them apart, and tell the voter:");
     for raw in cells {
         match score_result(raw) {
-            Ok(n) => println!("  {raw:>3?} -> counted as {n}"),
-            Err(e) => println!("  {raw:>3?} -> rejected: {e}"),
+            Ok(n) => println!("  {:>3} -> counted as {n}", format!("{raw:?}")),
+            Err(e) => println!("  {:>3} -> rejected: {e}", format!("{raw:?}")),
         }
     }
 
@@ -262,13 +262,13 @@ fn main() {
 ```text
 Option — one sad answer for four different problems:
   "4" -> Some(4)
-  "" -> None
+   "" -> None
   "x" -> None
   "9" -> None
 
 Result — the caller can tell them apart, and tell the voter:
   "4" -> counted as 4
-  "" -> rejected: the cell was blank
+   "" -> rejected: the cell was blank
   "x" -> rejected: not a number: invalid digit found in string
   "9" -> rejected: score 9 is above the 5 cap
 

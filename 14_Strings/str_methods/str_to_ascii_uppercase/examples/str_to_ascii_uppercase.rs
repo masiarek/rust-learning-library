@@ -10,8 +10,8 @@ fn main() {
 
     // Length is always preserved.
     for s in ["ß", "ﬁ", "abc"] {
-        println!("{s:<4?} ascii {} bytes, unicode {} bytes",
-                 s.to_ascii_uppercase().len(), s.to_uppercase().len());
+        println!("{:<5} ascii {} bytes, unicode {} bytes",
+                 format!("{s:?}"), s.to_ascii_uppercase().len(), s.to_uppercase().len());
     }
 
     // Hex digits: an ASCII-by-definition alphabet.

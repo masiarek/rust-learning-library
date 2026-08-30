@@ -47,14 +47,14 @@ fn main() {
 
     println!("Option — the caller cannot tell a typo from a policy limit:");
     for raw in lines {
-        println!("  {raw:>7?} -> {:?}", seats_lossy(raw));
+        println!("  {:>7} -> {:?}", format!("{raw:?}"), seats_lossy(raw));
     }
 
     println!("\nResult — every one of them can be answered differently:");
     for raw in lines {
         match seats(raw) {
-            Ok(n) => println!("  {raw:>7?} -> {n} seats"),
-            Err(e) => println!("  {raw:>7?} -> {e}"),
+            Ok(n) => println!("  {:>7} -> {n} seats", format!("{raw:?}")),
+            Err(e) => println!("  {:>7} -> {e}", format!("{raw:?}")),
         }
     }
 

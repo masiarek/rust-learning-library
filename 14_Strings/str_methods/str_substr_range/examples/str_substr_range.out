@@ -2,7 +2,7 @@
 None
 but find() matches by content: Some(8)
 "let" column Some(0)
-"x" column Some(4)
-"=" column Some(6)
+"x"   column Some(4)
+"="   column Some(6)
 "42;" column Some(8)
 Some(0..11)

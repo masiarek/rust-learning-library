@@ -34,7 +34,7 @@ fn main() {
 
     // Trailing zeros: fine on a decimal, wrong on an integer.
     for n in ["1.500", "1.0", "10", "100"] {
-        println!("{n:<6?} -> {:?}", n.trim_end_matches('0'));
+        println!("{:<7} -> {:?}", format!("{n:?}"), n.trim_end_matches('0'));
     }
 
     // Which is why a decimal wants the dot handled too.
@@ -53,9 +53,9 @@ fn main() {
 "a/b"
 Some("http://x/y//")
 "1.500" -> "1.5"
-"1.0" -> "1."
-"10" -> "1"
-"100" -> "1"
+"1.0"   -> "1."
+"10"    -> "1"
+"100"   -> "1"
 "1.5"
 ```
 <!-- /output -->

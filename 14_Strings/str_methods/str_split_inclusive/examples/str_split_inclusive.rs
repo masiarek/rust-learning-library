@@ -1,6 +1,6 @@
 fn main() {
     for input in ["a\nb\n", "a\nb", "", "\n"] {
-        println!("{input:<7?} -> {:?}", input.split_inclusive('\n').collect::<Vec<&str>>());
+        println!("{:<8} -> {:?}", format!("{input:?}"), input.split_inclusive('\n').collect::<Vec<&str>>());
     }
 
     // Nothing is discarded, so the pieces rebuild the original.
@@ -15,6 +15,6 @@ fn main() {
     // Telling a terminated last line from an unterminated one.
     for input in ["a\nb\n", "a\nb"] {
         let last = input.split_inclusive('\n').last().unwrap();
-        println!("{input:<7?} last piece {last:?} terminated={}", last.ends_with('\n'));
+        println!("{:<8} last piece {last:?} terminated={}", format!("{input:?}"), last.ends_with('\n'));
     }
 }

@@ -16,7 +16,7 @@ fn main() {
 
     // The input-handling reason it exists.
     for field in ["", "   ", " x "] {
-        println!("{field:<5?} empty={:<5} trimmed empty={}",
-                 field.is_empty(), field.trim().is_empty());
+        println!("{:<5} empty={:<5} trimmed empty={}",
+                 format!("{field:?}"), field.is_empty(), field.trim().is_empty());
     }
 }

@@ -32,8 +32,8 @@ fn main() {
 
     // Length-preserving, which the Unicode version is not.
     for s in ["İ", "ß", "ABC"] {
-        println!("{s:<4?} ascii {} bytes, unicode {} bytes",
-                 s.to_ascii_lowercase().len(), s.to_lowercase().len());
+        println!("{:<5} ascii {} bytes, unicode {} bytes",
+                 format!("{s:?}"), s.to_ascii_lowercase().len(), s.to_lowercase().len());
     }
 
     // Where it is exactly right: an ASCII-by-specification alphabet.
@@ -50,8 +50,8 @@ fn main() {
 "hello world"
 "cafÉ straße"
 "café straße"
-"İ" ascii 2 bytes, unicode 3 bytes
-"ß" ascii 2 bytes, unicode 2 bytes
+"İ"   ascii 2 bytes, unicode 3 bytes
+"ß"   ascii 2 bytes, unicode 2 bytes
 "ABC" ascii 3 bytes, unicode 3 bytes
 "content-type"
 "image.png"

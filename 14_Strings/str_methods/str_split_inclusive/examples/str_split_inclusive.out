@@ -1,9 +1,9 @@
 "a\nb\n" -> ["a\n", "b\n"]
-"a\nb" -> ["a\n", "b"]
-"" -> []
-"\n" -> ["\n"]
+"a\nb"   -> ["a\n", "b"]
+""       -> []
+"\n"     -> ["\n"]
 ["alpha\r\n", "beta\n", "gamma"]
 round trip: true
 ["alpha", "beta", "gamma"]
 "a\nb\n" last piece "b\n" terminated=true
-"a\nb" last piece "b" terminated=false
+"a\nb"   last piece "b" terminated=false

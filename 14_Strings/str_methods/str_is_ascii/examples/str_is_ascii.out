@@ -1,8 +1,8 @@
-"hello" ascii=true
-"héllo" ascii=false
-"" ascii=true
+"hello"  ascii=true
+"héllo"  ascii=false
+""       ascii=true
 "123!@#" ascii=true
 "Content-Type" -> "content-type"
-"Größe" -> "größe"
+"Größe"        -> "größe"
 5 5 true
 true

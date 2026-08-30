@@ -5,7 +5,7 @@ fn main() {
 
     // Both, or nothing.
     for q in ["\"hi\"", "\"hi", "hi\"", "hi"] {
-        println!("{q:<6?} -> {:?}", q.strip_circumfix('"', '"'));
+        println!("{:<8} -> {:?}", format!("{q:?}"), q.strip_circumfix('"', '"'));
     }
 
     // No double-counting when the string is too short to hold both.

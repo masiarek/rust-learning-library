@@ -1,0 +1,20 @@
+["ab"]  {:.<8?} on a &str
+["ab"....]  {:.<8} on format!("{:?}")
+
+same spec, eight different Debug impls:
+  i32          [42......]
+  f64          [1.5.....]
+  bool         [true....]
+  &str         ["ab"]
+  char         ['a']
+  String       ["ab"]
+  Option<u8>   [Some(1.......)]
+  Vec<u8>      [[1......., 2.......]]
+
+containers forward the spec to their elements:
+  Vec<u8>   [[1....., 2.....]]
+  Vec<&str> [["a", "b"]]
+
+precision, on the same eight-character string:
+  {:.3}  [abc]
+  {:.3?} ["abcdefgh"]

@@ -39,7 +39,7 @@ fn main() {
     // The all-zeros edge case.
     for n in ["0042", "0", "000", "40"] {
         let t = n.trim_start_matches('0');
-        println!("{n:<5?} -> {:?}  (as a number: {})", t, if t.is_empty() { "0" } else { t });
+        println!("{:<6} -> {:?}  (as a number: {})", format!("{n:?}"), t, if t.is_empty() { "0" } else { t });
     }
 }
 ```
@@ -56,9 +56,9 @@ Some("../src")
 "src"
 None
 "0042" -> "42"  (as a number: 42)
-"0" -> ""  (as a number: 0)
-"000" -> ""  (as a number: 0)
-"40" -> "40"  (as a number: 40)
+"0"    -> ""  (as a number: 0)
+"000"  -> ""  (as a number: 0)
+"40"   -> "40"  (as a number: 40)
 ```
 <!-- /output -->
 

@@ -3,6 +3,6 @@
 "a  b"
 "hi" from a 6-byte owner
 "hi"
-"" empty=true  trimmed empty=true
+""    empty=true  trimmed empty=true
 "   " empty=false trimmed empty=true
 " x " empty=false trimmed empty=false
