@@ -274,5 +274,5 @@ Ordered by what it costs a reader who came here from RBE:
 ## See also
 
 - [Rust by Example](00_Start_Here/rust_by_example/README.md) — what RBE is for, and the two moments it is the right answer
-- [The course, in order](README.md) — the reading order these lessons were written in
+- [The course, in order](index.md) — the reading order these lessons were written in
 - [KATAS.md](KATAS.md) — the exercises, which RBE calls *Activities*
