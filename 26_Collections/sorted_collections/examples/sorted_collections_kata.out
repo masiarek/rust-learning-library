@@ -1,0 +1,50 @@
+1. The roll, alphabetical — nothing here sorts
+   Ada 3
+   Ben 2
+   Cara 3
+   Dan 2
+   Eve 1
+
+2. The leaderboard, by leaving the map
+   Ada 3
+   Cara 3
+   Ben 2
+   Dan 2
+   Eve 1
+   Two ties — Ada/Cara at 3 and Ben/Dan at 2 — and `then` settles both
+   by name. Without it `sort_by` is still *stable*, so the order would
+   be the map's alphabetical one; but the rule would be implicit, and a
+   switch to sort_unstable_by would silently change the answer.
+
+3. The leaderboard, by making the count part of the key
+   Ada 3
+   Cara 3
+   Ben 2
+   Dan 2
+   Eve 1
+   Same order, and no sort call anywhere. A tuple is Ord when its parts
+   are, compared left to right, so (Reverse(count), name) orders by
+   count descending and then by name — the tie-break is in the type.
+
+4. A question a HashMap cannot be asked
+   candidates in "B".."D"  ["Ben", "Cara"]
+   half-open, so "D" is a bound and Dan is excluded; range("B"..="D")
+   would still exclude him, because "Dan" > "D" as a string.
+   candidates in "B"..="D" ["Ben", "Cara"]
+
+5. The key you cannot use
+   f64 is PartialOrd but not Ord, because NaN compares false against
+   everything including itself, so a BTreeMap keyed on one does not
+   compile. Scale to an integer and the ordering survives:
+   share in basis points  {909: "Eve", 1818: "Dan", 2727: "Cara"}
+
+6. ...and look at what that just cost
+   Five candidates went in and 3 came out.
+   Ada and Cara both hold 2727 basis points, Ben and Dan both 1818, and
+   a map keeps one value per key — so the second insert of each pair
+   overwrote the first. Keying on a DERIVED value drops ties silently:
+   nothing errors, the type is right, and two candidates are gone.
+   as a set of pairs      {(909, "Eve"), (1818, "Ben"), (1818, "Dan"), (2727, "Ada"), (2727, "Cara")}
+   The pair is the key, so equal shares no longer collide — and the
+   ordering is still share-then-name, for the same left-to-right reason
+   as the leaderboard in 3.

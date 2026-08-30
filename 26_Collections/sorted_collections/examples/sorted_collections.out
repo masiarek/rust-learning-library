@@ -1,0 +1,35 @@
+1. Collecting into a BTreeMap is a sort you did not write
+   BTreeMap  {"Ada": 3, "Ben": 2, "Cara": 3, "Dan": 1}
+   HashMap   [("Ada", 3), ("Ben", 2), ("Cara", 3), ("Dan", 1)]
+   The same four counts. The second line needed a Vec and a sort to be
+   printable in a fixed order at all; the first was already in one.
+
+2. Ordering buys three questions a HashMap cannot answer
+   first_key_value()   Some(("Ada", 3))
+   last_key_value()    Some(("Dan", 1))
+   range("B".."D")     [("Ben", 2), ("Cara", 3)]
+   A HashMap has no first, no last and no range: there is no order for
+   those questions to be asked against.
+
+3. The trap: sorted by KEY, and what you wanted sorted is the value
+   Ada 3
+   Ben 2
+   Cara 3
+   Dan 1
+   That is alphabetical, not a leaderboard. Votes-descending still
+   leaves the map:
+   [("Ada", 3), ("Cara", 3), ("Ben", 2), ("Dan", 1)]
+   Ada and Cara tie at 3, and `then` breaks it by name — so the order is
+   total and the answer is the same on every run.
+
+4. BTreeSet is BTreeMap<T, ()>: collecting into one sorts and dedups
+   {"Ada", "Ben", "Cara", "Dan"}
+   eligible but never voted  ["Eve"]
+   The set operations yield their items in order too, so that Vec
+   needed no sort either.
+
+5. The price is Ord, not Hash
+   keyed on an integer score  {55: "Ben", 72: "Cara", 91: "Ada"}
+   Integers, char, &str, String, and tuples and Vecs of those are all
+   Ord. f64 is not — NaN leaves it PartialOrd only — so a BTreeMap keyed
+   on a float does not compile. Scale to an integer, as above.
