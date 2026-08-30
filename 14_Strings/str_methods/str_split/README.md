@@ -20,7 +20,7 @@ Stable since **1.0.0**.
 | `"a,"` | `["a", ""]` — nothing after the last |
 | `""` | `[""]` — one piece, no matches |
 
-None of that is the method being unhelpful; the count is forced by the arithmetic. If you want the empties gone, that is a different question and [`split_whitespace`](../str_split_whitespace/README.md) (for prose) or a `.filter(|p| !p.is_empty())` (for anything else) answers it.
+None of that is the method being unhelpful; the count is forced by the arithmetic. If you want the empties gone, that is a different question and [`split_whitespace`](../str_split_whitespace/README.md) (for prose) or a [`.filter(|p| !p.is_empty())` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.filter) (for anything else) answers it.
 
 **Use `split` for delimited data and `split_whitespace` for prose.** Reaching for the wrong one silently shifts your columns: on `"a,,c"`, dropping the empty makes column 3 become column 2, and nothing errors.
 
