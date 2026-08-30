@@ -325,7 +325,7 @@ Four Manning books from 2024 all explain `clone`, and no two of them mean the sa
 | **Code Like a Pro in Rust** — Brenden Matthews | ch. 5, *Working with memory* — §5.3 *Deep copying* (p. 97), §5.4 *Avoiding copies* (p. 99), §5.6 *Reference counting* (p. 103), §5.7 *Clone on write* (p. 106) | Depth. The sharpest statement of the deep-copy reading: a derived `Clone` recurses, so one `.clone()` on a `Vec` duplicates everything inside it. |
 | **Write Powerful Rust Macros** — Sam Van Overmeire | §5.1.2 *Recreating the struct*; §6.4.5 *An alternative approach* | Getting rid of it. `clone` shows up because `parse_macro_input!` moves the `TokenStream` and the macro still has to give it back; the builder chapter then starts at *clone everything*, finds that this restricts the macro to `Clone` or `Copy` types, and ends by consuming `self` instead — needing no clone at all. |
 
-Only two of them are about copying data. MacLeod's `Rc` and Matthews' `Cow` are about *not* copying it, and Van Overmeire's is about a design that stops asking.
+Only half of that is about copying data. `Rc`, `Arc` and `Cow` are all here because they *avoid* the copy, and Van Overmeire's chapters end at a design that stops asking for one — so a reader who arrives at `clone` expecting a duplicate meets three chapters in a row where nothing is duplicated.
 
 ### Where a flattened summary goes wrong
 
