@@ -29,6 +29,8 @@ Already writing Rust? Two lessons to begin with:
 
 [`13_Enums/`](13_Enums/README.md) and [`12_Traits/`](12_Traits/README.md) sit directly after the foundations, because between them they are what the rest of the language is made of. Enums come first: anyone leaving the foundations has already used several of them — `Option` and `Result` among them — without being told that the feature has a name, or that a `match` which forgets a variant is a build error. Traits are the other half, and the same argument applies twice over: `Copy`, `Display`, `Iterator` and `From` all turn up in the earlier pages long before anything explains what they have in common.
 
+[`30_Pattern_Matching/`](30_Pattern_Matching/README.md) is one feature taught once instead of six times. `match` arms, `if let`, `while let`, `let else`, every `let`, and every function parameter are all the same thing — a shape matched against a value, binding the pieces by name — and what differs between them is only what happens when the shape does not fit. **Stubs today.** Three pieces of the topic stay where they already are, on the pages a reader meets them from: `if_let`, `while_let`, and the lowercase arm name that is not a comparison but a [binding that matches everything](13_Enums/a_typo_becomes_a_binding/README.md).
+
 [`22_Generics/`](22_Generics/README.md) follows both, because it needs both: `<T>` is how one definition serves every type, and a trait is what tells the compiler which types are allowed. It is also the section that explains the brackets in `Option<T>`, `Vec<T>` and `Result<T, E>` — read a hundred times by then, and nowhere defined.
 
 [`23_Closures/`](23_Closures/README.md) and [`24_Iterators/`](24_Iterators/README.md) are the pair of features every section above has already been spending. `unwrap_or_else(|| 0)` and `for row in &rows` are both on page one of this library and neither is explained there. Closures cover which of the three `Fn` traits a closure gets and why the compiler cares, what `move` moves, and why a closure that captured nothing is smaller than a function pointer; iterators cover why a chain of adapters allocates nothing, which of three doors a `for` loop picked for you, and what happens when you write `next` yourself. They are two sections rather than one because the sidebar is alphabetical, and a reader looking for iterators can name *iterators*.
@@ -64,23 +66,25 @@ The sidebar is sorted **alphabetically**, because that is how you find a section
 | 7 | [Ownership](18_Ownership/README.md) | Who owns the value — moves, borrows, and what a shadow does |
 | 8 | [Strings](14_Strings/README.md) | Text: the owner and the view, and the bytes underneath |
 | 9 | [Numbers and bytes](19_Numbers/README.md) | The unit all of that is counted in, down to the float that cannot hold your value |
-| 10 | [Enums](13_Enums/README.md) | The feature `Option` and `Result` were made of all along |
-| 11 | [Traits](12_Traits/README.md) | The other half the language is built from — and how a call reaches one |
-| 12 | [Generics](22_Generics/README.md) | `<T>`: one definition per idea, instead of one per type it is used with |
-| 13 | [Closures](23_Closures/README.md) | A function that carries values with it, and the three traits that say how often you may call it |
-| 14 | [Iterators](24_Iterators/README.md) | The sequence that computes nothing until somebody asks, and the three doors onto a collection |
-| 15 | [Errors](02_Errors/README.md) | What a failure does on its way out of a program |
-| 16 | [Command line](03_Command_Line/README.md) | What the program was handed on the way in |
-| 17 | [Files](04_Files/README.md) | The filesystem — the first thing outside the program that can say no |
-| 18 | [Tooling](05_Tooling/README.md) | `cargo` and the rest of the toolchain, rather than the language |
-| 19 | [Data](06_Data/README.md) | Serialization, and the round trip through JSON |
-| 20 | [Clients](07_Clients/README.md) | The network — the last thing outside the program that can say no |
-| 21 | [Observability](21_Observability/README.md) | What the service says about itself, once somebody else depends on it |
-| 22 | [Interfaces](08_Interfaces/README.md) | Putting a face on it |
-| 23 | [Advanced](09_Advanced/README.md) | What needs the foundations: threads, `unsafe`, FFI |
-| 24 | [Compilers](20_Compilers/README.md) | The layer under all of it, three quarters of which is not Rust |
-| 25 | [Resources](10_Resources/README.md) | Books, essays and exercises outside this library |
-| 26 | [Unix](11_Unix/README.md) | The shell you run the compiler from — two of its three tools are Rust |
+| 10 | [Pattern matching](30_Pattern_Matching/README.md) | A pattern is a shape, not a comparison — one feature wearing six syntaxes |
+| 11 | [Enums](13_Enums/README.md) | The feature `Option` and `Result` were made of all along |
+| 12 | [Traits](12_Traits/README.md) | The other half the language is built from — and how a call reaches one |
+| 13 | [Generics](22_Generics/README.md) | `<T>`: one definition per idea, instead of one per type it is used with |
+| 14 | [Closures](23_Closures/README.md) | A function that carries values with it, and the three traits that say how often you may call it |
+| 15 | [Iterators](24_Iterators/README.md) | The sequence that computes nothing until somebody asks, and the three doors onto a collection |
+| 16 | [Errors](02_Errors/README.md) | What a failure does on its way out of a program |
+| 17 | [Command line](03_Command_Line/README.md) | What the program was handed on the way in |
+| 18 | [Files](04_Files/README.md) | The filesystem — the first thing outside the program that can say no |
+| 19 | [Tooling](05_Tooling/README.md) | `cargo` and the rest of the toolchain, rather than the language |
+| 20 | [Data](06_Data/README.md) | Serialization, and the round trip through JSON |
+| 21 | [Clients](07_Clients/README.md) | The network — the last thing outside the program that can say no |
+| 22 | [Observability](21_Observability/README.md) | What the service says about itself, once somebody else depends on it |
+| 23 | [Interfaces](08_Interfaces/README.md) | Putting a face on it |
+| 24 | [Advanced](09_Advanced/README.md) | What needs the foundations: threads, `unsafe`, FFI |
+| 25 | [Compilers](20_Compilers/README.md) | The layer under all of it, three quarters of which is not Rust |
+| 26 | [Resources](10_Resources/README.md) | Books, essays and exercises outside this library |
+| 27 | [Unix](11_Unix/README.md) | The shell you run the compiler from — two of its three tools are Rust |
+| 28 | [C and C++](31_C_and_Cpp/README.md) | Nine bugs the compiler refuses to build — read it any time after Ownership |
 
 Nothing enforces this order and no page depends on it; skipping around is fine. It is here because a sidebar can be sorted one way only, and A–Z answers the more common question.
 

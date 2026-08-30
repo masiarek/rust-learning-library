@@ -19,6 +19,8 @@ The section starts from the declaration and works outward — what goes in a tra
 | [`Drop`, and what RAII buys](drop_and_raii/README.md) | 201 | The destructor that runs at a place you can point to: three drop orders, two of them opposites, `E0040` on an explicit call, and the `let _ =` that releases a guard before the work starts |
 | [`ToOwned`](to_owned/README.md) | 201 | `Clone` generalized to borrowed data: why `str` cannot be `Clone` at all, why `.clone()` on a `&str` quietly does nothing, and the `Rc` that `to_owned` does not deep-copy |
 | [`clone_into`](clone_into/README.md) | 201 | The provided method beside `to_owned`: refilling a buffer instead of allocating one, counted — plus the three ways it does not pay, and the backwards argument order that blocked it for five years |
+| [The comparison traits](comparison_traits/README.md) | 201 | `==` and `<` are traits, and the `Partial` half is why `f64` has both while having neither `Eq` nor `Ord` — plus the derived `Ord` that sorts by field declaration order. Stub |
+| [`Read` and `Write`](read_and_write/README.md) | 201 | The two traits between your code and every byte source there is — `&[u8]` is a `Read`, which is the whole testing story, and a `BufWriter` that flushes on drop throws the error away. Stub |
 | [Links and videos](resources/README.md) | reference | The reading behind the section |
 
 Three trait pages live outside this folder, because they are met long before anyone goes looking for a traits section: [`Copy` vs `Clone`](../16_Structs/copy_vs_clone/README.md), [Debug and Display](../15_First_Programs/debug_vs_display/README.md), and [the `Default` trait](../03_Command_Line/the_default_trait/README.md). They stay where they are; this section links them rather than moving them.

@@ -28,7 +28,7 @@ The first slide of this topic in most courses is *blocks and scopes*, and this l
 ## Planned
 
 - **Exercise: the Collatz sequence** — the length of the sequence that takes `n` to 1, halving evens and `3n + 1` on odds. It wants a `while` loop, a `match` or an `if` on the parity, and it overflows a `u32` for reasons that are not obvious from the problem statement, which makes it a good second meeting with [the width that runs out](../15_First_Programs/values/README.md#practice)
-- **Pattern matching proper** — bindings, tuples, `|`, ranges, guards, and destructuring a struct. `match_expressions` deliberately stops short of these
+- **Exercise: the Collatz sequence** is the one still missing from this list; pattern matching proper now has [its own section](../30_Pattern_Matching/README.md) — bindings, tuples, guards, destructuring — which is where `match_expressions` hands off
 - **`if let` and `let else` as control flow** — [`if let`](../17_Option_and_Result/if_let/README.md) and [`while let`](../17_Option_and_Result/while_let/README.md) exist already, taught from the `Option` side; the control-flow reading of them is a different page
 
 ## Where it goes next

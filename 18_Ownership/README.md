@@ -33,4 +33,6 @@ The last three pages are the ways out of a copy the one-owner rule would otherwi
 - [`ToOwned`](../12_Traits/to_owned/README.md) — `Clone` generalized to borrowed data
 - [`&'static str`](../14_Strings/static_str/README.md) — the longest lifetime, filed with the strings because that is where you meet it: the `E0597` that only bites off a non-literal, and why `T: 'static` the bound does not mean "lives forever"
 
+- [Interior mutability](../09_Advanced/interior_mutability/README.md) — the one way to write through a `&T`, and what moving the borrow check to run time costs
+
 [SHADOWING.md](../SHADOWING.md) is the full reading order for the names half.

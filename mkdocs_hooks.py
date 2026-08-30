@@ -122,6 +122,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...and the traits every earlier page has been calling without the
         # syntax admitting it: `+` is one, and so is `[]`.
         "operators_are_traits",
+        # ...and the other operators that were traits all along: == and <,
+        # where the `Partial` half is the whole lesson.
+        "comparison_traits",
         "returning_a_trait",
         # One std trait in depth, and the one whose name causes the most
         # confusion next to `clone`.
@@ -137,6 +140,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "drop_and_raii",
         "to_owned",
         "clone_into",
+        # ...and the pair that stands between the program and every byte source
+        # there is, which is what makes an I/O function testable at all.
+        "read_and_write",
         "resources",
     ],
     # Two of them are built into the language and two live in std, so the order
@@ -179,6 +185,22 @@ NAV_ORDER: dict[str, list[str]] = {
         "from_and_into",
         "tryfrom_and_tryinto",
         "casting_with_as",
+    ],
+    # Ordered by how much a reader has to know to follow the Rust half:
+    # the three ownership bugs first, then the two about threads, then the
+    # two that are wrong answers rather than crashes, then the two arithmetic
+    # and indexing rows that are run-time checks rather than refusals.
+    "31_C_and_Cpp": [
+        "README.md",
+        "uninitialized_reads",
+        "double_free",
+        "use_after_free",
+        "null_dereference",
+        "forgotten_unlock",
+        "data_races",
+        "iterator_invalidation",
+        "buffer_overruns",
+        "signed_overflow",
     ],
     "01_Foundations": [
         "README.md",
@@ -403,6 +425,18 @@ NAV_ORDER: dict[str, list[str]] = {
         "functions",
         "macros",
     ],
+    # Patterns, in the order each one stops being optional: every `let` is
+    # already one, then the two shapes you take apart, then the three ways to
+    # ask for more than a shape.
+    "30_Pattern_Matching": [
+        "README.md",
+        "irrefutable_patterns",
+        "destructuring_structs",
+        "destructuring_enums",
+        "match_guards",
+        "let_else",
+        "binding_at",
+    ],
     "14_Strings/str_methods": ["README.md"],
     "14_Strings/string_methods": ["README.md"],
     "14_Strings": [
@@ -583,6 +617,14 @@ NAV_ORDER: dict[str, list[str]] = {
         "channels",
         # ...and then the lock, and the Result it hands you.
         "mutex_poisoning",
+        # ...and the two rungs either side of that lock, once the Result it
+        # hands you has been read.
+        "rwlock_and_atomics",
+        # ...and what the compiler was checking all along to allow any of it.
+        "send_and_sync",
+        # The single-threaded cousin of a Mutex: same idea, check moved to run
+        # time and failure moved from blocking to a panic.
+        "interior_mutability",
         "one_person_one_vote",
         "scaled_integers",
         # The technique first, then what the type it lands on actually guarantees.
@@ -635,6 +677,18 @@ LABELS = {
     "15_First_Programs": "First programs",
     "19_Numbers": "Numbers and bytes",
     "25_Control_Flow": "Control flow",
+    "30_Pattern_Matching": "Pattern matching",
+    # 30_Pattern_Matching / 12_Traits / 09_Advanced -- keywords and trait names.
+    "let_else": "`let else`",
+    "binding_at": "Binding with `@`",
+    "read_and_write": "`Read` and `Write`",
+    "send_and_sync": "`Send` and `Sync`",
+    "rwlock_and_atomics": "`RwLock` and atomics",
+    # `clean()` would sentence-case this to "C and cpp", and the underscores
+    # are there because a folder name cannot hold a `+`.
+    "31_C_and_Cpp": "C and C++",
+    "double_free": "Double-free",
+    "use_after_free": "Use-after-free",
     # 25_Control_Flow -- every one of these is a keyword, and reads as code.
     "if_expressions": "`if` expressions",
     "match_expressions": "`match` expressions",
