@@ -6,7 +6,7 @@
 
 `String` owns its text and can grow it. That is the whole difference from [`str`](../str_methods/README.md), and it is why this list is short: everything about *reading* text is over there, reached automatically because `String` dereferences to `str`. What is here is the part that needs ownership — building, growing, removing, and handing the allocation somewhere else.
 
-So if you are looking for `split`, `trim`, `find`, `replace` or `parse`, they are [on the `str` side](../str_methods/README.md) and they work on a `String` unchanged.
+So if you are looking for [`split`](../str_methods/str_split/README.md), [`trim`](../str_methods/str_trim/README.md), [`find`](../str_methods/str_find/README.md), [`replace`](../str_methods/str_replace/README.md) or [`parse`](../str_methods/str_parse/README.md), they are [on the `str` side](../str_methods/README.md) and they work on a `String` unchanged.
 
 Same page shape as the `str` reference: summary, signature, stability, prose, then a complete program and its verified output.
 
@@ -14,17 +14,19 @@ Same page shape as the `str` reference: summary, signature, stability, prose, th
 
 Every method below moves one of three numbers, and confusing them is most of the difficulty:
 
-| | what it is | changed by |
-|---|---|---|
-| `len()` | **bytes** written | `push`, `push_str`, `truncate`, `clear`, `pop`, … |
-| `capacity()` | bytes the buffer can hold | `reserve`, `shrink_to_fit`, and growth |
-| `chars().count()` | Unicode scalars | nothing directly — it is derived by walking |
+| | what it is | changed by | worked example |
+|---|---|---|---|
+| `len()` | **bytes** written | [`push`](string_push/README.md), [`push_str`](string_push_str/README.md), [`truncate`](string_truncate/README.md), [`clear`](string_clear/README.md), [`pop`](string_pop/README.md), … | [`len`](string_len/README.md) |
+| `capacity()` | bytes the buffer can hold | [`reserve`](string_reserve/README.md), [`shrink_to_fit`](string_shrink_to_fit/README.md), and growth | [`capacity`](string_capacity/README.md) |
+| `chars().count()` | Unicode scalars | nothing directly — it is derived by walking | [`str::chars`](../str_methods/str_chars/README.md) |
+
+The last column is a page whose program prints that number moving, compiled and run by CI, so you can watch the row happen rather than take it on trust. The `len` page covers all three in six lines of output — `len 6 chars 5`, then `len 6 capacity 64`. For the bytes-per-character half on its own, `push` pushes `'a'`, `'é'` and `'👋'` and prints the length after each: 1, 3, 7. For the growth curve, `capacity` watches the buffer go 0 → 8 → 16 → 32 under three `push_str` calls.
 
 `len` is part of the value; `capacity` is not. Two strings with the same text and different capacities are equal, hash the same, and print the same — so never assert on a capacity in a test.
 
 ## Byte offsets panic in two ways
 
-`insert`, `remove`, `truncate`, `drain`, `replace_range`, `split_off` and `extend_from_within` all take byte offsets, and all panic on the same two conditions: **out of range**, or **inside a character**. [`is_char_boundary`](../str_methods/str_is_char_boundary/README.md) is the test and [`floor_char_boundary`](../str_methods/str_floor_char_boundary/README.md) is the repair.
+[`insert`](string_insert/README.md), [`remove`](string_remove/README.md), [`truncate`](string_truncate/README.md), [`drain`](string_drain/README.md), [`replace_range`](string_replace_range/README.md), [`split_off`](string_split_off/README.md) and [`extend_from_within`](string_extend_from_within/README.md) all take byte offsets, and all panic on the same two conditions: **out of range**, or **inside a character**. [`is_char_boundary`](../str_methods/str_is_char_boundary/README.md) is the test and [`floor_char_boundary`](../str_methods/str_floor_char_boundary/README.md) is the repair — all seven of those examples call the test, and `truncate`'s does the repair: a byte budget of 2 lands inside the `é` of `"héllo wörld"`, and flooring it first truncates to `"h"` instead of panicking.
 
 ---
 
