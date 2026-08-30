@@ -4,6 +4,7 @@
 //!   rustc --edition 2024 clone_into.rs -o /tmp/ci && /tmp/ci
 
 use std::alloc::{GlobalAlloc, Layout, System};
+use std::collections::{BTreeSet, HashSet};
 use std::sync::atomic::{AtomicUsize, Ordering::Relaxed};
 
 static ALLOCS: AtomicUsize = AtomicUsize::new(0);
@@ -132,8 +133,20 @@ fn main() {
     measure("Vec<String> clone_into (roomy slots)", || {
         names[..].clone_into(&mut slots)
     });
+    // "Roomy" is two conditions, not one: enough slots, and enough room in
+    // each. Miss either and part of the saving goes back.
+    let mut tight_slots: Vec<String> = (0..4).map(|_| String::with_capacity(4)).collect();
+    measure("Vec<String> clone_into (slots too small)", || {
+        names[..].clone_into(&mut tight_slots)
+    });
+    let mut few_slots: Vec<String> = (0..2).map(|_| String::with_capacity(32)).collect();
+    measure("Vec<String> clone_into (2 slots, 4 rows)", || {
+        names[..].clone_into(&mut few_slots)
+    });
     println!("   to_owned bought 5 buffers: the Vec, then one String each.");
     println!("   clone_into bought none — [T]'s impl clones into the slots in place.");
+    println!("   4-byte slots grow instead; rows past the end of the target are");
+    println!("   pushed as new Strings, and the Vec itself grows to hold them.");
 
     println!();
     println!("6. What you trade for it: the buffer keeps its high-water mark");
@@ -182,6 +195,47 @@ fn main() {
     });
     println!("   one byte short, the rewrite trades an alloc for a realloc.");
     println!("   give the default room and the same rewrite is free.");
+
+    println!();
+    println!("9. Which types the reuse reaches at all");
+    // Overriding clone_from is a per-impl decision. A wrapper can forward to
+    // the buffer inside it; a Copy type never had one.
+    let long_src = "a name long enough to need the heap".to_string();
+    let boxed_src: Box<String> = Box::new(long_src.clone());
+    let mut boxed: Box<String> = Box::new(String::with_capacity(64));
+    measure("Box<String>   dst.clone_from(&src)", || boxed.clone_from(&boxed_src));
+
+    let some_src: Option<String> = Some(long_src.clone());
+    let mut some: Option<String> = Some(String::with_capacity(64));
+    measure("Some(String)  dst.clone_from(&src)", || some.clone_from(&some_src));
+
+    let mut none: Option<String> = None;
+    measure("None          dst.clone_from(&src)", || none.clone_from(&some_src));
+
+    let mut n = 7_u64;
+    measure("u64 (Copy)    dst.clone_from(&src)", || n.clone_from(&9));
+
+    // An override that forwards to a type WITHOUT one buys nothing:
+    // BTreeSet::clone_from calls BTreeMap's, and BTreeMap has no override.
+    let here: Vec<String> = ["alpha", "bravo", "charlie", "delta"]
+        .iter()
+        .map(|s| s.to_string())
+        .collect();
+    let there: Vec<String> = ["echo", "foxtrot", "golf", "hotel"]
+        .iter()
+        .map(|s| s.to_string())
+        .collect();
+    let hash_src: HashSet<String> = there.iter().cloned().collect();
+    let mut hash_dst: HashSet<String> = here.iter().cloned().collect();
+    measure("HashSet<String>  clone_from", || hash_dst.clone_from(&hash_src));
+    let tree_src: BTreeSet<String> = there.iter().cloned().collect();
+    let mut tree_dst: BTreeSet<String> = here.iter().cloned().collect();
+    measure("BTreeSet<String> clone_from", || tree_dst.clone_from(&tree_src));
+    println!("   Box and Some forward to the String inside and reuse its 64 bytes.");
+    println!("   None has nothing to forward to, so it allocates. n = {n}: a Copy");
+    println!("   type owns no buffer, so there was never anything to save.");
+    println!("   HashSet reuses its table and buys a String per element; BTreeSet's");
+    println!("   override forwards to BTreeMap, which has none, so it buys the lot.");
 }
 
 const DEFAULT_FIELD: &str = "default_value"; //      13 bytes

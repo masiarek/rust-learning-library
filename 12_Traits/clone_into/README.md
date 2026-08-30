@@ -62,7 +62,9 @@ default fn clone_into(&self, target: &mut Vec<T, A>) {
 }
 ```
 
-Five buffers become zero: the `Vec`, and one per element.
+Five buffers become zero: the `Vec`, and one per element. That body is the general case of an internal `SpecCloneIntoVec`, which is what `default` marks: the case that specializes is elements whose clone is a bitwise copy — for a `Vec<u8>` or `Vec<i32>` std clears the target and `extend_from_slice`s, there being no inner buffers to reuse.
+
+**Roomy** is two conditions, not one. The impl truncates the target to the source's length, refills the overlapping prefix, and pushes whatever is left over — so four rows into four 4-byte slots reallocate four times, and four rows into two roomy slots still buy two `String`s and grow the `Vec`. Section 5 of the run below counts both. A `Vec<String>` reaches zero only when the target has enough slots *and* each `String` in them has enough capacity.
 
 ## Three ways it does not pay
 
@@ -72,6 +74,14 @@ Five buffers become zero: the `Vec`, and one per element.
 
 **`#[derive(Clone)]` gives you none of it.** The derive emits `clone` and nothing else, so `clone_from` on a derived struct falls through to the trait's default `*self = source.clone()` — and a `#[derive(Clone)] struct Row { name: String }` allocates a fresh `String` on every `clone_from`, with the destination's existing capacity untouched. That is measured in section 4 of the run below. It is also deliberate. Making the derive forward to each field's `clone_from` was [proposed and implemented ↗](https://github.com/rust-lang/rust/pull/98445), and libs-api [declined it in July 2022 ↗](https://github.com/rust-lang/rust/pull/98445#issuecomment-1190681305) — *people can hand-implement `clone_from` if they need the performance, but we shouldn't do so by default* — which closed [the issue ↗](https://github.com/rust-lang/rust/issues/98374) as wontfix. The argument that reached the meeting was not only about performance: the default `clone_from` builds the whole new value and then assigns it, so a panic partway through leaves the destination untouched, while a field-by-field version can leave it half-updated. So on your own types the reuse is opt-in, one hand-written `clone_from` at a time — and what you are opting into is a weaker guarantee, not just a faster path.
 
+## Which types the reuse reaches
+
+Twenty-four `Clone` impls in std as of 1.98 override `clone_from`: the collections (`String`, `Vec`, `VecDeque`, `LinkedList`, `BinaryHeap`, `HashMap`, `HashSet`, `BTreeSet`), the owned path and OS strings (`PathBuf`, `OsString`), and the wrappers that forward to something owning a buffer (`Box`, `Option`, `Result`, `Cow`, `RefCell`, `[T; N]`). Forwarding is the interesting half. `Box<String>` and `Some(String)` reuse the `String` inside them — `Box<T>`'s own documentation asserts it, *"And no allocation occurred"* — while a `None` target has nothing to forward to and allocates.
+
+An override that forwards to a type *without* one buys nothing, and `BTreeSet` is that case: its `clone_from` calls `BTreeMap`'s, `BTreeMap` has none, so four `String`s land in a freshly built tree. It allocates five times where the same four in a `HashSet` allocate four — and those four are the elements, since reusing a container's own buffer says nothing about the values inside it. Same distinction section 5 draws for `Vec<String>`.
+
+A `Copy` type is not on the list and cannot be: the default `clone_from` is `*self = source.clone()`, and for a `u64` that is a register move of a value that owns no buffer. There is nothing to save, so nothing to override. Section 9 of the run below counts all six cases.
+
 ## The direction is backwards, and everyone knew before it shipped
 
 The receiver is the **source**:
@@ -80,6 +90,8 @@ The receiver is the **source**:
 src.clone_into(&mut dst);   // ToOwned::clone_into — data moves left to right
 dst.clone_from(&src);       // Clone::clone_from   — data moves right to left
 ```
+
+Which of the two you can call is a question about types, not taste. `clone_from` takes `&Self`, so both sides must already be the same owned type; `&str` → `String` and `&[T]` → `Vec<T>` cross a borrow boundary and have only `clone_into`. Where both spellings exist they are the same call — the blanket `impl<T: Clone> ToOwned for T` defines `clone_into` as `target.clone_from(self)` — and clippy picks the spelling for you, rewriting `s = src.to_owned()` to `src.clone_into(&mut s)` and `v = other.clone()` to `v.clone_from(&other)`.
 
 Two methods that do the same job in the same standard library, pointing opposite ways. scottmcm flagged it [in the PR that introduced the method ↗](https://github.com/rust-lang/rust/pull/41009#issue-113803675) — *"the directionality is weird … and that means that autoref doesn't work well, usually forcing you to write `&mut`"* — and the same words open [the tracking issue ↗](https://github.com/rust-lang/rust/issues/41263).
 
@@ -119,7 +131,7 @@ error[E0502]: cannot borrow `name` as mutable because it is also borrowed as imm
   |          immutable borrow later used by call
 ```
 
-That was filed as [clippy#12444 ↗](https://github.com/rust-lang/rust-clippy/issues/12444) in March 2024, labelled `I-suggestion-causes-error`, and fixed by teaching the lint to bail out when the source borrows from the target. Verified on the pinned toolchain: clippy no longer suggests the rewrite for the snippet above. Two notes for reading the lint in the wild — it is **pedantic**, not warn-by-default, so it fires only if you asked for it; and when it does fire, it says *"may be inefficient"*, which is the honest word given the three ways above that it does not pay.
+That was filed as [clippy#12444 ↗](https://github.com/rust-lang/rust-clippy/issues/12444) in March 2024, labelled `I-suggestion-causes-error`, and fixed by teaching the lint to bail out when the source borrows from the target. Verified on the pinned toolchain: clippy no longer suggests the rewrite for the snippet above. Two notes for reading the lint in the wild. It is **pedantic**, so it fires only if you asked for it — but it shipped in **1.78** as a warn-by-default `perf` lint and was moved in **1.80**, on the stated grounds that it *"suggests to make your code less readable for a small performance gain"* ([clippy#12779 ↗](https://github.com/rust-lang/rust-clippy/pull/12779), [#12778 ↗](https://github.com/rust-lang/rust-clippy/issues/12778)). Anyone who remembers it firing unasked is remembering 1.79 or earlier. And the hedge is this lint's own: *"assigning the result of `Clone::clone()` **may** be inefficient"* is the only hedged efficiency claim clippy makes, and its neighbours in `perf` say it flat (*"swapping with a temporary value is inefficient"*, *"calling `.bytes()` is very inefficient"*). The three ways above are what the *may* is carrying.
 
 ### Where you will actually meet the lint
 
@@ -142,7 +154,7 @@ fn test() {
 }
 ```
 
-**The lint stays silent here.** Clippy skips `assigning_clones` inside a `#[test]` function; the identical statement in an ordinary module one scope over is reported. It is test-ness that decides it, not module-ness — so a codebase can hold hundreds of these and see nothing, which is fine, since test setup is where the saving matters least.
+**The lint stays silent here.** Clippy skips `assigning_clones` in test code: inside a `#[test]` function, and anywhere inside a `#[cfg(test)]` module — a plain helper down there, carrying no attribute of its own, is skipped too. It is the `cfg` that decides it, not the name: the identical statement in a module merely *called* `tests` is reported. So a codebase can hold hundreds of these and see nothing, which is fine, since test setup is where the saving matters least.
 
 **Applying the suggestion would buy nothing.** `"default_value"` is 13 bytes and `"override_value"` is 14, so the fixture hands over a buffer one byte too small, and the rewrite trades one allocation for one reallocation. Widen the default to 14 and the same rewrite is free. Section 8 of the run below measures both. Nothing about the source says which case you are in — two string literals decide it — which is what *"may be inefficient"* in the lint's own wording is being careful about.
 
@@ -186,8 +198,12 @@ fn test() {
 5. On a slice of Strings, the INNER buffers are reused too
    Vec<String> to_owned                       alloc 5   realloc 0
    Vec<String> clone_into (roomy slots)       alloc 0   realloc 0
+   Vec<String> clone_into (slots too small)   alloc 0   realloc 4
+   Vec<String> clone_into (2 slots, 4 rows)   alloc 2   realloc 1
    to_owned bought 5 buffers: the Vec, then one String each.
    clone_into bought none — [T]'s impl clones into the slots in place.
+   4-byte slots grow instead; rows past the end of the target are
+   pushed as new Strings, and the Vec itself grows to hold them.
 
 6. What you trade for it: the buffer keeps its high-water mark
    after a 300-byte row: capacity 300
@@ -208,6 +224,19 @@ fn test() {
    clone_into  (default already fits)         alloc 0   realloc 0
    one byte short, the rewrite trades an alloc for a realloc.
    give the default room and the same rewrite is free.
+
+9. Which types the reuse reaches at all
+   Box<String>   dst.clone_from(&src)         alloc 0   realloc 0
+   Some(String)  dst.clone_from(&src)         alloc 0   realloc 0
+   None          dst.clone_from(&src)         alloc 1   realloc 0
+   u64 (Copy)    dst.clone_from(&src)         alloc 0   realloc 0
+   HashSet<String>  clone_from                alloc 4   realloc 0
+   BTreeSet<String> clone_from                alloc 5   realloc 0
+   Box and Some forward to the String inside and reuse its 64 bytes.
+   None has nothing to forward to, so it allocates. n = 9: a Copy
+   type owns no buffer, so there was never anything to save.
+   HashSet reuses its table and buys a String per element; BTreeSet's
+   override forwards to BTreeMap, which has none, so it buys the lot.
 ```
 <!-- /output -->
 
@@ -398,4 +427,4 @@ fn main() {
 
 The design argument is all in two threads and worth reading in order: [PR 41009 ↗](https://github.com/rust-lang/rust/pull/41009), whose own description lists the alternative (`owned_from` on a separate trait) and why it was not taken, and [tracking issue 41263 ↗](https://github.com/rust-lang/rust/issues/41263), five years of a known objection outliving two attempts to stabilize and losing to a use case in the end.
 
-On the derive: [rust#98374 ↗](https://github.com/rust-lang/rust/issues/98374) (*derived `Clone` implementations don't utilize `clone_from`*), closed wontfix in 2024 after the libs-api decision quoted above. On the lint: [clippy#12444 ↗](https://github.com/rust-lang/rust-clippy/issues/12444).
+On the derive: [rust#98374 ↗](https://github.com/rust-lang/rust/issues/98374) (*derived `Clone` implementations don't utilize `clone_from`*), closed wontfix in 2024 after the libs-api decision quoted above. On the lint: [clippy#12444 ↗](https://github.com/rust-lang/rust-clippy/issues/12444), and [clippy#12779 ↗](https://github.com/rust-lang/rust-clippy/pull/12779), which moved it out of `perf` two releases after it shipped there.

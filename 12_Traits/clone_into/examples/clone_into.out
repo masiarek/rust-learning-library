@@ -22,8 +22,12 @@
 5. On a slice of Strings, the INNER buffers are reused too
    Vec<String> to_owned                       alloc 5   realloc 0
    Vec<String> clone_into (roomy slots)       alloc 0   realloc 0
+   Vec<String> clone_into (slots too small)   alloc 0   realloc 4
+   Vec<String> clone_into (2 slots, 4 rows)   alloc 2   realloc 1
    to_owned bought 5 buffers: the Vec, then one String each.
    clone_into bought none — [T]'s impl clones into the slots in place.
+   4-byte slots grow instead; rows past the end of the target are
+   pushed as new Strings, and the Vec itself grows to hold them.
 
 6. What you trade for it: the buffer keeps its high-water mark
    after a 300-byte row: capacity 300
@@ -44,3 +48,16 @@
    clone_into  (default already fits)         alloc 0   realloc 0
    one byte short, the rewrite trades an alloc for a realloc.
    give the default room and the same rewrite is free.
+
+9. Which types the reuse reaches at all
+   Box<String>   dst.clone_from(&src)         alloc 0   realloc 0
+   Some(String)  dst.clone_from(&src)         alloc 0   realloc 0
+   None          dst.clone_from(&src)         alloc 1   realloc 0
+   u64 (Copy)    dst.clone_from(&src)         alloc 0   realloc 0
+   HashSet<String>  clone_from                alloc 4   realloc 0
+   BTreeSet<String> clone_from                alloc 5   realloc 0
+   Box and Some forward to the String inside and reuse its 64 bytes.
+   None has nothing to forward to, so it allocates. n = 9: a Copy
+   type owns no buffer, so there was never anything to save.
+   HashSet reuses its table and buys a String per element; BTreeSet's
+   override forwards to BTreeMap, which has none, so it buys the lot.
