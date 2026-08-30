@@ -1,0 +1,51 @@
+1. Last declared, first dropped
+     end of block
+     drop c
+     drop b
+     drop a
+   Reverse declaration order, always — because a later value may
+   borrow an earlier one, and never the other way round.
+
+2. Moving moves the drop with it
+     consume got moved
+     drop moved
+     back in main, and it is already gone
+   The drop happened at the end of `consume`, not here. Whoever owns
+   the value owns the free — which is what makes ownership readable:
+   find the last owner and you have found the deallocation.
+
+3. Ending a value early
+     drop early
+     still in the block, and it is gone
+   `drop(x)` is a one-line function that takes x by value and does
+   nothing. The value dies because it was MOVED into a function that
+   ended — no magic, and it is why you cannot call `l.drop()`
+   yourself: that is E0040, "explicit use of destructor method".
+
+4. RAII: the release you cannot forget
+     open round 1
+     ...counting...
+     close round 1 at 8
+   There is no close() to call and no `finally` to write. The
+   compiler inserted the call at the end of the scope, and it runs
+   on the early-return path and on the panic path too.
+
+5. Fields drop after the struct, in declaration order
+     built from field first and field second
+     end of block
+     drop Pair itself
+     drop field first
+     drop field second
+   The struct's own Drop::drop runs FIRST, then its fields in
+   declaration order — the opposite of the local-variable rule, and
+   the one that surprises people. It has to be that way: your drop
+   body may still need the fields.
+
+6. What Drop is not for
+   Not for returning a value: drop takes &mut self, so it cannot
+   move anything out, and it cannot fail — there is no Result.
+   A close() that can error still needs to be called by hand, with
+   Drop as the backstop that at least frees the handle.
+   And a value can leak: std::mem::forget, an Rc cycle, or a process
+   that aborts all skip it. Leaking is SAFE in Rust; unsoundness is
+   what the language promises to prevent, not garbage.

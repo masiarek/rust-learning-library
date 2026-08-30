@@ -1,0 +1,46 @@
+1. Four impls, and what each one is for
+   Points * i32   : 15pt
+   i32 * Points   : 15pt
+   &Points * i32  : 15pt
+   Points + Points: 8pt
+   `3 * p` is NOT free once you have written `p * 3`. Mul is generic
+   over its right-hand type, not symmetric: `impl Mul<i32> for Points`
+   and `impl Mul<Points> for i32` are two unrelated impls.
+
+2. Why the second one is allowed at all
+   `impl Mul<Points> for i32` implements a foreign trait for a
+   FOREIGN type — and it compiles, because the orphan rule looks at
+   the whole impl: a local type appears in it, as the parameter.
+   That is why std can write `impl Add<&str> for String` and why you
+   can write this one, and also why `impl Mul<i32> for f64` is
+   refused: nothing in it is yours.
+
+3. The operator that should not exist
+   morning 80%, evening 40%
+   a naive `+`      would give 120%
+   the mean         would give 60%
+   weighted by size : 44%   <- the only right answer
+   Three plausible readings of `morning + evening`, and the correct
+   one needs an argument the operator has nowhere to put. So Turnout
+   has no Add: it has `combine(other, voters)`, whose name and
+   signature say what it does. An operator hides the question, and
+   the reader never learns there was one.
+
+4. The test for whether to implement an operator
+   Would every reader guess the same answer without reading the impl?
+   Points + Points     yes — it is a count
+   Turnout + Turnout   no  — three readings, above
+   Ballot + Ballot     no  — merge? concatenate? refuse?
+   Path / &str         yes, and std does exactly that for PathBuf
+   When the answer is no, a named method is not a worse API. It is
+   the honest one.
+
+5. What you still get for free, and what you do not
+   fold with `+`  : 12pt
+   `.sum()`       : needs `impl Sum for Points` — Iterator::sum is a
+                    trait method with its own bound, and Add alone
+                    does not satisfy it.
+   `+=`           : needs AddAssign, separately.
+   `Points * 3.0` : needs Mul<f64>, separately.
+   Each operator is one trait for one pair of types. That is verbose,
+   and it is why `Points + Seats` cannot compile by accident.

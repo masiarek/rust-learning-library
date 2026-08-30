@@ -1,0 +1,55 @@
+1. Locals: reverse declaration order
+   
+     end of block
+     drop c
+     drop b
+     drop a
+
+2. A struct: itself first, then its fields IN declaration order
+   
+     built from field first and field second
+     end of block
+     drop Outer itself
+     drop field first
+     drop field second
+   Opposite rules, and both are forced. A later local may borrow an
+   earlier one, so locals unwind. A struct's own drop body may still
+   read its fields, so the struct goes first and the fields follow in
+   the order they were written.
+
+3. A Vec drops front to back
+   
+     end of block
+     drop v0
+     drop v1
+     drop v2
+
+4. The guard released one line early
+   held to the end of the block:
+     acquire whole block
+     work with the lock held
+     release whole block
+   explicitly released, then more work:
+     acquire dropped early
+     work with the lock held
+     release dropped early
+     work with the lock NOT held
+   bound to a bare `_`:
+     acquire bound to underscore
+     release bound to underscore
+     work — but is the lock held?
+   The third is the bug. `let _ = Guard::acquire(..)` does not bind
+   anything, so the guard is a temporary that drops at the END OF
+   THAT STATEMENT — the lock is released before the work starts. The
+   fix is one character: `let _g = ...`, which is a binding and lives
+   to the end of the scope. This is the most common RAII mistake in
+   Rust, and it compiles without a warning.
+
+5. Drop still runs when the work does not finish
+   early_return(true) -> returned early
+     acquire across an early return
+     release across an early return
+   And on a panic too, while the stack unwinds — which is what makes
+   a guard a guarantee rather than a convention. The exceptions are
+   std::mem::forget, a reference cycle, and a process that aborts
+   instead of unwinding.

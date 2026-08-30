@@ -1,0 +1,46 @@
+1. The operator is the method
+   a + b        = 8pt   is Add::add(a, b)
+   Add::add(a, b) = 8pt   the same call, written out
+   a - b        = 2pt
+   -a           = -5pt
+   a * 3        = 15pt   Mul<i32>, a DIFFERENT trait from Mul<Points>
+
+2. `type Output` is why `+` can change the type
+   Add's signature is `fn add(self, rhs: Rhs) -> Self::Output`, so
+   none of the three types has to match. `Instant + Duration` is an
+   Instant, `Instant - Instant` is a DURATION, and `String + &str` is
+   a String. Here Output is Points because that is what made sense,
+   not because the trait required it.
+
+3. The assigning forms are separate traits
+   after three `+=`: 12pt
+   `+=` is AddAssign, and implementing Add does NOT give it to you.
+   The difference is real: add_assign takes &mut self and can mutate
+   in place, where add consumes and returns. For a Copy newtype that
+   is a formality; for a String or a Vec it is an allocation saved.
+
+4. Indexing, and what it returns
+   ballot[1] = 3pt
+   Index::index returns a REFERENCE — `&Self::Output` — and `[]` is
+   sugar for `*ballot.index(1)`. That is why a HashMap's `[]` panics
+   rather than returning Option: the trait has nowhere to put a None.
+
+5. What the operators buy, and the trap
+   fold with + : 12pt
+   sorted (Ord): [Points(3), Points(4), Points(5)]
+   A newtype with the right operators reads exactly like the number
+   it wraps, while still refusing `Points + Seats`. That is the
+   whole argument for the newtype: the type is a unit.
+   The trap is the other direction — implementing Add on a type whose
+   addition is not obvious. `Ballot + Ballot` could be a merge, a
+   concatenation, or an error, and the operator hides the question.
+   If the answer is not the one every reader would guess, write a
+   method with a name.
+
+6. What cannot be overloaded
+   && and ||   they short-circuit; a trait method cannot
+   =           assignment is not a trait
+   .           field access and method calls (Deref is not this)
+   ?           it has its own traits, Try and FromResidual, unstable
+   Everything else — + - * / % & | ^ << >> ! [] () == < > and the
+   nine assigning forms — is a trait in std::ops or std::cmp.
