@@ -1,0 +1,41 @@
+1. One sender, one receiver, one value
+   rx.recv() = "counted"
+   `send` takes the value BY VALUE. The String was built on the
+   spawned thread and is owned by main now — one move, no copy, and
+   the sending thread cannot touch it again because it no longer has
+   it. That is the channel's whole safety argument.
+
+2. Many senders: clone the Sender, not the Receiver
+   [("Ada", 3), ("Ben", 3), ("Cara", 4)]
+   mpsc is Multi-Producer, Single-Consumer: Sender is Clone and
+   Receiver is not. Note the sort — the arrival ORDER is whatever the
+   scheduler decides, so anything comparing output has to impose one.
+
+3. The hang, and the one line that prevents it
+   `for x in rx` ends when every Sender has been dropped. The clones
+   inside the threads drop when those threads finish; the ORIGINAL tx
+   in main does not, unless you drop it. Forget that `drop(tx)` and
+   the loop above waits forever, on a program that looks finished.
+   It is the single most common mpsc bug, and it has no error message
+   at all — just a process that never exits.
+
+4. `recv` tells you the difference between empty and finished
+   first  recv() = Ok(5)
+   second recv() = Err(RecvError)   <- RecvError: every sender is gone
+   `recv` BLOCKS until a value arrives or the channel closes;
+   `try_recv` returns immediately with Empty or Disconnected. Those
+   are two different questions and the types keep them apart.
+
+5. And the send can fail too
+   send() with no receiver = true
+   The value comes back inside the SendError, so nothing is lost —
+   which is the only sensible design for a function that took
+   ownership and could not deliver.
+
+6. Which tool for which problem
+   channel        hand a value OVER: a pipeline, a work queue, a
+                  result collected from a fan-out
+   Arc<Mutex<T>>  share ONE value: a counter, a cache, a registry
+   The question is whether the data has an owner at each moment or
+   is genuinely shared. Reaching for a Mutex when a channel would do
+   is how a program acquires a lock it then has to reason about.

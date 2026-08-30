@@ -1,0 +1,36 @@
+1. Sequential, for the answer to check against
+   totals = [24, 22, 20]
+
+2. spawn + Arc: the version that compiles first for most people
+   totals = [24, 22, 20]   matches: true
+   Three Arc clones, one refcount, and a `move` per closure. The Arc
+   is here for exactly one reason: `spawn` needs a 'static closure,
+   and a borrow of a local is not 'static.
+
+3. scope: the same thing with no Arc and no clone
+   totals = [24, 22, 20]   matches: true
+   The closures BORROW `rows`. `scope` cannot return until every
+   thread it started has finished, so the borrow provably ends first
+   — which is the whole reason the lifetime works out.
+   The `move` on each closure is about `i`, not about the data: a
+   loop variable is owned by the loop, so it has to be copied in, and
+   `move` then copies the shared REFERENCE rather than the Vec.
+
+4. The version that does not compile, and what rustc says
+   let h = thread::spawn(|| rows.len());   // no `move`
+   E0373: "closure may outlive the current function, but it borrows
+   `rows`, which is owned by the current function", with a note that
+   "function requires argument type to outlive `'static`" and the
+   help offering `move`. Adding `move` compiles — and MOVES rows into
+   the first thread, so a second one cannot have it. That is the
+   moment most people reach for Arc; scope is the other answer.
+
+5. Which to reach for
+   scope        the data is on this stack and the work finishes here.
+                Cheapest, and the borrow checker still helps.
+   Arc          the thread outlives this function, or the value has
+                no single owner. Read-only sharing needs nothing more.
+   Arc<Mutex>   ...and they also WRITE. Every reader now pays for the
+                writers, so ask whether a channel would do instead.
+   The order matters: each rung costs something the one above does
+   not, and a fan-out over data you already have needs only the first.

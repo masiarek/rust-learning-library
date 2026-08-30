@@ -1,0 +1,42 @@
+1. Stage one: parse on a worker, collect in main
+   0,5,2    -> Some([0, 5, 2])
+   2,4,4    -> Some([2, 4, 4])
+   3,3,3    -> Some([3, 3, 3])
+   4,4,1    -> Some([4, 4, 1])
+   5,3,0    -> Some([5, 3, 0])
+   9,1,1    -> None
+   x,2,2    -> None
+
+2. Two stages, wired together
+   totals   = [14, 19, 10]
+   rejected = 2
+   Each stage owns its Sender and drops it by finishing, which closes
+   the next stage's loop in turn. The pipeline shuts down from the
+   FRONT, one stage at a time, with nothing to co-ordinate.
+
+3. The hang, demonstrated without hanging
+   one value sent, the worker's Sender dropped, and a clone kept:
+   recv()               = Ok(1)
+   recv_timeout(50ms)   = Err(Timeout)
+   That Timeout is what `for x in rx` would have waited on FOREVER,
+   because one Sender is still alive in this scope. Drop it:
+   after drop(keep), recv() = Err(RecvError)
+   Disconnected is a different answer from Empty, and only the second
+   one is a reason to stop.
+
+4. The rule, in one line
+   A receiver's loop ends when the LAST Sender drops. So a Sender you
+   keep "just in case" is a Sender that never lets the program exit,
+   and the symptom is a process that finishes its work and hangs.
+   Either drop it explicitly, or never bind it — pass clones and let
+   the original go out of scope with the block that made it.
+
+5. Bounded channels, and what the bound is for
+   sync_channel(2): try_send #1 true
+                    try_send #2 true
+                    try_send #3 false   <- Full
+   drained: 1 2
+   An unbounded channel with a fast producer and a slow consumer is a
+   memory leak with good manners. A bound turns that into
+   backpressure: `send` blocks, and the producer slows to the
+   consumer's speed instead of buffering the difference.

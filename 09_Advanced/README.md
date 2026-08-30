@@ -6,6 +6,8 @@ Each page is still one idea with a program you can compile and run beside it.
 
 | Lesson | Level | What it teaches |
 |---|---|---|
+| [Spawning a thread](spawning_a_thread/README.md) | 201 → 301 | `spawn`, the `JoinHandle` that is the only way to a return value, the `'static` bound behind `E0373`, and `thread::scope` — which borrows what `spawn` cannot, so a fan-out needs no `Arc` at all |
+| [Channels](channels/README.md) | 201 → 301 | Handing a value over instead of sharing one: `send` moves, the `Sender` you kept that stops the program exiting, the difference between *empty* and *disconnected*, and when a bound is backpressure rather than a limit |
 | [Lock poisoning](mutex_poisoning/README.md) | 301 | Why `Mutex::lock()` returns a `Result` at all, what your `.unwrap()` is deciding on someone's behalf, and the three honest answers |
 | [The right to vote is a value](one_person_one_vote/README.md) | 301 | Authentication as a type rather than a boolean — a permission that cannot be forged, a `cast` that spends it, and the hole move semantics still cannot close |
 | [Scale the denominator away](scaled_integers/README.md) | 301 | Exact arithmetic without fractions — why a float breaks a tied count, why the rationals that fix it cost a `gcd` apiece, and when you can multiply the denominators out and spend the count in `i128` |
@@ -20,6 +22,6 @@ Each page is still one idea with a program you can compile and run beside it.
 Rough order, not a promise:
 
 - **`Send` and `Sync`** — the two traits that decide what may cross a thread boundary, and why you almost never write them yourself
-- **`Arc<Mutex<T>>` and its alternatives** — channels, `RwLock`, atomics, and the question of which one your problem actually is
+- **`RwLock` and atomics** — the two rungs between a `Mutex` and a channel, and the question of which one your problem actually is
 - **Interior mutability** — `Cell`, `RefCell`, and the runtime borrow check you are opting into
 - **`unsafe`** — what it does and does not turn off, and why the unit of review is the module rather than the block

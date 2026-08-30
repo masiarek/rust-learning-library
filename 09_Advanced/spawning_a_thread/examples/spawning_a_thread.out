@@ -1,0 +1,35 @@
+1. spawn takes a closure and hands back a handle
+   candidate A total, computed on another thread: 24
+   `spawn` returns a JoinHandle<T>, and `join` is the ONLY way to
+   get the T back. It also returns a Result, because the thread may
+   have panicked instead of finishing.
+
+2. Four threads, and why the output is still in order
+   A: 24
+   B: 22
+   C: 20
+   Nothing was printed FROM a thread. Interleaved println! output is
+   the classic non-deterministic test failure — do the work in the
+   thread, return the value, and print on the joining side.
+
+3. `move` is usually not optional
+   ballots with A >= 4: 4
+   Without `move`, the closure borrows `threshold` — and the compiler
+   refuses, because it cannot prove the borrow outlives the thread:
+   E0373, "closure may outlive the current function, but it borrows
+   `threshold`, which is owned by the current function". `spawn`
+   requires a `'static` closure for exactly that reason.
+
+4. A panicking thread does not take the process with it
+   the thread panicked; join() gave Err and main is fine
+   The panic message would normally go to stderr — suppressed here
+   so this example's transcript stays clean. `join` returns
+   Err(Box<dyn Any + Send>), which is the panic payload — usually a
+   String you can downcast if you care.
+
+5. `scope` borrows what `spawn` cannot
+   C's scores [0, 1, 2, 3, 5, 4, 5, 0] -> sum 20, max 5
+   Both closures BORROW `local`, with no Arc and no clone. `scope`
+   guarantees every thread it started has finished before it returns,
+   so the borrow cannot outlive the data. Stable since 1.63, and the
+   right default for fan-out over data you already have.
