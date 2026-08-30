@@ -25,6 +25,8 @@ Already writing Rust? Two lessons to begin with:
 
 [`01_Foundations/`](01_Foundations/README.md) is the map of everything a first week of Rust needs, now split across six sections by subject rather than kept in one flat run: [first programs](15_First_Programs/README.md), [structs](16_Structs/README.md), [`Option` and `Result`](17_Option_and_Result/README.md), [ownership](18_Ownership/README.md), [strings](14_Strings/README.md) and [numbers and bytes](19_Numbers/README.md). Lessons about the toolchain rather than the language — `cargo`, build profiles, compile times — are in [`05_Tooling/`](05_Tooling/README.md); the ones that assume the foundations — shared state across threads, `unsafe`, FFI — in [`09_Advanced/`](09_Advanced/README.md).
 
+[`25_Control_Flow/`](25_Control_Flow/README.md) is the `if`, `match` and three loops every program is made of. It sits right after the first programs because it needs exactly one idea from them — that a block has a value — and gives back the thing that makes Rust control flow read differently from its C-shaped equivalent: these are expressions, so `let size = if n < 10 { "small" } else { "large" };` needs no ternary and no `mut`. **Stubs today**, outlines with their traps written down; blocks and scopes themselves are already taught, in [a block is an expression](15_First_Programs/a_block_is_an_expression/README.md).
+
 [`13_Enums/`](13_Enums/README.md) and [`12_Traits/`](12_Traits/README.md) sit directly after the foundations, because between them they are what the rest of the language is made of. Enums come first: anyone leaving the foundations has already used several of them — `Option` and `Result` among them — without being told that the feature has a name, or that a `match` which forgets a variant is a build error. Traits are the other half, and the same argument applies twice over: `Copy`, `Display`, `Iterator` and `From` all turn up in the earlier pages long before anything explains what they have in common.
 
 [`22_Generics/`](22_Generics/README.md) follows both, because it needs both: `<T>` is how one definition serves every type, and a trait is what tells the compiler which types are allowed. It is also the section that explains the brackets in `Option<T>`, `Vec<T>` and `Result<T, E>` — read a hundred times by then, and nowhere defined.
@@ -56,28 +58,29 @@ The sidebar is sorted **alphabetically**, because that is how you find a section
 | 1 | [Start here](00_Start_Here/README.md) | The three outside courses this library is a companion to |
 | 2 | [Foundations](01_Foundations/README.md) | The map of a first week, pointing into the six sections below |
 | 3 | [First programs](15_First_Programs/README.md) | Running a `.rs` file at all, and what the punctuation in it means |
-| 4 | [Structs](16_Structs/README.md) | A compound type of your own, before the two the library leans on |
-| 5 | [`Option` and `Result`](17_Option_and_Result/README.md) | The two enums everything returns, and the dozen ways to open them |
-| 6 | [Ownership](18_Ownership/README.md) | Who owns the value — moves, borrows, and what a shadow does |
-| 7 | [Strings](14_Strings/README.md) | Text: the owner and the view, and the bytes underneath |
-| 8 | [Numbers and bytes](19_Numbers/README.md) | The unit all of that is counted in, down to the float that cannot hold your value |
-| 9 | [Enums](13_Enums/README.md) | The feature `Option` and `Result` were made of all along |
-| 10 | [Traits](12_Traits/README.md) | The other half the language is built from — and how a call reaches one |
-| 11 | [Generics](22_Generics/README.md) | `<T>`: one definition per idea, instead of one per type it is used with |
-| 12 | [Closures](23_Closures/README.md) | A function that carries values with it, and the three traits that say how often you may call it |
-| 13 | [Iterators](24_Iterators/README.md) | The sequence that computes nothing until somebody asks, and the three doors onto a collection |
-| 14 | [Errors](02_Errors/README.md) | What a failure does on its way out of a program |
-| 15 | [Command line](03_Command_Line/README.md) | What the program was handed on the way in |
-| 16 | [Files](04_Files/README.md) | The filesystem — the first thing outside the program that can say no |
-| 17 | [Tooling](05_Tooling/README.md) | `cargo` and the rest of the toolchain, rather than the language |
-| 18 | [Data](06_Data/README.md) | Serialization, and the round trip through JSON |
-| 19 | [Clients](07_Clients/README.md) | The network — the last thing outside the program that can say no |
-| 20 | [Observability](21_Observability/README.md) | What the service says about itself, once somebody else depends on it |
-| 21 | [Interfaces](08_Interfaces/README.md) | Putting a face on it |
-| 22 | [Advanced](09_Advanced/README.md) | What needs the foundations: threads, `unsafe`, FFI |
-| 23 | [Compilers](20_Compilers/README.md) | The layer under all of it, three quarters of which is not Rust |
-| 24 | [Resources](10_Resources/README.md) | Books, essays and exercises outside this library |
-| 25 | [Unix](11_Unix/README.md) | The shell you run the compiler from — two of its three tools are Rust |
+| 4 | [Control flow](25_Control_Flow/README.md) | `if`, `match` and the three loops — the ones that have values |
+| 5 | [Structs](16_Structs/README.md) | A compound type of your own, before the two the library leans on |
+| 6 | [`Option` and `Result`](17_Option_and_Result/README.md) | The two enums everything returns, and the dozen ways to open them |
+| 7 | [Ownership](18_Ownership/README.md) | Who owns the value — moves, borrows, and what a shadow does |
+| 8 | [Strings](14_Strings/README.md) | Text: the owner and the view, and the bytes underneath |
+| 9 | [Numbers and bytes](19_Numbers/README.md) | The unit all of that is counted in, down to the float that cannot hold your value |
+| 10 | [Enums](13_Enums/README.md) | The feature `Option` and `Result` were made of all along |
+| 11 | [Traits](12_Traits/README.md) | The other half the language is built from — and how a call reaches one |
+| 12 | [Generics](22_Generics/README.md) | `<T>`: one definition per idea, instead of one per type it is used with |
+| 13 | [Closures](23_Closures/README.md) | A function that carries values with it, and the three traits that say how often you may call it |
+| 14 | [Iterators](24_Iterators/README.md) | The sequence that computes nothing until somebody asks, and the three doors onto a collection |
+| 15 | [Errors](02_Errors/README.md) | What a failure does on its way out of a program |
+| 16 | [Command line](03_Command_Line/README.md) | What the program was handed on the way in |
+| 17 | [Files](04_Files/README.md) | The filesystem — the first thing outside the program that can say no |
+| 18 | [Tooling](05_Tooling/README.md) | `cargo` and the rest of the toolchain, rather than the language |
+| 19 | [Data](06_Data/README.md) | Serialization, and the round trip through JSON |
+| 20 | [Clients](07_Clients/README.md) | The network — the last thing outside the program that can say no |
+| 21 | [Observability](21_Observability/README.md) | What the service says about itself, once somebody else depends on it |
+| 22 | [Interfaces](08_Interfaces/README.md) | Putting a face on it |
+| 23 | [Advanced](09_Advanced/README.md) | What needs the foundations: threads, `unsafe`, FFI |
+| 24 | [Compilers](20_Compilers/README.md) | The layer under all of it, three quarters of which is not Rust |
+| 25 | [Resources](10_Resources/README.md) | Books, essays and exercises outside this library |
+| 26 | [Unix](11_Unix/README.md) | The shell you run the compiler from — two of its three tools are Rust |
 
 Nothing enforces this order and no page depends on it; skipping around is fine. It is here because a sidebar can be sorted one way only, and A–Z answers the more common question.
 

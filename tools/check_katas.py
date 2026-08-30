@@ -21,6 +21,11 @@ Four things it will not let past:
 4. **A number printed on a lesson page.** The ID lives in the table alone. A
    ``K7`` in a page's prose is a second copy that will disagree with the first —
    which it did, within a day, the first time we tried it.
+5. **A stale by-subject index.** KATAS.md carries a second view of the same
+   table, grouped by section, because "which katas are there for strings?" is a
+   different question from "what do I do next?" — and a hand-maintained second
+   copy of eighty rows would be wrong within a week. It is generated between
+   markers from the table above it, so it cannot disagree; ``--fix`` rewrites it.
 
 Stdlib only, and no network: same rule as run_examples.py.
 
@@ -44,6 +49,53 @@ ROW = re.compile(
 )
 # "**K7 — …**" or "**K7 …**" at the head of a Practice section.
 NUMBER_IN_PROSE = re.compile(r"\*\*K\d+\b")
+
+
+BY_SUBJECT_START = "<!-- by-subject:start -->"
+BY_SUBJECT_END = "<!-- by-subject:end -->"
+
+# Section-folder names a mechanical de-prefix reads badly.
+SECTION_LABELS = {
+    "17_Option_and_Result": "`Option` and `Result`",
+    "15_First_Programs": "First programs",
+    "19_Numbers": "Numbers and bytes",
+    "03_Command_Line": "Command line",
+    "25_Control_Flow": "Control flow",
+}
+
+
+def section_label(folder: str) -> str:
+    if folder in SECTION_LABELS:
+        return SECTION_LABELS[folder]
+    return folder.split("_", 1)[-1].replace("_", " ")
+
+
+def render_by_subject(rows) -> str:
+    """One block per section, in the order each section's first kata is reached.
+
+    The reading order and the subject grouping answer different questions, so
+    this is a second view of the same rows rather than a second list of them:
+    every line below is built from the table, and nothing here is typed twice.
+    """
+    groups: dict[str, list[tuple[int, str, str]]] = {}
+    for i, m in enumerate(rows, 1):
+        folder = m.group("lesson_href").split("/", 1)[0]
+        groups.setdefault(folder, []).append((i, m.group("kata"), m.group("kata_href")))
+
+    out = [BY_SUBJECT_START, ""]
+    out.append("*Generated from the table above by `tools/check_katas.py --fix`. Sections in the order their first kata is reached.*")
+    out.append("")
+    for folder, items in groups.items():
+        readme = f"{folder}/README.md"
+        count = len(items)
+        out.append(f"**[{section_label(folder)}]({readme})** — {count} kata{'s' if count != 1 else ''}")
+        out.append("")
+        for num, title, href in items:
+            short = title.split(" — ")[0]
+            out.append(f"- K{num} · [{short}]({href})")
+        out.append("")
+    out.append(BY_SUBJECT_END)
+    return "\n".join(out)
 
 
 def pages():
@@ -96,6 +148,22 @@ def main() -> int:
                     f"{INDEX.name}: K{num} links to #practice on "
                     f"{kata_path.relative_to(REPO)}, which has no `## Practice` heading"
                 )
+
+    index_text = INDEX.read_text(encoding="utf-8")
+    if BY_SUBJECT_START in index_text and BY_SUBJECT_END in index_text:
+        head, rest = index_text.split(BY_SUBJECT_START, 1)
+        _, tail = rest.split(BY_SUBJECT_END, 1)
+        wanted = render_by_subject(rows)
+        if "--fix" in sys.argv:
+            INDEX.write_text(head + wanted + tail, encoding="utf-8")
+            print(f"{INDEX.name}: by-subject index rewritten from the table")
+        elif (BY_SUBJECT_START + rest.split(BY_SUBJECT_END, 1)[0] + BY_SUBJECT_END) != wanted:
+            problems.append(
+                f"{INDEX.name}: the by-subject index no longer matches the table — "
+                "run `python3 tools/check_katas.py --fix`"
+            )
+    elif "--fix" in sys.argv:
+        print(f"{INDEX.name}: no {BY_SUBJECT_START} / {BY_SUBJECT_END} markers to fill")
 
     for page in sorted(practice_pages()):
         if page not in listed:

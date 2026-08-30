@@ -1,6 +1,6 @@
 # Foundations
 
-**One line:** The ideas you meet in your first week of Rust and keep using forever — six sections' worth, which is why this page is a map rather than a list.
+**One line:** The ideas you meet in your first week of Rust and keep using forever — seven sections' worth, which is why this page is a map rather than a list.
 
 This folder used to hold all of them: sixty-odd lessons in one flat run, sorted by nothing a reader could see. They are now grouped by what they are about, and this page is the door to each group. Nothing was dropped, and every lesson kept its content — only its address changed.
 
@@ -8,7 +8,8 @@ Read them in this order. Each section assumes the ones above it and nothing else
 
 | Section | Lessons | What it covers |
 |---|---|---|
-| [First programs](../15_First_Programs/README.md) | 9 | Running a `.rs` file at all, reading what the compiler says back, the braces every later page uses without explaining, and getting a program to print |
+| [First programs](../15_First_Programs/README.md) | 12 | Running a `.rs` file at all, reading what the compiler says back, the braces every later page uses without explaining, and getting a program to print — then `let`, the built-in types, and who decides which one you got |
+| [Control flow](../25_Control_Flow/README.md) | 8 | `if`, `match` and the three loops — all of them expressions, so all of them have values. Stubs for now |
 | [Structs](../16_Structs/README.md) | 8 | A type of your own: fields here, behaviour in a separate `impl` block, no constructor, and the eight errors one produces |
 | [`Option` and `Result`](../17_Option_and_Result/README.md) | 24 | No null and no exceptions — two ordinary enums, and the dozen small methods between `match` and `.unwrap()` |
 | [Ownership](../18_Ownership/README.md) | 15 | One owner per value, what a move actually transfers, borrowing, and the three questions the word "scope" collapses into one |

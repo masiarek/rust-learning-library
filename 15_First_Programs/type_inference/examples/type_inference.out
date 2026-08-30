@@ -1,0 +1,55 @@
+1. The same literal, two types — decided by a LATER line
+   let x = 10;   ...then takes_u32(x)   x is u32
+   let y = 20;   ...then takes_i8(y)    y is i8
+   Nothing on the `let` lines differs. Delete the two calls and both
+   become i32. The type came from how the value is used.
+
+2. This is not "any type"
+   x occupies 4 byte(s), y occupies 1
+   A dynamically typed value carries a tag at runtime and costs the
+   same whatever it holds. These are 4 bytes and 1 byte, fixed at
+   compile time — the identical machine code the annotated spelling
+   would have produced.
+
+3. Inference reaches forward through a whole chain
+   let mut names = Vec::new();   // no element type yet
+   names.push("Ada");            // ...decided here
+   names is alloc::vec::Vec<&str>
+   The `let` line is not where the type is known; it is only where
+   the question is asked.
+
+4. The two fallbacks, for when nothing decides
+   let n = 1;     -> i32
+   let f = 1.0;   -> f64
+   Rust never picks a *width* for you by guessing at the value: 1
+   does not become u8 because it is small. It becomes i32 because
+   that is the written-down fallback.
+
+5. Before it settles, the type has a placeholder name
+      let x = 3.14;
+      let y = 20;
+      assert_eq!(x, y);
+   error[E0277]: can't compare `{float}` with `{integer}`
+   {float} and {integer} are not types you can write. They are the
+   compiler saying "a number whose width is still undecided" — and
+   the reason this line fails is that no fallback ever makes two
+   different fallbacks equal.
+
+6. Where inference stops: a signature is never inferred
+      fn double(n) { n * 2 }       // not Rust
+      fn double(n: i32) -> i32     // every parameter, every return
+   Inside a body the compiler solves; at a boundary you declare. That
+   is why changing a function body cannot silently change its callers.
+
+7. When there is genuinely nothing to go on
+      let v = Vec::new();          // error[E0282]: type annotations needed
+      let x = "42".parse();        // error[E0284]
+   Two ways to answer, and they are the same answer written twice:
+      let parsed: i32 = "42".parse().unwrap();   42
+      let turbo = "42".parse::<i32>().unwrap();  42
+   equal? true
+
+The rule
+   An unannotated `let` is not an unknown type — it is a type the
+   compiler works out from everything you do with the value, falling
+   back to i32 or f64 only when nothing in the function decides.

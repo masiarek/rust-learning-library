@@ -200,6 +200,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "what_a_closure_is",
         "three_closure_traits",
         "the_move_keyword",
+        # ...and last, the thing a closure is measured against: a plain `fn`
+        # pointer, which carries nothing and so refuses the capturing ones.
+        "function_pointers",
     ],
     "24_Iterators": [
         "README.md",
@@ -244,6 +247,16 @@ NAV_ORDER: dict[str, list[str]] = {
         # together, and the braces that print.
         "a_block_is_an_expression",
         "braces_take_a_name",
+        # ...and now the language itself starts. You can run a file and read
+        # what the compiler says back, so the first Rust thing to meet is the
+        # one every later page uses on every line: naming a value.
+        "variables",
+        # ...and what you are allowed to name, before defining a type of your
+        # own: the scalar census, and the widths that make a type a promise.
+        "values",
+        # ...and who decided which of those a bare `let x = 10;` got. Before
+        # the annotation, because inference is what an annotation overrides.
+        "type_inference",
         # ...and the third piece of punctuation nobody defines: the `:` in
         # `let s: &str`. On a literal it changes nothing, which is why it is
         # easy to read as decoration; on four other shapes it decides the type.
@@ -368,6 +381,24 @@ NAV_ORDER: dict[str, list[str]] = {
         # sum is part of its answer, so the compiler may not choose it for you —
         # unless you say so. Hands off to the 09_Advanced exactness cluster.
         "letting_the_compiler_reorder",
+    ],
+    # Control flow is taught in the order a program is built out of it: the two
+    # branching forms first (two cases, then many), then the three loops from
+    # most-structured to least, then the two ways out of one -- and finally the
+    # two things that hold the whole lot, a function and a macro.
+    "25_Control_Flow": [
+        "README.md",
+        "if_expressions",
+        "match_expressions",
+        # The loops, most structured first: `for` knows the sequence, `while`
+        # knows only a condition, `loop` knows neither.
+        "for_loops",
+        "while_loops",
+        "the_loop_keyword",
+        # ...and the keyword all three share, which only `loop` can hand a value.
+        "break_and_continue",
+        "functions",
+        "macros",
     ],
     "14_Strings/str_methods": ["README.md"],
     "14_Strings/string_methods": ["README.md"],
@@ -600,6 +631,14 @@ LABELS = {
     "03_Command_Line": "Command line",
     "15_First_Programs": "First programs",
     "19_Numbers": "Numbers and bytes",
+    "25_Control_Flow": "Control flow",
+    # 25_Control_Flow -- every one of these is a keyword, and reads as code.
+    "if_expressions": "`if` expressions",
+    "match_expressions": "`match` expressions",
+    "for_loops": "`for` loops",
+    "while_loops": "`while` loops",
+    "the_loop_keyword": "`loop`",
+    "break_and_continue": "`break` and `continue`",
     # 26_Collections — the type names read as code.
     "the_vec": "`Vec`",
     "the_hashmap": "`HashMap`",

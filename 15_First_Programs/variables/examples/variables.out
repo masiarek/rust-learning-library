@@ -1,0 +1,47 @@
+1. `let` binds a name to a value
+   let x: i32 = 10;   x = 10   i32
+   let y = 10;        y = 10   i32
+   Same program. The annotation is a check, not a requirement —
+   nothing here needed it, because 10 has a fallback type.
+
+2. The binding is immutable by default
+   Adding a second line does not work:
+      let x: i32 = 10;
+      x = 20;   // error[E0384]: cannot assign twice to immutable variable
+   `x` is not a box holding 10 that you may refill. It is a name for
+   a value, and the name is spoken for.
+
+3. `mut` is the permission that assignment needs
+   let mut count = 0;   count = 0
+   count = 1;           count = 1
+   count += 1;          count = 2
+   One word, and every later line may write to it.
+
+4. `mut` you did not use is a warning, not a shrug
+      let mut total = 0;      // never assigned again
+      println!("{total}");
+   warning: variable does not need to be mutable
+   The compiler holds you to the promise: `mut` says *this changes*,
+   so a `mut` nothing writes to is a claim the code does not keep.
+
+5. Mutability belongs to the binding, not to the value
+   let owned = String::from("Ada");   // not mut
+   let mut moved = owned;             // now it is
+   moved.push_str(" Lovelace");       moved = "Ada Lovelace"
+   The same bytes were immutable under one name and writable under
+   the next. Nothing about the String changed — only the binding.
+
+6. A binding is scoped to its block
+   inner: visible only inside these braces
+   outer: visible to the end of main
+      println!("{inner}");   // error[E0425]: cannot find value `inner`
+
+7. `let` again is a new variable, not an assignment
+   let spaces = "   ";        &str
+   let spaces = spaces.len();  usize   spaces = 3
+   That is shadowing, and it needed no `mut` — because nothing was
+   assigned. A second variable took over the name.
+
+The rule
+   `let` names a value; `mut` lets a later line write through the name;
+   `let` again replaces the name and may change its type.

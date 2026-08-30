@@ -1,0 +1,67 @@
+1. Signed integers — i8 i16 i32 i64 i128 isize
+   type     bytes                                       min                                       max
+   i8           1                                      -128                                       127
+   i16          2                                    -32768                                     32767
+   i32          4                               -2147483648                                2147483647
+   i64          8                      -9223372036854775808                       9223372036854775807
+   i128        16  -170141183460469231731687303715884105728   170141183460469231731687303715884105727
+   isize        8                      -9223372036854775808                       9223372036854775807
+
+2. Unsigned integers — u8 u16 u32 u64 u128 usize
+   type     bytes                                       min                                       max
+   u8           1                                         0                                       255
+   u16          2                                         0                                     65535
+   u32          4                                         0                                4294967295
+   u64          8                                         0                      18446744073709551615
+   u128        16                                         0   340282366920938463463374607431768211455
+   usize        8                                         0                      18446744073709551615
+
+3. isize and usize are the width of a pointer
+   size_of::<usize>()      = 8
+   size_of::<*const u8>()  = 8
+   equal? true   <- that is the definition, not a coincidence of this machine
+   It is the type of a length, an index, and a byte count — which is
+   why `.len()` gives you a usize and not an i32.
+
+4. Floats, char and bool
+   f32     4 bytes      3.14, -10.0e20, 2_f32
+   f64     8 bytes        3.14 (the fallback)
+   char    4 bytes              'a', 'α', '∞'
+   bool    1 bytes                true, false
+   char is 32 bits wide because it holds one Unicode scalar value,
+   and the largest of those is U+10FFFF = 1114111.
+   bool is 8 bits wide because a byte is the smallest addressable
+   unit — it carries one bit of information in one byte of space.
+
+5. Writing one down
+   1000 == 1_000 == 10_00 ?  true
+   Underscores are legibility only. The compiler removes them.
+   123_i64 == 123i64 ?       true
+   The suffix is the type, written on the literal instead of the let.
+      let a = 123_i64;   is   let a: i64 = 123;
+
+6. Other bases, and the byte literal
+   decimal      65        65
+   hex          0x41      65
+   octal        0o101     65
+   binary       0b100_0001 65
+   byte         b'A'      65
+   all the same u8: true
+   b'A' is a u8, not a char: 1 vs 4
+
+7. The two fallbacks
+   let n = 1;     i32   <- i32 when nothing else decides
+   let f = 1.0;   f64   <- f64 when nothing else decides
+   In an error message these appear as {integer} and {float}:
+      let x = 3.14; let y = 20; assert_eq!(x, y);
+      error[E0277]: can't compare `{float}` with `{integer}`
+
+8. The width is a promise, and it is checked
+      let big: u8 = 1_000_000;
+      error: literal out of range for `u8`  (range is 0..=255)
+   u8::MAX = 255, and one more is:
+      almost + 1              panics in a debug build, wraps in release
+      wrapping_add(1)  = 0
+      checked_add(1)   = None
+      saturating_add(1)= 255
+   Four answers, and the type does not pick for you — you do.

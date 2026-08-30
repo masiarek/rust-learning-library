@@ -1,0 +1,33 @@
+1. fib, three ways, same answers
+   n           0   1   2   3   4   5   6   7   8   9  10
+   fib         0   1   1   2   3   5   8  13  21  34  55
+   fib_expr    0   1   1   2   3   5   8  13  21  34  55
+   fib_iter    0   1   1   2   3   5   8  13  21  34  55
+   all three agree for n = 0..30? true
+
+2. When does it panic?
+   fib(47) = 2971215073
+   u32::MAX = 4294967295
+   fib(48) needs 4807526976 , which is 512559681 more than u32 can hold.
+   The addition that dies is fib(47) + fib(46) = 2971215073 + 1836311903:
+      a + b            panicked: attempt to add with overflow
+      a.checked_add(b) = None
+      a.wrapping_add(b)= 512559680   <- the wrong answer a release build prints
+   So: n = 48 in a debug build, and n = 48 gives a plausible, wrong
+   number in a release build. The second one is the dangerous half.
+
+3. The same function, one word wider
+   u8    holds up to fib( 13) = 233
+   u16   holds up to fib( 24) = 46368
+   u32   holds up to fib( 47) = 2971215073
+   u64   holds up to fib( 93) = 12200160415121876738
+   u128  holds up to fib(186) = 332825110087067562321196029789634457848
+   Widening buys arithmetic, not safety: u128 dies at 187 instead of
+   48. Picking a type is picking where the program stops being right.
+
+4. Recursion is not the slow part — recomputation is
+   fib(10) = 55        recursive calls:       177   iterative steps: 10
+   fib(20) = 6765      recursive calls:     21891   iterative steps: 20
+   fib(30) = 832040    recursive calls:   2692537   iterative steps: 30
+   Every call recomputes what the sibling call already worked out.
+   The loop keeps two numbers and never asks the same question twice.
