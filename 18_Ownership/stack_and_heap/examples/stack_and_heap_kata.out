@@ -1,0 +1,51 @@
+Part 1 — predict the stack size of six types.
+
+    type           size  why
+    i32               4  the slot IS the value
+    [i32; 5]         20  five of them, still no header
+    Precinct          8  two u32 fields, nothing more
+    &str             16  pointer + length: a view needs both
+    Box<i32>          8  one pointer, the i32 is elsewhere
+    String           24  pointer + length + capacity
+    Vec<i32>         24  same three words, any length
+
+  The pair to compare is `[i32; 5]` at 20 and `Vec<i32>` at 24.
+  The array's 20 bytes ARE its five integers. The Vec's 24 are a
+  header and none of its data, so a Vec of a million elements is
+  still 24 and a `[i32; 1_000_000]` would be four megabytes of stack.
+
+Part 2 — what size_of_val can and cannot see.
+
+    size_of_val(&roomy)   24   the header, again
+    size_of_val(&*roomy)  3    the str behind it: live length
+    roomy.capacity()      64   bought, and invisible to both
+
+  Neither number is what the value is holding. 61 bytes are reserved,
+  untouched, and reported by nothing in std. Counting them takes an
+  allocator you can instrument, which is what part 3 uses.
+
+Part 3 — predict which of seven lines allocates, then count.
+
+    let moved = source;              alloc 0
+      ...and the buffer did not move: true
+    let copied = precinct;           alloc 0
+      ...a Copy type has no heap side to touch, and both names
+         are still alive: precinct 7 / copied 431 registered
+    let view = &moved[..];           alloc 0
+      ...a borrow is a pointer and a length, both on the stack
+    moved.clone()                    alloc 1
+      ...the one row that buys a second buffer: true
+    Box::new(41u32)                  alloc 1
+    Rc::new(cloned)                  alloc 1
+    Rc::clone(&shared)               alloc 0
+      ...one owner more, one counter up, no bytes copied: 2
+
+  Four of the seven allocate nothing. The three that do are the
+  three that put something NEW on the heap -- a clone's buffer, a
+  Box's payload, an Rc's counted allocation. Everything else moves
+  or copies a header between stack slots, which is why Rust can
+  afford to move by default however long the text is.
+
+  boxed still says 41, and the rule to carry away is that
+  `.clone()` names the only one you have to look at the TYPE to
+  price: on a String it allocates, on an Rc it does not.

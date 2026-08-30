@@ -1,0 +1,34 @@
+1. Fixed size, known at compile time -> the stack slot IS the value
+   i32              4
+   bool             1
+   char             4   a Unicode scalar, not a byte
+   (f64, f64)      16   a tuple is its fields
+   [i32; 5]        20   an array is length x element
+   Point            8   a struct is its fields, and nothing else
+   Making one costs a bump of the stack pointer: p = (1, 2)
+
+2. Growable or unknown size -> a fixed HEADER on the stack, data on the heap.
+   The header is all `size_of` can see, so it does not move with the content:
+   String holding    5 bytes of text -> 24 bytes on the stack
+   String holding 5000 bytes of text -> 24 bytes on the stack
+   Vec of 3 Strings                  -> 24 bytes on the stack
+   ptr + len + capacity, three words, whatever is at the other end.
+   `size_of_val` reports what a value OCCUPIES, never what it ALLOCATED:
+     size_of_val(&roomy)           =  24   the header again
+     size_of_val(roomy.as_str())   =   3   the live text, on the heap
+     roomy.capacity()              =  64   what was actually bought
+   Hand it the str and it does see heap bytes -- but it answers len, not capacity.
+
+3. Every pointer type costs the same on the stack. What differs is the far end:
+   Box<String>      8   one owner, freed when it drops
+   Rc<String>       8   several owners, counted, one thread
+   Arc<String>      8   several owners, counted atomically, many threads
+   &String          8   borrowed, owns nothing
+   &str            16   ptr + len: a view needs no capacity
+
+4. Box is the one place you SAY 'put this on the heap'
+   [u8; 4096]         4096 bytes on the stack
+   Box<[u8; 4096]>       8 bytes on the stack, 4096 on the heap
+   The stack is a few MB per thread and cannot grow. That is the whole reason
+   Box exists: the array is the same size either way, but only one of the two
+   spends the bounded region on it.
