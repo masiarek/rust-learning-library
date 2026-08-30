@@ -234,13 +234,28 @@ NAV_ORDER: dict[str, list[str]] = {
     ],
     "24_Iterators": [
         "README.md",
-        # Laziness first: it is the property the other two pages are
-        # describing, and the one that explains why a chain costs nothing.
+        # The spine. Laziness first: it is the property the other two pages
+        # are describing, and the one that explains why a chain costs nothing.
         "iterators_are_lazy",
         "iter_iter_mut_into_iter",
-        # Last, because it needs both halves: writing `next` yourself, and
-        # the lifetime a borrowing iterator carries.
+        # ...then writing `next` yourself, which needs both halves and the
+        # lifetime a borrowing iterator carries.
         "implementing_iterator",
+        # The two consumers worth knowing properly, in that order: fold is
+        # what collect is a special case of.
+        "fold_and_reduce",
+        "collect_and_fromiterator",
+        # A lookup table rather than a lesson, so it sits after the spine.
+        "adapters_by_job",
+        # ...and then the three questions you do not have until you hit them:
+        # handing a chain back, the two traits behind rev() and len(), and
+        # when not to write a chain at all.
+        "returning_an_iterator",
+        "double_ended_and_exact_size",
+        "when_a_loop_beats_a_chain",
+        # Last, and the only 301 in the section: the same trait with "not
+        # yet" added, which needs everything above it.
+        "iterator_vs_stream",
     ],
     "20_Compilers": [
         "README.md",
@@ -476,6 +491,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # Closes the arc: the other four string types, and the one
         # owned/borrowed pattern all six repeat.
         "six_kinds_of_string",
+        # ...then one deep dive, which needs every page above it: what `split`
+        # actually returns before anything consumes it, read field by field.
+        "inside_a_split",
         # The method reference: one page per method, 125 of them. It sits after
         # the lessons and before the stubs because a stub is not a page anyone
         # reads, and burying a reference this size under nine placeholders
@@ -763,6 +781,12 @@ LABELS = {
     "transforms_instead_of_match": "Transforms instead of `match`",
     "iter_iter_mut_into_iter": "`iter`, `iter_mut`, `into_iter`",
     "implementing_iterator": "Implementing `Iterator`",
+    "fold_and_reduce": "`fold` and `reduce`",
+    "collect_and_fromiterator": "`collect` and `FromIterator`",
+    "returning_an_iterator": "Returning an iterator",
+    "double_ended_and_exact_size": "`DoubleEndedIterator` and `ExactSizeIterator`",
+    "when_a_loop_beats_a_chain": "When a `for` loop beats a chain",
+    "iterator_vs_stream": "`Iterator` versus `Stream`",
     "three_closure_traits": "The three closure traits",
     # 06_Data · 07_Clients
     "serde_derive": "Deriving `Serialize` and `Deserialize`",

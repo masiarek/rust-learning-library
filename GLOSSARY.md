@@ -493,3 +493,18 @@ Short definitions. Every entry links to the page that explains it properly — a
 **`mpsc` channel** — Multi-producer, single-consumer: `Sender` is `Clone`, `Receiver` is not, and `send` **moves** the value, so at every moment it has exactly one owner and nothing needs a lock. The receiver's loop ends when the *last* `Sender` drops — which is why a `Sender` you kept hangs a program that has finished its work, with no error message at all. (Not the toolchain sense of *channel*, which is `stable`/`beta`/`nightly`.) → [Channels](09_Advanced/channels/README.md)
 
 **Backpressure** — What a bounded channel gives you: `sync_channel(n)` blocks the producer once *n* values are queued, so it runs at the consumer's speed. An unbounded channel with a fast producer and a slow consumer is a memory leak with good manners. → [Channels](09_Advanced/channels/README.md)
+
+
+**`fold`** — Carry an accumulator through a sequence and hand it back. The consumer the named ones are built from: std's `Sum for i32` is literally `iter.fold(0, |a, b| a + b)`, and `count` is a fold that adds one per item. Reach for it when the answer is not the same type as the items — a `String`, a `HashMap`, or two answers in one tuple. → [`fold` and `reduce`](24_Iterators/fold_and_reduce/README.md)
+
+**`reduce`** — `fold` with the first item as the starting value, so the accumulator must be the item type and the answer is an `Option`: an empty sequence has no first item, and `reduce` will not invent one. That is the right shape for a maximum and the wrong one for a sum, where `0` really is the answer. → [`fold` and `reduce`](24_Iterators/fold_and_reduce/README.md)
+
+**`FromIterator`** — The trait `collect` calls. It is why `collect` has no behaviour of its own: the **target type** decides whether you get a `Vec`, a deduplicated set, a map where a later key overwrites an earlier one, or one `Result` covering every row. Implement it once and your own type becomes collectable. → [`collect` and `FromIterator`](24_Iterators/collect_and_fromiterator/README.md)
+
+**`collect::<Result<Vec<_>, _>>()`** — The flip that turns an iterator **of** `Result`s into one `Result` **of** a collection, stopping at the first `Err`. The standard way to parse a file of rows and put a `?` at the end — and it keeps only the first failure, so a validation report wants `partition` instead. → [`collect` and `FromIterator`](24_Iterators/collect_and_fromiterator/README.md)
+
+**`DoubleEndedIterator`** — The trait behind `rev`, `rfind` and `rfold`: one extra method, `next_back`. Its obligation is the part no compiler checks — both ends consume from the same sequence and must meet in the middle, never handing out an element twice. → [`DoubleEndedIterator` and `ExactSizeIterator`](24_Iterators/double_ended_and_exact_size/README.md)
+
+**`ExactSizeIterator`** — An empty impl block that is entirely a promise: `len()` is provided, and its body reads `size_hint()` and trusts it. A wrong `size_hint` therefore yields a wrong `len()` rather than a panic. `filter` cannot have it (it cannot know how many pass) and neither can `str::chars`. → [`DoubleEndedIterator` and `ExactSizeIterator`](24_Iterators/double_ended_and_exact_size/README.md)
+
+**`Stream`** — An iterator whose `next` may answer *"not yet"*: `poll_next` returns `Poll<Option<Item>>` instead of `Option<Item>`. Not in std — it lives in `futures`, and the eventual std name, `AsyncIterator`, is still unstable. There is no `for x in stream`; the async form is `while let Some(x) = stream.next().await`. → [`Iterator` versus `Stream`](24_Iterators/iterator_vs_stream/README.md)
