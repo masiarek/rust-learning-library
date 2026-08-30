@@ -12,7 +12,7 @@ But a number is only as good as the sentence naming its subject, and the subject
 
 ## The six, and what kind of claim each is
 
-Seven rows for six bullets, because the first one bundles two measurements that do not agree with each other — which is the first thing worth knowing about it.
+Eight rows for six bullets, because the first bullet bundles three separate measurements behind one link, and they do not all point the same way — which is the first thing worth knowing about it.
 
 | The claim | The number | What was actually counted | Checked |
 |---|---|---|---|
@@ -103,7 +103,7 @@ And the *mechanism* — the reason this result is even available — is on none 
 
 ### The memory half does not follow
 
-The n-body row already says it: Rust is a hair behind C on time and uses about a quarter more memory than either C or C++ on that problem. And the energy study below supplies the sharper case — on its `fasta` benchmark Rust is the **most energy-efficient language measured**, and would fall **nine places** if the same table were sorted by peak memory instead.
+The n-body row already says it: Rust is a hair behind C on time and uses about a fifth more memory than either C or C++ on that problem. And the energy study below supplies the sharper case — on its `fasta` benchmark Rust is the **most energy-efficient language measured**, and would fall **nine places** if the same table were sorted by peak memory instead.
 
 So "excellent memory and energy efficiency" staples together two properties that the sources themselves separate. The claim worth making is a different one and is not about size: no garbage collector and no runtime means memory use that is *predictable* — you can point at the line that allocates. Predictable is not the same as small, and [The global allocator](../../09_Advanced/the_global_allocator/README.md) is where that distinction gets its own page.
 
@@ -119,11 +119,11 @@ The energy claim traces to Pereira, Couto, Ribeiro, Rua, Cunha, Fernandes and Sa
 | Ada | 98 J | 3,740 ms |
 | Java | 114 J | 3,821 ms |
 
-Rust second, about 3% behind C. A good result and a fairly gathered one.
+Rust second, just behind C. A good result, and a fairly gathered one.
 
 **But the paper's ten problems are the Computer Language Benchmarks Game's problems** — it says so, and cites the same site the bullet links. So the speed claim and the energy claim are not two independent confirmations. They are one corpus of contributed programs, weighed on two different meters, by two different groups, eight years apart. That does not make either wrong. It does mean that the caveat the Benchmarks Game prints about its own data applies to both bullets at once, and that a weakness in the corpus is a weakness in the whole first bullet rather than a third of it.
 
-The paper is also from 2017 — before `async`, before const generics, on compilers two dozen releases old. Its ranking has held up in every replication since; its *joules* have not been re-measured here and should not be quoted as current.
+The paper is also from 2017 — before `async`/`await`, before const generics, on the compilers of the time. Nothing here re-ran it, so treat the *ranking* as the durable part and the *joules* as a 2017 reading rather than a current one.
 
 ## One number that counted real bugs
 
