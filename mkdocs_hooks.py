@@ -103,10 +103,13 @@ NAV_ORDER: dict[str, list[str]] = {
     ],
     "13_Enums": [
         "README.md",
-        # The declaration, then what a payload costs, then the two pages about
-        # what `match` does and does not check for you.
+        # The declaration, then what a payload costs, then that same sum/product
+        # choice applied to the smallest product there is: a bool parameter.
         "what_an_enum_is",
         "variants_that_carry_data",
+        "an_enum_instead_of_a_bool",
+        # ...and then the two pages about what `match` does and does not check
+        # for you.
         "a_typo_becomes_a_binding",
         "an_enum_as_a_state_machine",
     ],
