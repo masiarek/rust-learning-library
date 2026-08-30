@@ -8,18 +8,18 @@
 
 | The job you have | The adapter |
 |---|---|
-| keep the items matching a test | `filter` |
-| keep items **until** one fails the test | `take_while` (and `skip_while` for the tail) |
-| transform every item | `map` |
-| transform **and** drop the ones that fail | `filter_map`, closure returns `Option` |
-| one item becomes several | `flat_map` |
-| flatten an iterator of iterators you already have | `flatten` |
-| number the items | `enumerate` |
-| walk two sequences together | `zip` (stops at the shorter) |
-| split a stream of pairs into two collections | `unzip` |
-| split one stream into two by a test | `partition` |
-| carry a running value and yield each step | `scan` |
-| look at the next item without taking it | `peekable` + `peek` |
+| keep the items matching a test | [`filter` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.filter) |
+| keep items **until** one fails the test | [`take_while` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.take_while) (and [`skip_while` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.skip_while) for the tail) |
+| transform every item | [`map` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.map) |
+| transform **and** drop the ones that fail | [`filter_map` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.filter_map), closure returns `Option` |
+| one item becomes several | [`flat_map` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.flat_map) |
+| flatten an iterator of iterators you already have | [`flatten` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.flatten) |
+| number the items | [`enumerate` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.enumerate) |
+| walk two sequences together | [`zip` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.zip) (stops at the shorter) |
+| split a stream of pairs into two collections | [`unzip` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.unzip) |
+| split one stream into two by a test | [`partition` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.partition) |
+| carry a running value and yield each step | [`scan` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.scan) |
+| look at the next item without taking it | [`peekable` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.peekable) + [`peek` ↗](https://doc.rust-lang.org/std/iter/struct.Peekable.html#method.peek) |
 | join two sequences end to end | `chain` |
 | repeat forever | `cycle` (pair it with `take`) |
 | every *n*th item | `step_by` |

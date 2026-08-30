@@ -162,9 +162,9 @@ Clippy has three lints for it, all allow-by-default, and choosing between them i
 
 | Lint | On the accumulator (bug 1) | On the reused name (bug 3) | On the four correct shadows |
 |---|---|---|---|
-| `shadow_same` | no | no | no — it found nothing in the file at all |
-| `shadow_unrelated` | **no** — the accumulator *reuses* `total`, so it is not "unrelated" | yes | no |
-| `shadow_reuse` | **yes** | no | **yes — all four of them** |
+| [`shadow_same` ↗](https://rust-lang.github.io/rust-clippy/master/index.html#shadow_same) | no | no | no — it found nothing in the file at all |
+| [`shadow_unrelated` ↗](https://rust-lang.github.io/rust-clippy/master/index.html#shadow_unrelated) | **no** — the accumulator *reuses* `total`, so it is not "unrelated" | yes | no |
+| [`shadow_reuse` ↗](https://rust-lang.github.io/rust-clippy/master/index.html#shadow_reuse) | **yes** | no | **yes — all four of them** |
 
 So the only lint that catches the worst bug is the one that also condemns the idiom the feature exists for. `shadow_reuse` cannot tell `let total = total + s` in a loop from `let raw: u32 = raw.parse()?` at the top of a function, because syntactically they are the same move. If you want one of them on, `shadow_unrelated` is the cheapest and the most defensible — it just will not catch bug 1.
 

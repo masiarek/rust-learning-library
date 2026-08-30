@@ -14,8 +14,8 @@ The fourth corner of the grid: exact or rounded, aborting or reporting.
 
 | | aborts | returns `Result` |
 |---|---|---|
-| rounds up | `reserve` | `try_reserve` |
-| exact | `reserve_exact` | `try_reserve_exact` |
+| rounds up | [`reserve` ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.reserve) | [`try_reserve` ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.try_reserve) |
+| exact | [`reserve_exact` ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.reserve_exact) | `try_reserve_exact` |
 
 Use it where both properties matter at once: a size that came from input (so failure must be handled) and is known to be final (so rounding up would waste memory that the input controls).
 

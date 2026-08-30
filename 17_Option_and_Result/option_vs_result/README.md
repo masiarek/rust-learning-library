@@ -376,16 +376,16 @@ Same row = same idea on both types.
 | Handle both arms | `match` | `match` |
 | Handle one arm | `if let Some(x)` | `if let Ok(x)` |
 | Bind or bail | `let Some(x) = … else` | `let Ok(x) = … else` |
-| Transform the value | `.map(f)` | `.map(f)` |
-| Transform, may fail | `.and_then(f)` | `.and_then(f)` |
-| Transform the error | — | `.map_err(f)` |
-| Fall back to a value | `.unwrap_or(v)` | `.unwrap_or(v)` |
-| Fall back lazily | `.unwrap_or_else(f)` | `.unwrap_or_else(f)` |
+| Transform the value | [`.map(f)` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.map) | [`.map(f)` ↗](https://doc.rust-lang.org/std/result/enum.Result.html#method.map) |
+| Transform, may fail | [`.and_then(f)` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.and_then) | [`.and_then(f)` ↗](https://doc.rust-lang.org/std/result/enum.Result.html#method.and_then) |
+| Transform the error | — | [`.map_err(f)` ↗](https://doc.rust-lang.org/std/result/enum.Result.html#method.map_err) |
+| Fall back to a value | [`.unwrap_or(v)` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.unwrap_or) | [`.unwrap_or(v)` ↗](https://doc.rust-lang.org/std/result/enum.Result.html#method.unwrap_or) |
+| Fall back lazily | [`.unwrap_or_else(f)` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.unwrap_or_else) | [`.unwrap_or_else(f)` ↗](https://doc.rust-lang.org/std/result/enum.Result.html#method.unwrap_or_else) |
 | Propagate to the caller | `?` | `?` (converts via `From`) |
-| Convert to the other | `.ok_or(e)` | `.ok()` |
-| Flip the nesting | `.transpose()` | `.transpose()` |
-| Is it the happy arm? | `.is_some()` | `.is_ok()` |
-| Borrow instead of move | `.as_ref()` | `.as_ref()` |
+| Convert to the other | [`.ok_or(e)` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.ok_or) | [`.ok()` ↗](https://doc.rust-lang.org/std/result/enum.Result.html#method.ok) |
+| Flip the nesting | [`.transpose()` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.transpose) | [`.transpose()` ↗](https://doc.rust-lang.org/std/result/enum.Result.html#method.transpose) |
+| Is it the happy arm? | [`.is_some()` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.is_some) | [`.is_ok()` ↗](https://doc.rust-lang.org/std/result/enum.Result.html#method.is_ok) |
+| Borrow instead of move | [`.as_ref()` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.as_ref) | [`.as_ref()` ↗](https://doc.rust-lang.org/std/result/enum.Result.html#method.as_ref) |
 | Crash if sad | `.expect("why")` | `.expect("why")` |
 
 ## Traps

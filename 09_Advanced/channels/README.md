@@ -47,9 +47,9 @@ Either drop it explicitly, or never bind it — hand out clones and let the orig
 
 | | |
 |---|---|
-| `rx.recv()` | blocks until a value arrives, or `Err(RecvError)` when every sender is gone |
-| `rx.try_recv()` | returns now: `Empty` or `Disconnected` |
-| `rx.recv_timeout(d)` | blocks up to `d`, then `Timeout` |
+| [`rx.recv()` ↗](https://doc.rust-lang.org/std/sync/mpsc/struct.Receiver.html#method.recv) | blocks until a value arrives, or `Err(RecvError)` when every sender is gone |
+| [`rx.try_recv()` ↗](https://doc.rust-lang.org/std/sync/mpsc/struct.Receiver.html#method.try_recv) | returns now: `Empty` or `Disconnected` |
+| [`rx.recv_timeout(d)` ↗](https://doc.rust-lang.org/std/sync/mpsc/struct.Receiver.html#method.recv_timeout) | blocks up to `d`, then `Timeout` |
 
 *Empty* and *Disconnected* are two different answers and only the second is a reason to stop. The practice below uses `recv_timeout` to show the hang without hanging — the `Timeout` it prints is exactly what `for x in rx` would have waited on forever.
 

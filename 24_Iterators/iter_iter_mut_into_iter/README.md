@@ -17,9 +17,9 @@ fn main() {
 
 | you write | the loop calls | each item is | the collection afterwards |
 |---|---|---|---|
-| `for n in &names` | `names.iter()` | `&T` | untouched |
-| `for n in &mut names` | `names.iter_mut()` | `&mut T` | modified in place |
-| `for n in names` | `names.into_iter()` | `T` | **consumed** |
+| `for n in &names` | [`names.iter()` ↗](https://doc.rust-lang.org/std/primitive.slice.html#method.iter) | `&T` | untouched |
+| `for n in &mut names` | [`names.iter_mut()` ↗](https://doc.rust-lang.org/std/primitive.slice.html#method.iter_mut) | `&mut T` | modified in place |
+| `for n in names` | [`names.into_iter()` ↗](https://doc.rust-lang.org/std/iter/trait.IntoIterator.html#tymethod.into_iter) | `T` | **consumed** |
 
 ## `for` wants `IntoIterator`, not `Iterator`
 

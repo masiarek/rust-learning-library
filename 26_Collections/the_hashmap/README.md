@@ -22,7 +22,7 @@ fn main() {
 
 | | on a missing key |
 |---|---|
-| `map.get(k)` | `None` |
+| [`map.get(k)` ↗](https://doc.rust-lang.org/std/collections/hash_map/struct.HashMap.html#method.get) | `None` |
 | `map[k]` | panics |
 | `map.get(k).copied().unwrap_or(0)` | `0` |
 

@@ -73,9 +73,9 @@ fn main() {
 
 | | `250u8` + 10 |
 |---|---|
-| `saturating_add(10)` | `255` |
-| `wrapping_add(10)` | `4` |
-| `checked_add(10)` | `None` |
+| [`saturating_add(10)` ↗](https://doc.rust-lang.org/std/primitive.u8.html#method.saturating_add) | `255` |
+| [`wrapping_add(10)` ↗](https://doc.rust-lang.org/std/primitive.u8.html#method.wrapping_add) | `4` |
+| [`checked_add(10)` ↗](https://doc.rust-lang.org/std/primitive.u8.html#method.checked_add) | `None` |
 
 Only the last hands the decision back to the caller, which makes it the one to reach for when the overflow means something.
 

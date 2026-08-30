@@ -35,10 +35,10 @@ fn main() {
 
 | method | operator | round1 vs round2 |
 |---|---|---|
-| `union` | `\|` | `["Ada", "Ben", "Cara", "Dan"]` |
-| `intersection` | `&` | `["Ben", "Cara"]` |
-| `difference` | `-` | `["Ada"]` |
-| `symmetric_difference` | `^` | `["Ada", "Dan"]` |
+| [`union` ↗](https://doc.rust-lang.org/std/collections/hash_set/struct.HashSet.html#method.union) | `\|` | `["Ada", "Ben", "Cara", "Dan"]` |
+| [`intersection` ↗](https://doc.rust-lang.org/std/collections/hash_set/struct.HashSet.html#method.intersection) | `&` | `["Ben", "Cara"]` |
+| [`difference` ↗](https://doc.rust-lang.org/std/collections/hash_set/struct.HashSet.html#method.difference) | `-` | `["Ada"]` |
+| [`symmetric_difference` ↗](https://doc.rust-lang.org/std/collections/hash_set/struct.HashSet.html#method.symmetric_difference) | `^` | `["Ada", "Dan"]` |
 
 The methods return **iterators** and allocate nothing until you `collect`; the operators build a new `HashSet` directly. And `is_subset`, `is_superset` and `is_disjoint` answer the yes/no versions without building anything at all.
 

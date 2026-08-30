@@ -49,8 +49,8 @@ Not a formality. They are read by different people at different times:
 
 | | who reads it | where it shows up |
 |---|---|---|
-| `Display` | a user of your program | your own messages, and every layer of an error chain |
-| `Debug` | you | `unwrap`, `expect`, `{:?}`, and what the runtime prints for an `Err` out of `main` |
+| [`Display` ↗](https://doc.rust-lang.org/std/fmt/trait.Display.html) | a user of your program | your own messages, and every layer of an error chain |
+| [`Debug` ↗](https://doc.rust-lang.org/std/fmt/trait.Debug.html) | you | `unwrap`, `expect`, `{:?}`, and what the runtime prints for an `Err` out of `main` |
 
 That last one surprises people: [`main` returning a `Result`](../main_returns_result/README.md) prints the **`Debug`** form, so the careful `Display` sentence you wrote is not the one your user sees unless you print it yourself. Which of the two you get where is [Debug and Display](../../15_First_Programs/debug_vs_display/README.md).
 

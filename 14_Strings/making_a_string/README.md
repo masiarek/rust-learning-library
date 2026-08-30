@@ -96,8 +96,8 @@ So the rule fits in three lines:
 
 | the source is | write | because |
 |---|---|---|
-| a `&str` | `to_owned()` | both work; the only thing changing is ownership, and that is the word for it |
-| anything else | `to_string()` | `to_owned()` was never a candidate — it does not make text |
+| a `&str` | [`to_owned()` ↗](https://doc.rust-lang.org/std/borrow/trait.ToOwned.html#tymethod.to_owned) | both work; the only thing changing is ownership, and that is the word for it |
+| anything else | [`to_string()` ↗](https://doc.rust-lang.org/std/string/trait.ToString.html#tymethod.to_string) | `to_owned()` was never a candidate — it does not make text |
 | already a `String` | neither | see the section above — you have it already |
 
 That is [dtolnay's argument ↗](https://users.rust-lang.org/t/to-string-vs-to-owned-for-string-literals/1441/6) arrived at from the other end: `&str` and `String` are both strings, so *"convert this string to a string"* names nothing that is happening, while *"take ownership of it"* names exactly what is. `String::from(s)` says the same thing in constructor form, and `.into()` says it once a signature has named the destination — [the second kata below](#practice) drills the choice across every source.
@@ -120,11 +120,11 @@ The wider conversion matrix, for the types the string family actually hands you:
 |---|---|
 | `&str` | `x.to_owned()` · `x.to_string()` |
 | `char` / any number / `bool` | `x.to_string()` |
-| `Vec<u8>` | `String::from_utf8(x)?` — can fail |
-| `&[u8]` | `String::from_utf8_lossy(x).into_owned()` — never fails, substitutes `�` |
-| `OsString` / `PathBuf` | `x.into_string()` — `Err` if not UTF-8 |
-| `&OsStr` / `&Path` | `x.to_str()?.to_owned()` |
-| `CString` | `x.into_string()?` |
+| `Vec<u8>` | [`String::from_utf8(x)?` ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf8) — can fail |
+| `&[u8]` | [`String::from_utf8_lossy(x).into_owned()` ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf8_lossy) — never fails, substitutes `�` |
+| `OsString` / `PathBuf` | [`x.into_string()` ↗](https://doc.rust-lang.org/std/ffi/struct.OsString.html#method.into_string) — `Err` if not UTF-8 |
+| `&OsStr` / `&Path` | [`x.to_str()?` ↗](https://doc.rust-lang.org/std/ffi/struct.OsStr.html#method.to_str)`.to_owned()` |
+| `CString` | [`x.into_string()?` ↗](https://doc.rust-lang.org/std/ffi/struct.CString.html#method.into_string) |
 | several pieces | `format!("{a}{b}")` |
 
 The `?` in that column is the whole point of [Six kinds of string](../six_kinds_of_string/README.md): narrowing to a `String` is where a promise about the bytes gets *checked*, so those conversions return `Result` rather than a value.

@@ -63,9 +63,9 @@ warning: `raw` is shadowed
 
 | Lint | Fires on | On the bug? |
 |---|---|---|
-| `shadow_same` | `let x = x;`, `let x = &x;` | no — it only ever catches junk |
-| `shadow_unrelated` | `let x = something_else;` | **no** — the accumulator reuses `total`, so this lint is silent |
-| `shadow_reuse` | `let x = f(x);` | **yes** — and on `let x = x.trim().parse()?` too |
+| [`shadow_same` ↗](https://rust-lang.github.io/rust-clippy/master/index.html#shadow_same) | `let x = x;`, `let x = &x;` | no — it only ever catches junk |
+| [`shadow_unrelated` ↗](https://rust-lang.github.io/rust-clippy/master/index.html#shadow_unrelated) | `let x = something_else;` | **no** — the accumulator reuses `total`, so this lint is silent |
+| [`shadow_reuse` ↗](https://rust-lang.github.io/rust-clippy/master/index.html#shadow_reuse) | `let x = f(x);` | **yes** — and on `let x = x.trim().parse()?` too |
 
 The lint that catches the bug is the one that also condemns the idiom. `shadow_reuse` cannot tell `let total = total + s` inside a loop from `let raw: u32 = raw.parse()?` at the top of a function, because syntactically they are the same move — and the second is what chapter 3.1 of the Book teaches on the page where it introduces the feature.
 

@@ -61,8 +61,8 @@ Both closures **borrow** `rows` — no `Arc`, no clone. `scope` cannot return un
 
 | Reach for | When |
 |---|---|
-| `thread::scope` | the data is on this stack and the work finishes here |
-| `Arc<T>` | the thread outlives this function, or the value has no single owner — read-only sharing needs nothing more |
+| [`thread::scope` ↗](https://doc.rust-lang.org/std/thread/fn.scope.html) | the data is on this stack and the work finishes here |
+| [`Arc<T>` ↗](https://doc.rust-lang.org/std/sync/struct.Arc.html) | the thread outlives this function, or the value has no single owner — read-only sharing needs nothing more |
 | `Arc<Mutex<T>>` | …and they also write. Every reader now pays for the writers, so ask whether a channel would do |
 
 ## The trap: printing from inside the thread

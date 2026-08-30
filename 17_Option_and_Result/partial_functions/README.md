@@ -58,12 +58,12 @@ Once you have the concept, `Option` returns stop looking arbitrary. Every one of
 
 | Partial version | Total version | Undefined when |
 |---|---|---|
-| `a / b` | `a.checked_div(b)` | `b == 0` |
-| `a + b` | `a.checked_add(b)` | the result overflows |
-| `a - b` | `a.checked_sub(b)` | unsigned, and it would go below zero |
-| `v[i]` | `v.get(i)` | `i` is out of bounds |
-| — | `v.first()` / `v.last()` | the collection is empty |
-| — | `map.get(k)` | the key is absent |
+| `a / b` | [`a.checked_div(b)` ↗](https://doc.rust-lang.org/std/primitive.i32.html#method.checked_div) | `b == 0` |
+| `a + b` | [`a.checked_add(b)` ↗](https://doc.rust-lang.org/std/primitive.i32.html#method.checked_add) | the result overflows |
+| `a - b` | [`a.checked_sub(b)` ↗](https://doc.rust-lang.org/std/primitive.u32.html#method.checked_sub) | unsigned, and it would go below zero |
+| `v[i]` | [`v.get(i)` ↗](https://doc.rust-lang.org/std/primitive.slice.html#method.get) | `i` is out of bounds |
+| — | [`v.first()` ↗](https://doc.rust-lang.org/std/primitive.slice.html#method.first) / [`v.last()` ↗](https://doc.rust-lang.org/std/primitive.slice.html#method.last) | the collection is empty |
+| — | [`map.get(k)` ↗](https://doc.rust-lang.org/std/collections/hash_map/struct.HashMap.html#method.get) | the key is absent |
 
 The `checked_*` family is the clearest illustration in the whole library: the same arithmetic, offered twice, differing only in whether the undefined case is a panic or a value.
 

@@ -8,11 +8,11 @@
 
 | what the bytes promise | owned | borrowed | you meet it |
 |---|---|---|---|
-| valid UTF-8, checked at the door | `String` | `&str` | all ordinary text |
-| whatever the OS handed you | `OsString` | `&OsStr` | filenames, env vars, `args_os` |
-| no NUL inside, one NUL at the end | `CString` | `&CStr` | calling C |
-| the OS row, plus path smarts | `PathBuf` | `&Path` | every file API |
-| nothing at all — just bytes | `Vec<u8>` | `&[u8]` | I/O buffers |
+| valid UTF-8, checked at the door | [`String` ↗](https://doc.rust-lang.org/std/string/struct.String.html) | [`&str` ↗](https://doc.rust-lang.org/std/primitive.str.html) | all ordinary text |
+| whatever the OS handed you | [`OsString` ↗](https://doc.rust-lang.org/std/ffi/struct.OsString.html) | [`&OsStr` ↗](https://doc.rust-lang.org/std/ffi/struct.OsStr.html) | filenames, env vars, `args_os` |
+| no NUL inside, one NUL at the end | [`CString` ↗](https://doc.rust-lang.org/std/ffi/struct.CString.html) | [`&CStr` ↗](https://doc.rust-lang.org/std/ffi/struct.CStr.html) | calling C |
+| the OS row, plus path smarts | [`PathBuf` ↗](https://doc.rust-lang.org/std/path/struct.PathBuf.html) | [`&Path` ↗](https://doc.rust-lang.org/std/path/struct.Path.html) | every file API |
+| nothing at all — just bytes | [`Vec<u8>` ↗](https://doc.rust-lang.org/std/vec/struct.Vec.html) | [`&[u8]` ↗](https://doc.rust-lang.org/std/primitive.slice.html) | I/O buffers |
 
 The last two rows are the honorary members: [`Path` is an `OsStr` that knows about `/`](../../04_Files/path_and_pathbuf/README.md), and `Vec<u8>` is what remains when no promise is made.
 

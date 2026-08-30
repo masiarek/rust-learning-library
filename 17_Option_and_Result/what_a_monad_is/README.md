@@ -65,10 +65,10 @@ let flat = Some(8).and_then(half);   // Option<i32>
 
 | Type | wrap | chain | What the "context" is |
 |---|---|---|---|
-| `Option<T>` | `Some` | `and_then` | it might be absent |
-| `Result<T, E>` | `Ok` | `and_then` | it might have failed, and why |
-| `Vec<T>` / iterators | `vec![x]` / `once` | `flat_map` | there might be many |
-| `Future<T>` | `async { x }` | `.await` in an `async` block | it is not ready yet |
+| [`Option<T>` ↗](https://doc.rust-lang.org/std/option/enum.Option.html) | `Some` | `and_then` | it might be absent |
+| [`Result<T, E>` ↗](https://doc.rust-lang.org/std/result/enum.Result.html) | `Ok` | `and_then` | it might have failed, and why |
+| [`Vec<T>` ↗](https://doc.rust-lang.org/std/vec/struct.Vec.html) / iterators | `vec![x]` / `once` | `flat_map` | there might be many |
+| [`Future<T>` ↗](https://doc.rust-lang.org/std/future/trait.Future.html) | `async { x }` | `.await` in an `async` block | it is not ready yet |
 
 Read the right-hand column and the pattern is clear: each type is *a value plus a complication*, and `and_then` is "do the next step, and keep handling the complication for me." That is what people mean by the famously unhelpful "programmable semicolon."
 

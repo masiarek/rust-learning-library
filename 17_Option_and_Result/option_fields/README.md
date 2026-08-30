@@ -51,9 +51,9 @@ The three one-liners that cover most days:
 
 | Call | Gives you | Use when |
 |---|---|---|
-| `.as_deref()` | `Option<&str>` from `Option<String>` | passing it on without cloning |
-| `.map_or(default, f)` | one value either way | rendering for display |
-| `.unwrap_or_default()` | `T::default()` when absent | absent and empty mean the same thing |
+| [`.as_deref()` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.as_deref) | `Option<&str>` from `Option<String>` | passing it on without cloning |
+| [`.map_or(default, f)` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.map_or) | one value either way | rendering for display |
+| [`.unwrap_or_default()` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.unwrap_or_default) | `T::default()` when absent | absent and empty mean the same thing |
 
 Use `.as_ref()` when you want to inspect the inside and keep the original — `known.isbn.as_ref().map(|s| s.len())` leaves `known.isbn` owned and intact, where `known.isbn.map(…)` would consume it.
 

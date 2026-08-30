@@ -6,11 +6,11 @@
 
 | you write | left operand | allocates | reach for it when |
 |---|---|---|---|
-| `s.push_str("…")` | borrowed `&mut` | only if it must grow | accumulating in a loop |
-| `s.push('c')` | borrowed `&mut` | only if it must grow | one character |
+| [`s.push_str("…")` ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.push_str) | borrowed `&mut` | only if it must grow | accumulating in a loop |
+| [`s.push('c')` ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.push) | borrowed `&mut` | only if it must grow | one character |
 | `a + &b` | **moved** — `a` is gone | no — `a`'s buffer becomes the answer | you are done with `a` |
-| `format!("{a}{b}")` | borrowed | yes, always | two or three known pieces |
-| `write!(s, "{x}")` | borrowed `&mut` | only if it must grow | formatting into an existing buffer |
+| [`format!("{a}{b}")` ↗](https://doc.rust-lang.org/std/macro.format.html) | borrowed | yes, always | two or three known pieces |
+| [`write!(s, "{x}")` ↗](https://doc.rust-lang.org/std/macro.write.html) | borrowed `&mut` | only if it must grow | formatting into an existing buffer |
 
 ---
 

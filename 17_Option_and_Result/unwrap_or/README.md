@@ -66,10 +66,10 @@ Three ways to keep the option alive, one per shape:
 | Call | Use it when |
 |---|---|
 | `unwrap_or(d)` | `d` already exists and is cheap |
-| `unwrap_or_else(\|\| …)` | the default costs something to produce |
+| [`unwrap_or_else(\|\| …)`](../unwrap_or_else/README.md) | the default costs something to produce |
 | `unwrap_or_else(\|e\| …)` (on `Result`) | the fallback should be computed *from* the error |
-| `unwrap_or_default()` | `T: Default` and the default is the zero value |
-| `map_or(d, f)` | you want to transform the value *and* have a fallback |
+| [`unwrap_or_default()`](../unwrap_or_default/README.md) | `T: Default` and the default is the zero value |
+| [`map_or(d, f)`](../map_or/README.md) | you want to transform the value *and* have a fallback |
 | `unwrap()` / `expect("…")` | absence is a bug, and crashing is the correct response |
 
 ## What the default erases

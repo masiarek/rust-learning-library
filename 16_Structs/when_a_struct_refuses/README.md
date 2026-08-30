@@ -12,14 +12,14 @@ Every error below prints its own fix. Seven of the eight include the exact edit;
 
 | Code | Reads as | Actually about |
 |---|---|---|
-| `E0063` | missing field | there is no partly-built struct |
-| `E0277` | trait bound not satisfied | **no `Display`** — you have to write it |
+| [`E0063` ↗](https://doc.rust-lang.org/error_codes/E0063.html) | missing field | there is no partly-built struct |
+| [`E0277` ↗](https://doc.rust-lang.org/error_codes/E0277.html) | trait bound not satisfied | **no `Display`** — you have to write it |
 | `E0277` | trait bound not satisfied | **no `Debug`** — but this one it will generate |
 | `E0277` | trait bound not satisfied | **a `str` field** — a missing *size*, not a missing impl |
 | `E0277` | trait bound not satisfied | **`Eq` without `PartialEq`** |
-| `E0119` | conflicting implementations | you both derived and hand-wrote a trait |
-| `E0594` | not declared as mutable | `mut` belongs to the binding, and you made a new one |
-| `E0282` | type annotations needed | a function in `impl<T>` that never mentions `T` |
+| [`E0119` ↗](https://doc.rust-lang.org/error_codes/E0119.html) | conflicting implementations | you both derived and hand-wrote a trait |
+| [`E0594` ↗](https://doc.rust-lang.org/error_codes/E0594.html) | not declared as mutable | `mut` belongs to the binding, and you made a new one |
+| [`E0282` ↗](https://doc.rust-lang.org/error_codes/E0282.html) | type annotations needed | a function in `impl<T>` that never mentions `T` |
 
 ## E0063 — there is no partly-built struct
 

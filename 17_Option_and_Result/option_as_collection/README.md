@@ -34,10 +34,10 @@ That is why all of this already works, with no conversion step:
 
 | You write | Because |
 |---|---|
-| `iter.flatten()` over `Option`s | each `Option` is itself iterable, so flattening drops the `None`s |
-| `vec.extend(Some(3))` | `extend` takes any `IntoIterator` |
-| `iter.chain(Some(9))` | same reason |
-| `iter.filter_map(f)` | it is literally `map` followed by `flatten` |
+| [`iter.flatten()` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.flatten) over `Option`s | each `Option` is itself iterable, so flattening drops the `None`s |
+| [`vec.extend(Some(3))` ↗](https://doc.rust-lang.org/std/iter/trait.Extend.html#tymethod.extend) | `extend` takes any `IntoIterator` |
+| [`iter.chain(Some(9))` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.chain) | same reason |
+| [`iter.filter_map(f)` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.filter_map) | it is literally `map` followed by `flatten` |
 
 And the reverse trick, which is the one people are most pleased to discover: **a collection of `Option`s collects into a single `Option` of a collection.**
 

@@ -28,11 +28,11 @@ and `count` is `self.fold(0, |accum, _elem| accum + 1)`, and `all` is a `try_fol
 
 | you write | what it is |
 |---|---|
-| `.sum()` | `fold(0, +)` |
-| `.count()` | a fold from `0` that adds one per item |
-| `.max()` | `max_by(Ord::cmp)`, a reducing fold |
-| `.collect::<Vec<_>>()` | `fold(Vec::new(), push)`, roughly |
-| `.all(p)` | `try_fold` that breaks on the first `false` |
+| [`.sum()` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.sum) | `fold(0, +)` |
+| [`.count()` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.count) | a fold from `0` that adds one per item |
+| [`.max()` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.max) | `max_by(Ord::cmp)`, a reducing fold |
+| [`.collect::<Vec<_>>()` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.collect) | `fold(Vec::new(), push)`, roughly |
+| [`.all(p)` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.all) | `try_fold` that breaks on the first `false` |
 
 **Keep writing the named one.** Knowing they are folds is worth having because it tells you what `fold` is *for* — not because hand-rolling `sum` is ever an improvement. The named version is clearer, and several of them are specialized for speed in ways your fold will not be.
 

@@ -101,8 +101,8 @@ Three tools, in order of how much you should reach for them:
 | you want | use | on a bad index |
 |---|---|---|
 | the slice, and a bug is a bug | `&s[a..b]` | panics |
-| the slice, or nothing | `s.get(a..b)` | `None` |
-| the legal cut points | `s.char_indices()` | yields only boundaries |
+| the slice, or nothing | [`s.get(a..b)` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.get) | `None` |
+| the legal cut points | [`s.char_indices()` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.char_indices) | yields only boundaries |
 
 `char_indices()` is the one to know: it yields `(byte_offset, char)` pairs, so every index it hands you is a boundary by construction. It is **not** `chars().enumerate()` — that numbers the characters 0, 1, 2 and those numbers are not offsets you can slice with. [Meet the `char`](../meet_the_char/README.md) is the full story of why `.len()` counts bytes.
 

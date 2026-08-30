@@ -62,10 +62,10 @@ error[E0277]: a slice of type `[String]` cannot be built since `[String]` has no
 
 | Target | What it does that a `Vec` does not |
 |---|---|
-| `String` | joins `char`s or `&str`s with no separator |
-| `HashSet<T>` / `BTreeSet<T>` | drops duplicates; `BTreeSet` also sorts |
-| `HashMap<K, V>` / `BTreeMap<K, V>` | from an iterator of **pairs**; a later key **overwrites** an earlier one |
-| `VecDeque<T>`, `BinaryHeap<T>`, `LinkedList<T>` | the other std containers, same call |
+| [`String` ↗](https://doc.rust-lang.org/std/string/struct.String.html) | joins `char`s or `&str`s with no separator |
+| [`HashSet<T>` ↗](https://doc.rust-lang.org/std/collections/hash_set/struct.HashSet.html) / [`BTreeSet<T>` ↗](https://doc.rust-lang.org/std/collections/struct.BTreeSet.html) | drops duplicates; `BTreeSet` also sorts |
+| [`HashMap<K, V>` ↗](https://doc.rust-lang.org/std/collections/hash_map/struct.HashMap.html) / [`BTreeMap<K, V>` ↗](https://doc.rust-lang.org/std/collections/struct.BTreeMap.html) | from an iterator of **pairs**; a later key **overwrites** an earlier one |
+| [`VecDeque<T>` ↗](https://doc.rust-lang.org/std/collections/struct.VecDeque.html), [`BinaryHeap<T>` ↗](https://doc.rust-lang.org/std/collections/struct.BinaryHeap.html), [`LinkedList<T>` ↗](https://doc.rust-lang.org/std/collections/struct.LinkedList.html) | the other std containers, same call |
 | `Result<Vec<T>, E>` | one `Result` for the whole sequence — see below |
 | `Option<Vec<T>>` | the same, for absence rather than failure |
 | `(Vec<A>, Vec<B>)` | from an iterator of pairs, via `unzip` |

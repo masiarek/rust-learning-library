@@ -20,8 +20,8 @@ One number lives beside the value. `Rc::clone` increments it, dropping an `Rc` d
 
 | | count |
 |---|---|
-| `Rc::new(v)` | 1 |
-| `Rc::clone(&r)` | +1 |
+| [`Rc::new(v)` ↗](https://doc.rust-lang.org/std/rc/struct.Rc.html#method.new) | 1 |
+| [`Rc::clone(&r)` ↗](https://doc.rust-lang.org/std/rc/struct.Rc.html#method.clone) | +1 |
 | an `Rc` goes out of scope | −1 |
 | the count reaches 0 | `T` is dropped, the allocation is freed |
 

@@ -6,9 +6,9 @@
 
 | you write | left | right | result |
 |---|---|---|---|
-| `format!("{a}{b}")` | anything | anything | one new buffer, nothing consumed |
+| [`format!("{a}{b}")` ↗](https://doc.rust-lang.org/std/macro.format.html) | anything | anything | one new buffer, nothing consumed |
 | `a + &b` | `String` | `&str` | `a` is consumed and its buffer becomes the answer |
-| `parts.join(", ")` | a slice of either | | one buffer, sized before it is filled |
+| [`parts.join(", ")` ↗](https://doc.rust-lang.org/std/primitive.slice.html#method.join) | a slice of either | | one buffer, sized before it is filled |
 | `a + b` | `String` | `String` | **`E0308`** — expected `&str`; borrow the right side |
 | `"a" + "b"` | `&str` | `&str` | **`E0369`** — neither side owns a buffer |
 
@@ -104,12 +104,12 @@ Beyond `format!`, `+`, `concat` and `join`, six more spellings turn up in real c
 
 | you write | what makes it different |
 |---|---|
-| `concat!("first", "second")` | a **macro, evaluated at compile time** — the result is a `&'static str` and costs nothing at run time. Literals only; it cannot see a variable |
-| `s.push_str(x)` · `s.push(c)` | appends in place, no new value — see [Building a `String`](../building_a_string/README.md) |
+| [`concat!("first", "second")` ↗](https://doc.rust-lang.org/std/macro.concat.html) | a **macro, evaluated at compile time** — the result is a `&'static str` and costs nothing at run time. Literals only; it cannot see a variable |
+| [`s.push_str(x)` ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.push_str) · [`s.push(c)` ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.push) | appends in place, no new value — see [Building a `String`](../building_a_string/README.md) |
 | `s += x` | `AddAssign<&str>`, the same rule as `+` with no rebinding |
-| `s.extend([a, b])` | `Extend<&str>`, for feeding an iterator into a string you already have |
-| `iter.collect::<String>()` · `String::from_iter(..)` | build one *from* an iterator rather than into an existing buffer |
-| `write!(&mut s, "{a}-{b}")` | `format!` semantics into a buffer you own; needs `use std::fmt::Write` and returns a `Result` |
+| [`s.extend([a, b])` ↗](https://doc.rust-lang.org/std/iter/trait.Extend.html#tymethod.extend) | `Extend<&str>`, for feeding an iterator into a string you already have |
+| [`iter.collect::<String>()` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.collect) · [`String::from_iter(..)` ↗](https://doc.rust-lang.org/std/iter/trait.FromIterator.html#tymethod.from_iter) | build one *from* an iterator rather than into an existing buffer |
+| [`write!(&mut s, "{a}-{b}")` ↗](https://doc.rust-lang.org/std/macro.write.html) | `format!` semantics into a buffer you own; needs `use std::fmt::Write` and returns a `Result` |
 
 `str::repeat(n)` is the odd one out — one piece, n times: `"ab".repeat(2)` is `"abab"`.
 

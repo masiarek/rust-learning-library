@@ -28,11 +28,11 @@ fn main() {
 
 | Want | Need |
 |---|---|
-| `p * 3` | `impl Mul<i32> for Points` |
+| `p * 3` | [`impl Mul<i32> for Points` ↗](https://doc.rust-lang.org/std/ops/trait.Mul.html) |
 | `3 * p` | `impl Mul<Points> for i32` — a **separate**, unrelated impl |
 | `&p * 3` | `impl Mul<i32> for &Points` |
-| `p += q` | `impl AddAssign for Points` — `Add` does not give it to you |
-| `scores.sum()` | `impl Sum for Points` — `Add` does not give you that either |
+| `p += q` | [`impl AddAssign for Points` ↗](https://doc.rust-lang.org/std/ops/trait.AddAssign.html) — `Add` does not give it to you |
+| `scores.sum()` | [`impl Sum for Points` ↗](https://doc.rust-lang.org/std/iter/trait.Sum.html) — `Add` does not give you that either |
 
 That second row is legal even though it implements a foreign trait for a foreign type, because the orphan rule looks at the **whole impl**: a local type appears in it, as the parameter. It is the same rule that lets std write `impl Add<&str> for String`, and the same rule that refuses `impl Mul<i32> for f64` from your crate.
 
