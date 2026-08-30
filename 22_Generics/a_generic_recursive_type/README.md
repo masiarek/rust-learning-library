@@ -88,7 +88,7 @@ The `data` field needs no `Box`. `T` is not recursive — only the `next` field 
 
 The boxed row is not strictly worse: it is a smaller node, which matters if you move nodes around a lot or if `T` is huge and rarely read. But it is a decision to make about a specific `T`, and the default is inline. A `Box<T>` in a generic struct is right when the type must be a fixed size regardless of `T` — not as a habit.
 
-Likewise a `where T: Clone` on the node definition itself — which is how the books usually print this struct — is a bound in the wrong place: it stops you from ever building a list of something unclonable, and the plainest `impl` block below it becomes seven errors. [Where the bound goes](../where_the_bound_goes/README.md) has that transcript.
+Likewise a `where T: Clone` on the node definition itself — which is how the books usually print this struct — is a bound in the wrong place: it stops you from ever building a list of something unclonable, and the plainest `impl` block below it becomes six errors. [Where the bound goes](../where_the_bound_goes/README.md) has that transcript.
 
 ## Walking one
 

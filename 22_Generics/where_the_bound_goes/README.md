@@ -112,7 +112,7 @@ impl<T> ListItem<T> {
 }
 ```
 
-It reads as documentation and behaves as an obligation. That plainest-possible `impl` block — which clones nothing and prints nothing — is **seven errors**, of which the first is the readable one:
+It reads as documentation and behaves as an obligation. That plainest-possible `impl` block — which clones nothing and prints nothing — is **six errors**, and the count rises with every further block that so much as names the type. The first is the readable one:
 
 ```text
 error[E0277]: the trait bound `T: Clone` is not satisfied

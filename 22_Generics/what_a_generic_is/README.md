@@ -67,6 +67,8 @@ That is generics working, not generics complaining. If you need one collection h
 | `Container<i64>` | 8 |
 | `Container<[u8; 16]>` | 16 |
 
+**What they cost is legibility.** Every `<T>` is a layer of abstraction between the reader and a concrete type, and a signature with three parameters and four bounds takes real effort to read — which is why the standard library's own generic code is worth studying and why a second type parameter should have to earn its place. The rule of thumb: write the concrete version first, and reach for `<T>` when you are about to write it a second time.
+
 The compiler achieves that by **[monomorphization](../../GLOSSARY.md)** — compiling one copy of the code per concrete type, with the type filled in. `largest(&[3, 9, 4])` and `largest(&['a', 'q', 'f'])` are two functions in the finished binary, each calling that type's comparison directly. You pay in compile time and code size, never in speed. [Static vs dynamic dispatch](../../12_Traits/static_vs_dynamic_dispatch/README.md) is the page that measures it.
 
 ## A generic function
