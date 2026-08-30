@@ -116,6 +116,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # function has to hand one back.
         "what_a_trait_is",
         "trait_in_scope",
+        # ...and the traits every earlier page has been calling without the
+        # syntax admitting it: `+` is one, and so is `[]`.
+        "operators_are_traits",
         "returning_a_trait",
         # One std trait in depth, and the one whose name causes the most
         # confusion next to `clone`.
@@ -126,9 +129,53 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...and its neighbour in std::marker: the parameter with no data
         # behind it, which only makes sense once markers are in hand.
         "phantom_types",
+        # Three std traits in depth: the one that runs at a place you can point
+        # to in the source, and the two whose names confuse next to `clone`.
+        "drop_and_raii",
         "to_owned",
         "clone_into",
         "resources",
+    ],
+    # Two of them are built into the language and two live in std, so the order
+    # is by what a program reaches for first rather than by where it comes from.
+    "26_Collections": [
+        "README.md",
+        # The two compound types the language itself provides...
+        "tuples",
+        "arrays_and_slices",
+        # ...then the three that grow, in the order a program needs them...
+        "the_vec",
+        "the_hashmap",
+        "the_hashset",
+        # ...and last the one that is a pointer rather than a container.
+        "the_box",
+    ],
+    # What a module IS, how to refer into one, where the files go -- then the
+    # two item kinds that live at module level and have nowhere else to be
+    # taught.
+    "27_Modules": [
+        "README.md",
+        "modules_and_visibility",
+        "the_use_declaration",
+        "one_module_per_file",
+        "const_and_static",
+        "what_an_attribute_is",
+    ],
+    # What a test says first, then where it goes, then the one that is also
+    # documentation.
+    "28_Testing": [
+        "README.md",
+        "what_a_test_asserts",
+        "where_a_test_goes",
+        "doc_tests",
+    ],
+    # Infallible, fallible, and the one with no check at all -- in that order,
+    # because the third is only judgeable against the first two.
+    "29_Conversion": [
+        "README.md",
+        "from_and_into",
+        "tryfrom_and_tryinto",
+        "casting_with_as",
     ],
     "01_Foundations": [
         "README.md",
@@ -546,6 +593,22 @@ LABELS = {
     "03_Command_Line": "Command line",
     "15_First_Programs": "First programs",
     "19_Numbers": "Numbers and bytes",
+    # 26_Collections — the type names read as code.
+    "the_vec": "`Vec`",
+    "the_hashmap": "`HashMap`",
+    "the_hashset": "`HashSet`",
+    "the_box": "`Box`",
+    # 27_Modules
+    "the_use_declaration": "Bringing names in with `use`",
+    "const_and_static": "`const` and `static`",
+    # 28_Testing
+    "doc_tests": "The example that is a test",
+    # 29_Conversion
+    "from_and_into": "`From` and `Into`",
+    "tryfrom_and_tryinto": "`TryFrom` and `TryInto`",
+    "casting_with_as": "Casting with `as`",
+    # 12_Traits
+    "drop_and_raii": "`Drop`, and what RAII buys",
     # 00_Start_Here — three product names, one of them lowercase on purpose.
     "the_book": "The Book",
     "rust_by_example": "Rust by Example",
