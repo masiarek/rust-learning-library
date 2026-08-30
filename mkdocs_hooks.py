@@ -259,6 +259,11 @@ NAV_ORDER: dict[str, list[str]] = {
         # Last, as the section README has it: the type that refuses to decide
         # between owning and borrowing until the data makes it.
         "clone_on_write",
+        # ...and the other two ways out of a copy, in the order they get
+        # reached for: several owners counted, then the same count made
+        # atomic so it can cross a thread boundary.
+        "reference_counting",
+        "sharing_across_threads",
     ],
     "19_Numbers": [
         "README.md",

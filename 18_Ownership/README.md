@@ -19,6 +19,10 @@ The back half is names rather than values. Shadowing, scope, and lifetimes are t
 | [Nothing checks a shadow](nothing_checks_a_shadow/README.md) | 201 | The tooling, not the mechanism: `rustc` has no shadowing lint, the type error that gets mistaken for one, and the single clippy lint that catches the accumulator bug — by also banning the idiom |
 | [Scope is about names, not values](scope_is_about_names/README.md) | 201 | One word, three questions: a name ends at its brace, a borrow ends at its last use, and a value dies on a schedule that five ordinary things can move — including the `_` that `rustc` denies outright on a lock |
 | [`Cow`: borrow until somebody writes](clone_on_write/README.md) | 201 | Borrowed or owned, decided at run time by the data — `to_mut()` is the write that pays for the clone, and the tag costs nothing: `Cow<str>` is the same 24 bytes as `String` |
+| [`Rc`: the clone that copies a pointer](reference_counting/README.md) | 201 | Several owners for one value, counted — `Rc::clone` duplicates a pointer and a number, never the data, which makes it the cheapest `.clone()` in Rust and the most commonly misread one |
+| [Sharing across threads: `Arc`](sharing_across_threads/README.md) | 201 | The same counter made atomic — the difference is not a performance note but the reason one of the two compiles across a thread boundary, and `Arc<Mutex<T>>` is what shared *mutable* state costs |
+
+The last three pages are the ways out of a copy the one-owner rule would otherwise force: borrow until somebody writes, or let several owners share one value and count them.
 
 ## Related sections
 

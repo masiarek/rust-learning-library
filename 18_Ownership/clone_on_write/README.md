@@ -246,6 +246,7 @@ rustc --edition 2024 18_Ownership/clone_on_write/examples/clone_on_write.rs -o /
 - [`clone_into`](../../12_Traits/clone_into/README.md) — the method `Cow::clone_from` calls, and the reason it was stabilized at all
 - [Ownership and moves](../ownership_and_moves/README.md) — the one-owner rule this type bends without breaking
 - [Borrowing](../borrowing/README.md) — where the `'a` on the borrowed arm comes from
+- [`Rc`: the clone that copies a pointer](../reference_counting/README.md) — the other way out of a copy: several owners instead of a deferred one
 - [The anatomy of a `String`](../../14_Strings/anatomy_of_a_string/README.md) — pointer, length, capacity: the 24 bytes the table above compares against
 - [Six kinds of string](../../14_Strings/six_kinds_of_string/README.md) — `Cow<str>` in its place among the owned/borrowed pairs
 - [`Cow` ↗](https://doc.rust-lang.org/std/borrow/enum.Cow.html) · [`ToOwned` ↗](https://doc.rust-lang.org/std/borrow/trait.ToOwned.html)
