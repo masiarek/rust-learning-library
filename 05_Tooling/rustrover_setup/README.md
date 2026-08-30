@@ -221,6 +221,37 @@ Two narrower notes for this IDE:
 - **RustRover 2026.2 defaults to the Islands UI**, whose inset, rounded tool windows a pre-Islands theme knows nothing about. The plugins that have caught up say so in the listing: Gerry ships `[Islands]` variants of every theme it has, and Falcon's entire pitch is Islands light themes.
 - **Solarized Light and Xcode are already bundled as schemes**, so those two plugins are buying you the window half of a look you can half-have for free. Set the scheme first and see whether the chrome still bothers you.
 
+### Setting it in the files instead of the dialog
+
+The dialog is not the only door, and the other one has an advantage: writing both halves yourself is the one way to change a theme **without** the reset above firing. Both settings are single lines, in the folder section 5 already reads:
+
+```xml
+<!-- options/laf.xml -->
+<laf themeId="islandsGerryLight" />
+
+<!-- options/colors.scheme.xml -->
+<global_color_scheme name="_@user_Github" />
+```
+
+`themeId` is the display name for a **bundled** theme (`Islands Light`), but for a **plugin** theme it is the provider id out of the plugin's own `META-INF/plugin.xml`, which is not what the dropdown shows you:
+
+```xml
+<themeProvider id="islandsGerryLight" path="/resources/islands/islandsGerryLight.theme.json"/>
+```
+
+That file also declares an `editorScheme` — the scheme the dialog would have switched you to, and the one you are declining by leaving `colors.scheme.xml` alone. Reading it first tells you what you are turning down: `[Islands] Gerry⟡ Light` ships `Gerry Light`, whose `parent_scheme` is `Default`, so both routes here are light and the choice is taste rather than polarity.
+
+**Do it with the IDE closed** — but not for the reason the phrase usually implies. Settings are *not* written only on exit: on the machine these pages were written on, RustRover had been running for five days and `laf.xml` carried that morning's timestamp, rewritten mid-session the moment a setting changed. The IDE holds this state in memory, never re-reads the file, and flushes its own copy over yours at the next save. So an edit made while it is running is both invisible now and gone later, which is a worse failure than being refused.
+
+Plugins are equally inspectable, one directory up. A single-jar theme sits there whole:
+
+```text
+~/Library/Application Support/JetBrains/RustRover2026.2/plugins/
+└── GerryThemes.jar      ← 224 KB, 27 themes in one file
+```
+
+The Marketplace button is the normal way to put it there and needs no help. Knowing the layout is worth it for the two things the button cannot do: telling you what is actually installed without opening a dialog, and pinning a specific version rather than the newest compatible one.
+
 ## 7. Stop the Build panel opening on every run
 
 Run the program and a **Build** tool window opens across the bottom of the frame, with `Sync` and `Build Output` tabs. Closing it does not stick — the next run re-activates it.
@@ -280,4 +311,4 @@ A fair question, and the honest answer is that the overlap is largest exactly he
 
 ---
 
-*Sections 1–4 have their settings paths verified against the [RustRover external linters documentation ↗](https://www.jetbrains.com/help/rust/rust-external-linters.html) rather than by driving the IDE; menu wording moves between releases, so treat those names as a route rather than a transcript. Sections 5 and 7 are the other way round — every label, dialog and file fragment in them was read off RustRover **2026.2.1** (`262.9437.161`) on macOS while making the changes, and the two `.idea/workspace.xml` fragments are that project's file after the edit. Section 6's two bundled lists were read out of that same build's application bundle rather than out of the dropdowns — the theme names from the `*.theme.json` files in `intellij.platform.ide.impl.jar`, the schemes and their polarity from `parent_scheme` in `colorSchemes/*.xml` — and its download and rating figures came from the Marketplace API on 2026-08-30, so treat those two columns as a snapshot.*
+*Sections 1–4 have their settings paths verified against the [RustRover external linters documentation ↗](https://www.jetbrains.com/help/rust/rust-external-linters.html) rather than by driving the IDE; menu wording moves between releases, so treat those names as a route rather than a transcript. Sections 5 and 7 are the other way round — every label, dialog and file fragment in them was read off RustRover **2026.2.1** (`262.9437.161`) on macOS while making the changes, and the two `.idea/workspace.xml` fragments are that project's file after the edit. Section 6's two bundled lists were read out of that same build's application bundle rather than out of the dropdowns — the theme names from the `*.theme.json` files in `intellij.platform.ide.impl.jar`, the schemes and their polarity from `parent_scheme` in `colorSchemes/*.xml` — its download and rating figures came from the Marketplace API on 2026-08-30, so treat those two columns as a snapshot, and its `laf.xml` / `plugin.xml` fragments are one real installation of the theme named in them.*
