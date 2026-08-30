@@ -1,0 +1,4 @@
+round trip: [1, 2, 3]
+rebuilt with len 2 of 3: [1, 2] cap 3
+Vec::from(Box<[T]>): [7, 8, 9] cap 3
+as_slice instead: [4, 5]

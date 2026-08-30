@@ -1,0 +1,7 @@
+taken [2, 3]  left [1, 4, 5]
+all [1, 2, 3]  v []  buffer kept true
+["Ada"] then ["Ben"]
+dropped the iterator, range still gone: [1, 4]
+last two, back to front: [6, 5]  v []
+drain -> [1, 2], a is still usable: []
+drain past the end panicked: true

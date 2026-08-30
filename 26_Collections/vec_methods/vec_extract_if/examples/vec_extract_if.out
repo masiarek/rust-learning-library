@@ -1,0 +1,7 @@
+extracted [2, 4, 6]  left [1, 3, 5]
+odds within 1..4: [1, 3]  left [0, 2, 4, 5]
+failed ["err:2", "err:4"]  remaining ["ok:1", "ok:3"]
+mutated then split: took [20, 30], left [10]
+stopped after the first match: [2, 3, 4]
+fully consumed: [2, 4]
+out-of-range range panicked: true

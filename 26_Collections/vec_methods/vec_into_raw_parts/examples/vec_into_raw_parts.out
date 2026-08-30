@@ -1,0 +1,5 @@
+before: [10, 20, 30] len 3 cap 3
+into_raw_parts: len 3 cap 3 ptr non-null true
+first element read through the raw pointer: 10
+restored: [10, 20, 30] len 3 cap 3
+len 1 but cap 16 — the deallocation needs the second number

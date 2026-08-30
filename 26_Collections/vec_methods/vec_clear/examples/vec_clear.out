@@ -1,0 +1,9 @@
+[] len 0 is_empty true
+after clear: len 0 cap 1024
+refilled with no allocation: cap still 1024
+before reassignment: cap 1024
+after reassignment:  cap 0
+clear() on two elements:
+  dropping a
+  dropping b
+capacity across three refills: [8, 8, 8]

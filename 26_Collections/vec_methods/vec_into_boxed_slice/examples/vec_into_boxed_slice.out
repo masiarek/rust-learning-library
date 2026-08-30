@@ -1,0 +1,9 @@
+[1, 2, 3] len 3
+Vec<i32> 24 bytes, Box<[i32]> 16 bytes
+before: len 3 cap 100
+after: len 3, and there is no capacity to ask about
+first Some(3) contains 2: true
+[1, 2, 3]
+into_vec: [1, 2, 3] cap 3
+and back: [1, 2, 3]
+[1, 2, 3]

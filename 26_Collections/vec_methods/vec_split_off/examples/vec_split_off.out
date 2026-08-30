@@ -1,0 +1,8 @@
+head [1, 2]  tail [3, 4, 5]
+all [1, 2]  v []
+v [1, 2]  tail []
+head cap 64 tail cap 32
+["a"] + ["b", "c"]
+[[1, 2, 3], [4, 5, 6], [7]]
+[[1, 2, 3], [4, 5, 6], [7]]
+split_off past len panicked: true

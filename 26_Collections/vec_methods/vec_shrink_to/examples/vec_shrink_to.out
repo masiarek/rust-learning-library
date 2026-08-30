@@ -1,0 +1,6 @@
+len 3 cap 10
+asked for 2 with len 5: cap 5
+shrink_to(100) on cap 4: cap 4
+shrink_to(0) 1 == shrink_to_fit 1
+capacity across a spike: [8, 4096, 64, 64]
+with shrink_to_fit:      [4, 4096, 4, 4]

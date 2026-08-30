@@ -1,0 +1,6 @@
+len 3 capacity 10
+reserve(1) -> 4   reserve_exact(1) -> 1
+asked exactly 5, got at least 5: true
+snapshot len 5 cap 5
+reserve_exact before every push: 8 reallocations for 8 pushes
+plain push:                      2 reallocations for 8 pushes

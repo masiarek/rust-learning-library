@@ -1,0 +1,7 @@
+len 1 cap 10 spare 9
+written but len is still 0
+after set_len(2): [10, 20]
+[0, 5, 10]
+the safe spelling: [0, 5, 10]
+full vector has 0 spare slots
+size_of MaybeUninit<u32> == size_of u32: true

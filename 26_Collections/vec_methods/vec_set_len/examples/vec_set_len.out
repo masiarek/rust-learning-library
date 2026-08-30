@@ -1,0 +1,15 @@
+[7, 8]
+truncate(1):
+  dropping 2
+  dropping 3
+  and now the survivor:
+  dropping 1
+set_len(1):
+  5 and 6 were never dropped — that is a leak
+  and now the survivor:
+  dropping 4
+capacity 10 — set_len(11) here would be UB
+set_len(0) is the one that is always safe: []
+hidden: [1, 2]
+revealed: [1, 2, 3, 4]
+no unsafe needed: [1, 2, 0, 0]

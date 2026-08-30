@@ -1,0 +1,8 @@
+len 3
+both len 4: 4 4 — but 4 bytes vs 32 bytes
+len 1 capacity 10
+index sum 10
+last index of an empty vec: None
+prefer .last(): None
+false false
+rows 2 total cells 5

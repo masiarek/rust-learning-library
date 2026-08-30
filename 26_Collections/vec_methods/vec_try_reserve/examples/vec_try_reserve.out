@@ -1,0 +1,6 @@
+reserved, capacity now at least 10: true
+a usize::MAX/4 request returned Err — the process is still alive
+vector is untouched: len 0 cap 0
+Ok([1, 2, 3])
+error: memory allocation failed because the computed capacity exceeded the collection's maximum
+len 3 capacity at least 8: true

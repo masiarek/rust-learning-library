@@ -1,0 +1,8 @@
+len 1 capacity 10
+first capacity — u8 8 u32 4 [u8; 2048] 1
+capacity sequence: [4, 8, 16, 32]
+vec![1,2,3] 3   new()+3 pushes 4   vec![0u8; n] 3
+Vec<()> capacity is usize::MAX: true
+cleared: len 0 cap 100
+shrunk:  len 0 cap 0
+capacity >= len: true  >= reserved: true

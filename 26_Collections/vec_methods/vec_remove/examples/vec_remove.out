@@ -1,0 +1,6 @@
+removed "b", left ["a", "c", "d"]
+remove(0) keeps order: [1, 2, 3, 4, 5, 6, 7]
+removed indices 1 and 3: [10, 12, 14]
+the same thing with retain: [10, 12, 14]
+index 7 is past len 3
+remove(3) from a len-1 vec panicked: true

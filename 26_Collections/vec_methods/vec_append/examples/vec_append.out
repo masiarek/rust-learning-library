@@ -1,0 +1,6 @@
+a [1, 2, 3, 4, 5]  b []  b.capacity() true
+moved [1, 2, 3] — non-Clone values — source now len 0
+["a", "b"]
+source kept its buffer: true
+refilled without allocating: [9]
+[1, 2, 3, 4, 5]

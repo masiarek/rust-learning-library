@@ -1,0 +1,5 @@
+["Ada", "Ben", "Cara"]
+append via insert: ["Ada", "Ben", "Cara", "Dana"]
+front inserts: [1, 2, 3, 4, 5]
+[5, 4, 3, 2, 1] == [5, 4, 3, 2, 1]: true
+insert(9, ..) into a len-3 vec panicked: true

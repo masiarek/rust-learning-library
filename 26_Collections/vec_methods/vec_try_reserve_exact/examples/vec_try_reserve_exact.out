@@ -1,0 +1,6 @@
+len 3 capacity 10
+try_reserve(1) -> 4   try_reserve_exact(1) -> 1
+huge request is Err: true
+and the vector is untouched: cap 0
+[7, 8, 9] len 3 cap 3
+no-op when it already fits: true

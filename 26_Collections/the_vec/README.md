@@ -304,6 +304,7 @@ fn main() {
 
 ## See also
 
+- [`Vec` methods](../vec_methods/README.md) — one page per method, with a compiled example each: the reference this lesson is the introduction to
 - [Arrays and slices](../arrays_and_slices/README.md) — the type `Vec` derefs to, and where its methods actually live
 - [Grids and nested `Vec`s](../vec_of_vecs/README.md) — what `vec![vec![0; w]; h]` allocates, and the flatter thing most grids should be
 - [`Box`](../the_box/README.md) — one value on the heap, where `Vec` is many

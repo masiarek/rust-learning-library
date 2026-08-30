@@ -1,0 +1,7 @@
+len 3 capacity at least 13: true
+already had room, unchanged: true
+reserve(1) on an empty Vec<u32> gave capacity 4
+with reserve:    (14, 0) (len, reallocations)
+without reserve: (14, 3)
+extend_from_slice reserved once: len 50 cap 50
+10 u64 slots = 80 bytes of buffer

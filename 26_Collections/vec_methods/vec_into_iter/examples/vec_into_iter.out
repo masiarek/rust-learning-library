@@ -1,0 +1,36 @@
+1. Three impls, three item types
+   &Vec<T>     -> Item = &T       first Some("Ada")
+   &mut Vec<T> -> Item = &mut T   now ["Ada!", "Ben!"]
+   Vec<T>      -> Item = T        collected ["Ada!", "Ben!"]
+
+2. The named types
+   (&Vec<i32>).into_iter()      is slice::Iter<i32>,    count 3
+   (&mut Vec<i32>).into_iter()  is slice::IterMut<i32>, count 3
+   Vec<i32>.into_iter()         is vec::IntoIter<i32>,  count 3
+
+3. What `for` desugars to
+   &v sum 6, &mut v then owned [10, 20, 30]
+
+4. `self` is the reference in two of the three
+   counted 3 through &v, and v is still here: [1, 2, 3]
+
+5. iter() vs into_iter()
+   v.iter() and (&v).into_iter() are the same type: true
+   iter() always yields &T; into_iter() depends on the receiver.
+
+6. Arrays, before and after Rust 1.53
+   [u8; 3].into_iter() -> [1, 2, 3] (u8)
+   [u8; 3].iter()      -> [1, 2, 3] (&u8)
+   Before 1.53 the first line yielded &u8: arrays had no by-value
+   impl, so method resolution fell through to the slice.
+
+7. Promotion, and why the same line can stop compiling
+   [1, 2].iter().collect()          -> Vec<&i32>, len 2
+   [x, y].into_iter().collect()     -> Vec<i32>,  len 2
+   [x, y].iter().collect() would be error[E0716] — the array is a
+   temporary, and rustc's own fix is to add `into_`.
+   Debug prints both as [1, 2], so the output cannot tell
+   you which is which — only the type can.
+
+8. Why the borrow checker cares
+   after into_iter(), `names` is moved; only ["Ada"] remains

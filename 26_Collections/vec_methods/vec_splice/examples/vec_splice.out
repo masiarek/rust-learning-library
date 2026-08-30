@@ -1,0 +1,8 @@
+removed [2, 3, 4]  now [1, 20, 30, 5]
+one out, three in: ["a", "x", "y", "z", "c"]
+insert at 1: [1, 2, 3, 4]
+remove 1..3: [1, 4]
+[9, 0]
+from a Vec: [7, 8, 2, 3]
+from an adapter: [1, 20, 22, 24]
+old [1, 2, 3]  new [0]

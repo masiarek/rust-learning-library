@@ -1,0 +1,5 @@
+[10, 20, 30]
+predicate saw [1, 2, 3], kept [2, 3]
+["alpha", "beta"]
+the two-pass version: ["a"]
+kept [3, 4, 2] spending 9

@@ -1,0 +1,7 @@
+Some(3) Some(2) Some(1) None
+empty now: []
+popped b
+popped a
+len 0 cap unchanged true
+balanced: true leftovers: []
+"only copy" and the vec is []

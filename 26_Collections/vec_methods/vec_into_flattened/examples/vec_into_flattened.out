@@ -1,0 +1,6 @@
+[1, 2, 3, 4, 5, 6] len 6
+5 arrays of 4 -> len 20
+Vec<Vec<u8>> needs an iterator: [1, 2, 3]
+two empty arrays flatten to len 0
+6 bytes ready to write: [255, 0, 0, 0, 255, 0]
+regrouped: [[255, 0, 0], [0, 255, 0]]

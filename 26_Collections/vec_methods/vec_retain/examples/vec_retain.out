@@ -1,0 +1,10 @@
+[2, 4, 6]
+["a", "bb", "ccc"]
+["keep"]
+visit order: [10, 20, 30]
+first occurrence of each: [3, 1, 2]
+retain(even):
+  dropping 1
+  dropping 3
+  survivor: 2
+  dropping 2

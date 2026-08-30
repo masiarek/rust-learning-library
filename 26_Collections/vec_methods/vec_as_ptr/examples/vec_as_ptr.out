@@ -1,0 +1,8 @@
+10 20 30
+gap between elements: 4 == size_of::<u32>() 4
+within capacity, pointer stable: true
+capacity 2 -> 64 — the buffer was reallocated, so `before`
+is not to be trusted whether or not the address changed
+empty vec pointer is aligned: true
+safe equivalent: [1, 2, 3] len 3
+sum through a raw pointer: 10

@@ -1,0 +1,8 @@
+[1, 2, 3, 1]
+sorted then deduped: [1, 2, 3]
+first occurrence, original order: [3, 1, 2]
+collapsed run: ["open", "read", "close"]
+full-struct equality keeps both: 2
+  keys [(1, "first"), (1, "second")]
+dedup_by_key keeps the first: Entry { key: 1, note: "first" }
+[] [7]

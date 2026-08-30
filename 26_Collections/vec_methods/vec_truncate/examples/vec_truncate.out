@@ -1,0 +1,11 @@
+[1, 2]
+truncate(10) on len 2: [1, 2]
+truncate(0): [] is_empty true
+truncate(1) on four elements:
+  dropping 2
+  dropping 3
+  dropping 4
+  survivor: 1
+  dropping 1
+len 1 cap 64
+after shrink_to_fit: len 1 cap 1

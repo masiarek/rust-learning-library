@@ -1,0 +1,6 @@
+[99, 2, 77]
+still within capacity: true
+filled through a raw pointer: [11, 22, 33, 44]
+the safe version: [11, 22, 33, 44]
+use `p` after this and it is UB, not a compile error: [2]
+[9, 2, 3]

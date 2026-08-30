@@ -1,0 +1,6 @@
+Some(4) then [1, 2, 3]
+None then [1, 2, 3]
+empty: got None, predicate called 0 times
+kept and mutated: None ["ada!"]
+zeros trimmed: [1, 2]
+the old way: [5]

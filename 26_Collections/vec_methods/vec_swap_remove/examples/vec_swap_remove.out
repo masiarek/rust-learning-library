@@ -1,0 +1,7 @@
+removed "b", left ["a", "d", "c"]
+remove      [0, 2, 3, 4]
+swap_remove [0, 4, 2, 3]
+3 [1, 2]
+drained a pool of jobs in 4 steps: ["job1", "job4", "job3", "job2"]
+remove(0) on len 5 shifts 4; swap_remove(0) moves 1
+out-of-bounds swap_remove panicked: true

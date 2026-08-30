@@ -1,0 +1,6 @@
+[10, 20, 30]
+[(1, "first"), (2, "third")]
+ungrouped: [("b", 1), ("a", 2), ("b", 3)]
+sorted first: [("a", 2), ("b", 1)]
+["ada", "ben"]
+runs of even/odd: [0, 5, 8]

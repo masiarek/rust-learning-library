@@ -148,6 +148,7 @@ The rule of thumb worth carrying: **a `.clone()` added to make a borrow compile 
 
 ## See also
 
+- [`Vec::into_iter`](../../26_Collections/vec_methods/vec_into_iter/README.md) — the three `IntoIterator` impls written out, and why `self` is a reference in two of them
 - [Iterators are lazy](../iterators_are_lazy/README.md) — what the chain after `iter()` does, and when
 - [Implementing `Iterator`](../implementing_iterator/README.md) — writing the three doors for a collection of your own
 - [Borrowing](../../18_Ownership/borrowing/README.md) — the rule that makes `iter()` and `iter_mut()` two different things

@@ -1,0 +1,5 @@
+[1, 2, 3, 4, 5]  source still usable: [3, 4, 5]
+["Ada", "Ben", "Cara"]  rest ["Ben", "Cara"]
+[1, 2, 3, 4] from [1, 2] and [3, 4]
+100 bytes in one go: len 100 cap 100
+hello world

@@ -1,0 +1,6 @@
+len 0 cap 0 empty true
+["Ada"]
+true true
+before push: cap 0
+after push:  cap 4
+1000 units: len 1000 cap is usize::MAX true

@@ -1,0 +1,10 @@
+["Ada", "Ben", "Cara"] len 3
+["Ada", "Ben", "Cara", "Dana"]
+reallocations during 17 pushes:
+  on push #0: cap 0 -> 8
+  on push #8: cap 8 -> 16
+  on push #16: cap 16 -> 32
+  3 reallocations for 17 pushes
+first capacity: u8 8 u64 4 [u8; 2048] 1
+["moved"]
+[1, 2, 3, 4] first was 1
