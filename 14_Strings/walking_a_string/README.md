@@ -299,5 +299,5 @@ rustc --edition 2024 14_Strings/walking_a_string/examples/walking_a_string.rs -o
 - [String slices](../string_slices/README.md) — what those byte offsets are for, and how they panic
 - [Meet the byte](../../19_Numbers/meet_the_byte/README.md) — the `u8` that `bytes()` yields
 - [`Option` as a collection](../../17_Option_and_Result/option_as_collection/README.md) — the `Option<u8>` the kata builds, iterated
-- [`iter`, `iter_mut`, `into_iter`](../../23_Functional/iter_iter_mut_into_iter/README.md) — the three-door question for a collection, where the answer is different from a string's
+- [`iter`, `iter_mut`, `into_iter`](../../24_Iterators/iter_iter_mut_into_iter/README.md) — the three-door question for a collection, where the answer is different from a string's
 - [`str::split` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split) · [`Pattern` ↗](https://doc.rust-lang.org/std/str/pattern/trait.Pattern.html) · [`str::split_once` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split_once)

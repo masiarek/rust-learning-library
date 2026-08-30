@@ -311,7 +311,7 @@ The rule to carry away:
 - [LogRocket — disambiguating Rust traits: `Copy`, `Clone` and `Dynamic` ↗](https://blog.logrocket.com/disambiguating-rust-traits-copy-clone-dynamic/) — where the deep/shallow framing above comes from, stated outright: *`Copy`* "creates a shallow copy, a new reference to the original value", *`Clone`* "creates a deep copy". Section 6 of the run below is that sentence tested. Its code says `#[Derive(Copy, Clone)]`, which does not compile — the attribute is lowercase
 - [`Rc`: the clone that copies a pointer](../../18_Ownership/reference_counting/README.md) — the clone that duplicates a pointer and a count, not the data; and [`Arc`](../../18_Ownership/sharing_across_threads/README.md) for the same thing across threads
 - [`Cow`: borrow until somebody writes](../../18_Ownership/clone_on_write/README.md) — the clone deferred until a write actually needs one
-- [The `move` keyword](../../23_Functional/the_move_keyword/README.md) — the `move` closure that copies instead of moving, because what it captured was `Copy`: it compiles, runs, and changes nothing outside itself
+- [The `move` keyword](../../23_Closures/the_move_keyword/README.md) — the `move` closure that copies instead of moving, because what it captured was `Copy`: it compiles, runs, and changes nothing outside itself
 
 ## Sources
 

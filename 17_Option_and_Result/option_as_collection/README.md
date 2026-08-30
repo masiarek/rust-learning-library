@@ -264,5 +264,5 @@ rustc --edition 2024 17_Option_and_Result/option_as_collection/examples/option_a
 
 - [`Option` vs `Result`](../option_vs_result/README.md) — which of the two you should be reaching for in the first place
 - [`Option` fields](../option_fields/README.md) — `Option` in a type definition rather than a return type
-- [Iterators are lazy](../../23_Functional/iterators_are_lazy/README.md) — the same adapters over a sequence longer than one, and when they actually run
+- [Iterators are lazy](../../24_Iterators/iterators_are_lazy/README.md) — the same adapters over a sequence longer than one, and when they actually run
 - [`std::mem::discriminant` ↗](https://doc.rust-lang.org/std/mem/fn.discriminant.html) and [`Option::is_some_and` ↗](https://doc.rust-lang.org/core/option/enum.Option.html#method.is_some_and)

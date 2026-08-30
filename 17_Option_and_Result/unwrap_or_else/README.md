@@ -314,5 +314,5 @@ rustc --edition 2024 17_Option_and_Result/unwrap_or_else/examples/unwrap_or_else
 - [Returning `None` on error](../none_on_error/README.md) — what `.ok()` discards, which is exactly what this closure is handed
 - [What a panic costs](../what_a_panic_costs/README.md) — the other answer to "and if it is missing?", and when it is the right one
 - [`Option` vs `Result`](../option_vs_result/README.md) — why only one of the two has an error to pass you
-- [The three closure traits](../../23_Functional/three_closure_traits/README.md) — why this one takes an `FnOnce`, and what a bound of `Fn` would have refused
+- [The three closure traits](../../23_Closures/three_closure_traits/README.md) — why this one takes an `FnOnce`, and what a bound of `Fn` would have refused
 - [`Option::unwrap_or_else` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.unwrap_or_else) · [`Result::unwrap_or_else` ↗](https://doc.rust-lang.org/std/result/enum.Result.html#method.unwrap_or_else) · [`or_else` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.or_else) · [`map_or_else` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.map_or_else)

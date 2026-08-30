@@ -85,4 +85,4 @@ trait Fresh {
 - [Returning a trait](../returning_a_trait/README.md) — `Box<dyn Trait>` and `impl Trait`, once one function has to answer with more than one type
 - [What a struct is](../../16_Structs/what_a_struct_is/README.md) — the type with no behaviour in it, which is the gap this fills
 - [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) — a marker trait that changes what `=` means, beside one you call
-- [Implementing `Iterator`](../../23_Functional/implementing_iterator/README.md) — required versus provided methods at scale: write one method, and seventy-five arrive
+- [Implementing `Iterator`](../../24_Iterators/implementing_iterator/README.md) — required versus provided methods at scale: write one method, and seventy-five arrive

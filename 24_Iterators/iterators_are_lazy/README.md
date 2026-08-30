@@ -315,7 +315,7 @@ fn main() {
 
 - [`iter`, `iter_mut`, `into_iter`](../iter_iter_mut_into_iter/README.md) — where the chain starts, and what it hands you
 - [Implementing `Iterator`](../implementing_iterator/README.md) — the `next` method all of this laziness is made of
-- [The three closure traits](../three_closure_traits/README.md) — why `map` takes an `FnMut` and `unwrap_or_else` takes an `FnOnce`
+- [The three closure traits](../../23_Closures/three_closure_traits/README.md) — why `map` takes an `FnMut` and `unwrap_or_else` takes an `FnOnce`
 - [`Option` is a one-item collection](../../17_Option_and_Result/option_as_collection/README.md) — the same adapters, on an iterator of length 0 or 1
 - [Walking a string](../../14_Strings/walking_a_string/README.md) — `chars`, `bytes` and the split family, which are these iterators over text
 - [What the optimizer does](../../20_Compilers/what_the_optimizer_does/README.md) — why a chain of adapters compiles to the loop you would have written

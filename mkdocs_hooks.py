@@ -144,17 +144,19 @@ NAV_ORDER: dict[str, list[str]] = {
         "generic_enums",
         "a_generic_recursive_type",
     ],
-    "23_Functional": [
+    "23_Closures": [
         "README.md",
-        # Closures first, because every iterator adapter takes one. The
-        # declaration, then the classification the compiler cares about, then
-        # the keyword that is blamed for that classification and does not
-        # decide it.
+        # The declaration, then the classification the compiler cares about,
+        # then the keyword that is blamed for that classification and does
+        # not decide it.
         "what_a_closure_is",
         "three_closure_traits",
         "the_move_keyword",
-        # ...then iterators, opening on the property that explains the rest:
-        # nothing runs until a consumer asks.
+    ],
+    "24_Iterators": [
+        "README.md",
+        # Laziness first: it is the property the other two pages are
+        # describing, and the one that explains why a chain costs nothing.
         "iterators_are_lazy",
         "iter_iter_mut_into_iter",
         # Last, because it needs both halves: writing `next` yourself, and
@@ -271,6 +273,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "borrowing",
         # ...and the scaffold most people are told to use while it lands.
         "how_to_learn_lifetimes",
+        # ...and immediately the page that scaffold hands off to when it comes
+        # down, since it is the one thing "clone everything" defers.
+        "lifetime_annotations",
         # The borrow rule immediately pays for itself: it is what proves a
         # shadow makes a second place, since it accepts `let y = &x; let x = 6`
         # and rejects the `mut` spelling of the same lines.
@@ -571,8 +576,8 @@ LABELS = {
     "rustrover_setup": "RustRover setup",
     "rustrover_code_vision": "RustRover Code Vision",
     "neovim_setup": "Neovim with LazyVim",
-    # 23_Functional
-    "23_Functional": "Functional Rust",
+    # 23_Closures · 24_Iterators — the folder names already read correctly,
+    # so only the four names a sentence-caser cannot get right are listed.
     "the_move_keyword": "The `move` keyword",
     "iter_iter_mut_into_iter": "`iter`, `iter_mut`, `into_iter`",
     "implementing_iterator": "Implementing `Iterator`",
