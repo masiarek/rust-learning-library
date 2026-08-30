@@ -11,8 +11,9 @@ The thing that makes Rust's version its own is that there is nothing to allocate
 | [What a closure is](what_a_closure_is/README.md) | 101 → 201 | The two-pipe syntax, the capture that separates a closure from a `fn`, and the measured claim that its size is exactly what it captured — zero bytes for one that captured nothing, which is smaller than a `fn` pointer |
 | [The three closure traits](three_closure_traits/README.md) | 201 | `Fn` / `FnMut` / `FnOnce` as a ladder rather than a menu; which bound to write; and the widely-repeated sentence about `move` and `FnOnce` that the run refutes in both directions |
 | [The `move` keyword](the_move_keyword/README.md) | 201 | What it moves, the two errors that demand it, the `Copy` case that silently copies instead — and the field-granularity capture that edition 2021 introduced, measured in bytes |
+| [Function pointers](function_pointers/README.md) | 201 | `fn` as a *type*: eight bytes pointing at code, the zero-sized `fn` item that is not the same thing, and why a bare `fn` parameter refuses callers an `Fn` bound would take |
 
-Read them in that order: the declaration, then the classification the compiler cares about, then the keyword that gets blamed for that classification and does not decide it.
+Read them in that order: the declaration, then the classification the compiler cares about, then the keyword that gets blamed for that classification and does not decide it — and last the thing a closure is measured against, the plain `fn` pointer that carries nothing.
 
 ## The other half: iterators
 
@@ -27,4 +28,4 @@ Read them in that order: the declaration, then the classification the compiler c
 
 ## Not yet written
 
-The gaps, listed rather than stubbed so they are visible: **closures that return closures** (and the `impl Fn` / `Box<dyn Fn>` decision that forces), **capturing in a struct field** — the lifetime parameter that arrives with it, and why `Box<dyn Fn>` is the usual escape — **`fn` items versus closures as arguments** (passing `str::len` where a closure is expected, and the coercion that makes it work), and **closures and `async`**, where the captured environment outlives the call by construction.
+The gaps, listed rather than stubbed so they are visible: **closures that return closures** (and the `impl Fn` / `Box<dyn Fn>` decision that forces), **capturing in a struct field** — the lifetime parameter that arrives with it, and why `Box<dyn Fn>` is the usual escape — and **closures and `async`**, where the captured environment outlives the call by construction.

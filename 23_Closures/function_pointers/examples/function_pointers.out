@@ -1,0 +1,51 @@
+1. Naming a function does not give you a `fn` pointer
+   size_of_val(&sum)                 = 0 bytes   the fn ITEM, `fn(i32, i32) -> i32 {sum}`
+   size_of_val(&op)                  = 8 bytes   the fn POINTER, after coercion
+   op(2, 3) = 5   sum(2, 3) = 5   same code, two types
+   the item is zero-sized because the function it names is already known;
+   the pointer is 8 bytes because which function it names is not.
+
+2. The item type cannot be compared, stored or passed around
+   let op1 = sum; let op2 = sum; op1 == op2
+     -> E0369: binary operation `==` cannot be applied to
+               type `fn(i32, i32) -> i32 {sum}`   (see the page)
+   Coerce first and it compiles — but the compiler now argues with you:
+     a == b   -> warning: unpredictable_function_pointer_comparisons
+     std::ptr::fn_addr_eq(a, b) = true
+     std::ptr::fn_addr_eq(a, c) = false
+
+3. A method is a value too — the dot is the sugar, not the function
+   let len: fn(&str) -> usize = str::len;
+   ["Ada", "Ben", "Cara"].map(len) = [3, 3, 4]
+   .map(String::from)              = ["a", "bb"]   an associated function
+   .map(Some)                      = [Some(1), Some(2)]   an enum variant is one too
+
+4. What a `fn` pointer can carry: nothing
+   apply_ptr(10, double)      = 20
+   apply_ptr(10, |v| v + 1)   = 11   a closure that captured nothing coerces
+   apply_ptr(10, |v| v + bonus)
+     -> E0308: expected fn pointer, found closure
+        note: closures can only be coerced to `fn` types if they
+              do not capture any variables
+
+5. So take an `Fn` bound, not a `fn` parameter
+   apply_bound(10, double)        = 20   a fn item
+   apply_bound(10, a)             = 20   a fn pointer
+   apply_bound(10, |v| v + 1)     = 11   a free closure
+   apply_bound(10, |v| v + bonus) = 15   a CAPTURING closure
+   Every `fn` implements Fn, FnMut and FnOnce — it borrows nothing, so
+   it satisfies all three. The bound accepts four callers; `fn` accepts two.
+
+6. Where a bare `fn` still wins: it is ONE concrete type
+   [fn(u32) -> u32; 2] applied to 8 = [16, 4]
+   size_of_val(&table)              = 16 bytes   two pointers, no allocation
+   HashMap<&str, fn(u32) -> u32>    -> by_name["halve"](8) = 4
+   struct Rule { name, apply }      -> double of 21 = 42
+   size_of::<Rule>()                = 24 bytes
+   const OP: fn(u32) -> u32         -> OP(3) = 6
+   A `dyn Fn` needs a Box and a vtable to do any of this. A generic
+   parameter cannot do it at all: two closures are two types.
+
+7. And it is never null, so `Option` costs nothing
+   size_of::<fn(u32) -> u32>()         = 8 bytes
+   size_of::<Option<fn(u32) -> u32>>() = 8 bytes   same — None is the niche
