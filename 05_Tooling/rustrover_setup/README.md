@@ -169,7 +169,59 @@ So: macOS in dark mode, *Sync with OS* on, and a light editor scheme picked deli
 
 To have both halves follow macOS rather than pinning one polarity, the cog beside **Sync with OS** opens *Preferred Theme and Editor Color Scheme*, which carries **For Light OS** and **For Dark OS** rows for the scheme as well as the theme. Filling in only the theme rows is the state above.
 
-## 6. Stop the Build panel opening on every run
+## 6. Install a theme the IDE did not ship with
+
+Before installing anything, look at what is already inside, because the two settings section 5 separates ship two very different-sized lists.
+
+**Themes** — eleven files in `Contents/lib/intellij.platform.ide.impl.jar`, of which the New UI's light ones are just **Light**, **Light with Light Header** and **Islands Light**. (`IntelliJ` and `IntelliJ Light` are their classic-UI ancestors; the dark side is **Dark**, **Darcula**, **Islands Dark**, **Islands Darcula** and **High Contrast**.) Three light choices is a short list, and it is the reason people go shopping.
+
+**Editor color schemes** — fourteen more, and `parent_scheme` sorts them exactly as it did for `_@user_Github` above: `Default` is light, `Darcula` is dark.
+
+| Light schemes, bundled | Dark schemes, bundled |
+|---|---|
+| Dawn · **Github** · Solarized Light · Xcode | All hallow's eve · Blackboard · Cobalt · Espresso · Monokai · Railscasts · Solarized Dark · Twilight · VibrantInk · WarmNeon |
+
+Worth checking before you install anything, because three of those four light schemes are names people reach for the Marketplace to get. If what you actually dislike is the *syntax colours* rather than the window chrome, you already own the fix — and it costs no plugin and no restart.
+
+### The install itself
+
+*Settings → Plugins*, the **Marketplace** tab (its neighbour is **Installed**), search the name, **Install**. A restart is usually optional for a theme — Catppuccin's own instructions say *"(Optional) Restart your IDE"* — and the dialog offers a **Restart IDE** button when it is not.
+
+The new theme then joins the dropdown at *Appearance & Behavior → Appearance* under **Theme:**, where section 5's trap applies to every install alike: picking it also rewrites **Editor color scheme:**, to whatever the plugin declares. A plugin carrying both the `Theme` and `Editor Color Schemes` tags on its Marketplace page ships both halves and looks right immediately; a `Theme`-only one changes the chrome and leaves your syntax colours behind. Catppuccin is explicit about the split and sends you to two different pages for it — *Appearance & Behaviour → Appearance* for the UI, *Editor → Color Scheme* for the code.
+
+Two paths show what happened, in the folder section 5 already reads:
+
+```text
+~/Library/Application Support/JetBrains/RustRover2026.2/
+├── plugins/<plugin>/     ← the theme itself, unpacked
+└── options/laf.xml       ← <laf themeId="…" /> — the one now in force
+```
+
+### What the community actually installs
+
+Downloads and ratings from the [JetBrains Marketplace ↗](https://plugins.jetbrains.com/search?tags=Theme) API on 2026-08-30, restricted to plugins that verifiably contain a light theme:
+
+| Plugin | The light half | Downloads | Rating |
+|---|---|---|---|
+| Gerry Themes | `Gerry⟡ Light` — and an **`[Islands] Gerry⟡ Light`** | 3.72M | **4.94** |
+| Solarized Theme | Solarized Light | 2.45M | 4.39 |
+| Catppuccin Theme | **Latte**, one of four flavours | 2.13M | 4.81 |
+| Atom One Theme | One Light | 1.02M | 4.85 |
+| Xcode Theme | Xcode Light | 923k | 4.87 |
+| Cyan Light Theme | the whole plugin | 574k | 4.83 |
+| Gruvbox Theme | gruvbox light | 546k | 4.83 |
+| macOS Light Theme | the whole plugin | 188k | 4.70 |
+| Everest Theme | `Everest Nature - Light` and siblings | 117k | 4.80 |
+| Falcon Relaxing-Eyes Islands Themes | `Islands Relax Light Green` | 89k | 4.82 |
+
+**Read the rating column, not the download column.** Downloads rank *plugins*, and the largest plugins here are collections whose light theme is a minority variant — so that number is mostly counting people who installed it for the dark one. Two entries make the point from outside the table: **Hiberbee** is the 16th most-downloaded theme on the Marketplace (949k) and contains no light theme at all — its own description lists one as upcoming — and **GitHub Primer Theme** rates 4.90 while describing itself as getting as close to *GitHub's dark theme* as possible. A high placing in the overall theme chart is not evidence about a plugin's light half.
+
+Two narrower notes for this IDE:
+
+- **RustRover 2026.2 defaults to the Islands UI**, whose inset, rounded tool windows a pre-Islands theme knows nothing about. The plugins that have caught up say so in the listing: Gerry ships `[Islands]` variants of every theme it has, and Falcon's entire pitch is Islands light themes.
+- **Solarized Light and Xcode are already bundled as schemes**, so those two plugins are buying you the window half of a look you can half-have for free. Set the scheme first and see whether the chrome still bothers you.
+
+## 7. Stop the Build panel opening on every run
 
 Run the program and a **Build** tool window opens across the bottom of the frame, with `Sync` and `Build Output` tabs. Closing it does not stick — the next run re-activates it.
 
@@ -206,7 +258,7 @@ The second, carrying `default="true"`, is the template. Both sit in `workspace.x
 
 Which is why a scaffolded tree never has this problem: the configurations [`rust_scaffold.py`](../scaffolding/README.md) writes there carry the same empty `<method v="2" />` already. It is the standalone `cargo new` project — `untitled` again, the one section 4 is also about — that ships with the step attached.
 
-## 7. The things you do not have to configure
+## 8. The things you do not have to configure
 
 Worth knowing so you do not go looking:
 
@@ -228,4 +280,4 @@ A fair question, and the honest answer is that the overlap is largest exactly he
 
 ---
 
-*Sections 1–4 have their settings paths verified against the [RustRover external linters documentation ↗](https://www.jetbrains.com/help/rust/rust-external-linters.html) rather than by driving the IDE; menu wording moves between releases, so treat those names as a route rather than a transcript. Sections 5 and 6 are the other way round — every label, dialog and file fragment in them was read off RustRover **2026.2.1** (`262.9437.161`) on macOS while making the changes, and the two `.idea/workspace.xml` fragments are that project's file after the edit.*
+*Sections 1–4 have their settings paths verified against the [RustRover external linters documentation ↗](https://www.jetbrains.com/help/rust/rust-external-linters.html) rather than by driving the IDE; menu wording moves between releases, so treat those names as a route rather than a transcript. Sections 5 and 7 are the other way round — every label, dialog and file fragment in them was read off RustRover **2026.2.1** (`262.9437.161`) on macOS while making the changes, and the two `.idea/workspace.xml` fragments are that project's file after the edit. Section 6's two bundled lists were read out of that same build's application bundle rather than out of the dropdowns — the theme names from the `*.theme.json` files in `intellij.platform.ide.impl.jar`, the schemes and their polarity from `parent_scheme` in `colorSchemes/*.xml` — and its download and rating figures came from the Marketplace API on 2026-08-30, so treat those two columns as a snapshot.*
