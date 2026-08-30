@@ -24,6 +24,22 @@ struct Tally {
     counted: u32,
 }
 
+// ---- Two ways to write it, and the one difference between them -----------
+// The same struct twice: a shared reference to something. `&T` is copyable
+// whatever T is -- but only one of these two spellings knows that.
+
+#[derive(Debug, Clone, Copy)] // expands to `impl<T: Copy> Copy for Derived<T>`
+struct Derived<'a, T>(&'a T);
+
+#[derive(Debug)]
+struct Manual<'a, T>(&'a T);
+impl<T> Copy for Manual<'_, T> {} // no bound on T at all
+impl<T> Clone for Manual<'_, T> {
+    fn clone(&self) -> Self { *self } // the only body a Copy type's Clone needs
+}
+
+fn bump(x: &mut u32) { *x += 1; }
+
 fn consume_ballot(b: Ballot) -> String { format!("{} cast {}", b.voter, b.scores.len()) }
 fn consume_precinct(p: Precinct) -> u32 { p.id + p.registered }
 fn consume_tally(t: Tally) -> u32 { t.counted }
@@ -99,4 +115,53 @@ fn main() {
     println!("   The axis is not deep vs shallow. It is WHO ASKS:");
     println!("     Copy  the compiler, silently, at every `=`");
     println!("     Clone you, in writing, at one call site");
+
+    println!("\n7. Two ways to write it — and the one difference");
+    println!("   The derive is the simple one, and it writes a bound you did not:");
+    println!("     #[derive(Clone, Copy)] struct Derived<T>(&T);");
+    println!("       ->  impl<T: Copy> Copy for Derived<T>");
+    println!("   That bound is about T, but the field is `&T`, and a shared");
+    println!("   reference copies whatever T is. So the derived version refuses");
+    println!("   a Derived<Ballot> that would have been perfectly fine:");
+    println!("     error[E0382]: borrow of moved value: `d`");
+    println!("       move occurs because `d` has type `Derived<'_, Ballot>`,");
+    println!("       which does not implement the `Copy` trait");
+    println!("       note: derived `Clone` adds implicit bounds on type parameters");
+    println!("       help: consider manually implementing `Clone` to avoid");
+    println!("             undesired bounds");
+    println!("   Writing the two impls by hand drops the bound:");
+    println!("     impl<T> Copy for Manual<'_, T> {{}}");
+    println!("     impl<T> Clone for Manual<'_, T> {{ fn clone(&self) -> Self {{ *self }} }}");
+    let held = Ballot { voter: "Dev".to_string(), scores: vec![1] };
+    let m = Manual(&held);
+    let m2 = m; // Copy, even though Ballot is not
+    println!("   Manual<Ballot> copies:  {:?} and {:?}", m.0.voter, m2.0.voter);
+    let counted = 431u32;
+    let d = Derived(&counted);
+    let d2 = d; // Copy, because u32 meets the bound the derive wrote
+    println!("   Derived<u32> copies:    {} and {}   <- the bound is met here", d.0, d2.0);
+    println!("   And a Copy type's Clone body is always `*self`. There is");
+    println!("   nothing else it could be: the compiler already copies the bits.");
+
+    println!("\n8. `&T` is Copy. `&mut T` is not — and the call site hides it");
+    let n = 7u32;
+    let s = &n;
+    let s2 = s; // shared references are Copy
+    println!("   shared:  let s = &n; let s2 = s;   both alive -> {s} {s2}");
+    let mut m_val = 7u32;
+    let r = &mut m_val;
+    println!("   unique:  let r = &mut m; let r2 = r;   r is MOVED");
+    println!("     error[E0382]: borrow of moved value: `r`");
+    println!("       move occurs because `r` has type `&mut u32`,");
+    println!("       which does not implement the `Copy` trait");
+    println!("   Most people never meet that error, because passing `r` to a");
+    println!("   function REBORROWS instead of moving:");
+    bump(r);
+    bump(r);
+    println!("     bump(r); bump(r);   -> {}", *r);
+    let r3 = &mut *r; // and you can ask for the reborrow by hand
+    bump(r3);
+    println!("     &mut *r, bumped     -> {}", *r);
+    println!("   Two references, one Copy and one not, for the ownership reason:");
+    println!("   `&T` may be duplicated because nobody may write through it.");
 }

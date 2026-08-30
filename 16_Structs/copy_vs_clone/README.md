@@ -61,6 +61,8 @@ error[E0184]: `Copy` not allowed on types with destructors    // Drop runs once 
 
 Always `#[derive(Clone, Copy)]` together. `E0204` points at the offending field, which is the fastest way to see what a type owns.
 
+`rustc --explain E0204` then gets its own rule wrong, in both directions: *"The `Copy` trait is implemented by default only on primitive types. If your type only contains primitive types, you'll be able to implement `Copy` on it. Otherwise, it won't be possible."* A `&String` field is `Copy` and `String` is not primitive; a struct whose only field is another `Copy` struct is `Copy` and contains no primitive either. And going the other way, a struct holding one `u32` plus a `Drop` impl contains nothing *but* a primitive and still cannot be `Copy` — that is `E0184`, the third code above. The rule is **every field `Copy`, no destructor, and you opted in**; "primitive" is a description of the common case that leaked into the definition.
+
 ## All-`Copy` fields is not enough
 
 ```rust
@@ -69,6 +71,60 @@ struct Tally { counted: u32 }
 ```
 
 One `u32`, still moves. You opt in, not the fields. `Copy` is a promise to callers that adding a `String` later would silently break.
+
+## Two ways to write it, and the bound the derive adds
+
+`#[derive(Clone, Copy)]` is one of two spellings. The other is the two impls by hand — and a `Copy` type's `Clone` body is always the same three characters, because the compiler is already copying the bits:
+
+```rust
+impl Copy for MyStruct {}
+impl Clone for MyStruct {
+    fn clone(&self) -> Self { *self }   // there is nothing else it could be
+}
+```
+
+On a *generic* type the two are not interchangeable. The derive writes a bound you did not:
+
+```rust
+#[derive(Clone, Copy)]        //  ->  impl<T: Copy> Copy for Derived<T>
+struct Derived<'a, T>(&'a T);
+```
+
+That bound is about `T`, but the field is `&T`, and a shared reference copies whatever `T` is. So `Derived<'_, Ballot>` refuses to copy for a reason that appears nowhere in the code you wrote:
+
+```text
+error[E0382]: borrow of moved value: `d`
+  move occurs because `d` has type `Derived<'_, Ballot>`, which does not implement the `Copy` trait
+  note: derived `Clone` adds implicit bounds on type parameters
+  help: consider manually implementing `Clone` to avoid undesired bounds
+```
+
+The compiler names the fix in its own `help`. Written by hand there is no bound to meet, and the same struct copies:
+
+```rust
+impl<T> Copy for Manual<'_, T> {}
+impl<T> Clone for Manual<'_, T> { fn clone(&self) -> Self { *self } }
+```
+
+This is the general rule — [every derive bounds the type parameters](../../27_Modules/what_an_attribute_is/README.md) — landing where it costs most, because `Copy` is the one trait whose absence changes what `=` means. A `PhantomData` marker field hits it the same way, and for the same reason: it is duplicable regardless of the `T` it is standing in for.
+
+## `&T` is `Copy`. `&mut T` is not
+
+Both are one word wide, both are pointers, and only one of them duplicates:
+
+```rust
+let s = &n;      let s2 = s;   // s is still usable
+let r = &mut m;  let r2 = r;   // r is MOVED
+```
+
+```text
+error[E0382]: borrow of moved value: `r`
+  move occurs because `r` has type `&mut u32`, which does not implement the `Copy` trait
+```
+
+That is the [borrowing](../../18_Ownership/borrowing/README.md) rule restated as traits. `&T` may be duplicated because nobody may write through it; `&mut T` may not, because being the only one is the entire content of the type.
+
+Most people never meet that error, because passing a `&mut` to a function **reborrows** instead of moving — `bump(r); bump(r);` compiles and `r` is alive afterwards. It is the plain `let` binding that moves. When you want the reborrow at a `let`, write it: `let r3 = &mut *r;`.
 
 ## Which to reach for
 
@@ -302,12 +358,47 @@ The rule to carry away:
    The axis is not deep vs shallow. It is WHO ASKS:
      Copy  the compiler, silently, at every `=`
      Clone you, in writing, at one call site
+
+7. Two ways to write it — and the one difference
+   The derive is the simple one, and it writes a bound you did not:
+     #[derive(Clone, Copy)] struct Derived<T>(&T);
+       ->  impl<T: Copy> Copy for Derived<T>
+   That bound is about T, but the field is `&T`, and a shared
+   reference copies whatever T is. So the derived version refuses
+   a Derived<Ballot> that would have been perfectly fine:
+     error[E0382]: borrow of moved value: `d`
+       move occurs because `d` has type `Derived<'_, Ballot>`,
+       which does not implement the `Copy` trait
+       note: derived `Clone` adds implicit bounds on type parameters
+       help: consider manually implementing `Clone` to avoid
+             undesired bounds
+   Writing the two impls by hand drops the bound:
+     impl<T> Copy for Manual<'_, T> {}
+     impl<T> Clone for Manual<'_, T> { fn clone(&self) -> Self { *self } }
+   Manual<Ballot> copies:  "Dev" and "Dev"
+   Derived<u32> copies:    431 and 431   <- the bound is met here
+   And a Copy type's Clone body is always `*self`. There is
+   nothing else it could be: the compiler already copies the bits.
+
+8. `&T` is Copy. `&mut T` is not — and the call site hides it
+   shared:  let s = &n; let s2 = s;   both alive -> 7 7
+   unique:  let r = &mut m; let r2 = r;   r is MOVED
+     error[E0382]: borrow of moved value: `r`
+       move occurs because `r` has type `&mut u32`,
+       which does not implement the `Copy` trait
+   Most people never meet that error, because passing `r` to a
+   function REBORROWS instead of moving:
+     bump(r); bump(r);   -> 9
+     &mut *r, bumped     -> 10
+   Two references, one Copy and one not, for the ownership reason:
+   `&T` may be duplicated because nobody may write through it.
 ```
 <!-- /output -->
 
 ## See also
 
 - [STRUCTS.md](../../STRUCTS.md) · [Struct update syntax](../struct_update/README.md) · [Ownership and moves](../../18_Ownership/ownership_and_moves/README.md) · [Borrowing](../../18_Ownership/borrowing/README.md)
+- [`std::marker::Copy` — *How can I implement `Copy`?* ↗](https://doc.rust-lang.org/std/marker/trait.Copy.html) — where the manual-impl pair and the derived-bound caveat above come from, stated in three sentences; and [`rustc --explain E0204` ↗](https://doc.rust-lang.org/error_codes/E0204.html) for the `&mut T` line and the over-tight "primitive types" wording
 - [LogRocket — disambiguating Rust traits: `Copy`, `Clone` and `Dynamic` ↗](https://blog.logrocket.com/disambiguating-rust-traits-copy-clone-dynamic/) — where the deep/shallow framing above comes from, stated outright: *`Copy`* "creates a shallow copy, a new reference to the original value", *`Clone`* "creates a deep copy". Section 6 of the run below is that sentence tested. Its code says `#[Derive(Copy, Clone)]`, which does not compile — the attribute is lowercase
 - [`Rc`: the clone that copies a pointer](../../18_Ownership/reference_counting/README.md) — the clone that duplicates a pointer and a count, not the data; and [`Arc`](../../18_Ownership/sharing_across_threads/README.md) for the same thing across threads
 - [`Cow`: borrow until somebody writes](../../18_Ownership/clone_on_write/README.md) — the clone deferred until a write actually needs one

@@ -47,3 +47,37 @@
    The axis is not deep vs shallow. It is WHO ASKS:
      Copy  the compiler, silently, at every `=`
      Clone you, in writing, at one call site
+
+7. Two ways to write it — and the one difference
+   The derive is the simple one, and it writes a bound you did not:
+     #[derive(Clone, Copy)] struct Derived<T>(&T);
+       ->  impl<T: Copy> Copy for Derived<T>
+   That bound is about T, but the field is `&T`, and a shared
+   reference copies whatever T is. So the derived version refuses
+   a Derived<Ballot> that would have been perfectly fine:
+     error[E0382]: borrow of moved value: `d`
+       move occurs because `d` has type `Derived<'_, Ballot>`,
+       which does not implement the `Copy` trait
+       note: derived `Clone` adds implicit bounds on type parameters
+       help: consider manually implementing `Clone` to avoid
+             undesired bounds
+   Writing the two impls by hand drops the bound:
+     impl<T> Copy for Manual<'_, T> {}
+     impl<T> Clone for Manual<'_, T> { fn clone(&self) -> Self { *self } }
+   Manual<Ballot> copies:  "Dev" and "Dev"
+   Derived<u32> copies:    431 and 431   <- the bound is met here
+   And a Copy type's Clone body is always `*self`. There is
+   nothing else it could be: the compiler already copies the bits.
+
+8. `&T` is Copy. `&mut T` is not — and the call site hides it
+   shared:  let s = &n; let s2 = s;   both alive -> 7 7
+   unique:  let r = &mut m; let r2 = r;   r is MOVED
+     error[E0382]: borrow of moved value: `r`
+       move occurs because `r` has type `&mut u32`,
+       which does not implement the `Copy` trait
+   Most people never meet that error, because passing `r` to a
+   function REBORROWS instead of moving:
+     bump(r); bump(r);   -> 9
+     &mut *r, bumped     -> 10
+   Two references, one Copy and one not, for the ownership reason:
+   `&T` may be duplicated because nobody may write through it.
