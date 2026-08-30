@@ -87,6 +87,7 @@ Two `Rc`s pointing at each other never reach zero. Nothing is unsafe and nothing
 
 - **When one owner would do.** `Rc` is for a value with genuinely several owners whose lifetimes cross. Reaching for it to quiet the borrow checker is the same reflex as reaching for `.clone()`, one indirection further along.
 - **When a `&` would do.** A borrow costs nothing and needs no count; `Rc` earns its keep only where the borrow cannot be made to live long enough.
+- **For a `Copy` scalar.** `Rc::new(5)` heap-allocates a control block — two `usize` counters sitting beside a four-byte value — so that several owners can share what a register duplicates for free. Tutorials demo `Rc` on an `i32` because [std's own doc example ↗](https://doc.rust-lang.org/std/rc/struct.Rc.html#impl-Clone-for-Rc%3CT,+A%3E) does; that example is being brief, not giving advice. The types worth counting are the ones that own a heap buffer.
 - **Across threads.** `Rc` is deliberately not [`Send`](../../12_Traits/marker_traits/README.md) — `assert_send::<Rc<i32>>()` is `E0277` while the `Arc` spelling compiles, on two values of the same size. [`Arc`](../sharing_across_threads/README.md) is the atomic version, and the compiler enforces the split.
 
 ## If you are coming from another language
