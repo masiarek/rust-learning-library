@@ -658,6 +658,7 @@ rustc --edition 2024 14_Strings/walking_a_string/examples/walking_a_string.rs -o
 - [STRINGS.md](../../STRINGS.md) — the map: every string lesson, in reading order
 - [Meet the `char`](../meet_the_char/README.md) — why `bytes()` and `chars()` give different counts
 - [String slices](../string_slices/README.md) — what those byte offsets are for, and how they panic
+- [Inside a `Split`](../inside_a_split/README.md) — what a split *is* before you consume it, and why printing one shows a struct
 - [Meet the byte](../../19_Numbers/meet_the_byte/README.md) — the `u8` that `bytes()` yields
 - [`Option` as a collection](../../17_Option_and_Result/option_as_collection/README.md) — the `Option<u8>` the kata builds, iterated
 - [`iter`, `iter_mut`, `into_iter`](../../24_Iterators/iter_iter_mut_into_iter/README.md) — the three-door question for a collection, where the answer is different from a string's

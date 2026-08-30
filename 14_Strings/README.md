@@ -18,6 +18,7 @@ The rest of the section is what follows from the bytes underneath. `len()` count
 | [Walking a `String`](walking_a_string/README.md) | 101 → 201 | Three item types and the split family — splits are the gaps between matches, `char_indices()` is not `chars().enumerate()`, and `split_whitespace()` silently shortens a row |
 | [`&'static str`](static_str/README.md) | 201 | On a literal it is the same type as `&str` — where the annotation starts refusing things, `const` vs `static`, and the three ways a `String` really can yield one |
 | [Six kinds of string](six_kinds_of_string/README.md) | 201 | `OsString`, `CString` and friends are not five more inventions — three promises about the bytes, each owned or borrowed, and narrowing is where a promise gets checked |
+| [Inside a `Split`](inside_a_split/README.md) | 201 → 301 | Why `println!("{:?}", s.split(":"))` prints a struct and not your pieces — the plan read field by field, the pattern that picks the searcher, and the one bool that is `split_terminator` |
 
 ## The method reference
 

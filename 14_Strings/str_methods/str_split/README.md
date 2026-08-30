@@ -26,6 +26,8 @@ None of that is the method being unhelpful; the count is forced by the arithmeti
 
 Pieces are borrowed from the original string; nothing is allocated. The pattern is the usual four shapes.
 
+The return value is a lazy iterator, not a list, so `println!("{:?}", s.split(":"))` prints the `Split` struct — searcher internals and a cursor — rather than the pieces. `.collect::<Vec<&str>>()` or a `for` loop is what produces those; [Inside a `Split`](../../inside_a_split/README.md) reads the struct field by field.
+
 ## Example
 
 <!-- source:str_split -->
@@ -76,6 +78,7 @@ columns: 3 kept, 2 after filtering
 
 - [`str::split_whitespace`](../str_split_whitespace/README.md) — the editorial version, for prose
 - [`str::split_terminator`](../str_split_terminator/README.md) — drops only a trailing empty piece
+- [Inside a `Split`](../../inside_a_split/README.md) — what `{:?}` on the iterator is showing you, and why `split_terminator` is the same struct with one bool flipped
 - [`str::splitn`](../str_splitn/README.md) — stop after n−1 splits and keep the rest whole
 - [`str::split_once`](../str_split_once/README.md) — exactly two pieces, or nothing
 - [`str::matches`](../str_matches/README.md) — the matches instead of the gaps

@@ -1,0 +1,52 @@
+collected      ["a", "b", "c"]
+uncollected    Split(SplitInternal { start: 0, end: 5, matcher: StrSearcher { haystack: "a:b:c", needle: ":", searcher: TwoWay(TwoWaySearcher { crit_pos: 0, crit_pos_back: 1, period: 1, byteset: 288230376151711744, position: 0, end: 5, memory: 0, memory_back: 1 }) }, allow_trailing_empty: true, finished: false })
+
+Split(
+    SplitInternal {
+        start: 0,
+        end: 5,
+        matcher: StrSearcher {
+            haystack: "a:b:c",
+            needle: ":",
+            searcher: TwoWay(
+                TwoWaySearcher {
+                    crit_pos: 0,
+                    crit_pos_back: 1,
+                    period: 1,
+                    byteset: 288230376151711744,
+                    position: 0,
+                    end: 5,
+                    memory: 0,
+                    memory_back: 1,
+                },
+            ),
+        },
+        allow_trailing_empty: true,
+        finished: false,
+    },
+)
+
+the four pattern shapes build four different machines:
+  split(":")               -> StrSearcher
+  split(':')               -> CharSearcher
+  split(char::is_numeric)  -> CharPredicateSearcher
+  split(&['-', '_'][..])   -> CharSliceSearcher
+
+split            allow_trailing_empty: true
+split_terminator allow_trailing_empty: false
+
+byteset for ":"   288230376151711744
+1 << (b':' & 63)  288230376151711744
+byteset for "ain" 72576357367808
+
+memory for "ain"  18446744073709551615
+usize::MAX        18446744073709551615
+
+the same struct, after each next():
+  next()        start  position  finished
+  Some("a")         2         2     false
+  Some("b")         4         4     false
+  Some("c")         4         5      true
+  None              4         5      true
+
+Chars(['a', ':', 'b', ':', 'c'])
