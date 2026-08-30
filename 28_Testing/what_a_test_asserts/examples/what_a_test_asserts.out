@@ -1,0 +1,41 @@
+1. A test is a function that panics when it is unhappy
+   assert!(cond)          panics if cond is false
+   assert_eq!(a, b)       panics if a != b, and PRINTS BOTH
+   assert_ne!(a, b)       panics if a == b
+   That is the whole mechanism: #[test] marks a function, the
+   harness runs it, and a panic is a failure. There is no assertion
+   library to learn and no `expect(x).to.equal(y)` grammar.
+
+2. The difference between the two, on the same wrong answer
+   assert!(tally(..) == 9):
+     assertion failed: tally(&[5, 3, 0]) == 9
+   assert_eq!(tally(..), 9):
+     assertion `left == right` failed
+       left: 8
+      right: 9
+   The first tells you a condition was false, which you knew from
+   the line number. The second tells you the answer was 8. Reach for
+   assert_eq! whenever both sides are values.
+
+3. The message, for when the values are not enough
+   seats = 3, but this election has 2 to fill
+   Everything after the condition is a format! call, run only on
+   failure. Use it when the values alone do not say what went wrong.
+
+4. The assertion that passes for the wrong reason
+   assert!(tally(&[]) == 0)      passes: true
+   assert_eq!(tally(&[]), 0)     passes too
+   Both are green, and neither has tested anything: an empty input
+   summing to zero is what `0` means, not what `tally` does. A test
+   whose expected value is a type's default is worth re-reading —
+   it is the shape a test takes when it was written to pass.
+
+5. Floats, where == is the wrong assertion entirely
+   (1.0 / 3.0) * 3.0 == 1.0 is true
+   0.1 + 0.2 == 0.3 is false
+   assert_eq! on floats tests bit equality, which is almost never
+   what you meant. Compare against a tolerance:
+   (0.1 + 0.2 - 0.3).abs() < 1e-10 is true
+   Note the first line: this one happens to be true, and the second
+   is false. Which of the two you meet first is luck, and that is
+   the argument for never writing == on a float in a test at all.

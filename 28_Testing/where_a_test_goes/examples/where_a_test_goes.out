@@ -1,0 +1,40 @@
+1. The two places, and the one difference that decides it
+   src/lib.rs        #[cfg(test)] mod tests   -> UNIT tests
+   tests/api.rs      no attribute needed      -> INTEGRATION tests
+   A unit test is inside the module, so it can call private items.
+   An integration test is a separate crate that `use`s yours, so it
+   sees exactly what a real user sees — which is the point of it.
+   Test the behaviour from outside; test the awkward internals from
+   inside, and only when the outside cannot reach them.
+   tally(&[5, 3, 0]) = 8, is_spoiled(9) = true
+
+2. `#[cfg(test)]` is not a run-time skip
+   The `tests` module above is compiled ONLY under `cargo test`.
+   In this binary it does not exist: cfg!(test) = false
+   So test-only helpers, fixtures and dev-dependencies cost the
+   shipped artefact nothing at all.
+
+3. `use super::*` is the one glob nobody argues about
+   The test module is a CHILD of the module under test, so it can
+   see its parent's private items — but it still has to name them.
+   `use super::*;` is the first line of almost every test module in
+   Rust, and it is safe for the reason globs usually are not: there
+   is exactly one place those names can have come from.
+
+4. The two attributes worth knowing on day one
+   #[should_panic(expected = "…")]  the test PASSES if it panics,
+     and the message must contain that substring. Without `expected`
+     it passes on ANY panic, including one from a typo — which is
+     how a should_panic test quietly stops testing anything.
+   #[ignore = "reason"]  compiled, not run; `cargo test -- --ignored`
+     runs exactly these. The reason string is printed in the summary.
+
+5. What `cargo test` runs, in one list
+   a. unit tests      #[test] fns anywhere in src/, usually in a
+                      #[cfg(test)] module
+   b. integration     every .rs file directly in tests/, each its own
+                      crate; tests/common/mod.rs for shared helpers,
+                      because a subdirectory is not compiled as a test
+   c. doc tests       the ``` blocks in your /// comments
+   All three in one command, and the doc tests are the ones people
+   forget they are shipping.

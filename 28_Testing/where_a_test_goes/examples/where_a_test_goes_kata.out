@@ -1,0 +1,33 @@
+1. What each kind of test can reach
+   tally("5,3,0")   = Some(8)   pub — an integration test can call it
+   parse_cell("9")  = None        private — only a unit test can
+   An integration test in tests/api.rs is a SEPARATE CRATE. It writes
+   `use my_crate::tally;` and there is no spelling of parse_cell that
+   works: E0603, private function. That is the boundary doing its
+   job, and the reason to put the parse_cell tests inline.
+
+2. The should_panic that tests nothing
+   panics_two_ways(0) -> index out of bounds: the len is 2 but the index is 9
+   panics_two_ways(1) -> the ballot was never counted
+   A bare #[should_panic] passes on BOTH. So a test named
+   `out_of_bounds` goes green when the function panics for an
+   entirely unrelated reason — including a panic introduced by the
+   very refactor the test was there to catch.
+   #[should_panic(expected = "index out of bounds")] passes on the
+   first only. The `expected` string is a SUBSTRING match, so it need
+   not be the whole message, and it should be the part that is about
+   the failure rather than the part about the data.
+
+3. Running this file as a test binary
+   rustc --edition 2024 --test where_a_test_goes_kata.rs
+   ...gives the harness that `cargo test` would run for the unit
+   half. The integration half needs a package, because a separate
+   crate needs something to link against.
+
+4. Where to put a test, decided in one question
+   Can the behaviour be observed through the public API?
+     yes -> tests/, as an integration test. It survives a refactor of
+            the internals, which is what makes it worth keeping.
+     no  -> #[cfg(test)] beside the code. And then ask whether the
+            thing being tested should be public, because sometimes
+            the honest answer is that the API is missing a method.

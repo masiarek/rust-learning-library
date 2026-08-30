@@ -1,0 +1,43 @@
+1. The three examples, run here as ordinary code
+   winner(&[3, 9, 5]) = Some(1)
+   winner(&[9, 9, 5]) = None
+   winner(&[])        = None
+
+2. Why the first example was not enough
+   The doc comment makes two promises: a winner's INDEX, and None on
+   a TIE. One clear-winner example tests the first half and leaves
+   the second as a sentence nobody checks. A doc test earns its
+   place when it demonstrates the part of the contract a reader
+   would otherwise have to take on trust — which is usually the
+   None, the Err, or the edge.
+   And the third case was not promised at ALL: the sentence says
+   nothing about an empty ballot. Writing the example is what
+   surfaced the gap; the fix is a better sentence, not just a test.
+
+3. What `#` hid, and what it must not hide
+   Each block above starts with a hidden `# use doc_tests_kata::winner;`
+   so the rendered example is one line. That is the right use: the
+   import is noise a reader can reconstruct.
+   Hiding the SETUP would not be — an example whose visible lines do
+   not run when copied is worse than no example, because it looks
+   like it should.
+
+4. The fence annotations, and the one to distrust
+   ```              compiled and run
+   ```no_run        compiled, not run  (it opens a socket)
+   ```should_panic  run, must panic
+   ```ignore        not even compiled
+   ```text          not Rust at all, so nothing is attempted
+   `ignore` looks like a test and is a comment. If the block is not
+   Rust, say `text`; if it is Rust that cannot run here, say
+   `no_run`; `ignore` is for the rare block that is real Rust, is
+   worth showing, and genuinely cannot compile — and it should carry
+   a note saying why.
+
+5. Why a doc test is an integration test
+   Each block is wrapped in its own `fn main()` and compiled as its
+   own crate, linked against yours. So it sees the PUBLIC API only,
+   exactly as a user does — which is why the hidden line says
+   `use doc_tests_kata::winner` and not `use crate::winner`, and why
+   a doc test is the cheapest way to find out that something you
+   meant to export is still private.

@@ -1,0 +1,39 @@
+1. A doc test is an example that has to keep working
+   tally(&[5, 3, 0]) = 8
+   read_cell(&["5", "3", "0"], 1) = Some(3)
+   Every ``` block in a /// comment is compiled and run by
+   `cargo test`. That is the answer to the oldest problem in
+   documentation: the example that stopped compiling two releases
+   ago and nobody noticed.
+
+2. Each block is a whole program
+   A doc test is wrapped in `fn main()` for you and compiled as its
+   own crate, which is why it must `use` your crate by name rather
+   than by `crate::`. It sees your PUBLIC API only — so a doc test
+   is an integration test that happens to be printed in the docs.
+
+3. `#` hides a line from the reader, not from the compiler
+   A line starting with `# ` is compiled and not rendered. Use it
+   for the `use` line and the fixture, so the example on the page is
+   the two lines that matter. Do not use it to hide the part that
+   makes the example work — a reader who copies what is rendered
+   should get something that runs.
+
+4. The four annotations on the fence
+   ```              compile and run          (the default)
+   ```no_run        compile, do not run      (network, long jobs)
+   ```should_panic  run, and expect a panic
+   ```ignore        do not even compile      (almost always wrong:
+                    use `text` if it is not Rust)
+   `ignore` is the one to be suspicious of — it turns a test into a
+   comment while leaving it looking like a test.
+
+5. What they are good for, and what they are not
+   Good: the two-line example a reader needs, kept honest. A doc
+   test that fails is a documentation bug, which is exactly the
+   right thing to be told.
+   Not: exhaustive coverage. They are slower than unit tests (one
+   compilation each), they only reach the public API, and a doc
+   comment full of edge cases is a bad doc comment. Put the third
+   through twentieth case in #[cfg(test)] and leave the first one
+   on the page.

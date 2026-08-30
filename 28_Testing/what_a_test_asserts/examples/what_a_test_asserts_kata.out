@@ -1,0 +1,37 @@
+1. The five assertions, and what each one proves
+   a. average(&[5, 3, 4]) is Some(4.0)   -> PASSED
+   b. average(&[]) is None               -> PASSED
+   c. average(&[1, 2]) == Some(1.5)      -> PASSED
+   d. average(&[1, 1, 1]) == Some(1.0)   -> PASSED
+   e. average(&[1, 2, 2]) == Some(5.0/3.0) -> PASSED
+
+2. Which ones cannot fail, and why
+   (d) is the tautology: 1, 1, 1 averages to 1 for any function that
+   divides a sum by a count, and also for one that just returns its
+   first element, and also for one that returns the maximum. An
+   input whose every plausible answer is the same number tests the
+   arithmetic, not the definition.
+   (e) passes for a different reason: both sides compute 5.0/3.0 the
+   same way, in the same rounding mode, so the bits match exactly.
+   Write the literal 1.6666666666666667 instead and it still passes;
+   write 1.666666666666667 and it does not. That is a test of your
+   typing, not of the code.
+
+3. The float assertion that means something
+   (a - 5.0/3.0).abs() < 1e-12 -> PASSED
+   A tolerance says what "close enough" means for THIS domain. On a
+   0-5 ballot, 1e-12 is absurd precision and 0.005 would be honest.
+   Picking the number is the work; == avoids the question.
+
+4. What a failure actually prints
+   assertion `left == right` failed
+   ...then two lines naming left and right. assert! would have said
+   only "assertion failed: average(&[5, 3, 4]) == Some(3.0)" — true,
+   unhelpful, and one debugging session longer.
+
+5. The message, and when to spend one
+   cannot fill 3 seats from 2 candidates
+   Values alone would have printed `3` and `2` with no clue which is
+   which. The message is a format! run only on failure, so it costs
+   nothing on the happy path — spend one whenever the two numbers do
+   not name themselves.
