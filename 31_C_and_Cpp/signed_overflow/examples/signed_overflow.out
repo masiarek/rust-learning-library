@@ -1,0 +1,5 @@
+checked_add(1)     -> None
+wrapping_add(1)    -> -2147483648
+saturating_add(1)  -> 2147483647
+overflowing_add(1) -> (-2147483648, true)
+x + 1              -> panicked: attempt to add with overflow

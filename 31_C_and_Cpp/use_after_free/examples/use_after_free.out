@@ -1,0 +1,3 @@
+copied out, then freed -> 5
+borrowed while alive   -> Ada
+dropped once the borrow was over

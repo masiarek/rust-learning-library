@@ -1,0 +1,2 @@
+retain               -> [5, 4, 3]
+collect, then remove -> ["Ada", "Ben"]

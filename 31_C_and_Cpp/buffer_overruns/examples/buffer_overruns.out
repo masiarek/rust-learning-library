@@ -1,0 +1,4 @@
+sum of the three -> 12
+scores.get(2)    -> Some(3)
+scores.get(3)    -> None
+scores[3]        -> index out of bounds: the len is 3 but the index is 3
