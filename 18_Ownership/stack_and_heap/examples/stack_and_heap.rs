@@ -54,9 +54,12 @@ fn main() {
     println!("   &str         {:>5}   ptr + len: a view needs no capacity", std::mem::size_of::<&str>());
 
     println!("\n4. Box is the one place you SAY 'put this on the heap'");
+    let boxed: Box<[u8; 4096]> = Box::new([0; 4096]);
     println!("   [u8; 4096]        {:>5} bytes on the stack", std::mem::size_of::<[u8; 4096]>());
-    println!("   Box<[u8; 4096]>   {:>5} bytes on the stack, 4096 on the heap",
-             std::mem::size_of::<Box<[u8; 4096]>>());
+    println!("   Box<[u8; 4096]>   {:>5} bytes on the stack, {} on the heap",
+             std::mem::size_of_val(&boxed), std::mem::size_of_val(&*boxed));
+    println!("   The far number is COMPUTED, not claimed: `&boxed` is the pointer and");
+    println!("   `&*boxed` is what it points at, so deref first and size_of_val crosses over.");
     println!("   The stack is a few MB per thread and cannot grow. That is the whole reason");
     println!("   Box exists: the array is the same size either way, but only one of the two");
     println!("   spends the bounded region on it.");

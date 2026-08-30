@@ -29,6 +29,8 @@
 4. Box is the one place you SAY 'put this on the heap'
    [u8; 4096]         4096 bytes on the stack
    Box<[u8; 4096]>       8 bytes on the stack, 4096 on the heap
+   The far number is COMPUTED, not claimed: `&boxed` is the pointer and
+   `&*boxed` is what it points at, so deref first and size_of_val crosses over.
    The stack is a few MB per thread and cannot grow. That is the whole reason
    Box exists: the array is the same size either way, but only one of the two
    spends the bounded region on it.
