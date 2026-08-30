@@ -39,6 +39,8 @@ Five sections in between follow one long arc: **turning a snippet into a program
 
 [`21_Observability/`](21_Observability/README.md) picks up where that arc ends: the program is now the service somebody else calls, and the only account of what happened to one request is whatever it chose to write down — a span, a structured line, a counter, and a header carrying the trace to the next process. Stubs as well, and the hardest ones here to finish, because every checked example in this library compiles with `rustc` alone and observability in Rust is a crate story. The section README says how it intends to close that gap rather than skip it.
 
+[**RUST_BY_EXAMPLE.md**](RUST_BY_EXAMPLE.md) is a map of a different kind: [Rust by Example ↗](https://doc.rust-lang.org/rust-by-example/) chapter by chapter, with the lesson here that covers each one, and an honest list of what it does not.
+
 Five topics are big enough to have a map of their own rather than a single page: [**OPTION.md**](OPTION.md), [**SHADOWING.md**](SHADOWING.md), [**STRUCTS.md**](STRUCTS.md), [**STRINGS.md**](STRINGS.md) and [**TOOLCHAIN.md**](TOOLCHAIN.md) each collect every lesson on their subject in reading order, and say what the idea is before the syllabus starts. The first four cross section boundaries because the lessons do; the fifth sorts one section by the problem you actually have.
 
 Every lesson explains; some of them also ask you to type. Those exercises are collected in [**KATAS.md**](KATAS.md), which is the only place they are ordered — each kata itself sits on the page for the topic it teaches, with a solution CI compiles and runs.

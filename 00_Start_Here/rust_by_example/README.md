@@ -39,4 +39,5 @@ So: not a course. A dictionary you happen to be able to run.
 
 - [The Book](../the_book/README.md) — the argument RBE deliberately leaves out
 - [rustlings](../rustlings/README.md) — the reps
+- [Rust by Example, page by page](../../RUST_BY_EXAMPLE.md) — RBE's 24 chapters mapped onto the lessons here, chapter by chapter, with the gaps named
 - [cheats.rs ↗](https://cheats.rs/) — even faster lookup once you know what you are looking for, and much denser
