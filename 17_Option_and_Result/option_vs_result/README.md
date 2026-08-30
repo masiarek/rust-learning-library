@@ -355,6 +355,18 @@ rustc --edition 2024 17_Option_and_Result/option_vs_result/examples/option_vs_re
 
 ---
 
+## The same methods, as a picture
+
+The cheat sheet below is a table because tables are searchable. But the same information has a *shape*, and the shape is worth one slow look — each box is a type, each label is a method that moves between types, and the two blue boxes in the middle are `Result<T, E>` and `Option<T>`.
+
+<img src="../../img/option_result_transformations_effective_rust.png"
+     alt="Directed graph of the conversions between Option and Result. T, E and the never type sit across the top; Result&lt;T, E&gt; and Option&lt;T&gt; in the middle; arrows labelled with method names - ok, err, ok_or[_else], unwrap, expect, unwrap_or[_else], unwrap_or_default, unwrap_err, expect_err, map, and[_then], map_err, map_or[_else], or[_else], filter, xor, replace - connect them to each other and to Result&lt;T, F&gt;, Result&lt;U, E&gt;, U and Option&lt;U&gt; along the bottom."
+     width="900">
+
+*Figure 1-1, "`Option` and `Result` transformations", from [Effective Rust ↗](https://effective-rust.com/transform.html) by David Drysdale, © 2024 Galloglass Consulting Limited. Reproduced unmodified under [CC BY-NC-ND 4.0 ↗](https://creativecommons.org/licenses/by-nc-nd/4.0/); [original drawing ↗](https://docs.google.com/drawings/d/1EOPs0YTONo_FygWbuJGPfikO9Myt5HwtiFUHRuE1JVM/preview).*
+
+Two things the picture shows that the table cannot. **The crossing is narrow:** only two arrows run directly between the two middle boxes — `ok` going down to `Option<T>`, `ok_or[_else]` coming back up — and the third door, `err`, does not land there at all: it peels the error off into an `Option<E>` over on the left. That is Step 6 drawn rather than described. **And the panicking methods are not a separate family:** the red `unwrap` and `expect` share a box with `unwrap_or[_else]` and `unwrap_or_default`, because everything in that box arrives at the same `T`. The only difference is what they do on the sad arm, which is exactly the choice the traps below are about.
+
 ## Cheat sheet
 
 Same row = same idea on both types.

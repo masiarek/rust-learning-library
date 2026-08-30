@@ -127,6 +127,8 @@ And one page about a claim you will read elsewhere: [Shadowing and `unwrap`](17_
 | [The `Result` you are reading is probably an alias](17_Option_and_Result/result_aliases/README.md) | 201 | `io::Result<T>` is `Result<T, io::Error>` — how to expand one and read what can fail |
 | [Six kinds of zero](17_Option_and_Result/six_kinds_of_zero/README.md) | 201 | Two variants are not enough either: when a value can be missing for six different reasons, the enum you write instead makes the compiler keep them apart |
 
+The two types also share most of their method surface, and [`Option` vs `Result`](17_Option_and_Result/option_vs_result/README.md) carries a diagram of the whole of it — every conversion between `T`, `E`, `Option<T>` and `Result<T, E>` on one page. It is the fastest way to see that the crossing is only three methods wide: `ok` down to `Option<T>` and `err` down to `Option<E>`, with `ok_or[_else]` the one way back up.
+
 Past that point the topic is no longer `Option`: how a failure travels out of a program is [Errors](02_Errors/README.md), whose pages are stubs for now.
 
 ## The eight jobs the standard library says it does

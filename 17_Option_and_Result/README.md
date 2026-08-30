@@ -6,6 +6,16 @@ Neither type is built into the language. Both are enums anyone could have writte
 
 The bulk of the section is the middle ground between `match` and `.unwrap()`. There are a dozen small methods that each answer one question — what if it is missing, what if I want to transform it, what if building the fallback is expensive — and choosing among them is most of what fluency in Rust looks like from the outside.
 
+Those methods have a shape, and it is worth seeing once before you start — nothing below assumes you already know it. Every box is a type, every label is a method that moves you between types, and the two blue boxes in the middle are the pair this section is about:
+
+<img src="../img/option_result_transformations_effective_rust.png"
+     alt="Directed graph of the conversions between Option and Result. T, E and the never type sit across the top; Result&lt;T, E&gt; and Option&lt;T&gt; in the middle; arrows labelled with method names - ok, err, ok_or[_else], unwrap, expect, unwrap_or[_else], unwrap_or_default, unwrap_err, expect_err, map, and[_then], map_err, map_or[_else], or[_else], filter, xor, replace - connect them to each other and to Result&lt;T, F&gt;, Result&lt;U, E&gt;, U and Option&lt;U&gt; along the bottom."
+     width="900">
+
+*Figure 1-1, "`Option` and `Result` transformations", from [Effective Rust ↗](https://effective-rust.com/transform.html) by David Drysdale, © 2024 Galloglass Consulting Limited. Reproduced unmodified under [CC BY-NC-ND 4.0 ↗](https://creativecommons.org/licenses/by-nc-nd/4.0/); [original drawing ↗](https://docs.google.com/drawings/d/1EOPs0YTONo_FygWbuJGPfikO9Myt5HwtiFUHRuE1JVM/preview).*
+
+Red marks the four that can panic. Notice where they land: `unwrap` and `expect` reach `T` through the same box as `unwrap_or[_else]` and `unwrap_or_default`, which reach that identical `T` without ever aborting. Same destination, different answer on the sad arm — and choosing between those two behaviours is most of what the pages below are teaching.
+
 | Lesson | Level | What it teaches |
 |---|---|---|
 | [`Some` and `None`](some_and_none/README.md) | 101 | The enum itself: two shapes, one exhaustive `match`, and why `Some(0)` is not `None` |
