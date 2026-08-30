@@ -84,45 +84,54 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K64 | [An empty field is data — parse `"5,,0"` into abstentions, then watch `split_whitespace()` shorten the row](14_Strings/walking_a_string/README.md#practice) | [Walking a `String`](14_Strings/walking_a_string/README.md) | 101 → 201 |
 | K65 | [Return a label three ways — read the `E0515`, then match, leak, or own it, and say which one leaks in a loop](14_Strings/static_str/README.md#practice) | [`&'static str`](14_Strings/static_str/README.md) | 201 |
 | K66 | [Three arrivals, three types — then break the UTF-8 promise and the NUL promise on purpose, and read both refusals](14_Strings/six_kinds_of_string/README.md#practice) | [Six kinds of string](14_Strings/six_kinds_of_string/README.md) | 201 |
-| K67 | [Build the same choice twice — a hand-maintained tag beside a union, then an `enum`, and the desync only one of them can have](09_Advanced/what_a_union_is/README.md#practice) | [What a union is](09_Advanced/what_a_union_is/README.md) | 301 |
-| K68 | [Seven errors, five root causes, three edits — group them by cause before changing a line](16_Structs/when_a_struct_refuses/README.md#practice) | [When a struct refuses](16_Structs/when_a_struct_refuses/README.md) | 101 → 201 |
-| K69 | [Both `dbg!` traps — the alternate flag a hand-written `Debug` ignores, and the move that costs you the value](15_First_Programs/what_dbg_does/README.md#practice) | [What `dbg!` does](15_First_Programs/what_dbg_does/README.md) | 101 → 201 |
-| K70 | [Four spellings, four error codes — and the one that compiles into the wrong thing](16_Structs/a_type_is_not_a_constructor/README.md#practice) | [A type is not a constructor](16_Structs/a_type_is_not_a_constructor/README.md) | 101 → 201 |
-| K71 | [Seed it, prove it, measure the modulo bias, then remove it — counted over the whole output space, never sampled](15_First_Programs/randomness/README.md#practice) | [Randomness](15_First_Programs/randomness/README.md) | 101 → 201 |
-| K72 | [Which defence catches a silent catch-all — two lints denied, a variant added, and only one of the three edits does anything](13_Enums/a_typo_becomes_a_binding/README.md#practice) | [A typo becomes a binding](13_Enums/a_typo_becomes_a_binding/README.md) | 201 |
-| K73 | [Pay only when you have to — `ensure_prefix` returning `Cow`, then prove the untouched rows were never copied](18_Ownership/clone_on_write/README.md#practice) | [`Cow`: borrow until somebody writes](18_Ownership/clone_on_write/README.md) | 201 |
-| K74 | [Make the sum land on the number you would have typed — eight tenths, two groupings, and the one assertion that survives either](19_Numbers/letting_the_compiler_reorder/README.md#practice) | [Letting the compiler reorder a float sum](19_Numbers/letting_the_compiler_reorder/README.md) | 201 → 301 |
-| K75 | [Let the source pick the spelling — six things converted to a `String`, and which of the five you were entitled to use](14_Strings/making_a_string/README.md#practice) | [Making a `String`](14_Strings/making_a_string/README.md) | 101 → 201 |
-| K76 | [Predict the owned twin before you run it — six receivers, and the two everybody gets wrong](12_Traits/to_owned/README.md#practice) | [`ToOwned`](12_Traits/to_owned/README.md) | 201 |
-| K77 | [Predict, then count — one line of output built four ways, and what `with_capacity` buys when the number is one byte short](09_Advanced/the_global_allocator/README.md#practice) | [The global allocator](09_Advanced/the_global_allocator/README.md) | 301 |
-| K78 | [Four loops that all look like reuse — predict the allocation count for each, then count them](12_Traits/clone_into/README.md#practice) | [`clone_into`](12_Traits/clone_into/README.md) | 201 → 301 |
-| K79 | [A container with two holes — write `Pair<A, B>`, and work out why `swap` cannot return `Self`](22_Generics/what_a_generic_is/README.md#practice) | [What a generic is](22_Generics/what_a_generic_is/README.md) | 101 → 201 |
-| K80 | [Walk a linked list without recursion — and without moving or cloning anything on the way](22_Generics/a_generic_recursive_type/README.md#practice) | [A generic recursive type](22_Generics/a_generic_recursive_type/README.md) | 201 → 301 |
-| K81 | [Predict the count four times, then find the edge that leaks — one roster shared by three tallies, a deep clone that changes none of the numbers, and a back-reference that stops `Drop` from running](18_Ownership/reference_counting/README.md#practice) | [`Rc`: the clone that copies a pointer](18_Ownership/reference_counting/README.md) | 201 |
-| K82 | [Predict the closure-call count, then count it — seven chains over six scores, and the three that stop early for three different reasons](24_Iterators/iterators_are_lazy/README.md#practice) | [Iterators are lazy](24_Iterators/iterators_are_lazy/README.md) | 201 |
-| K83 | [Three refusals, three fixes, and the one you can delete — an `Rc` in a `spawn`, a push through a shared `Arc`, a missing per-thread clone, and the total you cannot print](18_Ownership/sharing_across_threads/README.md#practice) | [Sharing across threads: `Arc`](18_Ownership/sharing_across_threads/README.md) | 201 |
-| K84 | [Four fields, and the transposition that compiles — total a ballot two ways, then swap two fields and construct the version rustc cannot catch](26_Collections/tuples/README.md#practice) | [Tuples](26_Collections/tuples/README.md) | 101 |
-| K85 | [One function, four callers — write `average` twice, find the three calls the fixed-length signature turns away, and the `0 / 0` that neither panics nor stops](26_Collections/arrays_and_slices/README.md#practice) | [Arrays and slices](26_Collections/arrays_and_slices/README.md) | 101 → 201 |
-| K86 | [Count the reallocations, then delete them — a hundred pushes three ways, and the elements each one copied](26_Collections/the_vec/README.md#practice) | [`Vec`](26_Collections/the_vec/README.md) | 101 → 201 |
-| K87 | [Four ways to count, and the two that are wrong — one reports 2 for a candidate who scored 11, the other is merely three lookups per ballot](26_Collections/the_hashmap/README.md#practice) | [`HashMap`](26_Collections/the_hashmap/README.md) | 101 → 201 |
-| K88 | [Who voted twice, who never voted — two answers from one operation with its arguments swapped, and the turnout formula that counts a stranger](26_Collections/the_hashset/README.md#practice) | [`HashSet`](26_Collections/the_hashset/README.md) | 201 |
-| K89 | [Two walks and a drop order — the same boxed list recursively and with a cursor, then the error rustc gives when the `Box` comes out](26_Collections/the_box/README.md#practice) | [`Box`](26_Collections/the_box/README.md) | 201 |
-| K90 | [Three conversions, one the compiler forbids — the orphan rule in its own words, and the `impl Into<T>` argument that also accepts the type it converts to](29_Conversion/from_and_into/README.md#practice) | [`From` and `Into`](29_Conversion/from_and_into/README.md) | 201 |
-| K91 | [A ballot line parsed twice — one parser names the bad cell, the other returns a plausible ballot with a 9 on a 0-5 scale](29_Conversion/tryfrom_and_tryinto/README.md#practice) | [`TryFrom` and `TryInto`](29_Conversion/tryfrom_and_tryinto/README.md) | 201 |
-| K92 | [Four silent losses — the turnout that rounds to zero, the guard a negative index walks through, and the three named adds](29_Conversion/casting_with_as/README.md#practice) | [Casting with `as`](29_Conversion/casting_with_as/README.md) | 201 |
-| K93 | [The door your own module left open — three versions of one newtype, two of which let a caller build an invalid score](27_Modules/modules_and_visibility/README.md#practice) | [Modules and visibility](27_Modules/modules_and_visibility/README.md) | 201 |
-| K94 | [Two traits called `Write`, and a glob that shadows — predict which line the ambiguity error lands on](27_Modules/the_use_declaration/README.md#practice) | [Bringing names in with `use`](27_Modules/the_use_declaration/README.md) | 101 → 201 |
-| K95 | [Five paths to one function — `super`, `crate`, `self` and a sibling, then the fifth file that compiles and never runs](27_Modules/one_module_per_file/README.md#practice) | [One module per file](27_Modules/one_module_per_file/README.md) | 201 |
-| K96 | [The address you may not rely on — two pointer comparisons that agree, only one of which is a promise](27_Modules/const_and_static/README.md#practice) | [`const` and `static`](27_Modules/const_and_static/README.md) | 201 |
-| K97 | [The derive that changed behaviour when a field moved — one cosmetic diff, and every sort over the type reversed](27_Modules/what_an_attribute_is/README.md#practice) | [What an attribute is](27_Modules/what_an_attribute_is/README.md) | 201 |
-| K98 | [Five assertions, two of which cannot fail — say what would have to break before each one noticed](28_Testing/what_a_test_asserts/README.md#practice) | [What a test asserts](28_Testing/what_a_test_asserts/README.md) | 201 |
-| K99 | [The test that could not see it — a private helper, and a `should_panic` that goes green on the wrong panic](28_Testing/where_a_test_goes/README.md#practice) | [Where a test goes](28_Testing/where_a_test_goes/README.md) | 201 |
-| K100 | [The example that documents half the sentence — then a third case the doc comment never promised at all](28_Testing/doc_tests/README.md#practice) | [The example that is a test](28_Testing/doc_tests/README.md) | 201 |
-| K101 | [Four impls for one `*`, and an operator that should not exist — then three plausible readings of adding two turnout figures](12_Traits/operators_are_traits/README.md#practice) | [Operators are traits](12_Traits/operators_are_traits/README.md) | 201 |
-| K102 | [Three drop orders, and the guard released one line early — two of the orders are opposites, and one binding is a bug](12_Traits/drop_and_raii/README.md#practice) | [`Drop`, and what RAII buys](12_Traits/drop_and_raii/README.md) | 201 |
-| K103 | [The same fan-out three ways — sequential, `spawn` plus `Arc`, and `scope`, then the E0373 that explains why the middle one exists](09_Advanced/spawning_a_thread/README.md#practice) | [Spawning a thread](09_Advanced/spawning_a_thread/README.md) | 201 → 301 |
-| K104 | [A three-stage pipeline, and the drop that ends it — then reproduce the classic mpsc hang without hanging](09_Advanced/channels/README.md#practice) | [Channels](09_Advanced/channels/README.md) | 201 → 301 |
-| K105 | [The safe line the unsafe block depends on — write `split_at_mut`, delete its assert, then find the ordinary `pub fn` that makes an unchecked read unsound](09_Advanced/what_unsafe_turns_off/README.md#practice) | [What `unsafe` turns off](09_Advanced/what_unsafe_turns_off/README.md) | 301 |
+| K67 | [Pivot both ways, then earn `E0106` and `E0515` — a borrowed field, an owned rewrite, and a `Cow` that allocates only when the text changes](14_Strings/string_vs_str/README.md#practice) | [`String` vs `&str`](14_Strings/string_vs_str/README.md) | 101 → 201 |
+| K68 | [Slice up to a boundary, then straight through one — `is_char_boundary` by hand against `floor_char_boundary`, the panic message in full, and an `Option` where a crash was](14_Strings/string_slices/README.md#practice) | [String slices](14_Strings/string_slices/README.md) | 201 |
+| K69 | [Four arrivals and one pre-payment — a capacity that does not move, a `parse` that does not trim, and the bytes that turned out not to be UTF-8](14_Strings/making_a_string/README.md#practice) | [Making a `String`](14_Strings/making_a_string/README.md) | 101 → 201 |
+| K70 | [Five edits, one buffer — `retain`, an insert at the middle character rather than the middle byte, `drain`, the `+` that eats its left operand, and `pop`](14_Strings/building_a_string/README.md#practice) | [Building a `String`](14_Strings/building_a_string/README.md) | 101 → 201 |
+| K71 | [Run-length encoding both ways — then the run past nine, the input with a digit in it, and the string that comes out bigger](14_Strings/building_a_string/README.md#practice) | [Building a `String`](14_Strings/building_a_string/README.md) | 201 |
+| K72 | [Case, whitespace, and `STARVoting` — a converter pair that is not a round trip, ASCII-only case swapping, and `'ß'` as the reason both families exist](14_Strings/meet_the_char/README.md#practice) | [Meet the `char`](14_Strings/meet_the_char/README.md) | 201 |
+| K73 | [The third ruler — reverse `café` and lose the accent, count a family emoji as seven, then write the grouper and name what it still cannot do](14_Strings/meet_the_char/README.md#practice) | [Meet the `char`](14_Strings/meet_the_char/README.md) | 201 → 301 |
+| K74 | [Two rulers over one string — `len()` against `chars().count()`, and the two indices that agree until the crab](14_Strings/walking_a_string/README.md#practice) | [Walking a `String`](14_Strings/walking_a_string/README.md) | 101 → 201 |
+| K75 | [Six searches, and the two that want a regex — palindromes, fields, offsets, every match, then what your hand-rolled email finder gets wrong](14_Strings/walking_a_string/README.md#practice) | [Walking a `String`](14_Strings/walking_a_string/README.md) | 101 → 201 |
+| K76 | [Build the same choice twice — a hand-maintained tag beside a union, then an `enum`, and the desync only one of them can have](09_Advanced/what_a_union_is/README.md#practice) | [What a union is](09_Advanced/what_a_union_is/README.md) | 301 |
+| K77 | [Seven errors, five root causes, three edits — group them by cause before changing a line](16_Structs/when_a_struct_refuses/README.md#practice) | [When a struct refuses](16_Structs/when_a_struct_refuses/README.md) | 101 → 201 |
+| K78 | [Both `dbg!` traps — the alternate flag a hand-written `Debug` ignores, and the move that costs you the value](15_First_Programs/what_dbg_does/README.md#practice) | [What `dbg!` does](15_First_Programs/what_dbg_does/README.md) | 101 → 201 |
+| K79 | [Four spellings, four error codes — and the one that compiles into the wrong thing](16_Structs/a_type_is_not_a_constructor/README.md#practice) | [A type is not a constructor](16_Structs/a_type_is_not_a_constructor/README.md) | 101 → 201 |
+| K80 | [Seed it, prove it, measure the modulo bias, then remove it — counted over the whole output space, never sampled](15_First_Programs/randomness/README.md#practice) | [Randomness](15_First_Programs/randomness/README.md) | 101 → 201 |
+| K81 | [Which defence catches a silent catch-all — two lints denied, a variant added, and only one of the three edits does anything](13_Enums/a_typo_becomes_a_binding/README.md#practice) | [A typo becomes a binding](13_Enums/a_typo_becomes_a_binding/README.md) | 201 |
+| K82 | [Pay only when you have to — `ensure_prefix` returning `Cow`, then prove the untouched rows were never copied](18_Ownership/clone_on_write/README.md#practice) | [`Cow`: borrow until somebody writes](18_Ownership/clone_on_write/README.md) | 201 |
+| K83 | [Make the sum land on the number you would have typed — eight tenths, two groupings, and the one assertion that survives either](19_Numbers/letting_the_compiler_reorder/README.md#practice) | [Letting the compiler reorder a float sum](19_Numbers/letting_the_compiler_reorder/README.md) | 201 → 301 |
+| K84 | [Let the source pick the spelling — six things converted to a `String`, and which of the five you were entitled to use](14_Strings/making_a_string/README.md#practice) | [Making a `String`](14_Strings/making_a_string/README.md) | 101 → 201 |
+| K85 | [Predict the owned twin before you run it — six receivers, and the two everybody gets wrong](12_Traits/to_owned/README.md#practice) | [`ToOwned`](12_Traits/to_owned/README.md) | 201 |
+| K86 | [Predict, then count — one line of output built four ways, and what `with_capacity` buys when the number is one byte short](09_Advanced/the_global_allocator/README.md#practice) | [The global allocator](09_Advanced/the_global_allocator/README.md) | 301 |
+| K87 | [Four loops that all look like reuse — predict the allocation count for each, then count them](12_Traits/clone_into/README.md#practice) | [`clone_into`](12_Traits/clone_into/README.md) | 201 → 301 |
+| K88 | [A container with two holes — write `Pair<A, B>`, and work out why `swap` cannot return `Self`](22_Generics/what_a_generic_is/README.md#practice) | [What a generic is](22_Generics/what_a_generic_is/README.md) | 101 → 201 |
+| K89 | [Walk a linked list without recursion — and without moving or cloning anything on the way](22_Generics/a_generic_recursive_type/README.md#practice) | [A generic recursive type](22_Generics/a_generic_recursive_type/README.md) | 201 → 301 |
+| K90 | [Predict the count four times, then find the edge that leaks — one roster shared by three tallies, a deep clone that changes none of the numbers, and a back-reference that stops `Drop` from running](18_Ownership/reference_counting/README.md#practice) | [`Rc`: the clone that copies a pointer](18_Ownership/reference_counting/README.md) | 201 |
+| K91 | [Predict the closure-call count, then count it — seven chains over six scores, and the three that stop early for three different reasons](24_Iterators/iterators_are_lazy/README.md#practice) | [Iterators are lazy](24_Iterators/iterators_are_lazy/README.md) | 201 |
+| K92 | [Three refusals, three fixes, and the one you can delete — an `Rc` in a `spawn`, a push through a shared `Arc`, a missing per-thread clone, and the total you cannot print](18_Ownership/sharing_across_threads/README.md#practice) | [Sharing across threads: `Arc`](18_Ownership/sharing_across_threads/README.md) | 201 |
+| K93 | [Four fields, and the transposition that compiles — total a ballot two ways, then swap two fields and construct the version rustc cannot catch](26_Collections/tuples/README.md#practice) | [Tuples](26_Collections/tuples/README.md) | 101 |
+| K94 | [One function, four callers — write `average` twice, find the three calls the fixed-length signature turns away, and the `0 / 0` that neither panics nor stops](26_Collections/arrays_and_slices/README.md#practice) | [Arrays and slices](26_Collections/arrays_and_slices/README.md) | 101 → 201 |
+| K95 | [Count the reallocations, then delete them — a hundred pushes three ways, and the elements each one copied](26_Collections/the_vec/README.md#practice) | [`Vec`](26_Collections/the_vec/README.md) | 101 → 201 |
+| K96 | [Four ways to count, and the two that are wrong — one reports 2 for a candidate who scored 11, the other is merely three lookups per ballot](26_Collections/the_hashmap/README.md#practice) | [`HashMap`](26_Collections/the_hashmap/README.md) | 101 → 201 |
+| K97 | [Who voted twice, who never voted — two answers from one operation with its arguments swapped, and the turnout formula that counts a stranger](26_Collections/the_hashset/README.md#practice) | [`HashSet`](26_Collections/the_hashset/README.md) | 201 |
+| K98 | [Two walks and a drop order — the same boxed list recursively and with a cursor, then the error rustc gives when the `Box` comes out](26_Collections/the_box/README.md#practice) | [`Box`](26_Collections/the_box/README.md) | 201 |
+| K99 | [Three conversions, one the compiler forbids — the orphan rule in its own words, and the `impl Into<T>` argument that also accepts the type it converts to](29_Conversion/from_and_into/README.md#practice) | [`From` and `Into`](29_Conversion/from_and_into/README.md) | 201 |
+| K100 | [A ballot line parsed twice — one parser names the bad cell, the other returns a plausible ballot with a 9 on a 0-5 scale](29_Conversion/tryfrom_and_tryinto/README.md#practice) | [`TryFrom` and `TryInto`](29_Conversion/tryfrom_and_tryinto/README.md) | 201 |
+| K101 | [Four silent losses — the turnout that rounds to zero, the guard a negative index walks through, and the three named adds](29_Conversion/casting_with_as/README.md#practice) | [Casting with `as`](29_Conversion/casting_with_as/README.md) | 201 |
+| K102 | [The door your own module left open — three versions of one newtype, two of which let a caller build an invalid score](27_Modules/modules_and_visibility/README.md#practice) | [Modules and visibility](27_Modules/modules_and_visibility/README.md) | 201 |
+| K103 | [Two traits called `Write`, and a glob that shadows — predict which line the ambiguity error lands on](27_Modules/the_use_declaration/README.md#practice) | [Bringing names in with `use`](27_Modules/the_use_declaration/README.md) | 101 → 201 |
+| K104 | [Five paths to one function — `super`, `crate`, `self` and a sibling, then the fifth file that compiles and never runs](27_Modules/one_module_per_file/README.md#practice) | [One module per file](27_Modules/one_module_per_file/README.md) | 201 |
+| K105 | [The address you may not rely on — two pointer comparisons that agree, only one of which is a promise](27_Modules/const_and_static/README.md#practice) | [`const` and `static`](27_Modules/const_and_static/README.md) | 201 |
+| K106 | [The derive that changed behaviour when a field moved — one cosmetic diff, and every sort over the type reversed](27_Modules/what_an_attribute_is/README.md#practice) | [What an attribute is](27_Modules/what_an_attribute_is/README.md) | 201 |
+| K107 | [Five assertions, two of which cannot fail — say what would have to break before each one noticed](28_Testing/what_a_test_asserts/README.md#practice) | [What a test asserts](28_Testing/what_a_test_asserts/README.md) | 201 |
+| K108 | [The test that could not see it — a private helper, and a `should_panic` that goes green on the wrong panic](28_Testing/where_a_test_goes/README.md#practice) | [Where a test goes](28_Testing/where_a_test_goes/README.md) | 201 |
+| K109 | [The example that documents half the sentence — then a third case the doc comment never promised at all](28_Testing/doc_tests/README.md#practice) | [The example that is a test](28_Testing/doc_tests/README.md) | 201 |
+| K110 | [Four impls for one `*`, and an operator that should not exist — then three plausible readings of adding two turnout figures](12_Traits/operators_are_traits/README.md#practice) | [Operators are traits](12_Traits/operators_are_traits/README.md) | 201 |
+| K111 | [Three drop orders, and the guard released one line early — two of the orders are opposites, and one binding is a bug](12_Traits/drop_and_raii/README.md#practice) | [`Drop`, and what RAII buys](12_Traits/drop_and_raii/README.md) | 201 |
+| K112 | [The same fan-out three ways — sequential, `spawn` plus `Arc`, and `scope`, then the E0373 that explains why the middle one exists](09_Advanced/spawning_a_thread/README.md#practice) | [Spawning a thread](09_Advanced/spawning_a_thread/README.md) | 201 → 301 |
+| K113 | [A three-stage pipeline, and the drop that ends it — then reproduce the classic mpsc hang without hanging](09_Advanced/channels/README.md#practice) | [Channels](09_Advanced/channels/README.md) | 201 → 301 |
+| K114 | [The safe line the unsafe block depends on — write `split_at_mut`, delete its assert, then find the ordinary `pub fn` that makes an unchecked read unsound](09_Advanced/what_unsafe_turns_off/README.md#practice) | [What `unsafe` turns off](09_Advanced/what_unsafe_turns_off/README.md) | 301 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -144,8 +153,8 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K47 · [The error message nobody saw](15_First_Programs/debug_vs_display/README.md#practice)
 - K48 · [The semicolon that changed the type](15_First_Programs/a_block_is_an_expression/README.md#practice)
 - K49 · [The f-string that isn't](15_First_Programs/braces_take_a_name/README.md#practice)
-- K69 · [Both `dbg!` traps](15_First_Programs/what_dbg_does/README.md#practice)
-- K71 · [Seed it, prove it, measure the modulo bias, then remove it](15_First_Programs/randomness/README.md#practice)
+- K78 · [Both `dbg!` traps](15_First_Programs/what_dbg_does/README.md#practice)
+- K80 · [Seed it, prove it, measure the modulo bias, then remove it](15_First_Programs/randomness/README.md#practice)
 
 **[`Option` and `Result`](17_Option_and_Result/README.md)** — 23 katas
 
@@ -182,9 +191,9 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K16 · [Three shadows, one of them earned](18_Ownership/when_to_shadow/README.md#practice)
 - K17 · [The tally that never tallied](18_Ownership/nothing_checks_a_shadow/README.md#practice)
 - K18 · [Time three things you cannot see](18_Ownership/scope_is_about_names/README.md#practice)
-- K73 · [Pay only when you have to](18_Ownership/clone_on_write/README.md#practice)
-- K81 · [Predict the count four times, then find the edge that leaks](18_Ownership/reference_counting/README.md#practice)
-- K83 · [Three refusals, three fixes, and the one you can delete](18_Ownership/sharing_across_threads/README.md#practice)
+- K82 · [Pay only when you have to](18_Ownership/clone_on_write/README.md#practice)
+- K90 · [Predict the count four times, then find the edge that leaks](18_Ownership/reference_counting/README.md#practice)
+- K92 · [Three refusals, three fixes, and the one you can delete](18_Ownership/sharing_across_threads/README.md#practice)
 
 **[Errors](02_Errors/README.md)** — 1 kata
 
@@ -198,8 +207,8 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K54 · [Pick the right receiver four times](16_Structs/impl_blocks/README.md#practice)
 - K55 · [Predict which half of the base survives a `..base`](16_Structs/struct_update/README.md#practice)
 - K56 · [One `E0382`, three fixes, and the `String` field that removes one of them](16_Structs/copy_vs_clone/README.md#practice)
-- K68 · [Seven errors, five root causes, three edits](16_Structs/when_a_struct_refuses/README.md#practice)
-- K70 · [Four spellings, four error codes](16_Structs/a_type_is_not_a_constructor/README.md#practice)
+- K77 · [Seven errors, five root causes, three edits](16_Structs/when_a_struct_refuses/README.md#practice)
+- K79 · [Four spellings, four error codes](16_Structs/a_type_is_not_a_constructor/README.md#practice)
 
 **[Advanced](09_Advanced/README.md)** — 11 katas
 
@@ -209,11 +218,11 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K44 · [The average that came out as a three-way tie](09_Advanced/i128_exactness/README.md#practice)
 - K45 · [Build the count that always finishes](09_Advanced/compounding_weights/README.md#practice)
 - K46 · [The audit that has to know when to stop](09_Advanced/interval_arithmetic/README.md#practice)
-- K67 · [Build the same choice twice](09_Advanced/what_a_union_is/README.md#practice)
-- K77 · [Predict, then count](09_Advanced/the_global_allocator/README.md#practice)
-- K103 · [The same fan-out three ways](09_Advanced/spawning_a_thread/README.md#practice)
-- K104 · [A three-stage pipeline, and the drop that ends it](09_Advanced/channels/README.md#practice)
-- K105 · [The safe line the unsafe block depends on](09_Advanced/what_unsafe_turns_off/README.md#practice)
+- K76 · [Build the same choice twice](09_Advanced/what_a_union_is/README.md#practice)
+- K86 · [Predict, then count](09_Advanced/the_global_allocator/README.md#practice)
+- K112 · [The same fan-out three ways](09_Advanced/spawning_a_thread/README.md#practice)
+- K113 · [A three-stage pipeline, and the drop that ends it](09_Advanced/channels/README.md#practice)
+- K114 · [The safe line the unsafe block depends on](09_Advanced/what_unsafe_turns_off/README.md#practice)
 
 **[Tooling](05_Tooling/README.md)** — 2 katas
 
@@ -226,9 +235,9 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K39 · [The fingerprint that collided](19_Numbers/why_hexadecimal/README.md#practice)
 - K40 · [A tic-tac-toe game in 18 bits](19_Numbers/bit_flags/README.md#practice)
 - K41 · [The results table that would not sort](19_Numbers/what_a_float_stores/README.md#practice)
-- K74 · [Make the sum land on the number you would have typed](19_Numbers/letting_the_compiler_reorder/README.md#practice)
+- K83 · [Make the sum land on the number you would have typed](19_Numbers/letting_the_compiler_reorder/README.md#practice)
 
-**[Strings](14_Strings/README.md)** — 11 katas
+**[Strings](14_Strings/README.md)** — 20 katas
 
 - K57 · [One `&str` parameter, three callers](14_Strings/string_vs_str/README.md#practice)
 - K58 · [Cut a name in half without panicking](14_Strings/string_slices/README.md#practice)
@@ -240,56 +249,65 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K64 · [An empty field is data](14_Strings/walking_a_string/README.md#practice)
 - K65 · [Return a label three ways](14_Strings/static_str/README.md#practice)
 - K66 · [Three arrivals, three types](14_Strings/six_kinds_of_string/README.md#practice)
-- K75 · [Let the source pick the spelling](14_Strings/making_a_string/README.md#practice)
+- K67 · [Pivot both ways, then earn `E0106` and `E0515`](14_Strings/string_vs_str/README.md#practice)
+- K68 · [Slice up to a boundary, then straight through one](14_Strings/string_slices/README.md#practice)
+- K69 · [Four arrivals and one pre-payment](14_Strings/making_a_string/README.md#practice)
+- K70 · [Five edits, one buffer](14_Strings/building_a_string/README.md#practice)
+- K71 · [Run-length encoding both ways](14_Strings/building_a_string/README.md#practice)
+- K72 · [Case, whitespace, and `STARVoting`](14_Strings/meet_the_char/README.md#practice)
+- K73 · [The third ruler](14_Strings/meet_the_char/README.md#practice)
+- K74 · [Two rulers over one string](14_Strings/walking_a_string/README.md#practice)
+- K75 · [Six searches, and the two that want a regex](14_Strings/walking_a_string/README.md#practice)
+- K84 · [Let the source pick the spelling](14_Strings/making_a_string/README.md#practice)
 
 **[Enums](13_Enums/README.md)** — 1 kata
 
-- K72 · [Which defence catches a silent catch-all](13_Enums/a_typo_becomes_a_binding/README.md#practice)
+- K81 · [Which defence catches a silent catch-all](13_Enums/a_typo_becomes_a_binding/README.md#practice)
 
 **[Traits](12_Traits/README.md)** — 4 katas
 
-- K76 · [Predict the owned twin before you run it](12_Traits/to_owned/README.md#practice)
-- K78 · [Four loops that all look like reuse](12_Traits/clone_into/README.md#practice)
-- K101 · [Four impls for one `*`, and an operator that should not exist](12_Traits/operators_are_traits/README.md#practice)
-- K102 · [Three drop orders, and the guard released one line early](12_Traits/drop_and_raii/README.md#practice)
+- K85 · [Predict the owned twin before you run it](12_Traits/to_owned/README.md#practice)
+- K87 · [Four loops that all look like reuse](12_Traits/clone_into/README.md#practice)
+- K110 · [Four impls for one `*`, and an operator that should not exist](12_Traits/operators_are_traits/README.md#practice)
+- K111 · [Three drop orders, and the guard released one line early](12_Traits/drop_and_raii/README.md#practice)
 
 **[Generics](22_Generics/README.md)** — 2 katas
 
-- K79 · [A container with two holes](22_Generics/what_a_generic_is/README.md#practice)
-- K80 · [Walk a linked list without recursion](22_Generics/a_generic_recursive_type/README.md#practice)
+- K88 · [A container with two holes](22_Generics/what_a_generic_is/README.md#practice)
+- K89 · [Walk a linked list without recursion](22_Generics/a_generic_recursive_type/README.md#practice)
 
 **[Iterators](24_Iterators/README.md)** — 1 kata
 
-- K82 · [Predict the closure-call count, then count it](24_Iterators/iterators_are_lazy/README.md#practice)
+- K91 · [Predict the closure-call count, then count it](24_Iterators/iterators_are_lazy/README.md#practice)
 
 **[Collections](26_Collections/README.md)** — 6 katas
 
-- K84 · [Four fields, and the transposition that compiles](26_Collections/tuples/README.md#practice)
-- K85 · [One function, four callers](26_Collections/arrays_and_slices/README.md#practice)
-- K86 · [Count the reallocations, then delete them](26_Collections/the_vec/README.md#practice)
-- K87 · [Four ways to count, and the two that are wrong](26_Collections/the_hashmap/README.md#practice)
-- K88 · [Who voted twice, who never voted](26_Collections/the_hashset/README.md#practice)
-- K89 · [Two walks and a drop order](26_Collections/the_box/README.md#practice)
+- K93 · [Four fields, and the transposition that compiles](26_Collections/tuples/README.md#practice)
+- K94 · [One function, four callers](26_Collections/arrays_and_slices/README.md#practice)
+- K95 · [Count the reallocations, then delete them](26_Collections/the_vec/README.md#practice)
+- K96 · [Four ways to count, and the two that are wrong](26_Collections/the_hashmap/README.md#practice)
+- K97 · [Who voted twice, who never voted](26_Collections/the_hashset/README.md#practice)
+- K98 · [Two walks and a drop order](26_Collections/the_box/README.md#practice)
 
 **[Conversion](29_Conversion/README.md)** — 3 katas
 
-- K90 · [Three conversions, one the compiler forbids](29_Conversion/from_and_into/README.md#practice)
-- K91 · [A ballot line parsed twice](29_Conversion/tryfrom_and_tryinto/README.md#practice)
-- K92 · [Four silent losses](29_Conversion/casting_with_as/README.md#practice)
+- K99 · [Three conversions, one the compiler forbids](29_Conversion/from_and_into/README.md#practice)
+- K100 · [A ballot line parsed twice](29_Conversion/tryfrom_and_tryinto/README.md#practice)
+- K101 · [Four silent losses](29_Conversion/casting_with_as/README.md#practice)
 
 **[Modules](27_Modules/README.md)** — 5 katas
 
-- K93 · [The door your own module left open](27_Modules/modules_and_visibility/README.md#practice)
-- K94 · [Two traits called `Write`, and a glob that shadows](27_Modules/the_use_declaration/README.md#practice)
-- K95 · [Five paths to one function](27_Modules/one_module_per_file/README.md#practice)
-- K96 · [The address you may not rely on](27_Modules/const_and_static/README.md#practice)
-- K97 · [The derive that changed behaviour when a field moved](27_Modules/what_an_attribute_is/README.md#practice)
+- K102 · [The door your own module left open](27_Modules/modules_and_visibility/README.md#practice)
+- K103 · [Two traits called `Write`, and a glob that shadows](27_Modules/the_use_declaration/README.md#practice)
+- K104 · [Five paths to one function](27_Modules/one_module_per_file/README.md#practice)
+- K105 · [The address you may not rely on](27_Modules/const_and_static/README.md#practice)
+- K106 · [The derive that changed behaviour when a field moved](27_Modules/what_an_attribute_is/README.md#practice)
 
 **[Testing](28_Testing/README.md)** — 3 katas
 
-- K98 · [Five assertions, two of which cannot fail](28_Testing/what_a_test_asserts/README.md#practice)
-- K99 · [The test that could not see it](28_Testing/where_a_test_goes/README.md#practice)
-- K100 · [The example that documents half the sentence](28_Testing/doc_tests/README.md#practice)
+- K107 · [Five assertions, two of which cannot fail](28_Testing/what_a_test_asserts/README.md#practice)
+- K108 · [The test that could not see it](28_Testing/where_a_test_goes/README.md#practice)
+- K109 · [The example that documents half the sentence](28_Testing/doc_tests/README.md#practice)
 
 <!-- by-subject:end -->
 

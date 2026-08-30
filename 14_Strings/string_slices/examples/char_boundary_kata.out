@@ -1,0 +1,40 @@
+1. The safe slicer — back up to the last legal boundary
+   "こんにちは" is 15 bytes, 5 characters of 3 bytes each
+   n=0  floor 0  ->  ""
+   n=1  floor 0  ->  ""
+   n=2  floor 0  ->  ""
+   n=3  floor 3  ->  "こ"
+   n=4  floor 3  ->  "こ"
+   n=5  floor 3  ->  "こ"
+   n=6  floor 6  ->  "こん"
+   n=7  floor 6  ->  "こん"
+   n=8  floor 6  ->  "こん"
+   n=9  floor 9  ->  "こんに"
+   hand-rolled and std agree everywhere: true
+   n past the end is clamped, not a panic: "こんにちは"
+
+2. The panic trap — slice straight through a character
+   &jp[0..2] panics: end byte index 2 is not a char boundary; it is inside 'こ' (bytes 0..3 of string)
+   &jp[1..6] panics: start byte index 1 is not a char boundary; it is inside 'こ' (bytes 0..3 of string)
+   This is a runtime panic, not a compile error: the compiler knows
+   the type is a string, never which bytes are in it. Index arithmetic
+   on text is the one place strings stop protecting you.
+   (Caught with catch_unwind here only so the program can carry on.)
+
+3. The first three CHARACTERS
+   first_chars("こんにちは", 3) = "こんに"
+   first_chars("café ☕ time", 3) = "caf"
+   first_chars("ab", 3) = "ab"
+   first_chars("", 3) = ""
+   &s[..3] would have taken three BYTES instead: one character of
+   "こんにちは", and on "ab🦀" a panic — end byte index 3 is not a char boundary; it is inside '🦀' (bytes 2..6 of string)
+
+4. Ask before you split
+   at=0  Some(("", "こんにちは"))
+   at=3  Some(("こ", "んにちは"))
+   at=4  None   <- inside a character, or past the end
+   at=6  Some(("こん", "にちは"))
+   at=15 Some(("こんにちは", ""))
+   at=16 None   <- inside a character, or past the end
+   std has this too: split_at_checked(4) = None
+   and the unchecked split_at(4) would panic, exactly like the slice.

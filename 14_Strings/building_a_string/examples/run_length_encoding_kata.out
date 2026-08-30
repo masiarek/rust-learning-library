@@ -1,0 +1,41 @@
+1. Encoding
+   "AAABBBCCDAA"    -> "3A3B2C1D2A"
+   "AAAAAAAAAAAA"   -> "12A"
+   "ABCDEF"         -> "1A1B1C1D1E1F"
+   ""               -> ""
+   "🦀🦀🦀ss"          -> "3🦀2s"
+   Twelve As encode as "12A", not "9A3A" — which is the whole reason
+   the decoder cannot just read one digit.
+
+2. Decoding
+   "3A3B2C1D2A"   -> "AAABBBCCDAA"
+   "12A"          -> "AAAAAAAAAAAA"
+   "1A1B1C"       -> "ABC"
+   "A3B"          -> Err: character 'A' has no count in front of it
+   "3A2"          -> Err: input ended with the count "2" and no character
+   Malformed input is a Result, not a panic: a decoder is the half of
+   this pair that meets data it did not produce.
+
+3. The round trip
+   "AAABBBCCDAA"            -> "3A3B2C1D2A"             -> "AAABBBCCDAA"            round trip ok
+   "ABCDEF"                 -> "1A1B1C1D1E1F"           -> "ABCDEF"                 round trip ok
+   "🦀🦀🦀ss"                  -> "3🦀2s"                   -> "🦀🦀🦀ss"                  round trip ok
+   "Mississippi"            -> "1M1i2s1i2s1i2p1i"       -> "Mississippi"            round trip ok
+
+4. Where the round trip breaks
+   Input containing digits: "AA3BB"
+     encode -> "2A132B"
+     decode -> 134 chars, starting "AABB"
+     round trip holds: false
+   The lone '3' encoded as "13" — one 3 — and its digit then ran into
+   the count in front of the Bs, so the decoder read "132B" as 132 Bs.
+   This encoding has no escape, so its real precondition is "the alphabet
+   contains no digits" — say that in a comment or in the signature,
+   rather than discovering it in production.
+
+5. And it is not always compression
+   "ABCDEF"   6 chars -> 12 chars   BIGGER
+   "AAAAAA"   6 chars -> 2 chars   smaller
+   Run-length encoding pays only when runs are long. On text with no
+   repeats it doubles the size, which is why real formats keep a literal
+   mode and switch between the two.

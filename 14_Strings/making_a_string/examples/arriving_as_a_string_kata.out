@@ -1,0 +1,31 @@
+1. Pre-paying for the growth
+   String::with_capacity(100)  len   0  capacity 100
+   after 10 pushes             len  10  capacity 100
+   assert_eq!(capacity, 100) held — the buffer was bought once, up front.
+   (An empty String::new() would have reallocated on the way to 10.)
+
+2. Digits out of a raw field
+   read_score(" 42 \n" ) -> Ok(42)
+   read_score("42"     ) -> Ok(42)
+   read_score("4 2"    ) -> Err(invalid digit found in string)
+   read_score(""       ) -> Err(cannot parse integer from empty string)
+   The trim is doing real work — `parse` itself refuses the spaces:
+   " 42 \n".parse::<i32>()        -> Err(ParseIntError { kind: InvalidDigit })
+   The Result is the whole point — a bad field is data, not a crash.
+
+3. One String out of three types
+   "seat 3: 61.84% turnout, decided = true"
+   {:.2} rounds for display only; the f64 itself is untouched.
+
+4. Bytes that really are UTF-8
+   String::from_utf8(7 bytes) -> Ok("★ Ada")
+   No copy: from_utf8 takes the Vec<u8> and hands back the same allocation.
+
+5. Bytes that are not
+   from_utf8       -> Err: invalid utf-8 sequence of 1 bytes from index 2
+                      first bad byte at index 2
+                      and the Vec is handed back unharmed: 5 bytes
+   from_utf8_lossy -> "Ad�a�"   <- each bad byte became U+FFFD
+   5 bytes in, 5 chars out, 2 of them the replacement character.
+   Lossy never fails, which is the risk: it silences the error rather than
+   reporting it. Use it for display; use from_utf8 when the bytes mattered.

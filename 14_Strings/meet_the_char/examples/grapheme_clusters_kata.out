@@ -1,0 +1,38 @@
+1. Three answers to "how long is it"
+   string       bytes  chars  graphemes
+   cafe+U+0301      6      5          4
+   family          25      7          1
+   flag             8      2          1
+   plain ada        3      3          3
+   The family emoji is 4 people and 3 zero-width joiners: 7 chars, 1
+   thing a reader points at. len() and chars().count() are both right
+   answers to questions nobody asked.
+
+2. Reversing by char breaks it
+   original          "cafe\u{301}"  -> renders as café
+   chars().rev()     "\u{301}efac"  -> renders as ́efac
+   the accent is now FIRST, with no base character in front of it — so it
+   renders on its own, and would land on whatever this string is glued to:
+   \u{301} \u{65} \u{66} \u{61} \u{63}
+
+3. Reversing by grapheme keeps it
+   clusters          ["c", "a", "f", "e\u{301}"]
+   reversed          "e\u{301}fac"  -> renders as éfac
+   \u{65} \u{301} \u{66} \u{61} \u{63}
+   The é travelled as one unit, because the mark moved with its base.
+
+4. The same test on the emoji
+   input             "👨\u{200d}👩\u{200d}👧\u{200d}👦🇵🇱!"
+   chars().rev()     "!🇱🇵👦\u{200d}👧\u{200d}👩\u{200d}👨"
+   graphemes rev     "!🇵🇱👨\u{200d}👩\u{200d}👧\u{200d}👦"
+   The joiners survive, but the sequence does not: boy-girl-woman-man is
+   not a defined emoji sequence, so it renders as four separate people —
+   and the flag's two regional indicators swapped into a pair that is not
+   a country. Neither string is corrupt UTF-8; every char is still valid,
+   which is why nothing errors and the bug reaches a screen.
+
+5. What this segmenter is not
+   It knows five joiners. UAX #29 also covers Hangul syllable blocks,
+   Indic conjuncts, prepend characters and more, and the rules move with
+   each Unicode release — which is exactly why std does not have them.
+   Reach for unicode-segmentation the moment the input is not yours.

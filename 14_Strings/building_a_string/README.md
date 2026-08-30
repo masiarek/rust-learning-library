@@ -264,6 +264,327 @@ Which to reach for:
 
 ---
 
+**Five edits, one buffer.** Strip the vowels out of a `String` in place with `retain`, printing `len()` and `capacity()` on both sides of the call. Insert a `|` at the middle *character* of `"vote🦀here"` — and work out what `insert(len()/2, '|')` would have done instead. Then drain a range out of the middle of a row and keep what came out.
+
+Then concatenate `a: String`, `b: &str` and `c: String` with `+`, and say which of the three you can still use afterwards. Finish by pushing `'A'` through `'Z'` onto an empty `String` and popping five characters back off — and say what `pop` returns on an empty string, and what it returns on `"go🦀"`.
+
+<details markdown="1">
+<summary><strong>Solution</strong></summary>
+
+<!-- source:editing_in_place_kata -->
+*[`editing_in_place_kata.rs`](examples/editing_in_place_kata.rs) in full — pasted here by `tools/run_examples.py` from the file CI compiles and runs.*
+
+```rust
+//! Kata solution: five edits that reuse the buffer — retain, insert, drain,
+//! the `+` that eats its left operand, and push/pop.
+//!
+//!   rustc --edition 2024 editing_in_place_kata.rs -o /tmp/eipk && /tmp/eipk
+
+/// Drop every vowel, in place. `retain` keeps what the closure says `true` to
+/// and shifts the rest down — one pass, no second allocation.
+fn strip_vowels(s: &mut String) {
+    s.retain(|c| !"aeiouAEIOU".contains(c));
+}
+
+/// The byte offset of character `n` — what every String edit actually wants.
+/// `insert(4, …)` means byte 4, and byte 4 of "café" is inside the é.
+fn byte_of_char(s: &str, n: usize) -> usize {
+    s.char_indices().nth(n).map(|(b, _)| b).unwrap_or(s.len())
+}
+
+fn main() {
+    println!("1. retain — keep the consonants");
+    let mut motto = String::from("Score Then Automatic Runoff");
+    let before = (motto.len(), motto.capacity());
+    strip_vowels(&mut motto);
+    println!("   before  {:?}", "Score Then Automatic Runoff");
+    println!("   after   {motto:?}");
+    println!("   len {} -> {}, capacity {} -> {}  <- same buffer, nothing allocated",
+        before.0, motto.len(), before.1, motto.capacity());
+
+    println!("\n2. insert — at the middle character, not the middle byte");
+    let mut name = String::from("vote🦀here");
+    let half_byte = name.len() / 2;
+    println!("   {name:?}: {} chars, {} bytes", name.chars().count(), name.len());
+    println!("   the middle BYTE is {half_byte}, and is_char_boundary({half_byte}) = {}",
+        name.is_char_boundary(half_byte));
+    println!("   so insert({half_byte}, '|') would panic — it is inside the crab.");
+    let middle_char = name.chars().count() / 2;
+    let at = byte_of_char(&name, middle_char);
+    println!("   the middle CHARACTER is #{middle_char}, which starts at byte {at}");
+    name.insert(at, '|');
+    println!("   after insert({at}, '|')  {name:?}");
+    println!("   Every String edit is byte-indexed: insert, remove, replace_range,");
+    println!("   truncate, split_off. len()/2 is a byte, and text is not bytes.");
+
+    println!("\n3. drain — remove a range and keep what came out");
+    let mut ballot = String::from("Ada,Ben,Cara,Dev");
+    let removed: String = ballot.drain(4..8).collect();
+    println!("   removed {removed:?}");
+    println!("   left    {ballot:?}");
+    println!("   drain returns an iterator over the removed chars; the String is");
+    println!("   edited whether you collect them or not.");
+
+    println!("\n4. `+` moves its left operand");
+    let a = String::from("Score");
+    let b = " then ";
+    let c = String::from("Runoff");
+    let joined = a + b + &c;
+    // println!("{a}");   // error[E0382]: borrow of moved value: `a`
+    println!("   let joined = a + b + &c;   -> {joined:?}");
+    println!("   a: String  MOVED   — `+` takes it by value and reuses its buffer");
+    println!("   b: &str    borrowed — the right side is always a &str");
+    println!("   c: String  borrowed — because it was passed as &c");
+    println!("   `c` is still here: {c:?}, `a` is gone. One allocation total,");
+    println!("   which is why `+` exists at all.");
+
+    println!("\n5. push and pop");
+    let mut alphabet = String::new();
+    for c in 'A'..='Z' {
+        alphabet.push(c);
+    }
+    println!("   after 26 pushes  {alphabet:?}  (len {}, capacity {})",
+        alphabet.len(), alphabet.capacity());
+    let mut popped = String::new();
+    for _ in 0..5 {
+        if let Some(c) = alphabet.pop() {
+            popped.push(c);
+        }
+    }
+    println!("   popped 5         {popped:?}   <- reversed: pop takes from the end");
+    println!("   left             {alphabet:?}  (len {}, capacity {})",
+        alphabet.len(), alphabet.capacity());
+    println!("   pop returns Option<char> — None on an empty String, never a panic —");
+    println!("   and it pops a whole character, however many bytes that is.");
+    let mut crab = String::from("go🦀");
+    println!("   {:?}.pop() = {:?}, leaving {:?}", "go🦀", crab.pop(), crab);
+}
+```
+<!-- /source -->
+
+<!-- output:editing_in_place_kata -->
+*Verified output of [`editing_in_place_kata.rs`](examples/editing_in_place_kata.rs) — regenerated by `tools/run_examples.py`, never hand-typed.*
+
+```text
+1. retain — keep the consonants
+   before  "Score Then Automatic Runoff"
+   after   "Scr Thn tmtc Rnff"
+   len 27 -> 17, capacity 27 -> 27  <- same buffer, nothing allocated
+
+2. insert — at the middle character, not the middle byte
+   "vote🦀here": 9 chars, 12 bytes
+   the middle BYTE is 6, and is_char_boundary(6) = false
+   so insert(6, '|') would panic — it is inside the crab.
+   the middle CHARACTER is #4, which starts at byte 4
+   after insert(4, '|')  "vote|🦀here"
+   Every String edit is byte-indexed: insert, remove, replace_range,
+   truncate, split_off. len()/2 is a byte, and text is not bytes.
+
+3. drain — remove a range and keep what came out
+   removed "Ben,"
+   left    "Ada,Cara,Dev"
+   drain returns an iterator over the removed chars; the String is
+   edited whether you collect them or not.
+
+4. `+` moves its left operand
+   let joined = a + b + &c;   -> "Score then Runoff"
+   a: String  MOVED   — `+` takes it by value and reuses its buffer
+   b: &str    borrowed — the right side is always a &str
+   c: String  borrowed — because it was passed as &c
+   `c` is still here: "Runoff", `a` is gone. One allocation total,
+   which is why `+` exists at all.
+
+5. push and pop
+   after 26 pushes  "ABCDEFGHIJKLMNOPQRSTUVWXYZ"  (len 26, capacity 32)
+   popped 5         "ZYXWV"   <- reversed: pop takes from the end
+   left             "ABCDEFGHIJKLMNOPQRSTU"  (len 21, capacity 32)
+   pop returns Option<char> — None on an empty String, never a panic —
+   and it pops a whole character, however many bytes that is.
+   "go🦀".pop() = Some('🦀'), leaving "go"
+```
+<!-- /output -->
+
+</details>
+
+---
+
+**Run-length encoding, and the input that breaks it.** Turn `"AAABBBCCDAA"` into `"3A3B2C1D2A"`, then write the inverse and check the round trip. Make the decoder return a `Result` rather than panicking: it is the half of the pair that meets input it did not produce.
+
+Then break your own pair with three inputs — a run longer than nine, a string that contains digits, and a string with no runs at all. Two of those change the answer and one only changes the size. Write down the precondition your encoding actually has, in the place a caller would look.
+
+<details markdown="1">
+<summary><strong>Solution</strong></summary>
+
+<!-- source:run_length_encoding_kata -->
+*[`run_length_encoding_kata.rs`](examples/run_length_encoding_kata.rs) in full — pasted here by `tools/run_examples.py` from the file CI compiles and runs.*
+
+```rust
+//! Kata solution: run-length encoding both ways — and the three inputs that
+//! turn the round trip into a lie.
+//!
+//!   rustc --edition 2024 run_length_encoding_kata.rs -o /tmp/rlek && /tmp/rlek
+
+/// "AAABBBCCDAA" -> "3A3B2C1D2A". Counts characters, not bytes, so a multibyte
+/// run survives; `push_str` and `push` grow one buffer instead of allocating
+/// a String per run.
+fn encode(s: &str) -> String {
+    let mut out = String::with_capacity(s.len());
+    let mut chars = s.chars().peekable();
+    while let Some(c) = chars.next() {
+        let mut run = 1usize;
+        while chars.peek() == Some(&c) {
+            chars.next();
+            run += 1;
+        }
+        out.push_str(&run.to_string());
+        out.push(c);
+    }
+    out
+}
+
+/// "3A3B2C1D2A" -> "AAABBBCCDAA". The count may be several digits, so the
+/// digits are accumulated until a non-digit arrives — that character is the
+/// one being repeated.
+fn decode(s: &str) -> Result<String, String> {
+    let mut out = String::new();
+    let mut count = String::new();
+    for c in s.chars() {
+        if c.is_ascii_digit() {
+            count.push(c);
+        } else if count.is_empty() {
+            return Err(format!("character {c:?} has no count in front of it"));
+        } else {
+            let n: usize = count.parse().map_err(|e| format!("bad count {count:?}: {e}"))?;
+            for _ in 0..n {
+                out.push(c);
+            }
+            count.clear();
+        }
+    }
+    if count.is_empty() {
+        Ok(out)
+    } else {
+        Err(format!("input ended with the count {count:?} and no character"))
+    }
+}
+
+fn round_trip(s: &str) {
+    let encoded = encode(s);
+    let decoded = decode(&encoded);
+    let ok = decoded.as_deref() == Ok(s);
+    println!("   {:<24} -> {:<24} -> {:<24} {}",
+        format!("{s:?}"),
+        format!("{encoded:?}"),
+        match &decoded {
+            Ok(d) => format!("{d:?}"),
+            Err(e) => format!("Err({e})"),
+        },
+        if ok { "round trip ok" } else { "MISMATCH" });
+}
+
+fn main() {
+    println!("1. Encoding");
+    for s in ["AAABBBCCDAA", "AAAAAAAAAAAA", "ABCDEF", "", "🦀🦀🦀ss"] {
+        println!("   {:<16} -> {:?}", format!("{s:?}"), encode(s));
+    }
+    println!("   Twelve As encode as \"12A\", not \"9A3A\" — which is the whole reason");
+    println!("   the decoder cannot just read one digit.");
+
+    println!("\n2. Decoding");
+    for s in ["3A3B2C1D2A", "12A", "1A1B1C", "A3B", "3A2"] {
+        match decode(s) {
+            Ok(d) => println!("   {:<14} -> {d:?}", format!("{s:?}")),
+            Err(e) => println!("   {:<14} -> Err: {e}", format!("{s:?}")),
+        }
+    }
+    println!("   Malformed input is a Result, not a panic: a decoder is the half of");
+    println!("   this pair that meets data it did not produce.");
+
+    println!("\n3. The round trip");
+    for s in ["AAABBBCCDAA", "ABCDEF", "🦀🦀🦀ss", "Mississippi"] {
+        round_trip(s);
+    }
+
+    println!("\n4. Where the round trip breaks");
+    let digits = "AA3BB";
+    println!("   Input containing digits: {digits:?}");
+    let encoded = encode(digits);
+    let back = decode(&encoded).unwrap_or_default();
+    println!("     encode -> {encoded:?}");
+    println!("     decode -> {} chars, starting {:?}", back.chars().count(), &back[..4]);
+    println!("     round trip holds: {}", back == digits);
+    println!("   The lone '3' encoded as \"13\" — one 3 — and its digit then ran into");
+    println!("   the count in front of the Bs, so the decoder read \"132B\" as 132 Bs.");
+    println!("   This encoding has no escape, so its real precondition is \"the alphabet");
+    println!("   contains no digits\" — say that in a comment or in the signature,");
+    println!("   rather than discovering it in production.");
+
+    println!("\n5. And it is not always compression");
+    for s in ["ABCDEF", "AAAAAA"] {
+        let e = encode(s);
+        println!("   {:<10} {} chars -> {} chars   {}",
+            format!("{s:?}"), s.chars().count(), e.chars().count(),
+            if e.chars().count() > s.chars().count() { "BIGGER" } else { "smaller" });
+    }
+    println!("   Run-length encoding pays only when runs are long. On text with no");
+    println!("   repeats it doubles the size, which is why real formats keep a literal");
+    println!("   mode and switch between the two.");
+}
+```
+<!-- /source -->
+
+<!-- output:run_length_encoding_kata -->
+*Verified output of [`run_length_encoding_kata.rs`](examples/run_length_encoding_kata.rs) — regenerated by `tools/run_examples.py`, never hand-typed.*
+
+```text
+1. Encoding
+   "AAABBBCCDAA"    -> "3A3B2C1D2A"
+   "AAAAAAAAAAAA"   -> "12A"
+   "ABCDEF"         -> "1A1B1C1D1E1F"
+   ""               -> ""
+   "🦀🦀🦀ss"          -> "3🦀2s"
+   Twelve As encode as "12A", not "9A3A" — which is the whole reason
+   the decoder cannot just read one digit.
+
+2. Decoding
+   "3A3B2C1D2A"   -> "AAABBBCCDAA"
+   "12A"          -> "AAAAAAAAAAAA"
+   "1A1B1C"       -> "ABC"
+   "A3B"          -> Err: character 'A' has no count in front of it
+   "3A2"          -> Err: input ended with the count "2" and no character
+   Malformed input is a Result, not a panic: a decoder is the half of
+   this pair that meets data it did not produce.
+
+3. The round trip
+   "AAABBBCCDAA"            -> "3A3B2C1D2A"             -> "AAABBBCCDAA"            round trip ok
+   "ABCDEF"                 -> "1A1B1C1D1E1F"           -> "ABCDEF"                 round trip ok
+   "🦀🦀🦀ss"                  -> "3🦀2s"                   -> "🦀🦀🦀ss"                  round trip ok
+   "Mississippi"            -> "1M1i2s1i2s1i2p1i"       -> "Mississippi"            round trip ok
+
+4. Where the round trip breaks
+   Input containing digits: "AA3BB"
+     encode -> "2A132B"
+     decode -> 134 chars, starting "AABB"
+     round trip holds: false
+   The lone '3' encoded as "13" — one 3 — and its digit then ran into
+   the count in front of the Bs, so the decoder read "132B" as 132 Bs.
+   This encoding has no escape, so its real precondition is "the alphabet
+   contains no digits" — say that in a comment or in the signature,
+   rather than discovering it in production.
+
+5. And it is not always compression
+   "ABCDEF"   6 chars -> 12 chars   BIGGER
+   "AAAAAA"   6 chars -> 2 chars   smaller
+   Run-length encoding pays only when runs are long. On text with no
+   repeats it doubles the size, which is why real formats keep a literal
+   mode and switch between the two.
+```
+<!-- /output -->
+
+</details>
+
+---
+
 ## The verified output
 
 <!-- output:building_a_string -->

@@ -182,6 +182,426 @@ Round 4 — safe slicing needs a boundary
 
 ---
 
+**Case and whitespace, and the two of them that are not one operation.** Trim a string padded with spaces, a tab and newlines. Convert `MyVariableName` to `my_variable_name` and back again — then run the pair on `STARVoting` and report what it does. Swap the case of only the ASCII letters, with `make_ascii_uppercase` / `make_ascii_lowercase`, on input that also contains `é` and Cyrillic.
+
+Then two that need characters rather than bytes: alternating `SpOnGeBoB` case where a space does not consume a turn, and an anagram checker that ignores case and whitespace. Finish by saying why `'ß'.to_uppercase()` is the reason the ASCII methods exist alongside the Unicode ones.
+
+<details markdown="1">
+<summary><strong>Solution</strong></summary>
+
+<!-- source:case_and_whitespace_kata -->
+*[`case_and_whitespace_kata.rs`](examples/case_and_whitespace_kata.rs) in full — pasted here by `tools/run_examples.py` from the file CI compiles and runs.*
+
+```rust
+//! Kata solution: six transformations, and the two places ASCII case and
+//! Unicode case stop being the same operation.
+//!
+//!   rustc --edition 2024 case_and_whitespace_kata.rs -o /tmp/cwk && /tmp/cwk
+
+/// `MyVariableName` -> `my_variable_name`. An underscore goes before every
+/// uppercase letter that is not the first character.
+fn to_snake_case(s: &str) -> String {
+    let mut out = String::with_capacity(s.len() + 4);
+    for (i, c) in s.chars().enumerate() {
+        if c.is_uppercase() {
+            if i != 0 {
+                out.push('_');
+            }
+            out.extend(c.to_lowercase());
+        } else {
+            out.push(c);
+        }
+    }
+    out
+}
+
+/// `my_variable_name` -> `MyVariableName`. Split on the underscores, uppercase
+/// the first character of each piece — and the first character may be two.
+fn to_camel_case(s: &str) -> String {
+    s.split('_')
+        .filter(|piece| !piece.is_empty())
+        .map(|piece| {
+            let mut chars = piece.chars();
+            match chars.next() {
+                Some(first) => first.to_uppercase().collect::<String>() + chars.as_str(),
+                None => String::new(),
+            }
+        })
+        .collect()
+}
+
+/// Swap the case of the ASCII letters and leave everything else exactly as it
+/// was — using the in-place `char` methods, which is what makes this ASCII-only.
+fn swap_ascii_case(s: &str) -> String {
+    s.chars()
+        .map(|c| {
+            let mut c = c;
+            if c.is_ascii_uppercase() {
+                c.make_ascii_lowercase();
+            } else if c.is_ascii_lowercase() {
+                c.make_ascii_uppercase();
+            }
+            c
+        })
+        .collect()
+}
+
+/// Alternating case, counting only the letters — so a space does not consume a
+/// turn and the pattern survives it.
+fn spongebob(s: &str) -> String {
+    let mut upper = false;
+    s.chars()
+        .map(|c| {
+            if c.is_alphabetic() {
+                upper = !upper;
+                if upper {
+                    c.to_uppercase().collect::<String>()
+                } else {
+                    c.to_lowercase().collect::<String>()
+                }
+            } else {
+                c.to_string()
+            }
+        })
+        .collect()
+}
+
+/// Same letters, ignoring case and whitespace.
+fn is_anagram(a: &str, b: &str) -> bool {
+    fn key(s: &str) -> Vec<char> {
+        let mut v: Vec<char> = s
+            .chars()
+            .filter(|c| !c.is_whitespace())
+            .flat_map(|c| c.to_lowercase())
+            .collect();
+        v.sort_unstable();
+        v
+    }
+    key(a) == key(b)
+}
+
+fn main() {
+    println!("1. trim");
+    let messy = "\t  Ada Lovelace \n\r\n ";
+    println!("   {messy:?}");
+    println!("   .trim()       {:?}", messy.trim());
+    println!("   .trim_start() {:?}", messy.trim_start());
+    println!("   .trim_end()   {:?}", messy.trim_end());
+    println!("   trim removes any Unicode whitespace, not just the space character:");
+    println!("   {:?}.trim() = {:?}   <- U+00A0, a non-breaking space",
+        "\u{a0}x\u{a0}", "\u{a0}x\u{a0}".trim());
+    println!("   {:?}.trim_ascii() = {:?}   <- the ASCII-only version leaves it",
+        "\u{a0}x\u{a0}", "\u{a0}x\u{a0}".trim_ascii());
+
+    println!("\n2. CamelCase -> snake_case");
+    for s in ["MyVariableName", "STARVoting", "Ballot", "alreadySnakeish"] {
+        println!("   {:<16} -> {:?}", s, to_snake_case(s));
+    }
+    println!("   `STARVoting` shows the limit of the one-rule version: an acronym");
+    println!("   becomes s_t_a_r_voting. Real converters carry a second rule for a");
+    println!("   run of capitals — say so rather than pretending the rule is complete.");
+
+    println!("\n3. snake_case -> CamelCase");
+    for s in ["my_variable_name", "ballot", "top_two_runoff", "trailing_"] {
+        println!("   {:<16} -> {:?}", s, to_camel_case(s));
+    }
+    println!("   Round trip: {:?} -> {:?} -> {:?}",
+        "my_variable_name",
+        to_camel_case("my_variable_name"),
+        to_snake_case(&to_camel_case("my_variable_name")));
+    println!("   It survives here, and does not for STARVoting — a converter pair is");
+    println!("   only a round trip on the names both rules agree about.");
+
+    println!("\n4. Swapping ASCII case only");
+    for s in ["Hello World", "café AU LAIT", "ЖУРНАЛ"] {
+        println!("   {:<14} -> {:?}", s, swap_ascii_case(s));
+    }
+    println!("   The é and the Cyrillic are untouched: make_ascii_*case is defined");
+    println!("   to leave every non-ASCII byte alone. That is a promise, not a bug —");
+    println!("   it is the one case conversion that cannot change a string's length.");
+    println!("   The Unicode version can: {:?}.to_uppercase() = {:?} ({} chars)",
+        'ß', 'ß'.to_uppercase().collect::<String>(), 'ß'.to_uppercase().count());
+
+    println!("\n5. Spongebob case");
+    for s in ["hello world", "star voting is good"] {
+        println!("   {:?}", spongebob(s));
+    }
+    let naive: String = "hello world".chars().enumerate()
+        .map(|(i, c)| if i % 2 == 0 { c.to_ascii_uppercase() } else { c.to_ascii_lowercase() })
+        .collect();
+    println!("   Alternating on every char instead of every letter: {naive:?}");
+    println!("   The space took a turn, so the two disagree from the w onward:");
+    println!("   letters only {:?} against every char {:?}.",
+        &spongebob("hello world")[6..], &naive[6..]);
+    println!("   Which is right is a taste question; which one you WROTE should not be.");
+
+    println!("\n6. Anagrams");
+    for (a, b) in [
+        ("Listen", "Silent"),
+        ("The eyes", "They see"),
+        ("Dormitory", "Dirty Room"),
+        ("ballot", "ballots"),
+    ] {
+        println!("   {:<14} vs {:<14} {}", format!("{a:?}"), format!("{b:?}"), is_anagram(a, b));
+    }
+    println!("   Sorting chars is the whole trick, and it is why this is a `char`");
+    println!("   exercise: sorting BYTES would compare halves of multibyte letters.");
+}
+```
+<!-- /source -->
+
+<!-- output:case_and_whitespace_kata -->
+*Verified output of [`case_and_whitespace_kata.rs`](examples/case_and_whitespace_kata.rs) — regenerated by `tools/run_examples.py`, never hand-typed.*
+
+```text
+1. trim
+   "\t  Ada Lovelace \n\r\n "
+   .trim()       "Ada Lovelace"
+   .trim_start() "Ada Lovelace \n\r\n "
+   .trim_end()   "\t  Ada Lovelace"
+   trim removes any Unicode whitespace, not just the space character:
+   "\u{a0}x\u{a0}".trim() = "x"   <- U+00A0, a non-breaking space
+   "\u{a0}x\u{a0}".trim_ascii() = "\u{a0}x\u{a0}"   <- the ASCII-only version leaves it
+
+2. CamelCase -> snake_case
+   MyVariableName   -> "my_variable_name"
+   STARVoting       -> "s_t_a_r_voting"
+   Ballot           -> "ballot"
+   alreadySnakeish  -> "already_snakeish"
+   `STARVoting` shows the limit of the one-rule version: an acronym
+   becomes s_t_a_r_voting. Real converters carry a second rule for a
+   run of capitals — say so rather than pretending the rule is complete.
+
+3. snake_case -> CamelCase
+   my_variable_name -> "MyVariableName"
+   ballot           -> "Ballot"
+   top_two_runoff   -> "TopTwoRunoff"
+   trailing_        -> "Trailing"
+   Round trip: "my_variable_name" -> "MyVariableName" -> "my_variable_name"
+   It survives here, and does not for STARVoting — a converter pair is
+   only a round trip on the names both rules agree about.
+
+4. Swapping ASCII case only
+   Hello World    -> "hELLO wORLD"
+   café AU LAIT   -> "CAFé au lait"
+   ЖУРНАЛ         -> "ЖУРНАЛ"
+   The é and the Cyrillic are untouched: make_ascii_*case is defined
+   to leave every non-ASCII byte alone. That is a promise, not a bug —
+   it is the one case conversion that cannot change a string's length.
+   The Unicode version can: 'ß'.to_uppercase() = "SS" (2 chars)
+
+5. Spongebob case
+   "HeLlO wOrLd"
+   "StAr VoTiNg Is GoOd"
+   Alternating on every char instead of every letter: "HeLlO WoRlD"
+   The space took a turn, so the two disagree from the w onward:
+   letters only "wOrLd" against every char "WoRlD".
+   Which is right is a taste question; which one you WROTE should not be.
+
+6. Anagrams
+   "Listen"       vs "Silent"       true
+   "The eyes"     vs "They see"     true
+   "Dormitory"    vs "Dirty Room"   true
+   "ballot"       vs "ballots"      false
+   Sorting chars is the whole trick, and it is why this is a `char`
+   exercise: sorting BYTES would compare halves of multibyte letters.
+```
+<!-- /output -->
+
+</details>
+
+---
+
+**The third ruler.** `"cafe\u{301}"` is `café` written with a combining accent. Reverse it with `.chars().rev().collect()` and look at where the accent ended up. Then count the characters in `"👨‍👩‍👧‍👦"` — the answer is seven — and say what a reader would have answered.
+
+Now write the grouper: a base character plus the marks, joiners, variation selectors and skin tones that attach to it, and a regional-indicator pair for a flag. Reverse by cluster and check the accent stays home. Then state precisely which cases your grouper does *not* cover — that list is the reason grapheme segmentation is a crate rather than a method on `str`.
+
+<details markdown="1">
+<summary><strong>Solution</strong></summary>
+
+<!-- source:grapheme_clusters_kata -->
+*[`grapheme_clusters_kata.rs`](examples/grapheme_clusters_kata.rs) in full — pasted here by `tools/run_examples.py` from the file CI compiles and runs.*
+
+```rust
+//! Kata solution: the third ruler. `chars().rev()` is not "reverse the text",
+//! and `chars().count()` is not "how many characters a reader sees".
+//!
+//!   rustc --edition 2024 grapheme_clusters_kata.rs -o /tmp/gck && /tmp/gck
+//!
+//! std has no grapheme segmentation, on purpose: the rules are a Unicode annex
+//! (UAX #29) that changes with each Unicode release, so they live in a crate
+//! that can ship on Unicode's schedule rather than Rust's. In real code:
+//!
+//!     use unicode_segmentation::UnicodeSegmentation;
+//!     let n = s.graphemes(true).count();
+//!     let back: String = s.graphemes(true).rev().collect();
+//!
+//! The segmenter below is NOT that. It handles exactly the five joiners this
+//! page uses — combining marks, ZWJ sequences, variation selectors, skin-tone
+//! modifiers and regional-indicator pairs — and nothing else. It is here so the
+//! *shape* of the answer is visible; it is not a substitute for the crate.
+
+/// A mark that attaches to the character before it.
+fn is_extender(c: char) -> bool {
+    matches!(c,
+        '\u{0300}'..='\u{036F}'      // combining diacritical marks
+        | '\u{1AB0}'..='\u{1AFF}'    // combining diacritical marks extended
+        | '\u{20D0}'..='\u{20FF}'    // combining marks for symbols
+        | '\u{FE00}'..='\u{FE0F}'    // variation selectors
+        | '\u{1F3FB}'..='\u{1F3FF}') // skin-tone modifiers
+}
+
+fn is_regional_indicator(c: char) -> bool {
+    ('\u{1F1E6}'..='\u{1F1FF}').contains(&c)
+}
+
+/// Split into clusters: a base character plus whatever attaches to it.
+fn clusters(s: &str) -> Vec<String> {
+    let chars: Vec<char> = s.chars().collect();
+    let mut out: Vec<String> = Vec::new();
+    let mut i = 0;
+    while i < chars.len() {
+        let mut cluster = String::new();
+        cluster.push(chars[i]);
+        // A flag is exactly two regional indicators.
+        if is_regional_indicator(chars[i])
+            && i + 1 < chars.len()
+            && is_regional_indicator(chars[i + 1])
+        {
+            cluster.push(chars[i + 1]);
+            i += 2;
+        } else {
+            i += 1;
+        }
+        // Then absorb marks, and anything a zero-width joiner attaches.
+        while i < chars.len() {
+            if is_extender(chars[i]) {
+                cluster.push(chars[i]);
+                i += 1;
+            } else if chars[i] == '\u{200D}' && i + 1 < chars.len() {
+                cluster.push(chars[i]);
+                cluster.push(chars[i + 1]);
+                i += 2;
+            } else {
+                break;
+            }
+        }
+        out.push(cluster);
+    }
+    out
+}
+
+fn grapheme_count(s: &str) -> usize {
+    clusters(s).len()
+}
+
+fn reverse_graphemes(s: &str) -> String {
+    clusters(s).into_iter().rev().collect()
+}
+
+fn escaped(s: &str) -> String {
+    s.chars().map(|c| c.escape_unicode().to_string()).collect::<Vec<_>>().join(" ")
+}
+
+fn main() {
+    // "café" written the second legal way: e + U+0301 COMBINING ACUTE ACCENT.
+    let cafe = "cafe\u{301}";
+    let family = "👨\u{200D}👩\u{200D}👧\u{200D}👦";
+    let flag = "🇵🇱";
+
+    println!("1. Three answers to \"how long is it\"");
+    println!("   {:<12} {:>5} {:>6} {:>10}", "string", "bytes", "chars", "graphemes");
+    for (label, s) in [("cafe+U+0301", cafe), ("family", family), ("flag", flag), ("plain ada", "ada")] {
+        println!("   {:<12} {:>5} {:>6} {:>10}", label, s.len(), s.chars().count(), grapheme_count(s));
+    }
+    println!("   The family emoji is 4 people and 3 zero-width joiners: 7 chars, 1");
+    println!("   thing a reader points at. len() and chars().count() are both right");
+    println!("   answers to questions nobody asked.");
+
+    println!("\n2. Reversing by char breaks it");
+    println!("   original          {cafe:?}  -> renders as {cafe}");
+    let by_char: String = cafe.chars().rev().collect();
+    println!("   chars().rev()     {by_char:?}  -> renders as {by_char}");
+    println!("   the accent is now FIRST, with no base character in front of it — so it");
+    println!("   renders on its own, and would land on whatever this string is glued to:");
+    println!("   {}", escaped(&by_char));
+
+    println!("\n3. Reversing by grapheme keeps it");
+    let by_cluster = reverse_graphemes(cafe);
+    println!("   clusters          {:?}", clusters(cafe));
+    println!("   reversed          {by_cluster:?}  -> renders as {by_cluster}");
+    println!("   {}", escaped(&by_cluster));
+    println!("   The é travelled as one unit, because the mark moved with its base.");
+
+    println!("\n4. The same test on the emoji");
+    let emoji = format!("{family}{flag}!");
+    println!("   input             {emoji:?}");
+    println!("   chars().rev()     {:?}", emoji.chars().rev().collect::<String>());
+    println!("   graphemes rev     {:?}", reverse_graphemes(&emoji));
+    println!("   The joiners survive, but the sequence does not: boy-girl-woman-man is");
+    println!("   not a defined emoji sequence, so it renders as four separate people —");
+    println!("   and the flag's two regional indicators swapped into a pair that is not");
+    println!("   a country. Neither string is corrupt UTF-8; every char is still valid,");
+    println!("   which is why nothing errors and the bug reaches a screen.");
+
+    println!("\n5. What this segmenter is not");
+    println!("   It knows five joiners. UAX #29 also covers Hangul syllable blocks,");
+    println!("   Indic conjuncts, prepend characters and more, and the rules move with");
+    println!("   each Unicode release — which is exactly why std does not have them.");
+    println!("   Reach for unicode-segmentation the moment the input is not yours.");
+}
+```
+<!-- /source -->
+
+<!-- output:grapheme_clusters_kata -->
+*Verified output of [`grapheme_clusters_kata.rs`](examples/grapheme_clusters_kata.rs) — regenerated by `tools/run_examples.py`, never hand-typed.*
+
+```text
+1. Three answers to "how long is it"
+   string       bytes  chars  graphemes
+   cafe+U+0301      6      5          4
+   family          25      7          1
+   flag             8      2          1
+   plain ada        3      3          3
+   The family emoji is 4 people and 3 zero-width joiners: 7 chars, 1
+   thing a reader points at. len() and chars().count() are both right
+   answers to questions nobody asked.
+
+2. Reversing by char breaks it
+   original          "cafe\u{301}"  -> renders as café
+   chars().rev()     "\u{301}efac"  -> renders as ́efac
+   the accent is now FIRST, with no base character in front of it — so it
+   renders on its own, and would land on whatever this string is glued to:
+   \u{301} \u{65} \u{66} \u{61} \u{63}
+
+3. Reversing by grapheme keeps it
+   clusters          ["c", "a", "f", "e\u{301}"]
+   reversed          "e\u{301}fac"  -> renders as éfac
+   \u{65} \u{301} \u{66} \u{61} \u{63}
+   The é travelled as one unit, because the mark moved with its base.
+
+4. The same test on the emoji
+   input             "👨\u{200d}👩\u{200d}👧\u{200d}👦🇵🇱!"
+   chars().rev()     "!🇱🇵👦\u{200d}👧\u{200d}👩\u{200d}👨"
+   graphemes rev     "!🇵🇱👨\u{200d}👩\u{200d}👧\u{200d}👦"
+   The joiners survive, but the sequence does not: boy-girl-woman-man is
+   not a defined emoji sequence, so it renders as four separate people —
+   and the flag's two regional indicators swapped into a pair that is not
+   a country. Neither string is corrupt UTF-8; every char is still valid,
+   which is why nothing errors and the bug reaches a screen.
+
+5. What this segmenter is not
+   It knows five joiners. UAX #29 also covers Hangul syllable blocks,
+   Indic conjuncts, prepend characters and more, and the rules move with
+   each Unicode release — which is exactly why std does not have them.
+   Reach for unicode-segmentation the moment the input is not yours.
+```
+<!-- /output -->
+
+</details>
+
+---
+
 ## The verified output
 
 <!-- output:meet_the_char -->

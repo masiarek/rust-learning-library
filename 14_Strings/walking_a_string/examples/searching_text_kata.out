@@ -1,0 +1,56 @@
+1. Palindromes
+   "racecar"                        true
+   "A man, a plan, a canal: Panama" true
+   "Ada"                            true
+   "ala"                            true
+   "kajak"                          true
+   to_lowercase() on a char returns an ITERATOR, not a char — 'İ'
+   lowercases to two chars — which is why flat_map is here.
+
+2. Counting words
+   11 words in 67 bytes
+   split_whitespace() splits on RUNS of any whitespace, so the double
+   space, the newline and the tab each separate one pair of words:
+   ["Score", "every", "candidate.", "Then", "the", "top", "two", "have", "an", "automatic", "runoff."]
+   split(' ') only knows the space character, so it keeps the newline
+   and the tab inside words and reports the gap as an empty field:
+   ["Score", "every", "candidate.\n", "", "Then", "the", "top", "two\thave", "an", "automatic", "runoff."]
+   On "a  b" that is ["a", "", "b"] against ["a", "b"].
+
+3. CSV fields
+   "Ada,5,2,,0" -> ["Ada", "5", "2", "", "0"]
+   The empty field survives: split() reports the gaps between matches,
+   so "a,,b" is three fields and the middle one is "".
+
+4. Where is it? find and rfind
+   "runoff between the top two, then a second runoff if tied"
+   find("runoff")   = Some(0)
+   rfind("runoff")  = Some(42)
+   find("instant")  = None   <- Option, not -1
+   both are BYTE offsets, so they slice directly: "runoff" … "runoff if tied"
+
+5. Does it look like a URL?
+   https://masiarek.github.io/rust-learning-library     true
+   http://example.com                                   true
+   ftp://example.com                                    false
+   example.com                                          false
+   https://example.com/                                 false
+
+6. Every match, not just the first
+   "5,4,0 5,5,1 0,0,5 5,2,3"
+   matches('5')       ["5", "5", "5", "5", "5"]  (5 of them)
+   match_indices('5') [0, 6, 8, 16, 18]
+   matches gives you the text, match_indices gives you where — and
+   overlapping matches are not reported: "aaa".matches("aa") is 1
+
+7. Addresses, without a regex engine
+   ["ada@example.com", "ben@sub.example.org"]
+   Every one of those is a &str borrowed from `inbox` — no allocation.
+
+8. Censoring, without a regex engine
+   before  "The Spoiler effect is a spoiler, and SPOILER talk is everywhere."
+   after   "The **** effect is a ****, and **** talk is everywhere."
+   Both of these are where a regex earns its place: word boundaries,
+   case folding and capture groups in one pass, instead of a hand-rolled
+   scanner per rule. `regex` is a crate, not std — deliberately, because
+   a regex engine is a compiler and std does not ship one.

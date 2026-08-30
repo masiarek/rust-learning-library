@@ -1,0 +1,51 @@
+1. trim
+   "\t  Ada Lovelace \n\r\n "
+   .trim()       "Ada Lovelace"
+   .trim_start() "Ada Lovelace \n\r\n "
+   .trim_end()   "\t  Ada Lovelace"
+   trim removes any Unicode whitespace, not just the space character:
+   "\u{a0}x\u{a0}".trim() = "x"   <- U+00A0, a non-breaking space
+   "\u{a0}x\u{a0}".trim_ascii() = "\u{a0}x\u{a0}"   <- the ASCII-only version leaves it
+
+2. CamelCase -> snake_case
+   MyVariableName   -> "my_variable_name"
+   STARVoting       -> "s_t_a_r_voting"
+   Ballot           -> "ballot"
+   alreadySnakeish  -> "already_snakeish"
+   `STARVoting` shows the limit of the one-rule version: an acronym
+   becomes s_t_a_r_voting. Real converters carry a second rule for a
+   run of capitals — say so rather than pretending the rule is complete.
+
+3. snake_case -> CamelCase
+   my_variable_name -> "MyVariableName"
+   ballot           -> "Ballot"
+   top_two_runoff   -> "TopTwoRunoff"
+   trailing_        -> "Trailing"
+   Round trip: "my_variable_name" -> "MyVariableName" -> "my_variable_name"
+   It survives here, and does not for STARVoting — a converter pair is
+   only a round trip on the names both rules agree about.
+
+4. Swapping ASCII case only
+   Hello World    -> "hELLO wORLD"
+   café AU LAIT   -> "CAFé au lait"
+   ЖУРНАЛ         -> "ЖУРНАЛ"
+   The é and the Cyrillic are untouched: make_ascii_*case is defined
+   to leave every non-ASCII byte alone. That is a promise, not a bug —
+   it is the one case conversion that cannot change a string's length.
+   The Unicode version can: 'ß'.to_uppercase() = "SS" (2 chars)
+
+5. Spongebob case
+   "HeLlO wOrLd"
+   "StAr VoTiNg Is GoOd"
+   Alternating on every char instead of every letter: "HeLlO WoRlD"
+   The space took a turn, so the two disagree from the w onward:
+   letters only "wOrLd" against every char "WoRlD".
+   Which is right is a taste question; which one you WROTE should not be.
+
+6. Anagrams
+   "Listen"       vs "Silent"       true
+   "The eyes"     vs "They see"     true
+   "Dormitory"    vs "Dirty Room"   true
+   "ballot"       vs "ballots"      false
+   Sorting chars is the whole trick, and it is why this is a `char`
+   exercise: sorting BYTES would compare halves of multibyte letters.

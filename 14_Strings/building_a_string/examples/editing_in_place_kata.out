@@ -1,0 +1,35 @@
+1. retain — keep the consonants
+   before  "Score Then Automatic Runoff"
+   after   "Scr Thn tmtc Rnff"
+   len 27 -> 17, capacity 27 -> 27  <- same buffer, nothing allocated
+
+2. insert — at the middle character, not the middle byte
+   "vote🦀here": 9 chars, 12 bytes
+   the middle BYTE is 6, and is_char_boundary(6) = false
+   so insert(6, '|') would panic — it is inside the crab.
+   the middle CHARACTER is #4, which starts at byte 4
+   after insert(4, '|')  "vote|🦀here"
+   Every String edit is byte-indexed: insert, remove, replace_range,
+   truncate, split_off. len()/2 is a byte, and text is not bytes.
+
+3. drain — remove a range and keep what came out
+   removed "Ben,"
+   left    "Ada,Cara,Dev"
+   drain returns an iterator over the removed chars; the String is
+   edited whether you collect them or not.
+
+4. `+` moves its left operand
+   let joined = a + b + &c;   -> "Score then Runoff"
+   a: String  MOVED   — `+` takes it by value and reuses its buffer
+   b: &str    borrowed — the right side is always a &str
+   c: String  borrowed — because it was passed as &c
+   `c` is still here: "Runoff", `a` is gone. One allocation total,
+   which is why `+` exists at all.
+
+5. push and pop
+   after 26 pushes  "ABCDEFGHIJKLMNOPQRSTUVWXYZ"  (len 26, capacity 32)
+   popped 5         "ZYXWV"   <- reversed: pop takes from the end
+   left             "ABCDEFGHIJKLMNOPQRSTU"  (len 21, capacity 32)
+   pop returns Option<char> — None on an empty String, never a panic —
+   and it pops a whole character, however many bytes that is.
+   "go🦀".pop() = Some('🦀'), leaving "go"
