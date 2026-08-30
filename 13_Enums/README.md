@@ -26,7 +26,7 @@ Two things follow, and the section is mostly about the second. An enum lets you 
 - [Nullable pointers](../17_Option_and_Result/nullable_pointers/README.md) — `Option<Box<T>>`, and recursive types
 - [What a union is](../09_Advanced/what_a_union_is/README.md) — the untagged version, and the desync only it can have
 - [Generic enums](../22_Generics/generic_enums/README.md) — `<T>` on an enum, and the two parameters `Result<T, E>` is made of
-- [A generic recursive type](../22_Generics/a_generic_recursive_type/README.md) — an enum that contains itself, and the `Box` that gives it a size
+- [A generic recursive type](../22_Generics/a_generic_recursive_type/README.md) — the `Box` a type that contains itself needs, and why a hand-rolled `Next`/`End` enum is `Option` with the API removed
 
 [OPTION.md](../OPTION.md) is the full reading order for `Option` itself.
 
