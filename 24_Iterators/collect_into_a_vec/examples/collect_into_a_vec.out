@@ -1,0 +1,63 @@
+1. One iterator, two ways to spend it
+   collect  -> ["a", "b", "c"]
+   for loop -> a b c
+   Same three pieces either way. The first line built a Vec to
+   hold them; the second never built a collection at all.
+
+2. What the Vec buys — five things the iterator cannot do
+   len          -> 4
+   index [1]    -> ada
+   sorted       -> ["ada", "ada", "ben", "cara"]
+   join         -> "cara, ada, ben, ada"
+   two passes   -> longest 4, 13 letters in all
+   `sort` and `join` are SLICE methods, not iterator ones: neither
+   can start until the last item has arrived, so neither can be an
+   adapter. Two passes need the pieces to still be somewhere.
+
+3. What it costs — and the questions that need no Vec
+   collect().len() = 4   4 pieces built, 1 Vec allocated
+   .count()        = 4   the same answer, no allocation
+   .next()         = "cara"  1 closure call
+   .find(b…)       = Some("ben")  3 closure calls, then it stopped
+   .any(== ada)    = true   2 closure calls, then it stopped
+   .position(ben)  = Some(2) 3 closure calls
+   .max_by_key(len)= Some("cara")
+   Only the first line allocated. A `collect` written to answer one
+   of the other six is a Vec built, read once, and dropped.
+
+4. The pieces are slices OF the original, not copies of it
+   "cara:ada:ben:ada"
+   byte offsets of the pieces -> [0, 5, 9, 13]
+   Not one character was copied: the Vec holds four (pointer, len)
+   pairs aimed into the string it came from. Cheap — and the reason
+   a Vec<&str> can never outlive the string it was split from.
+
+5. Borrowed or owned — one annotation apart
+   Vec<&str>   -> ["cara", "ada", "ben", "ada"]  (1 allocation: the Vec)
+   Vec<String> -> ["cara", "ada", "ben", "ada"]  (5: the Vec, and one per piece)
+   the owned one outlives its source -> ["cara", "ada", "ben"]
+   The same block returning Vec<&str> is E0515: the pieces would
+   point into a String that was dropped one line earlier.
+
+6. How many pieces? The answer is never zero
+   "".split(':')                  -> len 1  [""]
+   "a".split(':')                 -> len 1  ["a"]
+   "a::b".split(':')              -> len 3  ["a", "", "b"]
+   "a:b:".split(':')              -> len 3  ["a", "b", ""]
+   "a:b:".split_terminator(':')   -> len 2  ["a", "b"]
+   "".split_whitespace()          -> len 0  []
+   `split` yields one more piece than there are separators, always,
+   so the empty string gives one empty piece and the Vec is never
+   empty. `is_empty()` on it answers a question you did not ask.
+
+7. For a key=value line you want neither
+   "port=8080"
+      splitn(2, '=').collect() -> ["port", "8080"], and pieces.get(1) = Some("8080")
+      split_once('=')          -> Some(("port", "8080"))
+   "debug"
+      splitn(2, '=').collect() -> ["debug"], and pieces.get(1) = None
+      split_once('=')          -> None
+   `pieces[1]` on the second line is a panic, and the type system
+   said nothing: indexing a Vec is where a missing separator turns
+   into a crash. `split_once` returns Option<(&str, &str)>, so the
+   same mistake is a `None` the compiler makes you handle.

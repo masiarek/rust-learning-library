@@ -1,0 +1,31 @@
+roster = "cara:ada:ben:ada"   (4 names, one of them twice)
+
+1. How many names?            4
+   .count()          — 4 pieces walked, nothing kept
+2. Alphabetically first?      Some("ada")
+   .min()            — 4 pieces walked, one &str kept
+3. The last name?             Some("ada")
+   .next_back()      — 1 piece walked: it read from the far end
+4. In reverse order?          ada ben ada cara
+   .rev()            — no sort, no second pass, and no Vec: the
+                       names went straight to the screen. `Split` walks
+                       backwards on its own, so reversing is free.
+                       True for split(':') and NOT for split(":") —
+                       only the char searcher is double-ended.
+5. Any name twice?            true
+   HashSet + .any()  — 4 pieces walked here, because the repeat
+                       IS the last name. On "cara:ada:ada:ben"
+                       the same line answers true after 3 pieces and stops.
+                       A collection, but a set — with a Vec you would
+                       be writing the inner loop yourself.
+6. The names in order?        ["ada", "ada", "ben", "cara"]
+   collect + sort    — 4 pieces walked, all of them kept. THIS is
+                       the question that needs the Vec: sorting cannot
+                       begin until the last name has arrived, which is
+                       why there is no `Iterator::sort` to reach for.
+
+Four of the six answers built nothing at all; the fifth wanted a set
+rather than a Vec. The reflex to `collect` first and ask afterwards
+pays for a Vec on all six — and question 3 shows what that costs
+beyond the allocation: collecting reads the whole line to find a name
+the iterator hands back after a single step.
