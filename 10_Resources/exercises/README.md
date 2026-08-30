@@ -42,6 +42,8 @@ At some point the answer stops being an exercise track.
 
 **[Command-Line Rust ↗](https://github.com/kyclark/command-line-rust)** (Ken Youens-Clark) rebuilds the classic Unix tools — `head`, `cat`, `wc`, `grep` — one per chapter, each with a full test suite. It is the natural next step after an exercise track because the programs are real, small, and have an obvious definition of correct.
 
+**[The elevator kata](elevator_kata/README.md)** is the other kind of project — one problem, three incompatible published versions of it, and a design decision to make before any code. Worked through on its own page.
+
 And [the long way round to a STAR count](../../ROADMAP.md) is this library's own version of that: a sequence of lessons where each is the next thing Rust wants to teach, and the running example happens to be a voting method.
 
 ## See also
