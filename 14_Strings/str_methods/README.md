@@ -14,12 +14,16 @@ The signature block is a `text` fence rather than a `rust` one on purpose: a bar
 
 Twenty-odd methods below take a `P: Pattern`, and that one trait is why searching, splitting, trimming and replacing all accept the same four shapes:
 
-| shape | example | matches |
-|---|---|---|
-| `char` | `s.split(',')` | that one character |
-| `&str` | `s.split(", ")` | that exact substring |
-| `&[char]` | `s.split(&['-', '_'][..])` | **any one** of those characters |
-| `FnMut(char) -> bool` | `s.split(char::is_numeric)` | any character the closure approves |
+| shape | example | matches | worked example |
+|---|---|---|---|
+| `char` | `s.split(',')` | that one character | [`split`](str_split/README.md) |
+| `&str` | `s.split(", ")` | that exact substring | [`split_once`](str_split_once/README.md) |
+| `&[char]` | `s.split(&['-', '_'][..])` | **any one** of those characters | [`trim_matches`](str_trim_matches/README.md) |
+| `FnMut(char) -> bool` | `s.split(char::is_numeric)` | any character the closure approves | [`matches`](str_matches/README.md) |
+
+The last column is a page whose program uses that shape and is compiled and run by CI, so you can read the row working rather than take it on trust — and the four pages are four different methods, which is the trait's whole point. For all four shapes in one program, [`contains`](str_contains/README.md) calls it four times, one line per shape.
+
+`&[char]` is the shape that stays unfamiliar: of the 83 examples here only three use it — `contains`, `split` and `trim_matches`. The `[..]` on it is a habit rather than a requirement, and worth not copying into new code: `Pattern` is implemented for `[char; N]` and `&[char; N]` too, so `s.split(['-', '_'])` compiles and does the same thing.
 
 A `&str` pattern is never accepted where the method has to search **backwards from both ends at once** — [`trim_matches`](str_trim_matches/README.md) is the one that refuses it. Chain the two one-sided methods there instead.
 
