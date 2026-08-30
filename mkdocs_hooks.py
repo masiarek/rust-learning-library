@@ -330,6 +330,11 @@ NAV_ORDER: dict[str, list[str]] = {
         "unwrap_or_else",
         "unwrap_or_default",
         "map_or",
+        # ...and then all of them at once, as one vocabulary rather than a
+        # dozen separate methods -- and the operator that ends the chain by
+        # leaving the function.
+        "transforms_instead_of_match",
+        "the_question_mark_operator",
         "expect",
         "what_a_panic_costs",
         "partial_functions",
@@ -750,6 +755,8 @@ LABELS = {
     # 23_Closures · 24_Iterators — the folder names already read correctly,
     # so only the four names a sentence-caser cannot get right are listed.
     "the_move_keyword": "The `move` keyword",
+    "the_question_mark_operator": "The `?` operator",
+    "transforms_instead_of_match": "Transforms instead of `match`",
     "iter_iter_mut_into_iter": "`iter`, `iter_mut`, `into_iter`",
     "implementing_iterator": "Implementing `Iterator`",
     "three_closure_traits": "The three closure traits",

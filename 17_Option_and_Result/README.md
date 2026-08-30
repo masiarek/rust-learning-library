@@ -29,6 +29,8 @@ Red marks the four that can panic. Notice where they land: `unwrap` and `expect`
 | [`unwrap_or_else`](unwrap_or_else/README.md) | 201 | The lazy fallback — built only if needed, allowed to consume what it captures, and on a `Result` the only one handed the error |
 | [`unwrap_or_default`](unwrap_or_default/README.md) | 201 | The fallback the *type* chose — a derived `Default` is the type's zero, not your domain's, and a missing impl is a guard rail |
 | [`map_or` and `map_or_else`](map_or/README.md) | 201 | Transform *and* fall back in one call — the default written first and run last, and the clippy lint on each side of it |
+| [Transforms instead of `match`](transforms_instead_of_match/README.md) | 201 | The whole vocabulary at once: which sentence picks `map`, `and_then`, `ok_or` or `map_err` — plus the `_else` suffix measured, and the `as_ref()` that E0507 is asking for |
+| [The `?` operator](the_question_mark_operator/README.md) | 201 | Unwrap, **return**, and convert the error through `From` — three statements in one character, and the third is the one people are surprised by |
 | [`expect`](expect/README.md) | 201 | The message is a claim about why this cannot fail — and being unable to write it is the finding |
 | [What a panic costs](what_a_panic_costs/README.md) | 201 | The other half of `unwrap`: where the panic points, what unwinding gives back (memory) and what it does not (your work), and why the exit code is 101 |
 | [Partial functions](partial_functions/README.md) | 201 | Why `Option` exists at all: it turns a function that is undefined somewhere into one that always answers |
