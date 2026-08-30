@@ -23,16 +23,40 @@ fn collect<B: FromIterator<Self::Item>>(self) -> B {
 
 Everything interesting is in `B`.
 
-## The annotation is not optional, and it has two spellings
+## The type has to be *determined*, not *written*
 
 Because the target does the work, the compiler cannot infer it from the iterator alone — `E0282, type annotations needed` is the most common `collect` error, and it means *"which collection?"*, not *"which element?"*.
 
+But "annotate the collect" is the rule as usually taught, and it is a rule about the wrong thing. What `collect` needs is for **something** to pin `B`. Three things can:
+
 ```rust
-let v: Vec<&str> = words.into_iter().collect();      // annotate the binding
-let n = words.into_iter().collect::<Vec<_>>().len(); // or turbofish the call
+let v: Vec<&str> = words.into_iter().collect();      // 1. the binding
+let n = words.into_iter().collect::<Vec<_>>().len(); // 2. the turbofish
+let report = Report { lines: words.into_iter().map(str::to_uppercase).collect() };
+                                                     // 3. the USE SITE — nothing named here
 ```
 
-Use the turbofish when there is no binding to annotate — usually because you are about to call a method on the result. The `_` inside is inference doing the element type, which it *can* work out; only the container has to be named.
+The third is the one that surprises people, and it is not a special case: inference runs backward from wherever the value lands, so a **struct field**, a **function parameter**, or a **return type** determines `B` exactly as well as a binding does. In `fn shout(w: &[&str]) -> Vec<String> { w.iter().map(|s| s.to_uppercase()).collect() }` the signature is the annotation.
+
+Use the turbofish when nothing downstream pins it — usually because you are about to call a method on the result. The `_` is inference doing the element type, which it *can* work out; only the container has to be named. That is also the cheapest way to explore an unfamiliar API: write `let x: Vec<_> = …` and let rustc or your editor tell you what the elements turned out to be.
+
+**The one use site that does not pin it is a slice parameter** — which is the parameter type Rust otherwise tells you to prefer, and the one `clippy::ptr_arg` (warn by default: *"fn arguments of the type `&Vec<...>` or `&String`, suggesting to use `&[...]` or `&str` instead"*) will push you toward. Given `fn widest(lines: &[String]) -> usize`, this fails:
+
+```rust
+let lines = words.into_iter().map(str::to_uppercase).collect();  // ← does not compile
+println!("{}", widest(&lines));
+```
+
+```text
+error[E0277]: a slice of type `[String]` cannot be built since `[String]` has no definite size
+   |
+ 7 |     let lines = words.into_iter().map(str::to_uppercase).collect();
+   |                                                          ^^^^^^^ try explicitly collecting into a `Vec<String>`
+   |
+   = help: the trait `FromIterator<String>` is not implemented for `[String]`
+```
+
+`&Vec<String>` reaches `&[String]` by a **deref coercion**, and inference will not run a coercion backward — it takes `[String]` at face value and reports it unsized. Both `Vec<String>` and `&Vec<String>` do pin it, but the second is the exact signature `ptr_arg` just told you not to write, so the honest options are a by-value `Vec<String>` parameter or naming the type at the `collect` — which is what the compiler's own suggestion says. That is the small collision worth remembering: the idiomatic parameter type and use-site inference do not compose, and the lint wins.
 
 ## What you can collect into
 
@@ -68,7 +92,9 @@ Three things this buys, and one it costs:
 - **`?` works on the result**, which is usually the whole point of the line.
 - **Only the first error survives.** If you need all of them — a validation report, a row-by-row error list — `collect` is the wrong consumer. Use `partition(Result::is_ok)`, or collect into `Vec<Result<T, E>>` and sort it out afterwards. On the four rows above, partitioning keeps **two** errors where collecting kept one.
 
-`Option<Vec<T>>` behaves identically, with `None` in place of `Err`.
+The un-flipped shape is **one annotation away**, on the same pipeline: ask for `Vec<Result<i32, _>>` instead and you get `[Ok(5), Err(..), Ok(0), Err(..)]` — all four rows run, every outcome kept, no short-circuit, because there is nothing to short-circuit *to*. Which of the two you want is the whole decision, and it is made in the type.
+
+`Option<Vec<T>>` behaves identically, with `None` in place of `Err`. If you have met this shape in a functional language, it is [`traverse`/`sequence` ↗](https://hackage.haskell.org/package/base/docs/Data-Traversable.html) — Rust gets it from one `FromIterator` impl rather than a separate combinator.
 
 ## `Result<(), E>`: the degenerate case that is actually useful
 
@@ -113,7 +139,7 @@ And a collection you collect into is a claim about your element type, checked at
 
 - **Python.** `list(gen)`, `set(gen)`, `dict(pairs)`, `"".join(gen)` — Python names the target as a *constructor call* and Rust names it as a *type*, but it is the same decision made in the same place, and the dict case has the same last-key-wins behaviour. What Python has no counterpart for is `Result<Vec<_>, _>`: gathering per-row failures into one answer is a `try`/`except` around the whole loop, which is coarser (you lose which row) or a manual accumulator (which is `partition`). And Python's `list()` cannot be extended to your own class in the way `FromIterator` extends `collect` — the nearest thing is writing `MyType(gen)` and accepting the iterable in `__init__`, which works but is not the same generic call site.
 - **ABAP.** There is no equivalent, and that is worth saying plainly: building a result collection is always a `LOOP` with an `APPEND`, or the 7.40+ table comprehension `VALUE ty_tab( FOR wa IN lt_src ( CORRESPONDING #( wa ) ) )`, which is the closest ABAP gets — and note it names the target type on the left exactly as Rust does. The pieces with no ABAP counterpart are the interesting ones: `HashSet` deduplication is `DELETE ADJACENT DUPLICATES` after a `SORT`, a separate statement rather than a choice of target; and `Result<Vec<_>, _>` has no analogue at all, since ABAP's failure channel is `sy-subrc` or an exception, neither of which composes over a table. The habit that transfers badly is checking `sy-subrc` per row inside the loop; the Rust shape hoists that decision to the collect.
-- **Java / C#.** `.collect(Collectors.toList())` and `.ToList()` are the same idea, and Java's `Collector` is `FromIterator` with more moving parts. The difference is where the type comes from: Java passes a collector *value*, Rust infers the impl from the annotation, which is why Rust's failure mode is "type annotations needed" and Java's is picking the wrong collector. C#'s `ToDictionary` throws on a duplicate key where Rust's `collect` overwrites — worth knowing if you are porting a LINQ pipeline that relied on that throw.
+- **Java / C#.** `.collect(Collectors.toList())` and `.ToList()` are the same idea, and Java's `Collector` is `FromIterator` with more moving parts. The difference is where the type comes from: Java passes a collector *value*, Rust infers the impl from the annotation, which is why Rust's failure mode is "type annotations needed" and Java's is picking the wrong collector. The map case is where the two designs diverge most. Java's two-argument `Collectors.toMap` **throws** — *"an `IllegalStateException` is thrown when the collection operation is performed"* if the mapped keys contain duplicates — so handling them means a three-argument overload with a merge function, and choosing the map implementation means a four-argument one with a supplier. C#'s `ToDictionary` throws the same way. Rust's `collect` does none of that: it takes the target from the annotation and **silently overwrites** on a duplicate key. Fewer knobs, but the duplicate-key behaviour you get by default is the one Java made you ask for explicitly — worth knowing in both directions when porting.
 
 ---
 
@@ -149,6 +175,10 @@ And a collection you collect into is a claim about your element type, checked at
    short-circuiting. Note the shape it flipped: an iterator OF
    Results became one Result OF a Vec, so the caller has one thing
    to check instead of one per row.
+   Same pipeline, one annotation apart:
+   Vec<Result<_, _>> -> [Ok(5), Err(..), Ok(0), Err(..)]
+   all 4 rows ran and every outcome is kept — the un-flipped shape
+   has nothing to short-circuit TO, so it does not.
    Only the FIRST error survives. To keep them all, collect into a
    (Vec<_>, Vec<_>) with partition, or Vec<Result<_, _>> and sort it out.
    partitioned -> 2 ok, 2 err (every error kept)
@@ -181,6 +211,21 @@ And a collection you collect into is a claim about your element type, checked at
    `Voter` had to derive Eq and Hash to land in a HashSet, and Ord
    to land in a BTreeSet. Which collection you collect into is a
    claim about your type, checked at the collect call.
+
+9. You do not have to WRITE the type — it has to be KNOWABLE
+   struct field    -> ["ADA", "BEN", "CARA", "ADA"]
+   return position -> ["ADA", "BEN", "CARA", "ADA"]
+   by-value arg    -> widest = 4
+   Not one of those three `collect` calls names a type, and all
+   three compile: inference runs BACKWARD from where the value
+   lands. An annotation is not the requirement — a DETERMINED type
+   is, and a struct field, a return type or a parameter determines
+   one just as well as a binding does.
+   The use site that does NOT work is a `&[String]` parameter, which
+   is the one Rust otherwise tells you to prefer: `&Vec<String>` ->
+   `&[String]` is a deref coercion, and inference will not run a
+   coercion backward. It takes `[String]` literally and rejects it
+   as unsized — so that call is where you go back to a turbofish.
 ```
 <!-- /output -->
 
@@ -198,3 +243,5 @@ And a collection you collect into is a claim about your element type, checked at
 ## Sources
 
 [`Iterator::collect` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.collect) and [`FromIterator` ↗](https://doc.rust-lang.org/std/iter/trait.FromIterator.html) — the std page for the trait lists every impl, which is the real answer to "what can I collect into".
+
+Sam Van Overmeire, [*The Many Neat Tricks of Rust's `collect`* ↗](https://medium.com/@sam.van.overmeire/the-many-neat-tricks-of-rusts-collect-ab7e185f6fee) (Feb 2026) — a blog post, and the source of the use-site-inference point above; its closing example drops the annotation entirely and lets a struct field supply it. The slice-parameter limit and the `clippy::ptr_arg` collision are this page's, measured on the pinned toolchain. Its Java comparison is where the `Collectors.toMap` escalation comes from; the throwing behaviour is quoted from the [`Collectors` javadoc ↗](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Collectors.html) rather than the post.

@@ -24,6 +24,10 @@
    short-circuiting. Note the shape it flipped: an iterator OF
    Results became one Result OF a Vec, so the caller has one thing
    to check instead of one per row.
+   Same pipeline, one annotation apart:
+   Vec<Result<_, _>> -> [Ok(5), Err(..), Ok(0), Err(..)]
+   all 4 rows ran and every outcome is kept — the un-flipped shape
+   has nothing to short-circuit TO, so it does not.
    Only the FIRST error survives. To keep them all, collect into a
    (Vec<_>, Vec<_>) with partition, or Vec<Result<_, _>> and sort it out.
    partitioned -> 2 ok, 2 err (every error kept)
@@ -56,3 +60,18 @@
    `Voter` had to derive Eq and Hash to land in a HashSet, and Ord
    to land in a BTreeSet. Which collection you collect into is a
    claim about your type, checked at the collect call.
+
+9. You do not have to WRITE the type — it has to be KNOWABLE
+   struct field    -> ["ADA", "BEN", "CARA", "ADA"]
+   return position -> ["ADA", "BEN", "CARA", "ADA"]
+   by-value arg    -> widest = 4
+   Not one of those three `collect` calls names a type, and all
+   three compile: inference runs BACKWARD from where the value
+   lands. An annotation is not the requirement — a DETERMINED type
+   is, and a struct field, a return type or a parameter determines
+   one just as well as a binding does.
+   The use site that does NOT work is a `&[String]` parameter, which
+   is the one Rust otherwise tells you to prefer: `&Vec<String>` ->
+   `&[String]` is a deref coercion, and inference will not run a
+   coercion backward. It takes `[String]` literally and rejects it
+   as unsized — so that call is where you go back to a turbofish.

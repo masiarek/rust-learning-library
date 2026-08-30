@@ -27,6 +27,20 @@ impl FromIterator<String> for Roster {
     }
 }
 
+/// Three use sites that pin `collect`'s target without anyone writing it there.
+#[derive(Debug)]
+struct Report {
+    lines: Vec<String>,
+}
+
+fn widest(lines: Vec<String>) -> usize {
+    lines.iter().map(String::len).max().unwrap_or(0)
+}
+
+fn shout(words: &[&str]) -> Vec<String> {
+    words.iter().map(|w| w.to_uppercase()).collect()
+}
+
 fn main() {
     println!("1. One call, and the TYPE decides what gets built");
     let words = ["Ada", "Ben", "Cara", "Ada"];
@@ -80,6 +94,19 @@ fn main() {
     println!("   short-circuiting. Note the shape it flipped: an iterator OF");
     println!("   Results became one Result OF a Vec, so the caller has one thing");
     println!("   to check instead of one per row.");
+
+    let unflipped: Vec<Result<i32, _>> = bad.into_iter().map(str::parse::<i32>).collect();
+    let shapes: Vec<String> = unflipped
+        .iter()
+        .map(|r| match r {
+            Ok(n) => format!("Ok({n})"),
+            Err(_) => "Err(..)".to_string(),
+        })
+        .collect();
+    println!("   Same pipeline, one annotation apart:");
+    println!("   Vec<Result<_, _>> -> [{}]", shapes.join(", "));
+    println!("   all 4 rows ran and every outcome is kept — the un-flipped shape");
+    println!("   has nothing to short-circuit TO, so it does not.");
     println!("   Only the FIRST error survives. To keep them all, collect into a");
     println!("   (Vec<_>, Vec<_>) with partition, or Vec<Result<_, _>> and sort it out.");
 
@@ -143,4 +170,25 @@ fn main() {
     println!("   `Voter` had to derive Eq and Hash to land in a HashSet, and Ord");
     println!("   to land in a BTreeSet. Which collection you collect into is a");
     println!("   claim about your type, checked at the collect call.");
+
+    println!();
+    println!("9. You do not have to WRITE the type — it has to be KNOWABLE");
+    let lines = words.into_iter().map(str::to_uppercase).collect();
+    let report = Report { lines };
+    println!("   struct field    -> {:?}", report.lines);
+    println!("   return position -> {:?}", shout(&words));
+    println!(
+        "   by-value arg    -> widest = {}",
+        widest(words.into_iter().map(str::to_uppercase).collect())
+    );
+    println!("   Not one of those three `collect` calls names a type, and all");
+    println!("   three compile: inference runs BACKWARD from where the value");
+    println!("   lands. An annotation is not the requirement — a DETERMINED type");
+    println!("   is, and a struct field, a return type or a parameter determines");
+    println!("   one just as well as a binding does.");
+    println!("   The use site that does NOT work is a `&[String]` parameter, which");
+    println!("   is the one Rust otherwise tells you to prefer: `&Vec<String>` ->");
+    println!("   `&[String]` is a deref coercion, and inference will not run a");
+    println!("   coercion backward. It takes `[String]` literally and rejects it");
+    println!("   as unsized — so that call is where you go back to a turbofish.");
 }
