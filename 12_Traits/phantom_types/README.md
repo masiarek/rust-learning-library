@@ -199,3 +199,4 @@ The rule of thumb: reach for a phantom type when mixing the two kinds is a *bug*
 - [A score is not a number](../../16_Structs/newtype_score/README.md) — the same instinct without generics: one type, one door, no tag
 - [The right to vote is a value](../../09_Advanced/one_person_one_vote/README.md) — typestate built from distinct types and move semantics, and the hole neither approach closes
 - [Static vs dynamic dispatch](../static_vs_dynamic_dispatch/README.md) — where to go when the tag has to be a run-time choice after all
+- [Reference counting](../../18_Ownership/reference_counting/README.md) — the same silence with the opposite obligation: an `Rc`'s `.clone()` never says which of two jobs it is doing and nothing makes you say, while a phantom parameter cannot be inferred at all, so `E0282` makes you name it at every construction
