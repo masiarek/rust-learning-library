@@ -41,7 +41,7 @@ In 1.98.0's source, `Iterator` declares **76 methods** and exactly one of them �
 
 **`rev()` needs `DoubleEndedIterator`.** Reversing means pulling from the far end, and `next` cannot do that — you must also write `next_back`:
 
-```text
+```text title="Abridged — real rustc output, without the file-and-line headers"
 error[E0277]: the trait bound `Countdown: DoubleEndedIterator` is not satisfied
    |
 11 |     let v: Vec<u32> = Countdown { n: 3 }.rev().collect();
@@ -115,7 +115,7 @@ Writing the iterator struct *by hand* — a `next` that walks your own nodes —
 
 `fn iter(&self) -> std::slice::Iter<'_, String>` — the `'_` ties the returned iterator to the borrow of `self`, which is what stops the iterator outliving the data it reads:
 
-```text
+```text title="Real rustc output"
 error[E0515]: cannot return value referencing local variable `v`
  --> scratch.rs:3:5
   |

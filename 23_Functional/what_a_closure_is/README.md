@@ -27,7 +27,7 @@ fn main() {
 }
 ```
 
-```text
+```text title="Real rustc output"
 error[E0434]: can't capture dynamic environment in a fn item
  --> scratch.rs:3:40
   |
@@ -73,7 +73,7 @@ fn main() {
 }
 ```
 
-```text
+```text title="Abridged — real rustc output, without the file-and-line headers and the two type notes"
 error[E0308]: `if` and `else` have incompatible types
   |
 4 |     let f = if flag { |x: i32| x + bonus } else { |x: i32| x + bonus };
@@ -98,7 +98,7 @@ Three spellings, and the choice is between code size and indirection.
 
 The last row is the trap. A closure that captures nothing coerces to a `fn` pointer, so `apply_ptr(41, |n| n + 1)` compiles and reads like proof that closures are function pointers. Add one captured variable and it stops:
 
-```text
+```text title="Abridged — real rustc output, without the file-and-line headers and the type notes"
 error[E0308]: mismatched types
   |
 4 |     println!("{}", apply_ptr(41, |n| n + bonus));

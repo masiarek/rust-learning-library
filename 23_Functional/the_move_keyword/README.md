@@ -26,7 +26,7 @@ So `move` is not "capture by value instead of nothing". It is *"capture by value
 
 **Returning a closure.** A closure built inside a function and handed back cannot hold a reference to that function's locals:
 
-```text
+```text title="Abridged — real rustc output, without the file-and-line header and one note block"
 error[E0373]: closure may outlive the current function, but it borrows `name`, which is owned by the current function
   |
 3 |     || format!("hello, {name}")

@@ -14,7 +14,7 @@ fn main() {
 
 Delete `.collect()` and the closure never runs at all. The compiler notices:
 
-```text
+```text title="Abridged — real rustc output, without the second note and the help block"
 warning: unused `Map` that must be used
  --> scratch.rs:3:5
   |

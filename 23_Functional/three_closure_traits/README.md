@@ -91,7 +91,7 @@ The second closure is called twice, which an `FnOnce` cannot be. [What `move` ac
 
 **Calling an `FnOnce` twice** is not a special rule about closures. `call_once` takes `self`, so the call *moves* the closure — and the second call is an ordinary use-after-move:
 
-```text
+```text title="Abridged — real rustc output, without the file-and-line headers"
 error[E0382]: use of moved value: `consumer`
   |
 4 |     consumer();
@@ -105,7 +105,7 @@ note: this value implements `FnOnce`, which causes it to be moved when called
 
 **An `FnMut` closure needs a `mut` binding.** `call_mut` takes `&mut self`, so calling it borrows the closure mutably — and the compiler's message names the capture that put it in that category:
 
-```text
+```text title="Abridged — real rustc output, without the file-and-line header"
 error[E0596]: cannot borrow `bumps` as mutable, as it is not declared as mutable
   |
 3 |     let bumps = || count += 1;

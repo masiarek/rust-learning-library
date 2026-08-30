@@ -29,7 +29,7 @@ That indirection is also what keeps a collection re-iterable. An iterator is sin
 
 ## The E0382 everybody meets
 
-```text
+```text title="Abridged — real rustc output, without the file-and-line header"
 error[E0382]: borrow of moved value: `v`
     |
   2 |     let v = vec![1, 2, 3];
