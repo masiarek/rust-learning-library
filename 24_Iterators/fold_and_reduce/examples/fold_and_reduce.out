@@ -1,0 +1,43 @@
+1. fold takes a starting value and a way to absorb one more item
+   .fold(0, |acc, s| acc + s)   = 15
+   .sum::<i32>()                = 15
+   same answer, and `sum` IS this fold — std writes it as one.
+
+2. Which is why the others are folds too
+   count -> 6   (std: 6)
+   max   -> 5   (std: Some(5))
+   collect -> [5, 3, 0, 4, 2, 1]
+   Reach for the named one every time — this is what it is made of,
+   not a suggestion to write it yourself.
+
+3. The accumulator does NOT have to be the item type
+   six i32 -> one String   "5-3-0-4-2-1"
+   three pairs -> a tally  [("Ada", 9), ("Ben", 3)]
+   That is the whole reason fold exists: `sum` can only build a number.
+
+4. Two answers in one pass, with a tuple accumulator
+   min and max together    (0, 5)
+   .min() then .max() walks the data twice; this walks it once.
+
+5. reduce is fold with the first item as the starting value
+   .reduce(|a, b| a + b)   -> Some(15)
+   Note the Option: with no items there is no starting value to
+   return, so the answer is None rather than a made-up zero.
+   on an empty iterator:   reduce -> None
+                           fold   -> 0
+   fold's answer is the identity you supplied. reduce refuses to
+   invent one, which is the right answer for max, and the wrong
+   shape for sum — where 0 really is the answer.
+
+6. try_fold stops at the first failure, and that is how any/all/find work
+   try_fold over [5, 3, "no", 4] -> Err(invalid digit found in string)
+   the closure ran 3 times, not 4 — it stopped at the bad row.
+   A plain fold cannot do that: it has no way to say "stop", so it
+   would have to carry the error to the end in the accumulator.
+
+7. The trap: an accumulator that is rebuilt rather than carried
+   carried:  [5, 3, 0, 4, 2, 1]
+   cloned:   [5, 3, 0, 4, 2, 1]
+   Identical output. The second built six Vecs to produce one, which
+   is quadratic in the length. `mut acc` and returning it is the
+   shape to write; a `.clone()` inside a fold is nearly always this.

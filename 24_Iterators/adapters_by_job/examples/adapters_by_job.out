@@ -1,0 +1,59 @@
+1. Keep some — and the two ways to stop, which are not the same
+   .filter(< 5)          [3, 0, 4, 2, 1]
+   .take_while(< 5)      []
+   .skip_while(< 5)      [5, 3, 0, 4, 2, 1]
+   `filter` tests every item. `take_while` stops at the FIRST item
+   that fails and never looks again — on a sorted sequence that is
+   the point, and on an unsorted one it is a bug that returns a
+   plausible prefix. The 5 at the front ends take_while immediately.
+
+2. Transform-and-keep in one step
+   .filter_map(parse.ok())  [5, 3, 4]
+   `filter_map` is `map` whose closure returns Option: Some keeps and
+   transforms, None drops. Writing it as .map(..).filter(..).map(..)
+   parses twice or unwraps.
+
+3. One item in, many out — and the silent-loss trap
+   .flat_map(split)         ["Ada", "Lovelace", "Ben", "Carter"]
+   .flat_map(parse)         [5, 3, 4]
+   The second one is the trap. A Result IS an iterator of length 0 or
+   1, so flat_map over it flattens the Ok values and DROPS the Err —
+   quietly, with the same shape as the successful case. Three rows in,
+   three out; four rows in, three out, and nothing says which vanished.
+   When the failure matters, collect into Result instead.
+
+4. Split into two, keeping both halves
+   .partition(< 3)          small [0, 2, 1]  large [5, 3, 4]
+   .unzip()                 ["Ada", "Ben"]  [5, 3]
+   `partition` splits one stream by a predicate; `unzip` splits a
+   stream of pairs by position. Neither is lazy: both consume.
+
+5. Carry state along the chain
+   .scan(0, running total)  [5, 8, 8, 12, 14, 15]
+   `scan` is a fold that yields every intermediate rather than only
+   the last, and its closure returns Option — returning None ends the
+   iterator, which is how you write a stateful `take_while`.
+
+6. Look ahead without consuming
+   peek() saw 5, then take(2) got [5, 3]
+   `peek` takes &mut self even though it consumes nothing, because it
+   has to pull the item and hold it. That is why a peeked iterator
+   needs `let mut`, and why peeking inside a `while let` over the same
+   iterator needs care about where the borrow ends.
+
+7. Join, repeat, and step
+   .chain(other)            [5, 3, 9, 9]
+   .cycle().take(8)         [1, 2, 3, 1, 2, 3, 1, 2]
+   .step_by(2)              [5, 0, 2]
+   `cycle` is endless, so it only makes sense with something that
+   stops — laziness is what keeps it from hanging.
+
+8. The three that are NOT iterator adapters
+   slice::windows(2)        [[1, 2], [2, 3], [3, 4]]
+   slice::chunks(3)         [[1, 2, 3], [4]]
+   Vec::dedup()             [1, 2, 3]
+   `windows` and `chunks` are methods on a SLICE, not on Iterator —
+   they need to look at several items at once, which an iterator that
+   has handed you an item can no longer do. `dedup` is a Vec method
+   and only removes CONSECUTIVE duplicates; deduplicating a whole
+   sequence is a collect into a HashSet, or a sort first.

@@ -11,8 +11,15 @@ The property everything else follows from is **laziness**: `map` and `filter` bu
 | [Iterators are lazy](iterators_are_lazy/README.md) | 201 | Adapters build a plan and consumers run it, counted: 6 closure calls for `collect`, 1 for `find`, 0 for a chain nobody consumed — plus the interleaving proof that a chain is one pass, not one per adapter |
 | [`iter`, `iter_mut`, `into_iter`](iter_iter_mut_into_iter/README.md) | 101 → 201 | The three doors onto a collection, which one a `for` loop picked for you, the array `into_iter` that changed meaning in edition 2021, and why the clone you added to make it compile was probably the wrong door |
 | [Implementing `Iterator`](implementing_iterator/README.md) | 201 → 301 | One method and seventy-five arrive free; what does not (`rev`, `len`, `size_hint`); and why a collection must never *be* an iterator |
+| [`fold` and `reduce`](fold_and_reduce/README.md) | 201 | The consumer the others are made of — `sum` really is `fold(0, +)` in std — plus `try_fold`, and the `.clone()` inside a fold that makes it quadratic |
+| [`collect` and `FromIterator`](collect_and_fromiterator/README.md) | 201 | The call with no behaviour of its own: the target type decides. Including `Result<Vec<_>, _>`, which flips a sequence of failures into one, and keeps only the first |
+| [Adapters by job](adapters_by_job/README.md) | 201 | Which of the twenty to reach for, and the four traps — `take_while` is not `filter`, and `flat_map` over a `Result` deletes your errors |
+| [Returning an iterator](returning_an_iterator/README.md) | 201 → 301 | `impl Iterator` for the chain you cannot name, the lifetime edition 2024 now captures for you, and the second branch that forces a box |
+| [`DoubleEndedIterator` and `ExactSizeIterator`](double_ended_and_exact_size/README.md) | 201 → 301 | Where `rev()` and `len()` actually come from, what each promises, and why `.enumerate().rev()` and `.rev().enumerate()` number the same rows differently |
+| [When a `for` loop beats a chain](when_a_loop_beats_a_chain/README.md) | 201 | Four jobs the fluent style loses — an error that names its row, a growing work list, a break out of two levels, three answers in one pass — and why speed is not one of them |
+| [`Iterator` versus `Stream`](iterator_vs_stream/README.md) | 301 | The same trait with *"not yet"* added to the answer, polled by hand with a nine-line executor; and why an `Iterator` inside async code never yields |
 
-Read them in that order: laziness explains what the other two are describing, and the three doors have to be solid before you write the doors for a type of your own.
+The first three are the spine — read them in that order, since laziness explains what the other two are describing and the three doors have to be solid before you write the doors for a type of your own. After that the section stops being a sequence: `fold` and `collect` are the two consumers worth knowing properly, *adapters by job* is a lookup table, and the last three are each answers to a question you will not have until you hit it.
 
 ## They all take closures
 
@@ -31,4 +38,4 @@ Iterators turn up long before a section about them, so their lessons stay where 
 
 ## Not yet written
 
-The gaps, listed rather than stubbed so they are visible: **`fold` and `reduce`** (the consumer every other consumer is a special case of), **`collect` and `FromIterator`** — including `collect::<Result<Vec<_>, _>>()`, which turns a sequence of fallible rows into one fallible sequence — **the adapters by job** (`flat_map`, `partition`, `scan`, `windows`, `chunks`, `peekable`, `zip`/`unzip`), **`impl Iterator` as a return type** versus naming the concrete adapter chain, **`DoubleEndedIterator` and `ExactSizeIterator`** in their own right rather than as two refusals, **`Iterator` versus `Stream`** once `async` arrives, and **when a `for` loop beats a chain**, which is more often than the fluent style suggests.
+The remaining gaps, listed rather than stubbed so they are visible: **`itertools`**, the crate everybody adds for `chunk_by`, `sorted`, `dedup_by` and `Either` — and where its adapters differ from the std ones they resemble; **iterating a `HashMap`** and why the order is deliberately not the insertion order; **`Extend` and `Iterator::by_ref`**, the two mechanisms that let a chain be consumed in stages; **parallel iterators** (`rayon`'s `par_iter`), which is a one-word change with a real contract behind it; and **writing an iterator over a tree**, where `next` has to hold an explicit stack because the recursion cannot.

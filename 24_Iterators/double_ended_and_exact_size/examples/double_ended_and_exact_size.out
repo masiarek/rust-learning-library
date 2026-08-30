@@ -1,0 +1,45 @@
+1. `rev()` is not a method on Iterator's items — it needs the other end
+   forwards  [5, 3, 0, 4, 2, 1]
+   .rev()    [1, 2, 4, 0, 3, 5]
+   A slice iterator knows where it ends, so it can walk backwards.
+   An iterator that only has `next` cannot, and `.rev()` on one is
+   E0277: the trait bound `Countdown: DoubleEndedIterator` is not
+   satisfied — a compile error, never a run-time surprise.
+
+2. Writing `next_back` is what buys it
+   Countdown::new(5)          [5, 4, 3, 2, 1]
+   .rev()                     [1, 2, 3, 4, 5]
+   .rfind(|n| n % 2 == 0)     Some(2)
+
+3. The contract: both ends eat from ONE sequence, and meet in the middle
+   next Some(6)  next_back Some(1)  next Some(5)  next_back Some(2)
+   remaining: [4, 3]
+   Six items, four taken from alternating ends, two left. An impl
+   where the two ends can hand out the same element twice is a bug
+   the compiler cannot catch — this is the part you must get right.
+
+4. ExactSizeIterator: len() without walking anything
+   size_hint()  (9, Some(9))
+   len()        9
+   `len` is not a count — it reads `size_hint` and trusts it. That
+   is why implementing the trait is a promise rather than a method:
+   the impl block is empty, and what you are signing for is that
+   size_hint's two numbers are equal and correct.
+   and an exact hint pays: collect capacity 9
+
+5. Which adapters keep which trait
+   map      rev [8, 6, 4, 2]  len 4
+   filter   rev [4, 2]  len: no — filter cannot know how many pass
+   skip     rev [4, 3, 2]  len 3
+   chars    rev "cba"  len: no — a char is 1 to 4 bytes, so the count
+            is not known without walking the string
+   Both are structural: an adapter keeps a trait only if it can
+   still honour the contract. `filter` keeps rev and loses len.
+
+6. The trap: rev() and enumerate() do not commute
+   .enumerate().rev()  [(2, "Cara"), (1, "Ben"), (0, "Ada")]
+   .rev().enumerate()  [(0, "Cara"), (1, "Ben"), (2, "Ada")]
+   Same three names, same order on screen, DIFFERENT numbers.
+   `enumerate` counts the position it hands out, so putting it first
+   preserves the original index and putting it last renumbers from
+   the new front. If the index means "row in the file", it goes first.

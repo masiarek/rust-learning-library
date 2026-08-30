@@ -1,0 +1,36 @@
+1. The two signatures, side by side
+   fn next(&mut self)                  -> Option<Item>
+   fn poll_next(Pin<&mut Self>, &mut Context) -> Poll<Option<Item>>
+   Same question — is there another item? — with a third answer.
+   Option says "here it is" or "finished". Poll<Option<_>> adds
+   "not yet, wake me when there is", and that one extra state is the
+   whole difference between the two traits.
+
+2. Polling one by hand, so the Pending is visible
+   poll 1 -> Pending
+   poll 2 -> Ready(Some(3))
+   poll 3 -> Pending
+   poll 4 -> Ready(Some(2))
+
+3. The same stream, consumed by an async fn
+   executor: 3 Pending round(s) before the answer was Ready
+   items [3, 2, 1]   stream polled 7 times for 3 items
+   `while let Some(v) = stream.next().await` is the async `for`.
+   There is no `for v in stream`: `for` desugars to IntoIterator,
+   which has no await point anywhere in it.
+
+4. What an Iterator does inside async code
+   executor: 0 Pending round(s) before the answer was Ready
+   for n in [1, 2, 3] inside async -> 6
+   That loop is legal and has no await point, so it runs start to
+   finish without ever yielding. Harmless for three integers, and
+   the classic production bug when the body blocks: a synchronous
+   read inside async work stalls every other task on that thread,
+   because the executor only regains control at an `.await`.
+
+5. Where the traits actually live
+   Iterator      std::iter::Iterator          stable since 1.0
+   Stream        futures::Stream / tokio_stream, NOT in std
+   AsyncIterator core::async_iter::AsyncIterator, unstable (#79024)
+   So async iteration on stable Rust means a crate, and the trait
+   above is what that crate defines — poll_next, and nothing else.

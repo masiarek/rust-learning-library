@@ -1,0 +1,58 @@
+1. One call, and the TYPE decides what gets built
+   Vec<&str>      ["Ada", "Ben", "Cara", "Ada"]
+   String         "AdaBenCaraAda"
+   BTreeSet<&str> {"Ada", "Ben", "Cara"}   (sorted, and the duplicate Ada is gone)
+   VecDeque<&str> ["Ada", "Ben", "Cara", "Ada"]
+   Same iterator four times. `collect` did not decide any of this;
+   the annotation did, by picking whose FromIterator impl runs.
+
+2. Pairs collect into a map
+   BTreeMap  {"Ada": 4, "Ben": 3}
+   Ada appears twice in the input and once here: for a map, a later
+   key overwrites an earlier one. `collect` is not a merge — reach
+   for `fold` with `entry().or_insert()` when the totals matter.
+
+3. Turbofish, when there is no variable to annotate
+   .collect::<Vec<_>>().len()   = 4
+   the `_` is inference doing the element type; only the container
+   has to be named, and often only in one of the two places.
+
+4. The one everybody needs: Result<Vec<_>, _> from fallible rows
+   good rows -> Ok([5, 3, 0])
+   bad rows  -> Err(invalid digit found in string)
+   and it stopped after 2 of 4 rows — collect into a Result is
+   short-circuiting. Note the shape it flipped: an iterator OF
+   Results became one Result OF a Vec, so the caller has one thing
+   to check instead of one per row.
+   Only the FIRST error survives. To keep them all, collect into a
+   (Vec<_>, Vec<_>) with partition, or Vec<Result<_, _>> and sort it out.
+   partitioned -> 2 ok, 2 err (every error kept)
+
+5. Option collects the same way, and so does anything else you write
+   all even -> Some([2, 4, 6])
+   one odd  -> None   (one None and the whole answer is None)
+   our own  -> Roster with 3 rows, longest 10
+   one `impl FromIterator<String> for Roster` and `.collect()` works
+   on it — the trait is the whole extension point.
+
+6. What collect costs, and the two ways to pay less
+   collect  -> [3, 3, 4, 3]  capacity 4
+   extend   -> [3, 3, 4, 3]  capacity 4
+   `collect` allocates a new collection every time. `extend` pours
+   into one you already have, which is the loop-friendly form; and
+   an exact `size_hint` is what lets either make one allocation.
+
+7. The useful degenerate case: Result<(), E>
+   all rows parse            -> Ok(())
+   one row does not          -> Err(invalid digit found in string)
+   There is a FromIterator impl for `()`, so collecting an iterator
+   of `Result<(), E>` gives one `Result<(), E>`: did every step work,
+   with the first failure and nothing else kept. That is the shape
+   for a run of fallible side effects whose successes carry no value.
+   Same trick, same warning: it stops at the first Err.
+
+8. Deduplicating is a collect, and it costs a trait or two
+   three names -> HashSet<Voter> -> ["Ada", "Ben"]
+   `Voter` had to derive Eq and Hash to land in a HashSet, and Ord
+   to land in a BTreeSet. Which collection you collect into is a
+   claim about your type, checked at the collect call.
