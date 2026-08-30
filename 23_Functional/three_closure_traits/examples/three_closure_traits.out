@@ -1,0 +1,42 @@
+1. Three closures, three things the body does with the capture
+   || name.len()          reads it     -> 3
+   the capture survives the call: name = "Ada"
+   || { count += 1; count }  mutates it   -> 1 then 2
+   the mutation is real: count = 2
+   || owned               moves it out -> "cookie"
+   ...and `eats` is now spent. Calling it again is E0382.
+
+2. The ladder: Fn is an FnMut is an FnOnce
+   trait FnMut<A>: FnOnce<A>   and   trait Fn<A>: FnMut<A>
+   the reading closure, through F: Fn      -> (8, 8)
+   the same closure, through F: FnMut      -> (8, 8)
+   the same closure, through F: FnOnce     -> "8 chars"
+   so a bound of FnOnce accepts ALL closures; a bound of Fn accepts
+   only the ones that neither mutate nor consume. Take the loosest
+   bound your body can live with, or you refuse callers for nothing.
+
+3. What decides it is the BODY, not the `move` keyword
+   `|| cookie`        (no move)  is FnOnce: "cookie"
+   `move || biscuit.len()`       is Fn:     (7, 7)
+   called twice, which an FnOnce could not be. `move` chose where the
+   String lives; the body chose which traits the closure gets.
+
+4. An FnMut closure IS the state — and it needs a `mut` binding
+   record("Ada")  -> 1
+   record("Ben")  -> 2
+   record("Cara") -> 3
+   seen = ["Ada", "Ben", "Cara"]
+   without `let mut record`, the call is E0596 — the closure has to be
+   borrowed mutably to be called at all.
+
+5. Where std picked each one, and why
+   Option::unwrap_or_else(self, f: F)   F: FnOnce() -> T
+       runs at most once, so it may hand over an owned fallback.
+   Iterator::map(self, f: F)            F: FnMut(Self::Item) -> B
+       runs per item and is allowed to carry a running total.
+   Iterator::any(&mut self, f: F)       F: FnMut(Self::Item) -> bool
+   slice::sort_by_key(&mut self, f: F)  F: FnMut(&T) -> K
+   thread::spawn(f: F)                  F: FnOnce() -> T + Send + 'static
+       the thread body runs once; `Send + 'static` is a separate promise.
+   Each is the loosest bound that job can accept. Nothing here is about
+   speed: the bound decides which closures a caller may hand you.

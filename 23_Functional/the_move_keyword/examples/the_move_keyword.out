@@ -1,0 +1,39 @@
+1. Without `move`, a closure borrows what it reads
+   borrowed: Ada
+   borrowed: Ada
+   the original is still ours afterwards: "Ada"
+   size of that closure: 8 bytes (a reference, not a String)
+
+2. With `move`, the closure takes the value
+   owned: Ben
+   owned: Ben
+   size of that closure: 24 bytes (the String itself)
+   `owner` is no longer usable here — that use is E0382.
+
+3. The trap: on a Copy type, `move` COPIES
+   inside the closure:  11 then 12
+   outside it, total is still 10
+   nothing was moved: i32 is Copy, so the closure got its own copy,
+   the outer `total` was never touched, and no error was raised.
+   This is the one `move` bug that compiles, runs, and does nothing.
+
+4. A `move` closure captures the FIELDS it uses, not the whole value
+   voter: Cara
+   size of Voter:       48 bytes
+   size of the closure: 24 bytes  (just the String field)
+   and the field it did not touch is still ours: [5, 3, 0]
+   (edition 2021 changed this: before it, the whole `v` moved in.)
+
+5. Two places `move` is not optional
+   returned closure:  Hello, Ada
+   without `move` that is E0373: the closure would outlive `greeting`.
+   thread closure:    summed to 12
+   without `move` that is E0373 too, and the note names the reason:
+   `function requires argument type to outlive 'static`.
+
+6. When the original has to survive: clone, then move the clone
+   thread saw 2 rows
+   and main still has its own: ["Ada", "Ben"]
+   the clone exists only to be moved. That is the idiom, and it is
+   also the first place a `.clone()` is worth questioning: cloning to
+   satisfy `move` copies the data, cloning an Rc copies a pointer.

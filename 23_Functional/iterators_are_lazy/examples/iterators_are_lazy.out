@@ -1,0 +1,43 @@
+1. Building the chain runs nothing at all
+   SCORES.iter().map(doubled)        closure calls: 0
+   `_plan` is a value of type Map<Iter<i32>, {closure}>. It holds the
+   source and the closure, and has not looked at a single score.
+
+2. A consumer is what runs it — and how far it runs is the consumer's call
+   .collect()  -> [10, 6, 0, 8, 4, 2]    closure calls: 6
+   .find(>=6)  -> Some(10)               closure calls: 1
+   .any(==0)   -> true                   closure calls: 3
+   .count()    -> 6                      closure calls: 6
+   find and any stop at the first answer. collect and count cannot.
+
+3. The chain is one pass, element at a time — not one pass per adapter
+   result: [10, 6]
+     see 5
+     test 5
+     double 5
+     see 3
+     test 3
+     double 3
+   Each score is carried all the way through before the next one starts,
+   and `take(2)` stopped the whole chain: scores 0, 4, 2 and 1 were never
+   read. An eager version would have built two intermediate Vecs and
+   visited all six.
+
+4. Which is what makes an endless sequence usable
+   (1..).map(square).filter(%3==1).take(3) = [1, 4, 16]
+   `1..` has no end. Nothing hangs, because nothing is computed until
+   `collect` asks, and it stops asking after three.
+
+5. The mistake the compiler warns about
+   SCORES.iter().map(|s| println!("{s}"));   <- prints NOTHING
+   warning: unused `Map` that must be used
+   note: iterators are lazy and do nothing unless consumed
+   `map` is for producing values. To run a side effect per item, use
+   `for_each` or a plain `for` loop, both of which consume:
+   .for_each(...)  seen = [5, 3, 0]
+
+6. Laziness is per-adapter, so where you put an expensive step matters
+   cheap test first:  1 kept, expensive test ran 3 times
+   expensive first:   1 kept, expensive test ran 6 times
+   same answer, different amount of work. Order the chain so the
+   cheapest, most selective test runs first.

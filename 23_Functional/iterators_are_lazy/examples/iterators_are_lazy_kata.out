@@ -1,0 +1,35 @@
+1. Seven chains over the same six scores
+   .map(seen).collect()                         [5, 3, 0, 4, 2, 1] calls: 6
+   .map(seen).count()                           6                  calls: 6
+   .map(seen).find(== 0)                        Some(0)            calls: 3
+   .map(seen).position(== 4)                    Some(3)            calls: 4
+   .map(seen).any(< 4)                          true               calls: 2
+   .map(seen).all(< 4)                          false              calls: 1
+   .map(seen).zip(3 names).collect()            3                  calls: 3
+
+2. Why each of the short ones stopped
+   find(== 0)     3 calls — the zero sits at index 2, so the third
+                  element settled the question.
+   position(== 4) 4 calls — same reason, one element further along.
+   any(< 4)       2 calls — the first `true` ends it. `all` is the
+                  mirror image: it runs until the first `false`,
+                  which here is the very first score, so 1 call.
+   zip(3 names)   3 calls — the SHORTER side ends the pair. Nothing
+                  about the scores stopped it; the names ran out.
+   collect/count  6 calls — neither can answer without every element.
+
+3. And the trap: zip pulls the LEFT side first
+   pairs = [(5, 5), (3, 3)]
+   left side pulled 3 times, right side 2 times
+   zip asks the left iterator for an item BEFORE it discovers the
+   right one is empty — so the longer side is always pulled one
+   extra time. If that pull has a side effect, this is where it bites.
+
+4. Which order to write .filter(cheap).filter(expensive) in
+   cheap first:     1 row(s), expensive test ran 3 times
+   expensive first: 1 row(s), expensive test ran 6 times
+   Same rows either way, so this is a cost question only — and the
+   answer is not simply "cheap first". Put first whichever test
+   REJECTS the most rows per unit of work: a cheap filter that keeps
+   everything saves nothing. You need the data's selectivity, which
+   is exactly what a query planner spends its life estimating.

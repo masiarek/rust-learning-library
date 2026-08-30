@@ -1,0 +1,53 @@
+1. Write `next`, and seventy-five more methods arrive
+   Countdown { n: 5 }.collect()      [5, 4, 3, 2, 1]
+   .sum()                            15
+   .filter(odd).take(3).collect()    [9, 7, 5]
+   .zip([a, b, c]).collect()         [(3, "a"), (2, "b"), (1, "c")]
+   .max()  .last()                   Some(4) Some(1)
+   for n in Countdown { n: 3 }        <- works too: every Iterator
+     3     2     1
+
+2. What the trait actually asked for
+   type Item = u32;                     the element type
+   fn next(&mut self) -> Option<Item>;  advance, or say you are done
+   That is all. In 1.98.0's source, `Iterator` declares 76 methods
+   (a handful still unstable) and exactly one of them — `next` — has
+   no default body. Everything in section 1 is written in terms of it.
+
+3. Three things that are NOT free
+   .rev()   needs DoubleEndedIterator  (you must also write next_back)
+   .len()   needs ExactSizeIterator
+   Both are compile errors on Countdown, not runtime surprises.
+   And the default size_hint costs allocations:
+     default size_hint()  (0, None)    collect capacity 16
+     size_hint written    (9, Some(9)) collect capacity 9
+   Same nine items. Without the hint, collect grew the Vec by doubling
+   and overshot to 16; with it, one allocation of exactly nine.
+
+4. The mistake: implementing Iterator ON a collection
+   first pass over the collection:  [5, 3, 0]
+   second pass over the SAME value: []
+   An iterator is single-use by construction — `next` takes &mut self
+   and there is no rewind. So a collection that IS an iterator can be
+   read once, and `for row in collection` consumes it. Nobody wants a
+   Vec that empties itself when you look at it.
+
+5. What std does instead: hand out an iterator per kind of access
+   roster.iter().count()          3
+   roster.iter().count() again    3
+   after iter_mut:                ["Ada!", "Ben!", "Cara!"]
+   for row in &roster             Ada! Ben! Cara!
+   adapters work on the borrow:   longest = Some("Cara!")
+   for row in roster (by value)   ["Ada!", "Ben!", "Cara!"]
+   Three IntoIterator impls — for Roster, &Roster and &mut Roster —
+   are what make all three `for` spellings work, and the collection
+   itself stays re-readable because it never became the iterator.
+
+6. The borrowing iterators carry a lifetime, and it is load-bearing
+   fn iter(&self) -> std::slice::Iter<'_, String>
+   The '_ ties the iterator to the borrow of the Roster, so the
+   compiler refuses an iterator that outlives what it reads:
+     error[E0515]: cannot return value referencing local variable `v`
+     help: use `.collect()` to allocate the iterator
+   That help line is the whole decision: hand back a borrow tied to
+   data the caller owns, or hand back owned data.

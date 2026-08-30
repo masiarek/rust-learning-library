@@ -1,0 +1,46 @@
+1. The same Vec, three ways
+   iter()      yields &Name     Name("Ada")
+   iter_mut()  yields &mut Name  and the change landed: Name("Ada!")
+   into_iter() yields Name       taken apart into: ["Ada!", "Ben!", "Cara!"]
+   `names` is gone after into_iter — it was consumed, not borrowed.
+
+2. A `for` loop is one of those three, chosen by what you wrote
+   for n in &names        =>  names.iter()       item: &Name
+     "Ada"     "Ben"     "Cara"
+   for n in &mut names    =>  names.iter_mut()   item: &mut Name
+     [Name("ADA"), Name("BEN"), Name("CARA")]
+   for n in names         =>  names.into_iter()  item: Name  (moves it)
+     "ADA"     "BEN"     "CARA"
+   `for` needs IntoIterator, not Iterator, and Vec implements it three
+   times: for Vec<T>, for &Vec<T>, and for &mut Vec<T>.
+
+3. Which is why the beginner's E0382 happens where it does
+   for n in names { .. }   then using `names` afterwards is:
+     error[E0382]: borrow of moved value: `names`
+     `names` moved due to this implicit call to `.into_iter()`
+     help: consider iterating over a slice of the `Vec<Name>`'s content
+   The fix rustc suggests is one character: `for n in &names`.
+
+4. Arrays are the exception worth memorising
+   [u8; 3].into_iter()  -> items are u8   [5, 3, 0]
+   [u8; 3].iter()       -> items are &u8  [5, 3, 0]
+   ...and `scores` is still usable: [5, 3, 0]  (u8 is Copy)
+   Before edition 2021, array.into_iter() yielded REFERENCES — the
+   method resolved through the slice, because arrays had no by-value
+   IntoIterator. Old answers on the internet still assume that.
+
+5. Getting from &T to T: copied, cloned, and what each costs
+   .iter().collect::<Vec<&Name>>()   0 clone(s)  3
+   .iter().cloned().collect()        3 clone(s)  3
+   .into_iter().collect()            0 clone(s)  3
+   All three produce a collection of three. Only the middle one paid
+   for it — and it paid because `iter()` was the wrong door to start
+   from, not because collecting is expensive.
+   .copied() is the same adapter for Copy types: sum = 8
+
+6. Choosing, in one line each
+   read it            -> iter()       &T
+   change it in place -> iter_mut()   &mut T
+   take it apart      -> into_iter()  T   (the collection is spent)
+   Reaching for .clone() to make a borrow compile usually means the
+   answer was into_iter() one line earlier.

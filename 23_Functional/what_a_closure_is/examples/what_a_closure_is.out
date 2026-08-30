@@ -1,0 +1,45 @@
+1. The syntax, next to the function it replaces
+   fn add_one(n: i32) -> i32 { n + 1 }   add_one(41)         = 42
+   |n: i32| n + 1                        add_one_closure(41) = 42
+   |n| n + 1        (types inferred)     inferred(41)        = 42
+
+2. The difference is the capture: a closure can see the scope around it
+   bonus = 10, so with_bonus(1) = 11
+   a plain `fn` written in the same spot cannot: E0434, see the page
+
+3. A closure IS a struct the compiler wrote — its size is what it captured
+   |n| n + 1                 captures nothing   0 bytes
+   move |n| n + bonus        captures one i32   4 bytes
+   move || name.len()        captures a String  24 bytes
+   for comparison: size_of::<String>()        = 24 bytes
+   for comparison: size_of::<fn(i32) -> i32>()= 8 bytes
+   a closure that captured nothing is ZERO-SIZED — smaller than a fn pointer.
+   |n| n + bonus             borrows one i32    8 bytes
+   || name2.len()            borrows a String   8 bytes
+   the same two closures without `move`: each field is now a reference,
+   so both are one pointer wide. (calling them: 11 8)
+   (calling them, so the compiler keeps them: 2 11 3)
+
+4. Which means every closure has its own anonymous type
+   two closures with identical text are two different types — E0308,
+   and rustc says so in as many words: "no two closures, even if
+   identical, have the same type". See the page for the transcript.
+
+5. A closure that captured nothing coerces to a plain `fn` pointer
+   apply_ptr(41, |n| n + 1)          = 42
+   apply_ptr(41, add_one)            = 42
+   apply_ptr(41, |n| n + bonus)      -> E0308: expected fn pointer, found closure
+
+6. Three ways to accept one, and what each costs
+   fn apply(n, op: impl Fn(i32)->i32)  apply(41, |n| n + bonus) = 51
+   Box<dyn Fn(i32)->i32>               boxed(41)                = 51
+   size of the Box                     16 bytes (a fat pointer: data + vtable)
+   `impl Fn` is one stamped-out copy per closure type — no indirection.
+   `Box<dyn Fn>` is one allocation and a virtual call, and it is what
+   you need the moment two different closures must share a variable.
+
+7. Higher-order: the caller supplies the operation
+   add one    applied to 20 -> 21
+   double     applied to 20 -> 40
+   add bonus  applied to 20 -> 30
+   all three live in one Vec because `dyn Fn` erased their three types.
