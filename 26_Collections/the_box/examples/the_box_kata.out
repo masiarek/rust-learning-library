@@ -1,0 +1,34 @@
+1. The list
+   scores : [5, 3, 0, 4]
+   total  : 12
+
+2. Why it costs nothing to say "or nothing"
+   size_of::<Box<Node>>()         = 8
+   size_of::<Option<Box<Node>>>() = 8
+   size_of::<Node>()              = 16
+   The Option is the same size as the Box. A Box can never be null,
+   so the compiler uses the all-zero bit pattern to mean `None` —
+   the null-pointer optimisation. `Option<Box<T>>` is a nullable
+   pointer with the null checked by the type system.
+
+3. What the recursion costs
+   `total` calls itself once per node, so a list of 100_000 nodes
+   would need 100_000 stack frames and overflow the stack. The
+   `while let` in `to_vec` walks the same list in constant stack:
+   to_vec = [5, 3, 0, 4]
+   Rust does not promise tail-call elimination, so the iterative
+   form is the one to write for a list of unknown length.
+
+4. Drop order, which the list makes visible
+   two values, declared outer then inner:
+   dropping inner
+   dropping outer
+   Last declared, first dropped. The default recursive drop of a
+   long list has the same stack problem as `total` — which is why
+   real list types implement Drop by hand, popping in a loop.
+
+5. The whole point, in one line
+   Take the Box out of `next: Option<Box<Node>>` and rustc says
+   "recursive type `Node` has infinite size" [E0072], and offers the
+   fix itself: "insert some indirection (e.g., a `Box`, `Rc`, or
+   `&`) to break the cycle". The type needs a size; a pointer has one.

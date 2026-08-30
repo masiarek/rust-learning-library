@@ -1,0 +1,30 @@
+1. Swap without a temporary
+   after (a, b) = (b, a): a = 2, b = 1
+   The right-hand tuple is built first, so no third name is needed.
+
+2. `_` in a pattern discards without binding
+   let (voter, _, score, _) = row;  ->  Ada scored 5
+   An unused binding warns; an `_` does not, because it says so.
+
+3. Nesting, and destructuring through it
+   round 1: Ada, round 2: Ben
+   by_round.1.0 = 2 — legal, and the reason this is the last
+   arity anyone should write.
+
+4. The four-field tuple, and the same data named
+   first row, named: Ada -> Cara
+   totals_tuple  -> postal 9, walk-in 5
+   totals_struct -> postal 9, walk-in 5
+   Same answer. The difference is in the two function bodies:
+     for (_, _, score, is_postal) in rows       <- position
+     for b in rows: b.score, b.postal            <- name
+   Swap `score` and `postal` in the tuple's TYPE and the first
+   body still compiles if the types happen to line up. Here they
+   do not (u8 vs bool), so this one is caught — which is luck,
+   not design: two u8 fields swapped compile fine and count wrong.
+   Field names cannot be transposed by accident.
+
+5. What the struct also bought
+   Ballot { voter: "Ada", candidate: "Cara", score: 5, postal: true }
+   `#[derive(Debug)]` prints the field names. A tuple prints
+   ("Ada", "Cara", 5, true) and leaves the reader to guess.

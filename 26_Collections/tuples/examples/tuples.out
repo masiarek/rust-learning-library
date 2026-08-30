@@ -1,0 +1,31 @@
+1. Two values out of one function, with no type declared
+   min_max([5, 3, 0, 4, 2]) = (0, 5)
+   or keep the pair whole: both.0 = 0, both.1 = 5
+   The type is written the way the value is: (i32, i32).
+
+2. Length and element types are part of the type
+   (u8, char, bool) = (5, A, true)
+   size_of::<(u8, char, bool)>() = 8
+   size_of::<(i32, i32)>()       = 8
+   A tuple has no header and no indirection: it is its fields,
+   laid out next to each other, in an order the compiler picks.
+
+3. The two odd arities
+   () is the empty tuple, size 0 — what every function without
+      a `->` returns, and what a `;` turns an expression into.
+   (7,) is a ONE-tuple, and the trailing comma is load-bearing:
+      (7) is just 7 in parentheses. one.0 = 7, unit = ()
+
+4. Comparison is field by field, left to right
+   sorted: [(1, "Ben"), (2, "Ada"), (2, "Cara")]
+   (1, ..) < (2, ..) settles the first two without reading the name;
+   the tie between the 2s is broken by "Ada" < "Cara".
+   Ordering a tuple is a free sort key — put the field you want
+   to sort by first.
+
+5. Where a tuple stops being readable
+   tuple:  let (lo, hi) = min_max(&scores);        -> (0, 5)
+   struct: range_of(&scores).lowest / .highest   -> 0 / 5
+   Two fields you destructure on the spot: tuple. Three or more,
+   or a value that travels, or `.2` appearing in another function:
+   name the fields. `.0` is a comment nobody wrote.

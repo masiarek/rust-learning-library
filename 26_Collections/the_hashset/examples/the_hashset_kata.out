@@ -1,0 +1,30 @@
+1. Three questions, one pass
+   roll     : ["Ada", "Ben", "Cara", "Dan", "Eve", "Fay"]
+   received : ["Cara", "Ada", "Ben", "Cara", "Dan", "Ada", "Cara", "Zed"]
+   voted twice or more : ["Ada", "Cara", "Cara"]
+   on the roll, never voted : ["Eve", "Fay"]
+   voted but not on the roll : ["Zed"]
+   The last two are the SAME operation with the arguments swapped.
+   `difference` is not symmetric, and reading it as "the difference
+   between the sets" is how the two get confused.
+
+2. The wrong answer: counting duplicates with the set alone
+   received.len() = 8, distinct = 5, so 3 extra ballots arrived.
+   That is a count of surplus ballots, not of people: Cara sent three,
+   which is 2 of those 3. distinct-vs-total tells you HOW MANY too
+   many, never WHO — for that you need the `insert` bool above, or a
+   count per name in a HashMap.
+   people who repeated: 2 (["Ada", "Cara"])
+
+3. Turnout, as a set operation
+   eligible and voted: ["Ada", "Ben", "Cara", "Dan"]
+   turnout = 4/6 = 67%
+   Note it is the intersection, not received.len(): the stray ballot
+   from Zed would otherwise inflate turnout above the electorate.
+
+4. When you want the order back
+   BTreeSet: {"Ada", "Ben", "Cara", "Dan", "Zed"}
+   Sorted by construction, O(log n) instead of O(1) per operation,
+   and it needs Ord rather than Hash. For six names the difference is
+   nothing and the printout is stable — which is why this library's
+   examples reach for it whenever output is the point.

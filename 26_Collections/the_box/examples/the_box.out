@@ -1,0 +1,36 @@
+1. A Box is a pointer, whatever it points at
+   size_of::<Ballot>()      = 256
+   size_of::<Box<Ballot>>() = 8
+   size_of::<Box<u8>>()     = 8
+   The 256 bytes moved to the heap; 8 bytes stayed on the stack.
+   Moving a Box copies those 8 bytes and nothing else.
+
+2. It behaves like the value it holds
+   boxed.scores.len() = 64 — no explicit deref needed
+   *boxed moves the value back out: 64 scores
+   `Box<T>` implements `Deref<Target = T>`, so field access, method
+   calls and `&*b` all reach through. `*b` on its own MOVES the value
+   out and drops the box — the one operation that is not a borrow.
+
+3. The reason Box exists: a type that contains itself
+   enum Round { Final(&str), Then(&str, Round) }      <- E0072
+   "recursive type `Round` has infinite size". Each `Then` would
+   contain a whole `Round`, which contains a whole `Round`…
+   Box breaks the chain, because a pointer has a size the compiler
+   can write down before it knows what is on the other end.
+   size_of::<Round>() = 24 — one tag plus the largest variant
+   eliminated(&rounds) = ["Ada", "Ben"]
+   winner(&rounds) = Cara
+
+4. And the other reason: a size known only at run time
+   two closures with different captures, one type: Box<dyn Fn>
+   named(21) = 42, shifted(21) = 121
+   size_of::<Box<dyn Fn(u32) -> u32>>() = 16 — pointer to the value
+   AND pointer to its vtable. A `dyn` box is fat; a `Box<T>` is not.
+
+5. What it is not
+   Box is single ownership. One owner, dropped when that owner goes
+   out of scope, moved rather than copied. For two owners you want
+   Rc; for two threads, Arc. Reaching for Box to "put it on the heap"
+   when nothing needs the heap just adds an allocation and an
+   indirection: a Vec, a String and a HashMap are already heap-backed.

@@ -1,0 +1,33 @@
+1. Three numbers: pointer, length, capacity
+   size_of::<Vec<u32>>()  = 24  (three usize)
+   size_of::<Vec<[u8; 999]>>() = 24  — the same three, whatever T is
+   The elements are not in the Vec. The Vec is a receipt for them.
+
+2. Growth is amortised doubling, and you can watch it
+   Vec::new()            len 0 cap 0
+   push(1) reallocated   len 1 cap 0 -> 4
+   push(5) reallocated   len 5 cap 4 -> 8
+   push(9) reallocated   len 9 cap 8 -> 16
+   after 9 pushes        len 9 cap 16
+   Nine pushes, three allocations. Doubling is why pushing n items
+   costs O(n) in total rather than O(n^2), and the exact sequence is
+   this std's choice, not a promise in the language.
+
+3. If you know the size, say so
+   with_capacity(9): cap 9 -> 9 — no reallocation at all
+   Same nine values, one allocation instead of three, and no copying
+   of the old contents.
+
+4. A Vec derefs to a slice, so slice methods just work
+   total(&v) = 45 — `total` takes &[u32] and was handed a &Vec<u32>
+   v.first() = Some(1), v.contains(&5) = true
+   v.iter().rev().take(3): [9, 8, 7]
+   Write &[T] in a signature and both callers work. Write &Vec<T>
+   and you have refused arrays, slices and everything borrowed.
+
+5. Removing: the one that keeps order, and the one that is fast
+   remove(1)      -> b, left ['a', 'c', 'd', 'e', 'f']   (everything after shifts down)
+   swap_remove(1) -> b, left ['a', 'f', 'c', 'd', 'e']   (the last element fills the hole)
+   O(n) versus O(1). If you are about to sort anyway, take the O(1).
+   retain(|s| s > 0) on [5, 3, 0, 4, 0, 2] -> [5, 3, 4, 2]
+   One pass, one shift per survivor — not one `remove` per zero.

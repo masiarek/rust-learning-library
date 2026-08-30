@@ -1,0 +1,39 @@
+1. Counting, the way you will actually write it
+   ["Cara", "Ada", "Cara", "Ben", "Cara", "Ada"]
+   -> [("Ada", 2), ("Ben", 1), ("Cara", 3)]
+   `entry(k).or_insert(0)` returns a &mut to the value, inserting
+   the default first if the key was absent. One lookup, not the
+   two that `if map.contains_key(k)` costs.
+
+2. Reading: `get` asks, `[]` asserts
+   tally.get("Ada")   = Some(2)
+   tally.get("Nobody") = None
+   tally["Ada"]        = 2
+   tally["Nobody"]     -> panicked
+   Same split as slice indexing: `[]` is a claim, `.get` is a question.
+   tally.get("x").copied().unwrap_or(0) = 0
+
+3. `insert` returns what was there before
+   insert("Ada", 1) -> None   (nothing was there)
+   insert("Ada", 9) -> Some(1)   (the old value, handed back)
+   m is now [("Ada", 9)] — insert OVERWRITES. The return value is the only
+   warning you get, and ignoring it is the usual way a duplicate key
+   silently loses a row.
+
+4. Iteration order is not defined, and not stable between runs
+   sorted for printing:    [("Ada", 2), ("Ben", 1), ("Cara", 3)]
+   the same in a BTreeMap: [("Ada", 2), ("Ben", 1), ("Cara", 3)]
+   std's HashMap seeds its hasher randomly per process, so two runs
+   of the same program iterate in different orders. That is a defence
+   against hash-flooding, and it means any output you compare against
+   must be sorted first — or must come from a BTreeMap, which is
+   ordered by key by construction.
+
+5. What a key has to be
+   `HashMap<K, V>` needs K: Eq + Hash. Both are derivable, and both
+   must agree: two keys that are `==` must hash the same, or lookups
+   miss entries that are provably in the map.
+   the max, tie broken by name: Some(("Cara", 3))
+   `max_by_key` over a HashMap needs an explicit tiebreak for exactly
+   the reason above: with no tiebreak, a tie is resolved by whichever
+   equal entry the iterator happened to reach last.

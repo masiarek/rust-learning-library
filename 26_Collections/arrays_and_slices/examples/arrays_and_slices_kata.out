@@ -1,0 +1,31 @@
+1. The fixed-length signature, and who it turns away
+   average_fixed(&ballot) = 3.20
+   average_fixed(&short)   does not compile:
+     expected `&[u32; 5]`, found `&[u32; 2]`   [E0308]
+   average_fixed(&owned)   does not compile either — a Vec is not
+     an array, however many elements it happens to hold.
+
+2. The slice signature, and the same four callers
+   average(&ballot)     = Some(3.2)
+   average(&short)      = Some(4.0)
+   average(&owned)      = Some(3.5)
+   average(&ballot[1..]) = Some(2.75)
+   average(&empty)      = None   <- the length can be zero, so the
+   function has to say what it does about that. `&[u32; 5]` never
+   had to, which is the one thing it bought.
+
+3. `len()` is a run-time value, so the empty case is a real case
+   The fixed version divides by the 5 in its own type and cannot
+   be handed nothing. The slice version divides by len(), so 0/0
+   is reachable: in floating point that is NaN, silently.
+   without the guard: NaN   <- prints, compares false to itself
+   with the guard:    None
+
+4. What the slice methods give you for free
+   longest_run([5, 3, 3, 3, 2]) = 3
+   same, via windows(2): 3
+   (that shortcut is only right because this array has ONE run of
+   repeats — count adjacent equal pairs and you have counted every
+   run at once, not the longest. windows is a tool, not an answer.)
+   ballot.split_at(2) = ([5, 3], [3, 3, 2])
+   ballot.iter().rev().collect::<Vec<_>>() = [2, 3, 3, 3, 5]

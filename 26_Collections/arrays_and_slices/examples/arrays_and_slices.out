@@ -1,0 +1,36 @@
+1. The length is part of the type
+   five  : [u32; 5] = [5, 3, 0, 4, 2]
+   three : [u32; 3] = [1, 2, 3]
+   [u32; 5] and [u32; 3] are as different as u32 and String. A
+   function taking [u32; 5] rejects a four-element array.
+   size_of::<[u32; 5]>() = 20  — five values, no header
+
+2. A slice is a view: pointer plus length, and no ownership
+   size_of::<&[u32; 5]>() = 8  — a plain pointer
+   size_of::<&[u32]>()    = 16 — pointer AND length
+   The length moved out of the type and into the value, which is
+   why one function can serve every length.
+   total(&five) = 14, total(&three) = 6
+   total(&five[1..3]) = 3 — same function, part of the array
+
+3. Ranges are half-open: the end is not included
+   five[1..3] = [3, 0]   (indices 1 and 2)
+   five[..2]  = [5, 3]      five[3..] = [4, 2]
+   five[..]   = [5, 3, 0, 4, 2]  — the whole thing, as a slice
+
+4. Out of bounds is a panic, not a wrong answer
+   five[9] does not even compile — rustc constant-folds the index
+   and refuses: `error: this operation will panic at runtime`.
+   five[i] where i = 9 -> panicked
+   five.get(9) -> None
+   five.get(1) -> Some(3)
+   `[i]` asserts the index is in range; `.get(i)` asks. C reads
+   past the end and keeps going; Rust stops the program.
+
+5. The methods live on the slice, so the array gets them free
+   five.first() = Some(5), five.last() = Some(2)
+   five.contains(&4) = true
+   a copy, sorted: [0, 2, 3, 4, 5]   (the original is still [5, 3, 0, 4, 2])
+   `five` is Copy because u32 is, so `let mut sorted = five` copied it.
+   windows(2): [[5, 3], [3, 0], [0, 4], [4, 2]]
+   chunks(2):  [[5, 3], [0, 4], [2]]

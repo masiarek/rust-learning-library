@@ -1,0 +1,35 @@
+1. A set is a map with nothing on the right-hand side
+   HashSet<T> is literally HashMap<T, ()> underneath, so the same
+   rules apply: T: Eq + Hash, and no defined iteration order.
+
+2. `insert` answers the question you were about to ask
+   insert("Ada") -> true
+   insert("Ben") -> true
+   insert("Ada") -> false   <- already voted
+   insert("Cara") -> true
+   insert("Ben") -> false   <- already voted
+   set: ["Ada", "Ben", "Cara"]
+   The bool is `true` when the value was NOT already there, which
+   makes duplicate detection one line with no second lookup.
+
+3. The four operations
+   round1 | round2  union                 ["Ada", "Ben", "Cara", "Dan"]
+   round1 & round2  intersection          ["Ben", "Cara"]
+   round1 - round2  difference            ["Ada"]
+   round1 ^ round2  symmetric_difference  ["Ada", "Dan"]
+   Each returns an iterator, not a set — nothing is allocated until
+   you collect. The operator forms (`&`, `|`, `-`, `^`) exist too and
+   build a new HashSet directly.
+
+4. Containment, both directions
+   round1.contains("Ada")        = true
+   round1.is_subset(&round2)     = false
+   round1.is_disjoint(&round2)   = false
+   core.is_subset(&round1)       = true
+
+5. Deduplicating, and what it costs
+   ["Cara", "Ada", "Cara", "Ben", "Ada", "Cara"]
+   -> 3 distinct: ["Ada", "Ben", "Cara"]
+   first-seen order: ["Cara", "Ada", "Ben"]
+   A HashSet throws the order away. If you need it, keep a Vec beside
+   the set and let `insert`'s bool decide whether to push.
