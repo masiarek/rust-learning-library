@@ -64,6 +64,8 @@ fn main() {
 
 `windows` overlaps and never yields a short one; `chunks` does not overlap and the last one may be short. Reaching for the wrong one is the most common off-by-one in this corner of std.
 
+Two of them answer nothing. `sort` and `reverse` write back into the array and return [`()`](../../15_First_Programs/the_unit_type/README.md), so `println!("{:?}", a.reverse())` prints `()` — clean compile, no warning, and the array reversed behind you. The forms that bind or chain the receipt are caught, by clippy and by rustc respectively; the printed form is caught by neither, which is the [kata below](#practice).
+
 ## The trap: `&Vec<T>` in a signature
 
 Writing `fn total(scores: &Vec<u32>)` compiles and looks equivalent. It is not: it refuses arrays, refuses slices, refuses `&v[1..]`, and buys nothing at all, because the only things it can do with a `&Vec` are the things `&[T]` already offers. **Take `&[T]` unless you need to push.** Clippy has a lint for it (`ptr_arg`), which is how most people find out.
@@ -250,6 +252,154 @@ fn main() {
 
 </details>
 
+**The call that printed its own receipt.** Reverse a three-element array inside a `println!` — `println!("{:?}", a.reverse())` — and predict what it prints before you run it. Then write the same mistake two more ways: bind it (`let x = a.reverse();`) and chain off it (`a.reverse().len()`). Compile all three with `-W warnings`, then again under `clippy::all`, and record which tool catches which. One of the three is caught by nobody, and it is the one you wrote first.
+
+Then say why. Two mechanisms are doing the hiding, and only one of them is about `()`: work out which trait `{:?}` needs that `{}` does not, compile the `{}` version, and read rustc's `note:` line — it recommends the change that turns its own error into the silent bug. Finally, fix it three ways, and explain why the third (`let mut snapshot = original;`) is available here but not for a `Vec`.
+
+<details markdown="1">
+<summary><strong>Solution</strong></summary>
+
+<!-- source:the_silent_receipt_kata -->
+*[`the_silent_receipt_kata.rs`](examples/the_silent_receipt_kata.rs) in full — pasted here by `tools/run_examples.py` from the file CI compiles and runs.*
+
+```rust
+//! Kata solution: the receipt is caught when you keep it, not when you print it.
+//!
+//!   rustc --edition 2024 the_silent_receipt_kata.rs -o /tmp/tsrk && /tmp/tsrk
+
+fn main() {
+    println!("1. The call that printed its own receipt");
+    let mut a = ['x', 'c', 'z'];
+    println!("   println!(\"{{:?}}\", a.reverse())  prints  {:?}", a.reverse());
+    println!("   and a is now {a:?} — it DID reverse. You printed the receipt.");
+    println!("   reverse() writes the answer back into the receiver and hands");
+    println!("   you (), the unit value. Nothing was lost; nothing was returned.");
+
+    println!();
+    println!("2. Three ways to make the same mistake, and who catches each");
+    println!("   a.reverse().len()      rustc, immediately:");
+    println!("     error[E0599]: no method named `len` found for unit type `()`");
+    println!("   let x = a.reverse();   clippy, not rustc:");
+    println!("     warning: this let-binding has unit value [let_unit_value]");
+    println!("   println!(\"{{:?}}\", a.reverse())   NOBODY.");
+    println!("   Verified on rustc 1.98.0: silent under -W warnings, and silent");
+    println!("   under clippy::all + pedantic + nursery. The lint is on the LET,");
+    println!("   so calling inside the println! steps around the one tool that");
+    println!("   would have told you.");
+
+    println!();
+    println!("3. Why it prints instead of failing — and why an ARRAY makes it likelier");
+    println!("   () implements Debug, so {{:?}} accepts it. It does NOT implement");
+    println!("   Display, so println!(\"{{}}\", a.reverse()) is E0277 and safe:");
+    println!("     error[E0277]: `()` doesn\'t implement `std::fmt::Display`");
+    println!("     note: in format strings you may be able to use `{{:?}}` instead");
+    println!("   Read that note again. The one diagnostic standing between you");
+    println!("   and the silent version RECOMMENDS the silent version — it is");
+    println!("   answering a formatting question, and it is right about that.");
+    println!("   An array does not implement Display either, so printing one");
+    println!("   REQUIRES {{:?}} anyway. The formatter a beginner is pushed into");
+    println!("   from both directions is the one that swallows the unit value.");
+
+    println!();
+    println!("4. Nor is #[must_use] the missing guard");
+    println!("   must_use fires when a return value is DISCARDED. Here it was not");
+    println!("   discarded — it was printed, and the real answer went into the");
+    println!("   receiver. There is no value being ignored for a lint to notice.");
+
+    println!();
+    println!("5. The three right answers");
+    let mut b = ['x', 'c', 'z'];
+    b.reverse();
+    println!("   mutate, then look:  b.reverse(); b -> {b:?}");
+
+    let c = ['x', 'c', 'z'];
+    let backwards: Vec<char> = c.iter().rev().copied().collect();
+    println!("   ask for a new one:  c.iter().rev() -> {backwards:?}, c still {c:?}");
+
+    let original = ['x', 'c', 'z'];
+    let mut snapshot = original;
+    snapshot.reverse();
+    println!("   copy, then mutate:  snapshot {snapshot:?}, original {original:?}");
+    println!("   That third one is an ARRAY privilege: [char; 3] is Copy, so");
+    println!("   `let mut snapshot = original;` duplicates all three elements and");
+    println!("   the original keeps its name. A Vec is not Copy — the same line");
+    println!("   MOVES it, and you need .clone() to get the snapshot back.");
+
+    println!();
+    println!("6. The same split, named twice in std");
+    println!("   in place, returns ()      returns a new value");
+    println!("   ---------------------     -----------------------------");
+    println!("   slice::reverse            Iterator::rev");
+    println!("   slice::sort               (collect the sorted iterator)");
+    println!("   str::make_ascii_uppercase str::to_ascii_uppercase");
+    println!("   Vec::push / clear / dedup Vec::iter().filter().collect()");
+    println!("   The naming is the tell: an imperative verb mutates, and the");
+    println!("   to_/into_/iter_ forms hand something back.");
+}
+```
+<!-- /source -->
+
+<!-- output:the_silent_receipt_kata -->
+*Verified output of [`the_silent_receipt_kata.rs`](examples/the_silent_receipt_kata.rs) — regenerated by `tools/run_examples.py`, never hand-typed.*
+
+```text
+1. The call that printed its own receipt
+   println!("{:?}", a.reverse())  prints  ()
+   and a is now ['z', 'c', 'x'] — it DID reverse. You printed the receipt.
+   reverse() writes the answer back into the receiver and hands
+   you (), the unit value. Nothing was lost; nothing was returned.
+
+2. Three ways to make the same mistake, and who catches each
+   a.reverse().len()      rustc, immediately:
+     error[E0599]: no method named `len` found for unit type `()`
+   let x = a.reverse();   clippy, not rustc:
+     warning: this let-binding has unit value [let_unit_value]
+   println!("{:?}", a.reverse())   NOBODY.
+   Verified on rustc 1.98.0: silent under -W warnings, and silent
+   under clippy::all + pedantic + nursery. The lint is on the LET,
+   so calling inside the println! steps around the one tool that
+   would have told you.
+
+3. Why it prints instead of failing — and why an ARRAY makes it likelier
+   () implements Debug, so {:?} accepts it. It does NOT implement
+   Display, so println!("{}", a.reverse()) is E0277 and safe:
+     error[E0277]: `()` doesn't implement `std::fmt::Display`
+     note: in format strings you may be able to use `{:?}` instead
+   Read that note again. The one diagnostic standing between you
+   and the silent version RECOMMENDS the silent version — it is
+   answering a formatting question, and it is right about that.
+   An array does not implement Display either, so printing one
+   REQUIRES {:?} anyway. The formatter a beginner is pushed into
+   from both directions is the one that swallows the unit value.
+
+4. Nor is #[must_use] the missing guard
+   must_use fires when a return value is DISCARDED. Here it was not
+   discarded — it was printed, and the real answer went into the
+   receiver. There is no value being ignored for a lint to notice.
+
+5. The three right answers
+   mutate, then look:  b.reverse(); b -> ['z', 'c', 'x']
+   ask for a new one:  c.iter().rev() -> ['z', 'c', 'x'], c still ['x', 'c', 'z']
+   copy, then mutate:  snapshot ['z', 'c', 'x'], original ['x', 'c', 'z']
+   That third one is an ARRAY privilege: [char; 3] is Copy, so
+   `let mut snapshot = original;` duplicates all three elements and
+   the original keeps its name. A Vec is not Copy — the same line
+   MOVES it, and you need .clone() to get the snapshot back.
+
+6. The same split, named twice in std
+   in place, returns ()      returns a new value
+   ---------------------     -----------------------------
+   slice::reverse            Iterator::rev
+   slice::sort               (collect the sorted iterator)
+   str::make_ascii_uppercase str::to_ascii_uppercase
+   Vec::push / clear / dedup Vec::iter().filter().collect()
+   The naming is the tell: an imperative verb mutates, and the
+   to_/into_/iter_ forms hand something back.
+```
+<!-- /output -->
+
+</details>
+
 ---
 
 ## See also
@@ -259,6 +409,7 @@ fn main() {
 - [Tuples](../tuples/README.md) — the other built-in compound type, for fields of *different* types
 - [String slices](../../14_Strings/string_slices/README.md) — `&str` is `&[u8]` with a promise about its contents, and the same half-open ranges
 - [Borrowing](../../18_Ownership/borrowing/README.md) — why a slice cannot outlive what it points at
+- [The unit type `()`](../../15_First_Programs/the_unit_type/README.md) — what `sort` and `reverse` hand back, and why nothing complains
 - [Stack and heap](../../18_Ownership/stack_and_heap/README.md) — where the array's elements actually are
 
 ## Sources
