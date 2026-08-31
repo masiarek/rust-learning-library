@@ -164,6 +164,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "arrays_and_slices",
         # ...then the three that grow, in the order a program needs them...
         "the_vec",
+        # ...with the choice between the two fixed-vs-growable ones settled
+        # here, once both have been met.
+        "array_or_vec",
         "vec_of_vecs",
         # ...then the per-method reference for the one type a program uses most.
         # It sits directly under its two lessons rather than at the end of the
@@ -316,6 +319,10 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...and what you are allowed to name, before defining a type of your
         # own: the scalar census, and the widths that make a type a promise.
         "values",
+        # ...then the two rows of that census whose whole lesson is what they
+        # are NOT: `bool` is not a number, and `()` is not an absence.
+        "meet_the_bool",
+        "the_unit_type",
         # ...and who decided which of those a bare `let x = 10;` got. Before
         # the annotation, because inference is what an annotation overrides.
         "type_inference",

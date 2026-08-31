@@ -9,6 +9,7 @@ Two of them are built into the language and have no `use` line: the tuple and th
 | [Tuples](tuples/README.md) | 101 | A struct with numbered fields — free to return, and readable for about two of them |
 | [Arrays and slices](arrays_and_slices/README.md) | 101 → 201 | `[T; N]` is a type per length; `&[T]` is the one that belongs in a signature |
 | [`Vec`](the_vec/README.md) | 101 → 201 | Three numbers on the stack, doubling growth you can watch, and two removals with opposite guarantees |
+| [Array or `Vec`?](array_or_vec/README.md) | 101 → 201 | The default is `Vec` because most lengths come from input — plus the four things an array buys when the length is a fact about the problem: a compile error for the wrong one, `Copy`, a `const`, and no allocator |
 | [Grids and nested `Vec`s](vec_of_vecs/README.md) | 201 | One allocation per row, rows that are clones rather than aliases, and the `*` that `iter_mut` needs |
 | [`HashMap`](the_hashmap/README.md) | 101 → 201 | `entry` is the method the counting loop wants, and the iteration order is different every run |
 | [`HashSet`](the_hashset/README.md) | 101 → 201 | Membership, four set operations, and the `bool` that `insert` hands back |
