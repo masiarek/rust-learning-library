@@ -20,10 +20,10 @@
 | split one stream into two by a test | [`partition` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.partition) |
 | carry a running value and yield each step | [`scan` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.scan) |
 | look at the next item without taking it | [`peekable` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.peekable) + [`peek` ↗](https://doc.rust-lang.org/std/iter/struct.Peekable.html#method.peek) |
-| join two sequences end to end | `chain` |
-| repeat forever | `cycle` (pair it with `take`) |
-| every *n*th item | `step_by` |
-| see each item without changing it (debugging) | `inspect` |
+| join two sequences end to end | [`chain` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.chain) |
+| repeat forever | [`cycle` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.cycle) (pair it with [`take` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.take)) |
+| every *n*th item | [`step_by` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.step_by) |
+| see each item without changing it (debugging) | [`inspect` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.inspect) |
 
 And the ones that are **not** on `Iterator`: `windows` and `chunks` are methods on a **slice**, and `dedup` is a method on `Vec`.
 
