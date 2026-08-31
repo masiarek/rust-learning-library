@@ -68,9 +68,12 @@ dict(id="str_slice_boundary",
  code_on="front",
  expect="h\nfalse\nhé",
  back="<b>Slicing a string uses BYTE offsets, and panics if an end lands inside a character.</b>"
-      "<br><br><code>&amp;s[0..2]</code> would have panicked: <code>byte index 2 is not a char boundary</code> — it splits the "
-      "two bytes of <code>é</code>. The <code>é</code> occupies bytes 1–2, so the next legal cut is 3."
-      "<br><br><code>is_char_boundary(n)</code> is the test; <code>floor_char_boundary(n)</code> is the repair.",
+      "<br><br><code>&amp;s[0..2]</code> would have panicked, and the message names the character it cut: "
+      "<code>end byte index 2 is not a char boundary; it is inside 'é' (bytes 1..3 of string)</code>. "
+      "The <code>é</code> is bytes 1..3, so 1 and 3 are legal cuts and 2 is not."
+      "<br><br><code>is_char_boundary(n)</code> is the test. The two repairs go <i>opposite</i> ways: "
+      "<code>floor_char_boundary(2)</code> is <b>1</b> — back up, dropping the <code>é</code>; "
+      "<code>ceil_char_boundary(2)</code> is <b>3</b> — forward, keeping it. Both stable since 1.91.",
  bridge="<b>Python:</b> <code>s[0:2]</code> can never fail. In Rust a string slice is the one indexing operation that "
         "panics on <i>valid-looking</i> input.",
  link=("string_slices", SITE+"14_Strings/string_slices/index.html"),
@@ -82,9 +85,12 @@ dict(id="str_to_owned",
       "<br><br>Pick by intent:<br>"
       "• <code>String::from(\"x\")</code> — you are <i>constructing</i> a String<br>"
       "• <code>s.to_owned()</code> — you have a borrow and need to own it (says exactly that)<br>"
-      "• <code>s.to_string()</code> — most common; comes from <code>Display</code>, so it also works on numbers, and is "
-      "the one that costs a formatting machine on types where <code>to_owned</code> would not"
-      "<br><br>Going the other way is free: <code>&amp;my_string</code> or <code>.as_str()</code>.",
+      "• <code>s.to_string()</code> — most common; comes from <code>Display</code>, so it also works on numbers"
+      "<br><br>Off <code>&amp;str</code> they stop being alternatives at all. <code>to_owned()</code> is not a "
+      "stringifying operation — it returns the <i>source's</i> owned twin, so <code>42.to_owned()</code> is an "
+      "<code>i32</code> while <code>42.to_string()</code> is a <code>String</code>."
+      "<br><br>Coming back is free: <code>.as_str()</code>, or <code>&amp;my_string</code> <i>where a "
+      "<code>&amp;str</code> is expected</i> — on its own that expression is a <code>&amp;String</code>.",
  link=("making_a_string", SITE+"14_Strings/making_a_string/index.html"),
  tags="rust strings conversion"),
 

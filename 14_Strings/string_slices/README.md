@@ -90,7 +90,7 @@ This is the trap, and it hides in every ASCII test suite. Slice indices count **
 ```rust
 let word = "bête";
 word.len()            // 5 — not 4
-&word[0..2]           // PANIC: byte index 2 is not a char boundary
+&word[0..2]           // PANIC: end byte index 2 is inside 'ê'
 word.get(0..2)        // None      — the total version, no panic
 word.get(0..3)        // Some("bê") — 3 is a boundary
 word.is_char_boundary(2)   // false
