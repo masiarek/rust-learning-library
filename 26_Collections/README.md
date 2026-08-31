@@ -41,3 +41,13 @@ Once you have picked one, the **[`Vec` method reference](vec_methods/README.md)*
 ## Where it goes next
 
 Every one of these is iterable, and the chain you build over them is [iterators](../24_Iterators/README.md). Every one of them is generic, which is [what `<T>` means](../22_Generics/README.md). And the reason `map.get` hands you an `Option` rather than a value is [the whole of `Option` and `Result`](../17_Option_and_Result/README.md).
+
+## Po polsku
+
+Pół tuzina typów, z których faktycznie zbudowany jest każdy program: para (`(A, B)`), stały blok (`[T; N]`), rosnąca lista (`Vec<T>`), tablica skojarzeniowa (`HashMap<K, V>`), zbiór (`HashSet<T>`) i jedna wartość przeniesiona na stertę (`Box<T>`).
+
+Warto od razu ustawić dwa polskie słowa, bo bywają mylone. **Tablica** to w Ruscie `[T; N]` — o stałym, znanym w czasie kompilacji rozmiarze, leżąca na stosie. To, co w Pythonie nazywa się listą, a w Javie `ArrayList`, to tutaj `Vec<T>`, po polsku zwykle „wektor". Kto przenosi nawyk z C, gdzie „tablica" bywa dynamiczna przez `malloc`, będzie sięgał po złe słowo i po zły typ. Podobnie `HashMap` to **tablica skojarzeniowa** albo po prostu „mapa" — nie „słownik", choć znaczy to samo co pythonowy `dict`.
+
+Rzecz, której w tym dziale nie ma i to celowo: nie ma tu listy wiązanej jako typu, po który się sięga. `LinkedList` istnieje w bibliotece standardowej i prawie nigdy nie jest właściwą odpowiedzią — polskie kursy algorytmiki poświęcają jej dużo miejsca, co zostawia wrażenie, że jest podstawowym narzędziem. W praktyce `Vec` wygrywa niemal zawsze, również tam, gdzie teoria obiecuje inaczej, bo pamięć podręczna procesora lubi ciągły blok.
+
+**Szukaj po polsku:** kolekcje w Ruscie · tablica a wektor · tablica skojarzeniowa · `rust Vec vs array` · `rust LinkedList why not`

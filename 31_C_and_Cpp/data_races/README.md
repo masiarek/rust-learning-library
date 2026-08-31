@@ -135,3 +135,13 @@ The claim is that the compiler removes the category where the *hardware* gives y
 - [Marker traits](../../12_Traits/marker_traits/README.md) — `Send` and `Sync`, and what the compiler does with them
 - [Forgotten unlock](../forgotten_unlock/README.md) — the guard, and the deadlocks it does not prevent
 - [The bugs Rust is a reply to](../README.md) — the other eight
+
+## Po polsku
+
+Wyścig danych (*data race*) psuje intuicję, którą wynosi się z zajęć: że build debugowy zachowuje się „normalnie", a optymalizacja co najwyżej przyspiesza. Tutaj jest odwrotnie — to wersja debugowa gubi mniej więcej połowę inkrementacji, a `-O2` daje poprawną odpowiedź za każdym razem. Program z błędem zaczyna działać, kiedy się go zoptymalizuje, więc sprawdzenie „na szybko" utwierdza w przekonaniu, że wszystko gra.
+
+Norma C i C++ nie mówi tu „policzy źle", tylko **zachowanie niezdefiniowane** (*undefined behaviour*) — a to znaczy, że kompilator ma prawo założyć, że taka sytuacja nie zachodzi, więc sensu traci cały program, nie jedna zmienna. Warto przy okazji trzymać po polsku rozróżnienie, które łatwo się zlewa: **wyścig danych** to niezsynchronizowany dostęp dwóch wątków do tej samej pamięci, a **sytuacja wyścigu** (*race condition*) to szersze pojęcie o kolejności zdarzeń. Rust wyklucza pierwsze i nie obiecuje drugiego.
+
+Odmowa przychodzi nie z debuggera o trzeciej nad ranem, tylko z typów: cechy `Send` i `Sync` rozstrzygają, co wolno przenieść i współdzielić między wątkami. Cena jest uczciwa i widoczna — zamiast gołej zmiennej piszesz `Arc<Mutex<T>>` i musisz to zrobić wprost.
+
+**Szukaj po polsku:** wyścig danych · zachowanie niezdefiniowane · cechy `Send` i `Sync` · `rust fearless concurrency` · `rust data race`

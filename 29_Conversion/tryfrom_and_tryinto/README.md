@@ -313,3 +313,13 @@ fn main() {
 ## Sources
 
 [Conversion: TryFrom and TryInto ↗](https://doc.rust-lang.org/rust-by-example/conversion/try_from_try_into.html) in Rust by Example, plus [`std::convert::TryFrom` ↗](https://doc.rust-lang.org/std/convert/trait.TryFrom.html) and [`std::str::FromStr` ↗](https://doc.rust-lang.org/std/str/trait.FromStr.html) for the `type Err` spelling.
+
+## Po polsku
+
+`TryFrom` to konwersja, która **ma prawo odmówić**: ten sam kształt co `From`, plus `type Error`. Cała różnica mieści się w tym jednym elemencie i cały sens także — zwraca `Result`, więc możliwość niepowodzenia stoi w typie, a nie w komentarzu.
+
+Najpierw spotyka się implementacje ze standardu, choćby `u8::try_from(300i32)`, i właśnie na nich najlepiej widać, po co to jest. Rzutowanie przez `as` to **ta sama konwersja z usuniętym sprawdzeniem**: `300i32 as u8` daje 44 i nie mówi ani słowa. Warto zapamiętać tę różnicę w takiej właśnie formie — nie „`as` jest szybsze", tylko „`as` jest tym samym, tylko bez pytania, czy wynik ma sens".
+
+Dwie rzeczy przydatne w praktyce. Przy zbieraniu do `Result` przetwarzanie **zatrzymuje się na pierwszej odmowie** i oddaje ten jeden błąd, co zwykle jest dokładnie tym, o co chodziło. A gdy konwersja idzie **z tekstu**, właściwą cechą nie jest `TryFrom`, tylko `FromStr` — to ona stoi za `.parse()`, którego i tak używasz.
+
+**Szukaj po polsku:** konwersje zawodne · rzutowanie przez `as` · `FromStr` i `parse` · `rust TryFrom vs as` · `rust collect into Result`

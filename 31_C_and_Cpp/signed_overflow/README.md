@@ -107,3 +107,13 @@ Deny by default, so it is an error. It only fires when the operands are constant
 - [Buffer overruns](../buffer_overruns/README.md) — the other run-time check, and the one whose default does not move
 - [What the optimizer does](../../20_Compilers/what_the_optimizer_does/README.md) — the machinery that deleted `has_room`
 - [The bugs Rust is a reply to](../README.md) — the other eight
+
+## Po polsku
+
+`x + 1 > x` jest fałszem przy `-O0` i prawdą przy `-O2`, z tego samego źródła. To nie jest błąd optymalizatora: przepełnienie liczby ze znakiem jest w C **zachowaniem niezdefiniowanym**, więc kompilator ma pełne prawo założyć, że nie zachodzi — a skoro nie zachodzi, porównanie jest zawsze prawdziwe i można je po prostu wyciąć.
+
+Ten przykład wart jest zapamiętania, bo obala najczęstszy skrót myślowy o UB, powtarzany też po polsku: że „niezdefiniowane" znaczy „wyjdzie jakaś dziwna liczba". Nie znaczy. Kompilator **wnioskuje wstecz** z założenia, że sytuacja nie występuje, i usuwa kod, który przy tym założeniu jest zbędny — zniknąć może właśnie to sprawdzenie, które napisałeś, żeby przepełnieniu zapobiec.
+
+Rust rozdziela dwie sprawy, których C nie rozdziela. Przepełnienie jest **zdefiniowane**: w trybie debug program panikuje, w release zawija się modulo. Obie odpowiedzi są opisane, żadna nie jest UB, więc żaden optymalizator niczego z tego nie wywnioskuje. Jest tu jednak prawdziwa pułapka i trzeba o niej mówić uczciwie: skoro `--release` zawija po cichu, to sam Rust nie chroni przed *błędną liczbą* — chroni przed wnioskowaniem z niemożliwego. Gdy wynik ma znaczenie, sięgasz po `checked_add`, `saturating_add` albo `wrapping_add`, a nazwa mówi, co ma się stać.
+
+**Szukaj po polsku:** przepełnienie liczb ze znakiem · zachowanie niezdefiniowane · `checked_add` · `rust integer overflow release` · `rust wrapping_add`

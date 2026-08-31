@@ -27,3 +27,13 @@ A lowercase name in an arm is not a constant being compared against — it is a 
 - [Six kinds of zero](../../17_Option_and_Result/six_kinds_of_zero/README.md) — exhaustiveness used as a domain model
 - [`match` expressions](../../25_Control_Flow/match_expressions/README.md) — the keyword and its arm-order rules
 - [Comprehensive Rust: Destructuring Enums ↗](https://google.github.io/comprehensive-rust/pattern-matching/destructuring-enums.html)
+
+## Po polsku
+
+Destrukturyzacja wyliczenia to zapisanie wzorca (*pattern*) w kształcie samego wariantu — `Stop`, `Move(x, y)`, `Resize { w, h }` — i wstawienie nazw w dziury. Nazwy po lewej nie odnoszą się do niczego, co już istnieje: to **nowe wiązania**, tworzone w chwili dopasowania.
+
+Najcenniejsza jest tu jednak nie wygoda, tylko **kompletność dopasowania** (*exhaustiveness*): kompilator zna wszystkie warianty wyliczenia, więc potrafi wskazać ten, który pominąłeś, i robi to jako `E0004`, wymieniając brakujący wariant z nazwy. To właśnie zamienia parę „wyliczenie + `match`" w narzędzie projektowe, a nie w odpowiednik `switch`. Dlatego `_` na dole jest tu obciążeniem, a nie udogodnieniem: raz dopisany, na zawsze uciszy pytanie „a co z wariantem, który dojdzie za rok?".
+
+Pułapka, przez którą przechodzi każdy: **nazwa pisana małą literą w ramieniu nie jest porównaniem ze stałą, tylko nowym wiązaniem** — a takie wiązanie pasuje do wszystkiego, więc ramiona pod nim są martwe. Kompilator ostrzeże o nieosiągalnym ramieniu, ale nie o przyczynie, bo z jego punktu widzenia napisałeś dokładnie to, co chciałeś.
+
+**Szukaj po polsku:** dopasowanie wzorców · destrukturyzacja wyliczeń · kompletność dopasowania · `rust match exhaustiveness` · `E0004`

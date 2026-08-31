@@ -160,3 +160,13 @@ The rule of thumb worth carrying: **a `.clone()` added to make a borrow compile 
 ## Sources
 
 [`IntoIterator` ↗](https://doc.rust-lang.org/std/iter/trait.IntoIterator.html) in std, and the edition guide on [`IntoIterator` for arrays ↗](https://doc.rust-lang.org/edition-guide/rust-2021/IntoIterator-for-arrays.html).
+
+## Po polsku
+
+Trzy drzwi do tej samej kolekcji, i różnią się wyłącznie tym, co robią z własnością: `iter()` **pożycza** każdy element (`&T`), `iter_mut()` pożycza go mutowalnie (`&mut T`), a `into_iter()` **oddaje go na własność** (`T`) i nie zostawia sobie nic. Przedrostek `into_` w nazwie jest w Ruscie stałą konwencją i zawsze znaczy to samo: ta metoda konsumuje odbiorcę.
+
+Rzecz, która najbardziej zaskakuje, jest składniowa: pętla `for` **wybiera jedne z tych drzwi za ciebie**, na podstawie tego, czy napisałeś `&`, `&mut`, czy nic. `for x in &v` to `iter()`, `for x in &mut v` to `iter_mut()`, a `for x in v` to `into_iter()` — i to ostatnie zjada wektor, więc następna linijka, która się do niego odwołuje, dostaje `E0382`. To najczęstszy błąd początkującego w tym miejscu i, co ważne, wcale nie jest to błąd o iteratorach: to zwykłe przeniesienie własności, tylko schowane pod pętlą, której składnia niczego nie zapowiada.
+
+Jeden wyjątek wart zapamiętania na pamięć, bo łamie regułę: **tablice** (`[T; N]`) od Rusta 1.53 dają przez `into_iter()` wartości, a nie referencje. Starsze polskie materiały opisują poprzednie zachowanie, w którym `array.into_iter()` oddawało `&T` — jeśli przykład z sieci nie chce się skompilować dokładnie w tym miejscu, to jest zwykle ta zmiana, a nie twój błąd.
+
+**Szukaj po polsku:** iteratory w Ruscie · `iter` a `into_iter` · przenoszenie własności w pętli · `rust into_iter array 1.53` · `E0382`

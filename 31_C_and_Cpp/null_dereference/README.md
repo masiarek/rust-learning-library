@@ -113,3 +113,13 @@ The `help` is the honest part of the story, and it is worth reading as a warning
 - [`Some` and `None`](../../17_Option_and_Result/some_and_none/README.md) — the type itself, from the beginning
 - [Partial functions](../../17_Option_and_Result/partial_functions/README.md) — the idea underneath: "no answer" as one of the answers
 - [The bugs Rust is a reply to](../README.md) — the other eight
+
+## Po polsku
+
+`NULL` mieści się w typie wskaźnikowym, ale nie odpowiada na żadne z pytań, które ten typ obiecuje. Sedno warto powiedzieć wprost: `Osoba*` twierdzi, że wskazuje na osobę, a `NULL` znaczy „nie wskazuję na nic" — czyli typ kłamie, legalnie, na każdym wskaźniku w programie.
+
+Odpowiedzią Rusta nie jest lepszy wskaźnik ani sprawdzanie w czasie działania, tylko **inny typ**. `Option<T>` mówi „może tu czegoś nie być" w samej sygnaturze, więc informacja przestaje być konwencją i komentarzem, a staje się czymś, co kompilator umie wyegzekwować: `&T` nigdy nie jest puste, a jeśli może być — ma to napisane. Zdanie Tony'ego Hoare'a o „błędzie wartym miliard dolarów" krąży również po polsku; warto tylko wiedzieć, że alternatywa nie jest żadną nowinką, lecz zwykłym wyliczeniem o dwóch wariantach.
+
+Praktyczna uwaga, która zaskakuje przy przejściu z C: `Option<&T>` **nie zajmuje ani bajtu więcej** niż `&T`, bo kompilator wykorzystuje niemożliwy wzorzec zerowego wskaźnika jako znacznik wariantu `None`. Bezpieczeństwo nie kosztuje tu pamięci ani cyklu — kosztuje jedno `match`, które w C i tak trzeba było napisać, tylko nikt nie sprawdzał, czy je napisałeś.
+
+**Szukaj po polsku:** wskaźnik pusty · błąd wart miliard dolarów · optymalizacja zerowego wskaźnika · `rust Option null pointer optimization`

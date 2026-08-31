@@ -117,11 +117,32 @@ That is most of the vocabulary this library needs, and it means the table below 
 | panic | panika | The verb stays: *program panikuje*. |
 | compile | kompilować | |
 
+| [pattern](30_Pattern_Matching/README.md) | wzorzec | *dopasowanie wzorców* for pattern matching. |
+| irrefutable / refutable | niepodważalny / podważalny | Polish usage is genuinely unsettled here; these are the transparent calques and the English is always glossed beside them. |
+| destructuring | destrukturyzacja | |
+| exhaustiveness | kompletność dopasowania | The property `E0004` is about. |
+| match arm | ramię | |
+| [match guard](30_Pattern_Matching/match_guards/README.md) | strażnik | Same word as the RAII guard (`MutexGuard`), and the two do not collide in practice. |
+| undefined behaviour, UB | zachowanie niezdefiniowane | |
+| [data race](31_C_and_Cpp/data_races/README.md) | wyścig danych | Keep distinct from *sytuacja wyścigu* (race condition) — Rust rules out the first, not the second. |
+| [use-after-free](31_C_and_Cpp/use_after_free/README.md) | użycie po zwolnieniu | |
+| dangling pointer | wiszący wskaźnik | |
+| assertion | asercja | |
+| orphan rule | reguła sieroty | |
+| [capacity](26_Collections/the_vec/README.md) | pojemność | Keep distinct from **długość** (length); they grow independently. |
+| amortised | zamortyzowany | |
+| array vs `Vec` | tablica vs wektor | The one that misleads most: **tablica** is `[T; N]`, fixed and on the stack. Python's list and Java's `ArrayList` are `Vec`. |
+
 ### Words to leave in English
 
 `unwrap` · `match` · `impl` · `derive` · `cargo` · `clippy` · `rustfmt` · `no_std` · every error code (`E0308`), every attribute (`#[derive]`), every keyword.
 
 A Polish sentence containing an English keyword is normal Polish technical writing, and inflecting it is normal too — *w `match`u*, *przez `unwrap`a*. Do not invent a Polish keyword.
+
+
+### One thing the terminology cannot fix
+
+`Ord` on a `String` compares Unicode code points, not the Polish alphabet — `ą` sorts *after* `z`, not next to `a` — so a `BTreeMap` of surnames is not a Polish-sorted list. That is correct behaviour for a byte-wise comparison, not a bug, and the standard library has no locale-aware collation and does not pretend to. Any page that sorts human-readable Polish text should say so rather than imply the order is alphabetical.
 
 ## See also
 

@@ -109,3 +109,13 @@ help: consider assigning a value
 - [`Some` and `None`](../../17_Option_and_Result/some_and_none/README.md) — "not set yet" as a value you can hold and pass around
 - [Signed overflow](../signed_overflow/README.md) — the page where "the compiler may assume it never happens" stops being abstract
 - [The bugs Rust is a reply to](../README.md) — the other eight
+
+## Po polsku
+
+C pozwala zadeklarować zmienną i przeczytać ją, zanim cokolwiek do niej trafi. Rust też pozwala zadeklarować ją bez wartości — różnica polega na tym, że sprawdza **każdą ścieżkę** prowadzącą do odczytu i odmawia, jeśli choćby jedna z nich nie przypisuje.
+
+To rozróżnienie warto podkreślić, bo krąży o Ruscie fałszywe uproszczenie, że „wszystko trzeba od razu zainicjalizować". Nieprawda: `let x;` z przypisaniem w obu gałęziach `if` jest w pełni idiomatyczne i jest zwykłym wzorcem, nie obejściem. Kompilator nie żąda inicjalizacji w miejscu deklaracji — żąda dowodu, że w chwili odczytu wartość na pewno już tam jest.
+
+Po stronie C to znów nie jest „śmieć w zmiennej", tylko **zachowanie niezdefiniowane**, więc skutki bywają dziwniejsze niż przypadkowa liczba — ze zmienną typu `bool`, która nie jest ani prawdą, ani fałszem, włącznie. Polskie kursy uczą tu odruchu `int i = 0;` przy każdej deklaracji. To dobry nawyk w C i **zły** w Ruscie: zerowa wartość-atrapa gasi analizę kompilatora i zamienia błąd kompilacji w cichy zły wynik.
+
+**Szukaj po polsku:** zmienna niezainicjalizowana · zachowanie niezdefiniowane · `rust E0381` · `rust definite initialization`

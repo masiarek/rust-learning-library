@@ -120,3 +120,13 @@ The check is on *every* path, without running anything, which is the difference 
 - [Lifetime annotations](../../18_Ownership/lifetime_annotations/README.md) — for when the compiler cannot work out which owner a reference belongs to
 - [Double-free](../double_free/README.md) — the same ownership model, seen from the block's side
 - [The bugs Rust is a reply to](../README.md) — the other eight
+
+## Po polsku
+
+Zwolniony blok nie jest pusty — jest **dostępny**. To jedno słowo tłumaczy, dlaczego najbardziej pouczające użycie po zwolnieniu (*use-after-free*) nie jest wywaleniem programu, tylko odczytem, który spokojnie zwraca cudze dane. Pamięć wciąż należy do procesu, więc nic nie protestuje; alokator zdążył ją tylko oddać komuś innemu.
+
+Dlatego jest to błąd niebezpieczny w sensie bezpieczeństwa, a nie samej poprawności: „cudze dane" bywają hasłem albo kluczem z innej części programu, a odczyt wygląda w kodzie zupełnie zwyczajnie. Objaw zależy od tego, co akurat zdążyło wejść w to miejsce, więc potrafi znikać przy próbie powtórzenia — stąd ludowa diagnoza „wywala się raz na dziesięć uruchomień".
+
+Rust likwiduje całą tę klasę przy kompilacji i robi to bez odśmiecacza: wartość znika, gdy właściciel wychodzi z zasięgu, a kontroler pożyczeń nie pozwala, by jakakolwiek referencja przeżyła to, na co wskazuje. Wiszący wskaźnik (*dangling pointer*) nie jest tu błędem, który trzeba znaleźć — jest programem, którego nie da się zbudować.
+
+**Szukaj po polsku:** użycie po zwolnieniu · wiszący wskaźnik · kontroler pożyczeń · `rust use after free` · `rust dangling reference`

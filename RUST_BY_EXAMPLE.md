@@ -275,3 +275,13 @@ Ordered by what it costs a reader who came here from RBE:
 - [Rust by Example](00_Start_Here/rust_by_example/README.md) — what RBE is for, and the two moments it is the right answer
 - [The course, in order](index.md) — the reading order these lessons were written in
 - [KATAS.md](KATAS.md) — the exercises, which RBE calls *Activities*
+
+## Po polsku
+
+*Rust by Example* to zbiór krótkich, uruchamialnych przykładów, który większość uczących się trzyma otwarty w drugiej karcie przeglądarki. Rzecz, którą lepiej wiedzieć od razu: **polskiego tłumaczenia nie ma**. Oficjalne repozytorium prowadzi przekłady na hiszpański, japoński, koreański i chiński — i na tym koniec. Nie przeoczyłeś polskiej wersji, ona nie istnieje.
+
+Ta strona jest mapą pokrycia: przechodzi przez 24 rozdziały RBE i mówi, która lekcja tutaj im odpowiada, gdzie ta biblioteka schodzi głębiej, a czego nie porusza wcale. Korzystać z niej warto w jedną konkretną stronę — RBE odpowiada na pytanie „jak się to zapisuje", a lekcje tutaj na pytanie „dlaczego tak i gdzie to boli". Role są komplementarne, nie konkurencyjne.
+
+Stąd rada praktyczna dla uczącego się po polsku, i to ta sama, którą powtarza [POLSKI.md](POLSKI.md): składni ucz się, skąd chcesz, ale **komunikatów kompilatora ucz się po angielsku**. `rustc` po polsku nie mówi i mówić nie będzie, a większość czasu w Ruscie spędza się na czytaniu tego, co wypisał.
+
+**Szukaj po polsku:** kurs Rusta po polsku · dokumentacja Rusta · `rust by example` · `rust book tłumaczenie`

@@ -75,3 +75,13 @@ Start wherever your question is; each page stands alone.
 ---
 
 Several of these pages exist because of a [No Boilerplate ↗](https://www.youtube.com/@NoBoilerplate) walkthrough of the Rust tooling stack, whose recommendations — nightly by default, a strict clippy configuration, devenv for the environment — are each defensible and each carry a cost the format of a talk has no room for. Where a page disagrees with that source it says so and says why; where it agrees, it says that too.
+
+## Po polsku
+
+Wszystkie pytania z tego działu są jednym pytaniem zadanym na różnych wysokościach: **której wersji czego używam i kto o tym zdecydował?** Strona układa lekcje od odpowiedzi najtańszej do najdroższej.
+
+Warstwy warto umieć wymienić po polsku, bo w materiałach mieszają się bez ostrzeżenia: `rustup` zarządza **wersjami kompilatora**, `cargo` zarządza **zależnościami i budowaniem**, plik `rust-toolchain.toml` **przypina** wersję do projektu, a Nix czy devenv odtwarzają całe środowisko. Kiedy blog radzi `nightly`, a kolega ma w repozytorium plik, którego nigdy nie widziałeś, to są odpowiedzi z różnych warstw na różne problemy — i żadna z nich zwykle nie mówi, na który.
+
+Dwa słowa zostają po angielsku i nie warto ich tłumaczyć: **toolchain** („łańcuch narzędzi" po polsku brzmi jak coś innego) oraz **stable** i **nightly** jako nazwy kanałów wydawniczych. Reguła praktyczna dla uczącego się: zostań na `stable`, dopóki jakaś konkretna, dająca się nazwać rzecz nie zmusi cię do zmiany — a wtedy zapisz w projekcie, co i dlaczego, bo za pół roku sam siebie o to zapytasz.
+
+**Szukaj po polsku:** `rustup` i kanały wydawnicze · przypinanie wersji kompilatora · `cargo` i zależności · `rust toolchain file` · `rust stable vs nightly`

@@ -119,3 +119,13 @@ This is the plainest illustration of what the borrow rule is *for*. It is not a 
 - [Iterators are lazy](../../24_Iterators/iterators_are_lazy/README.md) — why the borrow lives as long as the chain does
 - [Use-after-free](../use_after_free/README.md) — the reallocation half of this bug
 - [The bugs Rust is a reply to](../README.md) — the other eight
+
+## Po polsku
+
+To jedyny błąd z tej listy, który zwykle **nie wywala programu**. Usuwanie z kontenera w trakcie chodzenia po nim po prostu zwraca złą odpowiedź — cicho, powtarzalnie i bez skargi ze strony jakiegokolwiek sanitizera. Dlatego jest groźniejszy niż naruszenie ochrony pamięci: to drugie znajdziesz w pięć minut, a przeskoczony element potrafi mieszkać w produkcji latami.
+
+Mechanizm wart jest nazwania po polsku, bo tłumaczy objaw: przy usunięciu elementu reszta przesuwa się w lewo, a iterator rusza dalej ze swojej pozycji, więc **przeskakuje** sąsiada. Przy dokładaniu dochodzi drugi wariant — realokacja bufora unieważnia wszystkie wskaźniki i iteratory, które wskazywały na stary, a to potrafi się już skończyć odczytem zwolnionej pamięci.
+
+Rust traktuje to jako to, czym jest naprawdę: **pożyczanie**. Chodzenie po kontenerze pożycza go współdzielnie, usuwanie żąda pożyczenia wyłącznego, a reguła „wielu czytających albo jeden piszący" nie pozwala mieć obu naraz — odmowa przychodzi przy kompilacji. Kiedy naprawdę trzeba usuwać w trakcie przebiegu, idiomem jest `retain` albo `drain`: jedno przejście, nic nie zostaje unieważnione.
+
+**Szukaj po polsku:** unieważnienie iteratora · pożyczanie w Ruscie · `retain` i `drain` · `rust iterator invalidation` · `E0502`

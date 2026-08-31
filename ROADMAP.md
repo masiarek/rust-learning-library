@@ -42,3 +42,13 @@ Rung 12 is the one where the two repos finally shake hands, and it is deliberate
 Some of the best pages here will have nothing to do with voting. Closures, `Rc` and `RefCell`, `Cow`, iterator laziness, formatting, `thiserror` versus `anyhow`, why `async` is the way it is — if one of them is the thing you want to understand this week, write that page and let the ladder wait. It is not going anywhere, and a concept learned because you were curious sticks better than one learned because a table said it was next.
 
 The only thing worth protecting is the house rule that makes the library trustworthy: [every claim on a page is printed by a program that CI actually runs](CONTRIBUTING.md).
+
+## Po polsku
+
+To jest plan powolnej, całkowicie opcjonalnej ścieżki przez bibliotekę: zliczanie głosów metodą STAR jako pretekst do nauki Rusta. Sama metoda mieści się w trzech zdaniach — zsumuj punkty każdego kandydata, weź dwóch najlepszych, a między nimi wygrywa ten, którego więcej kart stawia wyżej — i właśnie dlatego jest świetnym ćwiczeniem, a kiepskim celem: kodu jest ze trzydzieści linii, więc cała wartość leży w drodze, nie w mecie.
+
+Nazwa STAR (*Score Then Automatic Runoff*) nie ma ustalonego polskiego odpowiednika i zwykle zostawia się ją po angielsku; opisowo to „punktacja, a potem automatyczna dogrywka". Z pojęć wyborczych przydadzą się: **karta do głosowania** (*ballot*), **dogrywka** (*runoff*), **kandydat**, **remis** (*tie*). Warto wiedzieć, że o samych metodach wyborczych jest po polsku sporo literatury politologicznej, a o ich implementacji prawie nic — więc szukając kodu, lepiej pytać po angielsku.
+
+Każdy szczebel tej ścieżki stoi samodzielnie i uczy czegoś, czego i tak trzeba się nauczyć. Wybory są tylko wymówką, żeby pytania przychodziły w sensownej kolejności, zamiast z listy tematów.
+
+**Szukaj po polsku:** metody wyborcze · głosowanie punktowe · dogrywka wyborcza · `STAR voting` · `rust learning project ideas`

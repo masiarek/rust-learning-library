@@ -116,3 +116,13 @@ Each page states the signature and the stability, explains what the method does 
 ## Looking a term up
 
 [GLOSSARY.md](GLOSSARY.md) defines the vocabulary these pages use — string slice, string literal, deref coercion, capacity, Unicode scalar value, grapheme cluster, the `OsString` and `CString` pairs — and every entry links the page that explains it properly.
+
+## Po polsku
+
+Tekst w Ruscie to jeden wzorzec spotykany cztery razy: **właściciel i widok**. `String` posiada, `&str` ogląda — i ta sama para wraca przy `Vec<T>` / `&[T]`, przy `PathBuf` / `Path`, przy `OsString` / `OsStr`. Kto zobaczy ten wzorzec raz, przestaje uczyć się każdej z tych par osobno.
+
+Dla polskiego czytelnika ten dział jest ważniejszy niż dla angielskiego, i to z jednego konkretnego powodu: **każda z liter ą ć ę ł ń ó ś ź ż zajmuje w UTF-8 dwa bajty**. Dlatego `"Łódź".len()` daje 7, a nie 4; dlatego `&s[0..1]` potrafi wywołać panikę o granicy znaku; i dlatego cała rodzina metod z `ascii` w nazwie po cichu nic nie robi na polskim tekście — `to_ascii_uppercase` nie ruszy `ł`, a `split_ascii_whitespace` nie widzi twardej spacji, którą polska typografia stawia po spójnikach jednoliterowych. Angielski czytelnik może przejść przez ten dział i nigdy się na to nie natknąć; polski natknie się pierwszego dnia.
+
+Nazewnictwo, którego trzymamy się w całej bibliotece: `String` to **łańcuch znaków**, `&str` to **wycinek łańcucha**, a `char` to **znak** — przy czym jest to punkt kodowy Unicode, a nie bajt i nie „litera na ekranie".
+
+**Szukaj po polsku:** łańcuchy znaków w Ruscie · `String` a `&str` · kodowanie UTF-8 · polskie znaki diakrytyczne · `rust char boundary panic`

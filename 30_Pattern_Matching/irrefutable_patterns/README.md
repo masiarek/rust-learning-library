@@ -26,3 +26,13 @@
 - [Variables](../../15_First_Programs/variables/README.md) — the `let` this page is re-reading
 - [Destructuring structs](../destructuring_structs/README.md) — the irrefutable pattern you will use most
 - [Patterns ↗](https://doc.rust-lang.org/reference/patterns.html) · [`E0005` ↗](https://doc.rust-lang.org/error_codes/E0005.html) · [Comprehensive Rust: Irrefutable Patterns ↗](https://google.github.io/comprehensive-rust/pattern-matching/infallible.html)
+
+## Po polsku
+
+Po lewej stronie każdego `let` stoi **wzorzec** (*pattern*), a nie nazwa — `let x = 5;` to po prostu najprostszy z możliwych. Gdy się to raz zobaczy, `fn wypisz((a, b): (i32, i32))` i `for (i, nazwa) in nazwy.iter().enumerate()` przestają być osobnymi ciekawostkami składniowymi i okazują się tym samym dopasowaniem wzorców, które znasz z `match`.
+
+Rozstrzyga jedno pytanie: czy wzorzec **może nie pasować**. Wzorzec niepodważalny (*irrefutable*) pasuje zawsze — gołe nazwy, krotki, struktury, `_`. Wzorzec podważalny (*refutable*) może nie pasować: każdy wariant wyliczenia, każdy literał, każdy zakres. Cztery miejsca żądają niepodważalnego — `let`, wiązania w `for`, parametry funkcji i domknięć — bo nie mają dokąd skierować niepowodzenia. Cztery przyjmują podważalny — ramiona `match`, `if let`, `while let`, `let else` — bo każde z nich taką gałąź dostarcza.
+
+Stąd pułapka, którą pisze każdy początkujący: `let Some(n) = opt;` się nie kompiluje. Odruchem po przeczytaniu `E0005` jest `.unwrap()` — działa i **wyrzuca dokładnie tę gałąź, przez którą wzorzec był podważalny**. Właściwe wyjścia to `if let`, `let else` albo `match`, a wybór między nimi zależy wyłącznie od tego, co ma się stać, gdy wzorzec nie pasuje.
+
+**Szukaj po polsku:** wzorce niepodważalne i podważalne · dopasowanie wzorców · `rust refutable pattern` · `E0005`

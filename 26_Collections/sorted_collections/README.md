@@ -351,3 +351,13 @@ fn main() {
 ## Sources
 
 [`BTreeMap` ↗](https://doc.rust-lang.org/std/collections/struct.BTreeMap.html) and [`BTreeSet` ↗](https://doc.rust-lang.org/std/collections/struct.BTreeSet.html); the module page for [`std::collections` ↗](https://doc.rust-lang.org/std/collections/index.html) opens with the decision table this page's own comparison is a longer form of. The `E0277` transcript is a real compile of the six-line program above it, on rustc 1.98.0.
+
+## Po polsku
+
+`BTreeMap` i `BTreeSet` to para uporządkowana: klucze leżą **w kolejności**, więc przejście po takiej kolekcji jest już posortowane, a zebranie czegoś do niej jest sortowaniem, którego nie musiałeś pisać. Płaci się za to cechą `Ord` zamiast `Hash` oraz wyszukiwaniem, które schodzi po drzewie, zamiast skoczyć prosto pod adres.
+
+Dla polskiego czytelnika jest tu jedna rzecz, której angielski oryginał nie musi zauważać: **`Ord` dla `String` porównuje punkty kodowe Unicode, a nie porządek alfabetyczny polszczyzny**. Skutek jest natychmiastowy i widoczny — `ą` wypada *za* `z`, a nie tuż po `a`, więc lista nazwisk posortowana przez `BTreeMap` nie jest listą posortowaną po polsku. To nie jest wada `BTreeMap`, tylko poprawne zachowanie porównania bajt po bajcie; prawdziwe sortowanie językowe wymaga reguł kolacji (biblioteki spod hasła *collation*, np. ICU), których biblioteka standardowa nie ma i nie udaje, że ma.
+
+Pułapka, którą strona nazywa wprost, warta powtórzenia: **sortuje po kluczu, a ty zwykle chcesz posortować po wartości.** Mapa uporządkowana nie pomoże ustawić wyników od największego — do tego zbiera się do `Vec` i sortuje jawnie. Przydaje się też wiedzieć, że `BTreeSet<T>` to w istocie `BTreeMap<T, ()>`, czyli ten sam mechanizm z pustą wartością.
+
+**Szukaj po polsku:** kolekcje uporządkowane · sortowanie polskich znaków · reguły kolacji · `rust BTreeMap ordering` · `rust sort by value`

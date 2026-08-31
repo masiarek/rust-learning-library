@@ -124,3 +124,13 @@ Rust adds one wrinkle C does not have: a thread that panics while holding a lock
 - [Mutex poisoning](../../09_Advanced/mutex_poisoning/README.md) — the `Result` that `lock()` returns, and why
 - [Data races](../data_races/README.md) — the guarantee this row is often confused with
 - [The bugs Rust is a reply to](../README.md) — the other eight
+
+## Po polsku
+
+Każdy `pthread_mutex_lock` potrzebuje odpowiadającego mu odblokowania **na każdej ścieżce wyjścia z funkcji** — łącznie z tymi, które ktoś dopisze za pół roku. Taki jest kształt tego błędu: kod bywa poprawny w chwili pisania, a psuje go późniejszy `return` w środku, dodany przez kogoś, kto nie zauważył, że wyżej stoi blokada.
+
+Rust nie prosi o dyscyplinę, tylko zmienia mechanizm — blokadę zwalnia **wypuszczenie wartości** (*drop*), więc nie ma ścieżki, która mogłaby to ominąć: ani wcześniejszy `return`, ani `?`, ani panika. To jest RAII, znane z C++ przez `std::lock_guard`, z jedną istotną różnicą: w Ruscie nie da się sięgnąć po chronione dane *bez* wzięcia strażnika, więc nie istnieje wariant „zapomniałem opakować".
+
+Jest jedna rzecz, na którą kompilator faktycznie zwraca uwagę, i wygląda na formalność, a nie jest: `let _ = mutex.lock();` **nie utrzymuje** blokady, bo `_` nie jest nazwą, tylko odrzuceniem wartości — strażnik ginie natychmiast i sekcja krytyczna nigdy nie powstaje. Poprawnie jest `let _strażnik = …`. I to, czego Rust nie obiecuje: zakleszczenie (*deadlock*) z dwóch blokad branych w odwrotnej kolejności pozostaje w całości twoim problemem.
+
+**Szukaj po polsku:** muteks i sekcja krytyczna · RAII · zakleszczenie · `rust MutexGuard drop` · `rust let underscore lock`

@@ -26,3 +26,13 @@ Splitting one case into a guarded arm plus a catch-all silently converts a `matc
 - [Zero wins is not zero games](../../17_Option_and_Result/wrong_guard/README.md) — a guard that looks careful and lets the wrong case through
 - [Binding with `@`](../binding_at/README.md) — testing a value and keeping it, which is sometimes the guard you were reaching for
 - [Match guards ↗](https://doc.rust-lang.org/reference/expressions/match-expr.html#match-guards) · [Comprehensive Rust: `match` ↗](https://google.github.io/comprehensive-rust/control-flow-basics/match.html)
+
+## Po polsku
+
+Strażnik (*guard*) to `if` doczepiony do ramienia: `Some(n) if n > 100 => …`. Uruchamia się **po** związaniu wzorca, więc może korzystać z nazw, które wzorzec dopiero co utworzył — i po to istnieje, bo wzorzec potrafi sprawdzić kształt i literał, ale nie relację między dwiema nazwami ani wynik wywołania.
+
+Cena jest jedna i lepiej poznać ją wcześniej niż później: **kompilator nie zalicza ramienia ze strażnikiem do kompletności dopasowania.** `Some(n) if n > 0` razem z `None` nie jest wyczerpujące i komunikat ma rację — kompilator nie umie policzyć twojego warunku, więc musi założyć, że to ramię może odmówić. W praktyce znaczy to, że rozbicie jednego przypadku na ramię ze strażnikiem plus łapacz `_` po cichu zamienia `match`, który był sprawdzany, w taki, który już nie jest. Sygnałem ostrzegawczym jest `_ => unreachable!()` na dole: gdyby kompilator wciąż potrafił to udowodnić, nie trzeba by tego pisać.
+
+Dwie rzeczy na koniec. Strażnik obejmuje **całą** alternatywę po `|`, a nie tylko jej ostatnią gałąź — reguła wygląda na arbitralną dokładnie do chwili, w której się na niej przewrócisz. I bardzo często to, o co naprawdę chodziło, lepiej wyraża wzorzec zakresowy (`1..=9`) albo wzorzec zagnieżdżony, bez oddawania kompletności w zamian.
+
+**Szukaj po polsku:** strażnik w `match` · kompletność dopasowania · wzorce zakresowe · `rust match guard exhaustiveness`

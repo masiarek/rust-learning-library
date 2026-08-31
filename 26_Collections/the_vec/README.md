@@ -317,3 +317,13 @@ fn main() {
 ## Sources
 
 [Std library types: Vectors ↗](https://doc.rust-lang.org/rust-by-example/std/vec.html) in Rust by Example, and [`std::vec::Vec` ↗](https://doc.rust-lang.org/std/vec/struct.Vec.html), whose *Capacity and reallocation* section is the authority for everything this page says about growth.
+
+## Po polsku
+
+`Vec<T>` to **trzy liczby na stosie** — wskaźnik, długość i pojemność — plus jedna alokacja na stercie. Warto trzymać rozdzielone dwa słowa, które po polsku łatwo się zlewają: **długość** (*length*) to ile elementów faktycznie jest, a **pojemność** (*capacity*) to ile się zmieści, zanim trzeba będzie przealokować. Rosną niezależnie i tylko pierwsza z nich mówi coś o twoich danych.
+
+Rośnie przez **podwajanie**, i to podwajanie jest powodem, dla którego dopisywanie na koniec uchodzi za tanie, choć czasem kopiuje całą zawartość. Po polsku mówi się o koszcie **zamortyzowanym**: pojedyncze `push` bywa drogie, ale średnia po wielu wywołaniach jest stała. Kto zna `ArrayList` z Javy albo `list` z Pythona, zna dokładnie ten sam mechanizm pod inną nazwą — a `std::vector` z C++ to wręcz ten sam typ, łącznie z nazwą.
+
+Dwie rzeczy przydatne od pierwszego dnia. `Vec` **dereferencuje się do wycinka** (`&[T]`), więc wszystkie metody wycinka działają na nim bez żadnej konwersji — dlatego szukając „metody `Vec`", trafia się połowę odpowiedzi w dokumentacji `slice` i to nie pomyłka. I pułapka, ta sama co przy unieważnianiu iteratorów: **usuwanie wewnątrz pętli po indeksach** przesuwa resztę w lewo i przeskakuje element; `remove` zachowuje kolejność i jest liniowe, `swap_remove` jest stałoczasowe i kolejność niszczy, a gdy chodzi o odsianie wielu elementów, właściwą odpowiedzią jest `retain`.
+
+**Szukaj po polsku:** wektor w Ruscie · długość a pojemność · koszt zamortyzowany · `rust Vec capacity` · `rust swap_remove vs remove`

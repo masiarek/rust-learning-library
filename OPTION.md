@@ -142,3 +142,13 @@ Most of the pages above end in a `## Practice` exercise with a compiled solution
 ## Looking a term up
 
 [GLOSSARY.md](GLOSSARY.md) defines the vocabulary these pages use — `and_then`, discriminant, exhaustiveness, `let … else`, niche, the null-pointer optimization, `#[must_use]`, `?` — and every entry links to the page that explains it properly.
+
+## Po polsku
+
+`Option<T>` to po polsku najczęściej „opcja" (tak tłumaczy to Tour of Rust) albo opisowo „wartość opcjonalna"; w kodzie zostają `Option`, `Some` i `None`, bo to nazwy z biblioteki standardowej. Ta strona jest **mapą** — wymienia wszystkie lekcje o tym typie w kolejności, w jakiej pytania faktycznie się pojawiają.
+
+Jedno zdanie warto wynieść przed resztą: `Option` nie jest „rustowym `null`-em", tylko jego przeciwieństwem. `null` mieści się w każdym typie wskaźnikowym i nic o sobie nie mówi; `Option<T>` jest **osobnym typem**, więc kompilator wie, że wartości może nie być, i nie pozwala o tym zapomnieć. Dlatego nie ma tu „sprawdzania na wszelki wypadek" — albo masz `T`, albo masz `Option<T>` i musisz zdecydować, co zrobić z `None`.
+
+Dla szukających po polsku jedna pułapka porządkowa: większość materiałów omawia `Option` razem z `Result` pod wspólnym hasłem „obsługa błędów", co myli, bo **`None` nie jest błędem** — to zwyczajny brak wartości, bez informacji o przyczynie. Kiedy przyczyna ma znaczenie, właściwym typem jest `Result`.
+
+**Szukaj po polsku:** typ `Option` · wartość opcjonalna · `Some` i `None` · `rust Option vs null` · `rust Option vs Result`

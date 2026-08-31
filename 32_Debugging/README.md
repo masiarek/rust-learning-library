@@ -52,3 +52,13 @@ Three gaps, named rather than quietly left out:
 - **`tracing` and friends.** [Observability](../21_Observability/README.md) is the section for this and says honestly why its pages are the hardest here to finish: every checked example in this library compiles with `rustc` alone, and that is a crate story.
 
 A page graduates out of that list the way every page here arrives — with a program CI compiles, runs, and diffs against a recorded answer key. [CONTRIBUTING.md](../CONTRIBUTING.md) says how.
+
+## Po polsku
+
+Ta strona jest mapą, nie lekcją, a jej teza jest dla uczącego się wygodna: **większość tego, co w innych językach debuguje się w czasie działania, Rust po prostu odmawia zbudować**. Wartość pusta, wyścig danych, użycie po zwolnieniu, zapomniany wariant w `match` — gdzie indziej bywają sesją przy debuggerze, tutaj są komunikatem kompilatora.
+
+Skutek jest taki, że debugowanie w Ruscie to mniejszy i dziwniejszy zestaw umiejętności niż gdzie indziej, i dzieli się mniej więcej tak: jak **wypisać wartość** (`dbg!`, `{:?}`, `{:#?}`), co robić, **gdy panikuje** (ślad stosu, `RUST_BACKTRACE=1`), co robić, **gdy się nie buduje** — a to przypadek najczęstszy i najmniej podobny do debugowania w klasycznym sensie — i wreszcie co robić, **gdy ktoś już od twojego kodu zależy**.
+
+Jedna uwaga o oczekiwaniach. Krokowanie debuggerem jest w Ruscie znacznie rzadsze niż w C++ czy w Javie, i nie z braku narzędzi — `rust-gdb` i `rust-lldb` są w zestawie — tylko dlatego, że pytania, na które debugger odpowiada, zwykle padają wcześniej, przy kompilacji. Kto szuka polskich materiałów o debugowaniu Rusta i znajduje ich mało, niczego nie przeoczył: po angielsku jest ich niewiele więcej, z tego samego powodu.
+
+**Szukaj po polsku:** debugowanie Rusta · `dbg!` i `RUST_BACKTRACE` · czytanie komunikatów kompilatora · `rust debugging gdb lldb`

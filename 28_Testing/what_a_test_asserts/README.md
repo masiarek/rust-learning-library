@@ -280,3 +280,13 @@ fn main() {
 ## Sources
 
 [Unit testing ↗](https://doc.rust-lang.org/rust-by-example/testing/unit_testing.html) in Rust by Example, and [`std::assert_eq` ↗](https://doc.rust-lang.org/std/macro.assert_eq.html). Every transcript on this page was captured by running the failing assertion under `catch_unwind` in the example program, so the messages are rustc's own.
+
+## Po polsku
+
+W Ruscie nie ma osobnej biblioteki asercji do nauczenia się — **test to funkcja, która panikuje, gdy jest niezadowolona**. Kto przychodzi z JUnita albo z pytest, szuka warstwy, której tu nie ma, i to dobra wiadomość: `assert_eq!`, `assert!` i `panic!` wyczerpują temat.
+
+Reguła praktyczna: **`assert_eq!` zawsze, gdy obie strony są wartościami**, bo przy niepowodzeniu wypisuje obie i od razu widać, czym się różnią. `assert!(a == b)` powie tylko tyle, że warunek jest fałszywy, więc zaczynasz debugować sam test zamiast kod.
+
+Pułapka jest jedna i dotyczy nawyku, nie składni: **asercja, która nie może zawieść, jest gorsza niż jej brak** — daje zielone światło i zero informacji. Podręcznikowy przypadek to porównywanie liczb zmiennoprzecinkowych przez `==`. `0.1 + 0.2 == 0.3` jest fałszem, więc albo test pęka bez powodu, albo ktoś go „naprawia" tak, że przestaje cokolwiek sprawdzać; dla `f64` porównuje się różnicę z przyjętą tolerancją.
+
+**Szukaj po polsku:** testy jednostkowe w Ruscie · asercje · porównywanie liczb zmiennoprzecinkowych · `rust assert_eq` · `rust float epsilon comparison`

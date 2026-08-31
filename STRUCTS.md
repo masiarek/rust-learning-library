@@ -212,3 +212,13 @@ A [**union**](09_Advanced/what_a_union_is/README.md) is declared exactly like a 
 ## Looking a term up
 
 [GLOSSARY.md](GLOSSARY.md) defines the vocabulary these pages use — associated function, unit struct, tuple struct, field init shorthand, struct update syntax, newtype — and every entry links to the page that explains it properly.
+
+## Po polsku
+
+Struktura (*struct*) nazywa grupę wartości i czyni z tej nazwy **typ**. Ta strona jest mapą wszystkich lekcji o strukturach, rozrzuconych po całej bibliotece — bo strukturę definiuje się pierwszego dnia, a projektuje jeszcze w trzecim miesiącu.
+
+Dla kogoś, kto przychodzi z języka obiektowego, najważniejsze jest jedno rozstrzygnięcie: **struktura to nie klasa**. Nie ma dziedziczenia, metody nie mieszczą się w samej definicji (idą do osobnego bloku `impl`), i nie istnieje nic, co odpowiadałoby konstruktorowi jako elementowi języka. `Type::new()` to zwykła funkcja powiązana, tak nazwana z konwencji — nazwa nie jest w żaden sposób wyróżniona przez kompilator i można ją nazwać inaczej.
+
+Z polskiej terminologii przydają się: **pole** (*field*), **struktura krotkowa** (*tuple struct*, `Score(u8)`), **pusta struktura** (*unit struct*) oraz **nowy typ** (*newtype*). To ostatnie nie jest konstrukcją języka, tylko wzorcem: jednopolowa struktura opakowująca inny typ po to, żeby kompilator przestał mylić punkty z identyfikatorami.
+
+**Szukaj po polsku:** struktury w Ruscie · bloki `impl` · struktura krotkowa · wzorzec nowego typu · `rust struct vs class`

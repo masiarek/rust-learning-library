@@ -46,3 +46,11 @@ That gate is not ceremony. Building these four decks it caught a wrong claim abo
 ## What is not here
 
 Cards are deliberately not written for every method — the [`String`](../../14_Strings/string_methods/README.md) and [`Vec`](../../26_Collections/the_vec/README.md) references already do that job, and a deck that mirrors a reference is a deck you stop reviewing. These 126 are the facts that a working programmer forgets and is then bitten by.
+
+## Po polsku
+
+Anki to darmowy program do powtórek rozłożonych w czasie (*spaced repetition*), po polsku najczęściej nazywanych po prostu „systemem powtórek" albo SRS. Te talie mają 126 kart o `String`, `Vec`, iteratorach i własności, a ich wyróżnikiem jest to, że **każdy blok kodu został skompilowany i uruchomiony**, zanim karta powstała — więc karta nie może twierdzić czegoś, czego kompilator nie wypisał.
+
+Karty są po angielsku i tak zostaje, z tego samego powodu, dla którego cała ta biblioteka trzyma angielskie terminy w widoku: powtarzasz nazwy metod, komunikaty błędów i słowa kluczowe, czyli dokładnie te ciągi znaków, które zobaczysz w terminalu. Karta ucząca `pożyczanie` zamiast `borrow of moved value` nie przygotowałaby do niczego. Jeśli robisz sobie własne karty po polsku, warto trzymać tę samą zasadę: polskie zdanie, angielski termin w środku.
+
+**Szukaj po polsku:** system powtórek Anki · powtórki rozłożone w czasie · fiszki do nauki programowania · `anki rust deck` · `spaced repetition programming`

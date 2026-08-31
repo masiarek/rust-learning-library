@@ -110,3 +110,13 @@ Note what is *not* claimed: `unsafe` code can still call `drop` twice through a 
 - [Scope is about names](../../18_Ownership/scope_is_about_names/README.md) — when the free actually happens, which is not always the closing brace
 - [Use-after-free](../use_after_free/README.md) — the same ownership rule, aimed at the pointer rather than the block
 - [The bugs Rust is a reply to](../README.md) — the other eight
+
+## Po polsku
+
+Podwójne zwolnienie (*double-free*) wygląda na błąd o pamięci, a jest błędem o **odpowiedzialności**: dwa miejsca w kodzie uważają, że to one mają posprzątać. W C nic tego nie zapisuje — `free(p)` nie zmienia `p`, wskaźnik dalej wygląda na dobry, a wiedza „ja to już zwolniłem" mieszka wyłącznie w głowie autora i w komentarzu.
+
+Rust usuwa ten błąd, czyniąc odpowiedzialność **własnością wartości**, którą naraz może trzymać dokładnie jedno wiązanie. Nie ma czego zwolnić dwa razy, bo po przeniesieniu własności stara nazwa przestaje obowiązywać. To dokładnie ta sama reguła, którą poznaje się na pierwszej lekcji o przenoszeniu — tyle że oglądana od strony błędu, któremu zapobiega.
+
+Warto zauważyć, czego to *nie* wymaga: żadnego odśmiecacza (*garbage collector*) ani liczenia czegokolwiek w czasie działania. Zwolnienie następuje dokładnie tam, gdzie w C postawiłbyś `free`, tylko wpisuje je kompilator — i nie umie ani zapomnieć, ani zrobić tego dwa razy.
+
+**Szukaj po polsku:** podwójne zwolnienie pamięci · własność w Ruscie · przenoszenie własności · `rust double free` · `rust ownership`

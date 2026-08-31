@@ -72,3 +72,13 @@ Every page in the set ends in a `## Practice` exercise with a solution CI compil
 ## Looking a term up
 
 [GLOSSARY.md](GLOSSARY.md) defines the vocabulary these pages use — shadowing, pattern binding, drop order, `Copy`, dangling reference, `clippy::shadow_unrelated` — and every entry links to the page that explains it properly.
+
+## Po polsku
+
+Przesłanianie (*shadowing*) to napisanie `let x`, gdy `x` już istnieje: powstaje **druga zmienna** nosząca imię pierwszej. Ta strona jest mapą pięciu lekcji, odpowiadających na pięć różnych pytań — czym to jest, czym różni się od `mut`, co dzieje się z zasłoniętą wartością, czy wypada tak zrobić w danym miejscu i co by cię złapało, gdybyś się pomylił.
+
+Polskie „przesłanianie" jest tu akurat słowem trafniejszym niż angielski oryginał, bo samo podpowiada sedno: **zasłania się nazwę, a nie wartość**. Wartość pod spodem żyje dalej, jest nadal posiadana i nadal można ją pożyczać — po prostu nie da się jej już nazwać. To właśnie odróżnia przesłanianie od `mut`, które pisze w to samo miejsce.
+
+Uwaga terminologiczna, bo bywa myląca: w polskich materiałach o programowaniu obiektowym „przesłanianie" oznacza czasem nadpisanie metody klasy bazowej (*overriding*). To zupełnie inne zjawisko i nie ma z tym nic wspólnego.
+
+**Szukaj po polsku:** przesłanianie zmiennych · `let` a `mut` · zasięg zmiennej · `rust shadowing` · `rust variable shadowing vs mutability`

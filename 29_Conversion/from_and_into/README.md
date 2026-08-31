@@ -311,3 +311,13 @@ fn main() {
 ## Sources
 
 [Conversion: From and Into ↗](https://doc.rust-lang.org/rust-by-example/conversion/from_into.html) in Rust by Example; [`std::convert::From` ↗](https://doc.rust-lang.org/std/convert/trait.From.html), whose own docs state the "prefer implementing From" rule; and the [orphan rules ↗](https://doc.rust-lang.org/reference/items/implementations.html#orphan-rules) in the Reference, which rustc's `E0117` note links to directly.
+
+## Po polsku
+
+Napisz `From`, a `Into` dostajesz za darmo — w bibliotece standardowej stoi implementacja ogólna, która robi to za ciebie, więc obu nigdy się nie pisze. Stąd reguła, o którą pytają najczęściej: **`From` się implementuje, `Into` się używa w sygnaturze** (`fn f(x: impl Into<String>)`), bo ta druga forma przyjmuje więcej typów po stronie wywołania.
+
+Prawdziwy powód, dla którego ta cecha znaczy więcej, niż wygląda, to operator `?`. Przy wyjściu z funkcji `?` **sam konwertuje** błąd na typ zadeklarowany w sygnaturze, o ile istnieje pasujące `From` — i to jest cały mechanizm, dzięki któremu jedna funkcja zwraca jeden typ błędu, choć w środku woła trzy biblioteki o trzech różnych błędach. Kto o tym nie wie, pisze ręczne `map_err` przy każdym wywołaniu i uznaje obsługę błędów w Ruscie za rozwlekłą.
+
+Dwie granice. **Reguła sieroty** (*orphan rule*) zabrania implementować cudzą cechę dla cudzego typu — w praktyce konwersji między dwoma typami z obcych bibliotek po prostu nie napiszesz i trzeba opakować jedną stronę we własny typ. I rzecz do sprawdzenia, zanim sięgniesz po `From`: **ta konwersja nie może zawieść**. Nie ma w niej miejsca na błąd, więc gdy przeliczenie bywa niemożliwe, właściwą cechą jest `TryFrom`.
+
+**Szukaj po polsku:** konwersje typów w Ruscie · reguła sieroty · operator znaku zapytania · `rust From Into blanket impl` · `rust ? error conversion`
