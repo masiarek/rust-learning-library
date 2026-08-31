@@ -386,7 +386,7 @@ Same row = same idea on both types.
 | Flip the nesting | [`.transpose()` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.transpose) | [`.transpose()` ↗](https://doc.rust-lang.org/std/result/enum.Result.html#method.transpose) |
 | Is it the happy arm? | [`.is_some()` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.is_some) | [`.is_ok()` ↗](https://doc.rust-lang.org/std/result/enum.Result.html#method.is_ok) |
 | Borrow instead of move | [`.as_ref()` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.as_ref) | [`.as_ref()` ↗](https://doc.rust-lang.org/std/result/enum.Result.html#method.as_ref) |
-| Crash if sad | `.expect("why")` | `.expect("why")` |
+| Crash if sad | [`.expect("why")` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.expect) | [`.expect("why")` ↗](https://doc.rust-lang.org/std/result/enum.Result.html#method.expect) |
 
 ## Traps
 

@@ -125,7 +125,7 @@ The wider conversion matrix, for the types the string family actually hands you:
 | `OsString` / `PathBuf` | [`x.into_string()` ↗](https://doc.rust-lang.org/std/ffi/struct.OsString.html#method.into_string) — `Err` if not UTF-8 |
 | `&OsStr` / `&Path` | [`x.to_str()?` ↗](https://doc.rust-lang.org/std/ffi/struct.OsStr.html#method.to_str)`.to_owned()` |
 | `CString` | [`x.into_string()?` ↗](https://doc.rust-lang.org/std/ffi/struct.CString.html#method.into_string) |
-| several pieces | `format!("{a}{b}")` |
+| several pieces | [`format!("{a}{b}")` ↗](https://doc.rust-lang.org/std/macro.format.html) |
 
 The `?` in that column is the whole point of [Six kinds of string](../six_kinds_of_string/README.md): narrowing to a `String` is where a promise about the bytes gets *checked*, so those conversions return `Result` rather than a value.
 
