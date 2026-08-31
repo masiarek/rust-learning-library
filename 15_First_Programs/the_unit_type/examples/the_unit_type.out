@@ -5,6 +5,30 @@
   () == ()               = true   <- one value, so equality is always true
   it is the only type with exactly one value; bool has 2, u8 has 256, () has 1
 
+=== why zero: memory exists to tell states apart ===
+  type      values   bits   bytes
+  u8           256      8       1
+  bool           2      1       1
+  ()             1      0       0
+  bits = log2(values). One value needs log2(1) = 0 bits, so there is nothing
+  to store: if a variable has type (), its value must be (). bool is the row
+  where the two columns part -- 1 bit of information, 1 whole byte of space,
+  because a byte is the smallest thing a machine can address.
+
+=== the equality is decided at compile time, not run time ===
+  () == ()   = true   <- one value, so it cannot be otherwise
+  compiled with -O, `fn unit_eq(a: (), b: ()) -> bool { a == b }` is:
+      movb  $1, %al        <- load the constant 1, and return
+  neither argument is read. The bool version really compares:
+      movl  %edi, %eax ; xorl %esi, %eax ; xorb $1, %al
+
+=== zero bytes is not 'no address' ===
+  align_of::<()>()      = 1   <- still aligned, still a real place
+  &() is a real reference at a nonzero address: true
+  a Vec<()> after 1,000,000 pushes: len 1000000
+  ...and it never allocated: capacity == usize::MAX is true
+  there is no data to store, so the Vec is just a counter with a spare field
+
 === where it comes from #1: a function with no -> ===
   fn no_return_type() {}    returns ()
   fn explicit_unit() -> () {} returns ()   <- the same signature, spelled out
@@ -25,6 +49,10 @@
   ...because () costs nothing to store, so the map's value column is free
   set.contains("Ada")       = true
   map.contains_key("Ada")   = true
+
+=== where it turns up #5: a channel that carries only the fact ===
+  mpsc::channel::<()>() -- the message IS the signal, with no payload
+  received one; size of what crossed the channel = 0 bytes
 
 === the operations that hand you one back ===
   names.sort()              -> ()   <- sorts in place, returns nothing

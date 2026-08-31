@@ -15,15 +15,65 @@ println!("{:?} {:?}", record(5), names);   // Ok(()) ["Ada", "Cara"]
 
 ## One value, zero bytes
 
-`()` is both a **type** and the single **value** of that type, written the same way. That is not a shortcut — a type with exactly one value carries no information, so there is nothing to store:
+`()` is both a **type** and the single **value** of that type, written the same way. The zero is not a special case the compiler grants it; it falls out of what memory is for.
+
+**Memory exists to tell states apart**, so the bits a type needs is `log2(values)`:
+
+| type | values | bits of information | bytes occupied |
+|---|---|---|---|
+| `u8` | 256 | 8 | 1 |
+| `bool` | 2 | 1 | **1** |
+| `()` | 1 | **0** | **0** |
+
+One value needs `log2(1) = 0` bits. If a variable has type `()`, its value *must* be `()`, so there is nothing left for memory to record and the compiler stores nothing at all. That makes it a **zero-sized type** (ZST) — a small family that also includes `struct Marker;`, `[(); 1000]`, and [`PhantomData`](../../12_Traits/phantom_types/README.md).
+
+`bool` is the row where the two right-hand columns part company: one bit of information, one whole byte of space, because a byte is the smallest thing a machine can address. `()` is below even that floor — there is no information to round up.
 
 ```text
 size_of::<()>()         = 0
-size_of::<[(); 1000]>() = 0    <- a thousand of them still occupy nothing
-() == ()                = true <- one value, so equality is always true
+size_of::<[(); 1000]>() = 0    <- 1000 × 0; the length is compile-time knowledge
+() == ()                = true <- one value, so equality cannot be otherwise
 ```
 
+The array row is worth pausing on: an array's size is its element size times its length, so a thousand units is `1000 × 0`. The length is still tracked — in the *type* — but no stack or heap byte is set aside for the elements.
+
 It is the [empty tuple](../../26_Collections/tuples/README.md), which is why it is spelled with parentheses: `(a, b)` has two fields, `(a,)` has one, `()` has none. Counting values across the primitives puts it in order — `u8` has 256, `bool` has 2, `()` has 1, and `!` — the never type — has 0.
+
+### The equality is settled by the compiler, not at run time
+
+With one value in existence, any two instances are the same one, so `() == ()` is not a comparison — it is a constant. Compile `fn unit_eq(a: (), b: ()) -> bool { a == b }` with `-O` and ask for the assembly:
+
+```text title="Abridged — real `rustc -O --emit asm` output, x86-64"
+_unit_eq:
+	movb	$1, %al          ; load the constant 1, return
+	retq
+
+_bool_eq:
+	movl	%edi, %eax       ; the bool version actually compares
+	xorl	%esi, %eax
+	xorb	$1, %al
+```
+
+Neither argument is so much as read. That is the practical shape of "carries no information": there is nothing to look at.
+
+### Zero bytes is not "no address"
+
+A ZST is still a real place, which is what keeps it usable in generic code:
+
+```rust
+let here: &() = &();                 // a real reference, at a real, aligned address
+println!("{}", align_of::<()>());    // 1
+```
+
+And a `Vec` of them never allocates, because there is nothing to allocate for — its capacity is `usize::MAX` from the start:
+
+```rust
+let mut many: Vec<()> = Vec::new();
+for _ in 0..1_000_000 { many.push(()); }
+println!("{} {}", many.len(), many.capacity() == usize::MAX);   // 1000000 true
+```
+
+A million elements, no heap traffic: the `Vec` has become a counter with two spare fields. That is the general payoff of a ZST — the ordinary data structures keep working, and cost nothing when what you are storing is *the fact that there is an entry* rather than a value.
 
 ## Where it comes from #1: a function with no `->`
 
@@ -63,9 +113,20 @@ seen.insert("Ada", ());
 println!("{}", seen.contains_key("Ada"));   // true
 ```
 
-Because `()` costs nothing to store, a `HashMap<T, ()>` *is* a set — the value column is free. `HashSet<T>` in the standard library is [literally that ↗](https://doc.rust-lang.org/std/collections/struct.HashSet.html), a wrapper over `HashMap<T, ()>`, and the two have the same size.
+Because `()` costs nothing to store, a `HashMap<T, ()>` *is* a set — the value column is free. [`HashSet<T>` ↗](https://doc.rust-lang.org/std/collections/struct.HashSet.html) in the standard library is literally that, two wrappers deep: `std::collections::HashSet` holds a `hashbrown::HashSet`, and in the toolchain's own vendored copy of hashbrown that type is declared as one field — `map: HashMap<T, (), S, A>`. The set is a map with `()` in the value column, and the two have the same size.
 
 The one place the wrapper improves on it is the return type: `HashMap::insert` gives you `Option<()>`, which is a `bool` wearing eight extra characters, so [`HashSet::insert`](../../26_Collections/the_hashset/README.md) hands back a real `bool` instead. Same structure, better name — a small worked example of when a unit value should be translated into something that reads.
+
+## Where it turns up #5: a channel that carries only the fact
+
+```rust
+use std::sync::mpsc;
+let (tx, rx) = mpsc::channel::<()>();
+tx.send(()).unwrap();
+rx.recv().unwrap();          // the message IS the signal
+```
+
+When one thread needs to tell another *something happened* and there is no data to hand over — a shutdown request, a tick, "the file is written" — the payload type is `()`. Zero bytes cross the channel; what crosses is the fact that a send occurred. `Sender<()>` says that in the type, where a `Sender<bool>` carrying a permanent `true` would only imply it.
 
 ## The trap: `let x = v.sort();`
 
@@ -255,6 +316,30 @@ fn main() {
   () == ()               = true   <- one value, so equality is always true
   it is the only type with exactly one value; bool has 2, u8 has 256, () has 1
 
+=== why zero: memory exists to tell states apart ===
+  type      values   bits   bytes
+  u8           256      8       1
+  bool           2      1       1
+  ()             1      0       0
+  bits = log2(values). One value needs log2(1) = 0 bits, so there is nothing
+  to store: if a variable has type (), its value must be (). bool is the row
+  where the two columns part -- 1 bit of information, 1 whole byte of space,
+  because a byte is the smallest thing a machine can address.
+
+=== the equality is decided at compile time, not run time ===
+  () == ()   = true   <- one value, so it cannot be otherwise
+  compiled with -O, `fn unit_eq(a: (), b: ()) -> bool { a == b }` is:
+      movb  $1, %al        <- load the constant 1, and return
+  neither argument is read. The bool version really compares:
+      movl  %edi, %eax ; xorl %esi, %eax ; xorb $1, %al
+
+=== zero bytes is not 'no address' ===
+  align_of::<()>()      = 1   <- still aligned, still a real place
+  &() is a real reference at a nonzero address: true
+  a Vec<()> after 1,000,000 pushes: len 1000000
+  ...and it never allocated: capacity == usize::MAX is true
+  there is no data to store, so the Vec is just a counter with a spare field
+
 === where it comes from #1: a function with no -> ===
   fn no_return_type() {}    returns ()
   fn explicit_unit() -> () {} returns ()   <- the same signature, spelled out
@@ -275,6 +360,10 @@ fn main() {
   ...because () costs nothing to store, so the map's value column is free
   set.contains("Ada")       = true
   map.contains_key("Ada")   = true
+
+=== where it turns up #5: a channel that carries only the fact ===
+  mpsc::channel::<()>() -- the message IS the signal, with no payload
+  received one; size of what crossed the channel = 0 bytes
 
 === the operations that hand you one back ===
   names.sort()              -> ()   <- sorts in place, returns nothing
@@ -305,14 +394,18 @@ fn main() {
 
 ## Po polsku
 
-`()` to pusta krotka — **jedna** wartość zajmująca **zero** bajtów — i jest zarazem typem, i jedyną wartością tego typu, zapisywaną tak samo. To nie skrót notacyjny: typ o dokładnie jednej wartości nie niesie żadnej informacji, więc nie ma czego przechowywać, i dlatego `size_of::<[(); 1000]>()` też wynosi 0. Po polsku mówi się o **typie jednostkowym** (*unit type*), a policzenie wartości układa prymitywy w ciąg: `u8` ma ich 256, `bool` 2, `()` jedną, a `!` (typ „nigdy") — zero.
+`()` to pusta krotka — **jedna** wartość zajmująca **zero** bajtów — i jest zarazem typem, i jedyną wartością tego typu, zapisywaną tak samo. Po polsku mówi się o **typie jednostkowym** (*unit type*). Zero nie jest tu ulgą przyznaną przez kompilator, tylko wynikiem tego, po co w ogóle jest pamięć: **pamięć służy do odróżniania stanów**, więc liczba potrzebnych bitów to `log2(liczba wartości)`. `u8` ma 256 wartości, czyli 8 bitów; `bool` ma 2, czyli 1 bit; `()` ma jedną, czyli `log2(1) = 0` bitów. Jeśli zmienna jest typu `()`, jej wartością **musi** być `()` — nie ma czego zapisywać, więc kompilator nie zapisuje niczego. To czyni z niej **typ o zerowym rozmiarze** (*zero-sized type*, ZST) — do tej rodziny należą też `struct Marker;`, `[(); 1000]` i `PhantomData`.
+
+Wiersz `bool` jest tym, w którym rozjeżdżają się dwie kolumny: jeden bit informacji, ale cały bajt miejsca, bo bajt jest najmniejszą jednostką mającą własny adres. `()` leży poniżej nawet tej podłogi — nie ma informacji, którą trzeba by zaokrąglić w górę. Stąd `size_of::<[(); 1000]>()` również wynosi 0: rozmiar tablicy to rozmiar elementu razy długość, czyli `1000 × 0`, a sama długość jest wiedzą **z czasu kompilacji**, nie bajtem w pamięci. Policzenie wartości układa zresztą prymitywy w ciąg: `u8` ma ich 256, `bool` 2, `()` jedną, a `!` (typ „nigdy") — zero.
+
+Dwie rzeczy, które z tego wynikają, warto zobaczyć na własne oczy. Po pierwsze, **porównanie rozstrzyga kompilator, a nie procesor**: skoro istnieje tylko jedna wartość, `() == ()` nie jest porównaniem, tylko stałą, i funkcja `fn unit_eq(a: (), b: ()) -> bool { a == b }` skompilowana z `-O` to dosłownie `movb $1, %al` — wpisz jedynkę i wróć, nie zaglądając do żadnego z argumentów (wersja dla `bool` wykonuje prawdziwe `xor`). Po drugie, **zero bajtów to nie „brak adresu"**: `align_of::<()>()` wynosi 1, a `&()` jest prawdziwą referencją pod prawdziwym, wyrównanym adresem — i właśnie dlatego typ o zerowym rozmiarze da się używać w kodzie generycznym. Konsekwencja, która najbardziej zaskakuje: `Vec<()>` **nigdy nie alokuje**, bo nie ma czego alokować — jego pojemność od początku wynosi `usize::MAX`, więc milion elementów nie powoduje ani jednego dotknięcia sterty, a sam wektor staje się licznikiem z dwoma niepotrzebnymi polami.
 
 Wartości `()` w programie jest pełno, zanim ktokolwiek napisze ją celowo, bo bierze się z dwóch miejsc. Po pierwsze, **każda funkcja bez `->` zwraca `()`** — `fn tally() {}` i `fn tally() -> () {}` to ta sama sygnatura. Po drugie, **średnik**: `{ 7; }` ma wartość `()`, a `{ 7 }` ma wartość 7, i właśnie z tej jednej reguły bierze się cała rodzina komunikatów w rodzaju *„expected `i32`, found `()`”* — blok miał być wartością, a średnik po cichu zamienił go w instrukcję.
 
-Dwa miejsca, w których `()` pojawia się już świadomie, warto znać z nazwy. `Result<(), E>` to typ zadania, które albo się udaje bez żadnego wyniku, albo zawodzi z powodem — `Ok(())` czyta się jako „zadziałało i nie ma czego oddać”, a `?` nie gubi tu niczego, bo nie było czego zgubić. Oraz: **zbiór to mapa, której wartościami są `()`** — skoro `()` nic nie kosztuje, `HashMap<T, ()>` *jest* zbiorem, i dokładnie tym jest `HashSet<T>` w bibliotece standardowej. Jedyne, co opakowanie poprawia, to typ zwracany: `HashMap::insert` oddaje `Option<()>`, czyli `bool` przebrany za coś innego, więc `HashSet::insert` zwraca prawdziwy `bool`.
+Trzy miejsca, w których `()` pojawia się już świadomie, warto znać z nazwy. `Result<(), E>` to typ zadania, które albo się udaje bez żadnego wyniku, albo zawodzi z powodem — `Ok(())` czyta się jako „zadziałało i nie ma czego oddać”, a `?` nie gubi tu niczego, bo nie było czego zgubić. Oraz: **zbiór to mapa, której wartościami są `()`** — skoro `()` nic nie kosztuje, `HashMap<T, ()>` *jest* zbiorem, i dokładnie tym jest `HashSet<T>` w bibliotece standardowej. Jedyne, co opakowanie poprawia, to typ zwracany: `HashMap::insert` oddaje `Option<()>`, czyli `bool` przebrany za coś innego, więc `HashSet::insert` zwraca prawdziwy `bool`. I trzecie: **kanał, który niesie wyłącznie sam fakt** — gdy jeden wątek ma powiedzieć drugiemu „coś się stało", a nie ma czego przekazać (żądanie zamknięcia, takt zegara, „plik zapisany"), typem ładunku jest `()`. Przez kanał przechodzi zero bajtów; przechodzi sama informacja, że nadano. `Sender<()>` mówi to **w typie**, podczas gdy `Sender<bool>` wiecznie wysyłający `true` mógłby to najwyżej sugerować.
 
 Pułapka do zapamiętania to `let x = v.sort();`. Każda metoda działająca „w miejscu” zwraca `()`, bo odpowiedź została wpisana z powrotem do odbiorcy — nic nie protestuje, dopóki nie użyjesz `x`, a wtedy komunikat wprost nazywa typ: `no method named 'len' found for unit type '()'`. Wzięło się pokwitowanie zamiast wyniku. Tak samo zachowują się `push`, `dedup`, `retain`, `clear` i `sort_unstable`, i dlatego żadna z nich się nie łańcuchuje. Ta sama pomyłka istnieje w Pythonie (`x = lst.sort()` daje `None`), z tą różnicą, że Python zgłasza ją dopiero w czasie działania. W ABAP-ie odpowiednikiem jest `SORT lt_tab BY …` — instrukcja, która zmienia tabelę w miejscu i niczego nie zwraca; ABAP nie ma typu jednostkowego, więc próba przypisania wyniku jest po prostu błędem składni w miejscu wywołania, a nie mylącym typem kilka linijek dalej.
 
 Na koniec rozróżnienie, które najczęściej się zaciera: `()` to wartość, **którą masz** („nie ma nic do powiedzenia, ale doszliśmy tutaj”); `Option::None` to wartość zapisująca **brak** („mogło coś być, a nie ma”); a `!` to typ **bez żadnej wartości** („to nigdy nie wraca”) — mają go `panic!()` i `loop {}`, i właśnie dlatego, że nie może istnieć żadna jego wartość, dopasowuje się do dowolnego typu, co pozwala postawić `Err(_) => panic!("…")` obok `Ok(n) => n` w jednym `match`.
 
-**Szukaj po polsku:** typ jednostkowy · pusta krotka · `rust expected i32 found ()` · `rust let x = v.sort()` · `rust Result<(), E>`
+**Szukaj po polsku:** typ jednostkowy · typ o zerowym rozmiarze · pusta krotka · `rust expected i32 found ()` · `rust let x = v.sort()` · `rust Result<(), E>` · `rust zero sized type`

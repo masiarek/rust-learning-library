@@ -2,7 +2,9 @@
 //! that value already turns up in code nobody thinks of as using it.
 
 use std::collections::{HashMap, HashSet};
-use std::mem::size_of;
+use std::mem::{align_of, size_of};
+use std::sync::mpsc;
+use std::thread;
 
 fn no_return_type() {}
 fn explicit_unit() -> () {}
@@ -16,6 +18,35 @@ fn main() {
     println!("  size_of::<[(); 1000]>() = {}   <- a thousand of them also occupy nothing", size_of::<[(); 1000]>());
     println!("  () == ()               = {}   <- one value, so equality is always true", () == ());
     println!("  it is the only type with exactly one value; bool has 2, u8 has 256, () has 1");
+
+    println!("\n=== why zero: memory exists to tell states apart ===");
+    println!("  {:<8} {:>7}  {:>5}  {:>6}", "type", "values", "bits", "bytes");
+    println!("  {:<8} {:>7}  {:>5}  {:>6}", "u8", 256, (256f64).log2() as u32, size_of::<u8>());
+    println!("  {:<8} {:>7}  {:>5}  {:>6}", "bool", 2, (2f64).log2() as u32, size_of::<bool>());
+    println!("  {:<8} {:>7}  {:>5}  {:>6}", "()", 1, (1f64).log2() as u32, size_of::<()>());
+    println!("  bits = log2(values). One value needs log2(1) = 0 bits, so there is nothing");
+    println!("  to store: if a variable has type (), its value must be (). bool is the row");
+    println!("  where the two columns part -- 1 bit of information, 1 whole byte of space,");
+    println!("  because a byte is the smallest thing a machine can address.");
+
+    println!("\n=== the equality is decided at compile time, not run time ===");
+    println!("  () == ()   = {}   <- one value, so it cannot be otherwise", () == ());
+    println!("  compiled with -O, `fn unit_eq(a: (), b: ()) -> bool {{ a == b }}` is:");
+    println!("      movb  $1, %al        <- load the constant 1, and return");
+    println!("  neither argument is read. The bool version really compares:");
+    println!("      movl  %edi, %eax ; xorl %esi, %eax ; xorb $1, %al");
+
+    println!("\n=== zero bytes is not 'no address' ===");
+    println!("  align_of::<()>()      = {}   <- still aligned, still a real place", align_of::<()>());
+    let here: &() = &();
+    println!("  &() is a real reference at a nonzero address: {}", (here as *const ()) as usize != 0);
+    let mut many: Vec<()> = Vec::new();
+    for _ in 0..1_000_000 {
+        many.push(());
+    }
+    println!("  a Vec<()> after 1,000,000 pushes: len {}", many.len());
+    println!("  ...and it never allocated: capacity == usize::MAX is {}", many.capacity() == usize::MAX);
+    println!("  there is no data to store, so the Vec is just a counter with a spare field");
 
     println!("\n=== where it comes from #1: a function with no -> ===");
     println!("  fn no_return_type() {{}}    returns {:?}", no_return_type());
@@ -47,6 +78,16 @@ fn main() {
     println!("  ...because () costs nothing to store, so the map's value column is free");
     println!("  set.contains(\"Ada\")       = {}", set.contains("Ada"));
     println!("  map.contains_key(\"Ada\")   = {}", map.contains_key("Ada"));
+
+    println!("\n=== where it turns up #5: a channel that carries only the fact ===");
+    let (tx, rx) = mpsc::channel::<()>();
+    let worker = thread::spawn(move || {
+        tx.send(()).expect("receiver still alive");
+    });
+    rx.recv().expect("sender still alive");
+    worker.join().expect("worker did not panic");
+    println!("  mpsc::channel::<()>() -- the message IS the signal, with no payload");
+    println!("  received one; size of what crossed the channel = {} bytes", size_of::<()>());
 
     println!("\n=== the operations that hand you one back ===");
     let mut names = vec!["Cara", "Ada", "Ben"];

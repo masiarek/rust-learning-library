@@ -457,6 +457,73 @@ dict(id="prim_unit_type",
  link=("the_unit_type", SITE+"15_First_Programs/the_unit_type/index.html"),
  tags="rust primitives unit tuples"),
 
+dict(id="prim_zst_why_zero",
+ front="Why does a type with exactly one value take up ZERO bytes? Derive it, do not just assert it.",
+ back="<b>Memory exists to tell states apart, so the bits a type needs is <code>log2(values)</code>.</b>"
+      "<br><br>&bull; <code>u8</code>: 256 values &rarr; 8 bits &rarr; 1 byte"
+      "<br>&bull; <code>bool</code>: 2 values &rarr; <b>1 bit</b> &rarr; 1 byte"
+      "<br>&bull; <code>()</code>: 1 value &rarr; <b><code>log2(1) = 0</code> bits</b> &rarr; <b>0 bytes</b>"
+      "<br><br>If a variable has type <code>()</code>, its value <i>must</i> be <code>()</code> &mdash; there is "
+      "nothing left for memory to record. That makes it a <b>zero-sized type (ZST)</b>, along with "
+      "<code>struct Marker;</code>, <code>[(); 1000]</code> and <code>PhantomData</code>."
+      "<br><br><code>bool</code> is the row where the columns part: one bit of information, one whole byte of space, "
+      "because a byte is the smallest thing a machine can address. <code>()</code> is below even that floor."
+      "<br><br>And <code>size_of::&lt;[(); 1000]&gt;()</code> is <code>1000 &times; 0</code> = 0. The length is "
+      "still tracked &mdash; in the <i>type</i> &mdash; but no byte is set aside for the elements.",
+ code='''fn main() {
+    println!("{} {} {}", size_of::<()>(), size_of::<bool>(), size_of::<[(); 1000]>());
+}''',
+ code_on="back",
+ expect="0 1 0",
+ link=("the_unit_type", SITE+"15_First_Programs/the_unit_type/index.html"),
+ tags="rust primitives unit zst"),
+
+dict(id="prim_zst_vec_never_allocates",
+ front="What does this print, and what does the second value tell you?",
+ code='''fn main() {
+    let mut many: Vec<()> = Vec::new();
+    for _ in 0..1_000_000 {
+        many.push(());
+    }
+    println!("{} {}", many.len(), many.capacity() == usize::MAX);
+}''',
+ code_on="front",
+ expect="1000000 true",
+ back="<b>A <code>Vec</code> of a zero-sized type NEVER allocates</b> &mdash; its capacity is "
+      "<code>usize::MAX</code> from the moment it is created, because there is nothing to allocate for."
+      "<br><br>A million elements, no heap traffic: the <code>Vec</code> has become a counter with two spare fields."
+      "<br><br>That is the general payoff of a ZST &mdash; the ordinary data structures keep working and cost "
+      "nothing when what you are storing is <i>the fact that there is an entry</i> rather than a value. It is the "
+      "same mechanism behind <code>HashSet&lt;T&gt;</code>, which is a map with <code>()</code> in the value column."
+      "<br><br>But <b>zero bytes is not &lsquo;no address&rsquo;</b>: <code>align_of::&lt;()&gt;()</code> is 1 and "
+      "<code>&amp;()</code> is a real reference at a real, aligned address. That is what keeps a ZST usable in "
+      "generic code at all.",
+ link=("the_unit_type", SITE+"15_First_Programs/the_unit_type/index.html"),
+ tags="rust primitives unit zst"),
+
+dict(id="prim_zst_signal_channel",
+ front="One thread must tell another &ldquo;the file is written&rdquo; &mdash; no data, just the fact. What is the channel&rsquo;s payload type?",
+ code='''use std::sync::mpsc;
+
+fn main() {
+    let (tx, rx) = mpsc::channel::<()>();
+    tx.send(()).unwrap();
+    rx.recv().unwrap();
+    println!("signalled, {} bytes crossed", size_of::<()>());
+}''',
+ code_on="front",
+ expect="signalled, 0 bytes crossed",
+ back="<b><code>()</code> &mdash; <code>mpsc::channel::&lt;()&gt;()</code>. The message IS the signal.</b>"
+      "<br><br>Zero bytes cross the channel; what crosses is the fact that a send occurred. Shutdown requests, "
+      "ticks, &ldquo;work is done&rdquo; &mdash; all <code>Sender&lt;()&gt;</code>."
+      "<br><br>Why not <code>Sender&lt;bool&gt;</code>? Because one that only ever sends <code>true</code> merely "
+      "<i>implies</i> there is no payload, and leaves a reader wondering what a <code>false</code> would have "
+      "meant. <code>Sender&lt;()&gt;</code> says it in the type."
+      "<br><br>Same reasoning as <code>Result&lt;(), E&gt;</code>: when success carries nothing, say so with the "
+      "type that has nothing to carry.",
+ link=("the_unit_type", SITE+"15_First_Programs/the_unit_type/index.html"),
+ tags="rust primitives unit zst threads"),
+
 dict(id="prim_sort_returns_unit",
  front="What does this print? (Then say what the second value is, and why.)",
  code='''fn main() {
@@ -478,6 +545,36 @@ dict(id="prim_sort_returns_unit",
         "made <code>sort</code> return nothing <i>deliberately</i>, so a mutation cannot be mistaken for a copy.",
  link=("the_unit_type", SITE+"15_First_Programs/the_unit_type/index.html"),
  tags="rust primitives unit gotcha python-trap"),
+
+dict(id="prim_unit_printed_is_silent",
+ front="What does this print &mdash; and which tool warns you about it?",
+ code='''fn main() {
+    let mut a = ['x', 'c', 'z'];
+    println!("{:?}", a.reverse());
+}''',
+ code_on="front",
+ expect="()",
+ back="<b><code>()</code> &mdash; and nothing warns you at all.</b> The array really did reverse; you printed "
+      "the receipt and never looked at the array."
+      "<br><br>This is the sibling of the <code>let x = v.sort()</code> card, and it is the worse one. That "
+      "form is caught &mdash; <code>clippy::let_unit_value</code>, in <code>clippy::all</code>: "
+      "<i>this let-binding has unit value</i>. <b>The lint is on the <code>let</code></b>, so calling inside "
+      "the <code>println!</code> steps around the one tool that would have told you. Verified on rustc 1.98.0: "
+      "silent under <code>-W warnings</code>, and silent under <code>clippy::all</code> + "
+      "<code>pedantic</code> + <code>nursery</code>."
+      "<br><br>Two things do the hiding, and only one is about <code>()</code>. It implements <b>Debug</b>, so "
+      "<code>{:?}</code> accepts it. <code>{}</code> would be <code>E0277</code> &mdash; but read that error\'s "
+      "own note: <i>in format strings you may be able to use <code>{:?}</code> instead</i>. The single "
+      "diagnostic standing between you and this bug recommends it. And an array has no <b>Display</b> either, "
+      "so printing one <i>requires</i> <code>{:?}</code> anyway."
+      "<br><br><code>#[must_use]</code> is not the missing guard: it fires on a <b>discarded</b> return, and "
+      "nothing here was discarded. The answer went into the receiver.",
+ bridge="<b>Python:</b> <code>print(a.sort())</code> prints <code>None</code> &mdash; same shape, same silence. "
+        "The difference is what happens next: Python\'s <code>None</code> is a value you will trip over at run "
+        "time, so the bug tends to surface. Rust\'s <code>()</code> is a type the compiler is permanently "
+        "happy with, so if you only ever print it, nothing downstream ever objects.",
+ link=("arrays_and_slices", SITE+"26_Collections/arrays_and_slices/index.html#practice"),
+ tags="rust primitives unit gotcha python-trap clippy"),
 
 dict(id="prim_ok_unit",
  front="What does <code>Result&lt;(), String&gt;</code> describe, and how do you write its success value?",
