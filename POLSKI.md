@@ -57,81 +57,75 @@ That is most of the vocabulary this library needs, and it means the table below 
 
 ### Anchored in Tour of Rust's Polish chapters 1–5
 
+**A linked term has a lesson in this library; a bare one does not yet.** That is the only thing the linking means — it is not a judgement about how important the word is.
+
 | English | Polski | Note |
 |---|---|---|
-| variable | zmienna | |
+| [variable](15_First_Programs/variables/README.md) | zmienna | |
 | [mutable](18_Ownership/a_name_is_not_a_place/README.md) | mutowalna | *zmienna mutowalna*; ToR titles the lesson "Zmienianie Zmiennych" |
-| constant | stała | |
-| type | typ | *podstawowe typy* for the primitives |
-| type conversion, cast | konwersja typów | |
-| array | tablica | |
-| function | funkcja | |
-| control flow | kontrola przepływu sterowania | |
-| loop | pętla | |
-| expression block | blok wyrażeniowy | |
+| [constant](27_Modules/const_and_static/README.md) | stała | |
+| [type](15_First_Programs/values/README.md) | typ | *podstawowe typy* for the primitives |
+| [type conversion, cast](29_Conversion/casting_with_as/README.md) | konwersja typów | |
+| [array](26_Collections/arrays_and_slices/README.md) | tablica | `[T; N]`, fixed and on the stack. Python's list and Java's `ArrayList` are a `Vec`, not a *tablica* — the commonest false friend here. |
+| [function](25_Control_Flow/functions/README.md) | funkcja | |
+| [control flow](25_Control_Flow/README.md) | kontrola przepływu sterowania | |
+| [loop](25_Control_Flow/the_loop_keyword/README.md) | pętla | |
+| [expression block](15_First_Programs/a_block_is_an_expression/README.md) | blok wyrażeniowy | |
 | [struct](16_Structs/README.md) | struktura | |
-| tuple struct | struktura krotkowa | |
-| unit struct | pusta struktura | |
-| method | metoda | *wywoływanie metod* |
-| memory | pamięć | |
+| [tuple struct, unit struct](16_Structs/what_a_struct_is/README.md) | struktura krotkowa, pusta struktura | |
+| [method](16_Structs/impl_blocks/README.md) | metoda | *wywoływanie metod* |
+| [memory](18_Ownership/README.md) | pamięć | |
 | [enum](13_Enums/README.md) | wyliczenie | |
 | [generics](22_Generics/README.md) | typy generyczne | |
-| `Option` | Opcja | keep `Option` in code voice |
-| `Result` | Rezultat | keep `Result` in code voice |
-| `Vec`, vector | wektor | |
+| [`Option`](17_Option_and_Result/some_and_none/README.md) | Opcja | keep `Option` in code voice |
+| [`Result`](17_Option_and_Result/option_vs_result/README.md) | Rezultat | keep `Result` in code voice |
+| [`Vec`, vector](26_Collections/README.md) | wektor | |
 | [ownership](18_Ownership/ownership_and_moves/README.md) | własność | *posiadanie danych* for owning |
 | [scope](18_Ownership/scope_is_about_names/README.md) | zasięg | |
-| drop, release | wypuszczenie zasobu | ToR: *Wypuszczanie Zasobów* |
-| move | przeniesienie własności | |
+| [drop, release](12_Traits/drop_and_raii/README.md) | wypuszczenie zasobu | ToR: *Wypuszczanie Zasobów* |
+| [move](18_Ownership/no_move_trait/README.md) | przeniesienie własności | Responsibility moves; the bytes do not. |
 | [borrowing](18_Ownership/borrowing/README.md) | pożyczanie | |
-| reference | referencja | |
-| mutable reference | referencja mutowalna | |
+| [reference, mutable reference](18_Ownership/what_an_address_shows/README.md) | referencja, referencja mutowalna | |
 | dereference | dereferencja | |
 | [lifetime](18_Ownership/lifetime_annotations/README.md) | czas życia | *czas życia zmiennej* |
-| static lifetime | statyczny czas życia | |
-| error handling | obsługa błędów | |
+| [static lifetime](14_Strings/static_str/README.md) | statyczny czas życia | |
+| [error handling](02_Errors/README.md) | obsługa błędów | |
 
 ### Chosen here — no Polish course covers these
 
 | English | Polski | Why this one |
 |---|---|---|
 | [trait](12_Traits/README.md) | cecha | Say **cecha (*trait*)** once, then use `trait`. The keyword is `trait`, and a reader who only learns *cecha* cannot read an error message. |
-| trait object | obiekt cechy | |
+| [trait object](12_Traits/static_vs_dynamic_dispatch/README.md) | obiekt cechy | |
 | [closure](23_Closures/README.md) | domknięcie | Widespread in Polish CS writing, unlike most of this half. |
 | [iterator](24_Iterators/README.md) | iterator | Same word. |
 | [slice](14_Strings/README.md) | wycinek | *plaster* also appears; *wycinek* is commoner and less odd. |
-| string slice, `&str` | wycinek łańcucha | |
-| `String` | łańcuch znaków | Keep `String` when naming the type. |
-| `char` | znak | |
-| [stack](18_Ownership/stack_and_heap/README.md) | stos | |
-| heap | sterta | |
-| [smart pointer](18_Ownership/reference_counting/README.md) | inteligentny wskaźnik | *sprytny wskaźnik* also seen. |
-| raw pointer | surowy wskaźnik | |
-| reference counting | zliczanie referencji | |
+| [string slice, `&str`](14_Strings/string_vs_str/README.md) | wycinek łańcucha | |
+| [`String`](14_Strings/making_a_string/README.md) | łańcuch znaków | Keep `String` when naming the type. |
+| [`char`](14_Strings/meet_the_char/README.md) | znak | A Unicode code point — not a byte, and not a letter on screen. |
+| [stack / heap](18_Ownership/stack_and_heap/README.md) | stos / sterta | **sterta** is not *kopiec*, the binary-heap data structure — English calls both "heap". |
+| [smart pointer](26_Collections/the_box/README.md) | inteligentny wskaźnik | *sprytny wskaźnik* also seen. |
+| [raw pointer](09_Advanced/what_unsafe_turns_off/README.md) | surowy wskaźnik | |
+| [reference counting](18_Ownership/reference_counting/README.md) | zliczanie referencji | |
 | borrow checker | borrow checker | **Not translated.** It is the compiler's name for itself and every search result is English. |
-| shadowing | przesłanianie | |
-| [pattern matching](30_Pattern_Matching/README.md) | dopasowanie wzorców | |
+| [shadowing](SHADOWING.md) | przesłanianie | Not *overriding* — Polish OOP writing uses the same word for overriding a base-class method, which is a different thing entirely. |
+| [pattern, pattern matching](30_Pattern_Matching/README.md) | wzorzec, dopasowanie wzorców | |
+| [irrefutable / refutable](30_Pattern_Matching/irrefutable_patterns/README.md) | niepodważalny / podważalny | Polish usage is genuinely unsettled here; these are the transparent calques and the English is always glossed beside them. |
+| [destructuring](30_Pattern_Matching/destructuring_structs/README.md) | destrukturyzacja | |
+| [exhaustiveness](30_Pattern_Matching/destructuring_enums/README.md) | kompletność dopasowania | The property `E0004` is about. |
+| [match arm](25_Control_Flow/match_expressions/README.md) | ramię | |
+| [match guard](30_Pattern_Matching/match_guards/README.md) | strażnik | Same word as the RAII guard (`MutexGuard`); the two do not collide in practice. |
 | [module](27_Modules/README.md) | moduł | |
-| crate | crate | **Not translated.** *Skrzynka* is a literal rendering nobody uses; `crate` is a keyword and a command-line word. |
-| [thread](09_Advanced/channels/README.md) | wątek | |
-| panic | panika | The verb stays: *program panikuje*. |
-| compile | kompilować | |
-
-| [pattern](30_Pattern_Matching/README.md) | wzorzec | *dopasowanie wzorców* for pattern matching. |
-| irrefutable / refutable | niepodważalny / podważalny | Polish usage is genuinely unsettled here; these are the transparent calques and the English is always glossed beside them. |
-| destructuring | destrukturyzacja | |
-| exhaustiveness | kompletność dopasowania | The property `E0004` is about. |
-| match arm | ramię | |
-| [match guard](30_Pattern_Matching/match_guards/README.md) | strażnik | Same word as the RAII guard (`MutexGuard`), and the two do not collide in practice. |
-| undefined behaviour, UB | zachowanie niezdefiniowane | |
+| [crate](05_Tooling/cargo_dependencies/README.md) | crate | **Not translated.** *Skrzynka* is a literal rendering nobody uses; `crate` is a keyword and a command-line word. |
+| [thread](09_Advanced/spawning_a_thread/README.md) | wątek | |
+| [panic](17_Option_and_Result/what_a_panic_costs/README.md) | panika | The verb stays: *program panikuje*. |
+| [compile](20_Compilers/what_a_compiler_does/README.md) | kompilować | |
+| [undefined behaviour, UB](31_C_and_Cpp/README.md) | zachowanie niezdefiniowane | Not "a strange number comes out" — the compiler reasons backwards from the assumption that the case cannot arise. |
 | [data race](31_C_and_Cpp/data_races/README.md) | wyścig danych | Keep distinct from *sytuacja wyścigu* (race condition) — Rust rules out the first, not the second. |
-| [use-after-free](31_C_and_Cpp/use_after_free/README.md) | użycie po zwolnieniu | |
-| dangling pointer | wiszący wskaźnik | |
-| assertion | asercja | |
-| orphan rule | reguła sieroty | |
-| [capacity](26_Collections/the_vec/README.md) | pojemność | Keep distinct from **długość** (length); they grow independently. |
-| amortised | zamortyzowany | |
-| array vs `Vec` | tablica vs wektor | The one that misleads most: **tablica** is `[T; N]`, fixed and on the stack. Python's list and Java's `ArrayList` are `Vec`. |
+| [use-after-free](31_C_and_Cpp/use_after_free/README.md) | użycie po zwolnieniu | *wiszący wskaźnik* is the dangling pointer, same page. |
+| [assertion](28_Testing/what_a_test_asserts/README.md) | asercja | |
+| [orphan rule](29_Conversion/from_and_into/README.md) | reguła sieroty | |
+| [capacity](26_Collections/the_vec/README.md) | pojemność | Keep distinct from **długość** (length); they grow independently, and the growth is *zamortyzowany* (amortised). |
 
 ### Words to leave in English
 
