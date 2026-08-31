@@ -1,0 +1,36 @@
+=== the two lengths ===
+  the score scale is 0..=5 in every STAR election ever held  -> [u32; 6]
+  the candidate list is different every time                 -> Vec<String>
+  this election: 3 candidates, 4 ballots
+
+=== count into the fixed-length one ===
+  histogram = 0=3  1=1  2=1  3=1  4=3  5=3
+
+=== consequence 1: the array is Copy, so a snapshot is free ===
+  before    = 0=3  1=1  2=1  3=1  4=3  5=3
+  after     = 0=3  1=1  2=1  3=1  4=3  5=1003
+  the same two lines over a Vec do not compile. rustc opens with
+    error[E0382]: borrow of moved value: `live`
+  and closes with
+    help: consider cloning the value if the performance cost is acceptable
+  between them it says the move happened because Vec<u32> is not Copy.
+  So the fix is `let before = live.clone();` -- a heap allocation you
+  now know you made, which is the difference the two types are for.
+
+=== consequence 2: a wrong length is a compile error, not a bad report ===
+  total(histogram) = 12
+  total([0u32; 5]) -> error[E0308]: mismatched types
+                      expected an array with a size of 6, found one with a size of 5
+  a Vec of the wrong length would have produced a report that was merely wrong
+
+=== consequence 3: a run-time length cannot be an array length ===
+  Ada   11
+  Ben   12
+  Cara  10
+  `let c = [0u32; n];` -> error[E0435]: attempt to use a non-constant value in a constant
+  an array length is a constant; n came from the input, so it is vec![0; n]
+
+=== and both end up at the same signature ===
+  print_histogram(&histogram)     -> 0=3  1=1  2=1  3=1  4=3  5=3
+  print_histogram(&per_candidate) -> 0=11  1=12  2=10
+  one fn taking &[u32], two callers -- the decision was about storage, not API

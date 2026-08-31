@@ -1,0 +1,43 @@
+=== one value, zero bytes ===
+  ()                     = ()
+  size_of::<()>()        = 0   <- a zero-sized type: it occupies nothing
+  size_of::<[(); 1000]>() = 0   <- a thousand of them also occupy nothing
+  () == ()               = true   <- one value, so equality is always true
+  it is the only type with exactly one value; bool has 2, u8 has 256, () has 1
+
+=== where it comes from #1: a function with no -> ===
+  fn no_return_type() {}    returns ()
+  fn explicit_unit() -> () {} returns ()   <- the same signature, spelled out
+  fn returns_a_number() -> i32 returns 7
+
+=== where it comes from #2: the semicolon ===
+  { 7; }  = ()   <- the ; discards the value and leaves ()
+  { 7 }   = 7    <- no ;, so the block IS the value
+  that is the whole mechanism behind `expected i32, found ()`
+
+=== where it turns up #3: a Result that carries no success value ===
+  record_vote(5) = Ok(())
+  record_vote(9) = Err("score 9 is out of range 0..=5")
+  Ok(()) says 'it worked, and there is nothing to hand back'
+
+=== where it turns up #4: a set is a map whose values are () ===
+  size_of::<HashSet<&str>>() == size_of::<HashMap<&str, ()>>() : true
+  ...because () costs nothing to store, so the map's value column is free
+  set.contains("Ada")       = true
+  map.contains_key("Ada")   = true
+
+=== the operations that hand you one back ===
+  names.sort()              -> ()   <- sorts in place, returns nothing
+  names                     =  ["Ada", "Ben", "Cara"]
+  names.push("Dev")         -> ()
+  println! itself           -> the line you are reading
+  ...and its value          =  ()
+  that is why `let x = v.sort();` compiles and then confuses you:
+  x is (), not the sorted vector
+
+=== () versus the two things it is confused with ===
+  ()          one value,  zero bytes   'nothing to say'
+  Option::None one variant of a type   'there might have been something'
+  !           NO values                'this never returns at all'
+  Option<()>  = None or Some(()) -- a bool wearing two extra characters
+  size_of::<Option<()>>() = 1   <- one byte, because None needs a tag

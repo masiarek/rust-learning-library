@@ -1,0 +1,37 @@
+=== two values, one byte ===
+  size_of::<bool>()         = 1   <- one bit of information, one byte of space
+  size_of::<Option<bool>>() = 1   <- None hides in one of the 254 unused patterns
+  size_of::<[bool; 8]>()    = 8   <- eight bools are eight BYTES, not one
+  true as u8  = 1
+  false as u8 = 0
+
+=== bool is not a number, so you say the conversion out loud ===
+  approvals            = [true, false, true, true, false]
+  filter(..).count()   = 3
+  map(|b| b as u32).sum() = 3
+  map(u32::from).sum()    = 3   <- the same cast, spelled as a conversion
+
+=== false < true, so bools sort and max ===
+  sorted               = [false, false, true, true]   <- false first
+  false < true         = true
+  approvals.iter().any(|&b| b) = true
+  approvals.iter().all(|&b| b) = false
+
+=== && short-circuits; & does NOT, and both compile on bool ===
+  false && expensive()  -> log []
+  false &  expensive()  -> log ["expensive() ran"]   <- both sides always evaluated
+  the values agree; only the work differs: false vs false
+
+=== a bool can hand you a value without an if ===
+  true.then(|| "counted")   = Some("counted")
+  false.then(|| "counted")  = None
+  true.then_some(42)        = Some(42)   <- no closure when the value is ready
+  false.then_some(42)       = None
+
+=== parsing text into one ===
+   "true".parse::<bool>() = Ok(true)
+  "false".parse::<bool>() = Ok(false)
+   "TRUE".parse::<bool>() = Err(provided string was not `true` or `false`)
+      "1".parse::<bool>() = Err(provided string was not `true` or `false`)
+    "yes".parse::<bool>() = Err(provided string was not `true` or `false`)
+  only the exact lowercase words parse; there is no truthiness here either

@@ -1,0 +1,28 @@
+=== part 1: the guard, written both ways ===
+  index 1: (i < len) && (scores[i] > 0) = true
+  index 7: (i < len) && (scores[i] > 0) = false
+
+  now with a single &, which evaluates BOTH sides whatever the left says:
+  index 1: (i < len) &  (scores[i] > 0) = true
+  index 7: (i < len) &  (scores[i] > 0) = PANIC -- index out of bounds
+  both forms compile, both are `bool -> bool -> bool`, and one of them
+  reads the element it was supposed to be protecting you from.
+
+=== part 2: counting the trues -- Python's sum(flags), three ways ===
+  approvals = [true, false, true, true, false]
+  filter(|&&b| b).count()        = 3   <- says 'how many are true'
+  map(|f| f as u32).sum()        = 3   <- says 'add them up', via a cast
+  map(u32::from).sum()           = 3   <- the same cast as a named conversion
+  the first one is the one to write: the other two make you re-read a cast
+  to find out that counting was the point.
+
+=== part 3: what a bool cannot do, and the escape hatch ===
+  `true + 1`  -> error[E0369]: cannot add `{integer}` to `bool`
+  `if 1 { }`  -> error[E0308]: mismatched types, expected `bool`, found integer
+  so the cast is never implicit and never accidental:
+    true as u8  = 1      false as u8 = 0
+    u8::from(true) = 1   u8::from(false) = 0
+  and going back the other way needs a comparison, not a cast:
+    1u8 as bool -> error[E0054]: cannot cast `u8` as `bool`
+                   help: compare with zero instead
+    1u8 != 0    = true   <- which is the question you actually meant

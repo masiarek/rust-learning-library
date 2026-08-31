@@ -1,0 +1,30 @@
+=== part 1: the in-place methods hand back nothing ===
+  before                 = [3, 5, 1, 5, 0]
+  let x = scores.sort()  -> x is (), NOT the sorted vector
+  scores (mutated)       = [0, 1, 3, 5, 5]
+  asking x for its length is where you find out:
+    error[E0599]: no method named `len` found for unit type `()` in the current scope
+  the message names the type: `()` is what an in-place method returns,
+  because the answer was written back into the receiver.
+
+  the two ways to get a sorted value out of it:
+    mutate, then use     = [1, 3, 5]
+    clone, sort the copy = [1, 3, 5]  (original still [3, 5, 1])
+
+  every in-place method on Vec does this:
+    push / dedup / retain all return () () () -> v = [3, 1, 5]
+    so none of them chains: v.push(9).dedup() does not compile
+
+=== part 2: Ok(()) is 'it worked, and there is nothing to hand back' ===
+  check_ballot([5, 3, 0]) = Ok(())
+  check_ballot([5, 9, 0]) = Err("score 9 is out of range 0..=5")
+  `check_score(s)?` discards nothing on success -- there was nothing to discard.
+  Result<(), E> is the return type of a job that either works or explains itself.
+
+=== part 3: a set is a map whose values are () ===
+  first appearance order = ["Ada", "Ben", "Cara"]
+  seen.contains_key("Ada")  = true
+  seen.len()                = 3
+  `insert` returns Option<()> -- Some(()) means it was already there.
+  That Option<()> is a bool with extra syntax, which is exactly why
+  HashSet::insert returns a real bool instead. Same structure, better name.
