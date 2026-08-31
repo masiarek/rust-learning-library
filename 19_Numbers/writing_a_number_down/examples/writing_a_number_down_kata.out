@@ -1,0 +1,29 @@
+=== part 1: write each field in the base its digits line up with ===
+  file mode   0o644  =        420  = 110100100  = rw- r-- r--
+              same value in hex, 0x1A4, hides the three groups: 0x1a4
+  colour      0x008B8B =      35723  = r   0  g 139  b 139
+              same value in decimal, 35723, hides the byte edges
+  flags       0b0000_0011 =    3  = 00000011   read true write true exec false
+
+=== part 2: the narrowest type that holds the quantity ===
+  quantity                      worst case  type         that type's MAX
+  a STAR score, 0-5                      5  u8                       255
+  a byte of a ballot scan              255  u8                       255
+  ballots in one precinct           100000  u32               4294967295
+  votes in a US election         160000000  u32               4294967295
+  a Unicode code point             1114111  u32               4294967295
+
+=== the row where the obvious answer is wrong ===
+  'a precinct is small, u16 is plenty' -- u16::MAX = 65535
+      50000 ballots -> u16 holds it: 50000
+     100000 ballots -> u16 refuses: out of range integral type conversion attempted
+  the literal itself is refused at compile time, not at run time --
+  `let n = 100_000u16;` is rejected by a deny-by-default lint, verbatim:
+    error: literal out of range for `u16`
+    = note: the literal `100_000u16` does not fit into the type `u16` whose range is `0..=65535`
+    = note: `#[deny(overflowing_literals)]` on by default
+
+=== and the signed row, where the hole is at the bottom ===
+  a margin of -128 fits i8 (MIN is -128)
+  but its own absolute value does not: None
+  which is why `i8::MIN.abs()` panics in debug and wraps to -128 in release

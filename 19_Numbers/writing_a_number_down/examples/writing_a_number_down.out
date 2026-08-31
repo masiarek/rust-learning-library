@@ -1,0 +1,68 @@
+=== the 0 says 'not decimal', the letter names the base ===
+  0x2A   hex     = 42
+  0o77   octal   = 63
+  0b101  binary  = 5
+  42     decimal = 42
+  and all four spell the same u8 when the number is the same:
+    0xFF == 0o377 == 0b1111_1111 == 255 : true
+  case does not matter in hex: 0xff == 0xFF : true
+
+=== a leading zero on its own means nothing ===
+  0755  = 755   <- decimal seven hundred fifty-five, NOT octal
+  0o755 = 493   <- octal: rwx r-x r-x
+  0000042 = 42  <- leading zeros are legal and inert
+
+=== the underscore is for your eyes, anywhere in the literal ===
+  1_000_000     = 1000000
+  0xDEAD_BEEFu32 = 3735928559
+  0b1011_1110   = 190
+  1_0_0         = 100   <- legal, and nobody should
+
+=== the suffix is the type, written on the number ===
+  57u8  = 57 : u8
+  57_u8 = 57 : u8   <- same literal, the _ is optional
+  let c: u8 = 57 -> 57 : u8   <- same instruction, said on the let
+  57    = 57 : i32   <- the integer fallback
+  5.7   = 5.7 : f64   <- the float fallback
+
+=== b in front of a quote means bytes, not text ===
+  b'A'  = 65  : u8         1 byte
+  'A'   = 65  : char       4 bytes
+  b"Hi" = [72, 105] : &[u8; 2]
+  "Hi"  = "Hi" : &str
+  b'A' is a NUMBER you may do arithmetic on: b'A' + 2 = 67 = 'C'
+
+=== floats: the dot is required, and there is no unsigned one ===
+  2.0   = 2 : f64
+  2.    = 2 : f64   <- legal; 2 alone would be an integer
+  1e6   = 1000000 : f64
+  2.0f32 = 2 : f32
+  2_f32  = 2 : f32   <- no dot needed once the suffix says float
+  there is no uf32/uf64: every float carries a sign bit, always
+    -0.0 == 0.0                    : true
+    (-0.0f64).is_sign_negative()   : true   <- the bit is there either way
+
+=== how much a float remembers ===
+  f32  24 significand bits, ~6 reliable decimal digits (single precision)
+  f64  53 significand bits, ~15 reliable decimal digits (double precision)
+  0.1f32 = 0.10000000149011611938
+  0.1f64 = 0.10000000000000000555   <- same wrong answer, 29 bits further right
+
+=== what the width promises, by formula ===
+  signed   iN : -2^(N-1)  ..=  2^(N-1) - 1
+  unsigned uN :         0  ..=  2^N - 1
+  type                     MIN                   MAX   formula check
+  i8                      -128                   127   true
+  i16                   -32768                 32767   true
+  i32              -2147483648            2147483647   true
+  i64     -9223372036854775808   9223372036854775807   true
+  u8                         0                   255   true
+  u16                        0                 65535   true
+  u32                        0            4294967295   true
+  u64                        0  18446744073709551615   true
+
+=== the asymmetry the formula predicts ===
+  i8::MIN = -128, i8::MAX = 127   <- one more below zero than above
+  i8::MIN.checked_neg()  = None   <- -(-128) is not an i8
+  i8::MIN.checked_abs()  = None   <- neither is its absolute value
+  u8 has no such hole: 0 is its own negation, and there is nothing below it
