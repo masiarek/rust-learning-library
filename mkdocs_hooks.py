@@ -438,6 +438,8 @@ NAV_ORDER: dict[str, list[str]] = {
         "README.md",
         # Opens the numbers arc: the unit every other size is counted in.
         "meet_the_byte",
+        # ...and how to put one on the page: the prefix, the suffix, the b.
+        "writing_a_number_down",
         # ...and how to write one down, which is the last thing before meaning.
         "why_hexadecimal",
         # ...and what people put in one, once they can write it down.
