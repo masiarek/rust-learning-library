@@ -75,3 +75,9 @@ stopping
 - [`String::into_boxed_str`](../string_into_boxed_str/README.md) — giving up ownership instead of borrowing
 
 [`String::as_str` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.as_str)
+
+## Po polsku
+
+W codziennym kodzie `as_str` jest zwykle zbędne: `s.as_str()`, `&s[..]` i `&*s` to dokładnie to samo pożyczenie, a przekazując `&s` do funkcji oczekującej `&str` nie potrzebujesz żadnego z nich — automatyczna dereferencja (*deref coercion*) wstawia je za ciebie, co widać na wywołaniu `shout(&s)`. Sięgasz po tę metodę dopiero tam, gdzie konwersja nie ma się na czym oprzeć, i najczęściej po raz pierwszy w `match`u: `match cmd { "stop" => … }` na `String` kończy się błędem `E0308`, bo wzorzec jest literałem `&str`, a `match cmd.as_str()` dopasowuje się bez problemu. Drugi typowy przypadek to przekazanie metody jako funkcji — `names.iter().map(String::as_str)` czyta się lepiej niż domknięcie robiące to samo. Wynik jest darmowy, `const` i pożyczony, więc żyje dokładnie tak długo jak `String`, z którego pochodzi.
+
+**Szukaj po polsku:** dopasowanie wzorców do łańcucha znaków · automatyczna dereferencja · `rust match on String E0308` · `rust String as_str deref coercion`

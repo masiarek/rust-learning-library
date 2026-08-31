@@ -73,3 +73,9 @@ true
 - [`str::make_ascii_lowercase`](../str_make_ascii_lowercase/README.md) — in place, no allocation
 
 [`str::to_lowercase` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.to_lowercase)
+
+## Po polsku
+
+Dla polszczyzny to jest właśnie ta metoda, i da się powiedzieć wprost dlaczego: pełne reguły Unicode obejmują komplet naszych znaków diakrytycznych (`"ŻÓŁW".to_lowercase()` daje `"żółw"`), a to, że metoda nie zna ustawień lokalnych (*locale*) — co psuje sprawę tureckiemu `I`, bo `std` zwraca `i` zamiast `ı` — polskiemu nie szkodzi w niczym, ponieważ polski nie ma reguł zależnych od języka. Płaci się za to trzema niespodziankami, których wersja ASCII nie ma: metoda alokuje nowy `String`, długość może się zmienić (`"İ"` zajmuje 2 bajty, a po zamianie na małe litery 3) i wynik bywa zależny od kontekstu — greckie `"ΣΣ"` daje `"σς"`, dwa różne znaki z dwóch takich samych. Praktyczny wniosek przy polskim tekście jest jeden: `eq_ignore_ascii_case` tu **nie zadziała** (`"ŁÓDŹ".eq_ignore_ascii_case("łódź")` to `false`, bo ta metoda porównuje wielkość liter wyłącznie w ASCII), trzeba zamienić na małe litery obie strony — pamiętając, że to nadal odwzorowanie wielkości liter, a nie pełne `case folding`.
+
+**Szukaj po polsku:** małe litery a polskie znaki diakrytyczne · porównywanie bez rozróżniania wielkości liter · `rust to_lowercase` · `rust case folding vs case mapping`

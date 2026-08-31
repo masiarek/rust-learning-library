@@ -69,3 +69,9 @@ patch  -> None
 - [`str::contains`](../str_contains/README.md) — substring rather than equality
 
 [`str::eq_ignore_ascii_case` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.eq_ignore_ascii_case)
+
+## Po polsku
+
+Nazwę tej metody trzeba brać dosłownie: składa ona **tylko** dwadzieścia sześć liter ASCII, więc `"Łódź".eq_ignore_ascii_case("łódź")` da `false` — dokładnie tak jak `"É"` i `"é"` w przykładzie powyżej. To nie wada, tylko zakres: dla danych z definicji ASCII — nazw nagłówków HTTP, schematów URL, cyfr szesnastkowych — jest to odpowiedź poprawna i najszybsza z możliwych, bo porównanie idzie bajt po bajcie, urywa się na pierwszej różnicy i **nie alokuje niczego**, w przeciwieństwie do odruchowego `a.to_lowercase() == b.to_lowercase()`, które tworzy dwa `String`-i, żeby odpowiedzieć „tak” albo „nie”. Do tekstu pisanego przez ludzi użyj `to_lowercase()` po obu stronach — dla polszczyzny to wystarcza — pamiętając, że pełne składanie wielkości liter (*Unicode case folding*) to jednak coś innego niż zamiana na małe litery, a biblioteka standardowa go nie ma; dostarczają je crate'y `unicase` i `caseless`.
+
+**Szukaj po polsku:** porównywanie bez wielkości liter · składanie wielkości liter · `rust eq_ignore_ascii_case` · `rust unicode case folding crate`

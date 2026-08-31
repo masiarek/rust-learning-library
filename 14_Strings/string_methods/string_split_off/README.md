@@ -73,3 +73,9 @@ boundary at 2? false
 - [`String::into_boxed_str`](../string_into_boxed_str/README.md) — what to do with a finished half
 
 [`String::split_off` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.split_off)
+
+## Po polsku
+
+Różnica wobec `split_at` dotyczy tego, kto co posiada: `split_at` zwraca dwa wycinki (*string slices*) pożyczone z oryginału, a `split_off` **przenosi własność** ogona do nowego `String`, zostawiając głowę na miejscu — po `s.split_off(5)` obie połówki da się niezależnie modyfikować. Cenę widać w przykładzie: głowa zachowuje stary bufor razem z pojemnością 64, a ogon dostaje świeżą alokację o pojemności 6, więc rozcinanie w pętli oznacza alokowanie w pętli. `split_off(0)` opróżnia oryginał i oddaje całą zawartość, co jest standardowym sposobem na wyjęcie treści `String`a przez `&mut`, kiedy nie mamy go na własność. Argument liczy **bajty, nie znaki**: `"héllo".split_off(3)` daje `"llo"`, a przesunięcie 2 wypada w środku dwubajtowego `é` i program panikuje.
+
+**Szukaj po polsku:** przenoszenie własności łańcucha znaków · granica znaku UTF-8 · `rust String split_off` · `rust split_off vs split_at`

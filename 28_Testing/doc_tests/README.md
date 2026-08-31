@@ -295,3 +295,17 @@ fn main() {
 ## Sources
 
 [Documentation testing ↗](https://doc.rust-lang.org/rust-by-example/testing/doc_testing.html) in Rust by Example, and the [rustdoc book on documentation tests ↗](https://doc.rust-lang.org/rustdoc/write-documentation/documentation-tests.html), which is where the fence annotations are listed. The transcript above was produced by building this page's example as a library and running `rustdoc --test` against it.
+
+## Po polsku
+
+Test dokumentacyjny (*doc test*) to każdy blok kodu w komentarzu `///` — `cargo test` kompiluje go i uruchamia. To odpowiedź na najstarszy problem dokumentacji: przykład, który przestał się kompilować dwa wydania temu i nikt tego nie zauważył. Kto zna `doctest` z Pythona, zna pomysł, ale dwie różnice mają tu znaczenie: Pythonowy doctest porównuje **wypisany tekst** spod `>>>`, przez co kruszy się na białych znakach i na `repr()`, a tutaj pisze się zwyczajne `assert_eq!`; i w Pythonie trzeba go świadomie włączyć (`pytest --doctest-modules`), a w Ruscie działa domyślnie — dlatego akurat ta odmiana gnicia dokumentacji praktycznie tu nie występuje.
+
+Mechanizm, z którego wynika cała reszta: każdy blok jest **osobnym programem** — rustdoc opakowuje go we własne `fn main()` i kompiluje jako oddzielny crate linkowany z twoim. Stąd dwie rzeczy, które zaskakują dokładnie raz: do własnego crate'a trzeba odwołać się **po nazwie** (`use my_crate::tally;`, nigdy `use crate::…`), a widać wyłącznie **publiczne API**. Test dokumentacyjny jest więc testem integracyjnym, który przy okazji drukuje się w dokumentacji — i najtańszym sposobem, żeby odkryć, że coś, co miało być wyeksportowane, wciąż jest prywatne.
+
+Kratka `#` na początku linii ukrywa ją przed **czytelnikiem**, a nie przed kompilatorem: wyrenderowany przykład ma dwie linie, skompilowany cztery. Tak należy jej używać — chowa się import i przygotowanie danych, czyli szum, który czytelnik i tak sobie odtworzy. Czego chować nie wolno, to tego, co sprawia, że przykład w ogóle działa. Przykład, którego widoczne linie po skopiowaniu nie działają, jest gorszy niż brak przykładu, bo wygląda na taki, który by zadziałał.
+
+Znacznik otwierający blok (*fence*) przyjmuje cztery adnotacje i jednej z nich warto nie ufać: `no_run` — skompiluj, nie uruchamiaj (otwiera gniazdo albo trwa godzinę); `should_panic` — uruchom i oczekuj paniki; `text` — to nie jest Rust, więc nie próbuj niczego; `ignore` — **nawet nie kompiluj**, czyli komentarz przebrany za test. Jeśli blok nie jest Rustem, napisz `text`; jeśli jest Rustem, którego nie da się tu uruchomić, napisz `no_run`. Warto też wiedzieć, jak te testy są nazywane: **numerem linii**, w której blok się zaczyna (`doc_tests.rs - read_cell (line 42)`). To cały schemat nazewnictwa, więc porażka mówi, gdzie patrzeć, ale nie mówi, jak nazywał się przypadek.
+
+Na koniec granica zastosowania: testy dokumentacyjne nie służą do pokrycia kodu. Są wolne (jedna kompilacja na blok), sięgają wyłącznie publicznego API, a komentarz `///` wypełniony przypadkami brzegowymi jest po prostu złym komentarzem. Pierwszy przypadek zostaw na stronie, a trzeci do dwudziestego przenieś do modułu `#[cfg(test)]`.
+
+**Szukaj po polsku:** testy dokumentacyjne w Ruscie · doctest w Pythonie · `rust doc tests` · `rust rustdoc no_run ignore` · `cargo test --doc`

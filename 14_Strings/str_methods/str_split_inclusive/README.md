@@ -69,3 +69,9 @@ round trip: true
 - [`str::matches`](../str_matches/README.md) — the separators on their own
 
 [`str::split_inclusive` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split_inclusive)
+
+## Po polsku
+
+`split_inclusive` zostawia separator przyklejony do kawałka, który ten separator zakończył — `"a\nb\n"` daje `["a\n", "b\n"]` — więc nic nie przepada i `pieces.concat()` odtwarza oryginał co do bajta. Ta własność ratuje skórę przy przepisywaniu plików: `lines()` końce wierszy wyrzuca i przy okazji normalizuje `\r\n` do `\n`, więc wczytanie przez `lines()` i sklejenie przez `join("\n")` po cichu zamienia windowsowe zakończenia na uniksowe, a `git` pokazuje potem zmianę w każdym wierszu pliku — dokładnie tę różnicę widać w przykładzie, gdzie `["alpha\r\n", "beta\n", "gamma"]` stoi obok `["alpha", "beta", "gamma"]`. Skoro separator kończy kawałek, nie ma tu żadnego pustego elementu na końcu, a ostatni kawałek bez separatora jest czytelnym sygnałem, że tekst urwał się bez znaku nowego wiersza (`terminated=false`). Uwaga na skrajny przypadek: pusty tekst nie daje tu ani jednego kawałka, w odróżnieniu od `split`, gdzie `""` zwraca `[""]`.
+
+**Szukaj po polsku:** zachowanie końców wierszy CRLF · przepisywanie pliku bez zmiany znaków końca wiersza · `rust split_inclusive keep separator` · `rust lines vs split_inclusive`

@@ -119,3 +119,13 @@ Result<u8, u8> is a real type: Err(3)
 - [Variants that carry data](../../13_Enums/variants_that_carry_data/README.md) — what a payload costs, measured
 - [Six kinds of zero](../../17_Option_and_Result/six_kinds_of_zero/README.md) — writing your own enum when `Option`'s two variants run out
 - [`Option` vs `Result`](../../17_Option_and_Result/option_vs_result/README.md) — the two library enums this page is a general case of
+
+## Po polsku
+
+Polskie słowo „wyliczenie” (*enum*) jest tu odrobinę zdradliwe, bo dla czytelnika wychowanego na C czy starszej Javie oznacza listę nazwanych stałych — a Rustowe `enum` to typ sumaryczny (*sum type*): każdy wariant może nieść dane. Wersja generyczna dokłada jedną regułę: `<T>` deklaruje się **raz**, zaraz po nazwie wyliczenia, i dzielą je wszystkie warianty. Nie da się dać jednemu wariantowi własnego `T`. Stąd zaskoczenie, po którym większość ludzi trafia tu z wyszukiwarki: wariant bez ładunku **i tak** potrzebuje `T`, więc `let nothing = Slot::Empty;` kończy się na `E0282`, a naprawia się to turbofishem — `Slot::<u8>::Empty` — albo pozwalając późniejszemu użyciu rozstrzygnąć typ. Warto też zapamiętać, że `Slot::Filled` nie jest typem, tylko sposobem zbudowania `Slot<T>`; w sygnaturze funkcji można napisać tylko całe wyliczenie.
+
+Nagroda za zrozumienie tej jednej reguły jest duża, bo polskie materiały zwykle przedstawiają `Option<T>` i `Result<T, E>` tak, jakby były wbudowane w język. Nie są. `Either<L, R>` — dwa warianty, dwa parametry — to `Result` ze zmienionymi nazwami, a sam `Result` jest w bibliotece standardowej zwykłym wyliczeniem, ani odrobinę bardziej wbudowanym niż twoje `Either`. Oba parametry są od siebie niezależne, także wtedy, gdy wypełni się je tym samym typem: `Result<u8, u8>` jest poprawnym typem, a `Ok(3)` i `Err(3)` to w nim dwie różne wartości.
+
+Koszt liczy się jak dla każdego wyliczenia — rozmiar największego wariantu plus znacznik — więc to `T` decyduje: `Slot<u8>` zajmuje 2 bajty, `Slot<u64>` już 16 (osiem ładunku, znacznik dopchnięty do wyrównania), a `Either<u8, String>` — 24, czyli **tyle samo co goły `String`**, bo wskaźnik w `String` nigdy nie jest zerowy i znacznik chowa się w niszy. Ograniczenia (*bounds*) stawia się natomiast na bloku `impl`, który ich naprawdę potrzebuje, a nie w linii `enum`: `is_filled` działa dla każdego `T`, `describe` wypisuje ładunek, więc jego blok prosi o `Display`.
+
+**Szukaj po polsku:** wyliczenia generyczne w Ruscie · typ sumaryczny · turbofish w Ruscie · `rust generic enum E0282 type annotations needed` · `rust enum niche optimization size_of`

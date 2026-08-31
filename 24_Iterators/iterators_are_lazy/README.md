@@ -323,3 +323,19 @@ fn main() {
 ## Sources
 
 [`std::iter` ↗](https://doc.rust-lang.org/std/iter/index.html) — its own *Laziness* section is the source of the rule, and the [`Iterator` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html) page, whose adapter return types (`Map`, `Filter`, `Take`…) each carry the `#[must_use]` quoted above.
+
+## Po polsku
+
+Polskie określenie na to zjawisko istnieje i jest dobre: **leniwe wartościowanie**, w opozycji do **gorliwego**. `map` czy `filter` niczego nie liczą — budują wartość opisującą pracę do wykonania, i to wartość o widocznym typie: `Map<Iter<i32>, {closure}>` trzyma źródło i domknięcie (*closure*), nie zaglądając do żadnego elementu. Skasuj `.collect()` z pierwszego przykładu, a domknięcie nie wykona się ani razu. Kompilator to zauważy i wypowie regułę wprost: *„iterators are lazy and do nothing unless consumed”* — zdanie warte zapamiętania po angielsku, bo w takiej postaci zobaczysz je w terminalu. Zwróć uwagę na drobiazg, który tłumaczy treść ostrzeżenia: `#[must_use]` siedzi na **strukturze `Map`**, a nie na metodzie `map`, i dlatego rustc pisze *unused `Map` that must be used* — czyli o strukturze, nie o metodzie. Test na jedną linijkę: **jeśli coś oddaje ci iterator, to nic nie zrobiło.**
+
+Kto zatem wykonuje pracę i ile jej wykona? Konsument — i to on decyduje, jak daleko zajdzie. Osoba znająca strumienie z Javy ma tu gotową parę pojęć: adapter to **operacja pośrednia**, a konsument — **operacja kończąca**. Na tej samej sześcioelementowej tablicy licznik wywołań domknięcia wygląda tak: `.collect()` — 6, `.find(>=6)` — 1, `.any(==0)` — 3, `.count()` — 6. `find` i `any` **przerywają** w chwili, gdy odpowiedź jest już przesądzona; `collect` i `count` nie mają takiej możliwości, bo żeby coś policzyć albo zachować, trzeba to najpierw zobaczyć.
+
+Model do **oduczenia się** to potok powłoki, w którym każdy etap przerabia cały strumień, zanim zacznie następny. Łańcuch iteratorów działa odwrotnie: przeciąga **jeden element przez całą trasę**, zanim dotknie kolejnego — stąd ślad `see 5`, `test 5`, `double 5`, `see 3`, `test 3`, `double 3`, a nie sześć „see”, potem sześć „test”. Wynikają z tego trzy rzeczy i wszystkie trzy są powodem, dla którego takie łańcuchy są szybkie:
+
+- **Brak kolekcji pośrednich.** Gorliwy `filter` musiałby zaalokować wektor, żeby `map` miał co czytać. Tu alokuje wyłącznie końcowy `collect`.
+- **`take(2)` zatrzymał źródło.** Elementy `0, 4, 2, 1` nie zostały przeczytane w ogóle, nawet przez `inspect` — zatrzymanie propaguje się **wstecz** przez łańcuch.
+- **Dzięki temu nieskończona sekwencja jest użyteczna.** `(1u32..).map(|n| n * n).filter(|sq| sq % 3 == 1).take(3).collect()` daje `[1, 4, 16]` i nic się nie zawiesza, choć `1..` nie ma końca. W języku gorliwym ten program nigdy by się nie skończył.
+
+Najczęstszy błąd to `map` użyty **dla efektu ubocznego** — i jest cichy, bo bez konsumenta po prostu nic się nie dzieje: `scores.iter().map(|s| println!("{s}"))` nie wypisze niczego. Sięgnij po `for_each` albo po zwykłą pętlę `for`, która jest konsumentem z natury. Na koniec rzecz, którą łatwo przyswoić za mocno: kolejność filtrów naprawdę ma znaczenie (ten sam wynik kosztuje 3 albo 6 wywołań drogiego predykatu), ale zasadą **nie** jest „najtańszy najpierw”. Pierwszy ma iść ten test, który **odrzuca najwięcej wierszy na jednostkę pracy** — tani filtr przepuszczający wszystko nie oszczędza niczego. To dokładnie pojęcie **selektywności** z optymalizacji zapytań, a wiedza o niej pochodzi z danych, nie z kodu.
+
+**Szukaj po polsku:** leniwe wartościowanie · wartościowanie gorliwe · operacje pośrednie i kończące · selektywność predykatu · `rust iterators are lazy` · `rust unused Map that must be used`

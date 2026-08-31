@@ -65,3 +65,9 @@ after '👋': len 7
 - [`str::chars`](../../str_methods/str_chars/README.md) — the character count instead
 
 [`String::len` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.len)
+
+## Po polsku
+
+`len` liczy **bajty**, nie znaki, a dla polskiego tekstu ta różnica przestaje być teoretyczna już przy pierwszym słowie: `"Zażółć".len()` to 10, podczas gdy `"Zażółć".chars().count()` to 6, bo `ż`, `ó`, `ł` i `ć` zajmują po dwa bajty każdy — dokładnie to samo, co strona pokazuje na `"héllo"` wierszem `len 6 chars 5`. Kto przychodzi z Pythona, gdzie `len("Zażółć")` daje po prostu 6, musi tę intuicję odwrócić: w Ruscie długość w znakach liczy się jawnie, przez `chars().count()`, i jest to operacja O(n), bo trzeba przejść cały łańcuch znaków od początku. Nie myl też `len()` z `capacity()` — pierwsze mówi, ile treści jest zapisanej, i należy do wartości; drugie mówi tylko, ile miejsca wynajęto na stercie (stąd `len 6 capacity 64` w przykładzie).
+
+**Szukaj po polsku:** długość łańcucha w bajtach · polskie znaki w UTF-8 · liczba znaków a liczba bajtów · `rust String len bytes not chars` · `rust chars count`

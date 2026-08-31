@@ -16,3 +16,9 @@ This section is where `.len()` finally means something. A byte is the thing `siz
 
 - [Meet the `char`](../14_Strings/meet_the_char/README.md) — what those bytes encode, once you know what one is
 - [Exactness](../09_Advanced/README.md) — where the float page hands off
+
+## Po polsku
+
+Ta sekcja mierzy wszystko w bajtach: `size_of` liczy właśnie je, `.len()` na łańcuchu znaków zwraca ich liczbę, a nie liczbę znaków, i to bajt jest jednostką, do której odwołują się pozostałe lekcje. Dwie rzeczy sprawiają tu polskiemu czytelnikowi więcej kłopotu niż angielskiemu: separatorem dziesiętnym jest u nas przecinek, a Rust — jak każdy język programowania — pisze `0.1` z kropką, więc polskie teksty o liczbach zmiennoprzecinkowych (*floating-point*) czyta się z tą podmianą w głowie; oraz system o podstawie 16 nazywany bywa raz „szesnastkowym”, raz „heksadecymalnym”, podczas gdy w kodzie i w komunikatach kompilatora zobaczysz zawsze `hex` i przedrostek `0x`. Ostatnie dwie lekcje wyjaśniają, dlaczego `f64` nie implementuje `Eq` ani `Ord` — to nie kaprys projektantów języka, tylko konsekwencja tego, że `NaN` nie jest równe samemu sobie.
+
+**Szukaj po polsku:** bajt · system szesnastkowy · liczby zmiennoprzecinkowe · `rust size_of` · `rust f64 Eq Ord`

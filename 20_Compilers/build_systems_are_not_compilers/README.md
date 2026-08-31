@@ -25,3 +25,9 @@
 - [Compile times](../../05_Tooling/compile_times/README.md) — the phases inside one invocation, once the build system has decided to make it
 - [Adding a dependency](../../05_Tooling/cargo_dependencies/README.md) — where the graph's nodes come from, and what a version range resolves to
 - [A tree of practice projects](../../05_Tooling/practice_workspace/README.md) — one workspace, many crates, and what is shared between them
+
+## Po polsku
+
+System budowania (*build system*) niczego nie kompiluje — trzyma graf zależności i regułę nieaktualności, a prawdziwy kompilator wywołuje tylko dla tych węzłów, które tego wymagają; CMake stoi jeszcze krok wcześniej, bo sam nie buduje, tylko *generuje* budowanie (Ninja, Make, projekt IDE), i stąd jego błędy przychodzą w dwóch różnych momentach. Dla kogoś, kto przychodzi od `make` i plików `.c`, najważniejsza różnica brzmi tak: jednostką kompilacji jest **crate**, a nie plik — dlatego zmiana jednej funkcji przebudowuje cały crate, a rozbicie dużego crate'a potrafi realnie skrócić pętlę przebudowy. Zdanie „cargo jest wolne” prawie zawsze znaczy więc „ten projekt przebudowuje więcej, niż musi”, a przyczyna leży powyżej kompilatora: `build.rs` bez `cargo::rerun-if-changed`, inny zestaw `features` między dwoma poleceniami, zmienna środowiskowa wliczona w odcisk stanu. Żadna flaga optymalizacji nie naprawi grafu, który twierdzi, że wszystko jest nieaktualne.
+
+**Szukaj po polsku:** system budowania · graf zależności · `cargo build --timings` · `cargo rerun-if-changed` · `why does cargo rebuild everything`

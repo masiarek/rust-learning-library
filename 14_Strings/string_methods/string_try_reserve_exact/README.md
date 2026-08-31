@@ -65,3 +65,9 @@ still usable: "ok"
 - [`String::shrink_to_fit`](../string_shrink_to_fit/README.md) — the other direction
 
 [`String::try_reserve_exact` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.try_reserve_exact)
+
+## Po polsku
+
+Najłatwiej zapamiętać tę czwórkę jako siatkę dwa na dwa: jedna oś to „z zaokrągleniem albo dokładnie”, druga to „przerywa proces albo zwraca `Result`” — a `try_reserve_exact` zajmuje ostatni róg. Różnicę widać w liczbach z przykładu: dla dwuznakowego łańcucha znaków i prośby o 5 warianty zaokrąglające dają pojemność 8, a dokładne 7. Po tę metodę sięga się wtedy, gdy zależy nam na obu tych zachowaniach naraz: rozmiar przyszedł z wejścia (więc porażkę trzeba obsłużyć) i jest ostateczny (więc zaokrąglanie marnowałoby pamięć, o której rozmiarze decyduje ktoś z zewnątrz). Po nieudanej próbie `String` pozostaje w pełni sprawny — w przykładzie od razu przyjmuje `push_str`.
+
+**Szukaj po polsku:** rezerwowanie pojemności · dokładna alokacja bez zaokrąglania · `rust try_reserve_exact` · `rust reserve vs reserve_exact`

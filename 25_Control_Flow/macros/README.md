@@ -26,3 +26,9 @@ A macro is not a function, so the usual intuitions about evaluation do not hold:
 - [`Debug` and `Display`](../../15_First_Programs/debug_vs_display/README.md) — the traits the printing macros call, and why only one can be derived
 - [`unwrap` is a TODO](../../02_Errors/unwrap_is_a_todo/README.md) — `todo!` and `unimplemented!` as the honest placeholders
 - [Comprehensive Rust: Macros ↗](https://google.github.io/comprehensive-rust/control-flow-basics/macros.html)
+
+## Po polsku
+
+Wykrzyknik po nazwie nie oznacza ani negacji, ani niczego niebezpiecznego — mówi tylko tyle, że wywołanie zostanie rozwinięte w kod źródłowy jeszcze przed kompilacją. Warto od razu odciąć skojarzenie z C: makro w Ruscie to nie `#define` operujące na tekście, lecz przekształcenie drzewa składni, dzięki czemu `println!` sprawdza łańcuch formatujący już podczas kompilacji, a `vec![]` przyjmuje listę czegokolwiek — zwykła funkcja nie potrafi ani jednego, ani drugiego. Trzy rzeczy są zarezerwowane właśnie dla makr: zmienna liczba argumentów, argumenty różnych typów i zaglądanie do tekstu źródłowego — to ostatnie sprawia, że `dbg!` wypisuje wyrażenie dokładnie w takiej postaci, w jakiej je napisaliśmy. Pułapka jest jednak taka, że makro nie jest funkcją i intuicje o obliczaniu argumentów przestają obowiązywać (argument może zostać policzony dwa razy, ani razu albo w innej kolejności), a łańcuch formatujący musi być literałem — podanie zmiennej typu `String` kończy się błędem; kiedy nie wiadomo, w co dane makro się rozwinęło, odpowiedzi udziela `cargo expand`.
+
+**Szukaj po polsku:** makra w Ruscie · rozwinięcie makra · `macro_rules!` · `rust macro vs function` · `cargo expand`

@@ -25,3 +25,9 @@ The harness itself, and running tests faster: [cargo-nextest](../05_Tooling/next
 ## Where it goes next
 
 A test that fails is a panic, and what a panic actually does is [its own page](../17_Option_and_Result/what_a_panic_costs/README.md). And the reason most of this library's examples need no tests at all is that every one of them has a recorded answer key CI re-checks — the same idea as a doc test, applied to a whole program.
+
+## Po polsku
+
+W Ruscie nie dobiera się biblioteki do testów: mechanizm uruchamiający je (*test harness*) jest częścią języka, więc nie ma tu odpowiednika JUnita, pytesta ani osobnej biblioteki asercji do nauczenia się. Test to zwyczajna funkcja, która **panikuje**, kiedy coś się nie zgadza, a `assert_eq!` to w zasadzie całe API. Jedno polecenie `cargo test` uruchamia wszystkie trzy rodzaje naraz: testy jednostkowe w module `#[cfg(test)]` wewnątrz `src/` (widzą elementy prywatne), testy integracyjne w katalogu `tests/` (widzą wyłącznie publiczne API) oraz testy dokumentacyjne, czyli przykłady z komentarzy `///`, które są przy okazji dokumentacją.
+
+**Szukaj po polsku:** testy jednostkowe w Ruscie · testy integracyjne · `rust cargo test` · `rust doc tests` · `rust cfg test mod tests`

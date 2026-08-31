@@ -84,3 +84,13 @@ columns: 3 kept, 2 after filtering
 - [`str::matches`](../str_matches/README.md) — the matches instead of the gaps
 
 [`str::split` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split)
+
+## Po polsku
+
+`split` nie szuka „słów”, tylko zgłasza **przerwy między dopasowaniami**, a przerwa, w której nic nie ma, dalej jest przerwą. Stąd cała arytmetyka: *n* dopasowań to zawsze *n+1* kawałków, więc `"a,,c"` daje `["a", "", "c"]`, `",a"` daje `["", "a"]`, a pusty tekst `""` daje `[""]` — jeden pusty kawałek, nie zero. To nie jest złośliwość metody, tylko konsekwencja liczenia.
+
+Polskiego czytelnika najczęściej myli tu nawyk z Pythona: tamtejsze bezargumentowe `s.split()` dzieli po białych znakach i samo wyrzuca puste kawałki, więc łatwo oczekiwać tego samego po `str::split(',')`. Odpowiednikiem bezargumentowego `split()` jest `split_whitespace`, a nie `split`. Pomyłka nie kończy się błędem kompilacji ani paniką — cicho przesuwa kolumny: w `"a,,c"` po odfiltrowaniu pustych zostają 2 kawałki zamiast 3 i trzecia kolumna staje się drugą. Zasada jest prosta: `split` do danych z separatorem, `split_whitespace` do prozy, a wyrzucenie pustych to twoja świadoma decyzja (`.filter(|p| !p.is_empty())`).
+
+Ostatnia rzecz, która zaskakuje przy pierwszym `println!`: `split` zwraca leniwy iterator, więc `{:?}` wypisze strukturę `Split` wraz z wnętrznościami wyszukiwarki, a nie kawałki. Dopiero `collect::<Vec<&str>>()` albo pętla `for` je pokazuje — i są to wycinki (`&str`) pożyczone z oryginalnego tekstu, bez żadnej alokacji.
+
+**Szukaj po polsku:** dzielenie łańcucha znaków w Ruscie · puste elementy po podziale · `rust split empty strings` · `rust split vs split_whitespace`

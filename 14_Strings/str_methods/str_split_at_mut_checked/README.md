@@ -59,3 +59,9 @@ Héllo
 - [`str::get_mut`](../str_get_mut/README.md) — the same idea for an arbitrary range
 
 [`str::split_at_mut_checked` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split_at_mut_checked)
+
+## Po polsku
+
+Mutowalna połowa pary „checked”: te same dwie odmowy co w `split_at_checked` — offset poza końcem albo w środku znaku — sklejone w jedno `None`, z tą różnicą, że na wejściu jest `&mut str`. To drugie ma konsekwencję, którą widać w pętli z przykładu: `None` nie niesie ze sobą żadnej referencji, więc pożyczenie (*borrow*) kończy się od razu i po odmowie (`2 -> refused`) można pytać dalej, a na końcu nadal korzystać z tekstu. Gdyby wariant odmowy zwracał referencję mutowalną, byłby to klasyczny przypadek warunkowo zwracanego pożyczenia, na którym borrow checker odrzuca kod wyglądający zupełnie sensownie — stąd wzorzec wart zapamiętania: najpierw pytaj przez `split_at_mut_checked`, a edytuj w miejscu (`make_ascii_uppercase`) dopiero po trafieniu w legalny offset.
+
+**Szukaj po polsku:** warunkowe pożyczenie mutowalne · cięcie tekstu bez paniki · `rust split_at_mut_checked` · `rust conditional mutable borrow NLL`

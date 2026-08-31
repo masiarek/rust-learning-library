@@ -78,3 +78,9 @@ cleared and shrunk: capacity 0
 - [`String::capacity`](../string_capacity/README.md) — what this deliberately preserves
 
 [`String::clear` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.clear)
+
+## Po polsku
+
+`clear()` opróżnia tekst, ale **zostawia bufor** — w wyniku widać `before len 5 capacity 32`, a zaraz potem `after len 0 capacity 32`. To nie jest szczegół implementacyjny, tylko cały sens metody: pętla, która w każdym obrocie czyści i zapisuje ten sam `String`, alokuje raz zamiast raz na element, i dlatego pojemność 8 utrzymuje się przez wszystkie trzy przebiegi przykładu. Podmiana zmiennej na `String::new()` wygląda na to samo, a nie jest — stary bufor zostaje wypuszczony i kolejne `push` znowu alokuje, co widać jako `reassigned capacity 0`. Najczęściej spotkasz ten wzorzec przy czytaniu pliku wiersz po wierszu: `BufRead::read_line` **dopisuje** do podanego bufora, więc `clear()` na początku obrotu jest tam koniecznością, a nie optymalizacją; gdy pamięć ma naprawdę wrócić do systemu, dołóż `shrink_to_fit()`.
+
+**Szukaj po polsku:** ponowne użycie bufora · czyszczenie łańcucha znaków · `rust String clear vs new` · `rust read_line reuse buffer`

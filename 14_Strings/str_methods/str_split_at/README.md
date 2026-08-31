@@ -71,3 +71,9 @@ None
 - [`str::split_at_mut`](../str_split_at_mut/README.md) — the mutable version
 
 [`str::split_at` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split_at)
+
+## Po polsku
+
+`split_at` dostaje **offset w bajtach**, a nie numer znaku, i dla polskiego tekstu to różnica jak najbardziej praktyczna: w UTF-8 każde ą, ć, ę, ł, ń, ó, ś, ź, ż zajmuje po dwa bajty, więc w `"żółw"` (7 bajtów) legalne cięcia to 0, 2, 4, 6 i 7 — a `split_at(3)` ląduje w środku `ó` i program **panikuje**, dokładnie tak jak `"héllo".split_at(2)` z przykładu wyżej, gdzie tabelka pokazuje `mid 2 boundary=false`. To nie jest błąd kompilacji, tylko panika w czasie działania, więc taki kod przechodzi wszystkie testy na danych ASCII i wywraca się dopiero na tekście od użytkownika. W kodzie dotykającym cudzego tekstu domyślnie sięgaj więc po `split_at_checked` (zamiast panikować, zwraca `None`) albo sprawdź offset przez `is_char_boundary`; skrajne cięcia `split_at(0)` i `split_at(len())` są legalne i dają pustą połówkę.
+
+**Szukaj po polsku:** polskie znaki zajmują dwa bajty · granica znaku w łańcuchu znaków · `rust byte index is not a char boundary` · `rust split_at panic utf8`

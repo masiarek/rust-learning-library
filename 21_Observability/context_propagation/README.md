@@ -28,3 +28,13 @@ The header that arrives and is thrown away. Each service's own traces look compl
 - [Instrumenting async code](../instrumenting_async/README.md) — the same loss of context inside one process
 - [Sampling](../sampling/README.md) — the decision this header carries
 - [What OpenTelemetry is](../what_opentelemetry_is/README.md) — where the propagator API comes from
+
+## Po polsku
+
+Nagłówek jest na tyle mały, że opłaca się go znać na pamięć: `traceparent` to cztery pola rozdzielone myślnikami — wersja, `trace id` o 32 znakach szesnastkowych, `parent span id` o 16 znakach i dwa znaki flag — razem **dokładnie 55 znaków**. Obok jedzie `tracestate` z danymi konkretnego dostawcy. Przy pisaniu parsera dwie reguły łatwo przeoczyć, a obie są w specyfikacji: identyfikator złożony z samych zer jest **nieprawidłowy**, a nieznaną wersję trzeba **tolerować**, nie odrzucać. To rzadki przypadek, w którym poprawny parser ma być pobłażliwy — i akurat ten fragment da się w tej bibliotece sprawdzić bez żadnego crate'a, samą biblioteką standardową.
+
+Po polsku najlepiej opisuje to obraz sztafety: pałeczkę wkłada się do żądania wychodzącego (*inject*) i wyjmuje z przychodzącego (*extract*). Miejsca, w których wypada domyślnie, warto znać z nazwy, bo to praktyczna połowa tej strony — kolejka komunikatów, `tokio::spawn`, pula wątków, ponowienie budujące świeże żądanie od zera, zadanie z crona zaczynające własny korzeń oraz każdy przeskok przez proxy lub WAF, który wycina nieznane nagłówki. Nigdzie nie pojawi się przy tym błąd: dostajesz albo dwa kompletnie wyglądające ślady jednego żądania, albo sierotę wskazującą rodzica, którego nikt nie zna. Lokalnie wszystko wygląda w porządku, bo każda usługa ma komplet własnych spanów — rozjazd widać wyłącznie z góry.
+
+Jeszcze jedno, jeśli pracujesz w firmie, która ma własny `X-Request-Id` albo `X-Correlation-Id` — a ma je w Polsce niemal każdy zespół, który dorobił się mikrousług przed 2020 rokiem. Własny nagłówek rozumieją tylko twoje usługi; `traceparent` jest standardem W3C, więc rozumie go cudza biblioteka, cudze proxy i cudzy dostawca. W tym ostatnim bajcie flag jedzie też **decyzja o próbkowaniu**, dlatego usługa niżej w łańcuchu dziedziczy wybór usługi wyżej — i dlatego próbkowanie ustawia się raz, a nie osobno w każdym serwisie. Ten sam pomysł, tylko starszy niż samo słowo, znajdziesz w SAP-owym Passporcie: jeden identyfikator wędrujący przez wszystkie systemy, i ta sama awaria, gdy któryś przeskok zgubi nagłówek.
+
+**Szukaj po polsku:** propagacja kontekstu · nagłówek traceparent · identyfikator korelacji · `w3c trace context` · `opentelemetry propagator inject extract`

@@ -63,3 +63,9 @@ fn main() {
 - [`str::splitn`](../str_splitn/README.md) — the same limit idea, for splitting
 
 [`str::replacen` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.replacen)
+
+## Po polsku
+
+Rust ustawia tu domyślność odwrotnie niż JavaScript: tam `replace` bez flagi `/g` rusza tylko pierwsze wystąpienie, a tutaj `replace` podmienia wszystkie i dopiero `replacen` jest wersją z limitem. Licznik zawsze biegnie **od lewej** i żadnego `rreplacen` nie ma — żeby ruszyć ostatnie n wystąpień, trzeba pobrać przesunięcia z `rmatch_indices` i edytować przez `replace_range` **od tyłu**, tak aby jeszcze niewykorzystane przesunięcia pozostały ważne; to właśnie ta linia z wynikiem `"a.b/c/d"`. Sens całej metody widać w parze wydruków dla `"key=a=b"`: z limitem `1` wychodzi `"key: a=b"` i wartość zostaje nietknięta, a bez limitu `"key: a: b"`, czyli rozjechany rekord. Limit większy niż liczba dopasowań nie szkodzi, a `0` zwraca kopię bez zmian — ale i tak alokuje.
+
+**Szukaj po polsku:** podmiana tylko pierwszego wystąpienia · limit zamian w tekście · `rust replacen first occurrence` · `rust replace_range`

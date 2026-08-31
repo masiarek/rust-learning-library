@@ -64,3 +64,9 @@ true
 - [`str::encode_utf16`](../../str_methods/str_encode_utf16/README.md) — the outbound direction
 
 [`String::from_utf16` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf16)
+
+## Po polsku
+
+Wejściem są **jednostki kodowe** `u16` — nie bajty i nie znaki — a polszczyzna akurat tę różnicę skutecznie ukrywa: całe nasze „ą ć ę ł ń ó ś ź ż” mieści się w podstawowej płaszczyźnie (BMP), gdzie jedna jednostka to dokładnie jeden znak, więc złudzenie „`u16` = `char`” trzyma się aż do pierwszego emoji. Wtedy pęka: `"hi 👋"` to **5** jednostek, ale **4** znaki, bo `👋` przyjeżdża jako para surogatów (*surrogate pair*), którą ta funkcja skleja z powrotem w jeden `char`. Błędem kończy się wyłącznie **niesparowany** surogat — Windows i JavaScript dopuszczają takie łańcuchy, a Rustowy `String` z definicji nie, więc tekst z tamtych światów bywa po prostu niereprezentowalny; wtedy sięgnij po `from_utf16_lossy`. Jeśli masz surowe bajty zamiast `u16`, kolejność bajtów musi skądś pochodzić — do tego są `from_utf16le` i `from_utf16be`.
+
+**Szukaj po polsku:** kodowanie UTF-16 · para surogatów · jednostka kodowa · `rust String::from_utf16` · `rust unpaired surrogate`

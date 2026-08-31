@@ -25,3 +25,9 @@
 - [The third owned form](../boxed_str/README.md)
 - [STRINGS.md](../../STRINGS.md) — the map this page is a gap in
 - [Strings: links, books and videos](../resources/README.md) — where to read about it in the meantime
+
+## Po polsku
+
+Ta strona jest na razie szkicem, ale jej teza jest już ostra i warto ją zapamiętać: `String` okazuje się za wolny prawie nigdy, a jedynym sensownym pierwszym krokiem jest pomiar — i to pomiar **alokacji**, a nie liczby linijek. Polskie poradniki o wydajności zwykle zaczynają od listy sztuczek; tutaj kolejność jest odwrotna — najpierw licznik alokacji w globalnym alokatorze, potem `with_capacity`, gdy rozmiar znasz z góry, potem rezygnacja z alokowania w ogóle (`write!` do istniejącego bufora, zwrócenie wycinka `&str` zamiast kopii, `Cow` dla gałęzi, która niczego nie zmienia), a dopiero na końcu zewnętrzne crate'y pokroju `smallstr` czy `compact_str` — których ogromna większość programów nigdy nie potrzebuje. Jedna pułapka pomiarowa jest wspólna dla wszystkich języków, ale w Ruście kosztuje wyjątkowo dużo: benchmark uruchomiony bez optymalizacji (domyślny `cargo build`, czyli `-O0`) nie mówi nic sensownego, bo mierzysz kod, którego w wydaniu `--release` po prostu nie ma.
+
+**Szukaj po polsku:** wydajność łańcuchów znaków w Ruście · zliczanie alokacji · `rust String with_capacity` · `rust avoid allocation Cow` · `rust benchmark must be release build`

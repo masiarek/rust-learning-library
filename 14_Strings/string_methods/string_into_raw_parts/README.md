@@ -69,3 +69,9 @@ len 1 capacity 32
 - [`String::into_boxed_str`](../string_into_boxed_str/README.md) — an owned handoff that still frees itself
 
 [`String::into_raw_parts` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.into_raw_parts)
+
+## Po polsku
+
+Ta metoda rozbiera `String` na trzy liczby — surowy wskaźnik (*raw pointer*), długość i pojemność — i, co najważniejsze, **nie uruchamia destruktora**: bufor na stercie dalej istnieje, ale nikt już za niego nie odpowiada, więc wycieknie, dopóki nie oddasz go Rustowi przez `from_raw_parts`. Sensem jej istnienia jest FFI: trzy zwykłe liczby przechodzą przez granicę języków, przez którą `String` przejść nie potrafi. Dwie pułapki warto zapamiętać osobno, bo żadna z nich nie kończy się błędem kompilacji, tylko uszkodzeniem sterty w czasie działania: wszystkie trzy wartości muszą wrócić **dokładnie te same** (Rust zwalnia pamięć, podając alokatorowi jej rozmiar — dlatego przykład wypisuje `len 1 capacity 32`, a nie `1` i `1`), a otrzymany wskaźnik **nie jest zakończony zerem**, więc API w C oczekujące `char *` i tak wymaga `CString`. Jeżeli chciałeś tylko podejrzeć adres, właściwe jest `as_ptr` — ono pożycza i nie przekazuje własności nikomu.
+
+**Szukaj po polsku:** surowy wskaźnik · wyciek pamięci · wywoływanie kodu C z Rusta · `rust String into_raw_parts` · `rust from_raw_parts FFI`

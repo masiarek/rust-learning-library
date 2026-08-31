@@ -62,3 +62,9 @@ true
 - [`str::is_ascii`](../str_is_ascii/README.md) — checking the assumption first
 
 [`str::trim_ascii` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.trim_ascii)
+
+## Po polsku
+
+Wyróżnikiem tej metody nie jest to, co usuwa, tylko **kiedy** wolno jej to zrobić: jest `const fn`, więc `const TRIMMED: &str = RAW.trim_ascii();` kompiluje się bez mrugnięcia okiem, a `trim` w tym samym miejscu nie przejdzie — unikodowa klasyfikacja białych znaków to zaglądanie do tablicy, czego w czasie kompilacji zrobić się nie da. Zdejmuje dokładnie pięć bajtów (spacja, `\t`, `\n`, `\r`, wysuw strony) i idzie po wejściu bajt po bajcie, więc na danych, o których z góry wiadomo, że są ASCII, jest zwyczajnie szybsza. Cenę tej ślepoty widać w wyjściu przykładu: `"\u{a0}hi\u{a0}"` wraca nietknięte, podczas gdy `trim` daje `"hi"` — a że tekst przeklejony z Worda albo ze strony WWW nagminnie niesie U+00A0, reguła wyboru jest prosta: dane maszynowe (literały, protokoły, pliki konfiguracyjne) `trim_ascii`, tekst od człowieka `trim`.
+
+**Szukaj po polsku:** białe znaki ASCII · funkcje const w Ruscie · `rust trim_ascii const fn` · `rust non-breaking space trim`

@@ -25,3 +25,9 @@ A borrow error and a type error look alike on the page and are nothing alike in 
 - [What a warning is asking](../../15_First_Programs/what_a_warning_is_asking/README.md) — the diagnostics that let the build succeed, and why they are still worth reading
 - [What a compiler does before your program runs](../what_a_compiler_does/README.md) — which stage can raise which error
 - [The linker](../the_linker/README.md) — the failure that is not the compiler's, in someone else's words
+
+## Po polsku
+
+Pierwsze pytanie przy czerwonym komunikacie nie brzmi „co on znaczy”, tylko **który etap go wypisał** — `expected one of` pochodzi od parsera, `E0308 mismatched types` od kontroli typów, `E0502 cannot borrow` od borrow checkera, a `undefined symbols` od konsolidatora (*linker*), czyli od programu, który kompilatorem już nie jest. Cztery słowniki, cztery zupełnie różne rodzaje poprawki. Najkosztowniejsza pomyłka to wzięcie błędu pożyczania za błąd typów: błąd typów mówi „kształt się nie zgadza”, a błąd pożyczania — „kształt jest dobry, zły jest moment”, więc odruchowe `.clone()` wycisza komunikat, nie ucząc niczego. Komunikaty rustc są po angielsku i polskiej wersji nie ma, ale zanim cokolwiek wkleisz w wyszukiwarkę, uruchom `rustc --explain E0308` — ten sam błąd z dłuższym opisem i przykładem, lokalnie; i poprawiaj zawsze **pierwszy** błąd z listy, bo jeden brakujący nawias klamrowy potrafi wygenerować kilkanaście kolejnych, które znikną same.
+
+**Szukaj po polsku:** komunikaty błędów kompilatora Rust · błąd pożyczania · `rust --explain E0308` · `rust E0502 cannot borrow` · `rust undefined symbols linker`

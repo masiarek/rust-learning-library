@@ -60,3 +60,9 @@ Some((7, ","))
 - [`String::replace_range`](../../string_methods/string_replace_range/README.md) — the in-place edit this pairs with
 
 [`str::rmatch_indices` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.rmatch_indices)
+
+## Po polsku
+
+Odwrócona jest tu wyłącznie kolejność zwracania, a nie sposób numerowania: pary to nadal `(usize, &str)` z przesunięciem liczonym od początku łańcucha, co widać w wydruku — `[(3, ","), (7, ",")]` do przodu i `[(7, ","), (3, ",")]` do tyłu. Z tego zestawienia wynika jedyna praktyczna reguła tej strony: **edytuj od końca**, bo wtedy żadna zmiana nie unieważnia przesunięć, których jeszcze nie użyłeś — w przykładzie `","` zamienia się na dłuższe `" | "`, więc przy pracy od przodu drugie przesunięcie byłoby już nieaktualne. Przydaje się też skrót `rmatch_indices(...).next()`: to najtańszy sposób na samo ostatnie dopasowanie, bez zbierania reszty do wektora.
+
+**Szukaj po polsku:** edycja tekstu od końca · przesunięcia bajtowe dopasowań · `rust rmatch_indices replace_range` · `rust match_indices offsets`

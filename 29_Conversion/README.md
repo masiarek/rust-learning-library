@@ -33,3 +33,9 @@ Text conversion in both directions has its own section: [parsing out of a string
 ## Where it goes next
 
 Every one of these is a trait with a blanket impl behind it, which is [what a trait is](../12_Traits/README.md) at its most useful. And the reason `try_from` returns something you have to open is [`Option` and `Result`](../17_Option_and_Result/README.md).
+
+## Po polsku
+
+Konwersja typów (*conversion*) rozkłada się w Ruscie na cztery drogi, a wybiera między nimi jedno pytanie: czy konwersja **ma prawo się nie udać**. Nie może — `From`/`Into`, czyli `u64::from(n)`; może — `TryFrom`/`TryInto`, czyli `u8::try_from(n)?`; z tekstu — `FromStr` wywoływany przez `"4".parse::<T>()?`; a `n as u8` to rzutowanie bez żadnego sprawdzenia. Kto przychodzi z C, Javy czy ABAP-a, sięgnie po `as` odruchowo, bo tam rzutowanie *jest* zwykłą drogą konwersji — w Ruscie to wyjątek, który po cichu gubi dane na cztery różne sposoby, podczas gdy pozostałe trzy drogi to cechy (*traits*): rozszerzalne, widoczne w sygnaturze funkcji i możliwe do znalezienia grepem.
+
+**Szukaj po polsku:** konwersja typów w Ruscie · rzutowanie typów · `rust From Into trait` · `rust TryFrom` · `rust as cast truncation`

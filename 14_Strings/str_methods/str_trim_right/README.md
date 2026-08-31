@@ -50,3 +50,9 @@ identical: true
 - [`str::trim_left`](../str_trim_left/README.md) — the other deprecated name
 
 [`str::trim_right` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.trim_right)
+
+## Po polsku
+
+Jeśli przychodzisz od SQL-owego `RTRIM` albo pythonowego `rstrip`, `trim_right` jest nazwą, po którą sięgniesz odruchowo — i właśnie dlatego biblioteka standardowa oznaczyła ją w wersji 1.33 jako przestarzałą (*deprecated*) na rzecz `trim_end`. Powód wart zapamiętania: „prawa strona” to pojęcie ekranu, a nie danych — w piśmie od prawej do lewej (arabskim, hebrajskim) koniec łańcucha znaków wypada wizualnie po lewej, więc `end` nazywa pozycję bajtową i nie kłamie niezależnie od pisma. Działanie obu metod jest identyczne — przykład drukuje `identical: true` — a stara nazwa nadal się kompiluje, tylko z ostrzeżeniem, które `#![allow(deprecated)]` na górze pliku wycisza. W nowym kodzie po prostu zamień `right` na `end`.
+
+**Szukaj po polsku:** obcinanie białych znaków z prawej · metody przestarzałe w Ruscie · `rust trim_right deprecated` · `rust trim_end`

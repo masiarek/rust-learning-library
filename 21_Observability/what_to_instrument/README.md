@@ -23,3 +23,9 @@ Instrumenting what is easy to instrument. The pure function you just wrote takes
 - [A span is not a log line](../spans_not_lines/README.md) — what you are putting on those boundaries
 - [Why observability matters](../why_observability_matters/README.md) — the same argument, before it became a checklist
 - [Sampling](../sampling/README.md) — what happens to all of it on the way out
+
+## Po polsku
+
+Lista jest krótka na tyle, że da się ją zastosować do własnej usługi jeszcze dziś po południu: jeden span korzeniowy na żądanie przychodzące (trasa, metoda, status, czas trwania), jedno dziecko na każde wywołanie wychodzące poza proces (która zależność, pod jaki adres, z czym wróciło) i jedno zdarzenie na każdej ścieżce błędu — niosące **powód**, a nie sam fakt, że coś się nie udało. Wszystko w polach, nie w zdaniach, bo odpytać da się później tylko pola. Ważniejsza od listy „zawsze” jest tu jednak lista **„nigdy”**: hasła, tokeny, klucze, całe ciała żądań, cokolwiek osobowego — a ponieważ `#[instrument]` zapisuje argumenty **domyślnie**, pominięcie trzeba napisać wprost, bo samo się nie zrobi. Na koniec pułapka, w którą wpada się z dobrą wolą: instrumentujemy to, co łatwo zinstrumentować, czyli czystą funkcję napisaną przed chwilą, która nigdy nie będzie powodem dziewięciu sekund — a czas i awarie siedzą w wywołaniu sieciowym, deserializacji, blokadzie i ponowieniu, do których sięgnąć jest trudniej.
+
+**Szukaj po polsku:** co instrumentować w pierwszej kolejności · granica żądania · `tracing instrument skip` · `http server span attributes` · `otel semantic conventions http`

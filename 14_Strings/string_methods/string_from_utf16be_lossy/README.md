@@ -52,3 +52,9 @@ fn main() {
 - [`String::from_utf16_lossy`](../string_from_utf16_lossy/README.md) — when you already have `u16`s
 
 [`String::from_utf16be_lossy` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf16be_lossy)
+
+## Po polsku
+
+Wersja bez `Result`: i niesparowany surogat, i zwisający nieparzysty bajt zamieniają się w `�`, więc `[0x00, 0x68, 0x00]` daje `"h�"` zamiast błędu. Kusi wtedy, żeby uznać obecność `�` za sygnał „coś poszło nie tak” — i przed tym właśnie ta strona ostrzega mocniej niż przed samą stratnością: przy **złej kolejności bajtów** nie pojawi się ani błąd, ani żaden znak zastępczy, tylko inny, pozornie zupełnie czysty tekst (`"栀椀"` zamiast `"hi"`). Brak `�` niczego więc nie dowodzi; kolejność bajtów trzeba znać z formatu, a nie wnioskować z wyniku.
+
+**Szukaj po polsku:** stratne dekodowanie · znak zastępczy · kolejność bajtów big-endian · `rust from_utf16be_lossy` · `rust utf16 wrong endianness silent`

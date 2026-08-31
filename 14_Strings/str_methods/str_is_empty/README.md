@@ -77,3 +77,11 @@ None -> never asked
 - [`String::is_empty`](../../string_methods/string_is_empty/README.md) — the same test on the owned type
 
 [`str::is_empty` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.is_empty)
+
+## Po polsku
+
+W polszczyźnie jedno słowo „pusty” obsługuje dwa pojęcia, które angielski rozdziela na *empty* i *blank* — i dokładnie na tej szczelinie powstaje błąd opisany na tej stronie. `is_empty()` odpowiada wyłącznie na pytanie „zero bajtów?”, więc pole formularza, przez które użytkownik tylko przeskoczył tabulatorem, przychodzi jako `"   "` i jest **niepuste**. Wydruk pokazuje to wprost: dla `"   "` oraz `"\n"` pierwsza kolumna to `false`, a druga `true`. Przy danych wpisywanych przez człowieka pytaj więc o `s.trim().is_empty()`, nie o samo `is_empty()`.
+
+Druga różnica to „puste” kontra „brak” — znajoma każdemu, kto zderzył w SQL-u `NULL` z `''`. Jeżeli wartości może w ogóle nie być, właściwym typem jest `Option<String>`; zwinięcie `None` i `Some("")` w jeden pusty łańcuch znaków bezpowrotnie kasuje informację, czy użytkownik zostawił pole puste, czy nikt go o nic nie zapytał — te trzy przypadki rozstrzyga `match` w przykładzie. Drobiazg na koniec: clippy i tak przepisze `len() == 0` na `is_empty()` (lint `len_zero`), więc od razu pisz tę drugą formę.
+
+**Szukaj po polsku:** pusty łańcuch znaków · walidacja pustego pola formularza · `rust is_empty vs trim is_empty` · `rust clippy len_zero`

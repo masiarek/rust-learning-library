@@ -72,3 +72,9 @@ round trips: false
 - [`str::chars`](../str_chars/README.md) — why the character count can change
 
 [`str::to_uppercase` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.to_uppercase)
+
+## Po polsku
+
+Po polsku żadna litera przy zamianie na wielką nie rośnie — `ą` → `Ą`, `ż` → `Ż`, jeden znak na jeden — i właśnie dlatego tak łatwo wyrobić sobie tu fałszywe przekonanie, że `to_uppercase` zachowuje długość. Wystarczy jedno niemieckie `ß` albo ligatura `ﬁ` wklejona z PDF-u, żeby liczba znaków urosła: `"ß"` to jeden znak, `"SS"` już dwa, a `"straße"` ma 6 znaków wobec 7 w `"STRASSE"` — przy identycznej liczbie bajtów, co myli podwójnie. Praktyczny wniosek jest taki, że zamiana na wielkie litery **nie jest odwracalna**: `"ß".to_uppercase().to_lowercase()` daje `"ss"`, więc schemat „wyświetlam wielkimi, porównuję małymi” po cichu skleja ze sobą dane, które były różne.
+
+**Szukaj po polsku:** wielkie litery a długość łańcucha · liczba znaków a liczba bajtów · `rust to_uppercase ß SS` · `rust uppercase is not reversible`

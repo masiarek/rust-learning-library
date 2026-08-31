@@ -67,3 +67,9 @@ true
 - [`str::from_utf8`](../str_from_utf8/README.md) — re-establishing the promise, checked
 
 [`str::into_boxed_bytes` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.into_boxed_bytes)
+
+## Po polsku
+
+`into_boxed_bytes` nie kopiuje ani jednego bajtu — przejmuje tę samą alokację i zdejmuje z niej jedynie obietnicę, że w środku jest poprawny UTF-8. Przedrostek `into_` mówi tu wszystko: to przeniesienie własności (*move*), a nie pożyczanie jak w `as_bytes`, więc po wywołaniu `Box<str>` już nie istnieje i nie da się go użyć ponownie. Najciekawszy jest wydruk z przykładu: „héllo” to pięć znaków, ale **sześć** bajtów, bo `é` zajmuje dwa — identyczna pułapka czeka na „ą”, „ś” i „ż”, więc polski tekst prawie nigdy nie ma tylu bajtów, ile liter. Droga powrotna nie jest już darmowa: `String::from_utf8` sprawdza bajty i zwraca `Result`, a `std::str::from_boxed_utf8_unchecked` jest `unsafe`, bo obietnicę trzeba odtworzyć na słowo.
+
+**Szukaj po polsku:** przeniesienie własności · bajty a znaki UTF-8 · `rust Box<str> into_boxed_bytes` · `rust from_boxed_utf8_unchecked`

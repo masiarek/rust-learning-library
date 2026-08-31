@@ -24,3 +24,11 @@ The label that seemed harmless. `customer_id`, a URL with an id in the path, an 
 - [The three pillars](../the_three_pillars/README.md) — where metrics sit next to the other two signals
 - [Sampling](../sampling/README.md) — the same budget question, asked of traces
 - [Where the data goes](../where_the_data_goes/README.md) — who is holding all these series
+
+## Po polsku
+
+Trzy przyrządy i po jednym pytaniu na każdy: **licznik** (*counter*) tylko rośnie — żądania, błędy; **gauge** (po polsku bywa „miernikiem”) chodzi w obie strony — długość kolejki, liczba połączeń; **histogram** trzyma rozkład. Opóźnienie musi być histogramem, bo średni czas odpowiedzi to pojedyncza liczba najzdolniejsza ze wszystkich do ukrycia awarii. Kardynalność (*cardinality*) brzmi groźnie, a jest zwyczajnym iloczynem — najkrócej po polsku: **iloczyn kartezjański** zbiorów wartości etykiet, do policzenia długopisem przed wdrożeniem. `method` (5) × `status` (10) × `route` (40) to 2000 serii. Dorzuć `user_id` i mnożysz te 2000 przez liczbę wszystkich użytkowników, jacy kiedykolwiek do ciebie zapukali — a raz założone serie zostają na zawsze, niezależnie od tego, czy ktokolwiek na nie patrzy.
+
+Psuje się przy tym nie twoja usługa, tylko magazyn metryk — który albo się przewraca, albo się nie przewraca i przysyła fakturę. Dlatego akurat ten błąd wykrywa zwykle ktoś spoza zespołu. Podział pracy, który go rozwiązuje, warto zapamiętać jako jedno zdanie: szczegóły o wysokiej kardynalności należą do **spanów** (jeden na zdarzenie, i jeszcze próbkowane), a metryki są per seria i wieczne — `customer_id` na spanie kosztuje jeden span, na metryce kosztuje serię na zawsze. I ostrzeżenie, które w tej bibliotece brzmi szczególnie dotkliwie: **tu nie ma kompilatora.** Nazwa metryki to łańcuch znaków, konwencje `_total` i `_seconds` to umowa między ludźmi, a zmiana nazwy rozwala po cichu każdy pulpit i każdy alert na niej zbudowany — `rustc` nie powie ani słowa, a commit dodający jedną etykietę ma jedną linię i przechodzi przegląd bez uwag.
+
+**Szukaj po polsku:** kardynalność metryk · licznik, gauge, histogram · `prometheus cardinality explosion` · `rust metrics crate` · `histogram vs average latency`

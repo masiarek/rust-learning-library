@@ -59,3 +59,9 @@ fn main() {
 - [`str::lines`](../str_lines/README.md) — when the whole job is line endings
 
 [`str::trim_ascii_end` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.trim_ascii_end)
+
+## Po polsku
+
+Praktyczny powód, dla którego ta metoda przydaje się osobno, to windowsowe zakończenia wierszy: `\r` i `\n` należą do tego samego zestawu pięciu bajtów, więc `"ok\r\n".trim_ascii_end()` zdejmuje oba za jednym razem, podczas gdy `strip_suffix('\n')` zostawiłoby osierocone `\r`. Początek zostaje przy tym nietknięty — `"  GET /index.html \r\n"` daje `"  GET /index.html"`, ze spacjami z lewej strony na miejscu; jeśli mają zniknąć oba końce, potrzebne jest `trim_ascii`. Metoda jest `const`, więc literał wolno przyciąć już w czasie kompilacji, i to jest właściwy wybór do tekstu protokołów; do wiersza napisanego przez człowieka lepsze będzie `trim_end`, które rozumie też unikodowe białe znaki.
+
+**Szukaj po polsku:** zakończenie wiersza CRLF · obcinanie z prawej strony · `rust trim_ascii_end` · `rust remove trailing newline`

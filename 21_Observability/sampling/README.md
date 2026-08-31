@@ -24,3 +24,11 @@ Sampling configured per service, by whoever deployed each one. Every service is 
 - [Carrying the trace across a boundary](../context_propagation/README.md) — the flag the decision travels in
 - [Where the data goes](../where_the_data_goes/README.md) — where tail sampling actually runs
 - [Metrics, and the label that multiplies](../metrics_and_cardinality/README.md) — the signal that survives the cut
+
+## Po polsku
+
+Słowo **próbkowanie** (*sampling*) ciągnie za sobą po polsku dwie intuicje i obie trzeba tu poprawić. Z przetwarzania sygnałów niesie regularność — co n-ta próbka, stała częstotliwość. Ze statystyki niesie **reprezentatywność** — próba ma być nieobciążona. W śladach chodzi dokładnie na odwrót: sensowna polityka jest **celowo obciążona**, brzmi „zachowaj wszystko, co się wywróciło, próbkuj to, co się udało”, i jest zupełnie innym zdaniem niż „próbkujemy na poziomie 1%”. Przy rzadkich błędach 1% śladów to bowiem nie 1% błędów, tylko najczęściej zero.
+
+Reszta sprowadza się do pytania, **kto decyduje i kiedy**. Przy *head sampling* decyzja zapada w korzeniu, ląduje w bajcie flag nagłówka `traceparent` i propaguje się w dół — tanio i przewidywalnie, ale wolne żądanie wylatuje do kosza, zanim ktokolwiek zdąży zauważyć, że było wolne. Przy *tail sampling* collector buforuje cały ślad i zatrzymuje go, jeśli poleciał błąd albo przekroczony został próg czasu; to odpowiedź na pytanie, którego *head sampling* zadać nie umie, kosztem pamięci i jednego twardego warunku: **wszystkie spany jednego śladu muszą trafić do tej samej instancji collectora**. Stąd pułapka, o którą chodzi na tej stronie — próbkowanie konfigurowane osobno w każdej usłudze, przez tego, kto akurat ją wdrażał. Każde ustawienie z osobna jest rozsądne, ślady mają dziury, a w interfejsie nic nie odróżnia dziury od przeskoku, którego nigdy nie było. Metryk się przy tym nie próbkuje i właśnie dlatego przy 1% trend przeżywa, choć pojedynczy dowód ginie.
+
+**Szukaj po polsku:** próbkowanie śladów · próba obciążona · head-based i tail-based · `tail sampling collector` · `otel traceidratio sampler`

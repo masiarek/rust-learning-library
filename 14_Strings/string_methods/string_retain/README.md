@@ -72,3 +72,9 @@ fn main() {
 - [`String::clear`](../string_clear/README.md) — removing everything
 
 [`String::retain` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.retain)
+
+## Po polsku
+
+Nazwa mówi, w którą stronę działa predykat: `retain` **zachowuje** znaki, dla których domknięcie (*closure*) zwróci `true`, więc filtr wyrzucający samogłoski trzeba zapisać z przeczeniem — `|c| !"aeiou".contains(c)`. Dla polskiego tekstu najważniejsze jest to, że metoda ogląda **znaki**, a nie bajty, więc predykaty z rodziny `is_alphabetic` zostawią `ó`, `ż` i `ł` równie spokojnie jak `é` oraz `ö` w przykładzie (`"héllowörld"`); po `is_ascii_alphabetic` wszystkie polskie litery z ogonkami zniknęłyby bez słowa ostrzeżenia. Przebieg jest jeden, liniowy i w miejscu — ocalałe znaki ściskają się ku początkowi, a pojemność zostaje nienaruszona (`"abc" capacity 32`) — i tym `retain` bije pętlę po `remove`, kwadratową i wymagającą przeliczania przesunięć po każdym usunięciu. Predykat jest typu `FnMut`, więc wolno mu nieść stan: w przykładzie usuwa w ten sposób duplikaty (`"aabbccdd"` na `"abcd"`), a gdy oryginał ma zostać nietknięty, alternatywą jest alokujące `chars().filter(..).collect::<String>()`.
+
+**Szukaj po polsku:** filtrowanie znaków w miejscu · predykat zachowujący znaki · polskie znaki a funkcje ASCII · `rust String retain` · `rust filter chars collect String`

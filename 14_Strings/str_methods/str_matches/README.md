@@ -69,3 +69,9 @@ fn main() {
 - [`str::contains`](../str_contains/README.md) — whether there is at least one
 
 [`str::matches` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.matches)
+
+## Po polsku
+
+`matches` zwraca same trafienia, a `split` — kawałki między nimi; stąd arytmetyka z wydruku: trzy dopasowania „in”, ale cztery fragmenty po podziale, i to właśnie ta różnica `n` kontra `n+1` stoi za każdym zaskakującym pustym łańcuchem znaków w wyniku `split`. Dopasowania nie nachodzą na siebie i są szukane od lewej, więc `"aaaa".matches("aa")` daje 2, a nie 3 — o tym trzeba pamiętać, licząc wystąpienia przez `.count()`. Jeżeli szukasz w bibliotece standardowej wyrażeń regularnych, to ich tam nie ma: najbliższym odpowiednikiem Pythonowego `re.findall` jest `matches` z domknięciem (*closure*) albo ze zbiorem znaków `&[char]`, gdzie każdy element mówi, **który** znak pasował — jak w linii zwracającej `["e", "a", "i", "i", "a", "i"]`. Do prawdziwych wzorców trzeba sięgnąć po osobny crate `regex`.
+
+**Szukaj po polsku:** zliczanie wystąpień podłańcucha · wyrażenia regularne w Ruście · `rust str matches count occurrences` · `rust regex crate`

@@ -69,3 +69,9 @@ fn main() {
 - [`String::as_mut_vec`](../string_as_mut_vec/README.md) — the unsafe, resizable view
 
 [`String::as_mut_str` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.as_mut_str)
+
+## Po polsku
+
+`&mut str` pozwala zmieniać bajty, ale nie ich liczbę — i to jedno ograniczenie tłumaczy całą resztę strony: zostają `make_ascii_uppercase`, `make_ascii_lowercase`, `split_at_mut` i `get_mut`, a wszystko, co zmienia długość, musi być metodą `String`. Dla polskiego tekstu człon „ascii” w nazwie jest ostrzeżeniem, a nie ozdobnikiem: `make_ascii_uppercase` na `"żółw"` podniesie samo `w`, a `ż`, `ó` i `ł` zostawi nietknięte — prawdziwe wersaliki daje `to_uppercase()`, które zwraca **nowy** `String`, bo zmiana wielkości liter potrafi zmienić liczbę bajtów (niemieckie `ß` przechodzi w `SS`) i przez `&mut str` byłaby niewykonalna. Samego `as_mut_str()` zwykle nie trzeba pisać, bo dostarcza go automatyczna dereferencja; jawne wywołanie przydaje się przy typach generycznych, przy podpowiadaniu typu oraz wtedy, gdy edytujesz fragment — jak `t.as_mut_str()[..5].make_ascii_uppercase()`, po którym w przykładzie zostaje `"HELLO world"`.
+
+**Szukaj po polsku:** zmiana wielkości liter w miejscu · polskie znaki a wielkie litery · `rust make_ascii_uppercase` · `rust &mut str length preserving`

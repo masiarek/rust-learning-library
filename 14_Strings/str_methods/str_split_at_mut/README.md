@@ -63,3 +63,9 @@ true
 - [`String::as_mut_str`](../../string_methods/string_as_mut_str/README.md) — where the `&mut str` comes from
 
 [`str::split_at_mut` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split_at_mut)
+
+## Po polsku
+
+Zwykłe pożyczanie (*borrowing*) nie pozwala uzyskać dwóch `&mut` do jednego tekstu — reguła „wielu czytających albo jeden piszący” nie zna wyjątku „ale te zakresy się nie nakładają”, bo borrow checker nie potrafi tego sam udowodnić. `split_at_mut` jest właśnie tą furtką: zjada jedną referencję mutowalną i oddaje dwie, które z samej konstrukcji pokrywają rozłączne bajty; panikuje przy tym w tych samych dwóch sytuacjach co `split_at` — offset poza zakresem albo w środku znaku. Warto od razu wiedzieć, co takimi połówkami da się zrobić: `&mut str` nie może zmienić długości, więc w praktyce zostają edycje ASCII w miejscu, a `make_ascii_uppercase` podnosi wyłącznie litery `a`–`z`, przez co „żółw” zamienia się w „żółW”, nie w „ŻÓŁW”. Prawdziwa zmiana wielkości polskich liter to `to_uppercase`, które zwraca nowy `String` — wszystko, co może zmienić długość tekstu, musi iść przez `String`, a nie przez `&mut str`.
+
+**Szukaj po polsku:** dwie referencje mutowalne naraz · rozłączne wycinki tekstu · `rust split_at_mut two mutable borrows` · `rust make_ascii_uppercase non-ascii`

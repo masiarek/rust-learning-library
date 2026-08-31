@@ -29,3 +29,13 @@ Read them in that order: the declaration, then the classification the compiler c
 ## Not yet written
 
 The gaps, listed rather than stubbed so they are visible: **closures that return closures** (and the `impl Fn` / `Box<dyn Fn>` decision that forces), **capturing in a struct field** — the lifetime parameter that arrives with it, and why `Box<dyn Fn>` is the usual escape — and **closures and `async`**, where the captured environment outlives the call by construction.
+
+## Po polsku
+
+Domknięcie (*closure*) to funkcja, która widzi zmienne z miejsca, w którym ją napisano. Samo słowo bywa mylące, bo w polskiej matematyce „domknięcie” znaczy coś zupełnie innego (domknięcie zbioru), więc w tekstach programistycznych spotkasz też „funkcję anonimową” albo po prostu *lambdę*. W kodzie i w komunikatach `rustc` jest zawsze `closure` — i to tego słowa szuka się w wyszukiwarce.
+
+Kto przychodzi z Pythona albo JavaScriptu, ma już gotową intuicję domknięcia — i właśnie ona jest tutaj pułapką. Tam przechwycone zmienne żyją tak długo, jak długo żyje domknięcie, bo pilnuje tego odśmiecacz (*garbage collector*). W Ruscie odśmiecacza nie ma, więc kompilator generuje dla każdego domknięcia osobną **strukturę** przechowującą dokładnie to, co zostało przechwycone — często o rozmiarze **zera bajtów** — a wywołanie jest zwykłym, bezpośrednim wywołaniem, bez żadnej alokacji na stercie. Stąd biorą się trzy rzeczy, których w tamtych językach nie ma: słowo kluczowe `move`, trzy cechy (*traits*) `Fn` / `FnMut` / `FnOnce` oraz pytanie, ile razy wolno domknięcie wywołać.
+
+Kolejność lekcji jest celowa: najpierw składnia z dwiema pionowymi kreskami i samo przechwytywanie, potem klasyfikacja, na którą patrzy kompilator, potem `move` — któremu tę klasyfikację się przypisuje, choć jej nie ustala — a na końcu goły wskaźnik na funkcję (`fn`), czyli to, z czym domknięcie się mierzy. Praktyczna wskazówka na start: **większość błędów z domknięciami to błędy własności w przebraniu**. Jeśli kompilator marudzi o przeniesieniu własności albo o pożyczaniu wewnątrz `|…|`, wracaj do rozdziału o własności, a nie szukaj czegoś specyficznego dla domknięć.
+
+**Szukaj po polsku:** domknięcia w Ruscie · funkcje anonimowe · przechwytywanie zmiennych · `rust closure captures environment` · `rust Fn FnMut FnOnce`

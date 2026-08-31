@@ -75,3 +75,11 @@ owned    "h�i" -- something was replaced
 - [`str::from_utf8`](../../str_methods/str_from_utf8/README.md) — the borrowing, checked version
 
 [`String::from_utf8_lossy` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf8_lossy)
+
+## Po polsku
+
+Ta funkcja nie może się nie udać — i to jest zarazem powód, żeby jej używać, i powód, żeby jej nie używać. Do wyświetlania, logowania i ratowania tego, co się da: jak najbardziej. Wszędzie tam, gdzie bajty mają przetrwać podróż w obie strony: nie, bo podstawienie jest stratne nie tylko z nazwy — `[104, 255, 105]` wychodzi jako `[104, 239, 191, 189, 105]` i bajtu `0xFF` już nie odzyskasz.
+
+Wynikiem jest `Cow<'_, str>` i to nie jest wyłącznie szczegół implementacyjny: `Borrowed` znaczy „wejście było poprawne, nic nie zaalokowano”, `Owned` — „coś podmieniono”. Sprawdzenie wariantu jest więc darmowym testem czystości danych, tańszym niż drugie przejście przez `str::from_utf8`. Uważaj natomiast na liczenie znaków `�`: Unicode zaleca jeden znak zastępczy na **maksymalny niepoprawny podciąg**, więc trzy przypadkowe bajty `FF FE FD` dają trzy znaki, ale `E2 82` — ucięty początek sekwencji trzybajtowej — daje jeden. Liczba `�` nie jest liczbą zepsutych bajtów.
+
+**Szukaj po polsku:** stratne dekodowanie · Cow w Ruscie · znak zastępczy U+FFFD · `rust from_utf8_lossy Cow` · `rust maximal subpart replacement character`

@@ -71,3 +71,9 @@ false true true
 - [`str::rfind`](../str_rfind/README.md) — where the last occurrence is
 
 [`str::ends_with` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.ends_with)
+
+## Po polsku
+
+Szukanie od tyłu zostawia ślad w sygnaturze: `where … P::Searcher<'a>: ReverseSearcher<'a>` to dodatkowe ograniczenie, którego przy `starts_with` nie ma, a kompilator upomni się o nie dopiero wtedy, gdy sam napiszesz funkcję generyczną po `P: Pattern` — w zwykłym użyciu wszystkie cztery kształty wzorca je spełniają. Dla kogoś, kto ostrożnie podchodzi do operacji bajtowych na polskim tekście, jest tu wiadomość uspokajająca: `ends_with` nie jest w stanie rozciąć znaku, bo UTF-8 jest samosynchronizujący i bajt kontynuacji nigdy nie wygląda jak bajt początkowy, więc `"żółw".ends_with("łw")` po prostu działa. Prawdziwa pułapka leży gdzie indziej i strona pokazuje ją liczbami: to zwykłe porównanie bajtów, więc `"README.RS".ends_with(".rs")` daje `false`, a samo `".rs".ends_with(".rs")` — `true`. Do rozpoznawania rozszerzeń plików służy `Path::extension`, a gdy końcówka i tak ma zniknąć, `strip_suffix` sprawdza i usuwa za jednym razem.
+
+**Szukaj po polsku:** sprawdzanie końcówki łańcucha · rozszerzenie pliku w Ruscie · `rust str ends_with` · `rust strip_suffix` · `rust Path extension`

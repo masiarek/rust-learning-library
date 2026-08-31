@@ -37,3 +37,13 @@ And two pages are about what happens when a pattern is subtly wrong rather than 
 ## Where it goes next
 
 Patterns pay off most on a type with a fixed set of shapes, which is [enums](../13_Enums/README.md) — and the two enums every Rust program already uses are [`Option` and `Result`](../17_Option_and_Result/README.md).
+
+## Po polsku
+
+Polska nazwa — **dopasowanie wzorców** (*pattern matching*) — sugeruje porównywanie i to jest pierwsza rzecz do przestawienia. Wzorzec niczego nie porównuje: opisuje **kształt**, a przy okazji sprawdzania rozbiera wartość na części i wiąże je pod nazwami. Dlatego znak `=` w `let Some(n) = …` nie jest przypisaniem, tylko pytaniem „czy ta wartość ma taki kształt?”, a `Some(n)` po lewej stronie nie jest wywołaniem funkcji, mimo że wygląda identycznie jak wywołanie o linijkę wyżej. Kto czyta wzorzec jak wyrażenie, potknie się na każdej stronie tej sekcji.
+
+Druga rzecz to układ samej sekcji, bo różni się od tego, do czego przyzwyczajają kursy. Materiały — polskie i nie tylko — uczą wzorców sześć razy: osobno przy `match`u, osobno przy `if let`, osobno przy `while let`, osobno przy `let … else`, a o tym, że zwykły `let` i **parametr funkcji** też są wzorcami, zwykle nie mówią wcale. To jedna funkcja języka w sześciu składniach, a różni je wyłącznie to, co się dzieje, **gdy kształt nie pasuje**: `match` żąda pokrycia wszystkich przypadków, `if let` i `while let` po prostu nic nie robią, `let … else` musi przerwać przepływ sterowania, a zwykłemu `let` nie wolno nie pasować. Kto rozumie `Some(n) => …`, zna już pozostałe pięć zapisów — i to jest cała teza tej sekcji.
+
+Na koniec uwaga nawigacyjna, bo rozdział jest celowo niekompletny: strony w tabelce powyżej są na razie szkicami (mają wyznaczone granice i opisaną pułapkę, ale nie mają jeszcze uruchamialnego przykładu), a trzy najczęściej używane kawałki tematu mieszkają w ogóle poza tą sekcją — `if let`, `while let` i sam `match` opisane są od strony `Option`, bo tam spotyka się je pierwszego dnia. Jedną rzecz warto jednak wiedzieć, zanim przeczyta się cokolwiek innego: nazwa wpisana w ramię małą literą nie jest porównaniem z wariantem, tylko **nowym wiązaniem**, które pasuje do wszystkiego — i kompilator nie powie o tym prawie nic.
+
+**Szukaj po polsku:** dopasowanie wzorców · destrukturyzacja · wiązanie we wzorcu · `rust all the places patterns can be used` · `rust refutable irrefutable patterns`

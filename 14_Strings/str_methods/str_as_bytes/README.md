@@ -70,3 +70,11 @@ byte 1 = 195, char 1 = 'é'
 - [`String::as_bytes`](../../string_methods/string_as_bytes/README.md) — the same method on the owned type
 
 [`str::as_bytes` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.as_bytes)
+
+## Po polsku
+
+`as_bytes` niczego nie konwertuje i nic nie kosztuje: `&str` **jest** `&[u8]` plus obietnica, że te bajty to poprawny UTF-8, a ta metoda oddaje sam wycinek i obietnicę porzuca — dlatego działa w kontekście `const`. Droga powrotna kosztuje już sprawdzenie, stąd osobne `from_utf8`. Pułapka jest ta, która przy polskim tekście wraca zawsze: wynik to bajty, a nie znaki. Widać to na przykładzie ze strony — `"hé!"` ma cztery bajty i trzy znaki, a `as_bytes()[1]` to `195`, czyli pierwsza połowa `é`; z `"żółw"` wyjdzie siedem bajtów na cztery litery i żaden pojedynczy element nie jest literą.
+
+Sięgaj po `as_bytes`, kiedy zadanie naprawdę dotyczy bajtów — zapis do gniazda, haszowanie, porównanie z literałem `b"GET"`, skan po czystym ASCII — a nie kiedy chcesz „wziąć i-ty znak”; do tego są `chars()` i `char_indices()`. Bajty są pożyczone, więc łańcuch musi je przeżyć; gdy potrzebny jest własny `Vec<u8>`, użyj `String::into_bytes`, które też jest darmowe, bo to ta sama alokacja, tylko inaczej opisana.
+
+**Szukaj po polsku:** bajty a znaki w UTF-8 · wycinek bajtów · `rust str as_bytes` · `rust str is utf-8 bytes` · `rust from_utf8`

@@ -75,3 +75,9 @@ Some(3)
 - [`str::contains`](../str_contains/README.md) — when you only need whether, not where
 
 [`str::find` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.find)
+
+## Po polsku
+
+Od `find` z Pythona — czy `indexOf` z Javy — różnią tę metodę dwie rzeczy. Po pierwsze zwraca `Option<usize>`, a nie `-1`: nie ma wartownika, o którego sprawdzeniu dałoby się zapomnieć, bo system typów nie wypuści przesunięcia, dopóki nie obsłużysz przypadku „nie znaleziono”. Po drugie liczba w środku to przesunięcie **w bajtach**, więc na polskim tekście nie zgadza się z pozycją znaku — `"żółw=x".find('=')` da `Some(7)`, a nie `Some(4)`, dokładnie tak jak `"héllo=x"` z przykładu powyżej daje `Some(6)`. To przesunięcie zawsze wypada na granicy znaku, więc wolno przy nim ciąć, ale `&s[i + 1..]` jest poprawne wyłącznie wtedy, gdy wzorzec ma jeden bajt; koniec dopasowania to `i + pat.len()`, a najbezpieczniej niczego nie liczyć i sięgnąć po `split_once`.
+
+**Szukaj po polsku:** wyszukiwanie w łańcuchu znaków · przesunięcie bajtowe · `rust str find Option` · `rust split_once`

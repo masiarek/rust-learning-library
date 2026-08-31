@@ -75,3 +75,9 @@ capacity unchanged through the loop: true
 - [`String::capacity`](../string_capacity/README.md) — what this changes
 
 [`String::reserve` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.reserve)
+
+## Po polsku
+
+Argument tej metody to **zapas ponad obecną długość**, a nie docelowa pojemność: `s.reserve(10)` gwarantuje `capacity() >= len() + 10`, więc dla pięcioliterowego `"hello"` wychodzi `capacity 15`, a nie 10. Odczytanie tego jako „ustaw pojemność na 10” jest najczęstszym nieporozumieniem i rezerwuje po cichu za mało — nic się nie wysypie, bufor po prostu dorośnie później sam. Wolno jej też przydzielić więcej, niż poproszono (w przykładzie `reserve 8` tam, gdzie starczyłoby 7), i jest to zamierzone: ta sama polityka zamortyzowanego wzrostu co przy dokładaniu tekstu sprawia, że pętla „zarezerwuj, potem dopisuj” nie realokuje w każdym obrocie — a gdy nadmiaru nie chcesz, od tego jest `reserve_exact`. Na koniec rzecz, o której łatwo zapomnieć: przy braku pamięci `reserve` **przerywa proces** (*abort*), zamiast panikować, więc jeśli rozmiar pochodzi z niezaufanego wejścia, właściwe jest `try_reserve` zwracające `Result`.
+
+**Szukaj po polsku:** rezerwowanie pojemności · zapas ponad długość · zamortyzowany wzrost bufora · `rust String reserve capacity` · `rust try_reserve allocation failure`

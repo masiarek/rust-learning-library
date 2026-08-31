@@ -70,3 +70,9 @@ None
 - [`str::trim_start`](../str_trim_start/README.md) — whitespace instead of a pattern
 
 [`str::trim_start_matches` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.trim_start_matches)
+
+## Po polsku
+
+Powtarzalność jest tu całą treścią metody: `trim_start_matches` zdejmuje wzorzec z przodu tyle razy, ile razy on tam stoi, więc `"../../src"` daje `"src"`, a nie `"../src"` — jeśli chodziło o usunięcie dokładnie jednego `../`, to zadanie dla `strip_prefix`. W odróżnieniu od `trim_matches` przyjmuje wieloznakowy `&str`, bo szuka wyłącznie w przód i nie potrzebuje wyszukiwania wstecz. Zawsze zwraca `&str`, więc „nie było czego usuwać” i „usunąłem trzy wystąpienia” wyglądają w miejscu wywołania tak samo — widać to w przykładzie, gdzie `"src".trim_start_matches("../")` milczy, a `"src".strip_prefix("../")` mówi `None`. Klasyczne zastosowanie, czyli zdejmowanie wiodących zer z numerów kont czy kodów, ma też klasyczną pułapkę: `"0"` i `"000"` dają **pusty** łańcuch znaków, a nie `"0"`, więc przed konwersją na liczbę ten przypadek trzeba obsłużyć osobno.
+
+**Szukaj po polsku:** usuwanie wiodących zer · zdejmowanie przedrostka łańcucha · `rust trim_start_matches vs strip_prefix` · `rust trim leading zeros`

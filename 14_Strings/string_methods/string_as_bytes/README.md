@@ -66,3 +66,9 @@ true
 - [`str::bytes`](../../str_methods/str_bytes/README.md) — the same bytes as an iterator
 
 [`String::as_bytes` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.as_bytes)
+
+## Po polsku
+
+Podglądanie bajtów nic nie kosztuje: `as_bytes` zwraca `&[u8]` wskazujący prosto w bufor `String` — bez kopiowania i bez alokacji, a że wariant na `String` jest `const`, wolno go wywołać także w kontekście stałej. Zwrócony wycinek jest **pożyczony**, więc dopóki żyje, łańcucha znaków nie da się zmienić; gdy potrzebny jest własny `Vec<u8>`, `into_bytes` oddaje ten sam bufor również bez kopii, tyle że konsumując `String`. Najważniejsze jest tu nie pomylić poziomów: w wyniku przykładu `"héllo"` to sześć bajtów i pięć znaków, a bajty `195` i `169` to dwie połówki jednego `é` — polskie `ą`, `ę` czy `ł` zachowują się identycznie, więc indeksowanie wyniku `as_bytes()` daje bajty, nigdy znaki.
+
+**Szukaj po polsku:** bajty łańcucha znaków · UTF-8 a indeksowanie znaków · `rust String as_bytes vs into_bytes` · `rust get &[u8] from String`

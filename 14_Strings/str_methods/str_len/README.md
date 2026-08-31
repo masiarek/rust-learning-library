@@ -72,3 +72,11 @@ const len = 5
 - [`str::is_char_boundary`](../str_is_char_boundary/README.md) — whether a byte offset is a legal slice endpoint
 
 [`str::len` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.len)
+
+## Po polsku
+
+`len()` liczy **bajty**, nie litery, a dla polskiego tekstu obie liczby rozjeżdżają się natychmiast: `"Łódź".len()` daje 7, podczas gdy `"Łódź".chars().count()` daje 4, bo `Ł`, `ó` i `ź` zajmują po dwa bajty. Jeśli masz za sobą czasy ISO-8859-2, CP1250 czy Mazovii, gdzie każda polska litera mieściła się w jednym bajcie, to właśnie z tym przyzwyczajeniem trzeba się tu rozstać. Sam odczyt nic nie kosztuje — `len` czyta gotowe pole długości, które każdy `&str` ze sobą nosi, i nigdy nie zagląda w treść.
+
+Metody „ile znaków” celowo nie ma, bo uczciwe odpowiedzi są trzy: bajty (`len`), skalary Unicode (`chars().count()`, przechodzące cały łańcuch, więc O(n)) i to, co czytelnik nazwałby literą. Praktyczny wniosek jest jeden: przycięcie w rodzaju `&s[..10]` odmierza dziesięć **bajtów** i przy polskim tekście chętnie trafi w środek znaku, co kończy się paniką. Indeks do cięcia bierz z `char_indices` albo z `find`, ewentualnie napraw go przez `floor_char_boundary`.
+
+**Szukaj po polsku:** długość łańcucha znaków w bajtach · liczba znaków a liczba bajtów · `rust str len vs chars count` · `rust string length utf-8`

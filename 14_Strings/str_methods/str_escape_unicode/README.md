@@ -64,3 +64,9 @@ unicode \u{61}\u{a}\u{e9}
 - [`str::chars`](../str_chars/README.md) — the code points themselves
 
 [`str::escape_unicode` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.escape_unicode)
+
+## Po polsku
+
+Tutaj nie ma ani wyjątków, ani czytelności: każdy znak, łącznie ze zwykłym `a`, wychodzi jako `\u{…}`. Ta całkowita jednolitość jest właśnie zaletą — wyjście ma jeden kształt na znak, więc łatwo je sparsować z powrotem i żaden bajt oryginału nie zostanie wzięty za składnię. Po `escape_unicode` sięga się wtedy, gdy tematem jest **samo kodowanie**, i dla polskiego tekstu jest to narzędzie diagnostyczne pierwszego wyboru: `"ó"` bywa jednym znakiem `\u{f3}`, a bywa dwoma — `\u{6f}\u{301}`, czyli `o` plus łączący akut — przy czym na ekranie wyglądają identycznie, a `==` zwraca `false`, dokładnie jak `é` w przykładzie powyżej. Tak potrafią wyglądać nazwy plików przeniesione z macOS-a albo teksty sklejone z dwóch źródeł; różnicę widać tu natychmiast, a do sensownego porównywania takich łańcuchów potrzebna jest normalizacja Unicode, której biblioteka standardowa nie ma — daje ją crate `unicode-normalization`.
+
+**Szukaj po polsku:** normalizacja Unicode · znaki łączące · `rust escape_unicode` · `rust unicode-normalization NFC`

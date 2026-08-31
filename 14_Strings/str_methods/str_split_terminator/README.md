@@ -71,3 +71,9 @@ split 4  terminator 3  lines 3
 - [`str::trim_end_matches`](../str_trim_end_matches/README.md) — removing the terminator before splitting
 
 [`str::split_terminator` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split_terminator)
+
+## Po polsku
+
+Nazwa jest tu całą definicją: `split_terminator` traktuje wzorzec jako znak **kończący** element, a nie rozdzielający elementy, dlatego `"a,b,"` daje `["a", "b"]` zamiast `["a", "b", ""]`. Zysk jest bardzo praktyczny — plik zakończony znakiem nowego wiersza, czyli zwykły plik w konwencji POSIX, przestaje mieć o jeden „wiersz” za dużo; w przykładzie widać to jako `split 4` kontra `terminator 3` przy trzech liniach tekstu. Znika wyłącznie pusty kawałek z samego końca, bo puste na początku i w środku niosą informację: `",a,b"` to dalej `["", "a", "b"]`, a `"a,,b"` to `["a", "", "b"]` — w danych kolumnowych taka dziura w środku to po prostu pusta komórka. Dwa skrajne przypadki zapamiętaj osobno: `","` daje `[""]`, a pusty tekst nie daje nic (`[]`), choć `split` zwróciłby w tym miejscu `[""]`; do tekstu dzielonego na wiersze i tak zwykle lepsze jest `lines`, które dokłada obsługę `\r\n`.
+
+**Szukaj po polsku:** znak kończący a znak rozdzielający · plik zakończony nową linią liczenie wierszy · `rust split_terminator vs split` · `rust trailing empty string split`

@@ -74,3 +74,11 @@ n=8: floor 8 <= n, ceil 8 >= n
 - [`String::truncate`](../../string_methods/string_truncate/README.md) — the in-place version, which panics on a bad offset
 
 [`str::floor_char_boundary` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.floor_char_boundary)
+
+## Po polsku
+
+Ta metoda odpowiada na pytanie, które przy polskim tekście wraca bez przerwy: **jak przyciąć łańcuch znaków do limitu bajtów, nie rozcinając znaku**. Limit bajtowy jest zupełnie realny — kolumna w bazie, pole protokołu, ograniczenie w API — a naiwne `&s[..n]` panikuje dokładnie wtedy, gdy *n*-ty bajt wypada w środku litery, czyli w polskim tekście bardzo często, bo każda z liter `ą ć ę ł ń ó ś ź ż` zajmuje dwa bajty. `floor_char_boundary` cofa przesunięcie do najbliższej legalnej granicy, więc wynik **zawsze mieści się w budżecie** — widać to w tabeli powyżej: budżet 2 daje cięcie na 1, bo bajt 2 stoi w środku `é`. Przesunięcie za końcem łańcucha jest przycinane do `len()`, więc ta metoda nie panikuje nigdy.
+
+Bliźniacze `ceil_char_boundary` zaokrągla w drugą stronę i potrafi przekroczyć budżet nawet o trzy bajty, więc przy twardym limicie bierze się `floor`, a `ceil` tylko wtedy, gdy limit wolno lekko przekroczyć. I rozróżnienie najważniejsze: budżet jest **bajtowy**, a nie znakowy — przycięcie do dziesięciu znaków to zupełnie inne zadanie i robi się je przez `chars().take(10)` albo `char_indices()`. Metoda jest przy tym świeża (stabilna od 1.91.0), więc starsze polskie materiały jej nie znają i pokazują ręczną pętlę `while !s.is_char_boundary(n) { n -= 1 }` — daje ten sam wynik, tylko dłuższą drogą.
+
+**Szukaj po polsku:** przycinanie łańcucha do bajtów · granica znaku UTF-8 · `rust floor_char_boundary` · `rust byte index is not a char boundary` · `rust truncate string bytes`

@@ -52,3 +52,13 @@ Red marks the four that can panic. Notice where they land: `unwrap` and `expect`
 - [Ownership](../18_Ownership/README.md) — why `unwrap` on a `String` consumes it and on an `i32` does not
 
 [OPTION.md](../OPTION.md) is the full reading order, and lists the eight jobs the standard library says `Option` exists to do.
+
+## Po polsku
+
+W Ruscie nie ma `null` i nie ma wyjątków. Są za to dwa zwyczajne wyliczenia (*enums*): `Option` (w polskim Tour of Rust: Opcja) na wartość, której może nie być, i `Result` (Rezultat) na operację, która może się nie udać. Warto od razu wiedzieć, że żaden z tych typów nie jest wbudowany w język — to zwykłe wyliczenia, które ktokolwiek mógłby napisać, a każdą metodę z tego działu można po prostu przeczytać w źródłach std. Język dokłada do nich jedną rzecz: `match`, który musi obsłużyć wszystkie warianty, więc „zapomniałem o przypadku pustym” przestaje być klasą błędów, a staje się błędem kompilacji.
+
+Czytelnikowi przychodzącemu z Javy, C# albo Pythona najbardziej przydadzą się dwa rozróżnienia. `Option` to **nie** jest `null` z ładniejszą nazwą: nie da się go przez pomyłkę użyć jak wartości — najpierw trzeba go otworzyć, a kompilator tego pilnuje. `Result` to **nie** jest `try`/`catch`: błąd wędruje jako zwracana wartość, więc sygnatura funkcji mówi wprost, co może pójść nie tak, i nic nie przeskakuje nad kodem wywołującym. Polska literatura mówi tu o obsłudze błędów, ale bez mechanizmu wyjątków — cała „obsługa” to zwykłe dopasowanie wzorców do zwróconej wartości.
+
+Reszta działu sprowadza się do jednego pytania: co zrobić w przestrzeni między `match` a `.unwrap()`. Diagram powyżej czyta się prosto — każde pudełko to typ, każda etykieta to metoda przenosząca cię między typami, a na czerwono zaznaczone są te cztery, które mogą spanikować. Zwróć uwagę, gdzie lądują: `unwrap` i `expect` docierają do dokładnie tego samego `T`, co `unwrap_or[_else]` i `unwrap_or_default`, tylko te drugie robią to, nie przerywając programu. Ten sam cel, inna odpowiedź na smutnej gałęzi — i wybór między tymi dwoma zachowaniami to jest właśnie to, czego uczą kolejne strony z tabeli.
+
+**Szukaj po polsku:** obsługa błędów w Ruscie · wyliczenia Opcja i Rezultat · `rust Option vs Result` · `rust error handling without exceptions` · `rust unwrap_or_else`

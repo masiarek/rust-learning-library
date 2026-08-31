@@ -24,3 +24,11 @@ The whole page is the trap. Every other failure in this section announces itself
 - [A span is not a log line](../spans_not_lines/README.md) — where the ambient current span is introduced as a convenience
 - [Carrying the trace across a boundary](../context_propagation/README.md) — the same problem one boundary out, between processes
 - [Advanced](../../09_Advanced/README.md) — the section for things that assume the foundations
+
+## Po polsku
+
+Zacznij od formy poprawnej, bo tylko ona jest tu warta zapamiętania: `future.instrument(span)` albo `#[instrument]` na `async fn`. Forma, która wygląda naturalnie i jest błędna, to trzymanie strażnika (*guard*) z `span.enter()` przez `.await`. Mechanizm jest prosty i dlatego mylący: `enter()` ustawia bieżący span w zmiennej lokalnej **wątku** (*thread-local*), a `.await` oddaje wątek z powrotem środowisku uruchomieniowemu (*executor*) — strażnik nadal żyje, więc kolejne zadanie, które runtime położy na tym samym wątku, wykona się „wewnątrz” twojego spanu i odziedziczy jego pola. Kompiluje się, nie panikuje, nie ostrzega.
+
+Dlaczego to jest strona o Ruście, a nie ogólna strona o obserwowalności? Bo w serwerze typu wątek-na-żądanie zmienna lokalna wątku wystarcza za darmo — **wątek jest żądaniem**. W kodzie asynchronicznym zadania (*tasks*) są multipleksowane na pulę wątków, więc pojęcie „bieżący” musi podążać za **zadaniem**, a nie za wątkiem, i to podążanie trzeba włączyć samemu. Dokłada się do tego `tokio::spawn`, które startuje zadanie **bez** rodzica: domyślnie dostajesz odczepiony korzeń, dokładnie taką samą dziurę jak przy kolejce komunikatów, tylko jeden proces wcześniej. I na koniec to, co czyni z tego stronę na poziomie 301: reszta awarii w tym rozdziale sama się zgłasza — brakującego śladu po prostu brakuje. Ta jedna produkuje ślad kompletny, wiarygodny i pewnie narysowany, który przypisuje cudzą pracę twojemu żądaniu. Po samym kodzie tego nie widać, jeśli się wcześniej nie wie, czego szukać.
+
+**Szukaj po polsku:** instrumentacja kodu asynchronicznego · zadanie a wątek · `tracing Instrument await` · `rust span guard across await` · `tokio spawn parent span`

@@ -48,3 +48,9 @@ identical: true
 - [`str::trim_right_matches`](../str_trim_right_matches/README.md) — the other deprecated name
 
 [`str::trim_left_matches` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.trim_left_matches)
+
+## Po polsku
+
+Ta sama zamiana co przy `trim_left` — `left` na `start` — ale przy tej metodzie warto zadać jeszcze drugie pytanie, którego sama poprawka nazwy nie rozstrzyga: czy naprawdę chodziło o usuwanie wzorca **wielokrotnie**? `trim_left_matches('x')` na `"xxxvalue"` zdejmuje wszystkie trzy `x`, a `strip_prefix('x')` zdjęłoby jedno i jeszcze powiedziałoby, czy było co zdejmować — stare wywołanie bardzo często pochodzi po prostu z czasów, gdy `strip_prefix` (stabilne dopiero od 1.45) jeszcze nie istniało, więc przy okazji migracji sprawdź, które zachowanie było zamierzone.
+
+**Szukaj po polsku:** przestarzała nazwa metody · usuwanie przedrostka raz czy wielokrotnie · `rust trim_left_matches deprecated` · `rust trim_start_matches vs strip_prefix`

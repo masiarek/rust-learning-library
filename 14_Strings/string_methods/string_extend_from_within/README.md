@@ -72,3 +72,9 @@ boundary at 2? false
 - [`String::reserve`](../string_reserve/README.md) — sizing the buffer before a big self-append
 
 [`String::extend_from_within` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.extend_from_within)
+
+## Po polsku
+
+`extend_from_within` dopisuje na koniec łańcucha znaków kopię jego **własnego** fragmentu i istnieje dokładnie po to, żeby nie walczyć z borrow checkerem: oczywisty zapis `s.push_str(&s[0..3])` się nie skompiluje, bo `push_str` żąda `&mut s`, podczas gdy argument wciąż trzyma współdzieloną referencję do `s`. Starsze polskie poradniki każą w tym miejscu zrobić tymczasowy `String` (`let temp = s[0..2].to_string();`) — to działa, ale kosztuje dodatkową alokację, a od wersji 1.87 jest już zbędne. Zakres podaje się w **bajtach**, nie w znakach, więc na `"héllo"` zakres `0..3` dokłada `"hé"` (samo `é` zajmuje dwa bajty), a trafienie w środek znaku kończy się paniką — ta sama reguła granic co przy zwykłym wycinku. Skrót `s.extend_from_within(..)` podwaja cały łańcuch i jest najkrótszym sposobem na powtórzenie go raz.
+
+**Szukaj po polsku:** dopisywanie do łańcucha znaków · granica znaku UTF-8 · `rust extend_from_within` · `rust push_str borrow checker E0502`

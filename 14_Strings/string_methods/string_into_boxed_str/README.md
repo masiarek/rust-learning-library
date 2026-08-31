@@ -67,3 +67,9 @@ back    len 8 capacity 8
 - [`String::leak`](../string_leak/README.md) — giving up ownership entirely
 
 [`String::into_boxed_str` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.into_boxed_str)
+
+## Po polsku
+
+`String` zajmuje trzy słowa maszynowe — wskaźnik, długość i pojemność — a `Box<str>` dwa, bo skoro nie może rosnąć, to nie musi pamiętać, ile ma jeszcze wolnego miejsca. Wyjście przykładu pokazuje to wprost: 24 bajty kontra 16, czyli osiem bajtów na wartość, a przy milionie wartości w kolekcji osiem megabajtów. Konwersja nie jest przy tym darmowa — najpierw wykonuje `shrink_to_fit`, więc nadmiarowa pojemność wraca do alokatora (`capacity 64` → `capacity 8`), co może oznaczać realokację i przepisanie bajtów; płacisz raz, a oszczędzasz stale. Wymieniasz zatem możliwość wzrostu na miejsce na stercie, więc `Box<str>` pasuje do tekstu **skończonego** — nazw, sparsowanej konfiguracji, kluczy w mapie — a wszystko, co jeszcze budujesz, zostaje `String`iem; droga powrotna przez `into_string()` jest tania.
+
+**Szukaj po polsku:** `Box<str>` a `String` · rozmiar typu w pamięci · oszczędzanie pamięci na stercie · `rust into_boxed_str` · `rust Box<str> vs String memory`

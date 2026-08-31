@@ -68,3 +68,9 @@ Some("http://x/y//")
 - [`str::trim_end`](../str_trim_end/README.md) — whitespace instead of a pattern
 
 [`str::trim_end_matches` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.trim_end_matches)
+
+## Po polsku
+
+Ta metoda zdejmuje wzorzec **tyle razy, ile go zastanie**, i nigdy nie mówi, czy w ogóle coś zdjęła — zwraca zwykły `&str`, a nie `Option`, więc gdy odpowiedź „nie było czego usuwać” ma znaczenie, właściwym narzędziem jest `strip_suffix`. Pasuje za to idealnie do ukośników na końcu adresu albo ścieżki (`"http://x/y///"` → `"http://x/y"`) i do separatorów przed sklejaniem, bo tam „ile by ich nie było” jest dokładnie tym, o co chodzi. Pułapkę widać w wyjściu przykładu i dotyczy ona liczb: `trim_end_matches('0')` nie odróżnia zera wypełniającego od znaczącego, więc `"1.0"` schodzi do `"1."`, a `"100"` aż do `"1"` — przy formatowaniu liczb sięgaj po `strip_suffix` albo od razu po specyfikator formatu, a formatując po polsku pamiętaj, że domykające `trim_end_matches('.')` trzeba wtedy podmienić na przecinek.
+
+**Szukaj po polsku:** usuwanie ukośnika na końcu ścieżki · zbędne zera na końcu liczby · `rust trim_end_matches` · `rust trim_end_matches removes too much`

@@ -25,3 +25,9 @@
 - [Making a `String`](../making_a_string/README.md)
 - [STRINGS.md](../../STRINGS.md) — the map this page is a gap in
 - [Strings: links, books and videos](../resources/README.md) — where to read about it in the meantime
+
+## Po polsku
+
+Ta strona jest na razie szkicem — spisem pytań, na które gotowa lekcja ma odpowiedzieć — więc czytaj ją jak listę haseł do wyszukania, a nie jak wykład. Kluczowe jest jedno rozpoznanie: `{:>8.3}` to nie składnia Rusta, tylko osobny mały język (*format mini-language*) parsowany przez `std::fmt`, i dlatego nie da się go wydedukować — trzeba przeczytać gramatykę wypełnienia, wyrównania, szerokości i precyzji. Polskiego czytelnika czeka w nim niespodzianka, o której angielskie materiały milczą, bo ich nie dotyczy: `std::fmt` **nie zna pojęcia lokalizacji**, więc `{:.2}` zawsze wypisze `3.14` z kropką, nigdy `3,14`, i nie ma żadnego wbudowanego oddzielania tysięcy spacją. Polski format liczby trzeba złożyć samodzielnie albo sięgnąć po crate (`num-format`, `icu`) — samo `format!` tego nie zrobi.
+
+**Szukaj po polsku:** formatowanie tekstu w Ruscie · przecinek dziesiętny a formatowanie liczb · `rust std fmt format specifiers` · `rust format! width precision`

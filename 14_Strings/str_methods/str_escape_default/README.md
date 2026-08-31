@@ -60,3 +60,9 @@ let s = "a\"b\\c\n\u{e9}";
 - [`str::is_ascii`](../str_is_ascii/README.md) — the property the output guarantees
 
 [`str::escape_default` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.escape_default)
+
+## Po polsku
+
+Ta wersja gwarantuje jedno: **wyjście jest czystym ASCII**. Każda polska litera znika w kodzie — `"żółw".escape_default()` to `\u{17c}\u{f3}\u{142}w` — i dokładnie o to chodzi, gdy tekst trafia do kanału, któremu nie można ufać w sprawie UTF-8: agregatora logów, pliku `.properties`, terminala o nieznanym kodowaniu. Kto zna javowy `native2ascii`, ma tu dobrą intuicję, ale jedna rzecz się nie zgadza: to jest składnia **Rusta**, z klamrami i bez wiodących zer (`\u{17c}`), a nie javowa czy JSON-owa forma `\u017C` — więc tego wyjścia nie wkleisz wprost ani do `.properties`, ani do JSON-a. Zaletą tej samej składni jest to, że wynik stanowi poprawne wnętrze literału łańcuchowego w Ruscie — stąd naturalne zastosowanie w generowaniu kodu; drogi powrotnej biblioteka standardowa nie ma, odkodowanie trzeba napisać samemu albo wziąć z crate'a.
+
+**Szukaj po polsku:** ucieczka do ASCII · polskie znaki w logach · `rust escape_default` · `rust unescape string crate`

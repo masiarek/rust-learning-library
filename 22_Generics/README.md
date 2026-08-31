@@ -29,3 +29,13 @@ The library used generics for a year before this section existed, so several of 
 ## Not yet written
 
 Listed here rather than as empty pages, so the gaps are visible: **generic functions in anger** (the `largest`/`smallest` pair, and returning a reference to dodge a `Copy` bound), **lifetimes as generic parameters** (`struct Excerpt<'a>` — the same brackets, a different kind of thing inside), **associated types versus type parameters** (`Iterator::Item` and why it is not `Iterator<T>`), **`impl Trait` in return position** and what it hides, **const generics** (`[T; N]`, and the arrays that finally became one type), **default type parameters** (`Add<Rhs = Self>`), **blanket impls** (`impl<T: Display> ToString for T`, and the coherence rules that bound them), and **variance** — why `&'static str` is accepted where `&'a str` is wanted, and where that stops.
+
+## Po polsku
+
+Typy generyczne (*generics*) to jeden z niewielu działów, dla których istnieje polskie tłumaczenie Tour of Rust — i jednocześnie ten, w którym polska intuicja najczęściej zawodzi, bo czytelnik przychodzi tu albo z Javy, albo z C++, a Rust bierze po jednej rzeczy z każdego z tych światów. Od strony maszyny zachowuje się jak szablon w C++: `<T>` jest wypełniane **w czasie kompilacji**, przez wygenerowanie osobnej kopii kodu dla każdego użytego typu (monomorfizacja, *monomorphization*), więc `Vec<u8>` to naprawdę ciąg bajtów — bez opakowywania (*boxing*), bez znacznika typu i bez kosztu w czasie działania. Od strony sprawdzania zachowuje się jak Java: definicja jest sprawdzana **sama w sobie**, wobec zadeklarowanych ograniczeń (*bounds*), a nie dopiero w miejscu wywołania.
+
+Konsekwencja tego drugiego zaskakuje głównie osoby po C++: nieograniczony `T` nie umie prawie nic — nie wypiszesz go przez `{}` ani nie porównasz, dopóki nie dopiszesz `T: Display` albo `T: PartialEq`. W zamian komunikat o błędzie ląduje w funkcji, którą właśnie piszesz, a nie kilkanaście poziomów głębiej w cudzej bibliotece, przy tworzeniu instancji szablonu.
+
+Ten dział prowadzi jeden mały typ — najpierw pojemnik, potem listę jednokierunkową — przez pięć pytań po kolei: co znaczą nawiasy ostre, co zrobić, gdy kompilator nie potrafi wywnioskować typu (`E0282`), co wolno `T`-owi i gdzie postawić ograniczenie, co się zmienia, gdy generyczne jest wyliczenie, i co się dzieje, gdy typ generyczny zawiera sam siebie (`E0072`). Kody błędów są tu najlepszym hasłem wyszukiwania: po polsku o `E0072` nie ma praktycznie nic, po angielsku jest wszystko.
+
+**Szukaj po polsku:** typy generyczne w Ruscie · monomorfizacja · ograniczenia typów generycznych · `rust generics monomorphization` · `rust E0282 type annotations needed`

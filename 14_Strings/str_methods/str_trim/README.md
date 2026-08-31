@@ -73,3 +73,9 @@ fn main() {
 - [`str::is_empty`](../str_is_empty/README.md) — what to ask after trimming
 
 [`str::trim` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.trim)
+
+## Po polsku
+
+Wbrew nazwie `trim` niczego nie obcina: zwraca wycinek łańcucha (`&str`), czyli okno na te same bajty z przesuniętymi końcami — oryginał zostaje nietknięty, nic się nie alokuje, a samodzielna linijka `s.trim();` jest pustą instrukcją, o czym kompilator uprzejmie poinformuje. Nawyk z Pythona (`strip`) czy z Javy podpowiada tu coś przeciwnego, więc warto zapamiętać typ zwracany, a nie czasownik. Dla polskich danych ważne jest, że „biały znak” oznacza tutaj `char::is_whitespace`, czyli pełną definicję unikodową — łapie także **twardą spację** (U+00A0), której w polskim tekście jest mnóstwo, bo typografia każe ją stawiać po jednoliterowych wyrazach w rodzaju „w”, „z”, „i”, „a”; `trim_ascii` zostawi ją na miejscu. I ta jedna rzecz, dla której `trim` stoi na początku niemal każdej ścieżki obsługi wejścia: pole, przez które użytkownik tylko przeskoczył tabulatorem, przychodzi jako `"   "`, a `is_empty()` odpowiada wtedy `false` — dopiero `field.trim().is_empty()` daje `true`.
+
+**Szukaj po polsku:** usuwanie białych znaków · twarda spacja w łańcuchu · `rust trim returns &str` · `rust trim vs trim_ascii`

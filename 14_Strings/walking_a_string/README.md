@@ -663,3 +663,20 @@ rustc --edition 2024 14_Strings/walking_a_string/examples/walking_a_string.rs -o
 - [`Option` as a collection](../../17_Option_and_Result/option_as_collection/README.md) — the `Option<u8>` the kata builds, iterated
 - [`iter`, `iter_mut`, `into_iter`](../../24_Iterators/iter_iter_mut_into_iter/README.md) — the three-door question for a collection, where the answer is different from a string's
 - [`str::split` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split) · [`Pattern` ↗](https://doc.rust-lang.org/std/str/pattern/trait.Pattern.html) · [`str::split_once` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split_once)
+
+## Po polsku
+
+Po łańcuchu znaków nie chodzi się „po prostu” — najpierw trzeba wybrać miarkę, bo każdy z trzech iteratorów daje inny typ elementu. `bytes()` wydaje bajty jako `u8`, `chars()` wydaje znaki jako `char`, a cała rodzina `split*` wydaje wycinki `&str`. Na przykładzie z tej strony to 21 bajtów wobec 20 znaków dla tego samego tekstu, i nic tych dwóch liczb za ciebie nie pogodzi: `'ê'` jest jednym elementem w drugim iteratorze i dwoma w pierwszym.
+
+Najostrzejsza pułapka to `char_indices()` kontra `chars().enumerate()`. Pierwsze daje **offsety bajtowe**, czyli liczby, którymi wolno ciąć (`&s[..i]`), i z definicji trafiające w granicę znaku; drugie daje zwykłe numery porządkowe 0, 1, 2, które nie są offsetem donikąd. Obie zgadzają się dokładnie do pierwszego znaku wielobajtowego — a w polskim tekście to zwykle znaczy „do drugiej litery”. Dla `"Łódź"` (7 bajtów, 4 znaki) `char_indices()` daje 0, 2, 4, 5, a `enumerate()` uparcie 0, 1, 2, 3. Ciąć wolno tylko tą pierwszą liczbą; druga na danych ASCII wygląda identycznie, więc błąd przechodzi przez testy i panikuje na pierwszym nazwisku z `ó`.
+
+Cała reszta strony wynika z jednego zdania: **podział zwraca przerwy między dopasowaniami**, więc *n* dopasowań daje zawsze *n+1* kawałków. Stąd biorą się wszystkie zaskakujące puste łańcuchy — dwie spacje obok siebie nie mają nic pomiędzy, a separator na samym końcu nie ma nic po sobie. Nikt tu nie jest uprzejmy ani nieuprzejmy, liczba kawałków jest wymuszona arytmetyką. Praktycznie sprowadza się to do wyboru:
+
+- `split(sep)` — mechaniczny: raportuje przerwy razem z pustymi. Bierz go, gdy liczy się **pozycja**: CSV, stałe kolumny, pole, które wolno zostawić puste.
+- `split_whitespace()` — redakcyjny: ciągi białych znaków sklejają się w jeden, końce są przycięte. Do prozy i tekstu wpisywanego ręcznie.
+- `split_terminator(sep)` — pośredni: usuwa tylko *końcowy* pusty kawałek, czyli dokładnie to, czego chcesz dla pliku kończącego się separatorem.
+- `splitn(n, sep)` — uwaga na liczbę: `n` to **kawałki**, nie cięcia. Pythonowe `maxsplit=2` to tutaj `splitn(3, …)`.
+
+Sięgnięcie po `split_whitespace()` przy danych rozdzielanych przecinkiem nie zgłasza żadnego błędu — po cichu skraca wiersz, kolumna trzecia staje się drugą i nikt się o tym nie dowie. W codziennej pracy i tak najczęściej używa się dwóch innych: `lines()` (radzi sobie z `\r` i nie dokleja widmowego pustego wiersza na końcu pliku) oraz `split_once(sep)`, który bierze **pierwszy** separator i oddaje resztę w całości — dlatego `note = has = signs` przeżywa parsowanie `klucz = wartość`, a `split(" = ")` gubi wszystko po drugim. Warto też pamiętać, że wzorcem może być `char`, `&str` albo domknięcie (`|c: char| c == '\''`), że cała ta rodzina zwraca **iteratory wycinków** oryginału — nic nie jest kopiowane, dopóki nie wywołasz `.collect()` — i że `trim()` również zwraca wycinek, a nie nowy `String`. Wyrażeń regularnych w `std` nie ma, i to świadomie — silnik wyrażeń regularnych jest w gruncie rzeczy kompilatorem, więc `regex` jest osobnym crate'em.
+
+**Szukaj po polsku:** iterowanie po znakach łańcucha · dzielenie łańcucha znaków · bajty a znaki UTF-8 · `rust char_indices vs chars enumerate` · `rust split vs split_whitespace`

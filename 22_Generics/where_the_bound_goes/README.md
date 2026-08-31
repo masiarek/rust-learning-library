@@ -245,3 +245,21 @@ Shared<Handle> cloned by hand: value 9, 2 owners
 - [Phantom types](../../12_Traits/phantom_types/README.md) — the one case where the parameter is not in the data at all, and the bound question changes shape
 - [Static vs dynamic dispatch](../../12_Traits/static_vs_dynamic_dispatch/README.md) — `<T: Trait>` against `&dyn Trait`, and when a bound is not what you want
 - [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) — the two bounds used most often on this page
+
+## Po polsku
+
+`T` bez ograniczenia (*bound*) umie dokładnie trzy rzeczy:
+
+- da się go przechować — w polu, w `Vec`, w `Box`,
+- da się go przekazać, zwrócić i przenieść,
+- da się go wypuścić.
+
+I na tym koniec: nie wypiszesz go, nie porównasz, nie dodasz i nie sklonujesz. Wypisywanie czy porównywanie nie należy bowiem do samego typu — to cechy (*traits*), które ktoś musi zaimplementować, a `T` bez ograniczenia niczego nie obiecał. Sprawdzane jest to przy **definicji**, więc `error[E0277]: T doesn't implement std::fmt::Display` wypada w funkcji, którą właśnie piszesz, razem z gotową poprawką. To jest cały układ, na jaki się godzisz: deklarujesz potrzebę raz, a w zamian dostajesz każdy zgodny typ za darmo, bez ponownego sprawdzania w miejscach wywołania.
+
+Zapisy są trzy, ale tylko dwa znaczą to samo. `<T: Display>` i klauzula `where T: Display` są dla kompilatora nie do odróżnienia — wybieraj po długości linii. Klauzula `where` nie jest jednak wyłącznie „formą długą”: to **jedyny** zapis, gdy ograniczane jest coś innego niż goły parametr, bo `where Vec<T>: Debug` czy `where T::Item: Clone` nie da się wpisać w nawiasy ostre. Trzeci zapis, `impl Display` w pozycji argumentu, różni się naprawdę: nie ma nazwy, którą dałoby się podać turbofishem, a dwa argumenty `impl Display` to **dwa niezależne typy** — `pair(a: impl Display, b: impl Display)` przyjmie `u8` i `&str`, podczas gdy `pair<T: Display>(a: T, b: T)` odmówi. Jeśli sensem generyka jest to, że oba argumenty są tego samego typu, powie to tylko wersja z nazwanym parametrem.
+
+Najważniejsza część lekcji to jednak **gdzie** ograniczenie postawić — i tu polskie materiały bywają mylące, bo w większości są przekładami książek, a książki drukują akurat ten zły kształt: `struct ListItem<T> where T: Clone + Debug`. Ograniczenie na definicji struktury staje się częścią *typu*, więc obowiązuje wszędzie, także tam, gdzie nikt nic nie klonuje. Typu `Handle`, który nie jest `Clone`, nie da się już nawet **włożyć** do takiego opakowania. Koszt spada zresztą i na autora: najzwyklejszy blok `impl<T> ListItem<T>`, który niczego nie klonuje ani nie wypisuje, to **sześć błędów**, a przyjęcie podpowiedzi `rustc` rozlewa ograniczenie o jeden blok dalej — czyli powiela problem zamiast go rozwiązać. Wzorcem do naśladowania jest biblioteka standardowa: `Vec<T>`, `Option<T>` i `HashMap<K, V>` deklarują parametry gołe, a `K: Hash + Eq` siedzi na tych blokach `impl`, które faktycznie haszują klucz. Dochodzi do tego asymetria ważna dla każdego, kto publikuje crate: **poluzowanie** opublikowanego ograniczenia to zmiana łamiąca zgodność u wszystkich, którzy z twojego crate'a korzystają, a dołożenie go do nowego bloku `impl` — nie.
+
+Osobna niespodzianka to `derive`. `#[derive(Clone)]` na `Pair<T>` rozwija się do `impl<T: Clone> Clone for Pair<T>`, czyli dokładnie tam, gdzie trzeba — `Pair<Handle>` zbudujesz, wypiszesz i przeniesiesz, po prostu nie ma metody `.clone()`. Ale `derive` **nie czyta pól**: ograniczy każdy parametr niezależnie od tego, czy pola tego wymagają. Dlatego `struct Shared<T> { inner: Rc<T> }` z `#[derive(Clone)]` dostaje zbędne `T: Clone` i `error[E0599]: the method clone exists … but its trait bounds were not satisfied`, mimo że `Rc<T>` jest `Clone` dla dowolnego `T`. Rozpoznawaj to na pierwszy rzut oka: tajemnicze „nie implementuje `Clone`” na typie, którego pola to same `Rc` czy `Arc`, prawie zawsze pochodzi od `derive`, a nie od prawdziwego wymagania — i jest to rzadki przypadek, w którym `impl` napisany ręcznie jest **mniej** restrykcyjny niż wygenerowany.
+
+**Szukaj po polsku:** ograniczenia cech · klauzula `where` · `rust trait bound on impl not struct` · `rust E0277 consider restricting type parameter` · `rust derive Clone unwanted T: Clone bound`

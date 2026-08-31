@@ -70,3 +70,9 @@ boundary at 2? false  at 3? true
 - [`str::as_bytes_mut`](../../str_methods/str_as_bytes_mut/README.md) — the same idea on a `&mut str`
 
 [`String::as_mut_vec` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.as_mut_vec)
+
+## Po polsku
+
+To najpotężniejszy i najniebezpieczniejszy widok na `String`: w odróżnieniu od `as_mut_str` ten `Vec<u8>` wolno powiększać, skracać i zapisywać zupełnie dowolnie, a umowa jest jedna — **poprawny UTF-8 w chwili, gdy pożyczenie się kończy**; po drodze może być cokolwiek. Warto to powiedzieć wprost, bo polska intuicja podpowiada tu coś zupełnie innego: złamanie tego niezmiennika nie kończy się „krzaczkami” na ekranie, jak przy pomyleniu Latin-2 z Windows-1250, tylko **niezdefiniowanym zachowaniem** (*undefined behaviour*) — kod czytający później ten `String` ma prawo założyć, że bajty są poprawne, i optymalizować się pod to założenie. Dlatego skracanie w przykładzie poprzedza `floor_char_boundary(3)`: cięcie na bajcie 2 przepołowiłoby `é`, co potwierdza ostatni wiersz wyniku — `boundary at 2? false  at 3? true`. Prawie każde realne zastosowanie ma bezpieczny odpowiednik (`push_str`, `retain`, `truncate`, `replace_range`), więc `unsafe` zostaw na dekodowanie do własnego bufora i na pracę bajtową, która inaczej wymagałaby kopii tam i z powrotem.
+
+**Szukaj po polsku:** niezdefiniowane zachowanie w Ruscie · krzaczki a niepoprawny UTF-8 · `rust as_mut_vec safety invariant` · `rust unsafe String valid utf8`

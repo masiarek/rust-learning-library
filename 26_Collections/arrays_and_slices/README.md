@@ -264,3 +264,13 @@ fn main() {
 ## Sources
 
 [Primitives: Arrays and Slices ↗](https://doc.rust-lang.org/rust-by-example/primitives/array.html) in Rust by Example; the [`slice` ↗](https://doc.rust-lang.org/std/primitive.slice.html) and [`array` ↗](https://doc.rust-lang.org/std/primitive.array.html) primitive pages in std, which are where the method list actually lives.
+
+## Po polsku
+
+Tablica (*array*) `[T; N]` nosi długość **w typie**: `[u32; 5]` i `[u32; 3]` to dwa osobne typy, tak samo różne jak `u32` i `String`. To pierwsza rzecz, która zaskakuje po Pythonie czy Javie, gdzie tablica jest jedna, a długość to zwykła właściwość obiektu. Elementy leżą w niej jeden przy drugim, bez żadnego nagłówka (`size_of::<[u32; 5]>()` to 20), najczęściej na stosie — a jeśli `T: Copy`, to cała tablica też jest `Copy`, więc `let mut sorted = five;` kopiuje pięć wartości i zostawia oryginał nietknięty. Odpowiednikiem, który rośnie, jest wektor (`Vec`), a nie tablica.
+
+Wycinek (*slice*) `&[T]` przenosi długość **z typu do wartości** i na tym polega cały trik tej lekcji. `&[u32; 5]` zajmuje 8 bajtów (sam adres), a `&[u32]` szesnaście: adres **i** długość — stąd angielska nazwa *fat pointer*. Dzięki temu jedna funkcja `fn total(scores: &[u32])` obsługuje tablicę dowolnej długości, wektor i fragment `&five[1..3]`. Uwaga na nawyk przyniesiony z Pythona: tam `xs[1:3]` **kopiuje**, a w Ruscie `&xs[1..3]` to **pożyczenie** — żywy widok na cudze dane, więc dopóki wycinek istnieje, źródła nie wolno zmienić, i mówi o tym kompilator, a nie dziwne zachowanie w czasie działania. Zakresy są w obu językach półotwarte: `five[1..3]` to indeksy 1 i 2.
+
+Resztę strony da się zapamiętać jako dwie pary przeciwieństw. Pierwsza: **`[i]` to twierdzenie, `.get(i)` to pytanie**. `five[9]` w ogóle się nie kompiluje — rustc wylicza stały indeks i odrzuca kod lintem `unconditional_panic` z komunikatem *„this operation will panic at runtime”* — przy indeksie znanym dopiero w czasie działania program kończy się paniką, a `five.get(9)` po prostu zwraca `None`. Druga: `windows(2)` kontra `chunks(2)` — okna zachodzą na siebie i nigdy nie są krótsze, kawałki nie zachodzą, ale ostatni bywa krótszy; pomylenie ich to klasyczny błąd o jeden (*off-by-one*) w tym zakątku std. I jedna rada, której polskie kursy zwykle nie dają: w sygnaturze funkcji pisz `&[T]`, nigdy `&Vec<T>` — ta druga forma nie daje nic ponadto, a odrzuca tablice i wycinki; clippy zgłasza to jako `ptr_arg`.
+
+**Szukaj po polsku:** tablice w Ruscie · wycinek w Ruscie · `rust slice vs array` · `rust &[T] vs &Vec<T> ptr_arg` · `rust windows vs chunks`

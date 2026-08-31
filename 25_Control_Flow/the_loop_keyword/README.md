@@ -24,3 +24,9 @@
 - [`while` loops](../while_loops/README.md) — the condition-at-the-top version
 - [A block is an expression](../../15_First_Programs/a_block_is_an_expression/README.md) — the rule that lets a loop have a value at all
 - [Comprehensive Rust: `loop` ↗](https://google.github.io/comprehensive-rust/control-flow-basics/loops/loop.html)
+
+## Po polsku
+
+`loop` kręci się w nieskończoność i wychodzi się z niego przez `break` — i tylko w tej jednej pętli `break` potrafi nieść wartość, dzięki czemu `let x = loop { … break v; };` w ogóle ma sens; `while` i `for` zawsze dają `()`. Polskie kursy programowania uczą zwykle pętli nieskończonej jako `while (true)`, ale w Ruscie to nie jest ta sama konstrukcja i nie chodzi tu o styl: analiza przepływu traktuje `loop` jako pętlę, która na pewno się nie kończy (jej typem jest wtedy `!`, *never*, i dlatego `let x: i32 = loop {};` się kompiluje), a `while true` jako warunek, który kiedyś może okazać się fałszywy. Widać to w praktyce: obie wersje inaczej odpowiadają na pytanie, czy `let` postawiony za pętlą uchodzi za zainicjowany; w tej samej okolicy mieszkają linty `clippy` o nazwach `while_immutable_condition` i `never_loop`. Typowe zastosowania to „próbuj, aż się uda” i czytanie do napotkania wartownika; jeśli da się to zapisać jako `while let` albo jako iterator, zwykle właśnie tak warto skończyć.
+
+**Szukaj po polsku:** pętla nieskończona · `break` z wartością · typ `!` never · `rust loop vs while true` · `rust break value from loop`

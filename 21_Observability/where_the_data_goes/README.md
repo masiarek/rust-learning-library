@@ -23,3 +23,9 @@ The exporter in the request path. A synchronous send, an unbounded queue, or a b
 - [What OpenTelemetry is](../what_opentelemetry_is/README.md) — what OTLP and the collector are, in the wider layout
 - [Sampling](../sampling/README.md) — the other lever on volume, and the one that has to be decided globally
 - [Metrics, and the label that multiplies](../metrics_and_cardinality/README.md) — what is actually filling the store
+
+## Po polsku
+
+Reguła jest jedna i po polsku daje się powiedzieć w pół zdania: **oddaj telemetrię czemuś lokalnemu tak szybko, jak potrafisz, i zapomnij o niej** — ponawianie, buforowanie, redakcja i trasowanie należą do collectora, poza twoim procesem, bo dopiero tam da się je zmienić bez ponownego wdrożenia i bez trzymania w kodzie adresów oraz kluczy dostawcy. Wynika z tego zdanie, które budzi opór, a jest prawdziwe: **porzucanie spanów przy przepełnionej kolejce to zachowanie poprawne**, pod jednym warunkiem — licznik porzuceń musi być widoczny, bo ciche porzucenie jest nie do odróżnienia od błędu w instrumentacji. Pułapka jest dokładnie odwrotna: eksporter w ścieżce żądania (synchroniczna wysyłka, kolejka bez ograniczenia, blokujący `flush`) robi ze stosu obserwowalności zależność każdego żądania, a pierwsze, czego się z niego dowiesz, to że padł razem z tobą. Zapamiętaj też moment, w którym gubi się najciekawsze spany — zamknięcie procesu: kolejka trzyma wtedy właśnie tę paczkę, która opisuje awarię, więc opróżnienie jej na wyjściu jest różnicą między znanym a nieznanym powodem restartu.
+
+**Szukaj po polsku:** eksport telemetrii · kolejka i porzucanie spanów · opróżnianie bufora przy zamknięciu · `otel collector` · `batch span processor queue size`

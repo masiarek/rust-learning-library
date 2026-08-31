@@ -75,3 +75,9 @@ file.txt    positional file.txt
 - [`str::split_once`](../str_split_once/README.md) — when the boundary is a delimiter rather than a known prefix
 
 [`str::strip_prefix` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.strip_prefix)
+
+## Po polsku
+
+`strip_prefix` skleja dwie czynności w jedną: sprawdza, czy przedrostek w ogóle występuje, i od razu oddaje resztę jako `Some(reszta)` — albo `None`, gdy przedrostka nie było, więc test i obcięcie nigdy nie rozjadą się ze sobą. Polski czytelnik ma tu jeden bardzo konkretny powód, żeby nie pisać wersji ręcznej: `&flag[2..]` wymaga podania długości przedrostka **w bajtach**, a `ą`, `ę`, `ł` zajmują po dwa bajty, więc wycinek łańcucha (*string slice*) wyliczony „na oko” kończy się paniką: indeks nie wypada na granicy znaku (*char boundary*). Druga rzecz to „raz, a nie wielokrotnie”: `"../../src".strip_prefix("../")` daje `Some("../src")`, podczas gdy `trim_start_matches("../")` zdejmie wszystkie warstwy i zostawi `"src"` — po `strip_prefix` sięgaj wtedy, gdy chcesz usunąć dokładnie jedną.
+
+**Szukaj po polsku:** usuwanie przedrostka · granica znaku w łańcuchu · `rust strip_prefix vs trim_start_matches` · `rust byte index is not a char boundary`

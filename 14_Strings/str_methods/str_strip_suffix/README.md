@@ -72,3 +72,9 @@ Some("a//")
 - [`str::rsplit_once`](../str_rsplit_once/README.md) — when the boundary is a delimiter rather than a known suffix
 
 [`str::strip_suffix` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.strip_suffix)
+
+## Po polsku
+
+Lustrzane odbicie `strip_prefix`, tylko że najciekawsze jest tu `None` — to nie jest porażka, to odpowiedź. `line.strip_suffix('\n')` mówi wprost, czy wiersz był w ogóle zakończony (`"done\n"` daje `Some("done")`, samo `"done"` daje `None`), a `trim_end` tego nie powie nigdy, bo po cichu obetnie i nic nie zaraportuje — różnica robi się istotna, gdy urwany ostatni wiersz ma być błędem, a nie drobiazgiem formatowania. Obowiązuje ta sama zasada „raz, a nie wielokrotnie”: `"a///".strip_suffix('/')` zwraca `Some("a//")`, a `trim_end_matches('/')` zetnie wszystkie ukośniki do `"a"`. Do obcinania rozszerzeń plików lepiej jednak użyć `Path` — porównanie bajtów nie wie nic o `.tar.gz` ani o systemach plików nierozróżniających wielkości liter.
+
+**Szukaj po polsku:** usuwanie przyrostka · zakończenie wiersza · `rust strip_suffix vs trim_end` · `rust strip file extension Path`

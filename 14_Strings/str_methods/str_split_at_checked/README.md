@@ -68,3 +68,9 @@ fn main() {
 - [`str::floor_char_boundary`](../str_floor_char_boundary/README.md) — nudge instead of refuse
 
 [`str::split_at_checked` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split_at_checked)
+
+## Po polsku
+
+To samo cięcie co `split_at`, tylko zamiast paniki dostajesz `Option` — i właśnie ta wersja powinna być domyślna wszędzie tam, gdzie offset przyszedł spoza programu: z pliku konfiguracyjnego, z szerokości terminala, z licznika bajtów w protokole. Za tę wygodę płaci się utratą informacji: oba powody odmowy zlewają się w jedno `None`, więc po samym wyniku nie odróżnisz „offset poza tekstem” (tu `99`) od „offset w środku znaku” (tu `2`) — jeśli to rozróżnienie ma znaczenie, trzeba je odtworzyć ręcznie przez `is_char_boundary` i porównanie z `len()`. Gdy zaś w ogóle nie chcesz odmowy, tylko cięcia *blisko* żądanego miejsca — typowo przy skracaniu tekstu do wyświetlenia — właściwą odpowiedzią jest `floor_char_boundary`, które cofa indeks do najbliższej legalnej granicy. Warto wiedzieć, że `split_at_checked` jest stabilne dopiero od 1.80.0, więc starsze materiały, w tym polskie, pokazują w tym miejscu ręczne sprawdzanie granicy albo `get(..mid)`.
+
+**Szukaj po polsku:** bezpieczne cięcie tekstu bez paniki · granica znaku UTF-8 · `rust split_at_checked` · `rust floor_char_boundary truncate`

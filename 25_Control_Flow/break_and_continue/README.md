@@ -24,3 +24,9 @@ An unlabelled `break` inside a nested loop leaves the *inner* loop only, and the
 - [`for` loops](../for_loops/README.md) · [`while` loops](../while_loops/README.md) · [`loop`](../the_loop_keyword/README.md) — the three loops these leave
 - [Iterators are lazy](../../24_Iterators/iterators_are_lazy/README.md) — the chains that stop early without a `break`, and exactly when they stop
 - [Comprehensive Rust: `break` and `continue` ↗](https://google.github.io/comprehensive-rust/control-flow-basics/break-continue.html)
+
+## Po polsku
+
+`continue` zaczyna następny obieg, `break` wychodzi z pętli — i na tym kończy się część znana z każdego innego języka. Pułapka siedzi w zagnieżdżeniu: `break` bez etykiety opuszcza **tylko** pętlę wewnętrzną, zewnętrzna leci dalej z kolejnym elementem, a ostrzeżenia nie będzie, bo bywa to całkiem sensowne życzenie. Stąd etykieta — `'outer: for … { for … { break 'outer; } }` — której apostrof wygląda jak czas życia (*lifetime*), ale nim nie jest; zastępuje ona zmienną-flagę w rodzaju `let mut found = false;`, którą w innych językach trzeba wymyślać i którą łatwo sprawdzić o jeden poziom za późno. Dwie rzeczy na koniec: `break v` z wartością znaczy coś wyłącznie w `loop`, a najlepszą odpowiedzią często nie jest ani `break`, ani flaga, tylko `.find()`, `.any()` czy `.position()`, które wyrażają „zatrzymaj się na pierwszym trafieniu” jako wartość, a nie jako sterowanie.
+
+**Szukaj po polsku:** etykieta pętli · przerwanie pętli zagnieżdżonej · `rust labeled break outer loop` · `rust break with value`

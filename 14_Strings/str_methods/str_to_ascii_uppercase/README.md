@@ -66,3 +66,9 @@ true
 - [`str::is_ascii`](../str_is_ascii/README.md) — checking the assumption
 
 [`str::to_ascii_uppercase` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.to_ascii_uppercase)
+
+## Po polsku
+
+W drugą stronę pułapka wygląda inaczej niż przy `to_ascii_lowercase`: unikodowe `to_uppercase` potrafi łańcuch znaków **wydłużyć** (`"straße"` → `"STRASSE"`, ligatura `"ﬁ"` → `"FI"`), a wersja ASCII po prostu tych znaków nie dotyka, więc wychodzi `"STRAßE"` i dokładnie tyle samo bajtów, ile było na wejściu. Stąd bierze się jedyna gwarancja obiegu w obie strony, jaką da się tu w ogóle uzyskać: dla wejścia czysto ASCII `to_ascii_uppercase().to_ascii_lowercase()` odtwarza oryginał, czego para unikodowa nie obiecuje. Praktyczny podział jest więc prosty — cyfry szesnastkowe, tokeny protokołów i wszystko, co jest ASCII z definicji (`"1f4a9"` → `"1F4A9"`), a do tekstu czytanego przez człowieka `to_uppercase`, bo `"gdańsk".to_ascii_uppercase()` daje `"GDAńSK"`.
+
+**Szukaj po polsku:** zamiana na wielkie litery · niezmienna długość łańcucha · `rust to_ascii_uppercase` · `rust uppercase ß SS expansion`

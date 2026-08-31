@@ -24,3 +24,9 @@
 - [Marker traits](../../12_Traits/marker_traits/README.md)
 - [STRINGS.md](../../STRINGS.md) — the map this page is a gap in
 - [Strings: links, books and videos](../resources/README.md) — where to read about it in the meantime
+
+## Po polsku
+
+`str` jest typem o rozmiarze nieznanym w czasie kompilacji (*unsized*, w literaturze też *dynamically sized type*) — dlatego `size_of::<str>()` w ogóle się nie kompiluje, a w kodzie nigdy nie trzyma się samego `str`, tylko wycinek łańcucha `&str`: gruby wskaźnik (*fat pointer*) złożony z adresu i długości, czyli dwa razy szerszy niż `&String`. Polskiego czytelnika najczęściej zaskakuje to, że `Sized` jest **domyślnym**, niewidocznym ograniczeniem każdego parametru generycznego, więc `?Sized` niczego nie wymaga — ono to ograniczenie *rozluźnia*, a `E0277` przy jego braku mówi dokładnie o tym. Stąd bierze się też `ToOwned`: `Clone` wymaga `Sized`, więc `.clone()` na `&str` oddaje tylko kolejny `&str`, a żeby dostać wersję na własność, musiała powstać osobna cecha (*trait*).
+
+**Szukaj po polsku:** typy o nieznanym rozmiarze · gruby wskaźnik · `rust unsized types` · `rust ?Sized bound` · `rust fat pointer str`

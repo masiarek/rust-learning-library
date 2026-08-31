@@ -249,3 +249,13 @@ And the syntax trap, which is its own error:
 ## See also
 
 - [STRUCTS.md](../../STRUCTS.md) · [`Copy` vs `Clone`](../copy_vs_clone/README.md) · [What a struct is](../what_a_struct_is/README.md) · [Ownership and moves](../../18_Ownership/ownership_and_moves/README.md)
+
+## Po polsku
+
+Polska nazwa myli od pierwszego słowa: *struct update syntax* tłumaczy się na „składnię aktualizacji struktury”, a `..base` niczego nie aktualizuje — buduje **nową** wartość i przy okazji potrafi wypatroszyć starą. Po ludzku `..user1` znaczy „a reszta jak w `user1`”, ale w Ruscie jest to **przypisanie każdego niewymienionego pola**, a przypisanie oznacza przeniesienie własności. Warto też od razu odróżnić te dwie kropki od zakresu: `1..5` a `..base` w literale struktury to zupełnie inna składnia mimo tego samego znaku. I nie jest to żaden konstruktor kopiujący — `..base` nie uruchamia ani linijki twojego kodu; jeśli chcesz mieć bazę nietkniętą **i** pełny duplikat, to `.clone()`.
+
+O tym, która połowa bazy przeżyje, decyduje `Copy`. Pola `Copy` (`bool`, `u64`) zostają skopiowane i dalej dają się czytać; `String` zostaje **przeniesiony**, a próba odczytu kończy się `E0382`. Najciekawsze jest to, na co wskazuje komunikat: „borrow of moved value: `user1.username`” — nie `user1`, tylko konkretne pole. `borrow checker` śledzi przeniesienia **pole po polu**, więc struktura bywa przeniesiona **częściowo** i pozostaje w części używalna. Trudno o jaśniejsze miejsce, żeby zobaczyć `Copy` przy pracy: jedna linijka kopiuje dwa pola i zabiera trzecie.
+
+Bazę da się zachować w całości na trzy sposoby, a wybór zależy od zadania. Do struktur konfiguracyjnych bierze się `..Default::default()` — baza jest wtedy wartością tymczasową, której nikt nie trzyma, więc nie ma czego osierocić. Poprawiając pojedynczy rekord, wymień z nazwy wszystkie pola nie-`Copy`, a `..base` dokopiuje już tylko te `Copy`. Trzecia droga to `..base.clone()`, czyli koszt zapisany wprost w kodzie. Na koniec drobiazg składniowy z własnym komunikatem: `..base` musi stać **na końcu** i nie znosi przecinka po sobie — „cannot use a comma after the base struct”.
+
+**Szukaj po polsku:** składnia aktualizacji struktury · częściowe przeniesienie własności · Copy kontra Clone · `rust struct update syntax partial move` · `rust E0382 borrow of moved value`

@@ -76,3 +76,9 @@ boundary at 2? false
 - [`str::char_indices`](../../str_methods/str_char_indices/README.md) — where a safe offset comes from
 
 [`String::insert` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.insert)
+
+## Po polsku
+
+Indeks jest **przesunięciem w bajtach**, a nie numerem litery, i polszczyzna demaskuje to od razu: `"żółw"` ma cztery znaki, ale siedem bajtów, bo każda litera z diakrytykiem zajmuje dwa. Stąd najczęstsze nadużycie tej metody — `s.insert(2, '-')` w intencji „po drugiej literze” potrafi trafić w środek znaku i program panikuje; na stronie widać to jako `boundary at 2? false` dla `"héllo"`, a poprawne przesunięcie bierze się z `char_indices()`. Druga sprawa to koszt: wszystko za miejscem wstawienia przesuwa się, więc `insert(0, c)` w pętli jest kwadratowe — przykład pokazuje obok tańszy zapis `"abcd".chars().rev().collect::<String>()`, który daje ten sam wynik `"dcba"` w jednym przebiegu. Na samym końcu łańcucha znaków `insert` to zwykły `push`, a do wstawiania całego tekstu zamiast pojedynczego `char` służy `insert_str`.
+
+**Szukaj po polsku:** przesunięcie w bajtach · polskie znaki diakrytyczne w Ruscie · panika na granicy znaku · `rust String::insert` · `rust char_indices byte offset`

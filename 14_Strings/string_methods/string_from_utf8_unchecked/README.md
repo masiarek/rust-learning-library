@@ -65,3 +65,9 @@ true
 - [`String::as_mut_vec`](../string_as_mut_vec/README.md) — the other way to hold a `String`'s bytes unsafely
 
 [`String::from_utf8_unchecked` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf8_unchecked)
+
+## Po polsku
+
+Najważniejsze zdanie tej strony brzmi: `String` z niepoprawnymi bajtami to **undefined behavior**, a nie krzaczki na ekranie. To rozróżnienie gubią osoby przychodzące z C albo z Pythona, gdzie najgorszym skutkiem złego kodowania jest brzydki tekst — tutaj kompilator ma prawo zakładać, że każdy `String` jest poprawnym UTF-8, więc szkoda może wyjść gdziekolwiek dalej, niekoniecznie w miejscu wywołania. Warto też odebrać tej funkcji jej zwykłe usprawiedliwienie: `from_utf8` **również nie kopiuje** — obie wersje przejmują tę samą alokację — więc oszczędza się tu wyłącznie jedno liniowe przejście po bajtach, które jest bardzo szybkie. Sięgaj po `unsafe` tylko wtedy, gdy da się wykazać, że bajty pochodzą z tekstu: po podróży przez `into_bytes()` albo z bufora wypełnionego własnym koderem.
+
+**Szukaj po polsku:** niezdefiniowane zachowanie · unsafe w Ruscie · walidacja UTF-8 · `rust String::from_utf8_unchecked` · `rust undefined behavior invalid utf8`

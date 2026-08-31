@@ -75,3 +75,9 @@ len   5 capacity  16
 - [`String::reserve`](../string_reserve/README.md) — the opposite direction
 
 [`String::shrink_to` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.shrink_to)
+
+## Po polsku
+
+`shrink_to` to kompromis między trzymaniem całego zapasu a oddaniem go w całości: podajesz podłogę, poniżej której pojemność (*capacity*) nie zejdzie. Prośba nigdy nie niszczy zawartości — wynik to co najmniej `max(len(), min_capacity)`, więc `s.shrink_to(0)` na pięciobajtowym łańcuchu znaków daje pojemność 5, a nie 0, i nie jest to błąd, tylko ucięcie żądania do długości. Sens tego widać dopiero przy buforze używanym w pętli: `buf.shrink_to(16)` oddaje pamięć po nietypowo dużym elemencie (w przykładzie 200 → 16), ale zostawia zapas, żeby krótkie wpisy nie zmuszały alokatora do ciągłego powiększania bufora — a gdy pojemność już jest poniżej podłogi, wywołanie po prostu nic nie robi.
+
+**Szukaj po polsku:** pojemność łańcucha znaków · zmniejszanie pojemności bufora · `rust String shrink_to` · `rust shrink_to vs shrink_to_fit`

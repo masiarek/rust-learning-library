@@ -74,3 +74,9 @@ len 5 capacity 32
 - [`String::shrink_to_fit`](../string_shrink_to_fit/README.md) — releasing the memory afterwards
 
 [`String::truncate` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.truncate)
+
+## Po polsku
+
+Ta metoda ukarze polskiego czytelnika szybciej niż angielskiego: `truncate` liczy **bajty**, a każda litera z diakrytykiem zajmuje w UTF-8 dwa bajty, więc `s.truncate(10)` przechodzi bez szwanku na `"hello world"` i panikuje na `"żółta łąka"`, bo bajt 10 wypada w środku drugiego `ł` — kod przetestowany na ASCII pada dopiero na prawdziwych danych. Asymetria jest przy tym myląca: zbyt duży `new_len` nie robi nic (tą metodą nie da się wydłużyć łańcucha znaków), a jedyna panika bierze się z trafienia w środek znaku. Kiedy naprawdę chodzi o budżet bajtów — kolumna w bazie, limit w protokole — trzeba najpierw zejść do najbliższej granicy: `copy.truncate(copy.floor_char_boundary(budget))`, co przy budżecie 2 daje `"h"`, a nie połówkę `é`. Pojemność pozostaje nietknięta (`len 5 capacity 32`) — to metoda kasująca tekst, nie pamięć.
+
+**Szukaj po polsku:** obcinanie łańcucha znaków · polskie znaki a bajty UTF-8 · `rust String truncate char boundary panic` · `rust floor_char_boundary`

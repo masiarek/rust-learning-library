@@ -30,3 +30,11 @@ The diagram with three boxes and arrows between them, which implies correlation 
 - [Why observability matters](../why_observability_matters/README.md) — why any of them are worth the storage
 - [A span is not a log line](../spans_not_lines/README.md) — the first two pillars, and what actually separates them
 - [Metrics, and the label that multiplies](../metrics_and_cardinality/README.md) — the third, and the one with a bill attached
+
+## Po polsku
+
+„Trzy filary obserwowalności” to fraza, na którą po polsku trafisz w pierwszej lepszej prezentacji konferencyjnej — i właśnie dlatego warto od razu wiedzieć o niej dwie rzeczy. Pierwsza: sama OpenTelemetry nie mówi o filarach, tylko o **sygnałach** (*signals*), a ta lista jest otwarta — logi, metryki, ślady, `baggage`, i kolejne w robocie. Druga jest poważniejsza: metafora filaru sugeruje, że wystarczy postawić trzy, a dach utrzyma się sam. Nie utrzyma. Trzy sygnały z trzema niezwiązanymi identyfikatorami to po prostu trzy osobne źródła danych, a zszywanie ich po znaczniku czasu w środku awarii to zgadywanie z dodatkowymi krokami.
+
+To, co je naprawdę skleja, ma nazwę i osobną stronę: wspólny **trace id**, przenoszony przez granicę każdej usługi. Bez niego tabelka powyżej czyta się jak spis trzech niezależnych narzędzi; z nim — jak trzy ujęcia jednego zdarzenia: **ślad** (*trace*) mówi, że 8,6 z 9 sekund poszło na wywołanie usługi wyceny, **log** mówi, czego zabrakło w cache'u w tym jednym kroku, a **metryka** mówi, że dzieje się to dziś po raz czterysetny. Najwięcej uczy przy tym kolumna „na co dany sygnał nie odpowie”, a po polsku da się ją streścić w jednym zdaniu: ślad nie powie, czy jest **coraz** gorzej, log milczy o kroku, do którego program w ogóle nie doszedł, a metryka nigdy nie wskaże, **którego** żądania dotyczy.
+
+**Szukaj po polsku:** trzy filary obserwowalności · sygnały OpenTelemetry · ślad, log i metryka · `otel signals` · `trace id correlation`

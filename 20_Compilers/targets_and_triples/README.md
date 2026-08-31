@@ -25,3 +25,9 @@ A target triple looks like a naming convention and behaves like a contract. Two 
 - [The linker](../the_linker/README.md) — the stage where a target mismatch is discovered, and why the message names an architecture
 - [LLVM and its IR](../llvm_and_its_ir/README.md) — one IR, many back ends: the reason a target is a flag rather than a different compiler
 - [rustup](../../05_Tooling/rustup/README.md) — components, toolchains and targets, and which of the three a given command changes
+
+## Po polsku
+
+Trójka celu (*target triple*) ma cztery pola — architektura, dostawca, system operacyjny i ABI — więc już sama nazwa jest zaszłością historyczną i po polsku lepiej mówić od razu o **czterech decyzjach**; to nie konwencja nazewnicza, tylko kontrakt. Przy kompilacji skrośnej (*cross-compilation*) pułapka jest zawsze ta sama: `rustup target add` dokłada wyłącznie bibliotekę standardową **skompilowaną pod ten cel**, a nie kompilator i nie konsolidator, więc pierwsze budowanie i tak kończy się błędem — wypisanym przez linkera, jego własnym słownictwem, długo po etapie, który jeszcze wiedział, o co ci chodziło (od załatania tego są `cross` i `cargo-zigbuild`). Na Linuksie najwięcej widocznej roboty robi ostatnie pole: `gnu` to dynamiczna zależność od glibc, `musl` to wariant, który da się zlinkować statycznie, a dwa buildy różniące się tylko tym polem nie połączą się z tymi samymi bibliotekami.
+
+**Szukaj po polsku:** kompilacja skrośna · kompilator skrośny · `rustup target add` · `rust gnu vs musl` · `rust cross compile linker not found`

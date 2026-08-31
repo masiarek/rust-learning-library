@@ -24,3 +24,11 @@ Instrumenting every function. A span per three-line helper produces a trace with
 - [Instrumenting async code](../instrumenting_async/README.md) — where the ambient current span stops being free
 - [A log line a machine can read](../structured_logging/README.md) — the point-in-time half of the same crate
 - [What to instrument first](../what_to_instrument/README.md) — which boundaries earn a span
+
+## Po polsku
+
+Najkrócej po polsku: log to **punkt** na osi czasu, a span to **odcinek** — ma nazwę, początek, koniec, pola i, co najważniejsze, **rodzica**. Cały wodospad, który rysuje przeglądarka śladów, i całe zdanie „8,6 z 9 sekund poszło tutaj” to nic więcej niż ten link do rodzica plus arytmetyka na znacznikach czasu. Słowo `span` zostaje po polsku nieprzetłumaczone (odmieniamy je normalnie: *spanu*, *spanem*) i warto od razu odnotować, że przychodzi już zajęte: ze spanem `<span>` z HTML-a nie ma absolutnie nic wspólnego. Drzewo buduje się prosto — jeden span korzeniowy na przychodzące żądanie, dziecko na każde wywołanie na zewnątrz, a zdarzenia doczepiają się do tego spanu, który akurat jest bieżący.
+
+Dwie rzeczy zaskakują tu praktycznie każdego, więc lepiej je usłyszeć wcześniej niż na produkcji. Po pierwsze `#[tracing::instrument]` **domyślnie zapisuje argumenty funkcji** — więc `skip` i `skip_all` nie są optymalizacją, tylko wymogiem w chwili, gdy argumentem jest hasło, token albo czteromegabajtowe ciało żądania. Po drugie span musi umieć **douczyć się** pól po otwarciu: kodu odpowiedzi jeszcze nie ma, kiedy span powstaje. Na koniec pokusa, która wygląda na sumienność, a jest jej przeciwieństwem — oznaczanie spanem każdej funkcji. Trzylinijkowy pomocnik nie zasługuje na span; ślad z czterystoma wierszami to ślad, którego nikt nie czyta, i rachunek, którego nikt nie zatwierdzał. Spany stawia się na **granicach**: żądanie, zapytanie do bazy, wywołanie na zewnątrz — bo granica jest tym miejscem, gdzie naprawdę schodzi czas i gdzie naprawdę przechodzi wina.
+
+**Szukaj po polsku:** span a zdarzenie · ślad rozproszony · dane wrażliwe w spanach · `tracing instrument skip_all` · `rust span vs event`

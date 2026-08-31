@@ -28,3 +28,9 @@
 - [What an enum is](../../13_Enums/what_an_enum_is/README.md) — the type `match` was built for, and where exhaustiveness pays
 - [Six kinds of zero](../../17_Option_and_Result/six_kinds_of_zero/README.md) — an exhaustive match as a domain model, and the arm nobody wrote
 - [`match` expressions ↗](https://doc.rust-lang.org/reference/expressions/match-expr.html) · [Comprehensive Rust: `match` ↗](https://google.github.io/comprehensive-rust/control-flow-basics/match.html)
+
+## Po polsku
+
+`match` sprawdza wartość po kolei, od góry, i wygrywa pierwsze pasujące ramię — ale od `switch`a znanego z C czy Javy różnią go dwie rzeczy i obie są tu najważniejsze: nie ma przechodzenia między przypadkami (*fall-through*), więc nie ma też `break`a, o którym dałoby się zapomnieć, oraz obowiązuje **kompletność** dopasowania — każdy możliwy przypadek musi być pokryty, w przeciwnym razie `E0004`, a kompilator sam nazwie wartość, o którą nie zadbaliśmy. To właśnie ta druga własność zamienia „zapomniałem o jednym przypadku” z niespodzianki w czasie działania programu w błąd kompilacji, i dlatego `match` czuje się najlepiej na wyliczeniu (*enum*), gdzie zbiór przypadków jest skończony i znany z góry. Sam `match` jest przy tym wyrażeniem, więc wszystkie ramiona muszą mieć ten sam typ — dokładnie tak jak gałęzie `if`. Pułapka siedzi w `_`: ramię `_ => …` czyni dopasowanie kompletnym **na zawsze**, więc wariant dołożony do wyliczenia rok później skompiluje się bez słowa i po cichu wpadnie do gałęzi domyślnej — a bliźniacza wersja tego błędu to nazwa wariantu zapisana w ramieniu małą literą, bo wtedy zamiast porównania powstaje nowe wiązanie, które łapie wszystko.
+
+**Szukaj po polsku:** dopasowanie wzorców · kompletność dopasowania · `match` a `switch` · `rust E0004 non-exhaustive patterns` · `rust match catch-all underscore`

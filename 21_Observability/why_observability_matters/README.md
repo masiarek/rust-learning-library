@@ -23,3 +23,11 @@
 - [The three pillars](../the_three_pillars/README.md) — the three signals this page is arguing for
 - [What to instrument first](../what_to_instrument/README.md) — the same argument, reduced to a checklist
 - [Clients](../../07_Clients/README.md) — the section where the network first shows up as something that can say no
+
+## Po polsku
+
+Słowo **obserwowalność** (*observability*) nie jest w polszczyźnie kalką z żargonu DevOps — siedzi w naszej literaturze technicznej od dziesięcioleci, tyle że w teorii sterowania: układ jest obserwowalny, jeśli jego stan wewnętrzny da się odtworzyć z przebiegu wyjść. Kto miał automatykę na studiach, ma tu gotową i całkiem trafną intuicję, z jednym zastrzeżeniem, które ta strona stawia wprost: wyjścia trzeba **zaprojektować wcześniej**. W trakcie awarii już się ich nie dorobi. I to jest cała różnica między dwoma pytaniami: „czy wzrósł odsetek błędów” ktoś zapisał jako próg pół roku temu, a „dlaczego **to jedno** zamówienie szło dziewięć sekund, skoro godzinę wcześniej ten sam kod robił to w 200 ms” zadajesz o trzeciej w nocy i nikt go wcześniej nie przewidział.
+
+Dwie rzeczy brzmią po polsku ostrzej niż po angielsku i warto z tego skorzystać. Po pierwsze statystyka: **mediana** (p50) wygląda przyzwoicie dokładnie wtedy, gdy p99 jest tragiczny, a **średnia** jest z tych trzech liczb najbardziej skłonna zapewnić, że nic się nie dzieje — tymczasem twój handler zwrócił `Ok` w 4 ms, użytkownik czekał dziewięć sekund, i każda linijka w logu jest prawdziwa, tylko żadna nie jest odpowiedzią. Po drugie pułapka „przecież mamy logi”: nie brakuje wtedy **zapisów**, brakuje **korelacji**. Log jednej usługi to jej własna mała prawda, której nic nie łączy z prawdą usługi wywołującej — a identyfikatora żądania `println!` nie dopisze po fakcie, bo kiedy zaczynasz go potrzebować, żądanie już się skończyło i linia jest zapisana.
+
+**Szukaj po polsku:** obserwowalność układu · korelacja logów · identyfikator żądania · `observability vs monitoring` · `p99 latency tail`

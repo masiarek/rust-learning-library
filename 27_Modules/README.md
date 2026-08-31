@@ -21,3 +21,9 @@ The first three are one story told from three sides: what a module *is*, how to 
 Testing is the other thing `#[cfg(test)]` is for, and it has [a section of its own](../28_Testing/README.md). The invariant that private fields protect is [the newtype](../16_Structs/newtype_score/README.md). And the `use` line whose absence produces the strangest error in Rust — a method that exists but cannot be found — is [a trait must be in scope](../12_Traits/trait_in_scope/README.md).
 
 Cargo, crates and dependencies are toolchain rather than language, and live in [Tooling](../05_Tooling/README.md).
+
+## Po polsku
+
+Moduł (*module*) robi w Ruscie dwie rzeczy naraz i stąd bierze się większość trudności: jest przestrzenią nazw — dzięki czemu dwa różne typy mogą nazywać się `Result` — a przy okazji granicą prywatności. Ta druga rola zaskakuje osoby przychodzące z Javy czy C#, gdzie „prywatne” znaczy prywatne dla klasy: w Ruscie ścianę stawia **moduł**, a nie typ, więc każda funkcja leżąca w tym samym `mod` siedzi po wewnętrznej stronie i widzi prywatne pola cudzych struktur. Przy szukaniu materiałów warto pamiętać, że polski przekład Tour of Rust urywa się na rozdziale 5, a moduły są w rozdziale 9 — po polsku zostają pojedyncze wpisy blogowe, więc na konkretne pytanie i tak szybciej odpowie fraza angielska.
+
+**Szukaj po polsku:** moduły w Ruscie · widoczność i prywatność w Ruscie · `rust module system` · `rust pub(crate) visibility`

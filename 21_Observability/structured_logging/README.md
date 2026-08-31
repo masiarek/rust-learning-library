@@ -28,3 +28,13 @@ The format string that ate the field. Once `id` is inside a sentence, every quer
 - [A span is not a log line](../spans_not_lines/README.md) — the same crate, one level up: events inside intervals
 - [The three pillars](../the_three_pillars/README.md) — what logs are for, next to the other two
 - [`anyhow` and context](../../02_Errors/anyhow_and_context/README.md) — the same instinct applied to an error's own text
+
+## Po polsku
+
+Logowanie strukturalne (*structured logging*) sprowadza się do jednego pytania: czy linia w logu jest **zdaniem**, czy **rekordem**. `println!("user {id} failed after {ms}ms")` produkuje tekst, który za pół roku trzeba będzie rozbierać wyrażeniem regularnym; `info!(user_id, duration_ms, "request failed")` produkuje rekord z nazwanymi polami, których typ dojedzie aż na drugi koniec. Kosztuje to tyle samo pisania, a decyzja zapada w chwili, w której zapisujesz linię — nie wtedy, kiedy zadajesz pytanie.
+
+Dla piszących po polsku jest tu dodatkowa, całkiem konkretna pułapka: **polszczyzna jest fleksyjna, a pole nie ma przypadka.** Wartość wklejona w polskie zdanie musi się do niego odmienić („nie powiodło się żądanie użytkownika 42”), więc szablony komunikatów albo brzmią sztucznie, albo są niepoprawne — a `grep` po takiej prozie łamie się przy pierwszej zmianie szyku. Stąd rozsądna praktyka w polskich zespołach: **komunikaty w logach pisze się po angielsku**, a po polsku mówi interfejs użytkownika. Wtedy `user_id=42` jest tym samym rekordem niezależnie od języka, a tłumaczenie dotyczy warstwy, która naprawdę tego wymaga. Ten sam argument, tylko odkryty kilkadziesiąt lat wcześniej, stoi za dziennikiem aplikacji w SAP-ie (`SLG1`): komunikat jest klasą, numerem i parametrami właśnie dlatego, że **musiał** dać się przetłumaczyć — na polski też.
+
+Dwie rzeczy operacyjne warto nazwać po polsku od razu. **Poziomy logowania** (`RUST_LOG`, `EnvFilter`) to nie kwestia gustu, tylko pokrętło kosztu — `debug!` w gorącej pętli potrafi zaboleć dokładnie tego dnia, w którym ktoś je włączy na produkcji. I **redakcja danych**: w Europie to nie uwaga z code review, tylko RODO. Pole da się wyciąć centralnie, w jednym miejscu potoku; wartości wtopionej w zdanie nie wytniesz nigdzie — i to jest najmocniejszy argument za polami, jaki ta strona ma do zaoferowania.
+
+**Szukaj po polsku:** logowanie strukturalne · dane osobowe w logach RODO · poziomy logowania · `rust tracing fields` · `tracing-subscriber json`

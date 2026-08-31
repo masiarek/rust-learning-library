@@ -25,3 +25,9 @@ A `while` whose condition depends on a variable the body forgot to advance is an
 - [`loop`](../the_loop_keyword/README.md) — when there is no condition at the top
 - [Variables](../../15_First_Programs/variables/README.md) — the `mut` a `while` loop almost always needs
 - [Comprehensive Rust: `while` ↗](https://google.github.io/comprehensive-rust/control-flow-basics/loops/while.html)
+
+## Po polsku
+
+`while` sprawdza warunek **przed** każdym obiegiem, więc może nie wykonać się ani razu — a pętli z warunkiem na końcu, czyli pascalowego `repeat … until` i C-owego `do…while`, w Ruscie po prostu nie ma; jej odpowiednikiem jest `loop { …; if !warunek { break; } }`. Obowiązują tu te same trzy reguły co przy `if`: żadnych nawiasów wokół warunku, klamry obowiązkowe, a warunek musi być typu `bool`. Warto zwrócić uwagę na kształt takiego kodu: `while` niemal zawsze potrzebuje zmiennej `mut` zadeklarowanej przed pętlą, i to jest dokładnie ten wzorzec, którego `for` po iteratorze pozwala uniknąć. Stąd pułapka — jeśli ciało zapomni posunąć zmienną z warunku, powstaje pętla nieskończona, o której kompilator nie powie ani słowa, bo z jego punktu widzenia program jest poprawny; niezgodny jest tylko z tym, co mieliśmy na myśli, a wersja z `for` po znanej sekwencji nie potrafi popełnić tego błędu.
+
+**Szukaj po polsku:** pętla while · pętla z warunkiem na końcu · brak `do while` w Ruscie · `rust do while equivalent loop break` · `rust while let`

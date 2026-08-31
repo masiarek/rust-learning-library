@@ -69,3 +69,9 @@ None
 - [`str::rmatch_indices`](../str_rmatch_indices/README.md) — every match, from the back
 
 [`str::rfind` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.rfind)
+
+## Po polsku
+
+Przedrostek `r` odwraca wyłącznie **kierunek szukania**, a nie sposób numerowania: zwrócone przesunięcie nadal liczy się od początku łańcucha, dlatego `"a.b.c".rfind('.')` to `3`, a nie `1`. To metoda do odcinania końcówki tam, gdzie separator może pojawić się wiele razy — widać to na `"archive.tar.gz"`, gdzie `find` daje `"tar.gz"`, a `rfind` `"gz"`. Uwaga na idiom `&path[i + 1..]` z przykładu: działa, bo `/` zajmuje jeden bajt, ale przy separatorze pokroju `ł` albo `—` zamiast `1` trzeba dodać `c.len_utf8()`, inaczej trafisz w środek znaku i program panikuje. Zwykle i tak czytelniej wychodzi `rsplit_once`, które zwraca od razu obie części bez ręcznej arytmetyki na przesunięciach — w wydruku `Some(("/usr/local/share", "doc"))`.
+
+**Szukaj po polsku:** szukanie od końca łańcucha znaków · ostatni separator i rozszerzenie pliku · `rust rfind vs find` · `rust rsplit_once`

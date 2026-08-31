@@ -65,3 +65,9 @@ after  5 / 5
 - [`String::shrink_to_fit`](../../string_methods/string_shrink_to_fit/README.md) — what `into_boxed_str` does on the way
 
 [`str::into_string` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.into_string)
+
+## Po polsku
+
+To bilet powrotny z `Box<str>` do `String` i kosztuje dokładnie zero: bajty zostają tam, gdzie były, a wartość odzyskuje jedynie pole pojemności (*capacity*). O to pole toczy się tu cała gra — wydruk pokazuje `String` jako 24 bajty, a `Box<str>` jako 16, więc rezygnacja z możliwości rozrastania się oszczędza osiem bajtów na każdej wartości; w strukturze trzymanej milion razy to osiem megabajtów. Warto przy okazji zapamiętać konwencję nazw, bo w Ruście jest ona umowna, ale konsekwentna: `into_` to przejęcie na własność bez kopiowania, natomiast `to_string` z cechy (*trait*) `ToString` kopiuje tekst do świeżej alokacji — nazwy brzmią podobnie, koszt jest zupełnie inny. Skutek uboczny widać w ostatnich liniach przykładu: łańcuch znaków z zapasem 64 wraca jako 5/5, bo `into_boxed_str` po drodze przycina alokację do rozmiaru treści.
+
+**Szukaj po polsku:** przejęcie na własność · pojemność łańcucha znaków · `rust Box<str> vs String` · `rust into_string to_string difference`

@@ -223,3 +223,15 @@ first   Ada
 - [Generic enums](../generic_enums/README.md) — `NextNode<T>` in its own right, and the two-parameter case
 - [What a generic is](../what_a_generic_is/README.md) — the `<T>` being made recursive here
 - [Ownership and moves](../../18_Ownership/ownership_and_moves/README.md) — what `push_front(self, …)` is doing to the old head
+
+## Po polsku
+
+Struktura, która zawiera samą siebie, nie ma skończonego rozmiaru — i w tym tkwi cały problem tej lekcji. `rustc` mówi to wprost: `error[E0072]: recursive type ListNode has infinite size`, a w podpowiedzi sam proponuje `Box`. Po polskim kursie struktur danych ta ściana wydaje się dziwna, bo w Javie i w Pythonie pole `next` **już jest** referencją, a w C i C++ pisze się je wskaźnikiem odruchowo. Rust układa pola struktury w miejscu (*inline*), więc trzeba powiedzieć na głos, gdzie zaczyna się sterta: `Option<Box<ListNode<T>>>` to osiem bajtów niezależnie od tego, czym okaże się `T`, i te osiem bajtów przerywa cykl.
+
+Drugi fakt bywa jeszcze mniej oczywisty: `Option` jest tu **za darmo**. `Box` nigdy nie jest nullem i kompilator o tym wie, więc `None` zapisuje się *jako* wskaźnik zerowy, a nie jako dodatkowy znacznik obok niego — `size_of::<Box<ListNode<i32>>>()` i `size_of::<Option<Box<ListNode<i32>>>>()` dają tyle samo, po 8. To optymalizacja niszy (*null-pointer optimisation*) i to dzięki niej „może jest następny węzeł” pisze się w Ruscie przez `Option<Box<T>>`, a nie przez własne opakowanie, za które trzeba by zapłacić.
+
+Stąd pułapka, w którą wpada się właśnie po kursie list: skoro lista ma mieć „koniec”, to napiszmy własne wyliczenie z wariantem `End`. Ono się kompiluje, zajmuje te same 8 bajtów — i jest dokładnie `Option<Box<…>>` z przemianowanymi wariantami, tyle że bez całego API `Option`: bez `as_deref`, `map`, `take`, `is_none`, bez `while let Some(…)`, które każdy czytelnik Rusta rozpoznaje od razu. Własne dwuwariantowe wyliczenie zarabia na siebie wtedy, gdy nazwy coś znaczą (`Pending` / `Finalised`); „nie ma następnego węzła” to nie ten przypadek. Osobno: pola `data` **nie pakuj** w `Box`. Rekurencyjne jest wyłącznie `next` — `ListNode<[u8; 64]>` z ładunkiem w miejscu to 72 bajty i jedna alokacja na węzeł, a wersja z `data: Box<T>` to 16 bajtów i dwie.
+
+Na koniec zastrzeżenie, którego polskie materiały o listach wiązanych zwykle nie stawiają: w Ruscie ta struktura jest ćwiczeniem, nie narzędziem. `Vec<T>` wygrywa z listą jednokierunkową (*linked list*) przy niemal każdym wzorcu dostępu na prawdziwym sprzęcie i dokumentacja `LinkedList` ze std sama to przyznaje. Do tego domyślny `Drop` schodzi rekurencyjnie, po jednej ramce stosu na węzeł, więc dostatecznie długa lista przepełnia stos przy zwalnianiu — tak samo jak rekurencyjne `len()`. Przejście iteracyjne, przez `as_deref()`, takiego sufitu nie ma.
+
+**Szukaj po polsku:** lista jednokierunkowa w Ruscie · typ rekurencyjny o nieskończonym rozmiarze · optymalizacja niszy · `rust E0072 recursive type has infinite size` · `rust Option Box null pointer optimization`

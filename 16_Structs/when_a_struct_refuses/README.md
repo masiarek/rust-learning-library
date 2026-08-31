@@ -322,3 +322,20 @@ conflicting sites. The skill is reading the `note:` line, not the first one.
 - [What a struct is](../what_a_struct_is/README.md) · [STRUCTS.md](../../STRUCTS.md)
 - [A name is not a place](../../18_Ownership/a_name_is_not_a_place/README.md) — why `E0594` points at the binding
 - [What a warning is asking](../../15_First_Programs/what_a_warning_is_asking/README.md) — the same habit, applied to the messages that do *not* stop the build
+
+## Po polsku
+
+Ta strona uczy jednej rzeczy, którą łatwo przeoczyć: **kod błędu nie jest diagnozą**. `E0277` mówi tylko tyle, że nie spełniono ograniczenia cechy (*trait bound not satisfied*), a przy strukturach stoją za tym cztery zupełnie różne pomyłki. Polski czytelnik ma tu dodatkową pokusę: komunikat `rustc` jest długi i po angielsku, więc szybciej wydaje się wpisać sam kod w wyszukiwarkę, niż przeczytać całość. Akurat przy `E0277` ten skrót zawodzi — wyszukiwarka odpowie na cudzy problem. Odpowiedź jest zawsze niżej, w wierszach `note:` i `help:`, i w siedmiu przypadkach z ośmiu `rustc` podaje w nich gotową poprawkę.
+
+Cztery odczytania `E0277`, które ta strona rozdziela:
+
+- **brak `Display`** przy `{}` — tę cechę trzeba napisać ręcznie, kompilator nie zgadnie, jak człowiek ma czytać twój typ;
+- **brak `Debug`** przy `{:?}` — ten sam kod, odwrotna rada: tu wystarczy `#[derive(Debug)]` i `rustc` sam to proponuje;
+- **pole typu `str`** — wbrew kodowi to wcale nie brak implementacji, tylko brak **rozmiaru**: `str` to sam tekst o nieznanej długości, więc polem może być `&str` (wycinek łańcucha), `String` (łańcuch znaków na stercie) albo `Box<str>`; pole o rozmiarze nieznanym w czasie kompilacji wolno mieć wyłącznie na **ostatniej** pozycji;
+- **`Eq` bez `PartialEq`** — `Eq` nie dodaje żadnej metody, jest tylko obietnicą o `PartialEq` (że `a == a` zawsze zachodzi), więc obie idą zawsze parą. Rozdzielają je liczby zmiennoprzecinkowe: `f64` ma `PartialEq`, ale nie `Eq`, bo `NaN != NaN`.
+
+Reszta tabelki mówi coś o tym, jak Rust jest zbudowany. `E0063` — nie istnieje częściowo zbudowana struktura: w chwili, gdy powstaje, każde pole ma już wartość (`..Default::default()` dopełni resztę, ale zerami typu, a nie wartościami twojej dziedziny). `E0119` — `#[derive(...)]` **pisze impl**, więc razem z ręcznym `impl` masz dwie implementacje jednej cechy dla jednego typu, czego reguła spójności zabrania; zostaw tę, która wie więcej, bo `Default` z `derive` potrafi dać tylko zero typu, a twój własny — prawdziwą wartość domyślną. `E0594` mówi z kolei rzecz, którą polszczyzna wręcz podpowiada źle: **nie ma czegoś takiego jak „pole mutowalne”**. `mut` należy do wiązania nazwy, więc `let b = b;` tworzy nowe wiązanie już bez `mut` — i dlatego `help:` wskazuje wiersz z `let`, a nie wiersz z przypisaniem. A `E0282` łapie metodę w `impl<T>`, która o `T` nigdzie nie wspomina: nie ma z czego wywnioskować typu, więc najlepszym wyjściem jest zwykle wyniesienie jej poza generyczny `impl`.
+
+Na koniec arytmetyka z ćwiczenia, bo to najtrwalszy nawyk z całej strony: siedem błędów, pięć przyczyn, trzy poprawki. Jedno źle dobrane pole (`name: str`) wygenerowało od razu trzy komunikaty, bo psuje każdy `derive`, który musi go dotknąć. `rustc` zgłasza w jednym przebiegu wszystko, co jest w stanie zobaczyć — to nie jest kolejka do obsługiwania po jednym. Przeczytaj wszystkie, pogrupuj po przyczynach, dopiero potem edytuj.
+
+**Szukaj po polsku:** struktury w Ruscie · kody błędów rustc · `rust E0277 trait bound is not satisfied` · `rust str doesn't have a size known at compile-time` · `rust E0119 conflicting implementations`

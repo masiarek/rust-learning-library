@@ -25,3 +25,9 @@ Reaching for a **guard** where `@` is what you wanted — `n if (1..=9).contains
 - [One arm, many values](../../17_Option_and_Result/one_arm_many_values/README.md) — the ranges and `|` that go on the right of the `@`
 - [Destructuring enums](../destructuring_enums/README.md) — where `msg @ Variant { .. }` earns its keep
 - [`@` bindings ↗](https://doc.rust-lang.org/reference/patterns.html#binding-modes) · [Comprehensive Rust: Pattern Matching ↗](https://google.github.io/comprehensive-rust/pattern-matching.html)
+
+## Po polsku
+
+Znak `@` rozwiązuje wybór, przed którym stawia zwykły wzorzec: `1..=9` sprawdza wartość, ale nie zostawia dla niej nazwy, a samo `n` nazywa, lecz niczego nie sprawdza — `n @ 1..=9` robi jedno i drugie, i czyta się to „nazwij to `n`, ale tylko jeśli ma taki kształt”. Tak samo działa na całym wariancie: `msg @ Message::Resize { .. }` bada kształt, a zachowuje wartość w komplecie. Nawyk wart wyrobienia jest jednak inny niż sama składnia: kiedy pojawia się ochota na strażnika (*guard*) w rodzaju `n if (1..=9).contains(&n)`, to prawie zawsze znak, że chodziło o `@` — strażnik robi to samo, czyta się gorzej, a przy okazji wypisuje ramię z kontroli kompletności dopasowania. Jeśli warunek da się wyrazić wzorcem, wyraź go wzorcem.
+
+**Szukaj po polsku:** wiązanie we wzorcu · dopasowanie wzorców · `rust @ bindings pattern` · `rust bind and test value in match`

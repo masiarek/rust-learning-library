@@ -72,3 +72,9 @@ true true
 - [`String::capacity`](../string_capacity/README.md) — the field this leaves at zero
 
 [`String::new` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.new)
+
+## Po polsku
+
+`String::new()` w ogóle nie dotyka sterty — powstają tylko trzy słowa na stosie (wskaźnik, długość, pojemność), a bufor kupowany jest dopiero przy pierwszym dołożeniu treści. Wynik przykładu mówi to wprost: `before len 0 capacity 0`, a po dopisaniu jednego znaku od razu `capacity 8` — alokator nie wydziela jednego bajtu, tylko od razu z zapasem, i dalej rośnie przez podwajanie. Stąd `new()` jest właściwym domyślnym wyborem, gdy nie wiadomo, ile tekstu przyjdzie, albo gdy łańcuch znaków ma prawo zostać pusty; jeśli rozmiar znasz z grubsza, `with_capacity` kupuje bufor raz, zamiast płacić za kilka realokacji po drodze. Ponieważ to `const fn`, wolno nim zainicjować `static` — a z trzech zapisów pustego łańcucha (`String::new()`, `String::default()`, `"".to_string()`) tylko dwa pierwsze mają gwarancję, że nie alokują niczego.
+
+**Szukaj po polsku:** pusty łańcuch bez alokacji · alokacja na stercie · podwajanie pojemności · `rust String new vs with_capacity` · `rust String new does not allocate`

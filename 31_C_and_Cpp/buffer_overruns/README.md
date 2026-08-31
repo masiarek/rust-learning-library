@@ -119,3 +119,13 @@ When you genuinely need indexing with the check gone, `get_unchecked` exists and
 - [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md) — what `scores[3]` actually does, and when that is the right choice
 - [Signed overflow](../signed_overflow/README.md) — the other run-time check, and the one whose default changes with the build profile
 - [The bugs Rust is a reply to](../README.md) — the other eight
+
+## Po polsku
+
+Klasyczny „błąd o jeden” (*off-by-one*): `<=` zamiast `<`, czyli czwarty odczyt z trzyelementowej tablicy. Poprawna suma to 12, a program wypisał `1433338037`, potem `620167213`, potem `1175781431` — za każdym razem co innego, bo czyta to, co akurat leży dalej na stosie. Uwaga na polską nazwę: „przepełnienie bufora” kojarzy się u nas przede wszystkim z *zapisem* poza koniec i z exploitami, a tutaj nic nie jest zapisywane. To czysty **odczyt poza zakresem** — tak samo niezdefiniowany, a znacznie trudniejszy do zauważenia, bo program się nie wywraca, tylko zwraca liczbę.
+
+Warto zapamiętać, czego `-Wall` *nie* powiedziało. Przy stałym indeksie (`scores[3]` wypisanym wprost) clang ostrzega przez `-Warray-bounds`, ale przy granicy pętli milczy — a im dalej indeks od miejsca, w którym optymalizator potrafi go policzyć (wartość z `argc`, indeks wyliczony dwie funkcje wcześniej), tym ciszej i tym bardziej realistyczny kod. Po stronie Rusta widać dokładnie to samo rozróżnienie: zwykłe indeksowanie sprawdzane jest w czasie działania, ale stały indeks poza zakresem `rustc` odrzuca już przy kompilacji, lintem `unconditional_panic`.
+
+Różnica nie polega jednak na liczbie sprawdzeń, tylko na układzie danych. Tablica w C rozpada się do gołego wskaźnika i długość nigdzie z nią nie jedzie — w czasie działania nie ma czego sprawdzać. Wycinek (*slice*) `&[i32]` jest grubym wskaźnikiem (*fat pointer*): adres **i** długość w jednej wartości, więc pytanie „czy jest element numer 3?” w ogóle ma sens. Stąd dwa sposoby pytania i to jest właściwa lekcja tej strony: `scores[3]` znaczy „na pewno jest, dawaj” i przy pomyłce panikuje komunikatem `index out of bounds: the len is 3 but the index is 3`, a `scores.get(3)` znaczy „a jest?” i oddaje `None` w `Option`, którego nie da się przeoczyć. W pętli i tak zwykle nie indeksujemy — `for s in &scores` nie liczy żadnego indeksu, więc nie ma tam czego sprawdzać, i to jest lepszy argument za tą formą pętli niż estetyka.
+
+**Szukaj po polsku:** przepełnienie bufora · błąd o jeden · odczyt poza zakresem tablicy · `rust index out of bounds` · `rust slice get vs index` · `-Warray-bounds`

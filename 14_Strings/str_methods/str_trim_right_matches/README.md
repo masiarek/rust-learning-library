@@ -50,3 +50,9 @@ identical: true
 - [`str::trim_left_matches`](../str_trim_left_matches/README.md) — the other deprecated name
 
 [`str::trim_right_matches` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.trim_right_matches)
+
+## Po polsku
+
+Ta metoda dzieli los całej czwórki `*_left` / `*_right`: od wersji 1.33 nazywa się `trim_end_matches` i tylko tak powinna trafiać do nowego kodu. Przy okazji warto zobaczyć, co robi sam mechanizm, bo nazwa tego nie zdradza — wzorzec jest zdejmowany z końca **wielokrotnie**, więc `"value///"` daje `"value"`, a nie `"value//"`; przy normalizowaniu ścieżek albo adresów URL zwykle dokładnie o to chodzi. Jeśli natomiast chcesz usunąć jedno wystąpienie i jeszcze wiedzieć, czy w ogóle tam było, sięgnij po `strip_suffix`, która zwraca `Option`.
+
+**Szukaj po polsku:** usuwanie ukośników z końca ścieżki · normalizacja adresu URL w Ruscie · `rust trim_right_matches deprecated` · `rust trim_end_matches vs strip_suffix`

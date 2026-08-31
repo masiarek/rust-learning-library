@@ -69,3 +69,9 @@ boundary at 2? false
 - [`str::is_char_boundary`](../str_is_char_boundary/README.md) — the check being skipped
 
 [`str::get_unchecked` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.get_unchecked)
+
+## Po polsku
+
+Kontrakt bezpieczeństwa ma dwa warunki i oba muszą zachodzić naraz: zakres mieści się w `0..=len()`, a **oba** jego końce leżą na granicach znaków. Dla polskiego tekstu te warunki nie są tak samo trudne — pierwszy sprawdza się w głowie, przy drugim żadne przesunięcie wzięte „z sufitu” granicą raczej nie będzie, bo litery z ogonkami i kreskami zajmują po dwa bajty; w przykładzie powyżej granice `"héllo"` to `[0, 1, 3, 4, 5]`, a `is_char_boundary(2)` zwraca `false`. Złamanie któregokolwiek warunku daje niezdefiniowane zachowanie (*undefined behaviour*), a nie panikę i nie krzaczki: powstaje `&str` nad niepoprawnym UTF-8, czyli złamany niezmiennik, na którym opierają się wszystkie pozostałe metody — objaw potrafi więc wyjść daleko od miejsca wywołania. Ponieważ usuwane sprawdzenia są tanie (porównanie i test jednego bajtu), kolejność jest tylko jedna: najpierw `get` albo zwykłe indeksowanie, potem profiler, i dopiero gdy profiler o to poprosi — `get_unchecked` z przesunięciami pochodzącymi z `char_indices` albo `find`.
+
+**Szukaj po polsku:** niezdefiniowane zachowanie · granica znaku · `rust get_unchecked safety` · `rust unsafe str slicing`

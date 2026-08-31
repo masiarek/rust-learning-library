@@ -72,3 +72,9 @@ len 19 capacity 19
 - [`String::with_capacity`](../string_with_capacity/README.md) — the same idea at construction
 
 [`String::reserve_exact` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.reserve_exact)
+
+## Po polsku
+
+Słowo *exact* w nazwie opisuje intencję, a nie obietnicę: metoda nie zaokrągla celowo w górę, ale alokator i tak może oddać większy blok, a gwarancja pozostaje identyczna jak przy `reserve` — `capacity() >= len() + additional`. Argument nadal jest **zapasem**, nie sumą; cała różnica sprowadza się do tego, że dla `"ab"` i piątki dostajesz `reserve_exact 7` zamiast `reserve 8`. Po tę wersję sięgaj, gdy rozmiar końcowy jest znany i nie zamierzasz go przekroczyć — plik o znanej długości, rekord o stałym układzie; w przykładzie widać to jako `len 19 capacity 19`, bez ani jednego bajta zapasu. W pętli, która wciąż dokłada, wybieraj zwykłe `reserve`: końcówka przykładu pokazuje, czym kończy się `reserve_exact` powtarzane przy każdym dopisaniu — `6 capacity changes over 6 appends`, czyli realokacja za każdym razem, i jest to realny błąd wydajnościowy, a nie drobiazg.
+
+**Szukaj po polsku:** dokładna rezerwacja pojemności · realokacja w pętli · znany rozmiar bufora · `rust reserve vs reserve_exact` · `rust String capacity growth`

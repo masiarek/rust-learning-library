@@ -70,3 +70,9 @@ true
 - [`str::encode_utf16`](../../str_methods/str_encode_utf16/README.md) — the outbound direction
 
 [`String::from_utf16le` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf16le)
+
+## Po polsku
+
+To ta kolejność, którą w praktyce spotyka się najczęściej — Windows zapisuje UTF-16 jako little-endian, więc plik z Notatnika czy eksport „Unicode text” z Excela wchodzi do Rusta właśnie tędy. Prawdziwa pułapka nie tkwi jednak w kolejności bajtów, tylko w **BOM-ie**: `from_utf16le` go dekoduje, ale go nie zjada, więc początkowe `FF FE` zostaje w łańcuchu znaków jako `U+FEFF` — znak zerowej szerokości, którego nie widać na ekranie, a który psuje każde porównanie, `starts_with` i klucz w mapie. Widać go dokładnie w jednym miejscu: `{:?}` wypisuje `"\u{feff}h"`, podczas gdy zwykłe `{}` pokaże po prostu `h`, więc do polowania na ten znak używaj formatowania debugowego, a usuwaj go jawnie przez `strip_prefix('\u{FEFF}')`. Faktycznie zgłaszane błędy są tylko dwa: nieparzysta liczba bajtów i niesparowany surogat.
+
+**Szukaj po polsku:** znacznik BOM · niewidzialny znak na początku pliku · UTF-16LE w Windows · `rust String::from_utf16le` · `rust strip BOM U+FEFF`

@@ -26,3 +26,9 @@ Adding `;` after `"small"` in a branch changes that branch's value from `&str` t
 - [`match` expressions](../match_expressions/README.md) — the same idea for more than two cases, and the exhaustiveness the compiler checks
 - [`if let`](../../17_Option_and_Result/if_let/README.md) — `if` against a *pattern*, once `Option` is in play
 - [`if` expressions ↗](https://doc.rust-lang.org/reference/expressions/if-expr.html) · [Comprehensive Rust: `if` ↗](https://google.github.io/comprehensive-rust/control-flow-basics/if.html)
+
+## Po polsku
+
+Warunek nie stoi tu w nawiasach, za to klamry są obowiązkowe nawet dla jednej instrukcji — co z definicji likwiduje klasyczny błąd z dopisaniem drugiej linii pod `if`-em bez klamer. Warunek musi być typu `bool`: `if n` dla liczby całkowitej się nie skompiluje, bo w Ruscie nigdzie nie ma „prawdziwościowości” (*truthiness*) znanej z Pythona czy C — zero nie jest fałszem, a pusty łańcuch znaków niczym szczególnym. Do tego `if` jest wyrażeniem i ma wartość, więc zamiast operatora warunkowego `?:` i zamiast przypisania w każdej gałęzi pisze się `let size = if n < 10 { "small" } else { "large" };` — pod jednym warunkiem: **obie gałęzie muszą mieć ten sam typ**. Stąd typowy `E0308` początkującego, którego zwykłą przyczyną jest jeden zabłąkany średnik, bo `"small";` zmienia wartość gałęzi z `&str` na `()`, a błąd zgłaszany jest przy `if`, nie przy średniku; uwaga — średnik kończący całe `let x = if … { … };` to zupełnie inny średnik i on ma tam być.
+
+**Szukaj po polsku:** instrukcja warunkowa a wyrażenie · warunek musi być typu `bool` · `rust if expression both branches same type` · `rust E0308 if and else have incompatible types`

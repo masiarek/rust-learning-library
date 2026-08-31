@@ -77,3 +77,9 @@ None
 - [`str::trim`](../str_trim/README.md) — whitespace instead of a pattern
 
 [`str::trim_matches` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.trim_matches)
+
+## Po polsku
+
+`trim_matches` obcina **wzorzec** z obu końców i powtarza to tak długo, jak długo końce pasują — dlatego `"xxhixx".trim_matches('x')` daje `"hi"`, a nie `"xhix"`. Pierwsza pułapka jest widoczna od razu, bo kompilator ją zgłasza: wzorcem nie może być wieloznakowy `&str` (wymagany jest `DoubleEndedSearcher`), więc `"abcabc".trim_matches("abc")` się nie skompiluje i trzeba złożyć `trim_start_matches("abc").trim_end_matches("abc")`. Druga jest cichsza i widać ją w wyniku przykładu: przy zdejmowaniu cudzysłowów `"\"\"\"".trim_matches('"')` zjada wszystkie trzy i zostaje pusty łańcuch znaków, a `"hi\"".trim_matches('"')` usuwa cudzysłów, który nie miał pary. Gdy cudzysłowy mają być sparowane, uczciwą wersją jest `strip_prefix('"').and_then(|s| s.strip_suffix('"'))` — przy braku pary zwraca `None` zamiast po cichu psuć dane.
+
+**Szukaj po polsku:** obcinanie znaków z końców łańcucha · usuwanie cudzysłowów w Ruscie · `rust trim_matches vs strip_prefix` · `rust DoubleEndedSearcher pattern`

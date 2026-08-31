@@ -114,3 +114,13 @@ The first four borrow; the rest consume.
 - [`str` methods](../str_methods/README.md) — the borrowed half, 83 more pages, and where all the reading lives
 - [The strings arc](../README.md) — the lessons these pages are a reference for
 - [`String` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html) — the official documentation these pages explain
+
+## Po polsku
+
+To jest spis — po jednej stronie na każdą z 42 metod, które `String` udostępnia w stabilnym Ruscie 1.98. Podział między `String` a `str` warto sobie ułożyć raz i mieć go z głowy: `String` **posiada** tekst i potrafi go powiększyć, więc tutaj trafiło wszystko, co wymaga własności — budowanie, dopisywanie, usuwanie, oddanie bufora dalej. Całe *czytanie* (`split`, `trim`, `find`, `replace`, `parse`) mieszka po stronie `str` i działa na `String` bez żadnej konwersji, bo `String` dereferencjuje się do `str` — dlatego ta lista jest krótka, a tamta ma ponad osiemdziesiąt pozycji.
+
+Trzy liczby, których mylenie jest największym źródłem kłopotów, mają dla polskiego czytelnika dodatkowy haczyk: `len()` zwraca **bajty**, a nie znaki, i nasze ogonki pokazują to natychmiast — `"żółw"` ma cztery znaki, ale siedem bajtów, bo `ż`, `ó` i `ł` zajmują w UTF-8 po dwa. Liczbę znaków daje dopiero `chars().count()`, i to przechodząc po całym łańcuchu znaków, więc nie jest to odczyt pola, tylko pętla. Trzecia liczba, `capacity()`, mówi wyłącznie, ile bufor **może** pomieścić, i nie jest częścią wartości: dwa łańcuchy o tym samym tekście i różnej pojemności są równe i tak samo się haszują — nigdy nie pisz testu, który sprawdza `capacity()`.
+
+Z tej samej różnicy bierze się druga pułapka. Metody przyjmujące **przesunięcie w bajtach** — `insert`, `remove`, `truncate`, `drain`, `replace_range`, `split_off`, `extend_from_within` — panikują na dwa sposoby: gdy przesunięcie wychodzi poza zakres oraz gdy wypada **w środku znaku**. Dla `let mut s = String::from("żółw")` wywołanie `s.truncate(3)` to właśnie ten drugi przypadek, bo trójka trafia między dwa bajty `ó`. Testem jest `is_char_boundary`, naprawą `floor_char_boundary`, które cofa przesunięcie do najbliższej poprawnej granicy — strona `truncate` pokazuje to na `"héllo wörld"` przy budżecie dwóch bajtów.
+
+**Szukaj po polsku:** długość łańcucha w bajtach a w znakach · polskie znaki w UTF-8 · granica znaku w Ruscie · `rust String len vs chars count` · `rust byte index is not a char boundary`

@@ -205,3 +205,21 @@ Here because you will meet them in older code.
 - [`String` methods](../string_methods/README.md) — the owning half of the pair, 42 more pages
 - [The strings arc](../README.md) — the lessons these pages are a reference for
 - [`str` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html) — the official documentation these pages explain
+
+## Po polsku
+
+Ta strona jest **spisem**, a nie lekcją: 83 metody prymitywu `str`, każda na własnej stronie, z sygnaturą, pułapką i programem, który CI kompiluje i uruchamia. Jeśli podział na `String` (właściciel, łańcuch znaków na stercie) i `&str` (wycinek łańcucha, sam podgląd) jeszcze się nie ułożył, zacznij od [strony o łańcuchach znaków](../README.md) — połowa tej listy robi się zrozumiała dopiero wtedy.
+
+Argument nazywany tu **wzorcem** (`P: Pattern`) potrafi zmylić, bo to **nie** jest wyrażenie regularne — biblioteka standardowa Rusta nie ma regexów w ogóle, od tego jest crate `regex`. `Pattern` przyjmuje cztery kształty: pojedynczy `char`, dosłowny podłańcuch `&str`, tablicę `&[char]` (pasuje **którykolwiek** z wymienionych znaków) i domknięcie `FnMut(char) -> bool`. Dlatego `split`, `find`, `trim_matches` i `replace` biorą dokładnie to samo, i dlatego jedna nauczona rzecz obsługuje dwadzieścia metod.
+
+Reszta strony to dwie pułapki i obie uderzają w polskiego czytelnika mocniej niż w anglojęzycznego, bo nasz tekst nie jest ASCII. Pierwsza: **wszystkie przesunięcia są bajtowe**. `"żółw".len()` to **7**, a nie 4 — `ż`, `ó` i `ł` zajmują w UTF-8 po dwa bajty — więc `&s[0..1]` nie zwróci „ż”, tylko spanikuje komunikatem `byte index 1 is not a char boundary`. Liczbę znaków daje `chars().count()`, pozycję do cięcia `char_indices`, a `is_char_boundary`, `get` i `floor_char_boundary` to trzy sposoby na to, żeby zamiast paniki dostać odpowiedź.
+
+Druga: mnóstwo metod z powyższych tabel ma bliźniaka z `ascii` w nazwie i dla polskiego tekstu ta wersja bywa **cicho zła** — nie wywala się, po prostu nic nie robi:
+
+- `to_ascii_uppercase` zostawia `"żółw"` bez zmian; wielkie litery daje dopiero `to_uppercase` → `"ŻÓŁW"`
+- `eq_ignore_ascii_case` uzna `"Łódź"` i `"łódź"` za różne łańcuchy
+- `trim_ascii` i `split_ascii_whitespace` nie widzą twardej spacji U+00A0, którą polska typografia stawia po jednoliterowych wyrazach „w”, „z”, „i”, „a”
+
+Wersje bez `ascii` są wolniejsze i czasem alokują, ale to one rozumieją polski. Po `ascii` sięgaj świadomie — do nagłówków HTTP, protokołów, identyfikatorów — a nie do tekstu, który ktoś napisał.
+
+**Szukaj po polsku:** metody łańcuchów znaków · przesunięcie bajtowe a znak · `rust str methods` · `rust Pattern trait split` · `rust not a char boundary`

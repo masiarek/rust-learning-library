@@ -65,3 +65,9 @@ last char starts at byte 3
 - [`String::as_mut_vec`](../../string_methods/string_as_mut_vec/README.md) — the owned equivalent, with the same contract
 
 [`str::as_bytes_mut` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.as_bytes_mut)
+
+## Po polsku
+
+Cały kontrakt tej metody mieści się w jednym zdaniu: **gdy pożyczenie się kończy, w wycinku musi znowu być poprawny UTF-8** — pomiędzy tymi chwilami kompilator nikomu nie patrzy na ręce, więc to wywołujący odpowiada za to, by żaden znak wielobajtowy nie został przecięty. Warto tu porzucić odruch z innych języków: złamanie kontraktu **nie** kończy się krzaczkami, tylko niezdefiniowanym zachowaniem (*undefined behaviour*), bo późniejsze `chars()` ma pełne prawo w ogóle nie sprawdzać poprawności. Bezpieczna jest właściwie tylko podmiana bajtu ASCII na inny bajt ASCII, a to oznacza, że dla polskiego tekstu ta metoda niemal nie ma zastosowania — `ł` zajmuje dwa bajty, `l` jeden, więc taka „drobna poprawka w miejscu” zmienia długość i natychmiast wypada z kontraktu. Do prawdziwych zadań są `make_ascii_uppercase` i `String::retain`; `as_bytes_mut` zostaw na sytuacje, w których masz zmierzony powód.
+
+**Szukaj po polsku:** niezdefiniowane zachowanie · niezmiennik typu · `rust as_bytes_mut safety` · `rust unsafe utf-8 invariant`

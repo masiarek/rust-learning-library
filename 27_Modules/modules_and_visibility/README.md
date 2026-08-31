@@ -292,3 +292,13 @@ fn main() {
 ## Sources
 
 [Modules ↗](https://doc.rust-lang.org/rust-by-example/mod.html) and [Visibility ↗](https://doc.rust-lang.org/rust-by-example/mod/visibility.html) in Rust by Example; the Reference's [visibility and privacy ↗](https://doc.rust-lang.org/reference/visibility-and-privacy.html) chapter for the exact rules. The three error codes above were produced by compiling each violation.
+
+## Po polsku
+
+Wszystko wewnątrz modułu jest domyślnie prywatne, tylko słowo „prywatne” znaczy tu „dla tego modułu **i jego potomków**”, czyli obejmuje szerszy krąg, niż się zwykle zakłada. Widoczność biegnie przy tym w jedną stronę: moduł potomny sięga w górę przez `super::` i widzi wszystko, co mają jego przodkowie, a rodzic do dziecka nie zajrzy w ogóle. Warto też zauważyć, co dokładnie jest prywatne — **nazwa**, a nie dane. Moduł swobodnie czyta własne prywatne elementy i może oddać ich wartość na zewnątrz; dokładnie tym jest akcesor. Sięgnięcie po `election::QUORUM` z zewnątrz kończy się błędem `E0603`, *constant `QUORUM` is private*.
+
+`pub` nie znaczy „publiczne dla świata”, tylko „widoczne dla tych, którzy i tak widzą ten moduł”. Dlatego `pub fn` w prywatnym module nie jest publiczne dla nikogo — ścieżka do niego po prostu nie istnieje. Do wskazania konkretnego zasięgu służą warianty `pub(super)` (rodzic i jego potomkowie), `pub(crate)` (cały crate, ani kroku dalej) i `pub(in ścieżka)` (jeden wskazany przodek). Osobno działają pola: `pub struct` publikuje **typ**, a nie jego zawartość, i pola udostępnia się po jednym. Odczyt prywatnego pola z zewnątrz to `E0616`, a napisanie literału struktury z takim polem to `E0451` — czyli z zewnątrz nie da się takiej struktury zbudować inaczej niż przez konstruktor, i to jest cały mechanizm, na którym stoi pilnowanie niezmienników.
+
+Największa różnica wobec nawyków z Javy, C# czy ABAP-a jest w tym, **czym jest jednostka prywatności**: tam klasą, tutaj modułem. Dwie struktury leżące w jednym `mod` czytają nawzajem swoje prywatne pola, więc to, co w C++ wymaga deklaracji `friend`, a w ABAP-ie klauzuli `FRIENDS`, jest w Ruscie stanem domyślnym. Stąd bierze się pułapka z tej strony: `Score::new` odrzuca wartości powyżej 5, ale `pub fn from_raw` napisane obok, w tym samym module, buduje `Score { value: 200 }` bez mrugnięcia okiem i wynosi to na zewnątrz. Praktyczny wniosek jest krótki — gdy niezmiennik ucieka, audytuj **moduł**, a nie wywołujących, i w bibliotece trzymaj jeden typ na moduł, bo im mniej linii dzieli moduł z typem, tym krótsza lista kodu, który może złamać jego regułę.
+
+**Szukaj po polsku:** widoczność w modułach Rusta · prywatność modułu a klasa · `rust module visibility pub(crate)` · `rust E0603 is private` · `rust E0451 private field struct literal`

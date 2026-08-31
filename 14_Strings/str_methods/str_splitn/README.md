@@ -66,3 +66,9 @@ None
 - [`str::split_inclusive`](../str_split_inclusive/README.md) — keep the separator on the piece before it
 
 [`str::splitn` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.splitn)
+
+## Po polsku
+
+Liczba w `splitn` to liczba **kawałków**, a nie liczba cięć — i to pierwsza rzecz do sprawdzenia przy przepisywaniu kodu z Pythona, gdzie `maxsplit` liczy właśnie cięcia: `"key = a = b".split("=", 2)` daje tam trzy części, a `line.splitn(2, '=')` w Ruscie dwie. Przelicznik jest prosty — rustowe `n` odpowiada pythonowemu `maxsplit + 1` — i porządkuje też przypadki skrajne: `splitn(1, ..)` oddaje cały tekst, w ogóle niczego nie szukając, a `splitn(0, ..)` nie oddaje nic, czyli pustą sekwencję, a nie jeden pusty kawałek. Sens metody to „odetnij pierwsze pole, resztę zostaw w spokoju”: reszta wraca w całości, razem ze swoimi separatorami (`["key ", " a = b"]`), i właśnie to sprawdź, gdy wartość wygląda na poszatkowaną. Przy najczęstszym `n == 2` sięgnij jednak po `split_once`, bo brak separatora zgłasza jako `None`, a nie jako jednoelementowy iterator, który łatwo przeoczyć.
+
+**Szukaj po polsku:** ograniczenie liczby części przy podziale · odpowiednik maxsplit w Ruscie · `rust splitn vs split_once` · `rust splitn remainder keeps separators`

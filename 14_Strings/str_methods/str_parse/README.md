@@ -101,3 +101,11 @@ Err("bad blue: 300")
 - [`String::new`](../../string_methods/string_new/README.md) — where the text usually came from
 
 [`str::parse` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.parse)
+
+## Po polsku
+
+Typ wyniku wybiera tu **wnioskowanie typów**, a nie nazwa metody: `"42".parse::<i32>()` i `let n: i32 = "42".parse()?` to jedno i to samo wywołanie, raz zapisane turbofishem, raz adnotacją typu. Kiedy zabraknie obu, kompilator nie ma skąd wziąć właściwej implementacji `FromStr` i wypisuje `E0282, type annotations needed` — to zwykle pierwsze spotkanie z tym błędem i nie oznacza ono, że w kodzie jest coś zepsutego, tylko że brakuje jednej informacji.
+
+Ważniejsza dla nas jest inna sprawa: `parse` nie zna żadnych ustawień regionalnych. `"3,5".parse::<f64>()` skończy się błędem, bo gramatyka `f64` zna wyłącznie kropkę — polski przecinek dziesiętny trzeba zamienić samodzielnie, choćby przez `s.replace(',', ".")`, podobnie jak spacje z zapisu „1 000 000”. Nie ma też żadnego przycinania: `" 42".parse::<i32>()` to `Err`, więc na wszystkim, co wpisał człowiek, wołaj najpierw `trim`. Ta sama dosłowność dotyczy `bool`, który przyjmuje dokładnie `"true"` i `"false"` — ani `"True"`, ani `"1"`, a już na pewno nie `"tak"`.
+
+**Szukaj po polsku:** konwersja tekstu na liczbę · przecinek dziesiętny a kropka · `rust parse E0282 type annotations needed` · `rust implement FromStr`

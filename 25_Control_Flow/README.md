@@ -34,3 +34,13 @@ The first slide of this topic in most courses is *blocks and scopes*, and this l
 ## Where it goes next
 
 Loops are the long way round to [iterators](../24_Iterators/README.md), which is where most of these `for` loops end up once the collection is real. And `match` is at its best on a type with a fixed set of cases, which is [enums](../13_Enums/README.md).
+
+## Po polsku
+
+W polskich kursach programowania `if` bywa nazywany **instrukcją** warunkową, a `switch` — instrukcją wyboru. Pierwsza rzecz do przestawienia w Ruscie leży dokładnie tutaj: `if`, `match` i `loop` są **wyrażeniami**, czyli mają wartość. Dlatego nie istnieje operator warunkowy `?:` — nie jest do niczego potrzebny, skoro można napisać `let size = if n < 10 { "small" } else { "large" };`. Z tego samego powodu nie trzeba deklarować zmiennej przed pętlą tylko po to, żeby wynieść z niej wynik: `let x = loop { … break v; };` załatwia sprawę. Praktyczny efekt jest taki, że znika sporo `mut`-ów, które wersja pisana odruchem z C albo z Pythona musiałaby wprowadzić.
+
+Pod spodem pracuje jedna reguła — blok wyrażeniowy: wartością bloku `{ }` jest jego ostatnia linia **bez średnika**. Stąd bierze się najczęstsza wpadka początkującego: dopisany średnik zamienia wartość w `()`, a kompilator melduje `E0308` i typ `()` w miejscu, w którym spodziewaliśmy się liczby. Ta biblioteka uczy tej reguły osobno, przy pierwszych programach, i naprawdę warto ją mieć przerobioną przed czytaniem tej sekcji, bo wszystko powyżej z niej wynika.
+
+Trzy pętle dzielą się prosto. `for` chodzi wyłącznie po iteratorze, dlatego zakres i kolekcja to dla niego ten sam mechanizm (a `1..5` kończy się na 4, bo prawy koniec jest wyłączony). `while` jest na sytuację, w której liczby powtórzeń nie znamy z góry. `loop` to jedyna pętla potrafiąca zwrócić wartość, przez `break v`. Z pętli zagnieżdżonej wychodzi się etykietą (`break 'outer`), co zastępuje znaną z C sztuczkę ze zmienną-flagą. `match` natomiast pokazuje pełnię swoich możliwości dopiero na wyliczeniu (*enum*): kompilator sprawdza wtedy kompletność dopasowania i sam wymienia przypadek, o którym zapomnieliśmy.
+
+**Szukaj po polsku:** kontrola przepływu sterowania · wyrażenie a instrukcja · blok wyrażeniowy · `rust if is an expression` · `rust loop break with value`

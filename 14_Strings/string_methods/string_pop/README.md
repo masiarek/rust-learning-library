@@ -76,3 +76,9 @@ len 4 capacity 32
 - [`String::shrink_to_fit`](../string_shrink_to_fit/README.md) — actually releasing the memory
 
 [`String::pop` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.pop)
+
+## Po polsku
+
+Spośród metod odejmujących treść ta jedna nigdy nie panikuje i nigdy nie kosztuje więcej niż O(1): `pop` zdejmuje z końca cały **znak** (*`char`*), a nie bajt, więc `"café"` skraca się z 5 bajtów do 3 i oddaje `Some('é')` — polskie `"jeż"` straci na tym dwa bajty, nie jeden. Dlaczego akurat od końca jest tanio: granicę znaku w UTF-8 da się rozpoznać, cofając się o najwyżej kilka bajtów, więc długość łańcucha znaków nie ma tu znaczenia. Od przodu takiej sztuczki nie ma i właśnie dlatego `pop_front` nie istnieje — jego rolę pełni `remove(0)` o koszcie O(n), bo cała reszta musi się przesunąć. Zwracana `Option<char>` daje `None` na pustym łańcuchu, co czyni z `while let Some(c) = s.pop()` pętlę zatrzymującą się samoczynnie (w przykładzie opróżnia `"abc"` i odwraca `"héllo"` na `"olléh"`); pojemność pozostaje przy tym nietknięta — `len 4 capacity 32` — bo pamięć oddaje dopiero `shrink_to_fit`.
+
+**Szukaj po polsku:** usuwanie ostatniego znaku · granica znaku UTF-8 · pętla while let · `rust String pop` · `rust remove first character of String`

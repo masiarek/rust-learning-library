@@ -62,3 +62,9 @@ HELLO
 - [`String::as_mut_str`](../../string_methods/string_as_mut_str/README.md) — where a `&mut str` comes from
 
 [`str::as_mut_ptr` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.as_mut_ptr)
+
+## Po polsku
+
+Warto spojrzeć na sygnaturę: `as_mut_ptr` **nie** jest `unsafe` — samo pobranie surowego wskaźnika (*raw pointer*) niczego nie psuje, niebezpieczny jest dopiero zapis `*p = …`, i to w tym momencie przejmujesz obowiązek utrzymania niezmiennika typu `str`: bajty pod tym adresem muszą dalej być poprawnym UTF-8. Dlatego jedyną trywialnie bezpieczną edycją jest podmiana bajtu ASCII na inny bajt ASCII — `é` z przykładu zajmuje dwa bajty, dokładnie tak jak polskie `ą`, `ł` czy `ż`, więc nadpisanie jednego z nich osobno zostawia łańcuch znaków w stanie niedozwolonym. Osobna trudność pojawia się wcześniej: `&mut str` rzadko w ogóle się ma, bo literały są niemutowalne, i bierze się go z `String::as_mut_str`. Jeśli chodziło po prostu o zmianę wielkości liter w miejscu, właściwą odpowiedzią jest `make_ascii_uppercase` — bez `unsafe` i bez wskaźników.
+
+**Szukaj po polsku:** surowy wskaźnik · mutowalny wycinek łańcucha · `rust str as_mut_ptr` · `rust String as_mut_str` · `rust raw pointer undefined behavior`

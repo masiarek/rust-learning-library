@@ -70,3 +70,9 @@ Some(0..11)
 - [`str::split_whitespace`](../str_split_whitespace/README.md) — a common source of the borrowed tokens
 
 [`str::substr_range` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.substr_range)
+
+## Po polsku
+
+Nazwa myli i na tym polega cała pułapka tej metody: `substr_range` niczego nie **szuka**. Porównuje adresy — pyta, czy podany wycinek łańcucha (*string slice*) jest widokiem na ten właśnie łańcuch, i jeśli tak, w którym miejscu; dlatego `text.substr_range(elsewhere.as_str())` zwraca `None`, choć `elsewhere` to dosłownie `"42"`, podczas gdy `text.find("42")` w linijce obok daje `Some(8)`. Chodzi więc o tożsamość, a nie o treść, i to jest dokładnie to pytanie, które zadaje się w lekserze: token wypożyczony z wejścia sam wie, gdzie leży, więc nie trzeba przeciskać przesunięć przez wszystkie funkcje po drodze, żeby wypisać numer kolumny w komunikacie o błędzie. Metoda jest stabilna dopiero od **1.98.0** i zastępuje ręczne odejmowanie adresów po `as_ptr` — ten sam wynik, tylko bez `unsafe`.
+
+**Szukaj po polsku:** podłańcuch a tożsamość referencji · pozycja tokenu w wejściu · `rust substr_range` · `rust offset of subslice within slice`

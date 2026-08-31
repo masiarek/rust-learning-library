@@ -147,3 +147,18 @@ The corollary matters more: because both compile the same, the choice really is 
 ## Sources
 
 The Book's [iterators chapter ↗](https://doc.rust-lang.org/book/ch13-04-performance.html) makes the performance half of this argument with a benchmark; the rest is a judgement call, and this page tries to say which parts are which.
+
+## Po polsku
+
+Zacznijmy od przypadku, w którym łańcuch adapterów wygrywa, bo to przypadek najczęstszy: *przekształć i zbierz*. `names.iter().filter(…).map(…).collect()` to jedna linia zamiast pięciu, bez `mut` i bez pustego wektora, który istnieje przez dwie instrukcje. Ta strona jest o mniejszości — większej, niż sugeruje popularność stylu łańcuchowego. Cztery sytuacje, w których zwykła pętla `for` jest po prostu lepsza:
+
+- **Błąd musi powiedzieć, w którym wierszu.** `?` postawiony w domknięciu (*closure*) wraca z domknięcia, a nie z otaczającej funkcji — to ta sama przyczyna, co w połowie pytań „dlaczego nie mogę tu użyć `?`”. Łańcuch potrafi tylko `Err("invalid digit found in string")`; pętla z `enumerate` mówi indeks raz i zwraca `Err("row 3: … (found \"no\")")`.
+- **Lista pracy rośnie, kiedy ją opróżniasz.** Iterator pożycza kolekcję na cały swój czas życia, więc dopisanie czegoś w trakcie iterowania to `E0502`. `while let Some(n) = stack.pop()` bierze jeden element i natychmiast oddaje pożyczenie, dzięki czemu można dołożyć następne. Dlatego każde przeszukiwanie grafu i każda kolejka zadań w Ruscie jest pętlą — to nie kwestia gustu, tylko borrow checkera.
+- **Wyjście z dwóch poziomów naraz.** `break 'outer` nie ma odpowiednika wśród adapterów. `find_map` bywa tu nawet ładniejszy, dopóki wewnętrzna pętla ma *tylko* szukać — jego domknięcie nie potrafi równocześnie szukać i zmieniać czegoś na zewnątrz siebie.
+- **Jeden przebieg, kilka odpowiedzi.** `fold` z krotką w akumulatorze uniesie trzy wyniki naraz. Dwa pola (minimum i maksimum w jednym przebiegu) to wciąż dobry `fold`; przy trzech rozbieranie krotki kosztuje więcej uwagi, niż oszczędza.
+
+Ostatni punkt nie jest regułą, tylko oceną, i uczciwa wersja tej oceny brzmi: napisz `fold`, przeczytaj go następnego dnia i zostaw tę wersję, którą zrozumiałeś bez zatrzymania się.
+
+Czego na tej liście nie ma: **szybkości**. Adapter to struktura ze wstawianą w miejscu wywołania metodą `next`, a optymalizator spłaszcza cały łańcuch do dokładnie tej pętli, którą i tak byśmy napisali. Jeśli łańcuch mierzalnie zwalnia, winna jest alokacja (pośredni `collect`) albo klonowanie, nie sam łańcuch. Warto to podkreślić, bo polski czytelnik przychodzi tu zwykle od pythonowych wyrażeń listowych, gdzie granica przebiega gdzie indziej: w Pythonie wyrażenie listowe nie zniesie żadnej instrukcji, więc `try` czy `break` wypycha do pętli siłą. W Ruscie domknięcie instrukcje zniesie, styl łańcuchowy rozciąga się więc znacznie dalej — i właśnie dlatego pytanie, kiedy przestaje się opłacać, trzeba zadać sobie świadomie.
+
+**Szukaj po polsku:** pętla czy łańcuch adapterów · `?` w domknięciu · `rust question mark inside closure` · `rust modify vec while iterating E0502` · `rust labeled break outer loop`

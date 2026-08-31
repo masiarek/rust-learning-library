@@ -25,3 +25,9 @@ The other half of the section is what the compiler does *with* your struct: whic
 - [What an enum is](../13_Enums/what_an_enum_is/README.md) — the other way to declare a type of your own
 
 [STRUCTS.md](../STRUCTS.md) is the full reading order, including the pages in other sections.
+
+## Po polsku
+
+Struktura (*struct*) nazywa wyłącznie pola — zachowanie mieszka w osobnym bloku `impl`, i ta szczelina między dwiema deklaracjami jest całą odpowiedzią Rusta na pojęcie klasy. Dla kogoś, kto przychodzi od Javy, C# czy Pythona, najważniejsze w tym dziale jest to, czego tu **nie ma: konstruktora**. Nie ma słowa kluczowego `new`, nie ma wywołania `Type()` i nic nie wykonuje się samo w chwili powstawania wartości — albo wypisujesz literał pole po polu, albo piszesz zwykłą funkcję powiązaną z typem (*associated function*), która taką wartość zwraca. Gwarancje, które gdzie indziej daje konstruktor, bierze na siebie prywatność: prywatne pole sprawia, że jedynymi drzwiami do wartości jest funkcja, którą sam napisałeś — i na tym stoi cały wzorzec newtype. Nazwy trzech odmian są ustalone przez polskie rozdziały Tour of Rust: `struct` to struktura, `tuple struct` to struktura krotkowa, a `unit struct` to pusta struktura.
+
+**Szukaj po polsku:** struktury w Ruscie · struktura krotkowa · metody i bloki `impl` · `rust struct vs class` · `rust associated function new`

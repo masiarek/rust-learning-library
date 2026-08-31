@@ -65,3 +65,9 @@ same as unicode: true
 - [`str::split`](../str_split/README.md) — an explicit delimiter instead
 
 [`str::split_ascii_whitespace` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split_ascii_whitespace)
+
+## Po polsku
+
+`split_ascii_whitespace` zna dokładnie pięć separatorów — spację, `\t`, `\n`, `\r` i wysuw strony — a każdy inny znak traktuje jak zwykłą literę, w tym twardą spację `U+00A0`: dlatego `"a\u{00A0}b"` wraca jako jedno słowo, podczas gdy `split_whitespace` widzi w tym samym miejscu dwa. Dla polskiego tekstu to nie ciekawostka, tylko codzienność, bo nasza typografia każe stawiać spację nierozdzielającą po jednoliterowych przyimkach i spójnikach („w”, „i”, „z”, „a”), żeby nie zostawiać sierotek na końcu wiersza — edytory wstawiają ją same, więc wszystko wklejone z Worda albo z PDF-a jest pełne `U+00A0`. Ta ślepota jest jednak celowa i opłacona prędkością: metoda idzie bajt po bajcie, bez dekodowania UTF-8. Stąd reguła wyboru — `split_ascii_whitespace` do tekstu generowanego maszynowo (logi, protokoły, pliki z `/proc`), `split_whitespace` do wszystkiego, co napisał albo wkleił człowiek.
+
+**Szukaj po polsku:** twarda spacja w tekście · spacja nierozdzielająca U+00A0 · `rust split_ascii_whitespace vs split_whitespace` · `rust non-breaking space not whitespace`

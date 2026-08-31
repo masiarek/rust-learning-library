@@ -79,3 +79,9 @@ true
 - [`str::contains`](../str_contains/README.md) — guarding the allocation
 
 [`str::replace` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.replace)
+
+## Po polsku
+
+Najczęstsze polskie zastosowanie tej metody to zdejmowanie ogonków — `.replace('ą', "a").replace('ć', "c")…` — i właśnie w takim łańcuchu wywołań opisana tu pułapka boli najbardziej. Zamiany **nie dzieją się jednocześnie**: każde wywołanie przerabia wynik poprzedniego, więc jeśli coś podmieniasz na literę podmienianą krok dalej, efekty skumulują się kaskadowo — pokazuje to `"ab".replace('a', "b").replace('b', "a")`, które daje `"aa"`, a nie zamianę miejscami. Prawdziwa tabela podstawień wymaga jednego przejścia, na przykład `chars().map(...)` z `match`em, jak w linii zwracającej `"ba"`. Pamiętaj też, że każde wywołanie alokuje nowy `String`, nawet gdy nic nie pasowało — dziewięć polskich liter diakrytycznych to dziewięć kopii całego tekstu — i że `replace` podmienia **wszystkie** wystąpienia; od limitu jest `replacen`.
+
+**Szukaj po polsku:** usuwanie polskich znaków diakrytycznych · zamiana fragmentu tekstu · `rust str replace all occurrences` · `rust replace multiple patterns single pass`

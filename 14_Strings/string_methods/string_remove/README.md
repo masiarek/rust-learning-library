@@ -71,3 +71,9 @@ removed 'h'
 - [`String::replace_range`](../string_replace_range/README.md) — removing a range and putting something back
 
 [`String::remove` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.remove)
+
+## Po polsku
+
+Indeks w `remove` to **przesunięcie w bajtach**, a nie numer znaku, i musi trafiać dokładnie w początek znaku — dla polskiego tekstu jest to pole minowe: `"żaba"` zajmuje 5 bajtów, więc `remove(0)` usuwa `'ż'`, ale `remove(1)` kończy się paniką z komunikatem `start byte index 1 is not a char boundary; it is inside 'ż' (bytes 0..2 of string)`. Inaczej niż `pop`, metoda nie zwraca `Option` — zły indeks to panika, nie `None` — więc gdy przesunięcie przychodzi skądinąd, sprawdź je wcześniej przez `is_char_boundary` (strona pokazuje `boundary at 2? false` dla `"héllo"`). Druga pułapka jest algorytmiczna: koszt to O(n), bo reszta łańcucha znaków musi się przesunąć, a usuwanie w pętli po indeksie wychodzi przez to kwadratowe i zwykle jeszcze błędne, bo po każdym usunięciu przesunięcia są już inne — do usuwania „według reguły” służy `retain`, jednoprzebiegowe i wolne od indeksów; w przykładzie obie wersje dają `"prgrmmng"`, ale tylko jedną warto pisać.
+
+**Szukaj po polsku:** przesunięcie w bajtach · granica znaku · usuwanie znaków według reguły · `rust String remove is not a char boundary` · `rust retain vs remove`

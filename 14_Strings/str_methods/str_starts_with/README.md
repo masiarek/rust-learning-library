@@ -79,3 +79,9 @@ true
 - [`str::find`](../str_find/README.md) — where the pattern is
 
 [`str::starts_with` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.starts_with)
+
+## Po polsku
+
+`starts_with` jest **zakotwiczone** na początku tekstu, więc kosztuje tyle, ile ma prefiks, a nie tyle, ile ma cały łańcuch znaków. Osobno zapamiętaj zachowanie wzorca predykatowego (*predicate pattern*): `"7up".starts_with(char::is_numeric)` pyta wyłącznie o **pierwszy znak**, a nie o cały tekst — dlatego `"/usr/local/bin".starts_with(char::is_alphabetic)` zwraca `false`. Największa praktyczna pułapka zaczyna się dopiero wtedy, gdy po udanym teście chcesz prefiks odciąć, bo liczba, którą wpisujesz w wycinek, liczy **bajty**, a nie znaki: `"Święto"` przechodzi `starts_with("Ś")`, ale `&s[1..]` na nim panikuje, skoro `Ś` zajmuje dwa bajty. Dlatego parę „sprawdź i utnij” pisze się jako `strip_prefix("Ś")` — jeden krok, zero arytmetyki i żadnej okazji do pomyłki; przy okazji warto wiedzieć, że każdy tekst zaczyna się od pustego wzorca `""`.
+
+**Szukaj po polsku:** sprawdzanie prefiksu tekstu · odcinanie przedrostka bez paniki · `rust starts_with strip_prefix` · `rust byte index is not a char boundary`

@@ -71,3 +71,9 @@ Some("hi")
 - [`str::trim_matches`](../str_trim_matches/README.md) — the repeating, unbalanced alternative
 
 [`str::strip_circumfix` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.strip_circumfix)
+
+## Po polsku
+
+`strip_circumfix` zdejmuje prefiks i sufiks za jednym zamachem i zwraca `Some(środek)` wyłącznie wtedy, gdy **oba** rzeczywiście były na miejscu — zasada „wszystko albo nic” jest tu całą treścią metody. Dla polskiego tekstu wypada to lepiej, niż mogłoby się wydawać, bo nasze cudzysłowy są **asymetryczne**: `"„cześć”".strip_circumfix('„', '”')` daje `Some("cześć")`, a `trim_matches` w tym miejscu obcinałby powtarzające się znaki i w ogóle nie pilnował, czy otwarcie ma swoje zamknięcie. Krótkiego tekstu ta metoda też nie da się oszukać — prefiks i sufiks nie mogą na siebie zachodzić, więc sam `"` daje `None`, a nie kawałek policzony dwa razy. Stabilne jest to dopiero od 1.98.0, więc w publikowanym crate sprawdź najpierw MSRV; przenośny zapis tego samego to `strip_prefix(..).and_then(|s| s.strip_suffix(..))`.
+
+**Szukaj po polsku:** polskie cudzysłowy w kodzie · zdejmowanie cudzysłowów z tekstu · `rust strip_circumfix` · `rust strip_prefix and_then strip_suffix`

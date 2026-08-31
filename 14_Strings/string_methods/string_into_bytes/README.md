@@ -67,3 +67,9 @@ true
 - [`str::into_boxed_bytes`](../../str_methods/str_into_boxed_bytes/README.md) — the same move from a `Box<str>`
 
 [`String::into_bytes` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.into_bytes)
+
+## Po polsku
+
+`into_bytes` pokazuje, czym `String` jest naprawdę: wektorem bajtów `Vec<u8>` z doklejoną gwarancją poprawnego UTF-8, a ta metoda tę gwarancję zdejmuje i oddaje sam wektor. Pochłania przy tym łańcuch znaków (*consumes the `String`*) — przejmuje własność i zwraca ten sam blok pamięci pod nową etykietą, bez kopiowania: wskaźnik, długość i pojemność (*capacity*) przechodzą nietknięte, co przykład na tej stronie potwierdza wierszem `capacity carried across: true`. Polskiego czytelnika zwykle zaskakuje tu arytmetyka: `"héllo"` to pięć znaków, ale sześć bajtów (`[104, 195, 169, 108, 108, 111]`), bo `é` zajmuje dwa — dokładnie tak samo jak `ą`, `ę` czy `ł`. Jeśli łańcuch ma przeżyć operację, sięgnij po `as_bytes`, które tylko pożycza; droga powrotna to `String::from_utf8`, kosztująca jeden przebieg sprawdzający i oddająca wektor z powrotem wewnątrz błędu, gdy bajty przestały być poprawnym UTF-8.
+
+**Szukaj po polsku:** wektor bajtów · kodowanie UTF-8 · polskie znaki diakrytyczne a bajty · `rust String into_bytes` · `rust String from_utf8`

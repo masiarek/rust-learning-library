@@ -71,3 +71,9 @@ boundary at 2? false
 - [`String::clear`](../string_clear/README.md) — emptying without reading what went
 
 [`String::drain` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.drain)
+
+## Po polsku
+
+`drain` usuwa zakres i pozwala przy tym **zobaczyć**, co zniknęło — czym różni się od `replace_range` i `clear`: zwraca iterator po usuwanych znakach, więc `s.drain(0..6)` zebrane do `String` daje `"hello "`, a w `s` zostaje `"world"`. Najbardziej zaskakuje to, że usunięcie następuje **niezależnie od tego, czy iterator skonsumujesz** — `Drain` wycina zakres w chwili wypuszczenia zasobu, dlatego samo `t.drain(..7);` w osobnym wierszu jest poprawnym sposobem skasowania przedrostka i z `"prefix:value"` zostaje `"value"`. Zakres liczony jest w bajtach i panikuje na tych samych dwóch warunkach co reszta rodziny: poza zakresem albo w środku znaku — stąd `boundary at 2? false` dla `"héllo"` i cięcie dopiero na trójce. Dopóki `Drain` żyje, `String` jest pożyczony mutowalnie, więc dokończ iterację, zanim znów sięgniesz po zmienną; a gdy usunięta treść w ogóle cię nie interesuje, czytelniejsze będą `clear` albo `replace_range`.
+
+**Szukaj po polsku:** usuwanie zakresu z łańcucha znaków · iterator po usuwanych znakach · `rust String drain` · `rust drain removes on drop`

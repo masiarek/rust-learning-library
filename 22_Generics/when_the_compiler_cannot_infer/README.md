@@ -118,3 +118,13 @@ a Vec<u32> decided one line below where it was built, summing to 0
 - [Phantom types](../../12_Traits/phantom_types/README.md) — a parameter no value can ever imply, so the type must always be named
 - [`Some` and `None`](../../17_Option_and_Result/some_and_none/README.md) — where a bare `None` gets its `T` from in ordinary code
 - [Making a `String`](../../14_Strings/making_a_string/README.md) — `.into()` is the other call that never names its destination
+
+## Po polsku
+
+`error[E0282]: type annotations needed` nie znaczy „kompilator jest leniwy”, tylko: **nic w całej funkcji nie przypina `T`**. Widać to zresztą po tym, jak daleko kompilator zaszedł: w `Container<Option<_>>` podkreślnik jest miejscem, do którego wnioskowanie typów (*type inference*) doszło i skończyły mu się przesłanki. I tu czyha pułapka warta zapamiętania, bo polskie (i nie tylko polskie) materiały chwalą podpowiedzi `rustc` tak bardzo, że łatwo zacząć wklejać je bezmyślnie: ta konkretna podpowiedź, `let ambiguous: Container<Option<T>> = …`, **nie skompiluje się przepisana dosłownie** — `T` jest w niej nazwą, której nic nie deklaruje. Czytaj ją jako „wstaw prawdziwy typ tam, gdzie wypisałem `T`”.
+
+Ten sam fakt można zapisać w trzech miejscach i wszystkie są równoważne: adnotacja przy wiązaniu (`let x: Container<Option<String>> = …`), turbofish przy wywołaniu (`Container::<Option<String>>::new(None)`) albo nazwa typu na samym niejednoznacznym podwyrażeniu (`None::<String>`, `Vec::<u8>::new()`). Nie ma reguły poza czytelnością danej linijki — adnotacja jest odpowiedzią domyślną, a turbofish istnieje na sytuacje, w których nie ma żadnego wiązania, na którym dałoby się adnotację zawiesić.
+
+Najważniejsza różnica wobec nawyków z Javy i ABAP-a jest taka, że **wnioskowanie nie idzie od lewej do prawej**: kompilator czyta całe ciało funkcji, więc linia *niżej* rozstrzyga typ zadeklarowany *wyżej* — `let mut names = Vec::new();` jest legalne, bo dopiero `names.push(String::from("Ada"))` decyduje. W Javie diamond (`new ArrayList<>()`) patrzy wyłącznie na lewą stronę, a ABAP-owe `DATA(…)` musi dać się wywnioskować z jednej instrukcji. Dlatego typowy kod w Ruscie nie ma adnotacji prawie wcale, a te, które zostają, gromadzą się wokół `parse`, `collect`, `into` i `Default::default()` — wywołań, w których typem generycznym jest **wynik**, a w argumentach nie ma z czego go odczytać.
+
+**Szukaj po polsku:** wnioskowanie typów w Ruscie · adnotacja typu · turbofish · `rust E0282 type annotations needed` · `rust turbofish collect parse`

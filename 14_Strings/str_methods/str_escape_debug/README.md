@@ -65,3 +65,9 @@ default caf\u{e9}
 - [`str::chars`](../str_chars/README.md) — the unescaped characters
 
 [`str::escape_debug` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.escape_debug)
+
+## Po polsku
+
+To jest dokładnie ta wersja ucieczki, której używa `{:?}`, i jedyna z trójki, która nie zamienia polskiego tekstu w ciąg kodów: `"żółw".escape_debug()` wypisze `żółw`, podczas gdy `escape_default` da `\u{17c}\u{f3}\u{142}w`. Ucieczce podlegają znaki sterujące oraz `"` i `\`, a drukowalne znaki spoza ASCII zostają sobą — dlatego do logów z polskimi nazwami sięga się właśnie po `escape_debug` (albo wprost po `{:?}`), a po `escape_default` dopiero wtedy, gdy wyjście musi być czystym ASCII. Jest jeszcze przypadek, o którym łatwo zapomnieć: znak łączący na **początku** łańcucha też zostaje zapisany jako sekwencja ucieczki, bo inaczej skleiłby się z tym, co w wyjściu stoi przed nim, i popsułby wyświetlanie. Wynik jest iteratorem po `char`, więc zwykle kończy się na `.to_string()` albo `.collect::<String>()`.
+
+**Szukaj po polsku:** sekwencje ucieczki · formatowanie `{:?}` · `rust escape_debug` · `rust escape_default vs escape_debug`

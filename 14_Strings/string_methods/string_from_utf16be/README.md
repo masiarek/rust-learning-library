@@ -62,3 +62,9 @@ true
 - [`String::from_utf16`](../string_from_utf16/README.md) — when you already have `u16`s
 
 [`String::from_utf16be` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf16be)
+
+## Po polsku
+
+Najważniejsza rzecz na tej stronie dotyczy nie tyle big-endian, ile **ciszy**: odczytanie tych samych bajtów w odwrotnej kolejności nie jest błędem. `[0x00, 0x68, 0x00, 0x69]` to `Ok("hi")` przez `from_utf16be` i równie „poprawne” `Ok("栀椀")` przez `from_utf16le` — prawie każda para bajtów jest sensowną jednostką kodową w obu kolejnościach, więc zamiast `Err` dostajesz krzaczki z zakresu CJK. Stąd reguła: kolejność bajtów musi wynikać z formatu, ze znacznika BOM albo ze specyfikacji, nigdy ze zgadywania — a jeśli masz już gotowe `u16`, ta decyzja zapadła wcześniej i wystarczy `from_utf16`. Naprawdę wykrywalne zostają tylko dwa błędy: nieparzysta liczba bajtów i niesparowany surogat.
+
+**Szukaj po polsku:** kolejność bajtów · znacznik BOM · krzaczki zamiast polskich znaków · `rust String::from_utf16be` · `rust utf16 endianness`

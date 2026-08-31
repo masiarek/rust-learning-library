@@ -78,3 +78,9 @@ true
 - [`str::char_indices`](../str_char_indices/README.md) — enumerating every boundary
 
 [`str::is_char_boundary` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.is_char_boundary)
+
+## Po polsku
+
+To warunek stojący za najczęstszą paniką na łańcuchach znaków: `&s[..i]` jest legalne dokładnie wtedy, gdy `s.is_char_boundary(i)`. Polski tekst trafia na niego od razu, bo każda litera z ogonkiem zajmuje dwa bajty — w przykładzie `é` rozciąga się na bajty 1..3, więc `&s[..2]` wchodzi w jego środek i program panikuje komunikatem `byte index 2 is not a char boundary`. Warto rozdzielić dwa zadania: `is_char_boundary` **sprawdza** przesunięcie (dla indeksu spoza zakresu, jak `7` w wydruku, też zwraca `false`), a do **naprawienia** złego przesunięcia służą `floor_char_boundary` i `ceil_char_boundary` — to samo przesunięcie `2` cofają do `1` albo przesuwają w przód do `3`. Przy skracaniu tekstu do wyświetlenia zwykle chcesz tej drugiej pary, bo „nie skracam” nie jest wtedy odpowiedzią.
+
+**Szukaj po polsku:** granica znaku UTF-8 · skracanie tekstu z polskimi znakami · `rust byte index is not a char boundary` · `rust floor_char_boundary`

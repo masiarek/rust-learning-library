@@ -257,3 +257,21 @@ The ABAP habit worth keeping is the one that transfers: `sy-subrc` is checked *o
 - [What a monad is](../what_a_monad_is/README.md) — `map` and `and_then` are the two operations that name the shape
 - [`Option` vs `Result`](../option_vs_result/README.md) — which type you should have been transforming
 - [Effective Rust, Item 3 ↗](https://effective-rust.com/transform.html) — the source of the diagram on the section page, and of this page's `as_ref()` example
+
+## Po polsku
+
+Ta strona nie namawia do pisania krócej, tylko do **nazywania** tego, co się robi. `match`, którego gałęzie odkładają wartość z powrotem do `Some`/`Ok`, nie podejmuje żadnej decyzji, a i tak każe czytelnikowi przejść obie gałęzie, żeby się upewnić, że nie kryje się w nich nic niespodziewanego. Nazwa metody mówi to samo raz i nie może powiedzieć nic innego. Polskie zdanie, które chcesz wypowiedzieć, wskazuje metodę:
+
+- „zmień zawartość, kształt zostaw” → `map`
+- „zmień zawartość, ale może jej zabraknąć” → `and_then`
+- „zmień sam błąd, wartość zostaw nietkniętą” → `map_err`
+- „brak jest błędem, a oto jakim” → `ok_or` / `ok_or_else`
+- „nie obchodzi mnie już, dlaczego się nie udało” → `.ok()`
+
+Sygnałem do zamiany jest gałąź, której całym ciałem jest `Some(…)`, `None`, `Ok(…)` albo `Err(…)`. Tam, gdzie w gałęziach stoi strażnik (`if`) i naprawdę różna praca, `match` zostaje na swoim miejscu.
+
+Wybór między `map` a `and_then` ma odpowiedź mechaniczną: patrz na **typ zwracany przez domknięcie** (*closure*), a nie na własne intencje. Domknięcie oddające `u32` — `map`; domknięcie oddające `Option<u32>` — `and_then`. Jeśli w wyniku wyszło `Some(None)` albo sięgasz po `.flatten()` zaraz za `.map()`, chodziło o `and_then`. Osobom przychodzącym z Javy najszybciej wytłumaczyć to przez `Optional`: `map` to `map`, a `and_then` to `flatMap` (w iteratorach Rusta ta sama operacja nazywa się `flat_map`). W drugą stronę czujność przy `.ok()`: przejście z `Result` do `Option` **kasuje informację**, którą się już miało — pusty łańcuch znaków, liczba ujemna, słowo i przepełnienie docierają wtedy jako jedno, nierozróżnialne `None`. Idąc w górę przez `ok_or` dokładasz informację, schodząc w dół przez `.ok()` ją tracisz; rób to z rozmysłem, a nie dla porządku w kodzie.
+
+Dwie pułapki łapią tu najczęściej. Pierwsza: sufiks `_else` nie jest ozdobnikiem. Argument jest obliczany **przed** wywołaniem, do którego należy, więc `unwrap_or(drogie())` zbuduje wartość zapasową także wtedy, gdy w środku siedzi `Some`, a leniwa wersja `unwrap_or_else(|| drogie())` nie zbuduje jej wcale. Ta sama para dotyczy `ok_or` / `ok_or_else`, `or` / `or_else`, `map_or` / `map_or_else`: przy literale albo gotowej zmiennej bierz wersję zachłanną i zostaw linijkę czytelną, przy alokacji lub wywołaniu funkcji — tę z `_else`. Druga: `unwrap_or` przyjmuje `self` przez wartość, czyli chce **przejąć własność**, a metoda z `&self` niczego nie posiada, tylko pożycza — stąd `E0507`, *cannot move out of `self.ballot` which is behind a shared reference*. `as_ref()` przebudowuje `Option` wokół referencji (`&Option<String>` staje się `Option<&String>`), a skonsumowanie referencji nic nie kosztuje. Kompilator podpowie w tym miejscu `.clone()` i ta poprawka faktycznie działa — tyle że alokuje cały `String` przy każdym wywołaniu. Podpowiedź `rustc` jest najpewniejsza, niekoniecznie najlepsza.
+
+**Szukaj po polsku:** metody `Option` i `Result` · leniwe wartościowanie · `rust map vs and_then` · `rust E0507 cannot move out of behind a shared reference` · `rust Option as_ref as_deref`

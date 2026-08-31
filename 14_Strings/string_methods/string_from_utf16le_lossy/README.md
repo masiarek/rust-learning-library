@@ -54,3 +54,9 @@ true
 - [`String::from_utf16_lossy`](../string_from_utf16_lossy/README.md) — when you already have `u16`s
 
 [`String::from_utf16le_lossy` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf16le_lossy)
+
+## Po polsku
+
+Od `from_utf16be_lossy` różni się tylko kolejnością bajtów, ale jeden szczegół wart jest zapamiętania osobno: **obcięty** strumień jest tu łatany, a nie odrzucany. Widać to w wyjściu przykładu — `[0x68, 0x00, 0x69]` (nieparzysta liczba bajtów) i `[0x68, 0x00, 0x3D, 0xD8]` (niesparowany surogat) dają dokładnie ten sam wynik `"h�"`, więc po samym łańcuchu znaków nie odróżnisz „dane są uszkodzone” od „doczytałem pół jednostki, bo skończył się bufor”. To dyskwalifikuje tę funkcję przy czytaniu strumienia po kawałku: jeśli niepełny odczyt trzeba **ponowić**, a nie wyświetlić, weź `from_utf16le` i obsłuż `Err`.
+
+**Szukaj po polsku:** obcięty strumień · stratne dekodowanie UTF-16 · czytanie po kawałku · `rust from_utf16le_lossy` · `rust partial read utf16`

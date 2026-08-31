@@ -25,3 +25,9 @@
 - [`&'static str`](../static_str/README.md)
 - [STRINGS.md](../../STRINGS.md) — the map this page is a gap in
 - [Strings: links, books and videos](../resources/README.md) — where to read about it in the meantime
+
+## Po polsku
+
+Ta strona jest na razie szkicem — nie stoi za nią żaden kompilowany przykład, więc jej punkty to lista pytań, na które gotowa lekcja ma odpowiedzieć, a nie sprawdzone odpowiedzi. Sedno sprawy jest proste: to **sygnatura decyduje, kto alokuje**. Przyjmij `&str`, a wywołujący nie zapłaci nic — dzięki automatycznej dereferencji (*deref coercion*) `&String` trafia tam bez jawnej konwersji; przyjmij `String` przez wartość „dla prostoty”, a każdy, kto trzyma wycinek łańcucha, musi zrobić kopię. Pozostałe warianty to wymiana jednego kosztu na inny: `impl AsRef<str>` wpuszcza `&str`, `String` i `PathBuf` naraz, płacąc za to monomorfizacją, `impl Into<String>` ma sens wtedy, gdy funkcja i tak przejmuje tekst na własność (istniejący `String` można wówczas przenieść zamiast kopiować), a `Cow<'_, str>` zarabia na siebie głównie w **typie zwracanym** — pożycza, dopóki nic się nie zmieniło, i alokuje dopiero przy zapisie.
+
+**Szukaj po polsku:** parametr `&str` czy `String` · projektowanie API tekstowego · `rust AsRef<str> vs Into<String>` · `rust Cow<str> return type`

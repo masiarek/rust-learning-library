@@ -243,3 +243,13 @@ Which would you ship for "we do not know Alfredo's age"? Fix 1.
    the right move only once you no longer need to tell them apart.
 ```
 <!-- /output -->
+
+## Po polsku
+
+`Some` jest konstruktorem wariantu (*tuple variant*) wyliczenia (*enum*) `Option`, a nie znacznikiem „ustawione”. W praktyce to zwykła funkcja o typie `fn(u8) -> Option<u8>` — można ją przypisać do zmiennej i podać dalej, jak w `[31u8, 44, 7].into_iter().map(Some)`. Dlatego `Some(None)` nie mówi „pole jest ustawione na nic”; mówi, że do funkcji oczekującej `u8` trafiła `Option`. Kompilator odpowiada `E0308` — *expected `u8`, found `Option<_>`* — a linijka *arguments to this enum variant are incorrect* nazywa rzecz po imieniu: wariant został **wywołany** ze złym argumentem.
+
+Ta pułapka jest w gruncie rzeczy pułapką angielszczyzny: *some* czyta się jak „ustawione”, *none* jak „nic”, więc całość brzmi sensownie w zdaniu, choć nie ma sensu w typach. Po polsku łatwiej ją ominąć, jeśli czytać `Some(31)` jako „wariant `Some` z ładunkiem 31”, a `None` nie jako zawartość `Some`, lecz jako jego **rodzeństwo** — drugi, bezargumentowy wariant tego samego wyliczenia. Warto też oderwać słowo „konstruktor” od znaczenia, jakie ma w Javie czy C++: nie ma tu klasy ani ciała metody, jest wartość funkcyjna.
+
+`Option<Option<u8>>` bywa natomiast typem zupełnie właściwym — wtedy, gdy pytania są dwa: *czy w ogóle pytaliśmy?* i *czy ktoś odpowiedział?* Zna to każdy, kto walczył z `NULL`-em w SQL albo z wartością początkową (`IS INITIAL`) w ABAP-ie, gdzie jedno pole musi udźwignąć „nie pytano”, „odmówił” i prawdziwe zero. `.flatten()` skleja obie nieobecności z powrotem w jedną, kiedy przestają się różnić. Ale nie poszerzaj typu po to, żeby jedna linijka się skompilowała: od tej chwili każdy `match` niżej w kodzie będzie winien osobną gałąź `Some(None)`.
+
+**Szukaj po polsku:** wyliczenie `Option` w Ruscie · warianty wyliczenia · `rust E0308 mismatched types` · `rust Option<Option<T>> flatten` · `rust enum tuple variant constructor function`

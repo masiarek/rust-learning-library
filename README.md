@@ -60,7 +60,7 @@ The sidebar is sorted **alphabetically**, because that is how you find a section
 | # | section | what it is for |
 |---|---|---|
 | 1 | [Start here](00_Start_Here/README.md) | The three outside courses this library is a companion to |
-| 2 | [Foundations](01_Foundations/README.md) | The map of a first week, pointing into the six sections below |
+| 2 | [Foundations](01_Foundations/README.md) | The map of a first week, pointing into the seven sections below |
 | 3 | [First programs](15_First_Programs/README.md) | Running a `.rs` file at all, and what the punctuation in it means |
 | 4 | [Control flow](25_Control_Flow/README.md) | `if`, `match` and the three loops — the ones that have values |
 | 5 | [Structs](16_Structs/README.md) | A compound type of your own, before the two the library leans on |

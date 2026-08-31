@@ -272,3 +272,15 @@ fn main() {
 ## Sources
 
 [The use declaration ↗](https://doc.rust-lang.org/rust-by-example/mod/use.html) in Rust by Example, and the Reference's [use declarations ↗](https://doc.rust-lang.org/reference/items/use-declarations.html). Both error transcripts were produced by compiling the collision.
+
+## Po polsku
+
+`use` to **skrót nazwy**, a nie import — i to jest jedyna rzecz, którą naprawdę trzeba o nim wiedzieć. Linia `use std::collections::HashMap;` niczego nie wczytuje, nie kompiluje i nie linkuje; wiąże tylko nazwę `HashMap` w bieżącym module. Skasuj ją, a program działa dalej, pod warunkiem że wszędzie wypiszesz `std::collections::HashMap` w całości. Dlatego słowo „import” jest tu mylącym skrótem myślowym: w Pythonie `import` **wykonuje** moduł (są skutki uboczne, jest kolejność, są importy cykliczne), a `use` w Ruscie nie robi nic poza wprowadzeniem nazwy do zasięgu.
+
+`as` nie jest ozdobnikiem, tylko lekarstwem na kolizję: dwie cechy (*traits*) o nazwie `Write` w jednym pliku to `E0252` — *„the name `Write` is defined multiple times”* — a rustc sam dopisuje rozwiązanie: *„you can use `as` to change the binding name of the import”*. Warto przy okazji zauważyć rzecz, którą łatwo przeoczyć w rozwiązaniu zadania: nazwa `FmtWrite` nie pojawia się potem ani razu. Samo wciągnięcie `trait`a do zasięgu jest całym zadaniem, bo bez tego makro `write!` na `String`u nie ma się do czego odwołać.
+
+Klamry `{C, D}` biorą kilka nazw z jednej ścieżki, a `{self, C}` dokłada do nich sam moduł. Przy wyliczeniu (*enum*) zapis `use election::Method::{self, Approval, Star};` pozwala pisać w `match`u gołe `Star` — co czyta się świetnie, dopóki w pliku jest jedno wyliczenie, i fatalnie, gdy są trzy i każde ma swój `Star`. `Some`, `None`, `Ok` i `Err` siedzą w `std::prelude` właśnie dlatego, że akurat przy nich ta dwuznaczność nie powstaje.
+
+Najgorsza pułapka to gwiazdka. Dwa globy — `use election::*;` i `use other::*;` — z których każdy niesie `SEATS`, **kompilują się bez słowa skargi**; błąd `E0659` (*„`SEATS` is ambiguous”*, *„ambiguous because of multiple glob imports”*) wyskakuje dopiero w miejscu **użycia** nazwy. Kod stoi więc spokojnie miesiącami i psuje się w dniu, w którym ktoś dopisał nazwę w cudzym module — w pliku, którego nawet nie dotykałeś, a nowa nazwa z góry potrafi po cichu przesłonić lokalną. Dwa miejsca, w których glob jest w porządku, łączy jedna właściwość: nazwy mogą pochodzić dokładnie z jednego źródła — `use my_crate::prelude::*` (moduł istniejący po to, żeby go tak wciągać) oraz `use super::*` na początku modułu `#[cfg(test)]`, gdzie źródłem jest plik, który i tak właśnie czytasz.
+
+**Szukaj po polsku:** deklaracja use w Ruscie · moduły i zasięg nazw · `rust use is not an import` · `rust E0252 defined multiple times` · `rust E0659 ambiguous glob import`

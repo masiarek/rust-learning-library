@@ -74,3 +74,9 @@ None -> absent
 - [`str::trim`](../../str_methods/str_trim/README.md) — what to call first on human input
 
 [`String::is_empty` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.is_empty)
+
+## Po polsku
+
+`is_empty` odpowiada wyłącznie na pytanie „czy `len()` wynosi zero?”, a nie na pytanie, ile pamięci łańcuch znaków trzyma — `String::with_capacity(1024)` jest pusty, i po `clear()` też jest pusty, choć bufor o pojemności 5 wciąż do niego należy (wiersz `empty true capacity 5` w wyniku). Warto rozdzielić dwie rzeczy, które w polszczyźnie zlewają się w jedno słowo „pusty”: łańcuch złożony z samych spacji pusty **nie** jest (przykład wypisuje `false true` — dopiero `trim()` to zmienia), a „pusty” to nie to samo co „brakujący” — nieobecność wartości modeluje się przez `Option<String>`, gdzie `None` znaczy „nie ma”, a `Some("")` „jest, tylko bez treści”. Kto przychodzi z SQL-a, ma gotową intuicję: to ta sama różnica co między `NULL` a `''`, z tą przyjemną zmianą, że tutaj pilnuje jej kompilator, a nie dokumentacja.
+
+**Szukaj po polsku:** pusty łańcuch znaków · wartość pusta a brak wartości · białe znaki · `rust String is_empty` · `rust trim is_empty`

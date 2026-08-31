@@ -69,3 +69,9 @@ true
 - [`str::len`](../str_len/README.md) — equals the character count exactly when this is true
 
 [`str::is_ascii` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.is_ascii)
+
+## Po polsku
+
+Dla polskiego tekstu ta metoda zwraca `false` prawie zawsze — i właśnie dlatego jest przydatna: „Gdańsk” czy „Łódź” zawierają bajty powyżej 127, więc cała rodzina `*_ascii` (`to_ascii_lowercase`, `eq_ignore_ascii_case`, `trim_ascii`, `split_ascii_whitespace`) zostawi te litery nietknięte. Nie zgłosi przy tym żadnego błędu, po prostu przepuści „Ł” bez zmiany, a to najbardziej podstępny rodzaj pomyłki, bo testy na słowie „hello” przechodzą bez zarzutu. Stąd wzorzec z przykładu: `if s.is_ascii() { s.to_ascii_lowercase() } else { s.to_lowercase() }` — szybka ścieżka tam, gdzie wolno, poprawna wszędzie indziej. Drugi zysk jest taki, że `is_ascii()` równe `true` gwarantuje, że `len()` w bajtach zgadza się z liczbą znaków i każde przesunięcie jest granicą znaku — czego przy polskich literach nie wolno założyć nigdy.
+
+**Szukaj po polsku:** polskie znaki diakrytyczne w Ruscie · ASCII a UTF-8 · `rust is_ascii to_ascii_lowercase` · `rust to_lowercase unicode`

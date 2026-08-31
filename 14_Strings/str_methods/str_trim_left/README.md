@@ -50,3 +50,9 @@ identical: true
 - [`str::trim_right`](../str_trim_right/README.md) — the other deprecated name
 
 [`str::trim_left` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.trim_left)
+
+## Po polsku
+
+Nazwa jest przestarzała od 1.33, ale nadal działa — natkniesz się na nią w starym kodzie i w starszych polskich poradnikach, których w sieci jest na tyle mało, że trzymają się latami; kompilator wypisze ostrzeżenie `deprecated`, a nie błąd, i dlatego przykład na tej stronie musi je wyciszyć przez `#![allow(deprecated)]`. Poprawka jest czysto mechaniczna — wykreśl `left`, wpisz `start` — a powód zmiany warto zapamiętać: „lewo” opisuje położenie na ekranie, podczas gdy metoda opisuje położenie w bajtach, a dla pism pisanych od prawej do lewej te dwie rzeczy są sobie przeciwne.
+
+**Szukaj po polsku:** przestarzała metoda w Ruscie · lewo a początek łańcucha · `rust trim_left deprecated` · `rust trim_start`

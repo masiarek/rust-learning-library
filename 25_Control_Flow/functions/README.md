@@ -27,3 +27,9 @@ One extra semicolon on the last line changes the return type to `()`, and the er
 - [What a closure is](../../23_Closures/what_a_closure_is/README.md) — the anonymous version, and what it can capture that a `fn` cannot
 - [Optional function arguments](../../17_Option_and_Result/optional_arguments/README.md) — what to do without default arguments
 - [Comprehensive Rust: Functions ↗](https://google.github.io/comprehensive-rust/control-flow-basics/functions.html)
+
+## Po polsku
+
+Sygnatura funkcji nigdy nie jest wnioskowana: każdy parametr i typ wyniku wypisuje się jawnie. To nie luka we wnioskowaniu typów, tylko decyzja projektowa — wnioskowanie zatrzymuje się na granicy funkcji, żeby zmiana w ciele nie przestawiła po cichu jej interfejsu. Wynikiem jest ostatnie wyrażenie **bez średnika**, dlatego większość funkcji w Ruscie nie zawiera w ogóle słowa `return`; zostaje ono do wcześniejszego wyjścia z funkcji. Stąd też pułapka, którą warto znać, zanim się w nią wdepnie: jeden dopisany średnik zmienia typ wyniku na `()` (typ jednostkowy, *unit*), a `E0308` zgłaszany jest wobec typu zadeklarowanego w nagłówku — komunikat wskaże więc linię napisaną poprawnie, a nie tę zepsutą. Dwie rzeczy, o które najczęściej pytają osoby przychodzące z C++ albo z Javy: kolejność definicji nie ma znaczenia (funkcja może wołać tę zdefiniowaną niżej, żadnych prototypów), a przeciążania funkcji, argumentów domyślnych ani nazwanych po prostu nie ma — ich rolę przejmują `Option`, cechy (*traits*) i osobne, mówiące nazwy funkcji.
+
+**Szukaj po polsku:** sygnatura funkcji · wartość zwracana bez `return` · brak przeciążania funkcji w Ruscie · `rust missing return value semicolon E0308` · `rust default arguments alternative`

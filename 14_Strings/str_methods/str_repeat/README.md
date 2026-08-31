@@ -75,3 +75,9 @@ node 0
 - [`str::len`](../str_len/README.md) — the multiplication that can overflow
 
 [`str::repeat` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.repeat)
+
+## Po polsku
+
+W Pythonie napisałbyś `"-" * 20`; w Ruście mnożenia łańcuchów znaków nie ma i tę rolę pełni `repeat`, które przy okazji alokuje **raz**, od razu na docelowy rozmiar — widać to w wydruku: 10 bajtów i pojemność 10, bez rozrastania po drodze. Separatora podać się nie da: `"ab".repeat(3)` to po prostu `"ababab"`, a jeśli potrzebujesz `"x | x | x | x"`, robotę wykonuje `join` na kolekcji. Jedna rzecz jest tu naprawdę groźna: wynik ma `len() * n` bajtów, więc licznik powtórzeń wzięty z pliku albo z żądania użytkownika staje się gotowym wektorem ataku wyczerpującego pamięć — program wtedy przerywa działanie, zamiast po cichu obciąć wynik, dlatego `n` trzeba ograniczyć przed użyciem, tak jak `requested.min(32)` w przykładzie.
+
+**Szukaj po polsku:** powtarzanie łańcucha znaków · linia separatora i wcięcia · `rust str repeat` · `rust capacity overflow allocation`

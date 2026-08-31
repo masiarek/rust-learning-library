@@ -66,3 +66,9 @@ fn main() {
 - [`str::eq_ignore_ascii_case`](../str_eq_ignore_ascii_case/README.md) — comparison without allocating
 
 [`str::to_ascii_lowercase` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.to_ascii_lowercase)
+
+## Po polsku
+
+Ta strona ma dla polskiego czytelnika ostrzejszą wymowę niż dla angielskiego: `to_ascii_lowercase` rusza wyłącznie 26 liter `A`–`Z`, więc `"GDAŃSK".to_ascii_lowercase()` daje `"gdaŃsk"` — jedno wielkie `Ń` uwięzłe w środku małego słowa, a `"ŁÓDŹ"` wychodzi jako `"ŁÓdŹ"`. Na tekście pisanym przez człowieka jest to po prostu błąd, ale metoda jest dokładnie tym, czego trzeba tam, gdzie alfabet **z definicji** jest ASCII — nagłówki HTTP, identyfikatory, rozszerzenia plików (`"Content-Type"` → `"content-type"`). W zamian dostaje się gwarancję, której `to_lowercase` dać nie może: żaden bajt nie przybywa ani nie ubywa, więc długość i liczba znaków zostają nietknięte — porównaj `"İ"`, które w wersji ASCII ma 2 bajty, a po unikodowym `to_lowercase` już 3.
+
+**Szukaj po polsku:** polskie znaki diakrytyczne w ASCII · zmiana wielkości liter · `rust to_ascii_lowercase vs to_lowercase` · `rust ascii case insensitive compare`

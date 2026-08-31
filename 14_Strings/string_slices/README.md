@@ -516,3 +516,21 @@ rustc --edition 2024 14_Strings/string_slices/examples/string_slices.rs -o /tmp/
 - [Meet the `char`](../meet_the_char/README.md) — why the indices are bytes in the first place
 - [Borrowing](../../18_Ownership/borrowing/README.md) — the `E0502` above, as a rule rather than a case
 - [The Rust Book, ch. 4.3 — The Slice Type ↗](https://doc.rust-lang.org/book/ch04-03-slices.html) · [`str::char_indices` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.char_indices) · [`str::get` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.get)
+
+## Po polsku
+
+Wycinek (*slice*) to nie kawałek tekstu, tylko **widok** na tekst, którego właścicielem jest ktoś inny: dwa słowa maszynowe — wskaźnik i długość, razem 16 bajtów wobec 24 bajtów `String`a, bez pola pojemności, bo widok nie ma bufora do powiększania. Cała lekcja tej strony zawiera się w porównaniu dwóch sygnatur: funkcja zwracająca `usize` oddaje **liczbę oderwaną od danych** — po `s.clear()` zmienna `end` nadal wynosi 5 i wskazuje na tekst, którego już nie ma, a kompilator milczy; funkcja zwracająca `&str` wciąga wynik pod reguły pożyczania (*borrowing*), więc ten sam błąd staje się `E0502` przy kompilacji. Indeks ucieka spod kontroli borrow checkera, wycinek nie — i to jest właściwy powód, dla którego warto zwracać `&str`.
+
+Druga połowa strony to pułapka, która polskiego czytelnika dotyczy mocniej niż angielskiego: **indeksy liczą bajty, nie znaki**. `&s[..s.len()/2]` na `"żółw"` panikuje, bo łańcuch ma 7 bajtów, a bajt 3 wypada w środku dwubajtowego `ó` — dokładnie tak, jak `"日本語"` w ćwiczeniu na tej stronie. Warto jednak zauważyć, co to ćwiczenie pokazuje *poza* tym: `"bête noir"` i `"naïve café"` przechodzą bez szwanku, mimo diakrytyków. Sam akcent niczego nie przesądza — przesądza arytmetyka, czyli to, gdzie akurat wypadł policzony offset. Dlatego na polskich danych to nie jest błąd, który „albo jest, albo go nie ma”: jedno nazwisko przechodzi, następne przewraca program, a wychodzi to zwykle na produkcji, nie w testach.
+
+Trzy narzędzia, w kolejności sięgania:
+
+- `&s[a..b]` — panikuje na złym indeksie; dobre, gdy błąd naprawdę jest błędem.
+- `s.get(a..b)` — wersja totalna, zwraca `None` zamiast panikować.
+- `s.char_indices()` — daje pary `(offset_bajtowy, znak)`, więc każdy indeks stamtąd jest granicą znaku z definicji. To **nie** to samo co `chars().enumerate()`, które numeruje znaki 0, 1, 2 — tymi liczbami nie da się ciąć. Gdy chodzi o budżet bajtów, jest jeszcze `floor_char_boundary`, które cofa offset do najbliższej legalnej granicy.
+
+Osobna trudność jest czysto językowa. Po polsku „wycinek” pada również w kursach Pythona (`s[6:11]`) i w opisach ABAP-owego `lv+6(5)` — a tam wycinek jest **kopią**, i to kopią indeksowaną po znakach, nie po bajtach. To samo słowo oznacza więc w Ruscie coś odwrotnego: żywe okno na cudzy bufor, którego nie wolno modyfikować, dopóki się przez nie patrzy. Kto przychodzi z Pythona, musi odwrócić oba nawyki naraz — wycinek jest darmowy, a niebezpieczny jest indeks.
+
+Na koniec dwie rzeczy, które ta strona mówi mimochodem, a które oszczędzają najwięcej kłopotu: literał `"tekst"` **już jest** wycinkiem (`&'static str`, widok w pliku wykonywalnym), więc parametr funkcji ma być `&str`, a nigdy `&String` — inaczej wołający z literałem musi alokować `String` bez powodu. I to nie jest mechanizm tekstowy: `&str` ma się do `String`a tak, jak `&[T]` do `Vec<T>`, ta sama para słów maszynowych. Jedyne, co `&str` dokłada, to obietnica poprawnego UTF-8 — i właśnie dlatego jego indeks może zostać odrzucony, a indeks `&[u8]` nigdy.
+
+**Szukaj po polsku:** wycinek łańcucha znaków · granica znaku w UTF-8 · pożyczanie a wycinek · `rust string slice not a char boundary` · `rust &str vs &String parameter`

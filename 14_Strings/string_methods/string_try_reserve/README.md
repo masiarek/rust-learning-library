@@ -69,3 +69,9 @@ true
 - [`String::capacity`](../string_capacity/README.md) — what a successful call changes
 
 [`String::try_reserve` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.try_reserve)
+
+## Po polsku
+
+Domyślną reakcją Rusta na brak pamięci jest `abort` — bez odwijania stosu, bez `Result`, bez szansy na reakcję. W większości programów to rozsądny wybór, ale zamienia się w lukę bezpieczeństwa, gdy rozmiar pochodzi z **danych wejściowych**: pole długości w protokole, nagłówek `Content-Length`, liczba rekordów w pliku — wtedy jedna złośliwa liczba wystarczy, żeby ubić proces. `try_reserve` oddaje tę porażkę jako wartość, a `TryReserveError` rozróżnia dwa przypadki: `CapacityOverflow`, gdy niemożliwa jest sama arytmetyka (to właśnie komunikat z przykładu), i `AllocError`, gdy alokator odmówił. Warto pilnować zasięgu tej ochrony: zabezpieczona jest wyłącznie ta jedna alokacja, więc późniejszy `push_str` wykraczający poza zarezerwowaną pojemność przerwie proces jak zwykle — wzorzec brzmi „zarezerwuj tyle, ile deklaruje wejście, obsłuż błąd, a potem nie zapisuj więcej”.
+
+**Szukaj po polsku:** obsługa braku pamięci · walidacja długości z danych wejściowych · `rust try_reserve TryReserveError` · `rust allocation failure abort`

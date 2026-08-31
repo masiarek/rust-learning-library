@@ -56,3 +56,9 @@ true
 - [`String::from_utf16le_lossy`](../string_from_utf16le_lossy/README.md) — the same, from little-endian bytes
 
 [`String::from_utf16_lossy` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf16_lossy)
+
+## Po polsku
+
+To samo dekodowanie, tylko bez `Result`: każdy niesparowany surogat zamienia się w znak zastępczy `�` (`U+FFFD`) i dekodowanie idzie dalej, więc `[0x0068, 0xD83D, 0x0069]` daje `"h�i"` zamiast błędu. Różnica wobec `from_utf8_lossy` jest drobna, ale warto ją zauważyć — tam wynikiem jest `Cow`, który przy poprawnym wejściu niczego nie kopiuje, a tutaj zawsze dostajesz zwykły `String`, bo przejście z UTF-16 na UTF-8 i tak wymaga przekodowania całości i nie ma czego pożyczyć. Wybieraj tę wersję do **wyświetlania** tekstu z systemów tolerujących zepsuty UTF-16, gdzie pokazanie czegokolwiek bije komunikat o błędzie; jeśli dane mają jechać dalej, bierz `from_utf16`, bo tam uszkodzenie widać, zamiast być zamiecionym pod `�`.
+
+**Szukaj po polsku:** znak zastępczy U+FFFD · zepsuty UTF-16 · `rust from_utf16_lossy` · `rust replacement character`

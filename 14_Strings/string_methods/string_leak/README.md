@@ -69,3 +69,9 @@ fn main() {
 - [`String::from_raw_parts`](../string_from_raw_parts/README.md) — the only route back, if you kept the capacity
 
 [`String::leak` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.leak)
+
+## Po polsku
+
+Nazwa jest dosłowna i celowo prowokacyjna: `leak` to wyciek pamięci popełniony **umyślnie**. Metoda pochłania łańcuch znaków i zwraca `&'static mut str` — bufor nie zostanie zwolniony aż do zakończenia procesu, i właśnie stąd bierze się statyczny czas życia (*static lifetime*): referencja jest ważna zawsze, bo nic nigdy jej nie unieważni. To uczciwy interes dla danych, które i tak żyją tyle co program — konfiguracja wczytana przy starcie, nazwa, którą trzeba wcisnąć w API żądające `'static` — i zwyczajny błąd tam, gdzie powtarza się raz na żądanie albo raz na obrót pętli; ostatnia linijka przykładu wycieka 15 bajtów w trzech obrotach i nic tego nie posprząta. Odwrotu nie ma, bo `leak` wyrzuca pojemność, więc nawet `from_raw_parts` już nie uratuje sytuacji — gdy chcesz zachować możliwość oddania pamięci, sięgnij po `into_raw_parts`, które wszystkie trzy liczby zwraca.
+
+**Szukaj po polsku:** celowy wyciek pamięci · statyczny czas życia · `rust String leak` · `rust Box::leak static str` · `rust static lifetime bound`

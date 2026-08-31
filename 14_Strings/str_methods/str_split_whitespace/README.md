@@ -75,3 +75,9 @@ whitespace route  ["alice", "42"]  -> 2 fields, and 42 is now column 2
 - [`str::lines`](../str_lines/README.md) — when the unit is a line rather than a word
 
 [`str::split_whitespace` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split_whitespace)
+
+## Po polsku
+
+Ten podział jest **redakcyjny**, a nie mechaniczny: `split_whitespace` tnie po całych *ciągach* białych znaków i przycina końce, więc nigdy nie odda pustego kawałka — z `"  the   quick \t brown \n fox  "` robi cztery słowa, podczas gdy `split(' ')` daje z tego samego tekstu dwanaście kawałków, w większości pustych. Białe znaki rozumiane są tu po unicodowemu (`char::is_whitespace`), a więc razem z tabulatorem, znakiem nowego wiersza i twardą spacją `U+00A0`, i to jest dokładnie ta metoda, którą chcesz mieć przy tekście napisanym albo wklejonym przez człowieka. Z tego samego powodu jest to wybór **zły** do danych z separatorem: w wierszu `"alice,,42"` pusta komórka zwyczajnie znika, `42` wskakuje do drugiej kolumny i nic nie zgłasza błędu — pomyłkę zobaczysz dopiero kilka warstw dalej, jako wartość w niewłaściwym polu. Podział ról jest więc sztywny: `split(',')` do danych, `split_whitespace` do prozy; pusty tekst i tekst złożony z samych spacji nie dają tutaj ani jednego kawałka.
+
+**Szukaj po polsku:** dzielenie po białych znakach · liczenie słów w tekście · `rust split_whitespace vs split` · `rust count words in string`

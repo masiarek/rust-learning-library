@@ -83,3 +83,9 @@ push 9 reallocated: len 9 capacity 16
 - [`str::chars`](../../str_methods/str_chars/README.md) — the iterator that feeds a push loop
 
 [`String::push` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.push)
+
+## Po polsku
+
+Najczęstsza wywrotka na tej metodzie jest składniowa, nie pojęciowa: `push` przyjmuje pojedynczy **znak** (*`char`*), więc pisze się `s.push('!')` w apostrofach — `s.push("!")` w cudzysłowie to `E0308`, *mismatched types*, bo od tekstu jest osobne `push_str`. Druga rzecz to arytmetyka długości: `len()` rośnie o `c.len_utf8()`, czyli o 1 dla ASCII, ale o 2 dla `é`, `ą` czy `ż` i o 4 dla emoji, co strona pokazuje ciągiem `len 1`, `len 3`, `len 7` po trzech dołożeniach — pętla dokładająca *n* znaków nie daje więc łańcucha o długości *n*. Koszt jest zamortyzowany O(1), bo bufor podwaja się dopiero, gdy się zapełni (stąd `push 1 reallocated ... capacity 8` i `push 9 ... capacity 16`), ale jeśli budujesz łańcuch znak po znaku z iteratora, czytelniejsze i rozsądniej dobierające rozmiar bufora bywa `chars().map(..).collect::<String>()`.
+
+**Szukaj po polsku:** znak a łańcuch znaków · apostrof czy cudzysłów · `rust push char vs push_str` · `rust E0308 expected char found &str` · `rust collect into String`

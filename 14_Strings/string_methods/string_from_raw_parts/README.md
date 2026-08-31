@@ -66,3 +66,9 @@ carried across as 6 and 6
 - [`String::from_utf8_unchecked`](../string_from_utf8_unchecked/README.md) — the same UTF-8 obligation, without the pointer
 
 [`String::from_raw_parts` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.from_raw_parts)
+
+## Po polsku
+
+To `unsafe` nie jest tu ozdobą: za trzy warunki naraz ręczy wywołujący, a nie kompilator — wskaźnik musi pochodzić z tego samego alokatora, `length` i `capacity` muszą być **dokładnie** tymi liczbami, które miał pierwotny `String`, a pierwsze `length` bajtów musi być poprawnym UTF-8. Najgroźniejsza pomyłka to potraktowanie `capacity` jako „mniej więcej tyle”: zwalnianie pamięci w Ruscie jest rozmiarowane (*sized deallocation*), więc zła pojemność psuje alokator dopiero przy wypuszczeniu zasobu, daleko od miejsca błędu. Jedyne rutynowe zastosowanie to podróż w obie strony — `into_raw_parts` przenosi własność przez granicę FFI jako trzy zwykłe liczby, a `from_raw_parts` odbiera ją z powrotem, żeby Rust mógł normalnie zwolnić bufor. Wskaźnika z `malloc` ani z kodu C tu wstawiać nie wolno: pamięć zwalnia ten, kto ją przydzielił.
+
+**Szukaj po polsku:** własność przez granicę FFI · unsafe w Ruscie · alokator pamięci · `rust String::from_raw_parts` · `rust sized deallocation capacity mismatch`

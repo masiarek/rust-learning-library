@@ -371,3 +371,20 @@ The counter is Trap 2 arriving on your own data structure. `X` is the bottom fie
 - [A score is not a number](../../16_Structs/newtype_score/README.md) — the newtype pattern `Mode` uses, at the domain level rather than the bit level
 - [What is a ballot, in memory?](../../16_Structs/representing_a_ballot/README.md) — the other direction: when *not* to pack, and which bugs each layout makes writeable
 - Julia Evans, *How Integers and Floats Work* ([wizardzines.com ↗](https://wizardzines.com/)) — pages 15 and 16 are the source of the TCP word and the tic-tac-toe encoding
+
+## Po polsku
+
+Flaga to pole jednobitowe — i to jest cała treść tej lekcji. Polskiemu czytelnikowi termin „pole bitowe” (*bit field*) kojarzy się najpierw ze składnią C (`struct { unsigned tryb : 4; }`), a Rust nie ma niczego takiego: maski i przesunięcia pisze się tu ręcznie, przez co pojedyncza flaga i kilkubitowe pole nagłówka okazują się tym samym mechanizmem. Składasz przez `|`, sprawdzasz przez `&`. Jedna rzecz, która wygląda na skrót, a nim nie jest: `count_ones()` zlicza ustawione **bity**, nie flagi — w przykładzie z `open()` daje 3, choć jedna z tych jedynek należy do pola `O_RDWR`, a nie do żadnej flagi.
+
+Pierwsza pułapka to flaga o wartości zero. `O_RDONLY` to `0`, więc warunek `flags & O_RDONLY != 0` jest fałszywy dla każdego możliwego wejścia — `x & 0` to zawsze `0`. Nie da się tego złapać testem, bo ten błąd nie ma przypadku, w którym akurat zawodzi — jest po cichu i jednakowo zły dla każdego wejścia. Lekarstwem nie jest sprytniejszy warunek, tylko spostrzeżenie, że `O_RDONLY` nigdy nie było flagą. Dwa najmłodsze bity to pole o trzech wartościach; izoluje się je maską `O_ACCMODE` i porównuje w `match`u, czyli pytanie brzmi nie „czy ten bit jest ustawiony”, lecz „jaka wartość siedzi w tym polu”.
+
+Kolejność maski i przesunięcia warto zapamiętać jako parę odwrotności:
+
+- **pakowanie: najpierw maska, potem przesunięcie** — `(offset & OFF_MASK) << OFF_SHIFT`, żeby za duża wartość od wywołującego nie wlała się do pola powyżej;
+- **rozpakowanie: najpierw przesunięcie, potem maska** — `(w >> RSV_SHIFT) & RSV_MASK`.
+
+Druga pułapka bierze się właśnie z tej drugiej reguły: pole najwyższe wybacza brak maski, środkowe nie. `w >> 12` daje poprawne 8, bo nad polem offsetu nie ma już nic; to samo `w >> 9` daje 64 zamiast 0, bo offset zjechał w dół razem z resztą. Dlatego nawyk jest tak trwały — pierwsze pole, które ktokolwiek rozpakowuje, to zwykle to na górze, skrót tam działa i utrwala się, zanim trafi na pole, które za niego karze. Maskuj zawsze, także tam, gdzie widać, że to zbędne: wersja poprawna przez przypadek i wersja poprawna z konstrukcji wyglądają identycznie do dnia, w którym ktoś doda pole ponad twoim.
+
+Na koniec dwie rzeczy, które w polskich poradnikach o operacjach bitowych zwykle nie padają. Test zawierania pisze się `self.0 & other.0 == other.0`, a nie `& other.0 != 0` — dla jednego bitu obie wersje dają to samo (i dlatego zła się rozprzestrzenia), ale dla maski wielobitowej `!= 0` znaczy „którykolwiek z tych bitów”, a `== x` znaczy „wszystkie”. I gołe `u32` jest złym typem, na którym można poprzestać: dla kompilatora to zwykła liczba, więc `mode | ACK` policzy się bez mrugnięcia okiem. Struktura krotkowa `struct Mode(u32)` z własnym `impl BitOr` sprawia, że błędne złożenie przestaje być wyrażalne — dostajesz `error[E0308]: mismatched types`, a nie ostrzeżenie. W praktyce generuje to za ciebie crate `bitflags`; tutaj piszemy to ręcznie, bo makro nie robi nic ponad to, co właśnie zrobiłeś sam.
+
+**Szukaj po polsku:** operacje bitowe · maska bitowa · pole bitowe · przesunięcie bitowe · `rust bitflags crate`

@@ -68,3 +68,9 @@ Some(("one", "two :: three"))
 - [`str::strip_prefix`](../str_strip_prefix/README.md) — when the left-hand side is a known constant
 
 [`str::split_once` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split_once)
+
+## Po polsku
+
+Do rozbicia `klucz=wartość` sięgaj po `split_once`, a nie po `splitn(2, ..)` — cała różnica siedzi w typie: brak separatora to `None`, które kompilator każe obsłużyć, a nie jednoelementowy iterator udający, że parsowanie się powiodło. Kto przychodzi z Pythona, zna tę pułapkę od drugiej strony: `"bare".partition("=")` zwraca `('bare', '', '')`, czyli nieudany podział wygląda tam jak udany z pustą wartością, a `split("=", 1)` po cichu daje listę jednoelementową. Reszta zachowania jest mechaniczna i warto ją mieć w głowie: separator znika, prawa strona zatrzymuje wszystkie następne wystąpienia (`"key=a=b"` daje `Some(("key", "a=b"))`), a każda z połówek może być pusta, więc `"=v"` to wciąż `Some(("", "v"))` — pusty klucz sprawdzasz sam. Przy okazji znika arytmetyka na bajtach w stylu `i + 1` po `find`, dzięki czemu separator wielobajtowy — `→`, ale też `ł` czy półpauza `–` — nie ma jak się rozjechać.
+
+**Szukaj po polsku:** parsowanie klucz wartość · podział tekstu na dwie części · `rust split_once vs splitn` · `rust split_once returns None`

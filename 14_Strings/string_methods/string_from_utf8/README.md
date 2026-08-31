@@ -68,3 +68,9 @@ None
 - [`str::from_utf8`](../../str_methods/str_from_utf8/README.md) — the borrowing version
 
 [`String::from_utf8` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf8)
+
+## Po polsku
+
+Ta funkcja **przejmuje własność** wektora bajtów i przy powodzeniu oddaje tę samą alokację jako `String`, bez kopiowania — na tym polega różnica wobec `str::from_utf8`, które tylko pożycza. Z przejęcia własności bierze się drobny problem projektowy, rozwiązany tu na tyle ładnie, że warto go podpatrzeć do własnego kodu: skoro `Vec` został przeniesiony do środka, samo `Err` oznaczałoby utratę danych, więc `FromUtf8Error` niesie je z powrotem i `into_bytes()` oddaje wektor w całości (w przykładzie: `recovered [104, 255, 105]`). Do diagnostyki służy `utf8_error()` — `valid_up_to()` mówi, do którego bajtu było dobrze, a `error_len()` odróżnia dane **błędne** od **uciętych**: `None` znaczy „skończyło się w połowie znaku”, co przy czytaniu z gniazda zwykle oznacza „doczytaj resztę”, a nie „odrzuć porcję”. Gdy naruszenie nie jest warte zgłaszania, jest `from_utf8_lossy`.
+
+**Szukaj po polsku:** walidacja UTF-8 · przejęcie własności wektora · obsługa błędów · `rust String::from_utf8` · `rust FromUtf8Error into_bytes`

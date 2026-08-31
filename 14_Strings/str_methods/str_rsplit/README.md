@@ -66,3 +66,9 @@ true
 - [`str::rsplit_terminator`](../str_rsplit_terminator/README.md) — drops a leading empty piece instead
 
 [`str::rsplit` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.rsplit)
+
+## Po polsku
+
+`rsplit` tnie dokładnie to samo co `split`, tylko idzie od prawej: `"a,b,c".rsplit(',')` daje `["c", "b", "a"]` — te same kawałki, odwrócona kolejność. Tu siedzi pułapka, bo „dzielenie od końca” brzmi jak inny podział, a przy braku limitu jedyną różnicą jest to, z którego końca rusza iterator (puste kawałki zachowują się identycznie: `"a,,c"` daje `["c", "", "a"]`, a zwykłe `reverse()` przywraca kolejność czytania). Po `rsplit` sięgaj wtedy, gdy interesuje cię samo `next()`, czyli ostatnie pole bez zbierania reszty; jeśli natomiast chcesz kawałki w naturalnej kolejności, ale cięte od końca, to zadanie dla `rsplitn` albo `rsplit_once` — dopiero z limitem kierunek naprawdę zmienia wynik.
+
+**Szukaj po polsku:** dzielenie łańcucha od prawej · ostatnie pole tekstu · `rust rsplit vs split` · `rust str rsplit last field`

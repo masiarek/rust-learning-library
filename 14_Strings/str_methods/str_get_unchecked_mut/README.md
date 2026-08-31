@@ -63,3 +63,9 @@ cut at byte 3, boundary=true
 - [`str::as_bytes_mut`](../str_as_bytes_mut/README.md) — the broader unsafe mutable view
 
 [`str::get_unchecked_mut` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.get_unchecked_mut)
+
+## Po polsku
+
+Tutaj zagrożenia się **mnożą**: najpierw zakres — te same dwa warunki co przy `get_unchecked`, czyli w granicach łańcucha i oba końce na granicy znaku — a potem jeszcze to, co przez otrzymany `&mut str` zapiszesz. Drugie da się wyeliminować całkowicie, trzymając się zasady „bajt ASCII za bajt ASCII”, i wtedy do uzasadnienia zostaje sam zakres; dokładnie tak postępuje przykład powyżej, w którym przesunięcie pochodzi z `char_indices`, a edycją jest `make_ascii_uppercase`. Dla polszczyzny warto od razu założyć, że to jedyne sensowne użycie: `&mut str` nie może zmienić długości, a nasze litery zajmują po dwa bajty, więc zmiana wielkości liter w miejscu i tak ich nie dotknie — w wyniku `"héLLO"` widać, że `é` zostało nietknięte, i `ż` zachowałoby się identycznie. Prawdziwą zmianę wielkości liter daje dopiero `to_uppercase()` wraz z nową alokacją, a jeśli chodziło wyłącznie o pominięcie sprawdzeń, to `get_mut` kosztuje jedno porównanie i nie wymaga `unsafe`.
+
+**Szukaj po polsku:** mutowalny wycinek łańcucha · edycja w miejscu · `rust get_unchecked_mut` · `rust make_ascii_uppercase in place`

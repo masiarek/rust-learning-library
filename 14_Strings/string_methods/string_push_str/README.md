@@ -80,3 +80,9 @@ fn main() {
 - [`String::reserve`](../string_reserve/README.md) — sizing it partway through
 
 [`String::push_str` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.push_str)
+
+## Po polsku
+
+To jest robocze narzędzie do sklejania tekstu: `push_str` dopisuje `&str` na koniec, a dzięki dereferencji przyjmuje bez ceremonii również `&String`. Kto zna Javę, ma gotową analogię — w Ruscie nie ma osobnego `StringBuilder`, bo `String` **jest** builderem, a `push_str` pełni rolę jego `append`; klasyczny błąd „konkatenacji w pętli” wygląda tutaj jak `s = format!("{s}{t}")` powtarzane w każdym obrocie, które za każdym razem alokuje cały nowy łańcuch znaków i daje kwadratowy koszt. Metoda zwraca `()`, więc nie da się jej łączyć w łańcuszek wywołań — w zamian dostajesz czytelną pętlę, która razem z `with_capacity` mieści całą budowę w jednej alokacji, jak w przykładzie kończącym się `len 18 capacity 20`. Jeżeli elementy do sklejenia leżą już w tablicy albo wycinku (*slice*), krócej wypadnie `join(", ")`, które daje w przykładzie dokładnie ten sam napis.
+
+**Szukaj po polsku:** sklejanie łańcuchów znaków · konkatenacja w pętli · budowanie tekstu · `rust String push_str vs format!` · `rust join strings with separator`

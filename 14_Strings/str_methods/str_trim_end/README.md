@@ -66,3 +66,9 @@ false true
 - [`str::trim_right`](../str_trim_right/README.md) — the deprecated old name for this
 
 [`str::trim_end` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.trim_end)
+
+## Po polsku
+
+Nazwa znaczy tu więcej, niż się wydaje: `trim_right` przemianowano w 1.33 na `trim_end`, bo „koniec” jest miejscem **w bajtach**, a „prawo” miejscem na ekranie — dla polszczyzny wychodzi na jedno, ale dla pisma arabskiego czy hebrajskiego już nie, więc `std` wybrało nazwę niezależną od kierunku pisma. Sięga się po nią przede wszystkim przy czytaniu wierszy z wejścia: `read_line` zostawia `\n`, więc `line.trim_end()` jest naturalnym następnym krokiem, zdejmuje przy okazji windowsowe `\r\n` i **zachowuje wcięcie** — samo `trim()` zjadłoby także wcięcie, a ono zwykle coś znaczy. Drugie codzienne zastosowanie to tropienie niewidzialnych niezgodności w plikach konfiguracyjnych: `"value "` i `"value"` to dwa różne łańcuchy znaków, a spacja na końcu wiersza nie rzuca się w oczy w żadnym edytorze.
+
+**Szukaj po polsku:** obcinanie końca łańcucha · spacja na końcu wiersza · `rust trim_end vs trim` · `rust read_line trailing newline`

@@ -67,3 +67,9 @@ fn main() {
 - [`str::rsplit`](../str_rsplit/README.md) — the gaps, from the back
 
 [`str::rmatches` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.rmatches)
+
+## Po polsku
+
+Najbardziej zaskakuje tu nie kierunek, lecz **kolejność**: zebrane prosto do wektora dopasowania wychodzą od końca, stąd `["3", "3", "3", "2", "2", "1"]` zamiast lustrzanej kopii listy z `matches`. Ciekawsza jest linia z `"aaaaa"` — przy wzorcu, który mógłby na siebie nachodzić, każdy kierunek zachłannie bierze pierwsze trafienie od swojej strony, więc do przodu wypadają przesunięcia 0 i 2, a do tyłu 3 i 1: tyle samo dopasowań, w innych miejscach, z niewykorzystanym `a` po przeciwnej stronie. To zarazem odpowiedź na pytanie, po co osobna metoda, skoro istnieje `.rev()`: dla wzorca będącego łańcuchem znaków oba przebiegi mogą dać co innego, więc `Matches` nie jest wtedy iteratorem dwukierunkowym (*DoubleEndedIterator*) i `.rev()` po prostu się nie skompiluje. W praktyce sięga się po `rmatches(...).take(2)` — kilka ostatnich dopasowań bez przechodzenia całego tekstu.
+
+**Szukaj po polsku:** iteracja od końca łańcucha znaków · nakładające się dopasowania · `rust rmatches vs matches rev` · `rust DoubleEndedSearcher`

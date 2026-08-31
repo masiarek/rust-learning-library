@@ -75,3 +75,9 @@ equal true / capacities 3 and 64
 - [`String::len`](../string_len/README.md) — what is actually written
 
 [`String::capacity` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.capacity)
+
+## Po polsku
+
+Dwie liczby i jedno zdanie do zapamiętania: `len()` mówi, ile już **zapisałeś**, a `capacity()` — ile bajtów **kupiłeś**, czyli ile zmieści się, zanim bufor trzeba będzie przenieść w nowe miejsce. Przykład pokazuje tę drugą w ruchu: `String::new()` ma pojemność 0 i w ogóle nie sięga po stertę, a kolejne `push_str` przesuwają ją 0 → 8 → 16 → 32, mniej więcej podwajając. Same cyfry są jednak sprawą alokatora, nie obietnicą — `with_capacity(10)` gwarantuje **co najmniej** dziesięć — a pojemność nie należy do wartości łańcucha znaków: w wyniku stoi `equal true` dla dwóch napisów o tym samym tekście i pojemnościach 3 oraz 64, więc testu sprawdzającego `capacity()` nie pisz nigdy. Liczone są przy tym bajty, a nie znaki: `"é".repeat(3)` to trzy znaki i sześć bajtów, więc bufor na polski tekst z ogonkami zapełnia się szybciej, niż podpowiada liczba liter.
+
+**Szukaj po polsku:** pojemność a długość łańcucha · realokacja bufora · `rust String capacity growth` · `rust with_capacity`

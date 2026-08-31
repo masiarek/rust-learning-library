@@ -69,3 +69,9 @@ fn main() {
 - [`str::find`](../../str_methods/str_find/README.md) — locating the offset
 
 [`String::insert_str` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.insert_str)
+
+## Po polsku
+
+Reguły są dokładnie te same co przy `insert` — przesunięcie w bajtach, panika poza zakresem albo w środku znaku, przepchnięcie całej reszty — ale przykład odsłania pułapkę, która przy jednym `char` mniej boli: **przesunięcia policzone przed wstawieniem tracą po nim ważność**. Dlatego po `line.insert_str(i, " ")` drugie wywołanie sięga po `i + 2`, a nie `i + 1`: jeden bajt doszedł ze spacją, a `=` wciąż zajmuje swój własny. Wstawienie pod indeksem `0` to dopisanie na początek i nie ma na to tańszego zapisu — `String` rośnie od końca, więc każde „na przód” kopiuje całą resztę; przy wielokrotnym dopisywaniu na początek buduj po kolei i odwróć na koniec albo zbierz wynik z iteratora. A jeśli chcesz zakres **podmienić**, a nie wcisnąć się w niego, `replace_range` robi obie połowy naraz: `"key=value"` → `"key -> value"`.
+
+**Szukaj po polsku:** wstawianie na początek łańcucha znaków · nieaktualne przesunięcie po wstawieniu · `rust String::insert_str` · `rust replace_range`

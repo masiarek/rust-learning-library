@@ -73,3 +73,9 @@ fn main() {
 - [`str::rmatch_indices`](../../str_methods/str_rmatch_indices/README.md) — the back-to-front offsets this needs
 
 [`String::replace_range` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.replace_range)
+
+## Po polsku
+
+`replace_range` podmienia zakres bajtów **w miejscu**, wykorzystując istniejący bufor, podczas gdy `str::replace` zawsze alokuje nowy łańcuch znaków i podmienia wszystkie wystąpienia — na tej różnicy opiera się wybór między nimi. Nowy tekst nie musi mieć długości usuwanego (pusty `""` zamienia tę metodę w usuwanie zakresu), a stąd bierze się jedyna naprawdę groźna konsekwencja: **każde przesunięcie za zmienianym zakresem przestaje być aktualne**. Dlatego serię podmian wykonuje się od końca ku początkowi, i właśnie do tego służy `rmatch_indices` — przykład na tej stronie stawia oba wyniki obok siebie: poprawny `"one and two and three"` i ten sam kod idący od przodu po nieaktualnych przesunięciach, czyli `"one and and two,three"`. Poza tym obowiązują zwykłe warunki paniki: zakres poza łańcuchem albo koniec trafiający w środek znaku, co przy polskich literach zdarza się szybciej, niż się spodziewasz.
+
+**Szukaj po polsku:** podmiana zakresu w miejscu · nieaktualne przesunięcia · edycja od końca łańcucha · `rust String replace_range` · `rust replace vs replace_range`

@@ -63,3 +63,9 @@ beta
 - [`str::trim_left`](../str_trim_left/README.md) — the deprecated old name for this
 
 [`str::trim_start` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.trim_start)
+
+## Po polsku
+
+`trim_start` zdejmuje białe znaki tylko z przodu i — co zwykle jest całym powodem, dla którego się po nią sięga — **zostawia** to, co na końcu: `"   indented   "` staje się `"indented   "`, ze spacjami po prawej nietkniętymi. Nic się przy tym nie alokuje, bo wynikiem jest wycinek łańcucha (`&str`) wskazujący w środek oryginału, więc zdejmowanie wcięcia z każdego wiersza w pętli jest tanie. Słowo „start” oznacza początek w kolejności bajtów, a nie lewą krawędź ekranu: w ostatnim wierszu przykładu znikają dwie spacje stojące w pamięci **przed** hebrajskimi znakami, choć terminal rysuje ten napis od prawej do lewej. Stara nazwa `trim_left` opisywała położenie zależne od pisma i właśnie dlatego zastąpiono ją w wersji 1.33.
+
+**Szukaj po polsku:** usuwanie białych znaków z początku łańcucha · zdejmowanie wcięć z wierszy · `rust trim_start` · `rust trim_left renamed trim_start`

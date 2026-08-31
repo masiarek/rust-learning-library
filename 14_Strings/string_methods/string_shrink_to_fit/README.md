@@ -73,3 +73,9 @@ Box<str> is 16 bytes vs String's 24
 - [`String::reserve`](../string_reserve/README.md) — the opposite direction
 
 [`String::shrink_to_fit` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.shrink_to_fit)
+
+## Po polsku
+
+Oddanie zapasu nie jest darmowe: `shrink_to_fit` zwykle prosi alokator o mniejszy blok i **przepisuje** do niego bajty, więc wywołanie go w pętli albo na łańcuchu znaków, który zaraz znowu urośnie, kosztuje dwa kopiowania zamiast zera — w przykładzie pojemność (*capacity*) spada z 32 do 2 i natychmiast wraca do 8. Właściwy moment jest tylko jeden: gdy tekst osiągnął ostateczny rozmiar i będzie trzymany długo — sparsowana konfiguracja żyjąca przez cały czas działania procesu, milion nazw w tablicy symboli. Gwarancja jest przy tym słabsza, niż podpowiada nazwa: wynikowa pojemność to `len()` **albo więcej**, bo alokator ma prawo zostawić ją wyższą. A jeśli łańcuch jest naprawdę skończony, mocniejszym ruchem jest `into_boxed_str` — kasuje samo pole pojemności i zamienia 24 bajty `String` na 16 bajtów `Box<str>`.
+
+**Szukaj po polsku:** pojemność a długość łańcucha znaków · zwalnianie nadmiarowej pamięci · `rust String shrink_to_fit` · `rust into_boxed_str`

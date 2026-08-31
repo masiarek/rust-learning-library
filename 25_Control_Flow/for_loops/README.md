@@ -29,3 +29,9 @@
 - [Iterators are lazy](../../24_Iterators/iterators_are_lazy/README.md) — why the chain you write instead of a loop does no work until you ask
 - [What `dbg!` does](../../15_First_Programs/what_dbg_does/README.md) — the macro these examples print with, and the four things it does that `println!` does not
 - [`for` loops ↗](https://doc.rust-lang.org/reference/expressions/loop-expr.html#iterator-loops) · [Comprehensive Rust: `for` ↗](https://google.github.io/comprehensive-rust/control-flow-basics/loops/for.html)
+
+## Po polsku
+
+`for` nie wie nic o zakresach ani o tablicach — zna wyłącznie iteratory, dlatego `for x in 1..5` i `for elem in [2, 4, 8]` to ten sam mechanizm, a sam zakres jest zwyczajną wartością, którą można przypisać (`let r = 1..5;`). Po polsku najłatwiej zapamiętać `1..5` jako przedział prawostronnie otwarty: cztery obiegi, ostatni dla 4 — wersję domkniętą pisze się `1..=5` i cała różnica siedzi w tym jednym znaku `=`. Pułapka jest gdzie indziej: `for x in v` **przenosi własność** wektora (pętla bierze `into_iter`), a błąd `E0382`, „borrow of moved value”, pojawi się dopiero w którejś z późniejszych linii i wskaże niewinne użycie zamiast pętli, która wektor zabrała — lekarstwem jest jeden znak, `for x in &v`, bo wybór między `iter`, `iter_mut` a `into_iter` to właśnie pytanie, czy pętla pożycza, czy konsumuje. Indeks bierze się z `.enumerate()`, a nie z ręcznie prowadzonego licznika.
+
+**Szukaj po polsku:** pętla for w Ruscie · przedział prawostronnie otwarty · przeniesienie własności w pętli · `rust for loop moves vector E0382` · `rust range inclusive 1..=5`

@@ -81,3 +81,11 @@ equal contents: true
 - [`String::shrink_to_fit`](../string_shrink_to_fit/README.md) — giving back what you over-reserved
 
 [`String::with_capacity` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.with_capacity)
+
+## Po polsku
+
+`with_capacity` kupuje bufor, a nie treść: łańcuch znaków jest nadal pusty (`len 0`), zmienia się wyłącznie pojemność (*capacity*). Zysk jest czysto wydajnościowy — rosnący `String` realokuje się według podwajania i za każdym razem **przepisuje** wszystko, co już w nim jest. W przykładzie oba przebiegi stoją obok siebie: startując od `new()` pojemność idzie 8 → 16 → 16, a przy `with_capacity(32)` przez cały czas zostaje 32 i nie ma ani jednej realokacji.
+
+Dla polskiego czytelnika kluczowe jest jedno zdanie: **pojemność liczy się w bajtach, nie w znakach**. `with_capacity(100)` zamawia 100 bajtów, a nie miejsce na 100 znaków — każda polska litera z diakrytykiem zajmuje w UTF-8 dwa bajty, emoji albo znak CJK cztery, więc pole na nazwisko pełne ą, ę i ł potrzebuje mniej więcej dwa razy więcej miejsca, niż podpowiada intuicja; stąd cztery znaki `é` z przykładu to 8 bajtów. Rezerwacja nie jest też obietnicą, że łańcuch nie urośnie: zapis powyżej `n` realokuje najzwyczajniej w świecie, a rezerwacja z nadmiarem marnuje pamięć aż do `shrink_to_fit`. Uczciwe oszacowanie to takie, które naprawdę znasz — długość rekordu, rozmiar pliku w bajtach albo `input.len()` dla przekształcenia mniej więcej zachowującego długość.
+
+**Szukaj po polsku:** pojemność łańcucha znaków w bajtach · realokacja i podwajanie bufora · `rust String with_capacity` · `rust string capacity bytes not chars`
