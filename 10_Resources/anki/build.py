@@ -7,7 +7,10 @@ rendered as <pre> with <br>, so every note is exactly one line of TSV.
 import html, importlib.util, pathlib, sys
 
 HERE = pathlib.Path(__file__).parent
-OUT  = HERE / "out"; OUT.mkdir(exist_ok=True)
+# Written beside the cards, which is where the README tells you to import from.
+# (This used to be HERE/"out", so a documented regenerate left the tracked file
+# stale and the deck you re-imported was the previous build.)
+OUT  = HERE
 
 PRE = ('<pre style="text-align:left; white-space:pre-wrap; font-size:0.92em; '
        'line-height:1.45; border-left:3px solid #7a7a7a; padding:2px 0 2px 10px; '
@@ -71,3 +74,4 @@ if __name__ == "__main__":
     build("cards_vec",       "Rust_Vec.txt")
     build("cards_iterators", "Rust_Iterators.txt")
     build("cards_ownership", "Rust_Ownership.txt")
+    build("cards_primitives", "Rust_Primitives.txt")

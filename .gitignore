@@ -16,3 +16,8 @@ __pycache__/
 
 # macOS
 .DS_Store
+
+# Anki deck build scratch (verify.py compiles every card snippet through these).
+10_Resources/anki/snippets/
+10_Resources/anki/bin/
+10_Resources/anki/out/
