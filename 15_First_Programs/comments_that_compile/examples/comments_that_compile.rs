@@ -1,9 +1,10 @@
-//! Two of Rust's four comment forms are not comments.
+//! Two of Rust's six comment forms are not comments.
 //!
 //! `//` and `/* */` are thrown away by the lexer: the compiler never sees them,
-//! and you can write anything at all inside one. `///` and `//!` are PARSED —
-//! they become `#[doc = "..."]` attributes, they must be attached to something,
-//! and the code inside them is compiled and run as a test.
+//! and you can write anything at all inside one. The other four — `///`, `//!`,
+//! `/** */` and `/*! */` — are PARSED: they become `#[doc = "..."]` attributes,
+//! they must be attached to something, and the code inside them is compiled and
+//! run as a test.
 //!
 //! This very block is the third form. It documents the file it is inside, which
 //! is why it has to come before any item — and why it is `//!` and not `///`.
@@ -30,6 +31,7 @@ reveal_attrs! {
     reveal_ballot;
     "`Ballot`";
     /// A ballot.
+    /** The same thing, in the block form. */
     #[doc = "Written the long way."]
     struct Ballot;
 }
@@ -46,7 +48,7 @@ fn main() {
     println!("  The two lines above this one are syntactic garbage.");
     println!("  The program compiled anyway, so nothing ever parsed them.");
     println!("      That is what \"the compiler ignores comments\" means, and");
-    println!("      it is true of exactly two of the four forms.");
+    println!("      it is true of exactly two of the six forms.");
 
     // ───────────────────────────────────────────────────────────── 2
     banner(2, "`///` is not erased — it becomes an attribute");
@@ -99,7 +101,34 @@ fn main() {
     println!("      breaks. In Rust the lexer counts the pairs, so it works.");
 
     // ───────────────────────────────────────────────────────────── 6
-    banner(6, "The reason any of this matters: doc comments are tested");
+    banner(6, "The block DOC forms exist, and one character breaks them");
+    println!("  /** ... */  is `///` with a block delimiter (outer)");
+    println!("  /*! ... */  is `//!` with a block delimiter (inner)");
+    println!("      Step 2 above proves it: the `/** */` line desugared to the");
+    println!("      same `#[doc = ...]` as the slashes did. rustdoc renders the");
+    println!("      two identically, and even strips a leading `*` column, so");
+    println!("      the Javadoc habit costs nothing on the rendered page.");
+    println!("  What it costs is here — a doc example that mentions `*/`:");
+    println!("        /** Strips a C comment.");
+    println!("");
+    println!("        ```");
+    println!("        let s = \"/* hi */\";");
+    println!("        assert!(s.ends_with(\"*/\"));");
+    println!("        ```");
+    println!("        */");
+    println!("      The comment ENDS at the `*/` inside the string, four lines");
+    println!("      early. Everything after it is parsed as code, and the errors");
+    println!("      land wherever the wreckage happens to stop:");
+    println!("        error: prefix `B` is unknown");
+    println!("        error[E0765]: unterminated double quote string");
+    println!("      — reported on a `println!` further down the file that has");
+    println!("      nothing wrong with it. A `///` block cannot do this: it ends");
+    println!("      at the newline, so no content can terminate it early.");
+    println!("      That is the whole case for the line forms, and it is why");
+    println!("      you will almost never see a `/** */` in real Rust.");
+
+    // ───────────────────────────────────────────────────────────── 7
+    banner(7, "The reason any of this matters: doc comments are tested");
     println!("  A fenced block inside `///` is compiled and run by `cargo test`:");
     println!("        /// ```");
     println!("        /// assert_eq!(doubled(3), 6);");

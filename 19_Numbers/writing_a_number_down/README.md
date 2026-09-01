@@ -87,6 +87,17 @@ let e = 2_f32;     // f32 — no dot needed once the suffix says float
 println!("{a} {b} {c} {d} {e}");   // 2 2 1000000 2 2
 ```
 
+`e` is the fifth decoration, and it is a float-only one: **scientific notation**, `mEn` meaning *m × 10ⁿ*. The `e` may be either case, the exponent may be negative, and the exponent itself takes underscores like any other digit run:
+
+```rust
+assert_eq!(12.3e4, 123000.0);
+assert_eq!(1E-8, 0.00000001);
+assert_eq!(1e6, 1_000_000.0);      // no dot needed — the exponent makes it a float
+assert_eq!(1.5e-3_f32, 0.0015);    // the suffix still goes last
+```
+
+`1e6` is an `f64` despite having no decimal point, which is the one thing to remember: the exponent is enough to make the literal a float, so `let n = 1e6;` is not the integer a million. An exponent that overruns the type is caught at compile time rather than becoming an infinity — `1e400_f64` is `error: literal out of range for f64`, from the deny-by-default `overflowing_literals` lint.
+
 The one that trips people is `2.f32`, which looks like the integer suffix form and is not:
 
 ```text title="Abridged — real rustc output for bad.rs"

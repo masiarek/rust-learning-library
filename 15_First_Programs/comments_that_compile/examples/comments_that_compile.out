@@ -3,11 +3,12 @@
   The two lines above this one are syntactic garbage.
   The program compiled anyway, so nothing ever parsed them.
       That is what "the compiler ignores comments" means, and
-      it is true of exactly two of the four forms.
+      it is true of exactly two of the six forms.
 
 ──── Step 2: `///` is not erased — it becomes an attribute
   `Ballot` carries:
       #[doc = r" A ballot."]
+      #[doc = r" The same thing, in the block form. "]
       #[doc = "Written the long way."]
       The macro captured a `meta` fragment, so those are real
       attributes, not text. `///` is sugar for `#[doc = "..."]`,
@@ -48,7 +49,33 @@
       so commenting out a region that already contains a comment
       breaks. In Rust the lexer counts the pairs, so it works.
 
-──── Step 6: The reason any of this matters: doc comments are tested
+──── Step 6: The block DOC forms exist, and one character breaks them
+  /** ... */  is `///` with a block delimiter (outer)
+  /*! ... */  is `//!` with a block delimiter (inner)
+      Step 2 above proves it: the `/** */` line desugared to the
+      same `#[doc = ...]` as the slashes did. rustdoc renders the
+      two identically, and even strips a leading `*` column, so
+      the Javadoc habit costs nothing on the rendered page.
+  What it costs is here — a doc example that mentions `*/`:
+        /** Strips a C comment.
+
+        ```
+        let s = "/* hi */";
+        assert!(s.ends_with("*/"));
+        ```
+        */
+      The comment ENDS at the `*/` inside the string, four lines
+      early. Everything after it is parsed as code, and the errors
+      land wherever the wreckage happens to stop:
+        error: prefix `B` is unknown
+        error[E0765]: unterminated double quote string
+      — reported on a `println!` further down the file that has
+      nothing wrong with it. A `///` block cannot do this: it ends
+      at the newline, so no content can terminate it early.
+      That is the whole case for the line forms, and it is why
+      you will almost never see a `/** */` in real Rust.
+
+──── Step 7: The reason any of this matters: doc comments are tested
   A fenced block inside `///` is compiled and run by `cargo test`:
         /// ```
         /// assert_eq!(doubled(3), 6);

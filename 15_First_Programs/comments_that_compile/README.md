@@ -2,13 +2,13 @@
 
 **Level:** 101 → 201 · for newcomers
 
-**One line:** Rust has four comment forms, and two of them are not comments — `///` and `//!` are parsed into `#[doc = "..."]` attributes, they must be attached to something, and the code inside them is compiled and run as part of your test suite.
+**One line:** Rust has six comment forms and only two of them are comments — the other four are parsed into `#[doc = "..."]` attributes, they must be attached to something, and the code inside them is compiled and run as part of your test suite.
 
 Every language has a way to write text the compiler throws away. Rust has that, and it also has a second thing that *looks* identical — one extra slash — and behaves completely differently. Reading `///` as "a comment, but tidier" is the mistake, and it is the reason people write documentation that silently documents nothing.
 
 ---
 
-## The four forms
+## The six forms
 
 | Form | Name | What it does | Thrown away? |
 |---|---|---|---|
@@ -16,8 +16,12 @@ Every language has a way to write text the compiler throws away. Rust has that, 
 | `/* text */` | block comment | nothing at all — and these **nest** | yes |
 | `/// text` | outer doc comment | becomes `#[doc = "text"]` on the item **below** it | **no** |
 | `//! text` | inner doc comment | becomes `#[doc = "text"]` on the item it is **inside** | **no** |
+| `/** text */` | outer **block** doc comment | the same as `///`, delimited instead of per-line | **no** |
+| `/*! text */` | inner **block** doc comment | the same as `//!`, delimited instead of per-line | **no** |
 
-The top two are lexical: the compiler removes them before parsing, so you can put anything inside one. The bottom two are syntax, in the same way `#[derive(Debug)]` is syntax.
+The top two are lexical: the compiler removes them before parsing, so you can put anything inside one. The other four are syntax, in the same way `#[derive(Debug)]` is syntax.
+
+Two axes, not six unrelated things. **Line or block** is how the form is delimited; **outer or inner** is which item it attaches to. The bottom two rows carry no meaning the two above them do not, and [the section below](#the-block-doc-forms-and-the-one-character-that-breaks-them) is the case for never using them.
 
 ## Which way each one points
 
@@ -36,12 +40,13 @@ Nothing above needs to be taken on trust. A `macro_rules!` arm can capture attri
 *[`comments_that_compile.rs`](examples/comments_that_compile.rs) in full — pasted here by `tools/run_examples.py` from the file CI compiles and runs.*
 
 ```rust
-//! Two of Rust's four comment forms are not comments.
+//! Two of Rust's six comment forms are not comments.
 //!
 //! `//` and `/* */` are thrown away by the lexer: the compiler never sees them,
-//! and you can write anything at all inside one. `///` and `//!` are PARSED —
-//! they become `#[doc = "..."]` attributes, they must be attached to something,
-//! and the code inside them is compiled and run as a test.
+//! and you can write anything at all inside one. The other four — `///`, `//!`,
+//! `/** */` and `/*! */` — are PARSED: they become `#[doc = "..."]` attributes,
+//! they must be attached to something, and the code inside them is compiled and
+//! run as a test.
 //!
 //! This very block is the third form. It documents the file it is inside, which
 //! is why it has to come before any item — and why it is `//!` and not `///`.
@@ -68,6 +73,7 @@ reveal_attrs! {
     reveal_ballot;
     "`Ballot`";
     /// A ballot.
+    /** The same thing, in the block form. */
     #[doc = "Written the long way."]
     struct Ballot;
 }
@@ -84,7 +90,7 @@ fn main() {
     println!("  The two lines above this one are syntactic garbage.");
     println!("  The program compiled anyway, so nothing ever parsed them.");
     println!("      That is what \"the compiler ignores comments\" means, and");
-    println!("      it is true of exactly two of the four forms.");
+    println!("      it is true of exactly two of the six forms.");
 
     // ───────────────────────────────────────────────────────────── 2
     banner(2, "`///` is not erased — it becomes an attribute");
@@ -137,7 +143,34 @@ fn main() {
     println!("      breaks. In Rust the lexer counts the pairs, so it works.");
 
     // ───────────────────────────────────────────────────────────── 6
-    banner(6, "The reason any of this matters: doc comments are tested");
+    banner(6, "The block DOC forms exist, and one character breaks them");
+    println!("  /** ... */  is `///` with a block delimiter (outer)");
+    println!("  /*! ... */  is `//!` with a block delimiter (inner)");
+    println!("      Step 2 above proves it: the `/** */` line desugared to the");
+    println!("      same `#[doc = ...]` as the slashes did. rustdoc renders the");
+    println!("      two identically, and even strips a leading `*` column, so");
+    println!("      the Javadoc habit costs nothing on the rendered page.");
+    println!("  What it costs is here — a doc example that mentions `*/`:");
+    println!("        /** Strips a C comment.");
+    println!("");
+    println!("        ```");
+    println!("        let s = \"/* hi */\";");
+    println!("        assert!(s.ends_with(\"*/\"));");
+    println!("        ```");
+    println!("        */");
+    println!("      The comment ENDS at the `*/` inside the string, four lines");
+    println!("      early. Everything after it is parsed as code, and the errors");
+    println!("      land wherever the wreckage happens to stop:");
+    println!("        error: prefix `B` is unknown");
+    println!("        error[E0765]: unterminated double quote string");
+    println!("      — reported on a `println!` further down the file that has");
+    println!("      nothing wrong with it. A `///` block cannot do this: it ends");
+    println!("      at the newline, so no content can terminate it early.");
+    println!("      That is the whole case for the line forms, and it is why");
+    println!("      you will almost never see a `/** */` in real Rust.");
+
+    // ───────────────────────────────────────────────────────────── 7
+    banner(7, "The reason any of this matters: doc comments are tested");
     println!("  A fenced block inside `///` is compiled and run by `cargo test`:");
     println!("        /// ```");
     println!("        /// assert_eq!(doubled(3), 6);");
@@ -157,11 +190,12 @@ fn main() {
   The two lines above this one are syntactic garbage.
   The program compiled anyway, so nothing ever parsed them.
       That is what "the compiler ignores comments" means, and
-      it is true of exactly two of the four forms.
+      it is true of exactly two of the six forms.
 
 ──── Step 2: `///` is not erased — it becomes an attribute
   `Ballot` carries:
       #[doc = r" A ballot."]
+      #[doc = r" The same thing, in the block form. "]
       #[doc = "Written the long way."]
       The macro captured a `meta` fragment, so those are real
       attributes, not text. `///` is sugar for `#[doc = "..."]`,
@@ -202,7 +236,33 @@ fn main() {
       so commenting out a region that already contains a comment
       breaks. In Rust the lexer counts the pairs, so it works.
 
-──── Step 6: The reason any of this matters: doc comments are tested
+──── Step 6: The block DOC forms exist, and one character breaks them
+  /** ... */  is `///` with a block delimiter (outer)
+  /*! ... */  is `//!` with a block delimiter (inner)
+      Step 2 above proves it: the `/** */` line desugared to the
+      same `#[doc = ...]` as the slashes did. rustdoc renders the
+      two identically, and even strips a leading `*` column, so
+      the Javadoc habit costs nothing on the rendered page.
+  What it costs is here — a doc example that mentions `*/`:
+        /** Strips a C comment.
+
+        ```
+        let s = "/* hi */";
+        assert!(s.ends_with("*/"));
+        ```
+        */
+      The comment ENDS at the `*/` inside the string, four lines
+      early. Everything after it is parsed as code, and the errors
+      land wherever the wreckage happens to stop:
+        error: prefix `B` is unknown
+        error[E0765]: unterminated double quote string
+      — reported on a `println!` further down the file that has
+      nothing wrong with it. A `///` block cannot do this: it ends
+      at the newline, so no content can terminate it early.
+      That is the whole case for the line forms, and it is why
+      you will almost never see a `/** */` in real Rust.
+
+──── Step 7: The reason any of this matters: doc comments are tested
   A fenced block inside `///` is compiled and run by `cargo test`:
         /// ```
         /// assert_eq!(doubled(3), 6);
@@ -218,10 +278,43 @@ Step 2 is the one to look at twice:
 ```text
   `Ballot` carries:
       #[doc = r" A ballot."]
+      #[doc = r" The same thing, in the block form. "]
       #[doc = "Written the long way."]
 ```
 
-The macro matched `#[$m:meta]` — an *attribute* fragment. A `//` comment could never have matched it, because by then it does not exist. The `///` did, so `/// A ballot.` is `#[doc = r" A ballot."]` and nothing else. Note the leading space is preserved, and that rustc reached for a raw string to hold it.
+The macro matched `#[$m:meta]` — an *attribute* fragment. A `//` comment could never have matched it, because by then it does not exist. All three of those did, so `/// A ballot.` is `#[doc = r" A ballot."]` and nothing else, and the `/** */` beside it is the same attribute reached by a different spelling. Note the leading space is preserved, and that rustc reached for a raw string to hold it.
+
+## The block doc forms, and the one character that breaks them
+
+`/** */` and `/*! */` are `///` and `//!` with a block delimiter. Nothing more: step 2 of the output above shows the `/** */` line desugaring to the same `#[doc = …]` the slashes produced, and rustdoc renders the two identically — it even strips a leading `*` column, so the Javadoc habit costs nothing on the rendered page.
+
+What it costs is that a block comment ends at the first `*/`, and a doc comment's job is to contain **examples**:
+
+````rust,ignore
+/** Strips a C comment.
+
+```
+let s = "/* hi */";
+assert!(s.ends_with("*/"));
+```
+*/
+pub fn f() {}
+fn main() { f(); println!("compiled B"); }
+````
+
+The comment ends four lines early, at the `*/` inside the string. Everything after it is parsed as code, and the diagnostics land wherever the wreckage happens to stop — in the real file, on a `println!` further down that has nothing wrong with it:
+
+```text title="Abridged — real rustc output for block_doc_terminates_early.rs"
+error: prefix `B` is unknown
+ --> block_doc_terminates_early.rs:9:37
+  |
+9 | fn main() { f(); println!("compiled B"); }
+  |                                     ^ unknown prefix
+
+error[E0765]: unterminated double quote string
+```
+
+A `///` cannot do this. It ends at the newline, so no content can terminate it early — which is why you will almost never see `/** */` in real Rust, and why this page's other five sections are written entirely in terms of the line forms.
 
 ## Three answers to a misplaced doc comment
 

@@ -1,0 +1,60 @@
+
+──── Step 1: `_` binds nothing, so it moves nothing
+  let ballot = String::from("5,3,0");
+  let _ = ballot;
+  ballot is still usable afterwards: "5,3,0"
+      Replace `_` with any name — `let _x = ballot;` — and the
+      next line stops compiling with E0382, moved value. The
+      underscore is not a short name. It is the absence of one.
+
+──── Step 2: ...which is why it changes WHEN a temporary dies
+  A: let _  = make("temp");     a temporary, matched by `_`
+      drop(temp)
+      ...end of the statement reached
+  B: let _g = make("temp");     the same temporary, bound
+      ...end of the statement reached
+      drop(temp)
+      A dropped BEFORE the next line ran; B survived to the end
+      of its block. Nothing owned A, so it died as a temporary
+      at the semicolon. That one character is the most expensive
+      mistake in Rust: `let _ = mutex.lock();` unlocks instantly.
+
+──── Step 3: But it does NOT shorten the life of a value that is already owned
+  C: let s = make("named"); let _ = s;
+      ...after `let _ = s;`
+      drop(named)
+      `s` still owns it, so it drops at the end of the block, as
+      `s` always would. A and C look identical and differ in one
+      thing: whether the right-hand side was a temporary or a
+      place. `_` never extends a lifetime and never shortens one;
+      it declines to participate, and the value keeps its owner.
+
+──── Step 4: `_ = expr;` with no `let` is an assignment, not a binding
+  #[must_use] fn tally(&[u8]) -> u32
+  _ = tally(&[5, 3, 0]);      the warning is answered, in one line
+      Without it, `tally(&[5, 3, 0]);` warns:
+        warning: unused return value ... that must be used
+      `let _ = ...` says the same thing and is older; `_ = ...`
+      is destructuring assignment, and it reads as what it is —
+      an assignment to nowhere. Same drop timing as `let _ =`.
+
+──── Step 5: `_` and `_name` answer two different questions
+  for _ in &scores       3 iterations, no binding made
+  let _unread = tally(..)  a real binding, silent about being unused
+      `_`      = 'there is no value here to name'  — no binding
+      `_name`  = 'a value I am deliberately not reading' — a binding,
+                 which owns, drops at the end of scope, and can be
+                 renamed back into use later. Only one of the two
+                 is safe to put a lock guard in, and it is `_name`.
+
+──── Step 6: The other places the same glyph shows up
+  let (_, second) = pair;        second = 9
+  [first, .., last]              1..4   `..` is 'the rest',
+                                 `_` is 'exactly one, unnamed'
+  |_| 1u8                        a closure ignoring its argument
+  Vec<_>                         [1, 1, 1] — a DIFFERENT `_`: an
+                                 inference hole in a TYPE, not a
+                                 pattern. Same character, unrelated
+                                 feature; it asks the compiler to
+                                 fill the type in rather than to
+                                 discard a value.

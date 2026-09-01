@@ -1,0 +1,44 @@
+
+──── Step 1: A keyword is not a name, and rustc says how to make it one
+  let type = 1u8;
+        error: expected identifier, found keyword `type`
+        help: escape `type` to use it as an identifier
+           |     let r#type = 1u8;
+           |         ++
+      The fix is in the error. `r#` is not obscure trivia — it is
+      the first thing the compiler suggests.
+
+──── Step 2: `r#` works on items, bindings, fields and lifetimes
+  fn r#match(r#type: u8)      r#match(4) = 5
+  struct Header { r#type }    text/csv (3 fields set)
+  fn longest<'r#fn>(..)       "Cara"
+      A raw lifetime is `'r#name`, not `r#'name` — the tick comes
+      first, because what is being escaped is the identifier.
+
+──── Step 3: `r#` is an escape, not part of the name
+  fn r#ordinary() declared once, called two ways:
+      ordinary()   -> same function, either way
+      r#ordinary() -> same function, either way
+      One function, two spellings, no ambiguity — so `r#` on a
+      non-keyword is legal and does nothing. What it escapes is
+      the PARSER, not the name.
+  One place the distinction leaks: a macro re-printing the token
+      stringify!(r#type)     = r#type
+      stringify!(r#ordinary) = r#ordinary
+      keeps the prefix, because it is printing what you wrote.
+
+──── Step 4: Four names refuse it
+  r#crate  r#self  r#Self  r#super
+        error: `crate` cannot be a raw identifier
+      These four are not keywords in the ordinary sense — they are
+      PATHS, resolved by the module system rather than parsed as
+      names, so there is nothing an escape could turn them into.
+      Every other keyword takes `r#`, including `r#async`,
+      `r#dyn`, `r#gen`, `r#union` and `r#macro_rules`.
+
+──── Step 5: Do not confuse it with the raw STRING
+  r#foo      a raw IDENTIFIER — a name that was a keyword
+  r#"..."#   a raw STRING — a literal with no escape sequences
+      a "quoted" path: C:\tmp
+      Same letter, unrelated features. The tell is what follows
+      the `#`: a quote means string, a letter means identifier.

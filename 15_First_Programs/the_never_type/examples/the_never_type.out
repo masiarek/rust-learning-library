@@ -1,0 +1,56 @@
+
+──── Step 1: Four stable ways to produce a `!`
+  panic!(..)          the value never arrives
+  loop {}             with no `break`, control never leaves
+  return / break / continue    control goes somewhere else
+  std::process::exit(..)       the process is gone
+      Each is an EXPRESSION whose type is `!`. Not 'returns
+      nothing' — that is `()`, and it is a value you have.
+
+──── Step 2: `!` fits into every type; `()` fits into none
+  match n { 0 => give_up(..), k => k }  =>  3
+      The two arms have types `!` and `u32`, and the match
+      still type-checks as u32 — `!` coerces into anything.
+      Swap the diverging arm for `println!("zero")` and it stops:
+        error[E0308]: mismatched types
+           |     0 => println!("zero"),
+           |          ^^^^^^^^^^^^^^^^ expected `u32`, found `()`
+      That error is the whole lesson. `()` is a value of the wrong
+      type. `!` is no value at all, so there is nothing to mismatch.
+
+──── Step 3: A semicolon does NOT turn `!` into `()`
+  fn f() -> String { panic!(); }    compiles
+  fn g() -> String { loop {} }      compiles
+      The rule you already know — a trailing semicolon makes a
+      block evaluate to `()` — has an exception, and this is it.
+      A block whose control flow never reaches the end has type
+      `!`, punctuation or not. So the missing-return error you
+      expect here never appears.
+
+──── Step 4: You can RETURN `!`, but you cannot write it anywhere else
+  fn f() -> ! { .. }          stable since 1.0
+  fn f() -> Result<(), !> {}  NOT stable:
+        error[E0658]: the `!` type is experimental
+        note: see issue #35121 for more information
+  fn f(x: !) {}               the same error
+      So `!` is a promise a signature may make about its own
+      control flow, and not yet a type you may store, nest or
+      pass. Every `!` you meet in real code is after an `->`.
+
+──── Step 5: `Infallible` is the stable stand-in
+  fn parse_score(u8) -> Result<u8, Infallible>
+  parse_score(9) = 5
+      `Infallible` is `enum Infallible {}` — an ordinary enum with
+      no variants, so it has no values either, and `match e {}`
+      is EXHAUSTIVE with zero arms. That is how you unwrap a
+      cannot-fail Result without an `unwrap` that could panic.
+      It is what `Result<T, !>` would mean, spelled in stable Rust.
+
+──── Step 6: Where `!` is already working for you
+  give_up(..) -> !   ran, and unwound: caught = true
+  unreachable!()  todo!()  unimplemented!()   all have type `!`,
+      which is why any of them may stand in for a value of any
+      type while you are still writing the function around it.
+  let Some(x) = opt else { return; };
+      `let else` requires the else block to diverge — and
+      'diverge' is exactly 'has type `!`'.
