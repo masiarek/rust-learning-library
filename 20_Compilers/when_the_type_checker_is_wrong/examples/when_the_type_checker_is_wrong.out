@@ -1,0 +1,4 @@
+Tag::Zero as i32               = 0
+Tag::One  as i32               = 1
+Wrapped::Value(7) holds        = 7
+cast is the function's address = true
