@@ -50,6 +50,32 @@ println!("{quorum}");         // 5
 
 That last line is called the **tail expression**, and everything else about Rust's syntax falls out of it.
 
+## Both jobs at once
+
+Put the two together and you get the snippet that circulates as a quiz card:
+
+```rust
+let x = 10;
+let y = {
+    let x = 3;
+    x + 1
+};
+println!("x: {x}, y: {y}");   // x: 10, y: 4
+```
+
+Each half is one of the jobs above. `let x = 3` is job 1 — a second variable, gone at the closing brace, the outer `10` untouched. `x + 1` written without a semicolon is job 2 — the block's value, and therefore `y`.
+
+**Two semicolons are doing opposite things.** The one after `}` terminates the `let y = …` statement, and every `let` needs it. The one *missing* after `x + 1` is what gives the block a value to hand over. Write that one in and the shadowing is unchanged, but `y` is not:
+
+```rust
+let y = {
+    let x = 3;
+    x + 1;        // warning: unused arithmetic operation that must be used
+};                // `y` is `()` now, not 4
+```
+
+The usual gloss — *the trailing semicolon makes it a statement, and that is what `y` gets* — is backwards twice over. That semicolon belongs to the `let`, not to the block; and a block whose last line **is** a statement is worth `()`, with nothing to bind.
+
 ## The semicolon is the switch
 
 A semicolon turns an expression into a *statement*, and statements have no value — so the block's value becomes `()`, the unit type:
@@ -189,6 +215,17 @@ fn main() {
     };
     println!("  quorum = {quorum}");
 
+    banner("Both jobs at once — the snippet that circulates as a quiz");
+
+    let x = 10;
+    let y = {
+        let x = 3; //   job 1: a second `x`, ending at the brace below
+        x + 1 //        job 2: no semicolon, so this is what `y` is worth
+    };
+    println!("  x: {x}, y: {y}");
+    println!("  Two semicolons, two jobs: the one after `}}` ends the `let`,");
+    println!("  and the one MISSING after `x + 1` is what gives `y` a value.");
+
     banner("The semicolon is the switch");
 
     let with_tail = { tally() };
@@ -250,6 +287,11 @@ fn main() {
 ──── Job 2: it has a VALUE — its last line, with no semicolon
   quorum = 5
 
+──── Both jobs at once — the snippet that circulates as a quiz
+  x: 10, y: 4
+  Two semicolons, two jobs: the one after `}` ends the `let`,
+  and the one MISSING after `x + 1` is what gives `y` a value.
+
 ──── The semicolon is the switch
   { tally() }    is 6
   { tally(); }   is ()      <- the unit value
@@ -287,6 +329,7 @@ fn main() {
 - **Deleting the tail line's neighbour and taking the tail with it.** You get caught two different ways, which is lucky: `{ let x = 5; }` compiles as `()` and warns `unused variable`, while `{ let x = 5 }` is a **syntax** error — `expected one of ., ;, ?, else, or an operator, found }` — because a `let` is a statement and needs its semicolon before the brace.
 - **Writing `return` in the tail.** Legal, and `clippy::needless_return` will ask you not to. Keep `return` for genuine early exits.
 - **Reaching for a block to end a borrow that already ended.** Non-lexical lifetimes made most of those blocks unnecessary in 2018. Try deleting it; the compiler will tell you if it was load-bearing.
+- **Reading the `;` after `}` as the block's semicolon.** It ends the `let` statement, and leaving it out is a syntax error. The semicolon that decides what the block is *worth* is the one on the line above it.
 - **Reading the nested-block snippet as the shadowing lesson.** It is the version every language has. The Rust-specific one is a second `let` in the same scope, and it needs no braces — [SHADOWING.md](../../SHADOWING.md) is the map.
 - **Expecting `if` without `else` to have a value.** It has one, and the compiler says which: `let x = if c { 5 };` is `error[E0317]: \`if\` may be missing an \`else\` clause`, with the note *"`if` expressions without `else` evaluate to `()`"*. Every path has to produce the type you asked for, and a missing branch is a path.
 

@@ -12,6 +12,11 @@
 ──── Job 2: it has a VALUE — its last line, with no semicolon
   quorum = 5
 
+──── Both jobs at once — the snippet that circulates as a quiz
+  x: 10, y: 4
+  Two semicolons, two jobs: the one after `}` ends the `let`,
+  and the one MISSING after `x + 1` is what gives `y` a value.
+
 ──── The semicolon is the switch
   { tally() }    is 6
   { tally(); }   is ()      <- the unit value

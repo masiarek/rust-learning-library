@@ -49,6 +49,17 @@ fn main() {
     };
     println!("  quorum = {quorum}");
 
+    banner("Both jobs at once — the snippet that circulates as a quiz");
+
+    let x = 10;
+    let y = {
+        let x = 3; //   job 1: a second `x`, ending at the brace below
+        x + 1 //        job 2: no semicolon, so this is what `y` is worth
+    };
+    println!("  x: {x}, y: {y}");
+    println!("  Two semicolons, two jobs: the one after `}}` ends the `let`,");
+    println!("  and the one MISSING after `x + 1` is what gives `y` a value.");
+
     banner("The semicolon is the switch");
 
     let with_tail = { tally() };
