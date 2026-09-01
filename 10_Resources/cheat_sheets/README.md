@@ -19,6 +19,123 @@ A cheat sheet earns its place by answering *"what is this called?"* faster than 
 
 It also ships as a printable PDF, which is the form most people actually want: **[A4 ↗](https://cheats.rs/dl/rust_cheat_sheet_a4.pdf)** · **[Letter ↗](https://cheats.rs/dl/rust_cheat_sheet_letter.pdf)**. The links inside the PDF still work.
 
+Its source is public — **[ralfbiedert/cheats.rs ↗](https://github.com/ralfbiedert/cheats.rs/)** — which is worth knowing for two reasons beyond filing a correction. **The licence is CC-BY** ([the legal page ↗](https://cheats.rs/legal) states it, with Rust snippets released CC-0 and a requirement that any reproduction change the *Operator* section and not appear endorsed by the author), so the diagrams may be reused with credit rather than only linked. And **there are no diagrams to download.** The whole page carries exactly two `<img>` tags — a GitHub ribbon and the Ferris logo — because every memory-layout figure on it, the byte boxes and the lifetime strips alike, is drawn in HTML and CSS. Reusing one means re-drawing it, not copying a file, which is why the figures in this library are [built as text](../../14_Strings/anatomy_of_a_string/README.md) instead: a box diagram in a fenced block diffs, greps, and reads the same in both themes.
+
+## Chapter by chapter, against this library
+
+cheats.rs is a lookup surface for the whole language, so it doubles as a map of what a Rust library ought to cover. Its chapters are on the left; where this library says the same thing at teaching length, the page is on the right. **The blanks are real** — they are the gaps, named rather than papered over, and they are the honest answer to "does this library cover Rust?".
+
+| cheats.rs | Here |
+|---|---|
+| [Data Structures ↗](https://cheats.rs/#data-structures) | [Structs](../../16_Structs/README.md) · [Enums](../../13_Enums/README.md) · [Collections](../../26_Collections/README.md) |
+| [References & Pointers ↗](https://cheats.rs/#references-pointers) | [Ownership](../../18_Ownership/README.md) |
+| [Functions & Behavior ↗](https://cheats.rs/#functions-behavior) | [Traits](../../12_Traits/README.md) · [Closures](../../23_Closures/README.md) |
+| [Control Flow ↗](https://cheats.rs/#control-flow) | [Control flow](../../25_Control_Flow/README.md) |
+| [Organizing Code ↗](https://cheats.rs/#organizing-code) | [Modules](../../27_Modules/README.md) |
+| [Type Aliases and Casts ↗](https://cheats.rs/#type-aliases-and-casts) | [Conversion](../../29_Conversion/README.md) |
+| [Macros & Attributes ↗](https://cheats.rs/#macros-attributes) | [Macros](../../25_Control_Flow/macros/README.md) |
+| [Pattern Matching ↗](https://cheats.rs/#pattern-matching) | [Pattern matching](../../30_Pattern_Matching/README.md) |
+| [Generics & Constraints ↗](https://cheats.rs/#generics-constraints) | [Generics](../../22_Generics/README.md) |
+| [Higher-Ranked Items ↗](https://cheats.rs/#higher-ranked-items) | — |
+| [Strings & Chars ↗](https://cheats.rs/#strings-chars) | [Strings](../../14_Strings/README.md) |
+| [Documentation ↗](https://cheats.rs/#documentation) | [Doc tests](../../28_Testing/doc_tests/README.md), which is the half that runs |
+| [The Abstract Machine ↗](https://cheats.rs/#the-abstract-machine) | [Compilers](../../20_Compilers/README.md) |
+| [Memory & Lifetimes ↗](https://cheats.rs/#memory-lifetimes) | [Borrowed state](../../18_Ownership/borrowed_state/README.md) · [What `&'a T` claims](../../18_Ownership/what_a_reference_claims/README.md) · [At the call site](../../18_Ownership/lifetimes_at_the_call_site/README.md) |
+| [Basic Types ↗](https://cheats.rs/#basic-types) | [Numbers and bytes](../../19_Numbers/README.md) |
+| [Custom Types ↗](https://cheats.rs/#custom-types) | [Structs](../../16_Structs/README.md) · [Enums](../../13_Enums/README.md) · [What a union is](../../09_Advanced/what_a_union_is/README.md) |
+| [Pointer Meta ↗](https://cheats.rs/#pointer-meta) | [Static vs dynamic dispatch](../../12_Traits/static_vs_dynamic_dispatch/README.md) covers the vtable; the fat-pointer layout itself is not drawn here |
+| [Standard Library Types ↗](https://cheats.rs/#standard-library-types) | [Collections](../../26_Collections/README.md) · [Strings](../../14_Strings/README.md) · [`Rc`](../../18_Ownership/reference_counting/README.md) |
+| [One-Liners ↗](https://cheats.rs/#one-liners) | [row by row, below](#the-one-liners-row-by-row) — the one chapter small enough to check exhaustively |
+| [Thread Safety ↗](https://cheats.rs/#thread-safety) | [`Send` and `Sync`](../../09_Advanced/send_and_sync/README.md) |
+| [Atomics & Cache ↗](https://cheats.rs/#atomics-cache) | [`RwLock` and atomics](../../09_Advanced/rwlock_and_atomics/README.md) |
+| [Iterators ↗](https://cheats.rs/#iterators) | [Iterators](../../24_Iterators/README.md) · [Adapters, by job](../../24_Iterators/adapters_by_job/README.md) |
+| [Number Conversions ↗](https://cheats.rs/#number-conversions) | [Conversion](../../29_Conversion/README.md) · [Numbers and bytes](../../19_Numbers/README.md) |
+| [String Conversions ↗](https://cheats.rs/#string-conversions) | [Making a `String`](../../14_Strings/making_a_string/README.md) |
+| [String Output ↗](https://cheats.rs/#string-output) | [Strings](../../14_Strings/README.md) |
+| [Project Anatomy ↗](https://cheats.rs/#project-anatomy) | [Scaffolding](../../05_Tooling/scaffolding/README.md) |
+| [Cargo ↗](https://cheats.rs/#cargo) | [Tooling](../../05_Tooling/README.md) |
+| [Cross Compilation ↗](https://cheats.rs/#cross-compilation) | [Targets and triples](../../20_Compilers/targets_and_triples/README.md) |
+| [Tooling Directives ↗](https://cheats.rs/#tooling-directives) | [Strict lints](../../05_Tooling/strict_lints/README.md) |
+| [Types, Traits, Generics ↗](https://cheats.rs/#types-traits-generics) | [Traits](../../12_Traits/README.md) · [Generics](../../22_Generics/README.md) |
+| [Foreign Types and Traits ↗](https://cheats.rs/#foreign-types-and-traits) | [Traits](../../12_Traits/README.md), for the orphan rule |
+| [Type Conversions ↗](https://cheats.rs/#type-conversions) | [Conversion](../../29_Conversion/README.md) |
+| [Performance Tips ↗](https://cheats.rs/#performance-tips) | — |
+| [Async-Await 101 ↗](https://cheats.rs/#async-await-101) | only at the edges: [`Iterator` vs `Stream`](../../24_Iterators/iterator_vs_stream/README.md) and [instrumenting async](../../21_Observability/instrumenting_async/README.md) |
+| [Closures in APIs ↗](https://cheats.rs/#closures-in-apis) | [Function pointers](../../23_Closures/function_pointers/README.md) |
+| [Unsafe, Unsound, Undefined ↗](https://cheats.rs/#unsafe-unsound-undefined) | [What `unsafe` turns off](../../09_Advanced/what_unsafe_turns_off/README.md) · [C and C++](../../31_C_and_Cpp/README.md) |
+| [API Stability ↗](https://cheats.rs/#api-stability) | — |
+
+Four blanks, and they are not the same kind of blank. **Higher-ranked items** (`for<'a>`) and **API stability** are missing because nothing here has needed them yet. **Performance tips** is missing on purpose so far: every claim on such a page wants a measurement, and this library has no benchmark harness, so writing one would mean asserting numbers it cannot check — the one thing [the answer-key rule](../../CONTRIBUTING.md) exists to prevent. **Async** is the largest, and it is a section rather than a page.
+
+
+## The One-Liners, row by row
+
+[One-Liners ↗](https://cheats.rs/#one-liners) is the odd chapter out on cheats.rs: five tabs of *snippets* rather than concepts, admitted under three rules its source states in a comment — `std` only, "most people" should have hit the problem, and it must not be a trivial method on an obvious struct. That makes it the nearest thing the sheet has to a syllabus for a library like this one, and at twenty-six rows it is small enough to check exhaustively rather than chapter by chapter.
+
+**Fourteen rows land on a written lesson, four land on a stub, and eight have nothing.** The kata column is not decoration. A row with a page but no `## Practice` is one you can read and still not write from memory afterwards — which, for a chapter whose subject is *snippets you forget*, is the whole failure mode.
+
+### Strings — eight of nine, two with a kata
+
+| Snippet | Here | Kata |
+|---|---|---|
+| `format!("{x}{y}")` | [Concatenating strings](../../14_Strings/concatenating_strings/README.md), with the `{x}` capture itself in [The braces take a name](../../15_First_Programs/braces_take_a_name/README.md). [The format mini-language](../../14_Strings/the_format_language/README.md) — the `{:>8}` / `{:.3}` half — is still a stub | ✓ |
+| `write!(x, "{y}")` | [Building a `String`](../../14_Strings/building_a_string/README.md); the [`Write` trait](../../12_Traits/read_and_write/README.md) under it is a stub | ✓ |
+| `s.split(pattern)` | [`str::split`](../../14_Strings/str_methods/str_split/README.md), and [Inside a `Split`](../../14_Strings/inside_a_split/README.md) for why `{:?}` prints a struct instead of the pieces | — |
+| … with `&str` | [`str` methods](../../14_Strings/str_methods/README.md) — one `Pattern` table for all four shapes, each with a compiled page behind it | — |
+| … with `char` | *(same table)* | — |
+| … with closure | *(same table)* | — |
+| `s.split_whitespace()` | [`str::split_whitespace`](../../14_Strings/str_methods/str_split_whitespace/README.md) | — |
+| `s.lines()` | [`str::lines`](../../14_Strings/str_methods/str_lines/README.md) | — |
+| `Regex::new(r"\s")?.split(…)` | — | — |
+
+The regex blank is structural rather than an oversight. [`run_examples.py`](../../tools/run_examples.py) builds each example with a bare `rustc --edition 2024` — no `--extern`, no cargo — so an example can use nothing outside `std`. That is the same rule cheats.rs applies to this chapter, and the reason it flags that one row as needing a crate.
+
+The six blanks in the kata column are the honest finding here. The [`str`](../../14_Strings/str_methods/README.md) and [`String`](../../14_Strings/string_methods/README.md) method pages are 125 reference pages with a compiled program each and **no exercise anywhere in the set** — deliberate, in that a reference page answers a question you already have, but it does mean the split family is a set of pages you consult rather than a skill you own.
+
+### I/O — one of three
+
+| Snippet | Here | Kata |
+|---|---|---|
+| `File::create(PATH)?` | [Opening a file](../../04_Files/opening_a_file/README.md) — a **stub** | — |
+| `OpenOptions::new()…open(PATH)?` | *(same stub)* | — |
+| `read_to_string(path)?` | [Reading lines efficiently](../../04_Files/reading_lines_efficiently/README.md), which prices it against `lines()` and a reused buffer | — |
+
+[Files](../../04_Files/README.md) is six pages, five of them stubs, and no kata in the section.
+
+### Macros — none of two
+
+Both rows are `macro_rules!` with variable arguments (`$($args:expr),*` and expanding it with `$( f($args); )*`), and [Macros](../../25_Control_Flow/macros/README.md) is a stub that explains what the `!` means and stops. **Nothing in this library writes a macro.** That is the largest single gap the chapter exposes; it belongs in [Control flow](../../25_Control_Flow/README.md), where eight of nine pages are stubs.
+
+### Transforms — all five, and the strongest corner
+
+These rows are not snippets; each points at another sheet for *"everything you can turn this type into"*. The destinations are where this library goes deepest.
+
+| Starting type | Here |
+|---|---|
+| `Option<T> -> …` | [`Option` and `Result`](../../17_Option_and_Result/README.md) — 27 pages, 23 of them carrying a kata |
+| `Result<T, R> -> …` | *(same section)*, plus [Errors](../../02_Errors/README.md) |
+| `Iterator<Item=T> -> …` | [Adapters, by job](../../24_Iterators/adapters_by_job/README.md) |
+| `&[T] -> …` | [Arrays and slices](../../26_Collections/arrays_and_slices/README.md) · [`Vec` methods](../../26_Collections/vec_methods/README.md) |
+| `Future<T> -> …` | [`Iterator` vs `Stream`](../../24_Iterators/iterator_vs_stream/README.md) alone — the async blank named above |
+
+### Esoterics — none of seven
+
+| Snippet | Where it would go |
+|---|---|
+| <code>wants_closure({ let c = outer.clone(); move &#124;&#124; use_clone(c) })</code> | [Closures](../../23_Closures/README.md) · [The `move` keyword](../../23_Closures/the_move_keyword/README.md) |
+| <code>iter.try_for_each(&#124;x&#124; { Ok::&lt;(), Error&gt;(()) })?</code> | [Errors](../../02_Errors/README.md) · [Iterators](../../24_Iterators/README.md) |
+| `Cell::from_mut(mut_slice).as_slice_of_cells()` | [Interior mutability](../../09_Advanced/interior_mutability/README.md) |
+| `&original_slice[offset..][..length]` | [Arrays and slices](../../26_Collections/arrays_and_slices/README.md) |
+| `const _: Option<&dyn T> = None;` | [Static vs dynamic dispatch](../../12_Traits/static_vs_dynamic_dispatch/README.md), which covers dyn compatibility but not this canary for it |
+| the *semver trick* | [Cargo dependencies](../../05_Tooling/cargo_dependencies/README.md) |
+| `pub(crate) use internal_macro;` | [The `use` declaration](../../27_Modules/the_use_declaration/README.md) |
+
+Seven rows, seven pages that already exist, and a paragraph each would close the tab. It is the cheapest gap on this list, and — by the rule cheats.rs uses to admit a row at all — the one a reader is least likely to find anywhere else.
+
+### And the Cookbook it points to
+
+The chapter's own header sends you to the **[Rust Cookbook ↗](https://rust-lang-nursery.github.io/rust-cookbook/)** for more, and that link is worth following with the `std`-only rule in mind, because it is the mirror image of this library. Its recipes are organised by *task* — compression, cryptography, databases, images, HTTP, parsing with `nom` — and nearly every one is a crate call. The overlap with what can be built here is the handful of chapters that stay inside `std`: text processing, some of the file-system and command-line recipes, error handling, and the concurrency primitives. Everything else is a reason the sections that name a crate — [Data](../../06_Data/README.md), [Clients](../../07_Clients/README.md), [Observability](../../21_Observability/README.md) — are stubs here and cannot graduate the usual way: the mechanism gets modelled in `std`, where the check can see it, and the crate's real API stays a link to the crate's own versioned docs.
+
 ## Memory layout, on one page
 
 Both of these are frozen and both are still correct, because what they draw has not moved.
