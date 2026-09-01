@@ -15,6 +15,7 @@ The rest of the section is what follows from the bytes underneath. `len()` count
 | [Concatenating strings](concatenating_strings/README.md) | 101 → 201 | `format!`, `+` and `join` — the single `Add` impl behind all of it, and the three error codes you get from putting the wrong side on the left |
 | [Building a `String`](building_a_string/README.md) | 101 → 201 | `push_str`, `push`, and the `+` that eats its left operand — `format!` vs `write!` in a loop, and why `truncate` panics where a slice does |
 | [Meet the `char`](meet_the_char/README.md) | 101 → 201 | One Unicode scalar, four bytes as a value, 1–4 inside a `String` — why `.len()` is not "how many characters", `s[0]` refuses to compile, and `'ß'.to_uppercase()` returns *two* letters |
+| [Raw strings, escapes and the literal prefixes](raw_strings_and_escapes/README.md) | 101 → 201 | Every way to write text in source — `r"…"` turns the escapes off, `b"…"` drops the UTF-8 promise, `c"…"` adds the NUL — and `"C:\temp\new"` is two bytes shorter than it looks |
 | [Walking a `String`](walking_a_string/README.md) | 101 → 201 | Three item types and the split family — splits are the gaps between matches, `char_indices()` is not `chars().enumerate()`, and `split_whitespace()` silently shortens a row |
 | [`&'static str`](static_str/README.md) | 201 | On a literal it is the same type as `&str` — where the annotation starts refusing things, `const` vs `static`, and the three ways a `String` really can yield one |
 | [Six kinds of string](six_kinds_of_string/README.md) | 201 | `OsString`, `CString` and friends are not five more inventions — three promises about the bytes, each owned or borrowed, and narrowing is where a promise gets checked |
@@ -44,7 +45,7 @@ Strings are the worked example half the ownership pages already use, so the deep
 - [Meet the byte](../19_Numbers/meet_the_byte/README.md) — the unit `len` counts in
 - [`Path` and `PathBuf`](../04_Files/path_and_pathbuf/README.md) — the family's honorary pair, a **stub** for now
 
-[STRINGS.md](../STRINGS.md) is the full map: the same lessons with the question each one answers, plus the nine topics that are still outlines rather than lessons.
+[STRINGS.md](../STRINGS.md) is the full map: the same lessons with the question each one answers, plus the eight topics that are still outlines rather than lessons.
 
 [Strings: links, books and videos](resources/README.md) is the reading list — the Book, *Programming Rust* ch. 17, Easy Rust, the essays, and the exercise sets outside this library that map onto these pages.
 

@@ -59,10 +59,11 @@ flowchart LR
 | 5 | [Concatenating strings](14_Strings/concatenating_strings/README.md) | 101 → 201 | How to join two pieces of text — and why `+` insists on an owned `String` on the left, which is the whole of `E0369`/`E0308`/`E0368` |
 | 6 | [Building a `String`](14_Strings/building_a_string/README.md) | 101 → 201 | `push_str`, `push`, the `+` that consumes its left operand, and `format!` vs `write!` inside a loop |
 | 7 | [Meet the `char`](14_Strings/meet_the_char/README.md) | 101 → 201 | What the bytes encode — why `.len()` is not "how many characters", and why `s[0]` refuses to compile |
-| 8 | [Walking a `String`](14_Strings/walking_a_string/README.md) | 101 → 201 | Three item types and the split family — and why `split(' ')` and `split_whitespace()` disagree about empty fields |
-| 9 | [`&'static str`](14_Strings/static_str/README.md) | 201 | Is it different from `&str`? On a literal, no — and the claim that a `String` can never yield one is false |
-| 10 | [Six kinds of string](14_Strings/six_kinds_of_string/README.md) | 201 | Why `OsString` and `CString` exist, and the one owned/borrowed pattern all six types repeat |
-| 11 | [Inside a `Split`](14_Strings/inside_a_split/README.md) | 201 → 301 | Why printing `s.split(":")` with `{:?}` gives a struct full of `crit_pos` and `byteset` instead of `["a", "b", "c"]` — and what every field of it means |
+| 8 | [Raw strings, escapes and the literal prefixes](14_Strings/raw_strings_and_escapes/README.md) | 101 → 201 | Every way to write text in source — `r"…"`, `b"…"`, `c"…"`, `\x`, `\u{…}` — and why `"C:\temp\new"` is two bytes shorter than it looks |
+| 9 | [Walking a `String`](14_Strings/walking_a_string/README.md) | 101 → 201 | Three item types and the split family — and why `split(' ')` and `split_whitespace()` disagree about empty fields |
+| 10 | [`&'static str`](14_Strings/static_str/README.md) | 201 | Is it different from `&str`? On a literal, no — and the claim that a `String` can never yield one is false |
+| 11 | [Six kinds of string](14_Strings/six_kinds_of_string/README.md) | 201 | Why `OsString` and `CString` exist, and the one owned/borrowed pattern all six types repeat |
+| 12 | [Inside a `Split`](14_Strings/inside_a_split/README.md) | 201 → 301 | Why printing `s.split(":")` with `{:?}` gives a struct full of `crit_pos` and `byteset` instead of `["a", "b", "c"]` — and what every field of it means |
 
 ## The lessons strings lean on
 
@@ -82,14 +83,13 @@ Strings are the worked example half the library's ownership pages already use, s
 
 ## Still written as outlines
 
-Named honestly, because a map that only lists what exists is a map of the wrong territory. Each of these 9 is a **stub** — a real page at a real URL, carrying the questions the finished lesson has to answer and the links to its neighbours, but with no runnable example behind it yet. That is the boundary this library draws: a stub states what it does not know, and nothing on it has been through the check that backs every other claim here.
+Named honestly, because a map that only lists what exists is a map of the wrong territory. Each of these 8 is a **stub** — a real page at a real URL, carrying the questions the finished lesson has to answer and the links to its neighbours, but with no runnable example behind it yet. That is the boundary this library draws: a stub states what it does not know, and nothing on it has been through the check that backs every other claim here.
 
 | The page | Level | What it will answer |
 |---|---|---|
 | [Parsing out of a string](14_Strings/parsing_a_string/README.md) | 101 → 201 | `.parse()` beyond the one worked example, `FromStr` for your own type, and what to do with the `Result` that is not `.unwrap()` |
 | [Searching without splitting](14_Strings/searching_a_string/README.md) | 101 → 201 | `find` / `rfind` / `contains` / `starts_with`, and `Pattern` as the trait that unifies them with the split family |
 | [The format mini-language](14_Strings/the_format_language/README.md) | 201 | `{:>8.3}`, `{:#x}`, `{val:^width$}`: fill, align, sign, width, precision, and the `$` that makes them dynamic |
-| [Raw strings, escapes and byte strings](14_Strings/raw_strings_and_escapes/README.md) | 101 → 201 | `r"…"`, `r#"…"#`, `\u{…}`, and byte strings `b"…"` |
 | [Comparing and sorting text](14_Strings/comparing_strings/README.md) | 201 | `Ord` on strings is byte order, which is not human order; case folding vs `to_lowercase` |
 | [`str` is unsized](14_Strings/str_is_unsized/README.md) | 201 | `?Sized`, why you only ever meet `str` behind a pointer, and what a fat pointer is |
 | [The third owned form](14_Strings/boxed_str/README.md) | 201 → 301 | `Box<str>`, `Rc<str>`, `Arc<str>`: frozen text without the capacity word, and when the 8-byte saving matters |

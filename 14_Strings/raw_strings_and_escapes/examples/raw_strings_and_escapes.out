@@ -1,0 +1,34 @@
+THE TWELVE LITERALS
+  you type               you get            it holds
+  "hello"                &'static str       "hello"
+  "a\tb\nc\0d\\e"        &'static str       "a\tb\nc\0d\\e"
+  "\x36"                 &'static str       "6"
+  "\u{7fff}"             &'static str       "翿" = U+7FFF
+  r"C:\temp\new"         &'static str       "C:\\temp\\new"
+  r#"he said "hi""#      &'static str       "he said \"hi\""
+  c"linker"              &'static CStr      "linker" [108, 105, 110, 107, 101, 114, 0]
+  cr#"C:\a"b"#           &'static CStr      "C:\\a\"b"
+  b"Hi"                  &'static [u8; 2]   [72, 105]
+  br"\n"                 &'static [u8; 2]   [92, 110]  <- backslash, n
+  b'A'                   u8                 65
+  '🦀'                    char               '🦀' = U+1F980, 4 bytes of UTF-8, 4 bytes as a char
+
+SAME ELEVEN KEYSTROKES, TWO DIFFERENT STRINGS
+   "C:\temp\new"    9 bytes   "C:\temp\new"
+  r"C:\temp\new"   11 bytes   "C:\\temp\\new"
+
+COUNTING THE # UNTIL THE TEXT FITS
+  r#"a " quote"#          "a \" quote"
+  r##"a "# sequence"##    "a \"# sequence"
+
+\x STOPS AT 7F IN TEXT, REACHES FF IN BYTES
+  "\x7F"     "\u{7f}"   the highest a str will take
+  b"\xF5"    [245]      a byte string owes UTF-8 nothing
+
+A LITERAL SPANS LINES UNLESS YOU END ONE WITH \
+  no backslash   "one\n    two"
+  backslash      "one two"   <- newline AND the indent are eaten
+
+DISPLAY RENDERS THE ESCAPE, DEBUG PRINTS IT BACK
+  {}    a	b
+  {:?}  "a\tb"
