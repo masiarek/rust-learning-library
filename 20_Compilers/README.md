@@ -43,6 +43,7 @@ Two consequences worth carrying:
 | [LLVM: the part of rustc that is not Rust](llvm_and_its_ir/README.md) | 201 | What the name actually refers to — a suite, a library, an IR and a pipeline — plus Clang, LLD and LLDB, real IR for a small function, and the control-flow graph read straight off it |
 | [The linker: the stage that is not rustc](the_linker/README.md) | 201 | Two functions this crate never defines, called anyway — what an object file leaves blank, who fills it in, and why the error text is in a different dialect from every other error you have seen |
 | [Control-flow flattening](control_flow_flattening/README.md) | 201 → 301 | The optimizer's permission aimed backwards: the same function flattened into a state machine, an opaque predicate that always holds, and the three layers where a pass can be inserted |
+| [When the type checker is wrong](when_the_type_checker_is_wrong/README.md) | 301 | Soundness is a property of the checker, not of your code — the thirty programs `rustc` accepted between 2022 and 2025 and should not have, eleven of them reachable memory bugs, and the one of the thirty short enough to put on a page and run |
 
 ## Stubs
 

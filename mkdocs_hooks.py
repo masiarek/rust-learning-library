@@ -290,6 +290,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "the_linker",
         # ...and the same permission aimed backwards.
         "control_flow_flattening",
+        # ...and then the front end being wrong about its own rules, which is
+        # a claim about the first box rather than anything after it.
+        "when_the_type_checker_is_wrong",
         # The four stubs, in the order the section README lists them — so the
         # sidebar and that page cannot disagree about what comes next.
         "targets_and_triples",

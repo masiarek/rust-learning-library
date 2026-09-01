@@ -373,6 +373,7 @@ fn main() {
 ## See also
 
 - [What a union is](../what_a_union_is/README.md) — one of the five powers, in full
+- [When the type checker is wrong](../../20_Compilers/when_the_type_checker_is_wrong/README.md) — the same word one layer up: soundness as a property of `rustc` rather than of your module, and the thirty times it did not hold
 - [The global allocator](../the_global_allocator/README.md) — an `unsafe trait` implemented for real
 - [Borrowing](../../18_Ownership/borrowing/README.md) — the rules that stay on inside the block
 - [Arrays and slices](../../26_Collections/arrays_and_slices/README.md) — what `from_raw_parts_mut` is building
