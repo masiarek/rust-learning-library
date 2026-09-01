@@ -32,6 +32,13 @@
 - [UTF-8 Everywhere ↗](https://utf8everywhere.org/) — the manifesto behind the encoding decision Rust made for you. Long, opinionated, and the reason `String` is a `Vec<u8>` with a promise rather than an array of characters.
 - [`unicode-segmentation` ↗](https://docs.rs/unicode-segmentation/) — the crate for the third answer to "how long is it". Graphemes are not in `std`, deliberately, and this is where they live.
 
+## Q&A
+
+The one thread worth reading rather than searching:
+
+- [What are the differences between Rust's `String` and `str`? ↗](https://stackoverflow.com/questions/24158114/what-are-the-differences-between-rusts-string-and-str) — asked 2014, 240k views, and still the best single page on the question. huon's top answer is the one to read: `str` is bytes *somewhere*, and it enumerates the three somewheres (static storage, inside a `String`, a stack array) — which is where [`String` vs `&str`](../string_vs_str/README.md) gets its three-ways-to-have-text framing. Read the **footnotes and the comments**, not just the answers: the thread's most-repeated error is "`str` is immutable", corrected twice in the comments by Chayim Friedman — a `str` is fixed-**length**, and `&mut str` can be mutated in place. Two other answers are worth the scroll (snnsnn's long one on the data section and `struct String { vec: Vec<u8> }`; Zorf's on fat pointers and `Box<str>`), and one 42-vote answer says a `&str`'s length field counts *characters* — it counts **bytes**, as [Meet the `char`](../meet_the_char/README.md) prints.
+- [Understanding when to use `String` vs `str` ↗](https://users.rust-lang.org/t/understanding-when-to-use-string-vs-str/103746) — the users forum, 2023, and much shorter. Skip it for the definitions and take the one refinement it adds to "parameters take `&str`": scottmcm's rule that a parameter should become `String` **when the function always calls `.to_owned()` on it anyway** — at which point taking the borrow only forces the caller to allocate a copy you were going to make regardless.
+
 ## Video
 
 - [Easy Rust 013: String and `&str` ↗](https://youtu.be/pSyaGzGg26o) — Dave MacLeod, the spoken companion to [ch. 14 ↗](https://dhghomon.github.io/easy_rust/Chapter_14.html) above. Short, and it takes the *why does this need a `&`* question seriously instead of asserting the answer.

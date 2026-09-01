@@ -26,6 +26,8 @@ All three print the same way and compare the same way. What differs is who owns 
 
 **The trap in most tutorials: "a `str` is stack-allocated."** It is not. The text of a literal is baked into your executable's read-only data — not the stack, not the heap — and `&'static str` says exactly that: a view that lives as long as the program does. What sits on the stack is only the view itself, a pointer and a length. The *data* of a `str` can live anywhere: in the binary (a literal), on the heap (inside a `String`), even in a stack array. That is why you only ever meet `str` behind a `&`: it is text-of-unknown-size, wherever text happens to be.
 
+**The second trap, and the one even good answers repeat: "a `str` is immutable."** It is not — it is fixed-**length**. [`String::as_mut_str`](../string_methods/string_as_mut_str/README.md) hands you a `&mut str`, and [`make_ascii_uppercase`](../str_methods/str_make_ascii_uppercase/README.md) rewrites those bytes in place with no allocation; [`split_at_mut`](../str_methods/str_split_at_mut/README.md) will even hand you two `&mut str` into one buffer. What a `str` may never do is change *length*, because UTF-8 is variable-width — swapping an `a` for an `ä` needs a byte that is not there, and a view cannot reallocate what it does not own. So `&str` is read-only because the `&` is, not because `str` is. [Section 6 below](#the-verified-output) mutates one.
+
 ## What each one costs
 
 The machine's view, from the [verified output](#the-verified-output) below:
@@ -55,6 +57,8 @@ The middle call is the important one. `String` implements `Deref<Target = str>`,
 The reverse direction is never free: `&str → String` allocates a buffer and copies the bytes, and you ask for it out loud with `.to_string()` (or `.to_owned()`).
 
 So the API rule almost every Rust codebase follows: **parameters take `&str`, because every caller can afford one.** A `fn f(s: String)` forces each call site to allocate, clone, or surrender its value — the kata below makes you pay each of those once.
+
+**The one exception worth knowing:** if the body always calls `.to_owned()` on the parameter anyway — it stores the text in a struct, sends it to a thread, returns it — then taking `&str` does not save the allocation, it just moves it to the caller and takes away their choice. A caller holding a `String` it no longer needs could have handed the buffer over for free; instead it watches you copy it. Take `String` there, and let the caller with only a literal write `.to_string()` at the call site, where the cost is visible.
 
 ## Which one do I write?
 
@@ -92,7 +96,7 @@ let big2 = big1;         // the buffer changed owners
 | `s = "hi"` | one type for all text | two types: the owner and the view |
 | `t = s` | a second reference; refcount +1 | `String`: a move · `&str`: a copy of the view |
 | `s[4:7]` | a **new string**, copied out | `&s[4..7]` — a view, nothing copied |
-| immutable | every `str`, always | the view is read-only; the owner may be `mut` |
+| immutable | every `str`, always | `&str` is read-only, but `str` is only fixed-**length** — see the trap above |
 
 The habit that transfers: Python slices cost an allocation each, so you learned not to slice in a loop. Rust's `&str` removes the cost — a slice is a window — and the compiler enforces what the window may not do: outlive the text, or watch it while it changes.
 
@@ -404,6 +408,13 @@ fn main() {
 5. String moves; &str copies
    &str:   s1 = "hello", s2 = "hello"   <- both alive
    String: big2 = "hello", and `big1` is now unusable — E0382
+
+6. `str` is fixed-length, NOT immutable
+   through a &mut str:  "PER MARTIN-LOF"   <- no allocation, same buffer
+   split_at_mut halves: "PER" + " martin-lof"
+   only the first half changed: "PER martin-lof"
+   what a str cannot do is change LENGTH — one byte out, one byte in.
+   `&str` is read-only because the `&` is, not because `str` is.
 ```
 <!-- /output -->
 
@@ -427,7 +438,7 @@ rustc --edition 2024 14_Strings/string_vs_str/examples/string_vs_str.rs -o /tmp/
 
 Polskie materiały mówią zwykle o „napisach” i tym jednym słowem zacierają całą różnicę, o którą tu chodzi. Precyzyjniej: `String` to łańcuch znaków, który **jest właścicielem** swoich bajtów i to on je na koniec zwalnia, a `&str` to wycinek łańcucha — sam wskaźnik i długość, patrzące na cudze bajty. Widać to w rozmiarach: `&str` zajmuje 16 bajtów (wskaźnik + długość), `String` 24 (wskaźnik + długość + pojemność), a `&String` tylko 8, bo to sam wskaźnik na te trzy słowa. Pytanie brzmi więc nie „który typ jest napisem”, tylko **kto jest winien zwolnienie pamięci** — i dopiero z tego wynika reszta.
 
-Warto od razu unieszkodliwić zdanie, które krąży po polskich (i angielskich) tutorialach: „`str` leży na stosie”. Nieprawda. Na stosie leży sam widok — dwa słowa maszynowe. Bajty literału siedzą w sekcji tylko do odczytu pliku wykonywalnego, bajty w `String`u na stercie, a `str` może równie dobrze wskazywać na tablicę na stosie. `&'static str` też nie mówi o miejscu, tylko o czasie życia: „ten widok jest ważny tak długo, jak działa program”. Dlatego `str` spotyka się wyłącznie za `&` — to tekst o nieznanym rozmiarze, gdziekolwiek ten tekst akurat jest.
+Warto od razu unieszkodliwić zdanie, które krąży po polskich (i angielskich) tutorialach: „`str` leży na stosie”. Nieprawda. Na stosie leży sam widok — dwa słowa maszynowe. Bajty literału siedzą w sekcji tylko do odczytu pliku wykonywalnego, bajty w `String`u na stercie, a `str` może równie dobrze wskazywać na tablicę na stosie. `&'static str` też nie mówi o miejscu, tylko o czasie życia: „ten widok jest ważny tak długo, jak działa program”. Dlatego `str` spotyka się wyłącznie za `&` — to tekst o nieznanym rozmiarze, gdziekolwiek ten tekst akurat jest. Drugie zdanie warte unieszkodliwienia brzmi: „`str` jest niezmienny”. Też nieprawda — on ma **stałą długość**, a to co innego. `String::as_mut_str` zwraca `&mut str`, a `make_ascii_uppercase` nadpisuje bajty w miejscu, bez alokacji; `split_at_mut` potrafi wydać dwa `&mut str` do jednego bufora. Czego `str` nie może, to zmienić *długości*: UTF-8 ma zmienną szerokość, więc podmiana `a` na `ä` wymagałaby bajtu, którego nie ma, a widok nie zrealokuje cudzej pamięci. Innymi słowy: `&str` jest tylko do odczytu dlatego, że `&` jest tylko do odczytu — a nie dlatego, że `str` taki jest.
 
 Konwersja działa za darmo tylko w jedną stronę. `String` implementuje `Deref<Target = str>`, więc `&String` sam z siebie zamienia się w `&str` w miejscu wywołania — to jest *deref coercion*, i przy okazji dlatego `owned.to_uppercase()` w ogóle działa: ta metoda należy do `str`. W drugą stronę zawsze płacisz alokacją i kopią, i musisz o to poprosić głośno: `.to_string()` albo `.to_owned()`. Stąd reguła, którą stosuje praktycznie każda baza kodu w Ruscie: **parametr bierze `&str`**, bo na taki argument stać każdego wołającego. Ćwiczenie na tej stronie pokazuje rachunek dokładnie: przy `fn f(s: String)` literał musi zaalokować przez `.to_string()`, `String` musi się sklonować przez `.clone()`, żeby przeżyć wywołanie, albo oddaje się go na zawsze i przy następnym użyciu dostaje `E0382`.
 

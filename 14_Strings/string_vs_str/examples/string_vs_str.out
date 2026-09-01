@@ -20,3 +20,10 @@
 5. String moves; &str copies
    &str:   s1 = "hello", s2 = "hello"   <- both alive
    String: big2 = "hello", and `big1` is now unusable — E0382
+
+6. `str` is fixed-length, NOT immutable
+   through a &mut str:  "PER MARTIN-LOF"   <- no allocation, same buffer
+   split_at_mut halves: "PER" + " martin-lof"
+   only the first half changed: "PER martin-lof"
+   what a str cannot do is change LENGTH — one byte out, one byte in.
+   `&str` is read-only because the `&` is, not because `str` is.

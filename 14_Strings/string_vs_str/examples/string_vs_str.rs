@@ -41,4 +41,18 @@ fn main() {
     let big1 = String::from("hello");
     let big2 = big1; // the buffer changed owners
     println!("   String: big2 = {big2:?}, and `big1` is now unusable — E0382");
+
+    println!("\n6. `str` is fixed-length, NOT immutable");
+    let mut name = String::from("per martin-lof");
+    name.as_mut_str().make_ascii_uppercase(); // a &mut str, mutated in place
+    println!("   through a &mut str:  {name:?}   <- no allocation, same buffer");
+    let mut half = String::from("per martin-lof");
+    {
+        let (first, last) = half.split_at_mut(3); // two &mut str into one buffer
+        first.make_ascii_uppercase();
+        println!("   split_at_mut halves: {first:?} + {last:?}");
+    }
+    println!("   only the first half changed: {half:?}");
+    println!("   what a str cannot do is change LENGTH — one byte out, one byte in.");
+    println!("   `&str` is read-only because the `&` is, not because `str` is.");
 }
