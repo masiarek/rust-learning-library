@@ -55,6 +55,7 @@ Shadowing is not a topic you finish; it is a habit that shows up inside other le
 | [What a warning is asking](15_First_Programs/what_a_warning_is_asking/README.md) | `unused variable` is the compiler's only genuine net against an accidental shadow — and `unused_mut` on an accumulator is a shadowing bug reported in words that never say so |
 | [Ownership and moves](18_Ownership/ownership_and_moves/README.md) | Drop order in reverse declaration order, which is what makes a shadowed value outlive its shadow |
 | [Borrowing](18_Ownership/borrowing/README.md) | Why a reference taken before a shadow keeps working after it |
+| [Assignment drops the old value](18_Ownership/assignment_is_a_drop/README.md) | The nearest-miss comparison: `let e = …` twice keeps both values alive, `e = …` frees the first one on the spot — one keyword apart, and a completely different drop schedule |
 | [`if let`](17_Option_and_Result/if_let/README.md) | Pattern bindings introduce a fresh name; `let … else` is the guard clause the unwrap-and-narrow idiom opens with |
 | [Initial values](17_Option_and_Result/initial_values/README.md) | The other route away from `mut` — declare without initializing and let the compiler prove you assigned |
 | [A score is not a number](16_Structs/newtype_score/README.md) | `let id = BallotId(id);` — narrowing into a newtype so the loose form becomes unreachable |

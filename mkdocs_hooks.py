@@ -207,6 +207,10 @@ NAV_ORDER: dict[str, list[str]] = {
         "from_and_into",
         "tryfrom_and_tryinto",
         "casting_with_as",
+        # ...and last, the one nobody writes: where the compiler converts for
+        # you, and the three places it declines to. After the written three,
+        # because it is defined by what it is NOT.
+        "coercion",
     ],
     # Ordered by how much a reader has to know to follow the Rust half:
     # the three ownership bugs first, then the two about threads, then the
@@ -326,6 +330,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # are NOT: `bool` is not a number, and `()` is not an absence.
         "meet_the_bool",
         "the_unit_type",
+        # ...and the row below `()` in that same census: the type with no
+        # values at all, which is how the compiler says "control stops here".
+        "the_never_type",
         # ...and who decided which of those a bare `let x = 10;` got. Before
         # the annotation, because inference is what an annotation overrides.
         "type_inference",
@@ -340,6 +347,10 @@ NAV_ORDER: dict[str, list[str]] = {
         # The macro that needs the trait above, and does five things
         # println!("{:?}") does not.
         "what_dbg_does",
+        # An aside rather than a rung: nobody needs `r#` on day one, but
+        # rustc suggests it the first time a name collides with a keyword,
+        # and the reason it exists (editions) is worth meeting early.
+        "raw_identifiers",
         # Last, because it is the first thing that needs anything outside
         # the standard library: the crate almost everyone adds first, and
         # the API the Book still teaches under its old names.
@@ -412,12 +423,34 @@ NAV_ORDER: dict[str, list[str]] = {
         # String: which kinds of value live where, and one table pricing
         # move / Copy / clone / Arc::clone against the heap side.
         "stack_and_heap",
+        # ...and then the other half of that split, which stack_and_heap only
+        # sketches: what a CALL does to the stack region, since the frame is
+        # the unit every lifetime rule is ultimately stated against.
+        "the_call_stack",
+        # ...the same frames stacked until they run out, which is the one
+        # failure mode of the stack that is not a borrow error.
+        "recursion_and_the_stack",
+        # ...and what happens to a frame afterwards: it is reissued, not
+        # cleared. This is the mechanism the borrow rules exist to police, so
+        # it goes immediately before them.
+        "a_stack_slot_is_reused",
         "borrowing",
+        # ...and the same rule read from the owner's side: what `&b` does to
+        # `b`. Directly after `borrowing`, because it is the half that
+        # produces E0505/E0506, where the owner is refused its own binding.
+        "borrowed_state",
         # ...and the scaffold most people are told to use while it lands.
         "how_to_learn_lifetimes",
         # ...and immediately the page that scaffold hands off to when it comes
         # down, since it is the one thing "clone everything" defers.
         "lifetime_annotations",
+        # ...and then what a lifetime means once it sits in a TYPE rather than
+        # a signature: the three claims, and the one direction the compiler
+        # substitutes them in for free.
+        "what_a_reference_claims",
+        # ...and what all of that costs the CALLER, which is the reason one
+        # lifetime versus two is a design decision. Needs both pages above.
+        "lifetimes_at_the_call_site",
         # The borrow rule immediately pays for itself: it is what proves a
         # shadow makes a second place, since it accepts `let y = &x; let x = 6`
         # and rejects the `mut` spelling of the same lines.
@@ -435,6 +468,14 @@ NAV_ORDER: dict[str, list[str]] = {
         # asked to mean. Last, because it measures the borrow region, the
         # drop order and the shadow — all three already met by here.
         "scope_is_about_names",
+        # ...and the sixth thing that moves a drop, which that page's list of
+        # five leaves out because it is not a scope event at all: the
+        # assignment statement, which frees what the location was holding.
+        "assignment_is_a_drop",
+        # ...and the case both of those leave open: what happens when the
+        # compiler cannot tell from the source whether a location is still
+        # full. Last of the value half, and the deepest.
+        "the_drop_flag",
         # Last, as the section README has it: the type that refuses to decide
         # between owning and borrowing until the data makes it.
         "clone_on_write",
@@ -485,6 +526,10 @@ NAV_ORDER: dict[str, list[str]] = {
     "30_Pattern_Matching": [
         "README.md",
         "irrefutable_patterns",
+        # The simplest pattern there is, and the one whose consequences are
+        # ownership rather than matching: `_` binds nothing, so it moves
+        # nothing — which is the `let _ = mutex.lock()` bug.
+        "the_wildcard",
         "destructuring_structs",
         "destructuring_enums",
         "match_guards",
@@ -526,6 +571,8 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...then one deep dive, which needs every page above it: what `split`
         # actually returns before anything consumes it, read field by field.
         "inside_a_split",
+        # ...and the third owned form, which needs the anatomy page above it.
+        "boxed_str",
         # The method reference: one page per method, 125 of them. It sits after
         # the lessons and before the stubs because a stub is not a page anyone
         # reads, and burying a reference this size under nine placeholders
@@ -540,7 +587,6 @@ NAV_ORDER: dict[str, list[str]] = {
         "raw_strings_and_escapes",
         "comparing_strings",
         "str_is_unsized",
-        "boxed_str",
         "string_api_design",
         "when_string_is_too_slow",
         # ...and the outside world: books, essays, the video, and the exercises.

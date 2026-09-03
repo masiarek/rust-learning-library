@@ -69,6 +69,7 @@ Notice what four of those six have in common: **one code, several causes.** That
 | [E0505 ↗](https://doc.rust-lang.org/error_codes/E0505.html) | [A shadow does not drop](18_Ownership/shadowing_does_not_drop/README.md) | **2** other pages |
 | [E0506 ↗](https://doc.rust-lang.org/error_codes/E0506.html) | [A name is not a place](18_Ownership/a_name_is_not_a_place/README.md) | 1 other page |
 | [E0507 ↗](https://doc.rust-lang.org/error_codes/E0507.html) | [Transforms instead of `match`](17_Option_and_Result/transforms_instead_of_match/README.md) | **5** other pages |
+| [E0509 ↗](https://doc.rust-lang.org/error_codes/E0509.html) | [The drop flag](18_Ownership/the_drop_flag/README.md) | — |
 | [E0515 ↗](https://doc.rust-lang.org/error_codes/E0515.html) | [Collect the iterator into a `Vec`](24_Iterators/collect_into_a_vec/README.md) | **6** other pages |
 | [E0585 ↗](https://doc.rust-lang.org/error_codes/E0585.html) | [Comments that compile](15_First_Programs/comments_that_compile/README.md) | — |
 | [E0593 ↗](https://doc.rust-lang.org/error_codes/E0593.html) | [`unwrap_or_else`: the fallback that is built only if it is needed](17_Option_and_Result/unwrap_or_else/README.md) | — |
