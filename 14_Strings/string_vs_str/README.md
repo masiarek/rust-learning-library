@@ -28,6 +28,8 @@ All three print the same way and compare the same way. What differs is who owns 
 
 **The second trap, and the one even good answers repeat: "a `str` is immutable."** It is not — it is fixed-**length**. [`String::as_mut_str`](../string_methods/string_as_mut_str/README.md) hands you a `&mut str`, and [`make_ascii_uppercase`](../str_methods/str_make_ascii_uppercase/README.md) rewrites those bytes in place with no allocation; [`split_at_mut`](../str_methods/str_split_at_mut/README.md) will even hand you two `&mut str` into one buffer. What a `str` may never do is change *length*, because UTF-8 is variable-width — swapping an `a` for an `ä` needs a byte that is not there, and a view cannot reallocate what it does not own. So `&str` is read-only because the `&` is, not because `str` is. [Section 6 below](#the-verified-output) mutates one.
 
+**The third trap, the one a diagram teaches best because it can draw an equals sign: "`String` *is* a `Vec<u8>`, `&str` *is* a `&[u8]`."** The layout half is true, and std says so in both places — `String` is declared `struct String { vec: Vec<u8> }`, and the safety comment inside [`as_bytes_mut`](../str_methods/str_as_bytes_mut/README.md) reads *"the cast from `&str` to `&[u8]` is safe since `str` has the same layout as `&[u8]`"* — followed by the clause that settles the argument: **only std can make this guarantee**. For your code they are two types with two different promises: bytes are bytes, a `str` is bytes *that are valid UTF-8*, and every method on `str` is entitled to assume it. So the trip is free one way and checked the other — [`as_bytes`](../str_methods/str_as_bytes/README.md) hands back a view of the same memory for nothing, while [`str::from_utf8`](../str_methods/str_from_utf8/README.md) scans and returns a `Result`. A `&[u8]` will not go where a `&str` is wanted, however identical the two are in memory; that is `E0308`, and it is the type system holding a promise the layout cannot. [Section 7 below](#the-verified-output) makes both trips. [Six kinds of string](../six_kinds_of_string/README.md) is this same idea widened: three promises, each with an owner and a view.
+
 ## What each one costs
 
 The machine's view, from the [verified output](#the-verified-output) below:
@@ -97,6 +99,7 @@ let big2 = big1;         // the buffer changed owners
 | `t = s` | a second reference; refcount +1 | `String`: a move · `&str`: a copy of the view |
 | `s[4:7]` | a **new string**, copied out | `&s[4..7]` — a view, nothing copied |
 | immutable | every `str`, always | `&str` is read-only, but `str` is only fixed-**length** — see the trap above |
+| `s.encode()` / `b.decode()` | text ⇄ bytes, and only the way back can fail | `as_bytes()` is free · `str::from_utf8` returns a `Result` — same asymmetry, no exception |
 
 The habit that transfers: Python slices cost an allocation each, so you learned not to slice in a loop. Rust's `&str` removes the cost — a slice is a window — and the compiler enforces what the window may not do: outlive the text, or watch it while it changes.
 
@@ -108,6 +111,7 @@ The habit that transfers: Python slices cost an allocation each, so you learned 
 | `lv+4(3)` | offset/length substring access | `&lv[4..7]` |
 | `FIELD-SYMBOLS <fs>` assigned into data | a view, no copy | `&str` |
 | `TYPE c LENGTH 20` | fixed-width character field | no direct equivalent — closest is `[u8; 20]` |
+| `cl_abap_codepage=>convert_to` / `convert_from` | `string` ⇄ `xstring`, and only the way back can fail | `as_bytes()` · `str::from_utf8` — the failure is a `Result`, not a raise |
 
 What changes: an unassigned or stale field symbol is a runtime dump (`GETWA_NOT_ASSIGNED`), found in the debugger, in production, on a Friday. A `&str` that could outlive its `String` is a compile error — the same bug class, moved to the moment you can still fix it cheaply.
 
@@ -415,6 +419,15 @@ fn main() {
    only the first half changed: "PER martin-lof"
    what a str cannot do is change LENGTH — one byte out, one byte in.
    `&str` is read-only because the `&` is, not because `str` is.
+
+7. `str` is not `[u8]` — the same shape, a different promise
+   size_of::<&str>() = 16, size_of::<&[u8]>() = 16   <- the same two words
+   as_bytes():  "héllo" -> [104, 195, 169, 108, 108, 111]
+                6 bytes, 5 chars   <- the bytes forget where the chars were
+   and back:    str::from_utf8(bytes) = Ok("héllo")
+   str::from_utf8([104, 255, 105]) = Err, valid_up_to = 1
+   going the other way is checked, so it hands back a Result, never a &str.
+   `shout(bytes)` does not compile: E0308, expected `&str`, found `&[u8]`.
 ```
 <!-- /output -->
 
@@ -428,6 +441,7 @@ rustc --edition 2024 14_Strings/string_vs_str/examples/string_vs_str.rs -o /tmp/
 
 - [STRINGS.md](../../STRINGS.md) — the map: every string lesson, in reading order
 - [The anatomy of a `String`](../anatomy_of_a_string/README.md) — what the three words on the stack actually are
+- [Six kinds of string](../six_kinds_of_string/README.md) — the same owner-and-view split, three times over, for bytes that promise different things
 - [Ownership and moves](../../18_Ownership/ownership_and_moves/README.md) — `E0382` in full, with a value that announces its own death
 - [Borrowing](../../18_Ownership/borrowing/README.md) — the rules every `&str` lives under
 - [100 Exercises — String slices ↗](https://rust-exercises.com/100-exercises/04_traits/06_str_slice) — the same distinction drawn rather than described: three memory diagrams, `String` then `&String` then `&str`, with a test to make pass at the end

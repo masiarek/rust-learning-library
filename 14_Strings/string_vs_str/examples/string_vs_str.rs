@@ -55,4 +55,24 @@ fn main() {
     println!("   only the first half changed: {half:?}");
     println!("   what a str cannot do is change LENGTH — one byte out, one byte in.");
     println!("   `&str` is read-only because the `&` is, not because `str` is.");
+
+    println!("\n7. `str` is not `[u8]` — the same shape, a different promise");
+    let text = "héllo"; // the é is two bytes, so len() and chars().count() disagree
+    let bytes: &[u8] = text.as_bytes(); // free: a view of the very same memory
+    println!("   size_of::<&str>() = {}, size_of::<&[u8]>() = {}   <- the same two words",
+        size_of::<&str>(), size_of::<&[u8]>());
+    println!("   as_bytes():  {text:?} -> {bytes:?}");
+    println!("                {} bytes, {} chars   <- the bytes forget where the chars were",
+        text.len(), text.chars().count());
+    println!("   and back:    str::from_utf8(bytes) = {:?}", str::from_utf8(bytes));
+    // Assembled at runtime on purpose: written as a literal, rustc's `invalid_from_utf8`
+    // lint spots bytes that can never be text and warns before the program is even run.
+    let mut broken = b"hi".to_vec();
+    broken.insert(1, 0xFF); // 0xFF can begin no UTF-8 sequence
+    match str::from_utf8(&broken) {
+        Ok(s) => println!("   unreachable: {s:?}"),
+        Err(e) => println!("   str::from_utf8({broken:?}) = Err, valid_up_to = {}", e.valid_up_to()),
+    }
+    println!("   going the other way is checked, so it hands back a Result, never a &str.");
+    println!("   `shout(bytes)` does not compile: E0308, expected `&str`, found `&[u8]`.");
 }
