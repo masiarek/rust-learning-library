@@ -1,0 +1,21 @@
+──── One line, two different `&`
+  let r: &S = &a;
+  the first `&` named a TYPE, the second took an ADDRESS
+  a = S(1), *r = S(1)
+  and field access needs no `*` at all: r.0 = 1
+
+──── In a pattern, `&` REMOVES a reference
+  let &copied = rc;       copied = C(5)   (a C, not a &C)
+  .map(|&C(n)| n).sum()   total  = 7
+
+──── `*r` on the right READS the place; on the left it WRITES it
+  before the write:  S(1)
+  b afterwards:      S(2)   (b itself changed)
+
+──── Reading a place OUT is a copy, or a move
+  C is Copy:      let taken = *rd;  -> C(9), d still C(9)
+  S is not Copy:  mem::replace(..)  -> S(7), e now  S(8)
+
+──── The `*` in `*const S` is not a dereference
+  `*const S` is the NAME of a type; nothing was dereferenced.
+  the one `*` that does dereference: unsafe { &*p } = S(1)
