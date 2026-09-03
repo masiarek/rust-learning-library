@@ -70,32 +70,32 @@ fn middle_score(scores: &[u8]) -> Option<u8> {
 }
 
 /// #3 — the guarantor is nobody. A *user* typed this file.
-fn quorum_by_expect(config: &[(&str, &str)]) -> u32 {
+fn timeout_by_expect(config: &[(&str, &str)]) -> u32 {
     let (_, raw) = config
         .iter()
-        .find(|(k, _)| *k == "quorum")
-        .expect("the config should have a quorum");
-    raw.parse().expect("the quorum should be a number")
+        .find(|(k, _)| *k == "timeout")
+        .expect("the config should have a timeout");
+    raw.parse().expect("the timeout should be a number")
 }
 
 /// #3, fixed — the same information, to the same reader, plus the bad value,
 /// and the caller decides whether it is fatal.
-fn quorum_by_result(config: &[(&str, &str)]) -> Result<u32, String> {
+fn timeout_by_result(config: &[(&str, &str)]) -> Result<u32, String> {
     let (_, raw) = config
         .iter()
-        .find(|(k, _)| *k == "quorum")
-        .ok_or_else(|| "no `quorum` key in [election]".to_string())?;
+        .find(|(k, _)| *k == "timeout")
+        .ok_or_else(|| "no `timeout` key in [server]".to_string())?;
     raw.parse()
-        .map_err(|e| format!("quorum = {raw:?} is not a number ({e})"))
+        .map_err(|e| format!("timeout = {raw:?} is not a number ({e})"))
 }
 
 /// #4 — the proof is sound; the *message* is the problem. Every call to this
 /// function allocates a String, whether or not anything is about to fail.
 static PROOFS_BUILT: AtomicUsize = AtomicUsize::new(0);
 
-fn proof(ballot: usize, name: &str) -> String {
+fn proof(row: usize, name: &str) -> String {
     PROOFS_BUILT.fetch_add(1, Ordering::Relaxed);
-    format!("ballot {ballot} should score {name}; the loader pads short rows with 0")
+    format!("row {row} should have a {name} column; the loader pads short rows with 0")
 }
 
 fn total_eager(rows: &[Vec<u8>], col: usize, name: &str) -> u32 {
@@ -126,9 +126,9 @@ fn part1_name_the_guarantor() {
     println!("      #2  \"a non-empty slice has a middle element, and we");
     println!("           returned early above if it was empty\"");
     println!("            guarantor: the `return None` four lines up.             KEEP");
-    println!("      #3  \"the config should have a quorum\"");
+    println!("      #3  \"the config should have a timeout\"");
     println!("            guarantor: nobody. A user typed the file.               FIX THE TYPE");
-    println!("      #4  \"ballot N should score X; the loader pads short rows\"");
+    println!("      #4  \"row N should have a X column; the loader pads short rows\"");
     println!("            guarantor: the loader, named in the sentence.           KEEP THE PROOF,");
     println!("                                                                    MOVE THE MESSAGE");
     println!("      Three can name a guarantor. #3 can only say \"should\" — a hope");
@@ -151,11 +151,11 @@ fn part2_run_them(good: &[(&str, &str)], typo: &[(&str, &str)]) {
     );
     show(
         "#3 well-formed config",
-        caught(|| quorum_by_expect(good).to_string()),
+        caught(|| timeout_by_expect(good).to_string()),
     );
     show(
         "#3 typo'd key",
-        caught(|| quorum_by_expect(typo).to_string()),
+        caught(|| timeout_by_expect(typo).to_string()),
     );
 
     println!("      #1 and #2 cannot fail — #2 answers `None` rather than panicking,");
@@ -166,9 +166,9 @@ fn part2_run_them(good: &[(&str, &str)], typo: &[(&str, &str)]) {
 fn part3_change_the_type(good: &[(&str, &str)], typo: &[(&str, &str)], junk: &[(&str, &str)]) {
     banner(3, "Fix #3 by changing the signature, not the wording");
 
-    println!("      well-formed  -> {:?}", quorum_by_result(good));
-    println!("      typo'd key   -> {:?}", quorum_by_result(typo));
-    println!("      not a number -> {:?}", quorum_by_result(junk));
+    println!("      well-formed  -> {:?}", timeout_by_result(good));
+    println!("      typo'd key   -> {:?}", timeout_by_result(typo));
+    println!("      not a number -> {:?}", timeout_by_result(junk));
     println!("      No panic, and the third message carries the offending value —");
     println!("      which the `expect` version could not, because a &str message is");
     println!("      chosen before anyone knows what went wrong.");
@@ -199,9 +199,9 @@ fn part4_count_the_messages() {
 }
 
 fn main() {
-    let good = [("quorum", "50"), ("seats", "1")];
-    let typo = [("quourm", "50"), ("seats", "1")];
-    let junk = [("quorum", "fifty"), ("seats", "1")];
+    let good = [("timeout", "50"), ("retries", "1")];
+    let typo = [("timoeut", "50"), ("retries", "1")];
+    let junk = [("timeout", "fifty"), ("retries", "1")];
 
     part1_name_the_guarantor();
     part2_run_them(&good, &typo);

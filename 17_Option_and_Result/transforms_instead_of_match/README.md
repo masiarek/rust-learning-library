@@ -6,13 +6,13 @@
 
 ```rust
 fn main() {
-    let cast: Option<u32> = Some(3);
+    let given: Option<u32> = Some(3);
 
-    let by_match = match cast {
+    let by_match = match given {
         Some(n) => Some(n * 2),
         None => None,
     };
-    let by_method = cast.map(|n| n * 2);
+    let by_method = given.map(|n| n * 2);
 
     println!("{by_match:?} {by_method:?}");   // Some(6) Some(6)
 }
@@ -45,12 +45,12 @@ This is the only genuinely confusing choice in the list, and it has a mechanical
 
 ```rust
 fn main() {
-    let cast: Option<u32> = Some(3);
+    let given: Option<u32> = Some(3);
     let half = |n: u32| if n % 2 == 0 { Some(n / 2) } else { None };
 
-    println!("{:?}", cast.map(|n| n * 2));   // Some(6)     closure returned u32
-    println!("{:?}", cast.map(half));        // Some(None)  closure returned an Option — nested
-    println!("{:?}", cast.and_then(half));   // None        flattened
+    println!("{:?}", given.map(|n| n * 2));   // Some(6)     closure returned u32
+    println!("{:?}", given.map(half));        // Some(None)  closure returned an Option — nested
+    println!("{:?}", given.and_then(half));   // None        flattened
 }
 ```
 
@@ -78,11 +78,11 @@ Most of the time you will not write it, because [the `?` operator](../the_questi
 
 ```rust
 fn main() {
-    let cast: Option<u32> = Some(3);
+    let given: Option<u32> = Some(3);
     let blank: Option<u32> = None;
 
-    println!("{:?}", cast.ok_or("no ballot"));    // Ok(3)
-    println!("{:?}", blank.ok_or("no ballot"));   // Err("no ballot")
+    println!("{:?}", given.ok_or("no bio"));      // Ok(3)
+    println!("{:?}", blank.ok_or("no bio"));      // Err("no bio")
     println!("{:?}", "x".parse::<u32>().ok());    // None — the reason is gone
 }
 ```
@@ -105,33 +105,33 @@ The value was discarded both times; only the second one avoided building it. Sam
 This is the one that stops people, and it looks like a bug in `Option` rather than what it is:
 
 ```rust
-struct Voter {
-    ballot: Option<String>,
+struct Profile {
+    bio: Option<String>,
 }
 
-impl Voter {
+impl Profile {
     fn shout(&self) -> String {
-        // self.ballot.unwrap_or("(no ballot)".to_string())         // E0507
-        self.ballot.as_ref().map_or("(no ballot)".to_string(), |b| b.to_uppercase())
+        // self.bio.unwrap_or("(no bio)".to_string())            // E0507
+        self.bio.as_ref().map_or("(no bio)".to_string(), |b| b.to_uppercase())
     }
 }
 
 fn main() {
-    let voted = Voter { ballot: Some("yes".into()) };
-    println!("{}", voted.shout());   // YES
+    let filled = Profile { bio: Some("writes code".into()) };
+    println!("{}", filled.shout());   // WRITES CODE
 }
 ```
 
-```text title="Abridged — real rustc output for voter.rs, without the file-and-line header"
-error[E0507]: cannot move out of `self.ballot` which is behind a shared reference
+```text title="Abridged — real rustc 1.98.0 output for profile.rs, without the file-and-line header"
+error[E0507]: cannot move out of `self.bio` which is behind a shared reference
   |
-8 |         self.ballot.unwrap_or("(no ballot)".to_string()).to_uppercase()
-  |         ^^^^^^^^^^^ move occurs because `self.ballot` has type `Option<String>`, which does not implement the `Copy` trait
+8 |         self.bio.unwrap_or("(no bio)".to_string()).to_uppercase()
+  |         ^^^^^^^^ move occurs because `self.bio` has type `Option<String>`, which does not implement the `Copy` trait
   |
 help: consider cloning the value if the performance cost is acceptable
   |
-8 |         self.ballot.clone().unwrap_or("(no ballot)".to_string()).to_uppercase()
-  |                    ++++++++
+8 |         self.bio.clone().unwrap_or("(no bio)".to_string()).to_uppercase()
+  |                 ++++++++
 ```
 
 `unwrap_or` takes `self` by value, so it wants to *consume* the `Option` — and a `&self` method has only borrowed it. [`as_ref()` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.as_ref) rebuilds the `Option` around a borrow: `&Option<String>` becomes `Option<&String>`, which the method may consume freely because consuming a reference costs nothing.
@@ -147,11 +147,11 @@ fn main() {
     let outcome: Result<u32, std::num::ParseIntError> = "7".parse();
 
     let sentence = match outcome {
-        Ok(n) if n > 5 => format!("{n} is a landslide"),
-        Ok(n) => format!("{n} is close"),
+        Ok(n) if n > 5 => format!("{n} is plenty"),
+        Ok(n) => format!("{n} is tight"),
         Err(e) => format!("not a number: {e}"),
     };
-    println!("{sentence}");   // 7 is a landslide
+    println!("{sentence}");   // 7 is plenty
 }
 ```
 
@@ -194,7 +194,7 @@ The ABAP habit worth keeping is the one that transfers: `sy-subrc` is checked *o
 ```text
 1. The shape: a `match` whose arms put the value back
    match { Some(n) => Some(n * 2), None => None } = Some(6)
-   cast.map(|n| n * 2)                            = Some(6)
+   given.map(|n| n * 2)                           = Some(6)
    same answer: true
    The method is not shorter by accident — `map` NAMES the shape:
    change the payload, leave the Some/None decision alone.
@@ -207,8 +207,8 @@ The ABAP habit worth keeping is the one that transfers: `sy-subrc` is checked *o
    `and_then` is the one that may say "and now it is missing".
 
 3. Crossing between the two types
-   Option -> Result   cast.ok_or("no ballot")   = Ok(3)
-                      blank.ok_or("no ballot")  = Err("no ballot")
+   Option -> Result   given.ok_or("no bio")     = Ok(3)
+                      blank.ok_or("no bio")     = Err("no bio")
    Result -> Option   parse("12").ok()          = Some(12)
                       parse("x").ok()           = None   the WHY is gone
    `.ok()` is a downgrade: four different parse failures all arrive
@@ -234,15 +234,15 @@ The ABAP habit worth keeping is the one that transfers: `sy-subrc` is checked *o
    take     slot.take()     -> Some(9), slot is now None
 
 7. `as_ref()` — when `&self` owns nothing it may give away
-   voted.shout()  = YES
-   silent.shout() = (no ballot)
-   Without as_ref(): E0507, cannot move out of `self.ballot` which is
+   filled.shout() = WRITES CODE
+   empty.shout()  = (no bio)
+   Without as_ref(): E0507, cannot move out of `self.bio` which is
    behind a shared reference. as_ref() rewrites &Option<String> into
    Option<&String>, so the Option is rebuilt around a borrow.
-   voted.name is still ours afterwards: Ada
+   filled.name is still ours afterwards: Ada
 
 8. Where a `match` is still the right answer
-   7 is a landslide
+   7 is plenty
    Three outcomes, a guard, and different WORK per arm — no single
    transform expresses that. The advice is to stop writing the matches
    that only rewrap, not to stop writing `match`.
@@ -272,6 +272,6 @@ Sygnałem do zamiany jest gałąź, której całym ciałem jest `Some(…)`, `No
 
 Wybór między `map` a `and_then` ma odpowiedź mechaniczną: patrz na **typ zwracany przez domknięcie** (*closure*), a nie na własne intencje. Domknięcie oddające `u32` — `map`; domknięcie oddające `Option<u32>` — `and_then`. Jeśli w wyniku wyszło `Some(None)` albo sięgasz po `.flatten()` zaraz za `.map()`, chodziło o `and_then`. Osobom przychodzącym z Javy najszybciej wytłumaczyć to przez `Optional`: `map` to `map`, a `and_then` to `flatMap` (w iteratorach Rusta ta sama operacja nazywa się `flat_map`). W drugą stronę czujność przy `.ok()`: przejście z `Result` do `Option` **kasuje informację**, którą się już miało — pusty łańcuch znaków, liczba ujemna, słowo i przepełnienie docierają wtedy jako jedno, nierozróżnialne `None`. Idąc w górę przez `ok_or` dokładasz informację, schodząc w dół przez `.ok()` ją tracisz; rób to z rozmysłem, a nie dla porządku w kodzie.
 
-Dwie pułapki łapią tu najczęściej. Pierwsza: sufiks `_else` nie jest ozdobnikiem. Argument jest obliczany **przed** wywołaniem, do którego należy, więc `unwrap_or(drogie())` zbuduje wartość zapasową także wtedy, gdy w środku siedzi `Some`, a leniwa wersja `unwrap_or_else(|| drogie())` nie zbuduje jej wcale. Ta sama para dotyczy `ok_or` / `ok_or_else`, `or` / `or_else`, `map_or` / `map_or_else`: przy literale albo gotowej zmiennej bierz wersję zachłanną i zostaw linijkę czytelną, przy alokacji lub wywołaniu funkcji — tę z `_else`. Druga: `unwrap_or` przyjmuje `self` przez wartość, czyli chce **przejąć własność**, a metoda z `&self` niczego nie posiada, tylko pożycza — stąd `E0507`, *cannot move out of `self.ballot` which is behind a shared reference*. `as_ref()` przebudowuje `Option` wokół referencji (`&Option<String>` staje się `Option<&String>`), a skonsumowanie referencji nic nie kosztuje. Kompilator podpowie w tym miejscu `.clone()` i ta poprawka faktycznie działa — tyle że alokuje cały `String` przy każdym wywołaniu. Podpowiedź `rustc` jest najpewniejsza, niekoniecznie najlepsza.
+Dwie pułapki łapią tu najczęściej. Pierwsza: sufiks `_else` nie jest ozdobnikiem. Argument jest obliczany **przed** wywołaniem, do którego należy, więc `unwrap_or(drogie())` zbuduje wartość zapasową także wtedy, gdy w środku siedzi `Some`, a leniwa wersja `unwrap_or_else(|| drogie())` nie zbuduje jej wcale. Ta sama para dotyczy `ok_or` / `ok_or_else`, `or` / `or_else`, `map_or` / `map_or_else`: przy literale albo gotowej zmiennej bierz wersję zachłanną i zostaw linijkę czytelną, przy alokacji lub wywołaniu funkcji — tę z `_else`. Druga: `unwrap_or` przyjmuje `self` przez wartość, czyli chce **przejąć własność**, a metoda z `&self` niczego nie posiada, tylko pożycza — stąd `E0507`, *cannot move out of `self.bio` which is behind a shared reference*. `as_ref()` przebudowuje `Option` wokół referencji (`&Option<String>` staje się `Option<&String>`), a skonsumowanie referencji nic nie kosztuje. Kompilator podpowie w tym miejscu `.clone()` i ta poprawka faktycznie działa — tyle że alokuje cały `String` przy każdym wywołaniu. Podpowiedź `rustc` jest najpewniejsza, niekoniecznie najlepsza.
 
 **Szukaj po polsku:** metody `Option` i `Result` · leniwe wartościowanie · `rust map vs and_then` · `rust E0507 cannot move out of behind a shared reference` · `rust Option as_ref as_deref`

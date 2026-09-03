@@ -1,17 +1,17 @@
 Declared without a value, proved assigned before use:
-  quorum_for(  0) -> 0
-  quorum_for(  7) -> 7
-  quorum_for(461) -> 231
+  sample_size_for(  0) -> 0
+  sample_size_for(  7) -> 7
+  sample_size_for(461) -> 231
 
 The Option version returns the same numbers…
-  quorum_for_awkward(  0) -> 0
-  quorum_for_awkward(  7) -> 7
-  quorum_for_awkward(461) -> 231
+  sample_size_awkward(  0) -> 0
+  sample_size_awkward(  7) -> 7
+  sample_size_awkward(461) -> 231
       …and pays for it with a state that cannot occur, an `expect`
       whose claim nothing verifies, and a `mut` it did not need. The
       compiler even warns that the initial None is never read — the
       source has to #[allow] it to compile quietly.
 
 Where Option earns its place — absence that outlives the function:
-  Springfield 2026   not certified yet
-  Shelbyville 2026   certified: Ada
+  nightly-reindex    still running
+  nightly-backup     finished at 03:12

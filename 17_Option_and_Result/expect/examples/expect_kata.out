@@ -5,9 +5,9 @@
       #2  "a non-empty slice has a middle element, and we
            returned early above if it was empty"
             guarantor: the `return None` four lines up.             KEEP
-      #3  "the config should have a quorum"
+      #3  "the config should have a timeout"
             guarantor: nobody. A user typed the file.               FIX THE TYPE
-      #4  "ballot N should score X; the loader pads short rows"
+      #4  "row N should have a X column; the loader pads short rows"
             guarantor: the loader, named in the sentence.           KEEP THE PROOF,
                                                                     MOVE THE MESSAGE
       Three can name a guarantor. #3 can only say "should" — a hope
@@ -19,15 +19,15 @@
       #2 middle_score(&[3,5,0])  -> Some(3)
       #2 middle_score(&[])       -> None
       #3 well-formed config      -> 50
-      #3 typo'd key              -> PANIC: the config should have a quorum
+      #3 typo'd key              -> PANIC: the config should have a timeout
       #1 and #2 cannot fail — #2 answers `None` rather than panicking,
       because emptiness is a caller's question, not a bug. #3 dies on a
       config that is merely misspelled, with a message blaming nothing.
 
 ──── Part 3: Fix #3 by changing the signature, not the wording
       well-formed  -> Ok(50)
-      typo'd key   -> Err("no `quorum` key in [election]")
-      not a number -> Err("quorum = \"fifty\" is not a number (invalid digit found in string)")
+      typo'd key   -> Err("no `timeout` key in [server]")
+      not a number -> Err("timeout = \"fifty\" is not a number (invalid digit found in string)")
       No panic, and the third message carries the offending value —
       which the `expect` version could not, because a &str message is
       chosen before anyone knows what went wrong.

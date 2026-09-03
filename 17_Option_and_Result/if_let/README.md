@@ -33,8 +33,8 @@ Read it as *"if this value matches this pattern, bind the names in the pattern a
 `Some(x)` is the one you meet first, but nothing about `if let` is `Option`-specific. Anything you can write as a match arm can go on the left:
 
 ```rust
-if let Some(&Ballot { voter, score }) = ballots.first() { … }   // destructure through the reference
-if let Some(Ballot { voter, score: 5 }) = ballots.first() { … } // a literal is a condition, not a binding
+if let Some(&Review { author, stars }) = reviews.first() { … }   // destructure through the reference
+if let Some(Review { author, stars: 5 }) = reviews.first() { … } // a literal is a condition, not a binding
 if let Some((rank, label)) = pair { … }                          // tuples, nesting, `_`, all as usual
 ```
 
@@ -47,8 +47,8 @@ A `match` over an enum is **exhaustive**: the compiler refuses to build until ev
 `if let` opts out of that check for one expression. Add a variant, and an `if let` that used to see everything now silently sees less:
 
 ```text
-match  -> 3 scored, 1 blank, 1 spoiled = 5 of 5 marks
-if let -> 3 scored, and 2 marks silently unaccounted for
+match  -> 3 rated, 1 blank, 1 unreadable = 5 of 5 marks
+if let -> 3 rated, and 2 marks silently unaccounted for
 ```
 
 Both of those are the same data. Neither is a bug in Rust; the second is a decision someone made when they wrote `if let` instead of `match`, possibly years before the variant that made it wrong existed.
@@ -100,11 +100,11 @@ Nobody cares until the temporary is a lock guard, at which point the 2021 order 
 Since Rust 1.88, and only in edition 2024, you can chain `let` bindings and conditions in one head, each binding visible to the next:
 
 ```rust
-if let Some(a) = first_choice
-    && let Some(b) = runner_up
+if let Some(a) = first
+    && let Some(b) = second
     && a != b
 {
-    println!("runoff between {a} and {b}");
+    println!("comparing {a} against {b}");
 }
 ```
 
@@ -254,22 +254,22 @@ let-else keeps the happy path at the left margin:
       Same behaviour, same cost, one fewer arm to read.
 
 ──── Step 2: It is a `match`, so any pattern works — and it can take an `else`
-  struct pattern  -> Ada scored 5
-  literal in it   -> Ada gave a maximum score
+  struct pattern  -> Ada gave 5
+  literal in it   -> Ada gave the maximum
   tuple pattern   -> rank 1 is the first
   else            -> nothing there, and this arm says so
 
 ──── Step 3: The trade: `if let` is not exhaustive
-  match  -> 3 scored, 1 blank, 1 spoiled = 5 of 5 marks
-  if let -> 3 scored, and 2 marks silently unaccounted for
-      The day `Spoiled` was added to the enum, the `match` stopped
+  match  -> 3 rated, 1 blank, 1 unreadable = 5 of 5 marks
+  if let -> 3 rated, and 2 marks silently unaccounted for
+      The day `Unreadable` was added to the enum, the `match` stopped
       compiling and someone had to decide what to do about it.
       The `if let` compiled fine and quietly went on under-counting.
       That is the price of the deleted arm — pay it deliberately.
 
 ──── Step 4: `let … else`: bind, or leave — the guard clause
-  populated -> Ada leads with 12
-  empty     -> no candidates at all
+  populated -> widget leads with 12
+  empty     -> no products at all
       `if let` indents the happy path; `let … else` keeps it flat and
       sends the failure out of the function. The `else` block must
       diverge — return, break, continue, or panic — so what follows it
@@ -284,15 +284,15 @@ let-else keeps the happy path at the left margin:
       off-by-one available to get wrong.
 
 ──── Step 6: When you only want a bool: `matches!` and `is_some_and`
-  matches!(mark, Mark::Score(_))        -> true
-  matches!(mark, Mark::Score(n) if n>4) -> false
-  score.is_some_and(|n| n > 3)          -> true
+  matches!(mark, Mark::Rated(_))        -> true
+  matches!(mark, Mark::Rated(n) if n>4) -> false
+  stars.is_some_and(|n| n > 3)          -> true
       `if let` with an empty body and a flag set inside it is a smell.
       If the answer is a bool, ask for a bool.
 
 ──── Step 7: Edition 2024: `if let` chains
-  chained -> runoff between Ada and Ben
-  chained -> no runoff: one of the two is absent
+  chained -> comparing alpha against beta
+  chained -> no comparison: one of the two is absent
       Two `if let`s and a condition in one head, each binding visible
       to the next. Stable since Rust 1.88, and only in edition 2024 —
       before that this was a staircase of nested `if let`s.

@@ -1,10 +1,10 @@
 
 ──── Step 1: unwrap's message is the standard library's; expect's is yours
   None.unwrap()                      -> PANIC: called `Option::unwrap()` on a `None` value
-  None.expect("…")                   -> PANIC: the config should list a quorum
+  None.expect("…")                   -> PANIC: the config should list a timeout
   Err(e).unwrap()                    -> PANIC: called `Result::unwrap()` on an `Err` value: "invalid digit found in string"
-  Err(e).expect("…")                 -> PANIC: the quorum line should be a number: "invalid digit found in string"
-  Ok(5).expect_err("…")              -> PANIC: no quorum should parse from an empty file: 5
+  Err(e).expect("…")                 -> PANIC: the timeout line should be a number: "invalid digit found in string"
+  Ok(5).expect_err("…")              -> PANIC: no timeout should parse from an empty file: 5
       Four panics, and only two of them tell you anything. Note what the
       Result form does: `{your sentence}: {the error, Debug-printed}`, so
       the claim AND the cause survive — expect never costs you the error.
@@ -12,7 +12,7 @@
 
 ──── Step 2: The panic names your line, not the standard library's
   panicked at expect.rs:89
-  the ballot file should have been validated by now
+  the input file should have been validated by now
       That location is the `expect` call in THIS file — not a line inside
       core/src/option.rs, which is where the panic is physically raised.
       So the two halves of a good panic report come from two different
@@ -20,9 +20,9 @@
       from the sentence you wrote.
 
 ──── Step 3: Say what SHOULD be true, not what went wrong
-  expect("failed to get quorum")     -> PANIC: failed to get quorum
+  expect("failed to get timeout")    -> PANIC: failed to get timeout
   expect("unwrap failed")            -> PANIC: unwrap failed
-  expect("[election] should set…")   -> PANIC: the [election] section should set a quorum; the loader fills it in from defaults
+  expect("[server] should set…")     -> PANIC: the [server] section should set a timeout; the loader fills it in from defaults
       Same bug, three panics, one of them useful. The standard library's
       own guidance is to describe the reason you expected a value — so the
       line reads as a CLAIM, and a reader who sees it knows both what was
@@ -35,9 +35,9 @@
     by expect -> 50
     by Result -> Ok(50)
   config with a typo'd key (a thing users do):
-    by expect -> PANIC: the config should have a quorum
-    by Result -> Err("no `quorum` key in [election]")
-      Read the first message again: 'the config SHOULD have a quorum' —
+    by expect -> PANIC: the config should have a timeout
+    by Result -> Err("no `timeout` key in [server]")
+      Read the first message again: 'the config SHOULD have a timeout' —
       should according to whom? Nobody proved that; a user typed the file.
       The sentence is a hope, and the tell is that you cannot name who
       guaranteed it. That is the signal to return Result: the second form

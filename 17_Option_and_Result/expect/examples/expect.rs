@@ -63,16 +63,16 @@ fn step1() {
     show("None.unwrap()", caught(|| missing.unwrap().to_string()));
     show(
         "None.expect(\"…\")",
-        caught(|| missing.expect("the config should list a quorum").to_string()),
+        caught(|| missing.expect("the config should list a timeout").to_string()),
     );
     show("Err(e).unwrap()", caught(|| bad.clone().unwrap().to_string()));
     show(
         "Err(e).expect(\"…\")",
-        caught(|| bad.clone().expect("the quorum line should be a number").to_string()),
+        caught(|| bad.clone().expect("the timeout line should be a number").to_string()),
     );
     show(
         "Ok(5).expect_err(\"…\")",
-        caught(|| Ok::<u8, String>(5).expect_err("no quorum should parse from an empty file").to_string()),
+        caught(|| Ok::<u8, String>(5).expect_err("no timeout should parse from an empty file").to_string()),
     );
 
     println!("      Four panics, and only two of them tell you anything. Note what the");
@@ -86,7 +86,7 @@ fn step2() {
     banner(2, "The panic names your line, not the standard library's");
 
     let missing: Option<u8> = None;
-    let outcome = caught(|| missing.expect("the ballot file should have been validated by now"));
+    let outcome = caught(|| missing.expect("the input file should have been validated by now"));
     match outcome {
         Ok(_) => println!("  (unreachable)"),
         Err((msg, where_)) => {
@@ -108,18 +108,18 @@ fn step3() {
     let missing: Option<u8> = None;
 
     show(
-        "expect(\"failed to get quorum\")",
-        caught(|| missing.expect("failed to get quorum").to_string()),
+        "expect(\"failed to get timeout\")",
+        caught(|| missing.expect("failed to get timeout").to_string()),
     );
     show(
         "expect(\"unwrap failed\")",
         caught(|| missing.expect("unwrap failed").to_string()),
     );
     show(
-        "expect(\"[election] should set…\")",
+        "expect(\"[server] should set…\")",
         caught(|| {
             missing
-                .expect("the [election] section should set a quorum; the loader fills it in from defaults")
+                .expect("the [server] section should set a timeout; the loader fills it in from defaults")
                 .to_string()
         }),
     );
@@ -133,44 +133,44 @@ fn step3() {
 
 // ─────────────────────────────────────────────────────────── Step 4
 /// The dishonest version: this is a config file, and a user wrote it.
-fn quorum_by_expect(config: &[(&str, &str)]) -> u32 {
+fn timeout_by_expect(config: &[(&str, &str)]) -> u32 {
     config
         .iter()
-        .find(|(k, _)| *k == "quorum")
-        .expect("the config should have a quorum")
+        .find(|(k, _)| *k == "timeout")
+        .expect("the config should have a timeout")
         .1
         .parse()
-        .expect("the quorum should be a number")
+        .expect("the timeout should be a number")
 }
 
 /// The honest version: absence and malformedness are outcomes, not impossibilities.
-fn quorum_by_result(config: &[(&str, &str)]) -> Result<u32, String> {
+fn timeout_by_result(config: &[(&str, &str)]) -> Result<u32, String> {
     let (_, raw) = config
         .iter()
-        .find(|(k, _)| *k == "quorum")
-        .ok_or_else(|| "no `quorum` key in [election]".to_string())?;
+        .find(|(k, _)| *k == "timeout")
+        .ok_or_else(|| "no `timeout` key in [server]".to_string())?;
     raw.parse()
-        .map_err(|e| format!("quorum = {raw:?} is not a number ({e})"))
+        .map_err(|e| format!("timeout = {raw:?} is not a number ({e})"))
 }
 
 fn step4() {
     banner(4, "If you cannot write the sentence, you do not have the proof");
 
-    let good = [("quorum", "50"), ("seats", "1")];
+    let good = [("timeout", "50"), ("retries", "1")];
     let typo = [("qorum", "50")];
 
     println!("  well-formed config:");
-    println!("    by expect -> {}", quorum_by_expect(&good));
-    println!("    by Result -> {:?}", quorum_by_result(&good));
+    println!("    by expect -> {}", timeout_by_expect(&good));
+    println!("    by Result -> {:?}", timeout_by_result(&good));
 
     println!("  config with a typo'd key (a thing users do):");
-    match caught(|| quorum_by_expect(&typo).to_string()) {
+    match caught(|| timeout_by_expect(&typo).to_string()) {
         Ok(v) => println!("    by expect -> {v}"),
         Err((msg, _)) => println!("    by expect -> PANIC: {msg}"),
     }
-    println!("    by Result -> {:?}", quorum_by_result(&typo));
+    println!("    by Result -> {:?}", timeout_by_result(&typo));
 
-    println!("      Read the first message again: 'the config SHOULD have a quorum' —");
+    println!("      Read the first message again: 'the config SHOULD have a timeout' —");
     println!("      should according to whom? Nobody proved that; a user typed the file.");
     println!("      The sentence is a hope, and the tell is that you cannot name who");
     println!("      guaranteed it. That is the signal to return Result: the second form");
@@ -215,24 +215,24 @@ static BUILT: AtomicUsize = AtomicUsize::new(0);
 
 fn proof(name: &str) -> String {
     BUILT.fetch_add(1, Ordering::Relaxed);
-    format!("every ballot should score {name}; the loader pads missing columns with 0")
+    format!("every row should have a {name} column; the loader pads missing columns with 0")
 }
 
 fn step6() {
     banner(6, "The message is an argument, so it is built even when nothing fails");
 
-    let ballot: [(&str, Option<u8>); 3] = [("Ada", Some(5)), ("Ben", Some(3)), ("Cara", Some(0))];
+    let row: [(&str, Option<u8>); 3] = [("speed", Some(5)), ("price", Some(3)), ("support", Some(0))];
 
     BUILT.store(0, Ordering::Relaxed);
     let mut total = 0u32;
-    for (name, score) in ballot {
+    for (name, score) in row {
         total += u32::from(score.expect(&proof(name)));
     }
     println!("  expect(&proof(name))                    total {total}, proof() ran {} times", BUILT.load(Ordering::Relaxed));
 
     BUILT.store(0, Ordering::Relaxed);
     let mut total = 0u32;
-    for (name, score) in ballot {
+    for (name, score) in row {
         total += u32::from(score.unwrap_or_else(|| panic!("{}", proof(name))));
     }
     println!("  unwrap_or_else(|| panic!(proof(name)))  total {total}, proof() ran {} times", BUILT.load(Ordering::Relaxed));

@@ -1,6 +1,6 @@
 1. The shape: a `match` whose arms put the value back
    match { Some(n) => Some(n * 2), None => None } = Some(6)
-   cast.map(|n| n * 2)                            = Some(6)
+   given.map(|n| n * 2)                           = Some(6)
    same answer: true
    The method is not shorter by accident — `map` NAMES the shape:
    change the payload, leave the Some/None decision alone.
@@ -13,8 +13,8 @@
    `and_then` is the one that may say "and now it is missing".
 
 3. Crossing between the two types
-   Option -> Result   cast.ok_or("no ballot")   = Ok(3)
-                      blank.ok_or("no ballot")  = Err("no ballot")
+   Option -> Result   given.ok_or("no bio")     = Ok(3)
+                      blank.ok_or("no bio")     = Err("no bio")
    Result -> Option   parse("12").ok()          = Some(12)
                       parse("x").ok()           = None   the WHY is gone
    `.ok()` is a downgrade: four different parse failures all arrive
@@ -40,15 +40,15 @@
    take     slot.take()     -> Some(9), slot is now None
 
 7. `as_ref()` — when `&self` owns nothing it may give away
-   voted.shout()  = YES
-   silent.shout() = (no ballot)
-   Without as_ref(): E0507, cannot move out of `self.ballot` which is
+   filled.shout() = WRITES CODE
+   empty.shout()  = (no bio)
+   Without as_ref(): E0507, cannot move out of `self.bio` which is
    behind a shared reference. as_ref() rewrites &Option<String> into
    Option<&String>, so the Option is rebuilt around a borrow.
-   voted.name is still ours afterwards: Ada
+   filled.name is still ours afterwards: Ada
 
 8. Where a `match` is still the right answer
-   7 is a landslide
+   7 is plenty
    Three outcomes, a guard, and different WORK per arm — no single
    transform expresses that. The advice is to stop writing the matches
    that only rewrap, not to stop writing `match`.

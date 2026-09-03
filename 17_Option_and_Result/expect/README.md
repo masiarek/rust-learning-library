@@ -12,9 +12,9 @@ This page is about the message. What the panic itself does — where it points, 
 
 ```text
 None.unwrap()            -> called `Option::unwrap()` on a `None` value
-None.expect("…")         -> the config should list a quorum
+None.expect("…")         -> the config should list a timeout
 Err(e).unwrap()          -> called `Result::unwrap()` on an `Err` value: "invalid digit found in string"
-Err(e).expect("…")       -> the quorum line should be a number: "invalid digit found in string"
+Err(e).expect("…")       -> the timeout line should be a number: "invalid digit found in string"
 ```
 
 `unwrap`'s message is the standard library's, and it can only ever describe the *shape* of what happened, because that is all it knows. Yours describes the situation.
@@ -39,9 +39,9 @@ The bound is a fact about what the message is *made of*, not an arbitrary requir
 Three wordings, the same bug:
 
 ```text
-expect("failed to get quorum")   -> PANIC: failed to get quorum
+expect("failed to get timeout")   -> PANIC: failed to get timeout
 expect("unwrap failed")          -> PANIC: unwrap failed
-expect("the [election] section should set a quorum; the loader fills it in from defaults")
+expect("the [server] section should set a timeout; the loader fills it in from defaults")
 ```
 
 Only the third helps, and the standard library's own guidance says why: an `expect` message should describe **the reason you expected a value to be there**. Written that way, the panic line reads as a claim — and since the program stopped, the reader immediately knows *which* claim was false and *who* was supposed to make it true. "Failed to get X" only restates that the program stopped, which the word `panicked` already said.
@@ -51,8 +51,8 @@ A useful test when writing one: **name the guarantor.** "The loader fills it in"
 ## If you cannot write the sentence, you do not have the proof
 
 ```rust
-config.iter().find(|(k, _)| *k == "quorum")
-    .expect("the config should have a quorum")   // should — according to whom?
+config.iter().find(|(k, _)| *k == "timeout")
+    .expect("the config should have a timeout")   // should — according to whom?
 ```
 
 Nobody proved that. A *user* typed the file, and a typo'd key is a thing users do — so the sentence is a hope wearing the grammar of a proof, and the program dies on valid-looking input with a message that blames nothing.
@@ -60,10 +60,10 @@ Nobody proved that. A *user* typed the file, and a typo'd key is a thing users d
 The signal is that specific: you can write words, but you cannot name a guarantor. That is the moment to change the return type instead.
 
 ```rust
-fn quorum(config: &[(&str, &str)]) -> Result<u32, String> {
-    let (_, raw) = config.iter().find(|(k, _)| *k == "quorum")
-        .ok_or_else(|| "no `quorum` key in [election]".to_string())?;
-    raw.parse().map_err(|e| format!("quorum = {raw:?} is not a number ({e})"))
+fn timeout(config: &[(&str, &str)]) -> Result<u32, String> {
+    let (_, raw) = config.iter().find(|(k, _)| *k == "timeout")
+        .ok_or_else(|| "no `timeout` key in [server]".to_string())?;
+    raw.parse().map_err(|e| format!("timeout = {raw:?} is not a number ({e})"))
 }
 ```
 
@@ -95,7 +95,7 @@ unwrap_or_else(|| panic!(proof(name)))  total 8, proof() ran 0 times
 A plain string literal costs nothing, so prefer one. When the message genuinely needs a runtime value in it, the standard library's own answer is to move the whole thing into the sad path:
 
 ```rust
-score.unwrap_or_else(|| panic!("every ballot should score {name}; the loader pads missing columns"))
+score.unwrap_or_else(|| panic!("every row should have a {name} column; the loader pads missing columns"))
 ```
 
 ## If you are coming from another language
@@ -114,10 +114,10 @@ score.unwrap_or_else(|| panic!("every ballot should score {name}; the loader pad
 ```text
 ──── Step 1: unwrap's message is the standard library's; expect's is yours
   None.unwrap()                      -> PANIC: called `Option::unwrap()` on a `None` value
-  None.expect("…")                   -> PANIC: the config should list a quorum
+  None.expect("…")                   -> PANIC: the config should list a timeout
   Err(e).unwrap()                    -> PANIC: called `Result::unwrap()` on an `Err` value: "invalid digit found in string"
-  Err(e).expect("…")                 -> PANIC: the quorum line should be a number: "invalid digit found in string"
-  Ok(5).expect_err("…")              -> PANIC: no quorum should parse from an empty file: 5
+  Err(e).expect("…")                 -> PANIC: the timeout line should be a number: "invalid digit found in string"
+  Ok(5).expect_err("…")              -> PANIC: no timeout should parse from an empty file: 5
       Four panics, and only two of them tell you anything. Note what the
       Result form does: `{your sentence}: {the error, Debug-printed}`, so
       the claim AND the cause survive — expect never costs you the error.
@@ -125,7 +125,7 @@ score.unwrap_or_else(|| panic!("every ballot should score {name}; the loader pad
 
 ──── Step 2: The panic names your line, not the standard library's
   panicked at expect.rs:89
-  the ballot file should have been validated by now
+  the input file should have been validated by now
       That location is the `expect` call in THIS file — not a line inside
       core/src/option.rs, which is where the panic is physically raised.
       So the two halves of a good panic report come from two different
@@ -133,9 +133,9 @@ score.unwrap_or_else(|| panic!("every ballot should score {name}; the loader pad
       from the sentence you wrote.
 
 ──── Step 3: Say what SHOULD be true, not what went wrong
-  expect("failed to get quorum")     -> PANIC: failed to get quorum
+  expect("failed to get timeout")    -> PANIC: failed to get timeout
   expect("unwrap failed")            -> PANIC: unwrap failed
-  expect("[election] should set…")   -> PANIC: the [election] section should set a quorum; the loader fills it in from defaults
+  expect("[server] should set…")     -> PANIC: the [server] section should set a timeout; the loader fills it in from defaults
       Same bug, three panics, one of them useful. The standard library's
       own guidance is to describe the reason you expected a value — so the
       line reads as a CLAIM, and a reader who sees it knows both what was
@@ -148,9 +148,9 @@ score.unwrap_or_else(|| panic!("every ballot should score {name}; the loader pad
     by expect -> 50
     by Result -> Ok(50)
   config with a typo'd key (a thing users do):
-    by expect -> PANIC: the config should have a quorum
-    by Result -> Err("no `quorum` key in [election]")
-      Read the first message again: 'the config SHOULD have a quorum' —
+    by expect -> PANIC: the config should have a timeout
+    by Result -> Err("no `timeout` key in [server]")
+      Read the first message again: 'the config SHOULD have a timeout' —
       should according to whom? Nobody proved that; a user typed the file.
       The sentence is a hope, and the tell is that you cannot name who
       guaranteed it. That is the signal to return Result: the second form
@@ -187,7 +187,7 @@ rustc --edition 2024 17_Option_and_Result/expect/examples/expect.rs -o /tmp/ex &
 
 ## Practice
 
-**Four sentences, one of them a hope.** Write a small ballot loader with exactly four `expect` calls in it: one whose value comes from a literal in the source, one guarded by an early return a few lines above, one that looks up a key a *user* typed into a config file, and one inside a loop whose message is built with `format!` so it can name the row.
+**Four sentences, one of them a hope.** Write a small CSV loader with exactly four `expect` calls in it: one whose value comes from a literal in the source, one guarded by an early return a few lines above, one that looks up a key a *user* typed into a config file, and one inside a loop whose message is built with `format!` so it can name the row.
 
 Before running anything, audit them the way this page says to — **name the guarantor** for each, in one phrase. Three of the four have one. Write down which one does not, and what you would have to write to make its sentence true.
 
@@ -276,32 +276,32 @@ fn middle_score(scores: &[u8]) -> Option<u8> {
 }
 
 /// #3 — the guarantor is nobody. A *user* typed this file.
-fn quorum_by_expect(config: &[(&str, &str)]) -> u32 {
+fn timeout_by_expect(config: &[(&str, &str)]) -> u32 {
     let (_, raw) = config
         .iter()
-        .find(|(k, _)| *k == "quorum")
-        .expect("the config should have a quorum");
-    raw.parse().expect("the quorum should be a number")
+        .find(|(k, _)| *k == "timeout")
+        .expect("the config should have a timeout");
+    raw.parse().expect("the timeout should be a number")
 }
 
 /// #3, fixed — the same information, to the same reader, plus the bad value,
 /// and the caller decides whether it is fatal.
-fn quorum_by_result(config: &[(&str, &str)]) -> Result<u32, String> {
+fn timeout_by_result(config: &[(&str, &str)]) -> Result<u32, String> {
     let (_, raw) = config
         .iter()
-        .find(|(k, _)| *k == "quorum")
-        .ok_or_else(|| "no `quorum` key in [election]".to_string())?;
+        .find(|(k, _)| *k == "timeout")
+        .ok_or_else(|| "no `timeout` key in [server]".to_string())?;
     raw.parse()
-        .map_err(|e| format!("quorum = {raw:?} is not a number ({e})"))
+        .map_err(|e| format!("timeout = {raw:?} is not a number ({e})"))
 }
 
 /// #4 — the proof is sound; the *message* is the problem. Every call to this
 /// function allocates a String, whether or not anything is about to fail.
 static PROOFS_BUILT: AtomicUsize = AtomicUsize::new(0);
 
-fn proof(ballot: usize, name: &str) -> String {
+fn proof(row: usize, name: &str) -> String {
     PROOFS_BUILT.fetch_add(1, Ordering::Relaxed);
-    format!("ballot {ballot} should score {name}; the loader pads short rows with 0")
+    format!("row {row} should have a {name} column; the loader pads short rows with 0")
 }
 
 fn total_eager(rows: &[Vec<u8>], col: usize, name: &str) -> u32 {
@@ -332,9 +332,9 @@ fn part1_name_the_guarantor() {
     println!("      #2  \"a non-empty slice has a middle element, and we");
     println!("           returned early above if it was empty\"");
     println!("            guarantor: the `return None` four lines up.             KEEP");
-    println!("      #3  \"the config should have a quorum\"");
+    println!("      #3  \"the config should have a timeout\"");
     println!("            guarantor: nobody. A user typed the file.               FIX THE TYPE");
-    println!("      #4  \"ballot N should score X; the loader pads short rows\"");
+    println!("      #4  \"row N should have a X column; the loader pads short rows\"");
     println!("            guarantor: the loader, named in the sentence.           KEEP THE PROOF,");
     println!("                                                                    MOVE THE MESSAGE");
     println!("      Three can name a guarantor. #3 can only say \"should\" — a hope");
@@ -357,11 +357,11 @@ fn part2_run_them(good: &[(&str, &str)], typo: &[(&str, &str)]) {
     );
     show(
         "#3 well-formed config",
-        caught(|| quorum_by_expect(good).to_string()),
+        caught(|| timeout_by_expect(good).to_string()),
     );
     show(
         "#3 typo'd key",
-        caught(|| quorum_by_expect(typo).to_string()),
+        caught(|| timeout_by_expect(typo).to_string()),
     );
 
     println!("      #1 and #2 cannot fail — #2 answers `None` rather than panicking,");
@@ -372,9 +372,9 @@ fn part2_run_them(good: &[(&str, &str)], typo: &[(&str, &str)]) {
 fn part3_change_the_type(good: &[(&str, &str)], typo: &[(&str, &str)], junk: &[(&str, &str)]) {
     banner(3, "Fix #3 by changing the signature, not the wording");
 
-    println!("      well-formed  -> {:?}", quorum_by_result(good));
-    println!("      typo'd key   -> {:?}", quorum_by_result(typo));
-    println!("      not a number -> {:?}", quorum_by_result(junk));
+    println!("      well-formed  -> {:?}", timeout_by_result(good));
+    println!("      typo'd key   -> {:?}", timeout_by_result(typo));
+    println!("      not a number -> {:?}", timeout_by_result(junk));
     println!("      No panic, and the third message carries the offending value —");
     println!("      which the `expect` version could not, because a &str message is");
     println!("      chosen before anyone knows what went wrong.");
@@ -405,9 +405,9 @@ fn part4_count_the_messages() {
 }
 
 fn main() {
-    let good = [("quorum", "50"), ("seats", "1")];
-    let typo = [("quourm", "50"), ("seats", "1")];
-    let junk = [("quorum", "fifty"), ("seats", "1")];
+    let good = [("timeout", "50"), ("retries", "1")];
+    let typo = [("timoeut", "50"), ("retries", "1")];
+    let junk = [("timeout", "fifty"), ("retries", "1")];
 
     part1_name_the_guarantor();
     part2_run_them(&good, &typo);
@@ -427,9 +427,9 @@ fn main() {
       #2  "a non-empty slice has a middle element, and we
            returned early above if it was empty"
             guarantor: the `return None` four lines up.             KEEP
-      #3  "the config should have a quorum"
+      #3  "the config should have a timeout"
             guarantor: nobody. A user typed the file.               FIX THE TYPE
-      #4  "ballot N should score X; the loader pads short rows"
+      #4  "row N should have a X column; the loader pads short rows"
             guarantor: the loader, named in the sentence.           KEEP THE PROOF,
                                                                     MOVE THE MESSAGE
       Three can name a guarantor. #3 can only say "should" — a hope
@@ -441,15 +441,15 @@ fn main() {
       #2 middle_score(&[3,5,0])  -> Some(3)
       #2 middle_score(&[])       -> None
       #3 well-formed config      -> 50
-      #3 typo'd key              -> PANIC: the config should have a quorum
+      #3 typo'd key              -> PANIC: the config should have a timeout
       #1 and #2 cannot fail — #2 answers `None` rather than panicking,
       because emptiness is a caller's question, not a bug. #3 dies on a
       config that is merely misspelled, with a message blaming nothing.
 
 ──── Part 3: Fix #3 by changing the signature, not the wording
       well-formed  -> Ok(50)
-      typo'd key   -> Err("no `quorum` key in [election]")
-      not a number -> Err("quorum = \"fifty\" is not a number (invalid digit found in string)")
+      typo'd key   -> Err("no `timeout` key in [server]")
+      not a number -> Err("timeout = \"fifty\" is not a number (invalid digit found in string)")
       No panic, and the third message carries the offending value —
       which the `expect` version could not, because a &str message is
       chosen before anyone knows what went wrong.

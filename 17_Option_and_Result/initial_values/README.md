@@ -81,9 +81,9 @@ Prefer it over a `mut Option` in a global: it guarantees the value is written *e
 
 ## Practice
 
-**Declare it, then prove it.** Write `quorum_for(voters: usize) -> usize` whose value is decided in three branches — no `Option`, and no `mut`. Let the compiler be the thing that guarantees the variable is set before it is read.
+**Declare it, then prove it.** Write `sample_size_for(rows: usize) -> usize` whose value is decided in three branches — no `Option`, and no `mut`. Let the compiler be the thing that guarantees the variable is set before it is read.
 
-Write it with `let mut quorum: Option<usize> = None;` too, and read what the compiler says about the `None` you gave it. Then delete one branch from the plain version and read `E0381`. One of those two messages is a warning about a value you never needed; the other is a proof you cannot fake.
+Write it with `let mut sample: Option<usize> = None;` too, and read what the compiler says about the `None` you gave it. Then delete one branch from the plain version and read `E0381`. One of those two messages is a warning about a value you never needed; the other is a proof you cannot fake.
 
 <details markdown="1">
 <summary><strong>Solution</strong></summary>
@@ -98,16 +98,16 @@ Write it with `let mut quorum: Option<usize> = None;` too, and read what the com
 
 /// Declared, not initialized. Every path assigns before the read, and the
 /// compiler checks that — no `Option`, no `mut`, no unreachable arm.
-fn quorum_for(voters: usize) -> usize {
-    let quorum: usize;
-    if voters == 0 {
-        quorum = 0;
-    } else if voters < 10 {
-        quorum = voters; // a tiny board needs everyone
+fn sample_size_for(rows: usize) -> usize {
+    let sample: usize;
+    if rows == 0 {
+        sample = 0;
+    } else if rows < 10 {
+        sample = rows; // a tiny table: read all of it
     } else {
-        quorum = voters / 2 + 1;
+        sample = rows / 2 + 1;
     }
-    quorum
+    sample
 }
 
 /// The `Option` version of the same job, for contrast: one more state to read,
@@ -117,34 +117,34 @@ fn quorum_for(voters: usize) -> usize {
 /// `None` is "never read", which is it telling you the initial value was dead
 /// on arrival.
 #[allow(unused_assignments)]
-fn quorum_for_awkward(voters: usize) -> usize {
-    let mut quorum: Option<usize> = None;
-    if voters == 0 {
-        quorum = Some(0);
-    } else if voters < 10 {
-        quorum = Some(voters);
+fn sample_size_awkward(rows: usize) -> usize {
+    let mut sample: Option<usize> = None;
+    if rows == 0 {
+        sample = Some(0);
+    } else if rows < 10 {
+        sample = Some(rows);
     } else {
-        quorum = Some(voters / 2 + 1);
+        sample = Some(rows / 2 + 1);
     }
-    quorum.expect("every branch above assigns — but nothing checks that claim")
+    sample.expect("every branch above assigns — but nothing checks that claim")
 }
 
 /// Where `Option` is genuinely right: the value may never arrive at all.
-struct Election {
+struct Job {
     name: &'static str,
-    /// None until the count finishes. Not "not ready yet" — "may never happen".
-    certified_winner: Option<&'static str>,
+    /// None until the job finishes. Not "not ready yet" — "may never happen".
+    finished_at: Option<&'static str>,
 }
 
 fn main() {
     println!("Declared without a value, proved assigned before use:");
-    for voters in [0, 7, 461] {
-        println!("  quorum_for({voters:>3}) -> {}", quorum_for(voters));
+    for rows in [0, 7, 461] {
+        println!("  sample_size_for({rows:>3}) -> {}", sample_size_for(rows));
     }
 
     println!("\nThe Option version returns the same numbers…");
-    for voters in [0, 7, 461] {
-        println!("  quorum_for_awkward({voters:>3}) -> {}", quorum_for_awkward(voters));
+    for rows in [0, 7, 461] {
+        println!("  sample_size_awkward({rows:>3}) -> {}", sample_size_awkward(rows));
     }
     println!("      …and pays for it with a state that cannot occur, an `expect`");
     println!("      whose claim nothing verifies, and a `mut` it did not need. The");
@@ -152,12 +152,12 @@ fn main() {
     println!("      source has to #[allow] it to compile quietly.");
 
     println!("\nWhere Option earns its place — absence that outlives the function:");
-    let running = Election { name: "Springfield 2026", certified_winner: None };
-    let done = Election { name: "Shelbyville 2026", certified_winner: Some("Ada") };
-    for e in [&running, &done] {
-        match e.certified_winner {
-            Some(w) => println!("  {:<18} certified: {w}", e.name),
-            None => println!("  {:<18} not certified yet", e.name),
+    let running = Job { name: "nightly-reindex", finished_at: None };
+    let done = Job { name: "nightly-backup", finished_at: Some("03:12") };
+    for j in [&running, &done] {
+        match j.finished_at {
+            Some(at) => println!("  {:<18} finished at {at}", j.name),
+            None => println!("  {:<18} still running", j.name),
         }
     }
 }
@@ -169,22 +169,22 @@ fn main() {
 
 ```text
 Declared without a value, proved assigned before use:
-  quorum_for(  0) -> 0
-  quorum_for(  7) -> 7
-  quorum_for(461) -> 231
+  sample_size_for(  0) -> 0
+  sample_size_for(  7) -> 7
+  sample_size_for(461) -> 231
 
 The Option version returns the same numbers…
-  quorum_for_awkward(  0) -> 0
-  quorum_for_awkward(  7) -> 7
-  quorum_for_awkward(461) -> 231
+  sample_size_awkward(  0) -> 0
+  sample_size_awkward(  7) -> 7
+  sample_size_awkward(461) -> 231
       …and pays for it with a state that cannot occur, an `expect`
       whose claim nothing verifies, and a `mut` it did not need. The
       compiler even warns that the initial None is never read — the
       source has to #[allow] it to compile quietly.
 
 Where Option earns its place — absence that outlives the function:
-  Springfield 2026   not certified yet
-  Shelbyville 2026   certified: Ada
+  nightly-reindex    still running
+  nightly-backup     finished at 03:12
 ```
 <!-- /output -->
 
