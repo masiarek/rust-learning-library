@@ -5,8 +5,8 @@
 **One line:** A struct names a group of values and makes that name a *type*. It holds no behaviour.
 
 ```rust
-struct Ballot {
-    voter: String,
+struct Player {
+    name: String,
     scores: Vec<u8>,
 }
 ```
@@ -20,10 +20,10 @@ struct Ballot {
 ## Data here, behaviour there
 
 ```rust
-struct Ballot { … }        // data
+struct Player { … }        // data
 
-impl Ballot {              // behaviour
-    fn new(voter: &str) -> Self { … }   // associated function — no self
+impl Player {              // behaviour
+    fn new(name: &str) -> Self { … }    // associated function — no self
     fn total(&self) -> u32 { … }        // method — takes self
 }
 ```
@@ -34,11 +34,11 @@ Struct = record. `impl` = functions. `trait` = behaviour many types share. This 
 
 | Flavor | Written | Fields by |
 |---|---|---|
-| named-field | `struct Ballot { voter: String }` | `.voter` |
-| tuple struct | `struct Precinct(u32);` | `.0` |
+| named-field | `struct Player { name: String }` | `.name` |
+| tuple struct | `struct Level(u32);` | `.0` |
 | unit struct | `struct Sealed;` | none |
 
-A tuple struct is a named-field struct whose names are digits — `Precinct { 0: 7 }` compiles and equals `Precinct(7)`.
+A tuple struct is a named-field struct whose names are digits — `Level { 0: 7 }` compiles and equals `Level(7)`.
 
 Not "a classic C struct": layout is **undefined by default** (fields may be reordered), fields are **private by default**, assignment **moves** unless the type is [`Copy`](../copy_vs_clone/README.md).
 
@@ -62,7 +62,7 @@ let b: Sealed = Alias;      // error[E0423]: expected value, found type alias `A
 
 ## Names
 
-`UpperCamelCase` for types, `snake_case` for fields and methods — `rustc` lints both (`non_camel_case_types`, `non_snake_case`). Name the struct for what the group *means*: `Ballot`, not `Data`.
+`UpperCamelCase` for types, `snake_case` for fields and methods — `rustc` lints both (`non_camel_case_types`, `non_snake_case`). Name the struct for what the group *means*: `Player`, not `Data`.
 
 ## Privacy is per module
 
@@ -71,7 +71,7 @@ Private = **visible inside the defining module**, not "only to its own methods".
 For a tuple struct, a private field makes the *constructor* private:
 
 ```text
-error[E0603]: tuple struct constructor `Ballot` is private
+error[E0603]: tuple struct constructor `Meters` is private
    |  a constructor is private if any of the fields is private
 ```
 
@@ -95,7 +95,7 @@ This is what [the newtype](../newtype_score/README.md) relies on: one checked do
 
 `__slots__` is the nearest Python analogue to a fixed field set, but it is opt-in and Rust's is not.
 
-**ABAP.** `TYPES: BEGIN OF ty_ballot, voter TYPE string, ... END OF ty_ballot.` maps almost directly; `DATA ls_ballot TYPE ty_ballot` is the instance.
+**ABAP.** `TYPES: BEGIN OF ty_player, name TYPE string, ... END OF ty_player.` maps almost directly; `DATA ls_player TYPE ty_player` is the instance.
 
 | | ABAP | Rust |
 |---|---|---|
@@ -141,14 +141,14 @@ fn paint(c: &Color) -> String {
 
 mod sealed {
     // `pub` on the STRUCT is not `pub` on the FIELD, and for a tuple struct
-    // that also makes the CONSTRUCTOR private — you cannot write Ballot(9)
+    // that also makes the CONSTRUCTOR private — you cannot write Meters(9)
     // from outside this module, because doing so would set a private field.
     #[derive(Debug)]
-    pub struct Ballot(u32);
+    pub struct Meters(u32);
 
-    impl Ballot {
+    impl Meters {
         pub fn new(n: u32) -> Self {
-            Ballot(n)
+            Meters(n)
         }
         pub fn get(&self) -> u32 {
             self.0
@@ -162,7 +162,7 @@ struct Blank;
 
 impl fmt::Display for Blank {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "(no ballot returned)")
+        write!(f, "(nothing selected)")
     }
 }
 
@@ -183,9 +183,9 @@ fn main() {
     println!("   Same shape, same destructuring, and still not interchangeable.");
 
     println!("\n3. A private field makes a tuple struct's CONSTRUCTOR private");
-    let ballot = sealed::Ballot::new(431);
-    println!("   sealed::Ballot::new(431) -> {ballot:?}, get() = {}", ballot.get());
-    println!("   sealed::Ballot(431) from out here is E0603:");
+    let distance = sealed::Meters::new(431);
+    println!("   sealed::Meters::new(431) -> {distance:?}, get() = {}", distance.get());
+    println!("   sealed::Meters(431) from out here is E0603:");
     println!("     `a constructor is private if any of the fields is private`");
     println!("   That is the newtype's whole guarantee: one door, and the module owns it.");
 
@@ -211,13 +211,13 @@ fn main() {
    Same shape, same destructuring, and still not interchangeable.
 
 3. A private field makes a tuple struct's CONSTRUCTOR private
-   sealed::Ballot::new(431) -> Ballot(431), get() = 431
-   sealed::Ballot(431) from out here is E0603:
+   sealed::Meters::new(431) -> Meters(431), get() = 431
+   sealed::Meters(431) from out here is E0603:
      `a constructor is private if any of the fields is private`
    That is the newtype's whole guarantee: one door, and the module owns it.
 
 4. A unit struct holds nothing, so behaviour is all it can hold
-   (no ballot returned)   <- via its Display impl; the value carries no data at all
+   (nothing selected)   <- via its Display impl; the value carries no data at all
 ```
 <!-- /output -->
 
@@ -232,22 +232,22 @@ fn main() {
 
 ```text
 1. Three flavors, and a fourth spelling
-   named   Ballot { voter: "Ada", scores: [] }
-   tuple   Precinct(7)   field reached by index: 7
+   named   Player { name: "Ada", scores: [] }
+   tuple   Level(7)      field reached by index: 7
    unit    Sealed          — the type has exactly one value
    braces  AlsoEmpty      — `AlsoEmpty {}`, NOT the same as a unit struct
 
 2. A tuple struct is a named-field struct whose fields are numbers
-   Precinct { 0: 7 } == Precinct(7)  ->  true
+   Level { 0: 7 } == Level(7)  ->  true
 
 3. Field ORDER in the expression is free; the value is the same
-   Ballot { voter: "Ben", scores: [5, 2] }
-   Ballot { voter: "Ben", scores: [5, 2] }
+   Player { name: "Ben", scores: [5, 2] }
+   Player { name: "Ben", scores: [5, 2] }
    same value: true
 
 4. Data in the struct, behaviour in the impl block
    Cara scored [5, 2, 0], total 7
-   Ballot::total(&ballot) == ballot.total()  ->  true
+   Player::total(&player) == player.total()  ->  true
 
 5. Privacy is per module — `count` is private, and that is why
    the module has to hand you a method to read it
@@ -265,8 +265,8 @@ fn main() {
 
 Struktura to nazwa dla grupy wartości, która sama staje się **typem** — i nic ponadto, bo **zachowania nie trzyma żadnego**. Dane siedzą w `struct`, funkcje w bloku `impl`, a zachowanie wspólne dla wielu typów w cesze (*trait*); dlatego w Ruscie nie ma klas ani dziedziczenia. Polskiego czytelnika najłatwiej zmyli tu samo słowo, bo „strukturę” większość z nas poznała w C, gdzie jest ona rekordem o ustalonym układzie w pamięci. Rustowa struktura to co innego: **układ pól jest domyślnie nieokreślony** (kompilator może je poprzestawiać — jeśli potrzebujesz gwarancji, żądasz jej przez `#[repr(C)]`), pola są **domyślnie prywatne**, a przypisanie **przenosi własność**, o ile typ nie jest `Copy`.
 
-Odmiany są trzy plus jedna pisownia na doczepkę: struktura nazwana (`Ballot { voter: String }`, pola po nazwie), **struktura krotkowa** (`Precinct(u32)`, pola po numerze — `Precinct { 0: 7 }` kompiluje się i równa `Precinct(7)`, bo krotkowa to po prostu nazwana struktura, której pola nazywają się cyframi) oraz **pusta struktura** (`struct Sealed;`), która nie mieści nic, więc jedyne, co może nieść, to zachowanie — i po to właśnie się ją pisze. Uwaga na czwartą pisownię: `struct AlsoEmpty {}` też nie ma pól, ale **pustą strukturą nie jest** i przy użyciu domaga się klamer, inaczej dostaniesz `E0423` z podpowiedzią „use struct literal syntax instead: `AlsoEmpty {}`”. Przy okazji widać wtedy rzecz, o której podręczniki zwykle nie wspominają: `struct Sealed;` deklaruje **dwie** rzeczy o jednej nazwie — typ i stałą wartość — bo Rust prowadzi osobne przestrzenie nazw dla typów i dla wartości. Alias `type Alias = Sealed;` kopiuje tylko tę pierwszą, więc `Alias {}` przejdzie, a samo `Alias` już nie.
+Odmiany są trzy plus jedna pisownia na doczepkę: struktura nazwana (`Player { name: String }`, pola po nazwie), **struktura krotkowa** (`Level(u32)`, pola po numerze — `Level { 0: 7 }` kompiluje się i równa `Level(7)`, bo krotkowa to po prostu nazwana struktura, której pola nazywają się cyframi) oraz **pusta struktura** (`struct Sealed;`), która nie mieści nic, więc jedyne, co może nieść, to zachowanie — i po to właśnie się ją pisze. Uwaga na czwartą pisownię: `struct AlsoEmpty {}` też nie ma pól, ale **pustą strukturą nie jest** i przy użyciu domaga się klamer, inaczej dostaniesz `E0423` z podpowiedzią „use struct literal syntax instead: `AlsoEmpty {}`”. Przy okazji widać wtedy rzecz, o której podręczniki zwykle nie wspominają: `struct Sealed;` deklaruje **dwie** rzeczy o jednej nazwie — typ i stałą wartość — bo Rust prowadzi osobne przestrzenie nazw dla typów i dla wartości. Alias `type Alias = Sealed;` kopiuje tylko tę pierwszą, więc `Alias {}` przejdzie, a samo `Alias` już nie.
 
-Nazwa typu jest w Ruscie strażnikiem, bo typowanie jest **nominalne**, a nie strukturalne: `Color(i32, i32, i32)` i `Point(i32, i32, i32)` mają identyczny kształt i mimo to nie da się jednego podać tam, gdzie oczekiwany jest drugi — `E0308`, podczas gdy goła krotka `(i32, i32, i32)` przyjęłaby oba bez słowa. Prywatność, jak zwykle w Ruscie, obowiązuje na poziomie **modułu**, a nie typu, i w strukturze krotkowej ma dodatkowy skutek: prywatne pole czyni prywatnym sam **konstruktor** (`E0603`, „a constructor is private if any of the fields is private”) — na tym stoi cały wzorzec newtype. Na koniec drobiazg dla piszących po polsku: typy nazywamy w `UpperCamelCase`, pola w `snake_case` (pilnują tego linty `non_camel_case_types` i `non_snake_case`), a polskie znaki diakrytyczne w identyfikatorach są dozwolone — `struct Głos { wyborca: String }` kompiluje się bez mrugnięcia (sprawdzone na rustc 1.98, edycja 2024). Praktyka jest jednak inna: kod trzyma się angielskiego, bo po angielsku są komunikaty, dokumentacja i wyniki wyszukiwania.
+Nazwa typu jest w Ruscie strażnikiem, bo typowanie jest **nominalne**, a nie strukturalne: `Color(i32, i32, i32)` i `Point(i32, i32, i32)` mają identyczny kształt i mimo to nie da się jednego podać tam, gdzie oczekiwany jest drugi — `E0308`, podczas gdy goła krotka `(i32, i32, i32)` przyjęłaby oba bez słowa. Prywatność, jak zwykle w Ruscie, obowiązuje na poziomie **modułu**, a nie typu, i w strukturze krotkowej ma dodatkowy skutek: prywatne pole czyni prywatnym sam **konstruktor** (`E0603`, „a constructor is private if any of the fields is private”) — na tym stoi cały wzorzec newtype. Na koniec drobiazg dla piszących po polsku: typy nazywamy w `UpperCamelCase`, pola w `snake_case` (pilnują tego linty `non_camel_case_types` i `non_snake_case`), a polskie znaki diakrytyczne w identyfikatorach są dozwolone — `struct Gracz { imię: String }` kompiluje się bez mrugnięcia (sprawdzone na rustc 1.98, edycja 2024). Praktyka jest jednak inna: kod trzyma się angielskiego, bo po angielsku są komunikaty, dokumentacja i wyniki wyszukiwania.
 
 **Szukaj po polsku:** struktura krotkowa · pusta struktura · prywatność na poziomie modułu · `rust tuple struct vs tuple E0308` · `rust repr(C) struct layout`

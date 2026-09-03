@@ -2,20 +2,20 @@ Four operations, four different receivers:
   new      no self     there is no value yet
   leader   &self       asks, changes nothing
   record   &mut self   changes it, you keep it
-  certify  self        ends it — that is the point
+  finish   self        ends it — that is the point
 
-  fresh:  leader() = None   (None, not Some(0) — nobody has voted)
-  after 3 votes: counts [1, 0, 2], leader Some(2)
+  fresh:  leader() = None   (None, not Some(0) — nobody has scored)
+  after 3 points: counts [1, 0, 2], leader Some(2)
 
 Break 1 — call a &mut self method through a non-mut binding:
-    let t = Tally::new(..);  t.record(0);
+    let t = Scoreboard::new(..);  t.record(0);
     error[E0596]: cannot borrow `t` as mutable, as it is not declared as mutable
   The method signature is what demands it. `mut` on the BINDING is the answer.
 
 Break 2 — use the value after a method that took `self`:
-    let receipt = t.certify();  t.record(1);
+    let summary = t.finish();  t.record(1);
     error[E0382]: borrow of moved value: `t`
   Not a restriction to work around — it is the guarantee `self` buys:
-  a certified tally cannot be voted into, because it no longer exists.
+  a finished game cannot be scored into, because it no longer exists.
 
-  Mayor: candidate 2 wins with 2
+  Round 1: player 2 wins with 2

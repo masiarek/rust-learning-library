@@ -1,10 +1,10 @@
 1. Associated function vs method — the only difference is `self`
-   Ballot::new("Ada")  associated function, no instance existed yet
+   Cart::new("Ada")    associated function, no instance existed yet
    b.add(5)            method, called on the value
    b.total() = 7
 
 2. `b.total()` is sugar. This is the same call, spelled out:
-   Ballot::total(&b) = 7   equal: true
+   Cart::total(&b) = 7     equal: true
    The dot inserts the `&` for you. That is the whole trick.
 
 3. The three kinds of self, and what each costs the caller
@@ -12,24 +12,24 @@
    &mut self  add(4)         -> caller keeps it, changed
               [5, 2, 0, 4]
    self       into_receipt() -> caller LOSES it
-              Ada cast 4 scores
+              Ada bought 4 items
               `c` cannot be used again: E0382, borrow of moved value
 
 4. Several impl blocks are fine — they add up
-   b.is_blank() = false  (from the second impl Ballot block)
+   b.is_empty() = false  (from the second impl Cart block)
 
 5. `impl` is not struct-only — enums take methods identically
-   Elected("Ada")           -> Ada wins
-   Tied(3)                  -> 3-way tie
-   NoContest                -> no contest
+   Shipped("Leeds")         -> out for delivery in Leeds
+   Delayed(3)               -> delayed 3 days
+   Cancelled                -> cancelled
 
 6. Inherent impl vs trait impl
    inherent: you choose the signature
      b.total()      -> 7
    trait:    the trait chose it, so many types can answer
-     b.one_line()   -> Ada scored 3 candidates, total 7
-     Verdict.one_line() -> 3-way tie
-   default method, inherited free by Ballot:
-     b.shout()      -> ADA SCORED 3 CANDIDATES, TOTAL 7
-   ...and overridden by Verdict:
-     Verdict.shout()    -> *** 3-way tie ***
+     b.one_line()   -> Ada has 3 items, total 7
+     Delivery.one_line() -> delayed 3 days
+   default method, inherited free by Cart:
+     b.shout()      -> ADA HAS 3 ITEMS, TOTAL 7
+   ...and overridden by Delivery:
+     Delivery.shout()    -> *** delayed 3 days ***

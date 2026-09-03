@@ -6,44 +6,44 @@
 // The data. Nothing else is allowed in here — no `fn`, not one.
 // ---------------------------------------------------------------------------
 #[derive(Debug, Clone)]
-struct Ballot {
-    voter: String,
-    scores: Vec<u8>,
+struct Cart {
+    customer: String,
+    prices: Vec<u8>,
 }
 
 // ---------------------------------------------------------------------------
-// An INHERENT impl: functions that belong to Ballot and to nothing else.
+// An INHERENT impl: functions that belong to Cart and to nothing else.
 // ---------------------------------------------------------------------------
-impl Ballot {
+impl Cart {
     // No `self` => an ASSOCIATED FUNCTION. There is no instance to call it on,
-    // so you name the type: Ballot::new(..). This is what "standalone" means.
-    fn new(voter: &str) -> Self {
-        // `Self` (capital) is the TYPE — here it is another way to write Ballot.
-        Self { voter: voter.to_string(), scores: Vec::new() }
+    // so you name the type: Cart::new(..). This is what "standalone" means.
+    fn new(customer: &str) -> Self {
+        // `Self` (capital) is the TYPE — here it is another way to write Cart.
+        Self { customer: customer.to_string(), prices: Vec::new() }
     }
 
-    // `&self` => borrow it. Read-only, and the caller keeps the ballot.
+    // `&self` => borrow it. Read-only, and the caller keeps the cart.
     fn total(&self) -> u32 {
-        self.scores.iter().map(|&s| s as u32).sum()
+        self.prices.iter().map(|&p| p as u32).sum()
     }
 
     // `&mut self` => borrow it exclusively. May change it; caller still keeps it.
-    fn add(&mut self, s: u8) {
-        self.scores.push(s);
+    fn add(&mut self, price: u8) {
+        self.prices.push(price);
     }
 
-    // `self` => CONSUME it. The ballot is moved in and the caller loses it.
+    // `self` => CONSUME it. The cart is moved in and the caller loses it.
     // Right when the operation logically ends the value's life.
     fn into_receipt(self) -> String {
-        format!("{} cast {} scores", self.voter, self.scores.len())
+        format!("{} bought {} items", self.customer, self.prices.len())
     }
 }
 
 // A type may have MANY impl blocks. Nothing is nested, nothing is reopened —
 // they simply add. Handy for grouping, and required once generics get involved.
-impl Ballot {
-    fn is_blank(&self) -> bool {
-        self.scores.is_empty()
+impl Cart {
+    fn is_empty(&self) -> bool {
+        self.prices.is_empty()
     }
 }
 
@@ -52,18 +52,18 @@ impl Ballot {
 // (`Option`'s hundred methods are just an `impl<T> Option<T>` in std.)
 // ---------------------------------------------------------------------------
 #[derive(Debug)]
-enum Verdict {
-    Elected(String),
-    Tied(u8),
-    NoContest,
+enum Delivery {
+    Shipped(String),
+    Delayed(u8),
+    Cancelled,
 }
 
-impl Verdict {
+impl Delivery {
     fn headline(&self) -> String {
         match self {
-            Verdict::Elected(who) => format!("{who} wins"),
-            Verdict::Tied(n) => format!("{n}-way tie"),
-            Verdict::NoContest => "no contest".to_string(),
+            Delivery::Shipped(city) => format!("out for delivery in {city}"),
+            Delivery::Delayed(d) => format!("delayed {d} days"),
+            Delivery::Cancelled => "cancelled".to_string(),
         }
     }
 }
@@ -81,13 +81,13 @@ trait Summary {
     }
 }
 
-impl Summary for Ballot {
+impl Summary for Cart {
     fn one_line(&self) -> String {
-        format!("{} scored {} candidates, total {}", self.voter, self.scores.len(), self.total())
+        format!("{} has {} items, total {}", self.customer, self.prices.len(), self.total())
     }
 }
 
-impl Summary for Verdict {
+impl Summary for Delivery {
     fn one_line(&self) -> String {
         self.headline()
     }
@@ -98,16 +98,16 @@ impl Summary for Verdict {
 
 fn main() {
     println!("1. Associated function vs method — the only difference is `self`");
-    let mut b = Ballot::new("Ada"); //        no self  -> name the TYPE
+    let mut b = Cart::new("Ada"); //          no self  -> name the TYPE
     b.add(5); //                              &mut self -> name the VALUE
     b.add(2);
     b.add(0);
-    println!("   Ballot::new(\"Ada\")  associated function, no instance existed yet");
+    println!("   Cart::new(\"Ada\")    associated function, no instance existed yet");
     println!("   b.add(5)            method, called on the value");
     println!("   b.total() = {}", b.total());
 
     println!("\n2. `b.total()` is sugar. This is the same call, spelled out:");
-    println!("   Ballot::total(&b) = {}   equal: {}", Ballot::total(&b), Ballot::total(&b) == b.total());
+    println!("   Cart::total(&b) = {}     equal: {}", Cart::total(&b), Cart::total(&b) == b.total());
     println!("   The dot inserts the `&` for you. That is the whole trick.");
 
     println!("\n3. The three kinds of self, and what each costs the caller");
@@ -115,16 +115,16 @@ fn main() {
     println!("   &mut self  add(4)         -> caller keeps it, changed");
     let mut c = b.clone();
     c.add(4);
-    println!("              {:?}", c.scores);
+    println!("              {:?}", c.prices);
     println!("   self       into_receipt() -> caller LOSES it");
     println!("              {}", c.into_receipt());
     println!("              `c` cannot be used again: E0382, borrow of moved value");
 
     println!("\n4. Several impl blocks are fine — they add up");
-    println!("   b.is_blank() = {}  (from the second impl Ballot block)", b.is_blank());
+    println!("   b.is_empty() = {}  (from the second impl Cart block)", b.is_empty());
 
     println!("\n5. `impl` is not struct-only — enums take methods identically");
-    for v in [Verdict::Elected("Ada".into()), Verdict::Tied(3), Verdict::NoContest] {
+    for v in [Delivery::Shipped("Leeds".into()), Delivery::Delayed(3), Delivery::Cancelled] {
         println!("   {:<24} -> {}", format!("{v:?}"), v.headline());
     }
 
@@ -133,9 +133,9 @@ fn main() {
     println!("     b.total()      -> {}", b.total());
     println!("   trait:    the trait chose it, so many types can answer");
     println!("     b.one_line()   -> {}", b.one_line());
-    println!("     Verdict.one_line() -> {}", Verdict::Tied(3).one_line());
-    println!("   default method, inherited free by Ballot:");
+    println!("     Delivery.one_line() -> {}", Delivery::Delayed(3).one_line());
+    println!("   default method, inherited free by Cart:");
     println!("     b.shout()      -> {}", b.shout());
-    println!("   ...and overridden by Verdict:");
-    println!("     Verdict.shout()    -> {}", Verdict::Tied(3).shout());
+    println!("   ...and overridden by Delivery:");
+    println!("     Delivery.shout()    -> {}", Delivery::Delayed(3).shout());
 }

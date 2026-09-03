@@ -17,14 +17,14 @@ fn paint(c: &Color) -> String {
 
 mod sealed {
     // `pub` on the STRUCT is not `pub` on the FIELD, and for a tuple struct
-    // that also makes the CONSTRUCTOR private — you cannot write Ballot(9)
+    // that also makes the CONSTRUCTOR private — you cannot write Meters(9)
     // from outside this module, because doing so would set a private field.
     #[derive(Debug)]
-    pub struct Ballot(u32);
+    pub struct Meters(u32);
 
-    impl Ballot {
+    impl Meters {
         pub fn new(n: u32) -> Self {
-            Ballot(n)
+            Meters(n)
         }
         pub fn get(&self) -> u32 {
             self.0
@@ -38,7 +38,7 @@ struct Blank;
 
 impl fmt::Display for Blank {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "(no ballot returned)")
+        write!(f, "(nothing selected)")
     }
 }
 
@@ -59,9 +59,9 @@ fn main() {
     println!("   Same shape, same destructuring, and still not interchangeable.");
 
     println!("\n3. A private field makes a tuple struct's CONSTRUCTOR private");
-    let ballot = sealed::Ballot::new(431);
-    println!("   sealed::Ballot::new(431) -> {ballot:?}, get() = {}", ballot.get());
-    println!("   sealed::Ballot(431) from out here is E0603:");
+    let distance = sealed::Meters::new(431);
+    println!("   sealed::Meters::new(431) -> {distance:?}, get() = {}", distance.get());
+    println!("   sealed::Meters(431) from out here is E0603:");
     println!("     `a constructor is private if any of the fields is private`");
     println!("   That is the newtype's whole guarantee: one door, and the module owns it.");
 

@@ -87,6 +87,27 @@ A kata is an exercise, and it lives **on the page for the topic it teaches** —
 
 Then add a row to [KATAS.md](KATAS.md) at the point in the sequence where the kata should be attempted, and renumber — `tools/check_katas.py` fails if the IDs no longer read K1, K2, K3… in table order, if a `## Practice` section has no row, or if a row's links stop resolving. That check exists because the index is the one file no lesson owns: nothing about your page reveals that its row is missing. **Do not print the kata's number on its own page** — open with a short bold title instead. The number lives in that one table, which is what makes reordering the sequence free; a `K7` in a page's prose is a second place to update and the reason a stale one goes unnoticed.
 
+## Naming things in an example
+
+**Use the vocabulary a Rust reader has already met.** An example's names are a second load carried on top of the idea the page is teaching. A name from std's own docs costs the reader nothing; one they have to learn first is charged against the lesson.
+
+Two registers, and picking between them is the whole decision:
+
+- **`foo` / `bar` / `baz`** where the *shape* is the point — a lifetime, a `use` path, a trait bound, a `where` clause, a match ordering. There is nothing to model, so modelling anything is noise. This is std's ordinary register, not a fallback: 894 occurrences across `core`, `alloc` and `std` doc comments (`foo` 645, `bar` 204, `baz` 45).
+- **A concrete type where the shape carries meaning** — `Point` when two fields have to be *different* fields, `Rectangle` when a method has to compute something from them, `Counter` when state changes, `User` or `Config` when some fields are legitimately absent. std keeps a small cast for exactly this, and it is worth borrowing rather than inventing: `Point` (85), `Book` (35), `Animal` and `Counter` (14 each), `Person` (11), `Dog` (10), `User` (9).
+
+Re-measure before arguing with any row of that:
+
+```bash
+grep -rh '^[[:space:]]*///' "$(rustc --print sysroot)"/lib/rustlib/src/rust/library/{core,alloc,std}/src | grep -oE '\bfoo\b' | wc -l
+```
+
+**Keep the domain boring.** An example that needs a subject at all should take one every programmer already carries — a word count, a temperature, a price in cents, a file path, an HTTP status, a shopping cart. The test is what a reader loses by not knowing the domain: if the page has to teach the domain before it can teach the Rust, the domain is wrong. A fresh domain per page is fine and often better than one house cast — variety between pages, consistency within one.
+
+**What this replaced, since it is still visible in places:** ballots, candidates, runoffs and elections, inherited from this library's sibling [star-voting-library ↗](https://github.com/masiarek/star-voting-library) and carried by 151 of 1,294 examples and 125 of 496 pages when the rule was written (2026-08-31). Two costs, and the second is the one that matters. It reads as an in-joke to everyone outside the two repos — and it charges a voting-method lesson before the Rust one: [Six kinds of zero](17_Option_and_Result/six_kinds_of_zero/README.md) opened by separating *a ballot that scored a candidate 0* from *one that left them blank*, a real and genuinely interesting distinction about **STAR voting**, on a page whose subject is `Option<u8>`. A reader who does not already know that scoring zero and abstaining are different acts has to be taught it before the Rust lands, and it is the second thing they learn about `Option`.
+
+A domain earns its place only when the *Rust* problem is domain-shaped — money is why fixed-point integers exist, so [Scale the denominator away](09_Advanced/scaled_integers/README.md) is about prices. That is rare, and it is never the default.
+
 ## Writing the prose
 
 - **One idea per page.** If a page needs two H1-sized ideas, it is two pages.
