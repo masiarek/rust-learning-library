@@ -1,0 +1,41 @@
+1. Four owned strings, four handle sizes
+   String       24 bytes  (pointer + length + capacity)
+   Box<str>     16 bytes  (pointer + length)
+   Rc<str>      16 bytes  (pointer + length)
+   Arc<str>     16 bytes  (pointer + length)
+   &str         16 bytes  (pointer + length) — borrowed, owns nothing
+   Drop the capacity word and the handle is a &str's size — but it OWNS.
+
+2. The round trip, and what the capacity word was holding
+   String::with_capacity(64) + push_str  len 12 cap 64
+   .into_boxed_str()                     len 12  (no capacity field at all)
+   .into_string()                        len 12 cap 12
+   52 bytes of slack are gone: into_boxed_str shrinks first, so the
+   trip back cannot restore a capacity nobody recorded.
+
+3. When the 8 bytes matter
+        1000 values:  Vec<String>       23 KB   Vec<Box<str>>       15 KB   saved 7 KB
+     1000000 values:  Vec<String>    23437 KB   Vec<Box<str>>    15625 KB   saved 7812 KB
+   Count the values, not the bytes. At a thousand it is noise; at a
+   million it is eight million bytes you did not have to touch. And it
+   is a saving on the HANDLES only — the text is the same either way.
+
+4. Rc<str> is one hop; Rc<String> is two
+   Rc<str>     handle 16 bytes   text stored inside the Rc? true
+   Rc<String>  handle  8 bytes   text stored inside the Rc? false
+   Rc<String> has the smaller handle and costs MORE: the Rc holds a
+   String, and that String points somewhere else again — two heap
+   allocations per value, and two dereferences to reach a byte.
+
+5. Many owners, one buffer
+   5 clones of one Rc<str>: all pointing at the same buffer? true
+   strong_count = 6  (the 5 clones plus the original)
+   text allocated once: 12 bytes
+   the same table as Vec<String>: 5 separate buffers, 60 bytes of text
+
+6. The trap: .to_owned() on an Rc clones the POINTER
+   name.to_owned() points at the same buffer? true
+   strong_count is now 7 — a new owner, no new text
+   (&*name).to_owned() points at the same buffer? false
+   Same method name, two different jobs. On the smart pointer it is a
+   cheap new handle; one deref away it is an allocation and a memcpy.

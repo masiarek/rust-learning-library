@@ -1,0 +1,26 @@
+The column: 8 rows, 3 distinct names
+
+1. Vec<String> — grow-able, and nobody is going to grow it
+   handles        8 x 24 = 192 bytes
+   text buffers   8
+
+2. Vec<Box<str>> — same text, one word less per handle
+   handles        8 x 16 = 128 bytes   (64 saved)
+   text buffers   8   <- unchanged: freezing a handle copies no text
+
+3. Vec<Rc<str>> — intern, and the repeats stop paying
+   handles        8 x 16 = 128 bytes
+   text buffers   3   <- three names, three buffers, eight rows
+   "Ada Lovelace" appears 4 times; strong_count = 5
+   (4 rows + 1 held by the pool)
+
+4. The trap — same method name, two different jobs
+   Rc<str>.to_owned()  same buffer? true   <- clones the POINTER
+   (&str).to_owned()   same buffer? false  <- clones the TEXT
+
+What to reach for:
+   still being built            -> String
+   finished, stored in bulk     -> Box<str>   (8 bytes/value, no copy to make)
+   finished, and it REPEATS     -> Rc<str>    (one buffer per distinct value)
+   finished, and crosses threads-> Arc<str>
+   The first choice is about growth; the rest are about how many you keep.
