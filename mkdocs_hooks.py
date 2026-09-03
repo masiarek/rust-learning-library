@@ -434,6 +434,11 @@ NAV_ORDER: dict[str, list[str]] = {
         # cleared. This is the mechanism the borrow rules exist to police, so
         # it goes immediately before them.
         "a_stack_slot_is_reused",
+        # ...and then how to READ the two characters the next four pages
+        # are written in, before any rule about them can land: `&` and
+        # `*` mean different things in a type, an expression and a
+        # pattern, and no diagnostic ever explains that.
+        "where_the_sigil_sits",
         "borrowing",
         # ...and the same rule read from the owner's side: what `&b` does to
         # `b`. Directly after `borrowing`, because it is the half that
