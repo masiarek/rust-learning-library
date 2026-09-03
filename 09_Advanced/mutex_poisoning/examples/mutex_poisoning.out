@@ -12,7 +12,7 @@
   the data behind it    -> [1, 5, 2, 4, 3]
   invariant holds?      -> false
       The Vec is not corrupt in a memory sense — it is corrupt in the
-      sense that matters: a candidate with no score. That is what the
+      sense that matters: a key with no value. That is what the
       Err is warning the next thread about.
 
 ──── Step 3: Three honest responses, and the one you write by accident

@@ -12,11 +12,11 @@ It is the most-typed `.unwrap()` in Rust, and the one most often defended with *
 
 The lock is not there to stop two threads touching the same memory at the same instant — that is the mechanism, not the purpose. It is there so that other threads only ever see the data in a state you consider *finished*.
 
-Take a list that holds `(candidate, score)` as adjacent pairs. Its invariant is "the length is even". A writer holds the lock, pushes the candidate, and panics before pushing the score:
+Take a list that holds `(key, value)` as adjacent pairs. Its invariant is "the length is even". A writer holds the lock, pushes the key, and panics before pushing the value:
 
 ```rust
 let mut guard = shared.lock().unwrap();
-guard.push(3);                              // the candidate...
+guard.push(3);                              // the key...
 panic!("failed before writing the score");  // ...and the score never comes
 ```
 
@@ -231,7 +231,7 @@ Answer 3 — `.lock().unwrap()`, which is a decision, not a shortcut:
   the data behind it    -> [1, 5, 2, 4, 3]
   invariant holds?      -> false
       The Vec is not corrupt in a memory sense — it is corrupt in the
-      sense that matters: a candidate with no score. That is what the
+      sense that matters: a key with no value. That is what the
       Err is warning the next thread about.
 
 ──── Step 3: Three honest responses, and the one you write by accident

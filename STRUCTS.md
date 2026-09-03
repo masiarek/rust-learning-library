@@ -179,7 +179,7 @@ A struct owning its fields is the default, and the reason [`String` shows up in 
 | Lesson | Level | What it teaches |
 |---|---|---|
 | [Units are types](07_Clients/units_are_types/README.md) | 201 | The newtype used in anger: a quantity that cannot be added to the wrong quantity — **stub**, an outline only |
-| [The right to vote is a value](09_Advanced/one_person_one_vote/README.md) | 301 | A struct modelling an entitlement, and spending it exactly once |
+| [The right to post is a value](09_Advanced/one_account_one_review/README.md) | 301 | A struct modelling an entitlement, and spending it exactly once |
 | [Lock poisoning](09_Advanced/mutex_poisoning/README.md) | 301 | A struct shared across threads, and the `Result` the lock hands you |
 
 ## Still missing

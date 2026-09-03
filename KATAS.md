@@ -62,7 +62,7 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K42 | [The fingerprint that collided — one missing `0` turns two different ballot files into the same hex string, across 3,600 of the 65,536 two-byte cases](19_Numbers/why_hexadecimal/README.md#practice) | [Why hexadecimal](19_Numbers/why_hexadecimal/README.md) | 101 → 201 |
 | K43 | [A tic-tac-toe game in 18 bits — two nine-bit fields in one `u32`, eight win masks, then a fourth field arrives on top](19_Numbers/bit_flags/README.md#practice) | [Bit flags](19_Numbers/bit_flags/README.md) | 201 |
 | K44 | [The results table that would not sort — meet `E0277` on purpose, then rank the same table three ways and pick the one you would ship](19_Numbers/what_a_float_stores/README.md#practice) | [What a float actually stores](19_Numbers/what_a_float_stores/README.md) | 201 |
-| K45 | [Spend the entitlement, not just the token — close the sign-in hole, then count what the fix costs](09_Advanced/one_person_one_vote/README.md#practice) | [The right to vote is a value](09_Advanced/one_person_one_vote/README.md) | 301 |
+| K45 | [Spend the entitlement, not just the token — close the sign-in hole, then count what the fix costs](09_Advanced/one_account_one_review/README.md#practice) | [The right to post is a value](09_Advanced/one_account_one_review/README.md) | 301 |
 | K46 | [The scale that stopped covering the election — hard-code a denominator, grow the election past it, and find the bug that changes no winner](09_Advanced/scaled_integers/README.md#practice) | [Scale the denominator away](09_Advanced/scaled_integers/README.md) | 301 |
 | K47 | [The average that came out as a three-way tie — collapse three candidates onto one number, then rank them without ever dividing](09_Advanced/i128_exactness/README.md#practice) | [What `i128` is exact about](09_Advanced/i128_exactness/README.md) | 301 |
 | K48 | [Build the count that always finishes — then find the coarsest rounding that still reproduces the exact winners](09_Advanced/compounding_weights/README.md#practice) | [When the denominators compound](09_Advanced/compounding_weights/README.md) | 301 |
@@ -238,7 +238,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 **[Advanced](09_Advanced/README.md)** — 11 katas
 
 - K37 · [The `Result` the lock hands you](09_Advanced/mutex_poisoning/README.md#practice)
-- K45 · [Spend the entitlement, not just the token](09_Advanced/one_person_one_vote/README.md#practice)
+- K45 · [Spend the entitlement, not just the token](09_Advanced/one_account_one_review/README.md#practice)
 - K46 · [The scale that stopped covering the election](09_Advanced/scaled_integers/README.md#practice)
 - K47 · [The average that came out as a three-way tie](09_Advanced/i128_exactness/README.md#practice)
 - K48 · [Build the count that always finishes](09_Advanced/compounding_weights/README.md#practice)

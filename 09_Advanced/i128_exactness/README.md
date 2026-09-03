@@ -4,7 +4,7 @@
 
 **One line:** `i128` makes `+`, `−` and `×` exact to the last digit inside a ceiling you are responsible for proving, does nothing whatever for `÷`, and is not a substitute for Python's `fractions.Fraction` — which is exact under division and has no ceiling at all, and bills you for both on every operation.
 
-`i128` usually gets reached for about ten minutes after a float has destroyed a tie — two totals that are mathematically equal come out differing in the last bit, so the tiebreak that should have decided the seat never runs and the win goes to whichever way the rounding fell. That instinct is right, and the type does deliver — but it is a *wider integer*, not an exact-arithmetic library, and the two get conflated constantly. "Exact" is really three separate properties, and `i128` has one of them:
+`i128` usually gets reached for about ten minutes after a float has destroyed a tie — two totals that are mathematically equal come out differing in the last bit, so the tiebreak that should have decided the top spot never runs and the win goes to whichever way the rounding fell. That instinct is right, and the type does deliver — but it is a *wider integer*, not an exact-arithmetic library, and the two get conflated constantly. "Exact" is really three separate properties, and `i128` has one of them:
 
 | | exact under `+ − ×`? | exact under `÷`? | unbounded? |
 |---|---|---|---|
@@ -44,9 +44,9 @@ Every row after the first is exact about *something*. The rows differ in what th
        i128::MAX x 2 = None — there is no wider primitive to escape to
 
 3. And exact about nothing at all under /
-     100 ballots, 3 candidates, integer division:
-       each gets 33, and 33 × 3 = 99 — 1 ballot unaccounted for
-     The same statement in i64 loses the same ballot. Widening the type
+     100 raters, 3 products, integer division:
+       each gets 33, and 33 × 3 = 99 — 1 rater unaccounted for
+     The same statement in i64 loses the same rater. Widening the type
      does not close the integers under division; nothing can. That is
      what a rational is for — and what it charges for.
 
@@ -84,7 +84,7 @@ Four things in that run are worth pulling out.
 
 **`i64::MAX` squared fits with room to spare.** That is the case the type exists for: two values that each fit in 64 bits and a product that does not. The `f64` answer to the same multiplication is off by 18,446,744,073,709,551,615 — an error *larger than the largest number an `i64` can hold*. Floating point is not being sloppy there; it is doing exactly what 53 bits of mantissa permit.
 
-**It truncates under division exactly as `i64` does.** 100 ballots among 3 candidates is 33 each and one ballot gone. Widening the type buys range, not closure — no integer type is closed under division, and no wider one would help. This is the part people are surprised by, because "I switched to `i128` for exactness" and "my averages are wrong" feel like they should not both be true.
+**It truncates under division exactly as `i64` does.** 100 raters among 3 products is 33 each and one rater gone. Widening the type buys range, not closure — no integer type is closed under division, and no wider one would help. This is the part people are surprised by, because "I switched to `i128` for exactness" and "my averages are wrong" feel like they should not both be true.
 
 **The ceiling is hard and there is nothing past it.** `i128::MAX.checked_mul(2)` is `None`, and unlike every earlier widening there is no `i256` to escape into. In Rust, 128 bits is the end of the primitives.
 
@@ -123,7 +123,7 @@ Addition is a carry chain — `add` then `add-with-carry`, and the hardware was 
 
 Two smaller costs worth knowing before you put `i128` in a hot struct:
 
-- **Twice the memory, and twice the cache pressure.** A `Vec<i128>` of a million ballots is 15 MB against 7.6 MB. For a count that streams once this is nothing; for one that random-accesses a table repeatedly it can cost more than the arithmetic did.
+- **Twice the memory, and twice the cache pressure.** A `Vec<i128>` of a million raters is 15 MB against 7.6 MB. For a count that streams once this is nothing; for one that random-accesses a table repeatedly it can cost more than the arithmetic did.
 - **There is no stable `AtomicI128`.** It is behind the unstable `integer_atomics` feature, so a shared running total across threads needs a `Mutex` (and its own [poisoning question](../mutex_poisoning/README.md)) rather than a lock-free add.
 
 So: widen freely for adding and multiplying. Think before you divide, and think hard before you build a rational on it.
@@ -193,11 +193,11 @@ Both bridges land in the same place. Rust gives you a 128-bit integer that costs
 
 ## Practice
 
-**The average that came out as a three-way tie.** Three candidates, three genuinely different average scores, and an `i128` wide enough to hold every number in the election several times over. Compute each candidate's average with `total / ballots` and rank them.
+**The average that came out as a three-way tie.** Three products, three genuinely different average scores, and an `i128` wide enough to hold every number in the dataset several times over. Compute each product's average with `total / raters` and rank them.
 
-Make that mistake first and look hard at the three identical numbers before fixing anything, because the shape of the failure is the lesson. Work out *why* integer division can never reverse two candidates but can readily collapse them onto the same value — and then say what a manufactured tie actually does to an election, which is the reason this is a serious bug and not a rounding nit.
+Make that mistake first and look hard at the three identical numbers before fixing anything, because the shape of the failure is the lesson. Work out *why* integer division can never reverse two products but can readily collapse them onto the same value — and then say what a manufactured tie actually does to an dataset, which is the reason this is a serious bug and not a rounding nit.
 
-Then fix it without a wider type, because there isn't one: rank the field exactly while never performing a division. Finally, scale the election up until your fix overflows too — it will — and buy the headroom back the same way a rational library does.
+Then fix it without a wider type, because there isn't one: rank the field exactly while never performing a division. Finally, scale the dataset up until your fix overflows too — it will — and buy the headroom back the same way a rational library does.
 
 <details markdown="1">
 <summary><strong>Solution</strong></summary>
@@ -208,8 +208,8 @@ Then fix it without a wider type, because there isn't one: rank the field exactl
 ```rust
 //! Kata solution — the average that came out as a three-way tie.
 //!
-//! Three candidates, three different average scores, and an `i128` wide enough
-//! to hold every number in the election with room to spare. The averages still
+//! Three products, three different average scores, and an `i128` wide enough
+//! to hold every number in the dataset with room to spare. The averages still
 //! come out equal, because the one operation `i128` is not exact about is the
 //! one the word "average" is made of.
 //!
@@ -217,7 +217,7 @@ Then fix it without a wider type, because there isn't one: rank the field exactl
 //! help if there were: the problem is division, not range. The fix is to stop
 //! dividing — and then to notice what not-dividing costs.
 
-/// `(name, total score awarded, ballots that scored them)`.
+/// `(name, total score awarded, raters that scored them)`.
 const FIELD: [(&str, i128, i128); 3] = [
     ("Alma", 1_000_000, 3_000),
     ("Bruno", 1_000_500, 3_001),
@@ -249,27 +249,27 @@ fn compare_exact(a: i128, b: i128, c: i128, d: i128) -> Option<std::cmp::Orderin
 fn main() {
     // ------------------------------------------------------------ 1
     println!("1. The average, by division — the mistake worth making first");
-    for (name, total, ballots) in FIELD {
-        println!("     {name:<6} {total:>9} / {ballots:<5} = {}", total / ballots);
+    for (name, total, raters) in FIELD {
+        println!("     {name:<6} {total:>9} / {raters:<5} = {}", total / raters);
     }
-    println!("     Three identical averages, and a three-way tie for the seat.");
+    println!("     Three identical averages, and a three-way tie for the top spot.");
 
     // ------------------------------------------------------------ 2
     println!("\n2. What the truncation actually did");
     println!("     The real averages, to six places, computed only to show them:");
-    for (name, total, ballots) in FIELD {
+    for (name, total, raters) in FIELD {
         println!(
             "       {name:<6} {:.6}",
-            total as f64 / ballots as f64
+            total as f64 / raters as f64
         );
     }
     println!("     They were never equal. Integer division floors, and flooring is");
-    println!("     monotone — so it can never REVERSE two candidates, only collapse");
+    println!("     monotone — so it can never REVERSE two products, only collapse");
     println!("     them onto the same number. That sounds like the harmless failure");
-    println!("     until you remember what a tie does: it hands the seat to the");
+    println!("     until you remember what a tie does: it hands the top spot to the");
     println!("     tiebreak ladder, and at the bottom of that ladder is a lot.");
     println!("     A manufactured tie is not a rounding error. It is a coin flip");
-    println!("     between candidates who were not actually tied.");
+    println!("     between products who were not actually tied.");
 
     // ------------------------------------------------------------ 3
     println!("\n3. The fix: rank them without dividing at all");
@@ -277,8 +277,8 @@ fn main() {
     order.sort_by(|&(_, at, ab), &(_, bt, bb)| {
         compare_exact(bt, bb, at, ab).expect("these products fit easily")
     });
-    for (i, (name, total, ballots)) in order.iter().enumerate() {
-        println!("     {}. {name:<6} ({total}/{ballots})", i + 1);
+    for (i, (name, total, raters)) in order.iter().enumerate() {
+        println!("     {}. {name:<6} ({total}/{raters})", i + 1);
     }
     let (a, at, ab) = FIELD[0];
     let (b, bt, bb) = FIELD[1];
@@ -348,7 +348,7 @@ fn main() {
      Alma     1000000 / 3000  = 333
      Bruno    1000500 / 3001  = 333
      Cara      999000 / 3000  = 333
-     Three identical averages, and a three-way tie for the seat.
+     Three identical averages, and a three-way tie for the top spot.
 
 2. What the truncation actually did
      The real averages, to six places, computed only to show them:
@@ -356,12 +356,12 @@ fn main() {
        Bruno  333.388870
        Cara   333.000000
      They were never equal. Integer division floors, and flooring is
-     monotone — so it can never REVERSE two candidates, only collapse
+     monotone — so it can never REVERSE two products, only collapse
      them onto the same number. That sounds like the harmless failure
-     until you remember what a tie does: it hands the seat to the
+     until you remember what a tie does: it hands the top spot to the
      tiebreak ladder, and at the bottom of that ladder is a lot.
      A manufactured tie is not a rounding error. It is a coin flip
-     between candidates who were not actually tied.
+     between products who were not actually tied.
 
 3. The fix: rank them without dividing at all
      1. Bruno  (1000500/3001)
@@ -397,9 +397,9 @@ fn main() {
 
 Three things worth taking from that run.
 
-**Truncation could only ever have produced a tie.** Integer division floors, flooring is monotone, so if Bruno's true average is higher than Alma's then his floored average cannot come out lower. The failure has exactly one shape: distinct candidates collapsing onto one number. That is worth knowing precisely, because it tells you the bug will never look like an upset — it will look like a tie, and a tie looks like something the rulebook already handles.
+**Truncation could only ever have produced a tie.** Integer division floors, flooring is monotone, so if Bruno's true average is higher than Alma's then his floored average cannot come out lower. The failure has exactly one shape: distinct products collapsing onto one number. That is worth knowing precisely, because it tells you the bug will never look like an upset — it will look like a tie, and a tie looks like something the rulebook already handles.
 
-**Which is why it is worse than a reversal, not better.** A reversal is a wrong winner, and someone eventually notices a wrong winner. A manufactured tie sends the seat down the tiebreak ladder to a coin toss between candidates who were not tied — and every part of that process behaves correctly, logs correctly, and is reproducible. There is nothing to notice.
+**Which is why it is worse than a reversal, not better.** A reversal is a wrong winner, and someone eventually notices a wrong winner. A manufactured tie sends the top spot down the tiebreak ladder to a coin toss between products who were not tied — and every part of that process behaves correctly, logs correctly, and is reproducible. There is nothing to notice.
 
 **The fix and its bill are the same move as the lesson's.** Cross-multiplying removes the division, and then the products overflow at national scale — so you divide out each pair's `gcd` first and compare 9 × 5 against 8 × 6 instead of two 38-digit numbers. That is `Reduce::BeforeTheMultiply` from the lesson, arrived at from the other direction: not to make a rational reach further, but to make a comparison fit at all. Reduction is headroom, wherever you meet it.
 

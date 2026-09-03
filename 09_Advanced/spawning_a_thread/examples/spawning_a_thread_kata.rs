@@ -5,8 +5,8 @@
 use std::sync::Arc;
 use std::thread;
 
-/// Eight ballots, three candidates. The job: a per-candidate total, in parallel.
-fn ballots() -> Vec<[u32; 3]> {
+/// Eight rows, three columns. The job: a per-column total, in parallel.
+fn rows() -> Vec<[u32; 3]> {
     vec![
         [5, 3, 0], [4, 4, 1], [0, 5, 2], [3, 3, 3],
         [5, 0, 5], [2, 4, 4], [1, 1, 5], [4, 2, 0],
@@ -14,7 +14,7 @@ fn ballots() -> Vec<[u32; 3]> {
 }
 
 fn main() {
-    let rows = ballots();
+    let rows = rows();
 
     println!("1. Sequential, for the answer to check against");
     let expected: Vec<u32> = (0..3).map(|i| rows.iter().map(|b| b[i]).sum()).collect();

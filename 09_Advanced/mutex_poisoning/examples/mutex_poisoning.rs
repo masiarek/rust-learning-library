@@ -24,7 +24,7 @@ fn quietly(f: impl FnOnce() + Send + 'static) {
     panic::set_hook(prior);
 }
 
-/// The invariant: this list always holds (candidate, score) as ADJACENT pairs,
+/// The invariant: this list always holds (key, value) as ADJACENT pairs,
 /// so its length is always even.
 fn is_consistent(v: &[i32]) -> bool {
     v.len() % 2 == 0
@@ -49,7 +49,7 @@ fn poisoned_pair_list() -> Arc<Mutex<Vec<i32>>> {
 
     quietly(move || {
         let mut guard = writer.lock().unwrap();
-        guard.push(3); // the candidate...
+        guard.push(3); // the key...
         panic!("failed before writing the score"); // ...and the score never comes
     });
 
@@ -72,7 +72,7 @@ fn step2() {
         }
     }
     println!("      The Vec is not corrupt in a memory sense — it is corrupt in the");
-    println!("      sense that matters: a candidate with no score. That is what the");
+    println!("      sense that matters: a key with no value. That is what the");
     println!("      Err is warning the next thread about.");
 }
 

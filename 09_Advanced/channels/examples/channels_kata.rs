@@ -6,7 +6,7 @@ use std::sync::mpsc;
 use std::thread;
 use std::time::Duration;
 
-/// Raw ballot lines, two of which are not ballots.
+/// Raw input lines, two of which do not parse.
 const LINES: [&str; 7] = ["5,3,0", "4,4,1", "x,2,2", "0,5,2", "9,1,1", "3,3,3", "2,4,4"];
 
 fn parse(line: &str) -> Option<[u32; 3]> {

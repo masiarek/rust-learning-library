@@ -118,6 +118,11 @@ plugins:
         # the folder had to follow the title.
         16_Structs/representing_a_ballot/README.md: 16_Structs/representing_a_record/README.md
 
+        # 2026-09-02: same reason as the line above. The typestate lesson was
+        # written around one-person-one-vote; the Rust content is about spending
+        # an entitlement exactly once, so it is one-account-one-review now.
+        09_Advanced/one_person_one_vote/README.md: 09_Advanced/one_account_one_review/README.md
+
 markdown_extensions:
   - admonition
   - attr_list

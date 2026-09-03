@@ -2,7 +2,7 @@
      Alma     1000000 / 3000  = 333
      Bruno    1000500 / 3001  = 333
      Cara      999000 / 3000  = 333
-     Three identical averages, and a three-way tie for the seat.
+     Three identical averages, and a three-way tie for the top spot.
 
 2. What the truncation actually did
      The real averages, to six places, computed only to show them:
@@ -10,12 +10,12 @@
        Bruno  333.388870
        Cara   333.000000
      They were never equal. Integer division floors, and flooring is
-     monotone — so it can never REVERSE two candidates, only collapse
+     monotone — so it can never REVERSE two products, only collapse
      them onto the same number. That sounds like the harmless failure
-     until you remember what a tie does: it hands the seat to the
+     until you remember what a tie does: it hands the top spot to the
      tiebreak ladder, and at the bottom of that ladder is a lot.
      A manufactured tie is not a rounding error. It is a coin flip
-     between candidates who were not actually tied.
+     between products who were not actually tied.
 
 3. The fix: rank them without dividing at all
      1. Bruno  (1000500/3001)

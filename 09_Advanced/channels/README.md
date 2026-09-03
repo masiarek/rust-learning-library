@@ -129,7 +129,7 @@ The question is whether the data has an owner at each moment or is genuinely sha
 
 ## Practice
 
-**A three-stage pipeline, and the drop that ends it.** Read seven ballot lines, two of which are not ballots. Stage one sends the raw lines, stage two parses and forwards the good ones while counting the rejects, and the main thread folds what survives into a total. Each stage should shut down by itself, in order, with nothing co-ordinating it.
+**A three-stage pipeline, and the drop that ends it.** Read seven input lines, two of which do not parse. Stage one sends the raw lines, stage two parses and forwards the good ones while counting the rejects, and the main thread folds what survives into a total. Each stage should shut down by itself, in order, with nothing co-ordinating it.
 
 Then reproduce the classic hang *without hanging*: keep one extra `Sender` clone alive, and use `recv_timeout` to show what a `for x in rx` would be waiting on. Drop the clone and watch the answer change from `Timeout` to `RecvError`, and say why only one of those two is a reason to stop.
 
@@ -148,7 +148,7 @@ use std::sync::mpsc;
 use std::thread;
 use std::time::Duration;
 
-/// Raw ballot lines, two of which are not ballots.
+/// Raw input lines, two of which do not parse.
 const LINES: [&str; 7] = ["5,3,0", "4,4,1", "x,2,2", "0,5,2", "9,1,1", "3,3,3", "2,4,4"];
 
 fn parse(line: &str) -> Option<[u32; 3]> {

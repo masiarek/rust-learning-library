@@ -98,7 +98,7 @@ And if `main` returns while a spawned thread is still running, the process exits
 
 ```text
 1. spawn takes a closure and hands back a handle
-   candidate A total, computed on another thread: 24
+   column A total, computed on another thread: 24
    `spawn` returns a JoinHandle<T>, and `join` is the ONLY way to
    get the T back. It also returns a Result, because the thread may
    have panicked instead of finishing.
@@ -112,7 +112,7 @@ And if `main` returns while a spawned thread is still running, the process exits
    thread, return the value, and print on the joining side.
 
 3. `move` is usually not optional
-   ballots with A >= 4: 4
+   rows with A >= 4: 4
    Without `move`, the closure borrows `threshold` — and the compiler
    refuses, because it cannot prove the borrow outlives the thread:
    E0373, "closure may outlive the current function, but it borrows
@@ -137,7 +137,7 @@ And if `main` returns while a spawned thread is still running, the process exits
 
 ## Practice
 
-**The same fan-out three ways.** Total three candidates' scores over eight ballots, in parallel: sequentially first for an answer to check against, then with `spawn` + `Arc`, then with `thread::scope`. All three should agree.
+**The same fan-out three ways.** Total three columns' scores over eight rows, in parallel: sequentially first for an answer to check against, then with `spawn` + `Arc`, then with `thread::scope`. All three should agree.
 
 Then write the version with neither `move` nor `Arc` and read `E0373` — including the `note:` line, which says what the real constraint is. Say what `move` alone would have done to a second thread wanting the same data, and why the `scope` version needs `move` on its closures anyway even though nothing is moved.
 
@@ -155,8 +155,8 @@ Then write the version with neither `move` nor `Arc` and read `E0373` — includ
 use std::sync::Arc;
 use std::thread;
 
-/// Eight ballots, three candidates. The job: a per-candidate total, in parallel.
-fn ballots() -> Vec<[u32; 3]> {
+/// Eight rows, three columns. The job: a per-column total, in parallel.
+fn rows() -> Vec<[u32; 3]> {
     vec![
         [5, 3, 0], [4, 4, 1], [0, 5, 2], [3, 3, 3],
         [5, 0, 5], [2, 4, 4], [1, 1, 5], [4, 2, 0],
@@ -164,7 +164,7 @@ fn ballots() -> Vec<[u32; 3]> {
 }
 
 fn main() {
-    let rows = ballots();
+    let rows = rows();
 
     println!("1. Sequential, for the answer to check against");
     let expected: Vec<u32> = (0..3).map(|i| rows.iter().map(|b| b[i]).sum()).collect();

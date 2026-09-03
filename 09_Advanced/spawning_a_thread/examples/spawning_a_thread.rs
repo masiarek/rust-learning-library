@@ -4,7 +4,7 @@
 
 use std::thread;
 
-const BALLOTS: [[u32; 3]; 8] = [
+const ROWS: [[u32; 3]; 8] = [
     [5, 3, 0], [4, 4, 1], [0, 5, 2], [3, 3, 3],
     [5, 0, 5], [2, 4, 4], [1, 1, 5], [4, 2, 0],
 ];
@@ -13,10 +13,10 @@ fn main() {
     println!("1. spawn takes a closure and hands back a handle");
     let handle = thread::spawn(|| {
         // Runs on another thread. Whatever it returns comes back through join.
-        BALLOTS.iter().map(|b| b[0]).sum::<u32>()
+        ROWS.iter().map(|b| b[0]).sum::<u32>()
     });
     let total_a = handle.join().unwrap();
-    println!("   candidate A total, computed on another thread: {total_a}");
+    println!("   column A total, computed on another thread: {total_a}");
     println!("   `spawn` returns a JoinHandle<T>, and `join` is the ONLY way to");
     println!("   get the T back. It also returns a Result, because the thread may");
     println!("   have panicked instead of finishing.");
@@ -26,7 +26,7 @@ fn main() {
     let mut handles = Vec::new();
     for (i, name) in ["A", "B", "C"].iter().enumerate() {
         handles.push(thread::spawn(move || {
-            let total: u32 = BALLOTS.iter().map(|b| b[i]).sum();
+            let total: u32 = ROWS.iter().map(|b| b[i]).sum();
             (*name, total)
         }));
     }
@@ -43,8 +43,8 @@ fn main() {
     println!();
     println!("3. `move` is usually not optional");
     let threshold = 4u32;
-    let counted = thread::spawn(move || BALLOTS.iter().filter(|b| b[0] >= threshold).count());
-    println!("   ballots with A >= {threshold}: {}", counted.join().unwrap());
+    let counted = thread::spawn(move || ROWS.iter().filter(|b| b[0] >= threshold).count());
+    println!("   rows with A >= {threshold}: {}", counted.join().unwrap());
     println!("   Without `move`, the closure borrows `threshold` — and the compiler");
     println!("   refuses, because it cannot prove the borrow outlives the thread:");
     println!("   E0373, \"closure may outlive the current function, but it borrows");
@@ -72,7 +72,7 @@ fn main() {
 
     println!();
     println!("5. `scope` borrows what `spawn` cannot");
-    let local: Vec<u32> = BALLOTS.iter().map(|b| b[2]).collect();
+    let local: Vec<u32> = ROWS.iter().map(|b| b[2]).collect();
     let (sum, max) = thread::scope(|s| {
         let a = s.spawn(|| local.iter().sum::<u32>());
         let b = s.spawn(|| local.iter().copied().max().unwrap_or(0));

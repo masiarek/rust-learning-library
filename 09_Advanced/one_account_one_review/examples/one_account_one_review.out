@@ -1,0 +1,22 @@
+Design A — the rule lives in whoever calls `post`:
+  AccountId(1) accepted     (checked endpoint)
+  AccountId(2) accepted     (checked endpoint)
+  AccountId(1) accepted     (resubmit endpoint)
+  AccountId(3) refused      (not signed up)
+  -> 3 reviews in the box from 2 eligible accounts, 19 points post
+  -> design A: MORE REVIEWS THAN ACCOUNTS
+
+Design B — the right to post is a value, and posting spends it:
+  AccountId(1) signed in
+      review accepted, receipt serial 1
+  AccountId(2) signed in
+      review accepted, receipt serial 2
+  AccountId(3) refused at sign-in
+  AccountId(1) refused at sign-in
+  AccountId(1) signed in
+      review accepted, receipt serial 3
+  -> 3 reviews in the box from 2 eligible accounts, 21 points post
+  -> design B: MORE REVIEWS THAN ACCOUNTS
+
+Both boxes hold three reviews. Design A can be fixed at every call
+site that forgot a check; design B has exactly one function to fix.

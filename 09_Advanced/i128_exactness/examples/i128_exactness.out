@@ -18,9 +18,9 @@
        i128::MAX x 2 = None — there is no wider primitive to escape to
 
 3. And exact about nothing at all under /
-     100 ballots, 3 candidates, integer division:
-       each gets 33, and 33 × 3 = 99 — 1 ballot unaccounted for
-     The same statement in i64 loses the same ballot. Widening the type
+     100 raters, 3 products, integer division:
+       each gets 33, and 33 × 3 = 99 — 1 rater unaccounted for
+     The same statement in i64 loses the same rater. Widening the type
      does not close the integers under division; nothing can. That is
      what a rational is for — and what it charges for.
 

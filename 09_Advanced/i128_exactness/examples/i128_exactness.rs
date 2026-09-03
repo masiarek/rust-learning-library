@@ -144,15 +144,15 @@ fn main() {
 
     // ---------------------------------------------------------------- 3
     println!("\n3. And exact about nothing at all under /");
-    let (ballots, seats): (i128, i128) = (100, 3);
-    println!("     100 ballots, 3 candidates, integer division:");
-    let each = ballots / seats;
+    let (raters, shares): (i128, i128) = (100, 3);
+    println!("     100 raters, 3 products, integer division:");
+    let each = raters / shares;
     println!(
-        "       each gets {each}, and {each} × {seats} = {} — {} ballot unaccounted for",
-        each * seats,
-        ballots - each * seats
+        "       each gets {each}, and {each} × {shares} = {} — {} rater unaccounted for",
+        each * shares,
+        raters - each * shares
     );
-    println!("     The same statement in i64 loses the same ballot. Widening the type");
+    println!("     The same statement in i64 loses the same rater. Widening the type");
     println!("     does not close the integers under division; nothing can. That is");
     println!("     what a rational is for — and what it charges for.");
 

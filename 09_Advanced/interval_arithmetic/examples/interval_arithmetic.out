@@ -1,28 +1,28 @@
 
 === the count is the same; only the question changes ===
-  six ballots, weights 5/10 5/9 5/8 5/7 5/6 5/5
+  six reviewers, weights 5/10 5/9 5/8 5/7 5/6 5/5
   a rounded count answers 'who won'. it always answers.
   intervals answer 'is that answer mine, or the rounding's'.
 
-=== election 1 -- the one that is exactly tied ===
+=== dataset 1 -- the one that is exactly tied ===
 
-  Alma vs Bruno (the canonical seat 2)
-    exact: Alma 1205/168  vs  Bruno 1205/168   -> tie
+  Alpha vs Bravo (the canonical round 2)
+    exact: Alpha 1205/168  vs  Bravo 1205/168   -> tie
        scale      rounded count says               intervals say
-          10    Bruno      71-72      [    71,    74] [    70,    74]  undecided
-         100    Bruno     717-718     [   716,   719] [   715,   719]  undecided
-        1000    Bruno    7172-7173    [  7172,  7174] [  7171,  7174]  undecided
-       10000    Bruno   71726-71727   [ 71725, 71727] [ 71724, 71727]  undecided
-      100000    Bruno  717262-717263  [717261,717263] [717260,717263]  undecided
+          10    Bravo      71-72      [    71,    74] [    70,    74]  undecided
+         100    Bravo     717-718     [   716,   719] [   715,   719]  undecided
+        1000    Bravo    7172-7173    [  7172,  7174] [  7171,  7174]  undecided
+       10000    Bravo   71726-71727   [ 71725, 71727] [ 71724, 71727]  undecided
+      100000    Bravo  717262-717263  [717261,717263] [717260,717263]  undecided
 
-    The exact answer is a TIE, so no scale can honestly name a winner.
-    The rounded count names Bruno anyway -- at every scale, and it does
+    The exact answer is a TIE, so no scale can honestly name a leader.
+    The rounded count names Bravo anyway -- at every scale, and it does
     not waver as the scale refines. That is the part worth sitting with:
     this is not noise that averages out, it is the half-up rule leaning
     the same way every time. Refining the scale buys more digits of a
     wrong answer. The intervals overlap at every scale, and so decline.
 
-=== election 2 -- a real margin, and a small one ===
+=== dataset 2 -- a real margin, and a small one ===
 
   Petra vs Quinn (margin 1/504)
     exact: Petra 15/2  vs  Quinn 3779/504   -> Petra
@@ -33,12 +33,12 @@
        10000    Petra   75000-74980   [ 74999, 75001] [ 74979, 74982]  DECIDED: Petra
       100000    Petra  750000-749801  [749999,750001] [749801,749804]  DECIDED: Petra
 
-    Here there IS a winner, and the intervals find it -- but only once
+    Here there IS a leader, and the intervals find it -- but only once
     the scale is fine enough to separate 1/504 from the slack.
 
 === the coarsest scale that PROVES it ===
   intervals first PROVE it at scale : 504
-  below that, the rounded count got the winner wrong at 184
+  below that, the rounded count got the answer wrong at 184
   of the 503 coarser scales -- right most of the time, which is
   exactly what makes it untrustworthy: you cannot tell which run
   you are looking at without the answer you were trying to compute.
@@ -50,9 +50,9 @@
   do not assume the next power of ten will.
 
 === the property that makes it usable: the error is one-sided ===
-  40,000 (election, scale) pairs checked against the exact answer
+  40,000 (dataset, scale) pairs checked against the exact answer
     said DECIDED            : 18290
-    ...and was right        : 18290   <- every time. never a wrong winner.
+    ...and was right        : 18290   <- every time. never a wrong leader.
     said undecided anyway   : 1710   <- exact answer existed; bounds too loose
   SOUND but not COMPLETE: 'decided' is a proof, 'undecided' is an admission
   that this scale cannot tell you -- never a claim that nobody can.

@@ -1,4 +1,4 @@
-Six ballots, one line of output, four ways to build it.
+Six rows, one line of output, four ways to build it.
 Predict the allocation counts before reading them.
 
    via_collect    alloc  8  realloc  0   len 41

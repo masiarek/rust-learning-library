@@ -1,7 +1,7 @@
-Seat 2 of a 5-seat Reweighted Range Voting count, 0-5 ballots.
-Seat 1 went to Wren, so each ballot now weighs 5/(5+its score for Wren).
+Round 2 of a 5-round proportional allocation, 0-5 ratings.
+Round 1 funded Wren, so each reviewer now weighs 5/(5+their rating for Wren).
 
-  ballot   gave Wren   weight   Alma   Bruno
+  reviewer  gave Wren   weight   Alpha   Bravo
      1          5       5/10      0      0
      2          4       5/9       0      3
      3          3       5/8       1      1
@@ -10,29 +10,29 @@ Seat 1 went to Wren, so each ballot now weighs 5/(5+its score for Wren).
      6          0       5/5       5      0
 
 1. f64
-     Alma  7.17261904761904745
-     Bruno 7.17261904761904834
+     Alpha  7.17261904761904745
+     Bravo 7.17261904761904834
      difference 8.881784197001252e-16
-     -> declares Bruno the winner of seat 2
+     -> makes Bravo the larger share in round 2
 
 2. exact rationals
-     Alma  1205/168
-     Bruno 1205/168
-     -> TIE — the tiebreak rung has to run
-     gcd calls: 36  — 3 per ballot-and-candidate, to build the
-                    weight, scale it by the score, and add it in
+     Alpha  1205/168
+     Bravo 1205/168
+     -> a TIE — exactly equal shares
+     gcd calls: 36  — 3 per reviewer-and-project, to build the
+                    weight, scale it by the rating, and add it in
 
 3. scaled integers, everything over l = 2329089562800
-     Alma  16705672161750
-     Bruno 16705672161750
+     Alpha  16705672161750
+     Bravo 16705672161750
      -> TIE — same answer as the rationals
-     gcd calls while counting: 0   (setup, once, before any ballot: 26)
+     gcd calls while totalling: 0   (setup, once, before any rating: 26)
      same value? true
 
-What the scale costs in headroom. The worst a single ballot can
-contribute is 5 x 5 x (l/5), so the ballot capacity is that into the type:
+What the scale costs in headroom. The worst a single reviewer can
+contribute is 5 x 5 x (l/5), so the reviewer capacity is that into the type:
 
-  seats     denoms                  scale l   max ballots i64    in i128
+  rounds     denoms                  scale l   max reviewers i64    in i128
       1      5..10                     2520   732013653718633     1.4e34
       2      5..15                   360360     5118976599431     9.4e31
       3      5..20                232792560        7924112383     1.5e29
@@ -42,7 +42,7 @@ contribute is 5 x 5 x (l/5), so the ballot capacity is that into the type:
       7      5..40         5342931457063200               345     6.4e21
       8      5..45      9419588158802421600                 0     3.6e18
 
-One million ballots at 5 seats, worst case, in i64:
+One million reviewers over 5 rounds, worst case, in i64:
      checked_mul  -> None          (the honest answer)
      wrapping_mul -> -6801296259709551616   (what a release build does if you just write `*`)
      the same product in i128 -> 11645447814000000000

@@ -754,7 +754,7 @@ NAV_ORDER: dict[str, list[str]] = {
         # The single-threaded cousin of a Mutex: same idea, check moved to run
         # time and failure moved from blocking to a panic.
         "interior_mutability",
-        "one_person_one_vote",
+        "one_account_one_review",
         "scaled_integers",
         # The technique first, then what the type it lands on actually guarantees.
         "i128_exactness",
@@ -901,7 +901,7 @@ LABELS = {
     "json_round_trip": "The round trip",
     "http_with_reqwest": "An HTTP request",
     # 09_Advanced
-    "one_person_one_vote": "One person, one vote",
+    "one_account_one_review": "One account, one review",
     # 10_Resources — a topic page on the shelf, named for the shelf so it is not
     # mistaken for the Structs section.
     "structs": "Structs: the shelf",

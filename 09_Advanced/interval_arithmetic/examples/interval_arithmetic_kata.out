@@ -1,6 +1,6 @@
 === the slate, and what is actually true ===
   race     contest             exact A      exact B      margin
-  Ward 1   Alma v Bruno       1205/168     1205/168           0
+  Ward 1   Alpha v Bravo      1205/168     1205/168           0
   Ward 2   Petra v Quinn          15/2     3779/504       1/504
   Ward 3   Rosa v Sami        9511/504      349/126    2705/168
   Ward 4   Tariq v Vera         285/28     5197/504      67/504
@@ -15,7 +15,7 @@
 
 === the fix is a third outcome, not a bigger budget ===
   race     contest              true  audit says               check
-  Ward 1   Alma v Bruno          tie  escalate: hand count     correct to refuse
+  Ward 1   Alpha v Bravo         tie  escalate: hand count     correct to refuse
   Ward 2   Petra v Quinn       Petra  certified Petra at 1/10000 ok
   Ward 3   Rosa v Sami          Rosa  certified Rosa at 1/10   ok
   Ward 4   Tariq v Vera         Vera  certified Vera at 1/100  ok

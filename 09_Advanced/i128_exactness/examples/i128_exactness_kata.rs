@@ -1,7 +1,7 @@
 //! Kata solution — the average that came out as a three-way tie.
 //!
-//! Three candidates, three different average scores, and an `i128` wide enough
-//! to hold every number in the election with room to spare. The averages still
+//! Three products, three different average scores, and an `i128` wide enough
+//! to hold every number in the dataset with room to spare. The averages still
 //! come out equal, because the one operation `i128` is not exact about is the
 //! one the word "average" is made of.
 //!
@@ -9,7 +9,7 @@
 //! help if there were: the problem is division, not range. The fix is to stop
 //! dividing — and then to notice what not-dividing costs.
 
-/// `(name, total score awarded, ballots that scored them)`.
+/// `(name, total score awarded, raters that scored them)`.
 const FIELD: [(&str, i128, i128); 3] = [
     ("Alma", 1_000_000, 3_000),
     ("Bruno", 1_000_500, 3_001),
@@ -41,27 +41,27 @@ fn compare_exact(a: i128, b: i128, c: i128, d: i128) -> Option<std::cmp::Orderin
 fn main() {
     // ------------------------------------------------------------ 1
     println!("1. The average, by division — the mistake worth making first");
-    for (name, total, ballots) in FIELD {
-        println!("     {name:<6} {total:>9} / {ballots:<5} = {}", total / ballots);
+    for (name, total, raters) in FIELD {
+        println!("     {name:<6} {total:>9} / {raters:<5} = {}", total / raters);
     }
-    println!("     Three identical averages, and a three-way tie for the seat.");
+    println!("     Three identical averages, and a three-way tie for the top spot.");
 
     // ------------------------------------------------------------ 2
     println!("\n2. What the truncation actually did");
     println!("     The real averages, to six places, computed only to show them:");
-    for (name, total, ballots) in FIELD {
+    for (name, total, raters) in FIELD {
         println!(
             "       {name:<6} {:.6}",
-            total as f64 / ballots as f64
+            total as f64 / raters as f64
         );
     }
     println!("     They were never equal. Integer division floors, and flooring is");
-    println!("     monotone — so it can never REVERSE two candidates, only collapse");
+    println!("     monotone — so it can never REVERSE two products, only collapse");
     println!("     them onto the same number. That sounds like the harmless failure");
-    println!("     until you remember what a tie does: it hands the seat to the");
+    println!("     until you remember what a tie does: it hands the top spot to the");
     println!("     tiebreak ladder, and at the bottom of that ladder is a lot.");
     println!("     A manufactured tie is not a rounding error. It is a coin flip");
-    println!("     between candidates who were not actually tied.");
+    println!("     between products who were not actually tied.");
 
     // ------------------------------------------------------------ 3
     println!("\n3. The fix: rank them without dividing at all");
@@ -69,8 +69,8 @@ fn main() {
     order.sort_by(|&(_, at, ab), &(_, bt, bb)| {
         compare_exact(bt, bb, at, ab).expect("these products fit easily")
     });
-    for (i, (name, total, ballots)) in order.iter().enumerate() {
-        println!("     {}. {name:<6} ({total}/{ballots})", i + 1);
+    for (i, (name, total, raters)) in order.iter().enumerate() {
+        println!("     {}. {name:<6} ({total}/{raters})", i + 1);
     }
     let (a, at, ab) = FIELD[0];
     let (b, bt, bb) = FIELD[1];

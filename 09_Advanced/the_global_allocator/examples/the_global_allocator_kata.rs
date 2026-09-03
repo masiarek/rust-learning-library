@@ -28,14 +28,14 @@ unsafe impl GlobalAlloc for Counting {
 #[global_allocator]
 static GLOBAL: Counting = Counting;
 
-const BALLOTS: [(&str, u8); 6] = [
+const ROWS: [(&str, u8); 6] = [
     ("Ada", 5), ("Ben", 2), ("Cara", 0),
     ("Dan", 4), ("Eve", 3), ("Fay", 1),
 ];
 
 /// Worst: a String per row, a Vec to hold them, then a seventh buffer to join.
 fn via_collect() -> String {
-    BALLOTS
+    ROWS
         .iter()
         .map(|(name, score)| format!("{name}={score}"))
         .collect::<Vec<String>>()
@@ -45,7 +45,7 @@ fn via_collect() -> String {
 /// Better: one buffer that grows. Every row is a `write!`, no per-row String.
 fn via_push() -> String {
     let mut out = String::new();
-    for (i, (name, score)) in BALLOTS.iter().enumerate() {
+    for (i, (name, score)) in ROWS.iter().enumerate() {
         if i > 0 {
             out.push_str(", ");
         }
@@ -70,7 +70,7 @@ fn via_exact_capacity() -> String {
 }
 
 fn fill(out: &mut String) {
-    for (i, (name, score)) in BALLOTS.iter().enumerate() {
+    for (i, (name, score)) in ROWS.iter().enumerate() {
         if i > 0 {
             out.push_str(", ");
         }
@@ -86,7 +86,7 @@ fn measure(label: &str, work: impl FnOnce() -> String) {
 }
 
 fn main() {
-    println!("Six ballots, one line of output, four ways to build it.");
+    println!("Six rows, one line of output, four ways to build it.");
     println!("Predict the allocation counts before reading them.");
     println!();
     measure("via_collect", via_collect);

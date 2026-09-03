@@ -1,0 +1,12 @@
+Roll opens with 2 unspent entitlements.
+
+  AccountId(1) signed in
+      review accepted, receipt serial 1
+  AccountId(1) refused  (entitlement already spent)
+  AccountId(2) signed in
+      token dropped without posting
+  AccountId(2) refused  (entitlement already spent)
+
+  -> reviews in the box: 1 (2 eligible accounts, 7 points post)
+  -> entitlements left on the roll: 0
+  -> nobody posted twice, and Ben did not post at all

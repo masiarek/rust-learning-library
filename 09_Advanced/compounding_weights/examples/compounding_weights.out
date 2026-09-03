@@ -1,47 +1,47 @@
 1. Where the denominator comes from
-   Twelve ballots, two seats, so the Hare quota is 12/2 = 6 ballots.
-   Allison wins seat 1 with 8 supporters at the top score — 8 units of
+   Twelve rows, two rounds, so the quota is 12/2 = 6 rows.
+   Alpha wins round 1 with 8 backers at the top rating — 8 units of
    weight to spend a 6-unit quota, so each keeps 1 - 6/8:
 
-     seat 1 -> candidate 0   widest weight 1/4   (3 bits)
+     round 1 -> project 0   widest weight 1/4   (3 bits)
 
-   winners: Allison, Doug
+   picked: Alpha, Delta
 
    The 4 in that 1/4 was not chosen from any fixed set. It is the total
-   weight of whoever happened to tie at the top score — so seat 3's
-   denominators would be built from seat 2's weights, and so on down.
+   weight of whoever happened to tie at the top rating — so round 3's
+   denominators would be built from round 2's weights, and so on down.
    There is no set of denominators to take an lcm over.
 
-2. Eight electorates of exactly the same size
-   900 ballots, 18 candidates, 12 seats. Only the votes differ.
+2. Eight datasets of exactly the same size
+   900 rows, 18 projects, 12 rounds. Only the votes differ.
 
      widest denominator, in bits: [31, 31, 32, 33, 39, 33, 35, 27]
      min 27, max 39, spread 12 bits
-   Same ballot count, same seats, same candidates. The arithmetic the
+   Same row count, same rounds, same projects. The arithmetic the
    count needs is decided by how people voted, and by nothing you know
    before they vote.
 
-3. The same election, counted two ways
-   2000 ballots, 30 candidates, 20 seats. Both additions are exact;
+3. The same dataset, counted two ways
+   2000 rows, 30 projects, 20 rounds. Both additions are exact;
    they differ only in how big a number they build on the way.
 
-     a/b + c/d = (ad+cb)/bd  -> OVERFLOWED at seat 16 (widest so far 44 bits)
-     both over lcm(b, d)     -> all 20 seats, widest denominator 68 bits
+     a/b + c/d = (ad+cb)/bd  -> OVERFLOWED at round 16 (widest so far 44 bits)
+     both over lcm(b, d)     -> all 20 rounds, widest denominator 68 bits
 
-   Read those two lines together. One counted the whole election; the
-   other gave up four seats short. And the widest number the finishing
+   Read those two lines together. One counted the whole dataset; the
+   other gave up four rounds short. And the widest number the finishing
    count ever had to REPRESENT was 68 bits — barely half of i128's 127.
    The failing count did not run out of room for its answers. It ran
    out building `(ad+cb)/bd`, a product of two denominators that it was
    about to reduce away again.
 
 4. Far enough out, the answer itself stops fitting
-   2500 ballots, 35 candidates, 28 seats:
+   2500 rows, 35 projects, 28 rounds:
 
-     cross-multiply  -> OVERFLOWED at seat 16 (widest so far 33 bits)
-     lcm             -> OVERFLOWED at seat 27 (widest so far 73 bits)
+     cross-multiply  -> OVERFLOWED at round 16 (widest so far 33 bits)
+     lcm             -> OVERFLOWED at round 27 (widest so far 73 bits)
 
-   The better addition bought eleven seats, not safety. No fixed width
+   The better addition bought eleven rounds, not safety. No fixed width
    covers an unbounded quantity, and the width this count needs is not
-   knowable until it has read the ballots — which is why it returns an
+   knowable until it has read the rows — which is why it returns an
    Outcome rather than a number.

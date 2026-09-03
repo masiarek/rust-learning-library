@@ -1,8 +1,8 @@
-700 ballots, 16 candidates, 10 seats — 6 electorates
+700 rows, 16 projects, 10 rounds — 6 datasets
 
      exact count finished on 6 of 6, ran out of i128 on 0
 
-     scale   reproduces the exact winner list
+     scale   reproduces the exact pick list
      10^18   6 of 6
      10^12   6 of 6
      10^9    6 of 6
@@ -10,12 +10,12 @@
      10^4    6 of 6
      10^2    4 of 6   <-- diverges
 
-2000 ballots, 30 candidates, 20 seats — 6 electorates
+2000 rows, 30 projects, 20 rounds — 6 datasets
 
      exact count finished on 5 of 6, ran out of i128 on 1
      (the fixed-point count returned a committee on all 6)
 
-     scale   reproduces the exact winner list
+     scale   reproduces the exact pick list
      10^18   5 of 5
      10^12   5 of 5
      10^9    5 of 5
@@ -27,8 +27,8 @@ Four decimal places reproduce every exact answer anyone could check.
 Two do not. The exact count that ran out of i128 was working to 68-odd
 bits of denominator to reach a result that 10^4 also reaches.
 
-What that establishes: on these electorates, at these sizes, the
+What that establishes: on these datasets, at these sizes, the
 approximation and the exact answer agree. What it does not establish:
-anything at all about an election with a tied round, which is exactly
+anything at all about an dataset with a tied round, which is exactly
 where a truncated weight and an exact one part company, and exactly the
 case the companion lesson opened with.

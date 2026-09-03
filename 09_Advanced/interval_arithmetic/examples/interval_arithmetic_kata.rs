@@ -74,7 +74,7 @@ fn exact(scores: &[i128], weights: &[Ratio]) -> Ratio {
 /// the whole fix, and the reason the naive loop cannot be repaired by looping harder.
 #[derive(Debug, PartialEq)]
 enum Audit {
-    Certified(&'static str, i128), // winner, and the scale that proved it
+    Certified(&'static str, i128), // leader, and the scale that proved it
     HandCount,                     // no scale in budget separated them
 }
 
@@ -100,7 +100,7 @@ fn audit(r: &Race, weights: &[Ratio]) -> Audit {
     Audit::HandCount
 }
 
-fn exact_winner(r: &Race, weights: &[Ratio]) -> &'static str {
+fn exact_leader(r: &Race, weights: &[Ratio]) -> &'static str {
     match exact(r.a.1, weights).cmp(exact(r.b.1, weights)) {
         Ordering::Greater => r.a.0,
         Ordering::Less => r.b.0,
@@ -112,7 +112,7 @@ fn main() {
     let weights: Vec<Ratio> = [5, 4, 3, 2, 1, 0].iter().map(|&s| Ratio::new(5, 5 + s)).collect();
 
     let races = [
-        Race { name: "Ward 1", a: ("Alma", &[0, 0, 1, 1, 1, 5]), b: ("Bruno", &[0, 3, 1, 1, 5, 0]) },
+        Race { name: "Ward 1", a: ("Alpha", &[0, 0, 1, 1, 1, 5]), b: ("Bravo", &[0, 3, 1, 1, 5, 0]) },
         Race { name: "Ward 2", a: ("Petra", &[1, 3, 4, 0, 1, 2]), b: ("Quinn", &[0, 2, 1, 2, 4, 1]) },
         Race { name: "Ward 3", a: ("Rosa", &[5, 4, 5, 4, 5, 4]), b: ("Sami", &[1, 1, 0, 1, 0, 1]) },
         Race { name: "Ward 4", a: ("Tariq", &[3, 3, 2, 2, 4, 1]), b: ("Vera", &[2, 4, 3, 1, 3, 2]) },
@@ -153,7 +153,7 @@ fn main() {
     let mut wrong = 0;
     let mut escalated = 0;
     for r in &races {
-        let truth = exact_winner(r, &weights);
+        let truth = exact_leader(r, &weights);
         let result = audit(r, &weights);
         let shown = match result {
             Audit::Certified(w, s) => format!("certified {w} at 1/{s}"),

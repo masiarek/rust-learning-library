@@ -136,7 +136,7 @@ impl Paper<Marked> {
 
 `Paper<Blank>` has no `cast` — an unmarked paper cannot reach the ballot box, and the refusal is `E0599`, "no method named `cast` found for struct `Paper<Blank>`". `mark` takes `self` rather than `&mut self`, so the blank paper is moved-from and reusing it is `E0382`. The illegal orderings are not checked; they are unwriteable.
 
-[The right to vote is a value](../../09_Advanced/one_person_one_vote/README.md) builds the same thing out of *distinct* types — `Voter`, `Eligible`, `Receipt` — with no generics at all. The choice between the two is whether the states share behaviour: distinct types duplicate every common method, and `impl<State> Paper<State>` writes it once. That page's closing warning applies here unchanged, and is the honest limit of both: move semantics govern one value, not how many values a constructor hands out.
+[The right to post is a value](../../09_Advanced/one_account_one_review/README.md) builds the same thing out of *distinct* types — `Account`, `Eligible`, `Receipt` — with no generics at all. The choice between the two is whether the states share behaviour: distinct types duplicate every common method, and `impl<State> Paper<State>` writes it once. That page's closing warning applies here unchanged, and is the honest limit of both: move semantics govern one value, not how many values a constructor hands out.
 
 ## What it costs
 
@@ -197,7 +197,7 @@ The rule of thumb: reach for a phantom type when mixing the two kinds is a *bug*
 - [Marker traits](../marker_traits/README.md) — the other half of `std::marker`: a trait with no methods rather than a parameter with no data
 - [What a type annotation does](../../15_First_Programs/what_an_annotation_does/README.md) — the annotation and the turbofish `E0282` sends you to write
 - [A score is not a number](../../16_Structs/newtype_score/README.md) — the same instinct without generics: one type, one door, no tag
-- [The right to vote is a value](../../09_Advanced/one_person_one_vote/README.md) — typestate built from distinct types and move semantics, and the hole neither approach closes
+- [The right to post is a value](../../09_Advanced/one_account_one_review/README.md) — typestate built from distinct types and move semantics, and the hole neither approach closes
 - [Static vs dynamic dispatch](../static_vs_dynamic_dispatch/README.md) — where to go when the tag has to be a run-time choice after all
 - [Reference counting](../../18_Ownership/reference_counting/README.md) — the same silence with the opposite obligation: an `Rc`'s `.clone()` never says which of two jobs it is doing and nothing makes you say, while a phantom parameter cannot be inferred at all, so `E0282` makes you name it at every construction
 

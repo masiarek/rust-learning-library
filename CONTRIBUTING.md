@@ -106,7 +106,7 @@ grep -rh '^[[:space:]]*///' "$(rustc --print sysroot)"/lib/rustlib/src/rust/libr
 
 **What this replaced, since it is still visible in places:** ballots, candidates, runoffs and elections, inherited from this library's sibling [star-voting-library ↗](https://github.com/masiarek/star-voting-library) and carried by 151 of 1,294 examples and 125 of 496 pages when the rule was written (2026-08-31). Two costs, and the second is the one that matters. It reads as an in-joke to everyone outside the two repos — and it charges a voting-method lesson before the Rust one: [Six kinds of zero](17_Option_and_Result/six_kinds_of_zero/README.md) opened by separating *a ballot that scored a candidate 0* from *one that left them blank*, a real and genuinely interesting distinction about **STAR voting**, on a page whose subject is `Option<u8>`. A reader who does not already know that scoring zero and abstaining are different acts has to be taught it before the Rust lands, and it is the second thing they learn about `Option`.
 
-A domain earns its place only when the *Rust* problem is domain-shaped — money is why fixed-point integers exist, so [Scale the denominator away](09_Advanced/scaled_integers/README.md) is about prices. That is rare, and it is never the default.
+A domain earns its place only when the *Rust* problem is domain-shaped. [Scale the denominator away](09_Advanced/scaled_integers/README.md) is the clearest case in the library: its subject is exact arithmetic over a **bounded set of denominators**, which is not a property of a metaphor but of a specific reweighting rule, so the page keeps that rule and drops everything around it. That is rare, and it is never the default.
 
 ## Writing the prose
 

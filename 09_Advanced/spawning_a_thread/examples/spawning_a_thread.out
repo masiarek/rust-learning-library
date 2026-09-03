@@ -1,5 +1,5 @@
 1. spawn takes a closure and hands back a handle
-   candidate A total, computed on another thread: 24
+   column A total, computed on another thread: 24
    `spawn` returns a JoinHandle<T>, and `join` is the ONLY way to
    get the T back. It also returns a Result, because the thread may
    have panicked instead of finishing.
@@ -13,7 +13,7 @@
    thread, return the value, and print on the joining side.
 
 3. `move` is usually not optional
-   ballots with A >= 4: 4
+   rows with A >= 4: 4
    Without `move`, the closure borrows `threshold` — and the compiler
    refuses, because it cannot prove the borrow outlives the thread:
    E0373, "closure may outlive the current function, but it borrows
