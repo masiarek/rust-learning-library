@@ -409,7 +409,7 @@ The ninth candidate is the point. A debug build panics with `attempt to shift le
 
 ## See also
 
-- [What is a ballot, in memory?](../../16_Structs/representing_a_ballot/README.md) — the layer above: once you have the bytes, which container to put them in
+- [What is a record, in memory?](../../16_Structs/representing_a_record/README.md) — the layer above: once you have the bytes, which container to put them in
 - [A score is not a number](../../16_Structs/newtype_score/README.md) — the other half of "pick a type that states the range", at the domain level rather than the machine level
 - [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md) — what actually happens when the overflow check fires
 - [Running a scratch program](../../15_First_Programs/rustc_without_cargo/README.md) — the debug/release split this page leans on, in the build command itself

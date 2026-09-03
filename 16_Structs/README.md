@@ -15,7 +15,7 @@ The other half of the section is what the compiler does *with* your struct: whic
 | [`Copy` vs `Clone`](copy_vs_clone/README.md) | 101 → 201 | `Clone` is a method you call; `Copy` changes what `=` *means* — and a struct is never `Copy` by accident: every field must be, and you must opt in. Three refusals, three error codes |
 | [When a struct refuses](when_a_struct_refuses/README.md) | 101 → 201 | Eight struct errors and the fix each is asking for — and why `E0277` is never the diagnosis, since one code covers a missing `Display`, a missing `Debug`, an unsized field and an `Eq` without its `PartialEq` |
 | [A score is not a number](newtype_score/README.md) | 101 → 201 | The newtype: one private field, one validating door, and why privacy is per *module* |
-| [What is a ballot, in memory?](representing_a_ballot/README.md) | 201 | Array vs `Vec` vs tuple vs struct vs map vs flat matrix — and which bugs each one makes writeable |
+| [What is a record, in memory?](representing_a_record/README.md) | 201 | Array vs `Vec` vs tuple vs struct vs map vs flat matrix — and which bugs each one makes writeable |
 
 ## Struct pages that live elsewhere
 

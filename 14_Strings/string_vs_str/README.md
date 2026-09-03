@@ -71,7 +71,7 @@ So the API rule almost every Rust codebase follows: **parameters take `&str`, be
 | a return of freshly built text | `String` | someone must own the new bytes, and it is not the callee |
 | a constant | `&'static str` | the binary already owns the bytes |
 
-The field row is why `String` fills beginner code where `&str` looks tidier — and it is the right call: own by default, borrow when a signature lets you. [What is a ballot, in memory?](../../16_Structs/representing_a_ballot/README.md) makes that choice inside a real struct.
+The field row is why `String` fills beginner code where `&str` looks tidier — and it is the right call: own by default, borrow when a signature lets you. [What is a record, in memory?](../../16_Structs/representing_a_record/README.md) makes that choice inside a real struct.
 
 ## `String` moves, `&str` copies
 

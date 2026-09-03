@@ -112,6 +112,12 @@ plugins:
         23_Functional/iter_iter_mut_into_iter/README.md: 24_Iterators/iter_iter_mut_into_iter/README.md
         23_Functional/implementing_iterator/README.md: 24_Iterators/implementing_iterator/README.md
 
+        # 2026-09-02: the struct-design lesson was written around a ballot, back
+        # when this library borrowed its examples from its voting sibling. The
+        # Rust content never depended on that, so it became a survey record and
+        # the folder had to follow the title.
+        16_Structs/representing_a_ballot/README.md: 16_Structs/representing_a_record/README.md
+
 markdown_extensions:
   - admonition
   - attr_list

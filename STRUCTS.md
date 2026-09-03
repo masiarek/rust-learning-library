@@ -148,7 +148,7 @@ flowchart LR
 | [`Copy` vs `Clone`](16_Structs/copy_vs_clone/README.md) | 101 → 201 | Why a struct is never `Copy` by accident, and the three refusals — `E0277`, `E0204`, `E0184` |
 | [Struct update syntax](16_Structs/struct_update/README.md) | 101 → 201 | `..base` moves field by field, so the base ends up *partially* dead — and `Copy` decides which half |
 | [`Some` is a constructor, not a flag](17_Option_and_Result/some_is_a_constructor/README.md) | 101 → 201 | `Some(None)` in a field, and the doubly-optional type that makes it legal |
-| [What is a ballot, in memory?](16_Structs/representing_a_ballot/README.md) | 201 | Designing a real struct: the layout choices, and the parallel `Vec`s that desync |
+| [What is a record, in memory?](16_Structs/representing_a_record/README.md) | 201 | Designing a real struct: the layout choices, and the parallel `Vec`s that desync |
 | [Six kinds of zero](17_Option_and_Result/six_kinds_of_zero/README.md) | 201 | When a field's zero is a value and when it is a hole |
 | [Bit flags](19_Numbers/bit_flags/README.md) | 201 | Packing several fields into one integer, and when that is worth doing |
 | [The `Result` you are reading is probably an alias](17_Option_and_Result/result_aliases/README.md) | 201 | The *other* way to name a type — and why an alias gives no safety at all |

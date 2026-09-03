@@ -370,7 +370,7 @@ fn main() {
 
 - [Meet the byte](../meet_the_byte/README.md) — why eight bits is the unit in the first place; this page is about how to write one down
 - [What a float actually stores](../what_a_float_stores/README.md) — the other way a number stops being what you typed, and `{:x}` on an `f64`'s bits is how you look at it
-- [What is a ballot, in memory?](../../16_Structs/representing_a_ballot/README.md) — the layer above, where those bytes become a container you chose
+- [What is a record, in memory?](../../16_Structs/representing_a_record/README.md) — the layer above, where those bytes become a container you chose
 - [Six kinds of zero](../../17_Option_and_Result/six_kinds_of_zero/README.md) — the sentinel argument, which is the same mistake as an unpadded fingerprint: meaning the type cannot see
 - Julia Evans, *How Integers and Floats Work* ([wizardzines.com ↗](https://wizardzines.com/)) — the zine this lesson thread follows, and the source of the bits-in-a-row framing at the top of this page
 

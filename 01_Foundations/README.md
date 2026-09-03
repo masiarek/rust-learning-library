@@ -20,7 +20,7 @@ Four of those topics are big enough to have a reading map of their own, which cr
 
 Two sections sit alongside these rather than after them, because between them they are what the rest of the language is made of: [Enums](../13_Enums/README.md) and [Traits](../12_Traits/README.md).
 
-There is also a slow, optional thread running through several of the pages above — [the long way round to a STAR count](../ROADMAP.md), which sequences a handful of lessons so each one is the next thing Rust wants to teach. `newtype_score`, `representing_a_ballot` and `six_kinds_of_zero` are its first rungs. They stand alone as Rust lessons; the election is the excuse.
+There is also a slow, optional thread running through several of the pages above — [the long way round to a STAR count](../ROADMAP.md), which sequences a handful of lessons so each one is the next thing Rust wants to teach. `newtype_score`, `representing_a_record` and `six_kinds_of_zero` are its first rungs. They stand alone as Rust lessons; the election is the excuse.
 
 ## The eight jobs `Option` does
 

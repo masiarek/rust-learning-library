@@ -50,7 +50,7 @@ Chapter **names** are given as well as numbers on purpose: the numbering changed
 | `04_primitive_types` | ch3.2 Data Types · ch4.3 The Slice Type | [Six kinds of zero](../../17_Option_and_Result/six_kinds_of_zero/README.md) · [What a float stores](../../19_Numbers/what_a_float_stores/README.md) |
 | `05_vecs` | ch8.1 Vectors | [`Option` is a one-item collection](../../17_Option_and_Result/option_as_collection/README.md) |
 | `06_move_semantics` | ch4.1 What Is Ownership? · ch4.2 References and Borrowing | [Ownership and moves](../../18_Ownership/ownership_and_moves/README.md) · [Borrowing](../../18_Ownership/borrowing/README.md) |
-| `07_structs` | ch5.1 Defining Structs · ch5.3 Methods | [Representing a ballot](../../16_Structs/representing_a_ballot/README.md) · [The newtype](../../16_Structs/newtype_score/README.md) |
+| `07_structs` | ch5.1 Defining Structs · ch5.3 Methods | [Representing a record](../../16_Structs/representing_a_record/README.md) · [The newtype](../../16_Structs/newtype_score/README.md) |
 | `08_enums` | ch6 Enums and Pattern Matching · ch19 Patterns and Matching | [`if let`](../../17_Option_and_Result/if_let/README.md) · [`while let`](../../17_Option_and_Result/while_let/README.md) |
 | `09_strings` | ch8.2 Strings | [Meet the byte](../../19_Numbers/meet_the_byte/README.md) |
 | `10_modules` | ch7 Packages, Crates, and Modules | [Scope is about names](../../18_Ownership/scope_is_about_names/README.md) |

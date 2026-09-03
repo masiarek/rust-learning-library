@@ -22,7 +22,7 @@ The wrapper is easy to build and easy to overbuild. Every method you forward (`l
 
 - [A score is not a number](../../16_Structs/newtype_score/README.md) — the same move on a single value: one private field, one validating door
 - [`Path` and `PathBuf`](../../04_Files/path_and_pathbuf/README.md) — the owned/borrowed pair this struct has to choose between
-- [What is a ballot, in memory?](../../16_Structs/representing_a_ballot/README.md) — choosing the shape of the data, and which bugs each shape makes writeable
+- [What is a record, in memory?](../../16_Structs/representing_a_record/README.md) — choosing the shape of the data, and which bugs each shape makes writeable
 
 ## Po polsku
 

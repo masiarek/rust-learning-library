@@ -51,7 +51,7 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K31 | [A list that ends — `Option<Box<Node>>`, and the `size_of` proof that it costs nothing](17_Option_and_Result/nullable_pointers/README.md#practice) | [Nullable pointers](17_Option_and_Result/nullable_pointers/README.md) | 201 |
 | K32 | [One optional argument, four ways — and the signature that rejects half your callers](17_Option_and_Result/optional_arguments/README.md#practice) | [Optional function arguments](17_Option_and_Result/optional_arguments/README.md) | 201 |
 | K33 | [Make the invalid score unbuildable — then find the door your own module still leaves open](16_Structs/newtype_score/README.md#practice) | [A score is not a number](16_Structs/newtype_score/README.md) | 101 → 201 |
-| K34 | [The line you forgot — desync two parallel `Vec`s and get a plausible wrong answer](16_Structs/representing_a_ballot/README.md#practice) | [What is a ballot, in memory?](16_Structs/representing_a_ballot/README.md) | 201 |
+| K34 | [The line you forgot — desync two parallel `Vec`s and get a plausible wrong answer](16_Structs/representing_a_record/README.md#practice) | [What is a record, in memory?](16_Structs/representing_a_record/README.md) | 201 |
 | K35 | [Expand the alias — follow a one-parameter `Result` back to the list of things that can go wrong](17_Option_and_Result/result_aliases/README.md#practice) | [The `Result` you are reading is probably an alias](17_Option_and_Result/result_aliases/README.md) | 201 |
 | K36 | [Guard the input that has no answer — find the case the careful-looking guard lets through](17_Option_and_Result/wrong_guard/README.md#practice) | [Zero wins is not zero games](17_Option_and_Result/wrong_guard/README.md) | 201 |
 | K37 | [The `Result` the lock hands you — a thread dies mid-update, and you answer it three ways](09_Advanced/mutex_poisoning/README.md#practice) | [Lock poisoning](09_Advanced/mutex_poisoning/README.md) | 301 |
@@ -227,7 +227,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 **[Structs](16_Structs/README.md)** — 8 katas
 
 - K33 · [Make the invalid score unbuildable](16_Structs/newtype_score/README.md#practice)
-- K34 · [The line you forgot](16_Structs/representing_a_ballot/README.md#practice)
+- K34 · [The line you forgot](16_Structs/representing_a_record/README.md#practice)
 - K57 · [Three flavors, and the two things the compiler keeps apart](16_Structs/what_a_struct_is/README.md#practice)
 - K58 · [Pick the right receiver four times](16_Structs/impl_blocks/README.md#practice)
 - K59 · [Predict which half of the base survives a `..base`](16_Structs/struct_update/README.md#practice)

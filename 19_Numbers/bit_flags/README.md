@@ -369,7 +369,7 @@ The counter is Trap 2 arriving on your own data structure. `X` is the bottom fie
 - [Meet the byte](../meet_the_byte/README.md) — the rung below, and where the "you cannot fetch one bit" limitation this page routes around is established; its kata is the one-bit-per-candidate version of the packing here
 - [Why hexadecimal](../why_hexadecimal/README.md) — why every mask on this page is written `0x1FF` and not `511`
 - [A score is not a number](../../16_Structs/newtype_score/README.md) — the newtype pattern `Mode` uses, at the domain level rather than the bit level
-- [What is a ballot, in memory?](../../16_Structs/representing_a_ballot/README.md) — the other direction: when *not* to pack, and which bugs each layout makes writeable
+- [What is a record, in memory?](../../16_Structs/representing_a_record/README.md) — the other direction: when *not* to pack, and which bugs each layout makes writeable
 - Julia Evans, *How Integers and Floats Work* ([wizardzines.com ↗](https://wizardzines.com/)) — pages 15 and 16 are the source of the TCP word and the tic-tac-toe encoding
 
 ## Po polsku

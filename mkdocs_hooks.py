@@ -372,7 +372,7 @@ NAV_ORDER: dict[str, list[str]] = {
         # eight of them, and the fix each is asking for.
         "when_a_struct_refuses",
         "newtype_score",
-        "representing_a_ballot",
+        "representing_a_record",
     ],
     "17_Option_and_Result": [
         "README.md",
@@ -936,7 +936,7 @@ LABELS = {
     "struct_update": "Struct update syntax",
     "copy_vs_clone": "`Copy` vs `Clone`",
     "newtype_score": "A score is not a number",
-    "representing_a_ballot": "What is a ballot, in memory?",
+    "representing_a_record": "What is a record, in memory?",
     # 17_Option_and_Result — these are method names, so they are code.
     "some_and_none": "`Some` and `None`",
     "some_is_a_constructor": "`Some` is a constructor",

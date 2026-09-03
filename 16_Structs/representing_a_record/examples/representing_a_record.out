@@ -1,0 +1,78 @@
+
+──── Step 1: One record, six shapes
+  [u8; 3]                 [5, 3, 0]
+  Vec<u8>                 [5, 3, 0]
+  Row(Stars, Stars, ..)   Row(Five, Three, Zero)
+  NamedRow { .. }         speed=Five price=Three
+  BTreeMap<&str, Stars>   {"price": Three, "speed": Five, "support": Zero}
+  Vec<(&str, Stars)>      [("speed", Five), ("price", Three)]  <- sparse: support simply absent
+    (Row is positional too: .0 = 5, .1 = 3, .2 = 0)
+    (every shape above still goes through one door: Stars::new(4) -> Some(Four), Stars::new(6) -> None)
+
+  What each one costs (size_of, the handle only):
+    [u8; 3]                      3 bytes  (all of it, no heap)
+    [Stars; 3]                   3 bytes
+    Row                          3 bytes
+    NamedRow                     3 bytes
+    Vec<u8>                     24 bytes  + heap for the data
+    BTreeMap<&str, Stars>       24 bytes  + heap, + the keys
+      A fixed array IS the data. A Vec is a 24-byte handle (pointer,
+      length, capacity) pointing at data somewhere else — which is
+      the price of not knowing the column count until runtime.
+
+──── Step 2: The bug positional storage cannot see
+  same numbers, header speed,price,support -> [("speed", 9), ("price", 13), ("support", 5)]
+                        top             -> price (13 points)
+  same numbers, header price,speed,support -> [("price", 9), ("speed", 13), ("support", 5)]
+                        top             -> speed (13 points)
+      Nothing failed. No parse error, no panic, no warning — just a
+      different answer, because a column's meaning lives outside the
+      data, in a header the type system never saw.
+  NamedRow: speed=5 price=3 support=0
+      Here the same mistake is unwriteable: you ask for `.speed`, not
+      for column 0. The cost is that the questions are baked into
+      the type at compile time — fine for a lesson, useless for a
+      form you load from a file. That tension is the real lesson.
+
+──── Step 3: Blank is not zero
+  scored 0   [Some(Five), Some(Three), Some(Zero)] -> total 8, 3 of 3 questions answered
+  left blank [Some(Five), Some(Three), None] -> total 8, 2 of 3 questions answered
+      Both total 8: a blank sums as zero. But they are different
+      answers, and only the Option remembers which one happened.
+  size_of::<Stars>()         = 1
+  size_of::<Option<Stars>>() = 1  <- remembering costs nothing
+
+──── Step 4: Order-free lookup, and the determinism trap
+  inserted support, speed, price — iterating a BTreeMap gives:
+    price    3
+    speed    5
+    support  0
+  record.get("price")  -> Some(3)
+  record.get("colour") -> None
+      A map drops the column problem entirely: the key IS the meaning.
+      This program deliberately does NOT print a HashMap's iteration
+      order, because it is randomised per run — the answer key could
+      not be recorded. A report that breaks ties by scanning a map
+      would inherit exactly that irreproducibility.
+
+──── Step 5: One allocation for the whole survey
+  cells (row-major, 3 responses x 3 questions): [5, 3, 0, 4, 5, 1, 0, 5, 4]
+  rating(response 2, question 1) = 5
+    speed    9
+    price    13
+    support  5
+      One Vec for the whole survey instead of one per response: the
+      shape a real data frame uses. It trades the misalignment bug for
+      an index-arithmetic bug — `row * n + col`, written once, in one
+      method, which is the only reason the trade is worth making.
+
+──── Step 6: Identical responses, compressed
+  75 responses stored as 3 rows
+    speed    231
+    price    298
+    support  265
+      A weighted row is a COMPRESSION, not a different survey: the
+      count multiplies, it does not join the ratings. Storing 42 as a
+      fourth number in the same array would be the same category
+      error as the header in Step 2 — a value whose meaning depends
+      on which column it landed in.

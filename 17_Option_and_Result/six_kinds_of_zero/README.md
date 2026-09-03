@@ -21,7 +21,7 @@ Six different things happened. The arithmetic cannot tell them apart, and it doe
 
 ## Where `Option` runs out
 
-[Blank is not zero](../../16_Structs/representing_a_ballot/README.md#blank-is-not-zero) already made half this argument: `Vec<Option<Stars>>` remembers that a box was never marked, where `Vec<Stars>` cannot. That is the right type when there are exactly **two** cases.
+[Blank is not zero](../../16_Structs/representing_a_record/README.md#blank-is-not-zero) already made half this argument: `Vec<Option<Stars>>` remembers that a box was never marked, where `Vec<Stars>` cannot. That is the right type when there are exactly **two** cases.
 
 Here there are six, and `Option` has one shape for five of them:
 
@@ -347,7 +347,7 @@ rustc --edition 2024 17_Option_and_Result/six_kinds_of_zero/examples/six_kinds_o
 
 ## See also
 
-- [What is a ballot, in memory?](../../16_Structs/representing_a_ballot/README.md) — the rung below; where "blank is not zero" stops at two cases
+- [What is a record, in memory?](../../16_Structs/representing_a_record/README.md) — the rung below; where "blank is not zero" stops at two cases
 - [A score is not a number](../../16_Structs/newtype_score/README.md) — the `Stars` enum this page wraps, and why it is an enum
 - [`Option` as a collection](../option_as_collection/README.md) — the niche optimization that makes `Option<Mark>` free
 
