@@ -1,46 +1,46 @@
 //! Kata solution: `_ =>` is a hole you punch in your own safety net.
 //!
-//! The election office adds a sixth mark — '%', spoiled and reissued. Two audit
+//! The survey team adds a sixth mark — '%', unreadable and corrected. Two audit
 //! functions were written before it existed. Only one of them tells you.
 //!
 //!   rustc --edition 2024 six_kinds_of_zero_kata.rs -o /tmp/skzk && /tmp/skzk
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Mark {
-    Scored(u8),
+    Rated(u8),
     Blank,
-    RaceAbstention,
-    CandidateAbstention,
-    Spoiled,
-    SpoiledReissued, // <- added today
+    SectionSkipped,
+    Declined,
+    Unreadable,
+    Corrected, // <- added today
 }
 
 /// Written when there were five marks. The `_` arm looked harmless: every
 /// remaining case really was a blank at the time.
 fn bucket_lazy(m: Mark) -> &'static str {
     match m {
-        Mark::Scored(_) => "scored",
-        Mark::RaceAbstention => "abstention",
-        Mark::CandidateAbstention => "abstention",
-        Mark::Spoiled => "spoiled",
+        Mark::Rated(_) => "rated",
+        Mark::SectionSkipped => "skipped",
+        Mark::Declined => "declined",
+        Mark::Unreadable => "unreadable",
         _ => "blank",
     }
 }
 
 /// Written the same day, without the `_`. It did not compile this morning
-/// until somebody chose an arm for the new mark — and chose "spoiled".
+/// until somebody chose an arm for the new mark — and chose "unreadable".
 fn bucket_strict(m: Mark) -> &'static str {
     match m {
-        Mark::Scored(_) => "scored",
+        Mark::Rated(_) => "rated",
         Mark::Blank => "blank",
-        Mark::RaceAbstention => "abstention",
-        Mark::CandidateAbstention => "abstention",
-        Mark::Spoiled => "spoiled",
-        Mark::SpoiledReissued => "spoiled",
+        Mark::SectionSkipped => "skipped",
+        Mark::Declined => "declined",
+        Mark::Unreadable => "unreadable",
+        Mark::Corrected => "unreadable",
     }
 }
 
-fn tally<'a>(marks: &[Mark], bucket: fn(Mark) -> &'a str) -> Vec<(&'a str, usize)> {
+fn count<'a>(marks: &[Mark], bucket: fn(Mark) -> &'a str) -> Vec<(&'a str, usize)> {
     let mut out: Vec<(&str, usize)> = Vec::new();
     for m in marks {
         let b = bucket(*m);
@@ -54,39 +54,42 @@ fn tally<'a>(marks: &[Mark], bucket: fn(Mark) -> &'a str) -> Vec<(&'a str, usize
 }
 
 fn main() {
-    let ballots = [
-        Mark::Scored(5),
-        Mark::Scored(3),
+    let cells = [
+        Mark::Rated(5),
+        Mark::Rated(3),
         Mark::Blank,
-        Mark::RaceAbstention,
-        Mark::Spoiled,
-        Mark::SpoiledReissued,
-        Mark::SpoiledReissued,
-        Mark::CandidateAbstention,
+        Mark::SectionSkipped,
+        Mark::Unreadable,
+        Mark::Corrected,
+        Mark::Corrected,
+        Mark::Declined,
     ];
 
     println!("Eight cells, two audit reports of the same stack:\n");
-    println!("  with `_ => \"blank\"`   {:?}", tally(&ballots, bucket_lazy));
-    println!("  exhaustive            {:?}", tally(&ballots, bucket_strict));
+    println!("  with `_ => \"blank\"`   {:?}", count(&cells, bucket_lazy));
+    println!("  exhaustive            {:?}", count(&cells, bucket_strict));
 
-    println!("\n  The two reissued ballots landed in \"blank\" on the first report.");
-    println!("  Nothing failed. It compiled, it ran, and it filed two spoiled");
-    println!("  ballots as voters who declined to mark the box — which is the");
-    println!("  difference between a printing fault and an electorate's opinion.");
+    println!("\n  The two corrected cells landed in \"blank\" on the first report.");
+    println!("  Nothing failed. It compiled, it ran, and it filed two scanning");
+    println!("  faults as people who chose to leave the box empty — which is the");
+    println!("  difference between a hardware problem and an opinion.");
 
     println!("\nWhat the second function did this morning, before it was fixed —");
     println!("real rustc output, not a paraphrase:\n");
     for line in [
-        "error[E0004]: non-exhaustive patterns: `Mark::SpoiledReissued` not covered",
-        "   |",
-        "   |     match m {",
-        "   |           ^ pattern `Mark::SpoiledReissued` not covered",
-        "   |",
+        "error[E0004]: non-exhaustive patterns: `Mark::Corrected` not covered",
+        "  |",
+        "3 |     match m {",
+        "  |           ^ pattern `Mark::Corrected` not covered",
+        "  |",
+        "note: `Mark` defined here",
+        "1 | enum Mark { Rated(u8), Blank, SectionSkipped, Declined, Unreadable, Corrected }",
+        "  |      ^^^^                                                           --------- not covered",
         "help: ensure that all possible cases are being handled by adding a match",
         "      arm with a wildcard pattern or an explicit pattern as shown",
-        "   |",
-        "   ~         Mark::Spoiled => \"spoiled\",",
-        "   ~         Mark::SpoiledReissued => todo!(),",
+        "  |",
+        "8 ~         Mark::Unreadable => \"unreadable\",",
+        "9 ~         Mark::Corrected => todo!(),",
     ] {
         println!("    {line}");
     }

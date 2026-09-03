@@ -47,34 +47,34 @@ fn step1() {
 // ─────────────────────────────────────────────────────────── Step 2
 /// The tempting version: one derive, and every field takes its zero.
 #[derive(Debug, Default, Clone, Copy)]
-struct DerivedQuorum(u32);
+struct DerivedThreshold(u32);
 
 /// The same newtype with the domain's answer written down instead.
 #[derive(Debug, Clone, Copy)]
-struct HouseQuorum(u32);
+struct HouseThreshold(u32);
 
-impl Default for HouseQuorum {
+impl Default for HouseThreshold {
     fn default() -> Self {
-        HouseQuorum(50)
+        HouseThreshold(50)
     }
 }
 
 fn step2() {
     banner(2, "A derived default is the type's zero, not your domain's");
 
-    let configured: Option<u32> = None; // nobody set a quorum in the config
-    let ballots_cast = 40;
+    let configured: Option<u32> = None; // nobody set a free-shipping threshold
+    let cart_total = 40;
 
-    let derived = configured.map(DerivedQuorum).unwrap_or_default();
-    let house = configured.map(HouseQuorum).unwrap_or_default();
+    let derived = configured.map(DerivedThreshold).unwrap_or_default();
+    let house = configured.map(HouseThreshold).unwrap_or_default();
 
-    println!("  ballots cast: {ballots_cast}, and the config set no quorum");
-    println!("  #[derive(Default)] -> {derived:?}  => quorum met? {}", ballots_cast >= derived.0);
-    println!("  impl Default (50)  -> {house:?}   => quorum met? {}", ballots_cast >= house.0);
+    println!("  cart total: {cart_total}, and the config set no threshold");
+    println!("  #[derive(Default)] -> {derived:?}  => ships free? {}", cart_total >= derived.0);
+    println!("  impl Default (50)  -> {house:?}   => ships free? {}", cart_total >= house.0);
     println!("      Same call site, opposite outcome, and the difference is a line of");
     println!("      code in another file. `derive(Default)` on a newtype means 'zero is");
-    println!("      the sensible fallback' — true for a tally, false for a quorum, a");
-    println!("      threshold, a timeout, a seat count. The third option is the best one");
+    println!("      the sensible fallback' — true for a counter, false for a threshold, a");
+    println!("      timeout, a retry limit, a page size. The third option is the best one");
     println!("      when there IS no sensible fallback: implement Default for neither,");
     println!("      and `unwrap_or_default()` stops compiling (E0277). A missing impl is");
     println!("      a guard rail, not a gap.");
@@ -82,21 +82,21 @@ fn step2() {
 
 // ─────────────────────────────────────────────────────────── Step 3
 #[derive(Debug, Default, PartialEq)]
-enum Tiebreak {
+enum OnConflict {
     #[default]
-    Lot,
-    MostFirstPlaces,
-    Alphabetical,
+    Abort,
+    Overwrite,
+    Rename,
 }
 
 fn step3() {
     banner(3, "On an enum, the compiler makes you say it out loud");
 
-    let configured: Option<Tiebreak> = None;
-    println!("  Tiebreak::default()            -> {:?}", Tiebreak::default());
+    let configured: Option<OnConflict> = None;
+    println!("  OnConflict::default()          -> {:?}", OnConflict::default());
     println!("  configured.unwrap_or_default() -> {:?}", configured.unwrap_or_default());
-    for variant in [Tiebreak::Lot, Tiebreak::MostFirstPlaces, Tiebreak::Alphabetical] {
-        let marked = if variant == Tiebreak::default() { "  <- #[default]" } else { "" };
+    for variant in [OnConflict::Abort, OnConflict::Overwrite, OnConflict::Rename] {
+        let marked = if variant == OnConflict::default() { "  <- #[default]" } else { "" };
         println!("    {variant:?}{marked}");
     }
     println!("      `#[derive(Default)]` on an enum does not compile without `#[default]`");
@@ -110,23 +110,23 @@ fn step3() {
 
 // ─────────────────────────────────────────────────────────── Step 4
 #[derive(Debug)]
-struct Ballot(u8);
+struct Row(u8);
 
-fn report(label: &str, loaded: Option<Vec<Ballot>>) {
+fn report(label: &str, loaded: Option<Vec<Row>>) {
     // The convenient reading: no file and an empty file are the same thing.
     let flattened = loaded.unwrap_or_default();
-    let total: u32 = flattened.iter().map(|b| b.0 as u32).sum();
-    println!("  {label:<22} unwrap_or_default() -> {} ballots, {total} points", flattened.len());
+    let total: u32 = flattened.iter().map(|r| r.0 as u32).sum();
+    println!("  {label:<22} unwrap_or_default() -> {} rows, total {total}", flattened.len());
 }
 
-fn honest(label: &str, loaded: &Option<Vec<Ballot>>) {
+fn honest(label: &str, loaded: &Option<Vec<Row>>) {
     match loaded {
-        None => println!("  {label:<22} match -> no ballot file was provided; nothing to count"),
-        Some(v) if v.is_empty() => println!("  {label:<22} match -> a real election in which nobody voted"),
+        None => println!("  {label:<22} match -> no input file was provided; nothing to read"),
+        Some(v) if v.is_empty() => println!("  {label:<22} match -> a real file that happens to have no rows"),
         Some(v) => println!(
-            "  {label:<22} match -> {} ballots, {} points",
+            "  {label:<22} match -> {} rows, total {}",
             v.len(),
-            v.iter().map(|b| b.0 as u32).sum::<u32>()
+            v.iter().map(|r| r.0 as u32).sum::<u32>()
         ),
     }
 }
@@ -134,9 +134,9 @@ fn honest(label: &str, loaded: &Option<Vec<Ballot>>) {
 fn step4() {
     banner(4, "Empty is not absent");
 
-    let no_file: Option<Vec<Ballot>> = None;
-    let empty_file: Option<Vec<Ballot>> = Some(Vec::new());
-    let real: Option<Vec<Ballot>> = Some(vec![Ballot(5), Ballot(3)]);
+    let no_file: Option<Vec<Row>> = None;
+    let empty_file: Option<Vec<Row>> = Some(Vec::new());
+    let real: Option<Vec<Row>> = Some(vec![Row(5), Row(3)]);
 
     honest("no file at all", &no_file);
     honest("a file with no rows", &empty_file);
@@ -156,16 +156,16 @@ fn step4() {
 fn step5() {
     banner(5, "Where it is exactly right: zero as an identity");
 
-    let marks = ["Ada", "Ben", "Ada", "Cara", "Ada", "Ben"];
+    let words = ["the", "cat", "the", "mat", "the", "cat"];
     let mut counts: BTreeMap<&str, u32> = BTreeMap::new();
-    for name in marks {
-        *counts.entry(name).or_default() += 1;
+    for word in words {
+        *counts.entry(word).or_default() += 1;
     }
-    println!("  approvals: {counts:?}");
-    for name in ["Ada", "Dan"] {
+    println!("  word counts: {counts:?}");
+    for word in ["the", "dog"] {
         println!(
-            "  counts.get({name:?}).copied().unwrap_or_default() -> {}",
-            counts.get(name).copied().unwrap_or_default()
+            "  counts.get({word:?}).copied().unwrap_or_default() -> {}",
+            counts.get(word).copied().unwrap_or_default()
         );
     }
 
@@ -173,7 +173,7 @@ fn step5() {
     let drained = std::mem::take(&mut pending);
     println!("  mem::take(&mut pending) -> {drained:?}, leaving {pending:?}");
 
-    println!("      A candidate nobody approved really did get zero approvals: here the");
+    println!("      A word that never appeared really did occur zero times: here the");
     println!("      type's zero IS the domain's answer, and `or_default` / `unwrap_or_");
     println!("      default` say so in fewer characters than the alternative. mem::take");
     println!("      is the same idea used for its other half — swap the default IN to");
@@ -184,7 +184,7 @@ fn step5() {
 #[derive(Debug)]
 struct Config {
     port: u16,
-    seats: u8,
+    retries: u8,
     title: String,
 }
 
@@ -192,8 +192,8 @@ impl Default for Config {
     fn default() -> Self {
         Config {
             port: 8080,
-            seats: 1,
-            title: String::from("(untitled election)"),
+            retries: 1,
+            title: String::from("(untitled)"),
         }
     }
 }
@@ -207,11 +207,11 @@ fn step6() {
     println!("  missing.unwrap_or_default()          -> {}", missing.unwrap_or_default());
 
     let cfg = Config {
-        seats: 3,
+        retries: 3,
         ..Default::default()
     };
-    println!("  Config {{ seats: 3, ..Default::default() }}");
-    println!("    -> port {}, seats {}, title {:?}", cfg.port, cfg.seats, cfg.title);
+    println!("  Config {{ retries: 3, ..Default::default() }}");
+    println!("    -> port {}, retries {}, title {:?}", cfg.port, cfg.retries, cfg.title);
     println!("      All three fallbacks produce the same 0, and for a Copy type they");
     println!("      compile to the same thing — pick the one that says what you mean.");
     println!("      Struct update syntax is where Default is unambiguously good: every");

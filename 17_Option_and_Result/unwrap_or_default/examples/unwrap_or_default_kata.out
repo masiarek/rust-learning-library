@@ -1,13 +1,13 @@
 unwrap_or_default fills in the TYPE's zero:
-  handed in     -> Ballot { ada: 5, ben: 2, cara: 0 }
-  not handed in -> Ballot { ada: 0, ben: 0, cara: 0 }
-      The second line is a ballot nobody cast, and it is now
-      indistinguishable from a voter who scored everyone 0:
+  returned       -> Response { speed: 5, price: 2, support: 0 }
+  never returned -> Response { speed: 0, price: 0, support: 0 }
+      The second line is a form nobody filled in, and it is now
+      indistinguishable from someone who rated everything 0:
       equal? true
 
-So the count has to ask before it defaults:
-  ballots returned: 2 of 3
-  of those, all-zero ballots: 1
+So the summary has to ask before it defaults:
+  forms returned: 2 of 3
+  of those, all-zero responses: 1
 
 Empty is not absent — the same trap one level up:
   None.unwrap_or_default()      -> []

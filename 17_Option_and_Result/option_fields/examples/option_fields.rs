@@ -93,9 +93,9 @@ struct Survey {
 fn step4() {
     banner(4, "Option<Vec<T>> — usually wrong, occasionally exactly right");
 
-    let unsent = Survey { question: "Best method?".into(), responses: None };
-    let ignored = Survey { question: "Best method?".into(), responses: Some(vec![]) };
-    let answered = Survey { question: "Best method?".into(), responses: Some(vec![5, 3]) };
+    let unsent = Survey { question: "How was checkout?".into(), responses: None };
+    let ignored = Survey { question: "How was checkout?".into(), responses: Some(vec![]) };
+    let answered = Survey { question: "How was checkout?".into(), responses: Some(vec![5, 3]) };
 
     println!("  question: {:?}", unsent.question);
     for s in [&unsent, &ignored, &answered] {

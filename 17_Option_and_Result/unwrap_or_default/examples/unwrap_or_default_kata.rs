@@ -3,39 +3,39 @@
 //!   rustc --edition 2024 unwrap_or_default_kata.rs -o /tmp/uodk && /tmp/uodk
 
 /// Derived `Default` fills every field with its type's zero. Read the result as
-/// a ballot and it says something false: a voter who scored everyone 0.
+/// a survey response and it says something false: someone who rated everything 0.
 #[derive(Debug, Default, Clone, PartialEq)]
-struct Ballot {
-    ada: u8,
-    ben: u8,
-    cara: u8,
+struct Response {
+    speed: u8,
+    price: u8,
+    support: u8,
 }
 
 /// The same data with the domain's answer written down instead.
-impl Ballot {
-    /// A ballot that was handed in blank still exists — it is not scores of 0.
-    fn blank() -> Option<Ballot> {
+impl Response {
+    /// A form that was never returned still exists as a fact — it is not ratings of 0.
+    fn not_returned() -> Option<Response> {
         None
     }
 }
 
 fn main() {
-    let handed_in: Option<Ballot> = Some(Ballot { ada: 5, ben: 2, cara: 0 });
-    let not_handed_in: Option<Ballot> = Ballot::blank();
+    let returned: Option<Response> = Some(Response { speed: 5, price: 2, support: 0 });
+    let never_returned: Option<Response> = Response::not_returned();
 
     println!("unwrap_or_default fills in the TYPE's zero:");
-    println!("  handed in     -> {:?}", handed_in.clone().unwrap_or_default());
-    println!("  not handed in -> {:?}", not_handed_in.clone().unwrap_or_default());
-    println!("      The second line is a ballot nobody cast, and it is now");
-    println!("      indistinguishable from a voter who scored everyone 0:");
-    println!("      equal? {}", not_handed_in.clone().unwrap_or_default() == Ballot { ada: 0, ben: 0, cara: 0 });
+    println!("  returned       -> {:?}", returned.clone().unwrap_or_default());
+    println!("  never returned -> {:?}", never_returned.clone().unwrap_or_default());
+    println!("      The second line is a form nobody filled in, and it is now");
+    println!("      indistinguishable from someone who rated everything 0:");
+    println!("      equal? {}", never_returned.clone().unwrap_or_default() == Response { speed: 0, price: 0, support: 0 });
 
-    println!("\nSo the count has to ask before it defaults:");
-    let cast = [handed_in.clone(), not_handed_in.clone(), Some(Ballot { ada: 0, ben: 0, cara: 0 })];
-    let turnout = cast.iter().filter(|b| b.is_some()).count();
-    let zeroed = cast.iter().flatten().filter(|b| **b == Ballot::default()).count();
-    println!("  ballots returned: {turnout} of {}", cast.len());
-    println!("  of those, all-zero ballots: {zeroed}");
+    println!("\nSo the summary has to ask before it defaults:");
+    let sent = [returned.clone(), never_returned.clone(), Some(Response { speed: 0, price: 0, support: 0 })];
+    let response_rate = sent.iter().filter(|r| r.is_some()).count();
+    let zeroed = sent.iter().flatten().filter(|r| **r == Response::default()).count();
+    println!("  forms returned: {response_rate} of {}", sent.len());
+    println!("  of those, all-zero responses: {zeroed}");
 
     println!("\nEmpty is not absent — the same trap one level up:");
     let no_list: Option<Vec<u8>> = None;

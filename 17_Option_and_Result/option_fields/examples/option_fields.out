@@ -19,7 +19,7 @@
   as_ref().map(len)   Some(9)   (known.isbn still owned: Some("1-123-456"))
 
 ──── Step 4: Option<Vec<T>> — usually wrong, occasionally exactly right
-  question: "Best method?"
+  question: "How was checkout?"
   not collected yet
   collected — nobody answered
   collected — 2 responses

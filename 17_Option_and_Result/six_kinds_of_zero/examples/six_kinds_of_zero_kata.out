@@ -1,26 +1,29 @@
 Eight cells, two audit reports of the same stack:
 
-  with `_ => "blank"`   [("abstention", 2), ("blank", 3), ("scored", 2), ("spoiled", 1)]
-  exhaustive            [("abstention", 2), ("blank", 1), ("scored", 2), ("spoiled", 3)]
+  with `_ => "blank"`   [("blank", 3), ("declined", 1), ("rated", 2), ("skipped", 1), ("unreadable", 1)]
+  exhaustive            [("blank", 1), ("declined", 1), ("rated", 2), ("skipped", 1), ("unreadable", 3)]
 
-  The two reissued ballots landed in "blank" on the first report.
-  Nothing failed. It compiled, it ran, and it filed two spoiled
-  ballots as voters who declined to mark the box — which is the
-  difference between a printing fault and an electorate's opinion.
+  The two corrected cells landed in "blank" on the first report.
+  Nothing failed. It compiled, it ran, and it filed two scanning
+  faults as people who chose to leave the box empty — which is the
+  difference between a hardware problem and an opinion.
 
 What the second function did this morning, before it was fixed —
 real rustc output, not a paraphrase:
 
-    error[E0004]: non-exhaustive patterns: `Mark::SpoiledReissued` not covered
-       |
-       |     match m {
-       |           ^ pattern `Mark::SpoiledReissued` not covered
-       |
+    error[E0004]: non-exhaustive patterns: `Mark::Corrected` not covered
+      |
+    3 |     match m {
+      |           ^ pattern `Mark::Corrected` not covered
+      |
+    note: `Mark` defined here
+    1 | enum Mark { Rated(u8), Blank, SectionSkipped, Declined, Unreadable, Corrected }
+      |      ^^^^                                                           --------- not covered
     help: ensure that all possible cases are being handled by adding a match
           arm with a wildcard pattern or an explicit pattern as shown
-       |
-       ~         Mark::Spoiled => "spoiled",
-       ~         Mark::SpoiledReissued => todo!(),
+      |
+    8 ~         Mark::Unreadable => "unreadable",
+    9 ~         Mark::Corrected => todo!(),
 
   Read the help text closely: rustc offers you the wildcard as a fix.
   Taking it turns this compile error into the silent miscount above,
