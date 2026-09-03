@@ -109,7 +109,7 @@ Three things that cost more than they look:
 
 - [Exercises](../README.md) — the four practice tracks, and which stage each is for
 - [A tree of practice projects](../../../05_Tooling/practice_workspace/README.md) — where to keep this on disk
-- [The long way round to a STAR count](../../../ROADMAP.md) — this library's own build-something-instead
+- [The long way round to a column summary](../../../ROADMAP.md) — this library's own build-something-instead
 - [masiarek/elevator_kata ↗](https://github.com/masiarek/elevator_kata) — the Rust attempt this page was written for
 - [emilybache/Lift-Kata ↗](https://github.com/emilybache/Lift-Kata) — starting code in seven languages (C++, C#, Go, Java, JS, PHP, Python) — Rust not among them
 

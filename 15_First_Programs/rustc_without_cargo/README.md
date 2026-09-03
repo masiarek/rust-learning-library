@@ -289,7 +289,7 @@ And `-O` changes one line of the output above — `debug_assertions` reports `fa
 - [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md) — the exit code 101 mentioned above, and what unwinding does and does not give back
 - [`if let`](../../17_Option_and_Result/if_let/README.md) — the let chain used as an edition detector, and why it is 2024-only
 - [CONTRIBUTING.md](../../CONTRIBUTING.md) — how a lesson's example is compiled, run, and held to a recorded answer key
-- [The long way round to a STAR count](../../ROADMAP.md) — rung 10 is where the single-file rule finally retires and this repo grows a `Cargo.toml`
+- [The long way round to a column summary](../../ROADMAP.md) — rung 10 is where the single-file rule finally retires and this repo grows a `Cargo.toml`
 - [The Cargo Book — Cargo targets ↗](https://doc.rust-lang.org/cargo/reference/cargo-targets.html) — `autobins`, `src/bin/`, and the manifest keys behind all of the above
 
 ## Po polsku

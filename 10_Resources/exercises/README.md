@@ -44,7 +44,7 @@ At some point the answer stops being an exercise track.
 
 **[The elevator kata](elevator_kata/README.md)** is the other kind of project — one problem, three incompatible published versions of it, and a design decision to make before any code. Worked through on its own page.
 
-And [the long way round to a STAR count](../../ROADMAP.md) is this library's own version of that: a sequence of lessons where each is the next thing Rust wants to teach, and the running example happens to be a voting method.
+And [the long way round to a column summary](../../ROADMAP.md) is this library's own version of that: a sequence of lessons where each is the next thing Rust wants to teach, and the running example happens to be a small file-summarising tool.
 
 ## See also
 

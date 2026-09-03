@@ -53,7 +53,7 @@ A lesson can end with a **`## Po polsku`** section — the same idea framed the 
 
 Every lesson explains; some of them also ask you to type. Those exercises are collected in [**KATAS.md**](KATAS.md), which is the only place they are ordered — each kata itself sits on the page for the topic it teaches, with a solution CI compiles and runs.
 
-There is also a slow, optional thread running through them: [**the long way round to a STAR count**](ROADMAP.md), which sequences a handful of lessons so that each one is the next thing Rust wants to teach, and the running example happens to be a voting method. Every rung stands alone; the election is the excuse.
+There is also a slow, optional thread running through them: [**the long way round to a column summary**](ROADMAP.md), which sequences a handful of lessons so that each one is the next thing Rust wants to teach, and the running example happens to be a small file-summarising tool. Every rung stands alone; the tool is the excuse.
 
 ## The course, in order
 

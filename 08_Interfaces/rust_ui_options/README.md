@@ -46,7 +46,7 @@ The honest warning about starting at stage 2 or 3: reactive UI is a substantial 
 
 - [A tree of practice projects](../../05_Tooling/practice_workspace/README.md) — where a staged project like this would live, and how a shared library crate works
 - [An HTTP request](../../07_Clients/http_with_reqwest/README.md) — the other half of a client, if the app ever talks to something
-- [The long way round to a STAR count](../../ROADMAP.md) — the lessons sequenced so the running example is a voting method
+- [The long way round to a column summary](../../ROADMAP.md) — the lessons sequenced so the running example is one small tool
 
 ## Po polsku
 
