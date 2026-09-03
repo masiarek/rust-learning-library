@@ -283,6 +283,7 @@ you write the conversion yourself.
 - [`ToOwned`](../../12_Traits/to_owned/README.md) — going the other way, from borrowed to owned
 - [Arrays and slices](../../26_Collections/arrays_and_slices/README.md) — the unsizing coercion, from the array's side
 - [Static vs dynamic dispatch](../../12_Traits/static_vs_dynamic_dispatch/README.md) — where `Box<T>` → `Box<dyn Trait>` leads
+- [Method resolution](../../12_Traits/method_resolution/README.md) — the receiver-side rule this page separates itself from, in full
 
 ## Po polsku
 

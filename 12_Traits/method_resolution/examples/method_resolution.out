@@ -1,0 +1,24 @@
+1. The receiver you did not write: `&` is inserted for you
+   seats.len()                 -> 3
+   the method takes &self, so the receiver was `&seats`
+
+2. Deref first, then borrow — `String` has no `len`, `str` does
+   name.len()                  -> 3
+   name.to_uppercase()         -> ADA
+   both live on `str`, one deref down
+
+3. The ladder is walked as far as it goes: Vec -> [i32]
+   seats.iter().sum()          -> 6   (`iter` is a slice method)
+   seats.first()               -> Some(3)
+
+4. Extra references cost nothing — they are peeled off first
+   (&&&name).len()             -> 3
+
+5. The trap: an inherent method on a Deref wrapper shadows the target's
+   t.len()      -> "3 entries"  <- Tally::len, and it returns a String
+   (*t).len()   -> 3            <- Vec::len, reached by dereferencing first
+   Vec::len(&t) -> 3            <- the same method, named instead of found
+   t.first()    -> Some(3)      <- unshadowed, so it still reaches the slice
+
+6. The ladder crosses as many smart pointers as it needs
+   Rc -> RefCell -> Vec        -> [1, 2, 3, 4]

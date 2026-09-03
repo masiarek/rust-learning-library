@@ -10,11 +10,12 @@ The reason it is a section and not a page: patterns are taught six times over in
 | [The wildcard `_`](the_wildcard/README.md) | 201 | A pattern that binds **nothing** — so it moves nothing, and the same two lines release a lock immediately or not at all depending on whether the right-hand side was a temporary |
 | [Destructuring structs](destructuring_structs/README.md) | 101 → 201 | Taking a struct apart by field name, `..` for the rest, and the shorthand that binds a field to its own name |
 | [Destructuring enums](destructuring_enums/README.md) | 101 → 201 | The pattern each variant shape needs, and the exhaustiveness that makes adding a variant a compile error rather than a bug |
+| [Match ergonomics](match_ergonomics/README.md) | 201 | Matching a reference against a non-reference pattern makes every binding a reference — the default binding mode, the `ref` spelling it replaced, and the `E0382` it saves you from |
 | [Match guards](match_guards/README.md) | 201 | `if` on an arm — a condition the pattern alone cannot express, and the reason a guard does **not** count towards exhaustiveness |
 | [`let else`](let_else/README.md) | 201 | Bind or diverge: the shape that keeps the happy path unindented, and the one rule (`else` must not fall through) |
 | [Binding with `@`](binding_at/README.md) | 201 → 301 | Testing a value *and* keeping it — `n @ 1..=9` — and the two other places a name can appear in a pattern |
 
-**[The wildcard `_`](the_wildcard/README.md) is the only page here with a program behind it; the rest are stubs** — outlines with their boundaries and their trap written down, no runnable example yet. [CONTRIBUTING.md](../CONTRIBUTING.md) says what graduating one takes.
+**[The wildcard `_`](the_wildcard/README.md) and [Match ergonomics](match_ergonomics/README.md) are the pages here with a program behind them; the rest are stubs** — outlines with their boundaries and their trap written down, no runnable example yet. [CONTRIBUTING.md](../CONTRIBUTING.md) says what graduating one takes.
 
 ## Already taught elsewhere
 
@@ -33,7 +34,6 @@ And two pages are about what happens when a pattern is subtly wrong rather than 
 
 - **Exercise: expression evaluation** — a small `enum Expression` tree, evaluated by one recursive `match`. It is the exercise that makes the case for the whole section, because the recursion is a page long and contains no `if` at all
 - **Slice and array patterns** — `[first, .., last]`, and the `rest @ ..` binding
-- **Reference patterns and `ref`** — matching through a `&`, what binding modes do for you now, and why old code says `ref x`
 
 ## Where it goes next
 

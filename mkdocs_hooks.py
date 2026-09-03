@@ -126,6 +126,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # function has to hand one back.
         "what_a_trait_is",
         "trait_in_scope",
+        # ...and the search that "in scope" is a precondition for: the deref
+        # ladder the dot walks, and the inherent method that ends it early.
+        "method_resolution",
         # ...and what the compiler says when a call finds nothing: one error
         # code over four causes, of which "not in scope" is only the second.
         "no_method_named",
@@ -445,6 +448,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # produces E0505/E0506, where the owner is refused its own binding.
         "borrowed_state",
         # ...and the scaffold most people are told to use while it lands.
+        # ...and the borrow that a call site inserts instead of moving, which
+        # needs both halves of the rule above already in hand.
+        "reborrowing",
         "how_to_learn_lifetimes",
         # ...and immediately the page that scaffold hands off to when it comes
         # down, since it is the one thing "clone everything" defers.
@@ -477,6 +483,10 @@ NAV_ORDER: dict[str, list[str]] = {
         # five leaves out because it is not a scope event at all: the
         # assignment statement, which frees what the location was holding.
         "assignment_is_a_drop",
+        # ...and the last thing that moves a drop, which is not a statement
+        # about the value at all but about the SHAPE of the line that made
+        # it: the short list of `let` forms that extend a temporary.
+        "temporary_lifetimes",
         # ...and the case both of those leave open: what happens when the
         # compiler cannot tell from the source whether a location is still
         # full. Last of the value half, and the deepest.
@@ -537,6 +547,11 @@ NAV_ORDER: dict[str, list[str]] = {
         "the_wildcard",
         "destructuring_structs",
         "destructuring_enums",
+        # ...and the rule that decides what those bindings actually ARE once
+        # the scrutinee is a reference. After both destructuring pages,
+        # because it is a property of every pattern above rather than a
+        # pattern of its own.
+        "match_ergonomics",
         "match_guards",
         "let_else",
         "binding_at",

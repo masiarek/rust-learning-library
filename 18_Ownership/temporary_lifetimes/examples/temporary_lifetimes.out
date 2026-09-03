@@ -1,0 +1,38 @@
+1. `&` in a let extends; anything else drops at the semicolon
+   before both lets
+      [drop B]
+   after  both lets       -> A is A, B was B
+   leaving the block
+      [drop A]
+
+2. A struct literal is an extending expression too
+   Holder built inline    -> H
+   leaving the block
+      [drop H]
+
+3. Extending one field keeps the WHOLE temporary alive
+   made a Pair            -> P1 + P2
+   &pair().first          -> P1
+   leaving the block      -> both fields are still here
+      [drop P1]
+      [drop P2]
+
+4. A match holds its scrutinee's temporaries through every arm
+   entering the match
+   inside the arm         -> M is still alive
+      [drop M]
+   left the match
+
+5. ...and the same expression in a let does not
+      [drop S]
+   after the let          -> S was returned, S is already gone
+
+6. An `if let` releases its scrutinee BEFORE the else — since edition 2024
+   entering the if let
+      [drop IF]
+   else branch            -> IF is already gone
+   left the if let
+
+7. With no `Drop` and no interior mutability, there is nothing to extend
+   &Quiet(..) as &'static -> Q
+   the annotation is the proof: rvalue static promotion, not extension

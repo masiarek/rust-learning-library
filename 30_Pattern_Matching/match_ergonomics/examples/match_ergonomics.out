@@ -1,0 +1,20 @@
+1. A `&` on the scrutinee makes every binding a `&`
+   name: &String         -> Ada, 3 bytes
+   ballot survived       -> Some("Ada")
+
+2. The spelling it replaced, which still works and still means this
+   Some(ref name)        -> Ada
+
+3. `&mut` on the scrutinee gives `&mut` bindings, so you can write through them
+   after `*n += 1`       -> Some(8)
+
+4. It goes all the way down a nested pattern
+   for (name, score)     -> Ada leads with 5
+   rows survived         -> 2 still owned
+
+5. Writing `&` in the PATTERN turns it back off — that destructures
+   |&n| copies n out     -> total 16
+
+6. The trap: a binding you think is `u8` is `&&u8` inside a closure
+   filter(|n| **n > 3)   -> [9, 4]
+   filter(|&&n| n > 3)   -> [9, 4]   (the same list, spelled the other way)

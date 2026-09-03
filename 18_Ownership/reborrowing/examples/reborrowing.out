@@ -1,0 +1,21 @@
+1. Passing a `&mut` to a function does not move it
+   bump(r) three times       -> *r = 3
+   each call passed `&mut *r`, inserted for you — `r` itself stayed put
+
+2. A bare `let` moves it — unless the line says what type it wants
+   let a: &mut i32 = r       -> *a = 4
+   let inner = &mut *r       -> *inner = 5
+   ...and r works again      -> *r = 6
+
+3. A shared reborrow: one `&mut` hands out as many `&` as you like
+   &*r twice                 -> 6 and 6
+
+4. A method call reborrows its receiver, which is the only reason a loop works
+   sr.push() three times     -> [1, 2, 3, 4, 5, 6]
+
+5. `&mut self` is the same insertion, one level in
+   c.bump() twice            -> score = 12
+
+6. The trap: `Option<&mut T>` matched by value moves the reference OUT
+   slot.as_deref_mut() twice -> Some(7)
+   `if let Some(x) = slot` compiles once, then E0382 on the second line

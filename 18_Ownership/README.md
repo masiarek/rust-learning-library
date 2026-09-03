@@ -4,6 +4,8 @@
 
 Three rules do the work, and the pages here try to make them *visible* rather than merely stated: a value that announces its own death shows exactly when a move happens, and `&x` printed before and after shows what actually changed (the three-word header, not the bytes).
 
+Three pages in the middle are the mechanism the rest of the section polices: what a call does to memory, what happens when the calls stack up, and what happens to a frame after it returns — which is that it is handed to the next call, bytes and all. Everything the borrow checker refuses is a way of stopping you holding a pointer into one of those.
+
 The back half is names rather than values. Shadowing, scope, and lifetimes are three different questions that English collapses into one word — a name ends at its brace, a borrow ends at its last use, and a value drops on a schedule five ordinary things can move — so the section separates them and then puts shadowing back through the borrow checker to prove the difference.
 
 | Lesson | Level | What it teaches |
@@ -12,19 +14,30 @@ The back half is names rather than values. Shadowing, scope, and lifetimes are t
 | [There is no `Move` trait](no_move_trait/README.md) | 201 | Moving is the default, so there is no trait to implement — `Copy` is the opt-out that stops it, and the compiler says so as an absence: *"does not implement the `Copy` trait"* |
 | [What an address shows](what_an_address_shows/README.md) | 201 | `&x` addresses the three-word header, not the text — so a move changes the number without relocating a byte, and a `Copy` does the same thing while nothing moves at all |
 | [Stack and heap](stack_and_heap/README.md) | 101 → 201 | No keyword puts a value on the heap — the *type* does, and `size_of` shows it: a `String` is 24 bytes on the stack whether it holds 5 characters or 5,000. One table prices move, `Copy`, `clone` and `Arc::clone` against the heap side |
+| [The call stack](the_call_stack/README.md) | 101 → 201 | What a call does to memory: a region reserved, the arguments *moved into* it, the whole thing released on return — plus the footnote everyone skips, run rather than asserted (at `-O` the four frames are not there) |
+| [Recursion and the size of the stack](recursion_and_the_stack/README.md) | 201 | Depth is the cost, the bound is fixed when the thread is spawned, and running out is an **abort**: no unwinding, no `Drop`, and `catch_unwind` catches nothing |
+| [A stack slot is reused](a_stack_slot_is_reused/README.md) | 201 | A released frame is reissued, not cleared — the same address, a different value — which is the concrete reason for every rule on the next four pages. `E0515` in Rust, a warning you can build past in C |
+| [Where the `&` sits decides what it does](where_the_sigil_sits/README.md) | 101 → 201 | The same two characters do three different jobs — `&S` is a type, `&a` is an operator, and `&x` in a *pattern* removes a reference rather than making one — so `*r` names a **place** rather than a value, and the `*` in `*const S` dereferences nothing at all |
 | [Borrowing](borrowing/README.md) | 101 → 201 | `&T` and `&mut T`, the many-readers-or-one-writer rule, and the last-use rule that decides which order compiles |
+| [Borrowed state](borrowed_state/README.md) | 201 | The same rule from the owner's side: `&b` locks `b`, so the two errors that follow (`E0505`, `E0506`) are not about a second reference at all — the owner is refused its own binding |
+| [Reborrowing](reborrowing/README.md) | 201 | Why `&mut` acts like `Copy` when you pass it and moves when you bind it — a call site inserts `&mut *r`, a bare `let` does not, and adding a type annotation to that same `let` puts it back |
 | [How to learn lifetimes](how_to_learn_lifetimes/README.md) | 201 | Is *"clone everything"* good advice? Mostly yes — with three amendments, the sharpest being that cloning to dodge a *mutation* error compiles and silently does nothing |
 | [Lifetime annotations](lifetime_annotations/README.md) | 201 | `<'a>` names a relationship rather than granting a duration — `E0106` and what its help line is asking, the three elision rules that make most signatures need nothing, and why a second lifetime permits *more* programs than reusing one |
+| [What `&'a T` claims](what_a_reference_claims/README.md) | 201 → 301 | Three promises in one type, and the third is the one that decides what may be assigned *into* a reference — plus the single direction the compiler substitutes lifetimes for free, and where that reverses |
+| [What a lifetime does at the call site](lifetimes_at_the_call_site/README.md) | 201 → 301 | Two functions with identical bodies, one of which releases an argument the other keeps locked — because the compiler reads the signature and never looks at the body |
 | [A name is not a place](a_name_is_not_a_place/README.md) | 201 | What separates a shadow from `mut`, proved with the borrow checker rather than with addresses: the shadow compiles and the `mut` spelling is `E0506`, because one is a declaration and the other is a write |
 | [A shadow does not drop](shadowing_does_not_drop/README.md) | 201 | What shadowing does to the value underneath: nothing — it is still alive, still borrowable, and it drops *after* the shadow that hid it, with no name left to release it early |
 | [When to shadow](when_to_shadow/README.md) | 201 | The judgement call the other two leave open: what shadowing buys that `mut` cannot, the five idioms worth copying, and the three bugs that compile — only one of which warns, and not about shadowing |
 | [Nothing checks a shadow](nothing_checks_a_shadow/README.md) | 201 | The tooling, not the mechanism: `rustc` has no shadowing lint, the type error that gets mistaken for one, and the single clippy lint that catches the accumulator bug — by also banning the idiom |
 | [Scope is about names, not values](scope_is_about_names/README.md) | 201 | One word, three questions: a name ends at its brace, a borrow ends at its last use, and a value dies on a schedule that five ordinary things can move — including the `_` that `rustc` denies outright on a lock |
+| [Assignment drops the old value](assignment_is_a_drop/README.md) | 201 | `x = value` frees what `x` was holding, so a value can die mid-function on a line with no brace — plus the two assignments that drop nothing, and the three `std::mem` functions that hand the old value back instead |
+| [Temporary lifetime extension](temporary_lifetimes/README.md) | 301 | A temporary dies at the semicolon unless the `let` has one of a short list of shapes — so `Holder { r: &make() }` compiles and `hold(&make())` is `E0716`, and a `match` holds its scrutinee through every arm |
+| [The drop flag](the_drop_flag/README.md) | 301 | What the compiler does when it cannot tell from the source whether a location is still full: a hidden boolean in your stack frame, checked at the brace — and the reason `E0509` refuses to split a `Drop` type |
 | [`Cow`: borrow until somebody writes](clone_on_write/README.md) | 201 | Borrowed or owned, decided at run time by the data — `to_mut()` is the write that pays for the clone, and the tag costs nothing: `Cow<str>` is the same 24 bytes as `String` |
 | [`Rc`: the clone that copies a pointer](reference_counting/README.md) | 201 | Several owners for one value, counted — `Rc::clone` duplicates a pointer and a number, never the data, which makes it the cheapest `.clone()` in Rust and the most commonly misread one |
 | [Sharing across threads: `Arc`](sharing_across_threads/README.md) | 201 | The same counter made atomic — the difference is not a performance note but the reason one of the two compiles across a thread boundary, and `Arc<Mutex<T>>` is what shared *mutable* state costs |
 
-The last three pages are the ways out of a copy the one-owner rule would otherwise force: borrow until somebody writes, or let several owners share one value and count them.
+`Cow`, `Rc` and `Arc` are the ways out of a copy the one-owner rule would otherwise force: borrow until somebody writes, or let several owners share one value and count them.
 
 ## Related sections
 
