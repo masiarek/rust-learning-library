@@ -1,0 +1,132 @@
+# What a lifetime does at the call site
+
+**Level:** 201 → 301 · working knowledge
+
+**One line:** Passing `&a` and `&b` into one function locks **both** for as long as you keep the result — because the compiler reads only the signature, never the body — and giving the parameters two different lifetimes is what releases the one the result cannot have come from.
+
+```rust
+fn tally_of<'a, 'b>(tally: &'a str, _scratch: &'b str) -> &'a str { tally }
+
+let chosen = tally_of(&tally, &scratch);
+scratch.push_str(" — mutated");     // legal: `scratch` was released at the call
+println!("{chosen}");
+```
+
+[Lifetime annotations](../lifetime_annotations/README.md) answers *how do I write this signature and what is `E0106` asking*. This page answers the question underneath it — **what the annotation costs whoever calls you** — which is the reason the choice between one lifetime and two is a design decision rather than a formality.
+
+---
+
+## A call locks every reference it is given
+
+[Borrowed state](../borrowed_state/README.md) says `&b` locks `b`. A call is no different: `f(&b, &c)` locks both, and the lock lasts as long as the result is still in use, because the result might be pointing into either of them.
+
+Might. That is the whole difficulty. At the call site the compiler does not know which address came back — and it does not look, even when the answer is obvious from three lines away.
+
+## The compiler reads the signature, not the body
+
+Two functions with **identical bodies**:
+
+```rust
+fn tally_of<'a, 'b>(tally: &'a str, _scratch: &'b str) -> &'a str { tally }
+fn either<'a>(tally: &'a str, _scratch: &'a str) -> &'a str { tally }
+```
+
+Both return their first argument, always. Only the first lets the caller touch the second argument afterwards:
+
+```text
+error[E0502]: cannot borrow `scratch` as mutable because it is also borrowed as immutable
+  --> one_lifetime_locks_both.rs:9:5
+   |
+ 8 |     let chosen = either(&tally, &scratch);
+   |                                 -------- immutable borrow occurs here
+ 9 |     scratch.push_str(" — mutated");
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ mutable borrow occurs here
+10 |     println!("{chosen}");
+   |                ------ immutable borrow later used here
+```
+
+`either` never returns `_scratch`. The compiler does not care, and refusing to look is deliberate: a signature is a contract with every caller, and it will not let that contract be inferred from a body you may rewrite tomorrow. The same discipline produces `E0106` — the compiler can see which argument a body returns perfectly well, and still insists you say it.
+
+The practical consequence is the useful half of this page: **one lifetime on everything is not the conservative default it looks like.** It is a promise to your callers that the result may alias any argument, and they pay for it in code they cannot write. Reach for a second lifetime whenever a parameter genuinely cannot appear in the return type.
+
+## An outlives bound costs the same as merging
+
+`'b: 'a` reads like a weaker statement than reusing one name — it only says `'b` outlives `'a`. At the call site it is not weaker:
+
+```rust
+fn tally_of<'a, 'b: 'a>(tally: &'a str, _scratch: &'b str) -> &'a str { tally }
+```
+
+```text
+error[E0502]: cannot borrow `scratch` as mutable because it is also borrowed as immutable
+  --> outlives_bound_relocks.rs:9:5
+   |
+ 8 |     let chosen = tally_of(&tally, &scratch);
+   |                                   -------- immutable borrow occurs here
+ 9 |     scratch.push_str(" — mutated");
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ mutable borrow occurs here
+10 |     println!("{chosen}");
+   |                ------ immutable borrow later used here
+```
+
+Once `'b` is known to cover `'a`, a `&'b str` can be used as a `&'a str` — that is the free narrowing from [what `&'a T` claims](../what_a_reference_claims/README.md) — so the result may once again be pointing into either argument, and both stay locked. Adding the bound to make a signature compile is a common move; it is worth knowing it hands back the flexibility two separate lifetimes bought.
+
+## Where the lifetimes come from
+
+You never choose the regions. The compiler picks them at the **call site**, from the borrows you actually passed, and it picks the smallest ones that make the call and its result type-check. `'a` and `'b` in the signature are parameters, exactly like `T` — the caller supplies them, and different calls supply different ones.
+
+Which is why the regions are usually much shorter than the variables' scopes: `'a` is not "how long `tally` lives", it is "the stretch of code over which this call's result is used". The lock lifts at the last use of anything that may point into the argument, and not at any brace.
+
+## The whole verified run
+
+<!-- output:lifetimes_at_the_call_site -->
+*Verified output of [`lifetimes_at_the_call_site.rs`](examples/lifetimes_at_the_call_site.rs) — regenerated by `tools/run_examples.py`, never hand-typed.*
+
+```text
+──── 1. Two lifetimes: only the returned one stays locked
+  chosen  = Ada 5, Ben 3
+  scratch = scratch — mutated while `chosen` is still alive
+  The push_str happened while `chosen` was still in use. `scratch`
+  was released the moment the call returned, because the return type
+  names `'a` and nothing else — so no result can point into it.
+
+──── 2. One lifetime: both stay locked
+  chosen2 = Ada 5, Ben 3
+  Same body, same call, one character different in the signature —
+  and now `scratch2.push_str(..)` on the line above would be E0502.
+  The body returns `tally` in BOTH functions. The compiler never looked.
+
+──── 3. The signature is the whole contract
+  `either` always returns its first argument. Its signature does not
+  say so, so every caller pays for a result that might have come from
+  the second. Widening a lifetime in a signature costs the CALLER
+  something the body never uses — which is why `'a` on everything is
+  not the safe default it looks like.
+```
+<!-- /output -->
+
+## If you are coming from another language
+
+- **Python.** The nearest thing is a habit rather than a feature: passing a mutable list into a function and not knowing whether the returned object shares storage with it. `sorted(xs)` gives you a new list, `xs.sort()` does not, and `numpy`'s slicing returns a **view** whose writes are visible in the original — the aliasing question is real, unanswerable from the call, and the source of a whole genre of quiet numpy bugs. A Rust signature answers exactly that question, in the type, at every call. If you have ever written `.copy()` defensively because you could not tell whether a function kept a reference to what you handed it, this page is the compiler doing that reasoning for you and charging you honestly for the answer.
+- **ABAP.** Parameter passing already makes a version of this distinction visible, which makes the bridge unusually direct: `VALUE(iv_x)` copies, `REFERENCE(iv_x)` does not, and `CHANGING` says the caller will see writes. What ABAP cannot express is the part this page is about — *which* of several passed-by-reference parameters the returned value points into, and for how long. In practice that is handled by convention and by not keeping returned references around. Rust makes it a type, and the payment is that you sometimes have to write `'a` and `'b` where ABAP would have said nothing at all.
+- **C++.** This is the page where Rust and C++ diverge most concretely, because C++ has the identical problem and no way to state the answer. `std::string_view` returned from a function that took two `string_view`s may point into either, the compiler will not tell you which, and the dangling case compiles and usually appears to work. The C++ guidance is a convention — the *lifetime profile* in the Core Guidelines, and lifetimebound annotations in some compilers — which is precisely this feature, retrofitted and advisory. A C++ reader should read the two-lifetime signature not as new syntax to learn but as the documentation comment they were already writing, promoted to something the compiler checks.
+
+## See also
+
+- [Lifetime annotations](../lifetime_annotations/README.md) — writing `<'a>`, `E0106`, and the three elision rules that make most signatures need none
+- [What `&'a T` claims](../what_a_reference_claims/README.md) — the three claims, and the narrowing that makes the outlives bound behave as it does
+- [Borrowed state](../borrowed_state/README.md) — the lock itself, before any function is involved
+- [How to learn lifetimes](../how_to_learn_lifetimes/README.md) — the "clone everything" scaffold, and when to put it down
+- [Borrowing](../borrowing/README.md) — where a borrow ends, which is what decides all of this
+
+## Po polsku
+
+Wywołanie funkcji **blokuje każdą referencję**, którą jej przekazujesz, na tak długo, jak długo trzymasz wynik — bo kompilator nie wie, na który z argumentów wskazuje zwrócony adres. I, co najważniejsze, **nie sprawdza tego w ciele funkcji**: czyta wyłącznie sygnaturę.
+
+Dwie funkcje o *identycznym ciele* zachowują się więc różnie u wywołującego. `fn f<'a, 'b>(x: &'a str, y: &'b str) -> &'a str` zwalnia `y` natychmiast po wywołaniu; `fn g<'a>(x: &'a str, y: &'a str) -> &'a str` trzyma zablokowane oba, mimo że zwraca zawsze `x`. To jest celowe: sygnatura to umowa z każdym wywołującym i nie może zależeć od ciała, które jutro przepiszesz.
+
+Praktyczny wniosek jest odwrotny do intuicji: **jeden czas życia na wszystkim nie jest bezpiecznym domyślnym wyborem.** To obietnica, że wynik może wskazywać na dowolny argument, a płacą za nią wywołujący — kodem, którego nie mogą napisać. Drugi czas życia warto wprowadzić zawsze, gdy dany parametr fizycznie nie może pojawić się w typie wyniku.
+
+Uwaga na ograniczenie `'b: 'a`. Wygląda na słabsze niż użycie jednej nazwy, ale u wywołującego kosztuje dokładnie tyle samo — skoro `'b` pokrywa `'a`, to `&'b str` może zostać zawężone do `&'a str`, więc wynik znów może wskazywać na oba argumenty i oba pozostają zablokowane. Sprawdzone kompilatorem, nie zgadnięte.
+
+**Szukaj po polsku:** czasy życia w Ruscie · parametry czasu życia · elizja czasów życia · `rust lifetimes` · `rust E0502` · `rust lifetime elision`

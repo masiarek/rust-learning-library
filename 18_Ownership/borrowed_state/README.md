@@ -1,0 +1,161 @@
+# Borrowed state: what `&x` does to `x`
+
+**Level:** 201 · working knowledge
+
+**One line:** A reference is not only something you receive — it is a lock placed on the place you took it from, and until that lock lifts the owner may not assign to its own value, move it, or lend it out again.
+
+```rust
+let mut b = String::from("Ada");
+let r = &b;                 // `b` is now in borrowed state
+println!("{r}");            // ...r's last use, so the lock lifts here
+b = String::from("Ben");    // legal: nothing borrows `b` any more
+```
+
+[Borrowing](../borrowing/README.md) answers what the *reference* may do. This page is the other half — what happens to the **binding you took it from**, which is where the errors actually land. `&b` does not merely produce a value; it marks the place `b` as borrowed, and the compiler then refuses every operation that could invalidate the address it just handed out.
+
+---
+
+## What the lock forbids
+
+Four errors, one cause. Each is the compiler refusing to let a place change under a reference that is still going to be read:
+
+| You wrote | Error | Refused because |
+|---|---|---|
+| `b = value;` | [`E0506` ↗](https://doc.rust-lang.org/error_codes/E0506.html) | assigning to a borrowed place |
+| `let owned = b;` | [`E0505` ↗](https://doc.rust-lang.org/error_codes/E0505.html) | moving out of a borrowed place |
+| `b.push(x);` | [`E0502` ↗](https://doc.rust-lang.org/error_codes/E0502.html) | borrowing mutably while borrowed immutably |
+| `f(b)` after `&mut b` | [`E0503` ↗](https://doc.rust-lang.org/error_codes/E0503.html) | using a place while it is exclusively borrowed |
+
+The first two are the ones this page is about, because they are the ones that are *not* about a second reference. Nothing else borrows `b` in either case — the owner is being refused access to its own binding:
+
+```text
+error[E0506]: cannot assign to `b` because it is borrowed
+ --> assign_while_borrowed.rs:7:5
+  |
+6 |     let r = &b;
+  |             -- `b` is borrowed here
+7 |     b = S(4);
+  |     ^^^^^^^^ `b` is assigned to here but it was already borrowed
+8 |     println!("{r:?}");
+  |                - borrow later used here
+```
+
+```text
+error[E0505]: cannot move out of `votes` because it is borrowed
+ --> move_while_borrowed.rs:4:17
+  |
+2 |     let votes = vec![3, 5, 1];
+  |         ----- binding `votes` declared here
+3 |     let first = &votes[0];
+  |                  ----- borrow of `votes` occurs here
+4 |     let owned = votes;
+  |                 ^^^^^ move out of `votes` occurs here
+5 |     println!("{first} {owned:?}");
+  |                ----- borrow later used here
+```
+
+Read the last line of each. *"borrow later used here"* is the compiler naming the line that holds the lock open — not the line that took the reference. That is the line to move if you want the code to compile.
+
+## When the lock lifts
+
+At the **last use of any reference that may point at the place** — which is not the same as the last use of the reference you named. Copy the reference and the lock follows the copy:
+
+```rust
+let mut c = String::from("Ada");
+let r = &c;
+let s = r;                  // a copy of the reference
+println!("{s}");            // the lock lifts HERE, at `s`'s last use, not `r`'s
+c = String::from("Ben");    // legal only now
+```
+
+This is [non-lexical lifetimes](../borrowing/README.md) seen from the owner's side, and it is why the fix for a borrow error is so often *move the read earlier* rather than *add a block*. The block was needed before 2018; the last-use rule usually makes it unnecessary work now.
+
+## Two fields are two places
+
+The lock is on a **place**, and a struct field is its own place. Borrow one field and the others stay free:
+
+```rust
+let who = &ballot.voter;
+ballot.score = 5;           // fine: `voter` is locked, `score` is not
+println!("{who}");
+```
+
+A method call is the exception, and the reason catches people out: `ballot.voter()` takes `&self`, so it borrows *all* of `ballot`, not the field it happens to return. Same visible result, a lock four times the size. When a borrow error appears only after you tidy a field access into a getter, this is why — and the fix is usually to keep the field access, or to split the struct so the two halves can be borrowed independently.
+
+## `ref` keeps the whole value alive
+
+`let (a, _) = pair();` drops the second half on that line, because `_` binds nothing. Add one keyword and neither half can die:
+
+```rust
+let (ref first, _) = pair();   // `ref` borrows INTO the temporary tuple
+```
+
+The borrow is of one field, but the thing being held open is the temporary that holds both — so the value bound to `_` survives to the end of the block after all. The run below prints the two cases side by side; they differ by the word `ref` and by nothing else.
+
+## The whole verified run
+
+<!-- output:borrowed_state -->
+*Verified output of [`borrowed_state.rs`](examples/borrowed_state.rs) — regenerated by `tools/run_examples.py`, never hand-typed.*
+
+```text
+──── 1. The lock sits on the PLACE, not on the reference
+  b = S(0), holding 0
+  through r: S(0)   <- r's last use, so the lock lifts HERE
+  b = S(4)   <- assigned after the borrow ended, no error
+  Move that read below the assignment and the same lines are E0506.
+
+──── 2. Copying the reference extends the lock
+  through s: S(2)   <- `s` is a copy of `r`, so `c` stays locked
+     until this line — the last use of ANY reference that may point at c
+  c = S(9)   <- legal once `s` is done, not once `r` is
+
+──── 3. Two fields of one struct are two places
+  &ballot.voter held, ballot.score written anyway: Ada 5
+  The checker split the struct: `voter` is locked, `score` is not.
+  ballot.voter() takes &self, so it locks ALL of ballot — and this
+  is the last line allowed to read `name`: Ada
+  ballot.score = 7   <- written after `name`'s last use
+
+──── 4. A `ref` binding keeps the WHOLE value alive
+  (a) both halves bound normally — neither dies before the brace:
+      ...both still alive on this line, and the brace is next:
+      drop: 4 — bound normally
+      drop: 1 — bound normally
+  (b) second half bound to `_` — it dies on its own line:
+      drop: 5 — bound to `_`
+      ^ that drop is already above this line. The brace is next:
+      drop: 2 — bound normally
+  (c) first half bound by `ref` — now NEITHER half can die:
+      nothing dropped yet, though `_` bound the second half. Brace:
+      drop: 3 — bound by ref
+      drop: 6 — bound to `_`
+  (b) and (c) differ by one keyword. `ref` borrows into the tuple, so
+  the whole temporary is held open — and value 6 rides along with it.
+```
+<!-- /output -->
+
+## If you are coming from another language
+
+- **Python.** There is no equivalent, and that is the honest answer — `r = b` makes a second name for one object and nothing is locked, so `b.append(1)` while `r` is live is ordinary code rather than an error. The Python bug this rule prevents is the familiar one of mutating a list while iterating it, which raises at run time if you are lucky and silently skips elements if you are not. Rust moves that check to compile time and widens it: not just *during iteration*, but any time a reference is still going to be read. The nearest Python instinct to carry over is the defensive `list(xs)` copy you write before mutating — Rust's `E0502` is the compiler telling you where that copy would have been needed, and `.clone()` is the same escape hatch with the cost made visible.
+- **ABAP.** `FIELD-SYMBOLS` is the closest thing, and the comparison is worth taking seriously because the failure it prevents is one you may have hit. `ASSIGN itab[ 1 ] TO <fs>` gives you a genuine pointer into a table; `APPEND` to that table may reallocate it, and `<fs>` then points at freed memory with no warning and no dump at the point of the mistake. `LOOP AT itab ASSIGNING <fs>` with a modification of `itab` inside the loop is the standard version of this bug. Rust's borrowed state is exactly that hazard turned into a compile error — `E0502` is the message ABAP never gives you. The habit that transfers: the reason you were taught to be careful with `ASSIGNING` is the reason this rule exists, so the discipline is familiar even though the enforcement is not.
+- **C++.** `const T&` looks like the same idea and is not, because nothing stops the referent changing or dying underneath it — an iterator into a `std::vector` is invalidated by `push_back`, and reading it afterwards is undefined behaviour that usually appears to work. This is the single closest analogue: Rust's `E0502` is iterator invalidation, detected at compile time instead of in production. What is genuinely new is `E0506` and `E0505` — that the *owner* loses the right to assign or move while a reference is outstanding. C++ has no such restriction and no way to express one, which is why a C++ reader should expect the two errors on this page to be the surprising ones.
+
+## See also
+
+- [Borrowing](../borrowing/README.md) — `&T` and `&mut T`, the many-readers-or-one-writer rule, and where a borrow ends
+- [Scope is about names, not values](../scope_is_about_names/README.md) — the three questions "out of scope" is asked, of which the borrow region is one
+- [What a lifetime does at the call site](../lifetimes_at_the_call_site/README.md) — the same lock, propagated through a function call
+- [A name is not a place](../a_name_is_not_a_place/README.md) — `E0506` used as the proof that a shadow is a declaration and `mut` is a write
+- [Interior mutability](../../09_Advanced/interior_mutability/README.md) — the way out, and what moving this check to run time costs
+
+## Po polsku
+
+Referencja to nie tylko wskaźnik, który dostajesz — to **blokada nałożona na miejsce**, z którego ją wziąłeś. Od chwili napisania `&b` zmienna `b` jest *pożyczona* (ang. *borrowed state*) i właściciel traci prawo do trzech rzeczy: przypisania nowej wartości (`E0506`), przeniesienia wartości (`E0505`) i pożyczenia jej komuś na wyłączność (`E0502`).
+
+Kluczowa obserwacja: dwa pierwsze błędy nie dotyczą *drugiej referencji*. Nikt inny nic nie pożycza — to **właściciel dostaje odmowę dostępu do własnej zmiennej**, i to zwykle najbardziej zaskakuje osoby przychodzące z C++, gdzie `const T&` niczego takiego nie wymusza.
+
+Blokada znika przy **ostatnim użyciu dowolnej referencji, która może wskazywać na to miejsce** — a nie przy końcu bloku. Skopiowanie referencji (`let s = r;`) przedłuża blokadę do ostatniego użycia `s`. Dlatego typowa naprawa błędu pożyczania to *przesunięcie odczytu wyżej*, a nie dodanie nawiasów klamrowych; bloki były potrzebne przed edycją 2018, dziś zwykle są zbędną pracą.
+
+Najbliższy ABAP-owy odpowiednik to `FIELD-SYMBOLS`: `ASSIGN itab[ 1 ] TO <fs>`, a potem `APPEND` do tej samej tabeli — tabela może zostać przealokowana, a `<fs>` wskazuje w próżnię, bez ostrzeżenia i bez dumpa w miejscu błędu. Rust zamienia dokładnie to zagrożenie w błąd kompilacji.
+
+**Szukaj po polsku:** pożyczanie w Ruscie · stan pożyczenia · kontroler pożyczeń · `rust borrow checker` · `rust E0502` · `rust E0506`

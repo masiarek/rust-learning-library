@@ -1,0 +1,23 @@
+──── 1. One name, two different lifetimes, and it still compiles
+  longer_of(forever, &borrowed) = a string literal, alive for the whole program
+  `'a` was asked to cover both. The compiler did not widen the local —
+  it NARROWED the literal, because a longer lifetime is usable wherever
+  a shorter one is wanted. That direction is the whole rule.
+
+──── 2. What may be assigned INTO a reference
+  r = outer — declared first, so it outlives `inner`
+  r = inner — declared inside the block
+     ^ legal, because `r` is not read below this block.
+  r = outer — declared first, so it outlives `inner`
+     ^ always legal: `outer` outlives every region `r` is used in.
+  Keep the `r = &inner` line and read `r` after the brace and it is
+  E0597 — the value assigned in must outlive every LATER use of `r`.
+
+──── 3. The direction reverses behind `&mut`
+  slot = initially a literal
+  slot = outer — declared first, so it outlives `inner`
+  `&mut &'a str` is INVARIANT in 'a: the compiler will not quietly
+  shorten `'a` here the way it did in section 1, because writing
+  through the pointer could leave the caller holding a shorter
+  reference than its own type promises. This call is fine only
+  because `outer` genuinely outlives `slot`'s last use.

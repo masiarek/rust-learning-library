@@ -1,0 +1,33 @@
+──── 1. The lock sits on the PLACE, not on the reference
+  b = S(0), holding 0
+  through r: S(0)   <- r's last use, so the lock lifts HERE
+  b = S(4)   <- assigned after the borrow ended, no error
+  Move that read below the assignment and the same lines are E0506.
+
+──── 2. Copying the reference extends the lock
+  through s: S(2)   <- `s` is a copy of `r`, so `c` stays locked
+     until this line — the last use of ANY reference that may point at c
+  c = S(9)   <- legal once `s` is done, not once `r` is
+
+──── 3. Two fields of one struct are two places
+  &ballot.voter held, ballot.score written anyway: Ada 5
+  The checker split the struct: `voter` is locked, `score` is not.
+  ballot.voter() takes &self, so it locks ALL of ballot — and this
+  is the last line allowed to read `name`: Ada
+  ballot.score = 7   <- written after `name`'s last use
+
+──── 4. A `ref` binding keeps the WHOLE value alive
+  (a) both halves bound normally — neither dies before the brace:
+      ...both still alive on this line, and the brace is next:
+      drop: 4 — bound normally
+      drop: 1 — bound normally
+  (b) second half bound to `_` — it dies on its own line:
+      drop: 5 — bound to `_`
+      ^ that drop is already above this line. The brace is next:
+      drop: 2 — bound normally
+  (c) first half bound by `ref` — now NEITHER half can die:
+      nothing dropped yet, though `_` bound the second half. Brace:
+      drop: 3 — bound by ref
+      drop: 6 — bound to `_`
+  (b) and (c) differ by one keyword. `ref` borrows into the tuple, so
+  the whole temporary is held open — and value 6 rides along with it.
