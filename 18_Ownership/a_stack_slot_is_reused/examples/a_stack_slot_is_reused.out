@@ -1,0 +1,34 @@
+1. The same call, twice: the same address
+   call 1 produced 7042, call 2 produced 9013
+   both locals lived at the same address:  true
+   the first Ballot was not moved aside. Its region was reissued.
+
+2. A different type, from the same place: the same region
+   tally returned 60, from a u64 rather than a Ballot
+   within 256 bytes of where the Ballots were: true
+   the bytes that spelled a Ballot now spell something else entirely
+
+3. Depth is reused too, not just the top
+   a 21-frame call bottomed out well below the shallow ones: true
+   and the next shallow call still lands where the others did:  true
+   so the depth a program reached is invisible afterwards --
+   the stack pointer went back, and nothing was erased on the way
+
+4. Four ways a location stops holding a valid value
+   (a) the frame was released:
+       cast() returned, and its Ballot's slot became free real estate
+   (b) the value was moved out:
+       `owned` was moved into `moved`; the old slot holds bytes,
+       and the compiler will not let you read them
+   (c) the value was dropped at the end of its scope:
+       alive inside the block...
+       [drop] block-scoped is no longer a valid value
+   (d) the slot was reused by a later call -- parts 1 to 3 above.
+
+5. Why the compiler cares
+   All four leave an ADDRESS that is still perfectly readable and no
+   longer means what it meant. C will hand you that pointer. Rust
+   refuses to build one: a reference may not outlive the thing it
+   borrows, which is what a lifetime is for.
+   moved-away was the value that survived all of this:
+       [drop] moved-away is no longer a valid value

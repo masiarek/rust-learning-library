@@ -1,0 +1,40 @@
+Part 1 — the same call twice.
+
+    two calls, one address:  true
+
+  Not a coincidence of this build. `address_of_local` returned, the
+  stack pointer was restored to where it had been, and the second
+  call started from the same offset. Same frame layout, same slot.
+
+Part 2 — a different function, from the same place.
+
+    a u64 local, within 256 bytes of the Ballots:  true
+
+  Checked as a distance, not an equality: a different function has a
+  different frame layout, so its local sits at a different offset
+  inside the SAME reissued region. Equality would be luck; overlap
+  is the claim worth making.
+
+Part 3 — what the two errors each tell you.
+
+    E0106 is about the SIGNATURE: no lifetime is available.
+    E0515 is about the BODY: the lifetime you supplied is not this
+    local's. Fixing the first only gets you as far as the second,
+    which is the useful part -- naming a lifetime never lengthens
+    one, so there was never a spelling that made the local survive.
+
+Part 4 — the two fixes, both compiling above.
+
+    returned by value:   Ballot { precinct: 7, score: 5 }
+    ...moved into a slot main provided, so no frame outlived it
+    borrowed from an argument: Ballot { precinct: 2, score: 9 }
+    ...precinct 2 won it with 9 points
+    ...the reference borrows `roster`, which is main's, so it is
+    alive for as long as the caller keeps it alive
+
+  Which would I write? Return the value. Borrowing from an argument
+  is right when the caller already owns the data and you are picking
+  something OUT of it -- `highest` is that shape and a lifetime would
+  be wrong there. When the function CREATED the value, the caller has
+  nothing for it to borrow from, and a reference is the wrong return
+  type rather than an annotation problem.

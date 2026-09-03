@@ -1,0 +1,32 @@
+1. A call reserves a region, and it is not the caller's
+   inside count: x = Ballot(1)
+   my frame is below the caller's?  true
+   x is a local of THIS call, and drops here unless it leaves
+       [drop] Ballot(1) freed
+   count returned 1; `a` is gone from main, because it went IN
+   and the drop line above ran inside count, before it returned
+
+2. Nesting: every further call is another region, below the last
+   four nested calls, four distinct frames:  4
+   each one below the frame that called it:  true
+   the whole chain fits in under 4 KiB:      true
+   ...and all four are released by the time level_1 returns.
+
+3. A parameter is a local, so it can leave by the return path
+   stamp returned Ballot(107) and freed nothing on the way out
+   the VALUE outlived the frame it was standing in; the frame did not
+
+4. A block is not a frame, but it ends a name just the same
+   c = Ballot(9), alive inside this block
+       [drop] Ballot(9) freed
+   past the brace the name is gone, and the value went with it
+
+5. Why `&x` is what forces a slot to exist at all
+   small = 3, and size_of::<u8>() = 1
+   a byte can live entirely in a register and never touch the stack;
+   asking for its address is what obliges the compiler to give it one.
+   `&small` landed inside main's own frame:  true
+   so `&u8` costs 8 bytes to hold a value that is 1.
+
+   main ends here, and `stamped` drops last:
+       [drop] Ballot(107) freed

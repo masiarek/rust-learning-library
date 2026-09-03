@@ -1,0 +1,29 @@
+A. early return while still owning it        -> dropped AT the return
+       returning early, still owning it:
+       drop A
+
+B. early return after moving it out          -> nothing at the return
+       filed B
+       drop B
+       returning early, having moved it out:
+
+C. moved out on round 1, then `break`        -> nothing at the brace
+       round 0
+       round 1
+       filed C
+       drop C
+       after the loop:
+
+D. the same, with the emptiness in the type  -> same schedule, askable
+       round 0, holding = true
+       round 1, holding = true
+       filed D
+       drop D
+       round 2, holding = false
+       after the loop, holding = false:
+
+Four paths, four values, four drops — one each, never two, never
+none. A and C are the ones a flag is for: the SAME closing brace
+has to drop in one execution and not in another, so the answer
+cannot be baked into the code at that brace. D is C with the
+question moved into the type, where `is_some()` can answer it.

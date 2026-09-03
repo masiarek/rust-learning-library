@@ -1,0 +1,46 @@
+A. reassignment                     let mut a = T(1); a = T(2);
+       a holds one
+       drop one
+       <- one drop, above, on the assignment line
+       a now holds two
+       end of block:
+       drop two
+
+B. first write to a deferred `let`  let b; b = T(3);
+       b holds three   <- nothing dropped: the location was empty
+       end of block:
+       drop three
+
+C. write to a moved-out binding     let m = c; c = T(5);
+       m = four, c = five   <- nothing dropped: `c` had been emptied
+       end of block:
+       drop four
+       drop five
+
+D. write through &mut               *r = T(7);
+       drop six
+       <- one drop, above: `*r = v` is an assignment
+       d = seven
+       end of block:
+       drop seven
+
+E. shadowing                        let e = T(8); let e = T(9);
+       e = eight
+       e = nine   <- nothing dropped: `let` declares, it does not write
+       end of block, and BOTH are still alive:
+       drop nine
+       drop eight
+       ^ reverse declaration order, so the shadow dies first and
+         `eight` outlives the name that hid it.
+
+F. mem::replace                     let old = replace(&mut f, T(11));
+       old = ten, f = eleven   <- nothing dropped: it was returned
+       end of block:
+       drop ten
+       drop eleven
+
+Tally: two of the six dropped anything where the statement sits,
+       A and D. B and C did not, because an assignment drops what
+       was THERE and both locations were empty; E did not, because
+       `let` declares rather than writes; F did not, because the old
+       value was handed back instead.

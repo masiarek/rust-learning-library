@@ -1,0 +1,52 @@
+1. The same source line, two different answers
+     consumed value (and dropped it here)
+     drop value
+     end of maybe_move(flag = true)
+     ---
+     end of maybe_move(flag = false)
+     drop value
+   Identical code. In the first call the value was dropped inside
+   `consume`; in the second, at the closing brace. Something read at
+   run time decided which — and it is not part of the value.
+
+2. It is not in the type
+     size_of::<Named>() == size_of::<&'static str>() : true
+     a Drop impl adds nothing to the type's size, so the flag is
+     somewhere else: a slot in the stack frame of the function that
+     might or might not have moved the value out.
+
+3. Dropped exactly once, whichever way the branch goes
+     flag = true
+     consumed counted (and dropped it here)
+     drop counted
+     flag = false
+     drop counted
+   Once per iteration, never twice, never zero times. That is the
+   guarantee; the flag is how it is kept when the compiler cannot
+   settle the question by reading the source.
+
+4. Fields are tracked one at a time
+     moved out `p.left` -> p.left, leaving p.right
+     drop p.left
+     end of block, and only `p.right` is left to drop:
+     drop p.right
+   `p` is partly moved: the compiler tracks the two fields
+   separately, so the brace drops one of them and knows not to
+   touch the other.
+
+5. Which is why a type with its own Drop cannot be split
+     Give `Pair` a `Drop` impl and `let taken = p.left;` stops
+     compiling: error[E0509], cannot move out of type `Pair`,
+     which implements the `Drop` trait. There is no half-value to
+     hand `drop(&mut self)`, so the move is refused outright.
+
+6. The version where the emptiness is a value you can see
+     round 0: slot is_some = true
+     consumed in the Option (and dropped it here)
+     drop in the Option
+     round 1: slot is_some = false
+     round 2: slot is_some = false
+     end of block, and there is nothing left to drop:
+   `Option::take` puts the same decision in the type, where you can
+   read it, test it, and return it. The flag does the identical job
+   invisibly — which is fine, until you want to ASK.

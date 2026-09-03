@@ -1,0 +1,18 @@
+Compiles as written — a coercion fires at the argument:
+  1. takes_str(&owned)          = 6
+  2. takes_slice(&counts)       = 15
+  3. takes_slice(&[1, 2, 3])    = 6
+     &String -> &str and &Vec<i32> -> &[i32] are deref coercions;
+     &[i32; 3] -> &[i32] is an unsizing coercion. All three are
+     invisible at the call site.
+
+Rejected as written, and the repair:
+  4. takes_str(owned)      -> takes_str(&owned)          = 6
+  5. takes_opt(held.as_ref()) -> takes_opt(held.as_deref()) = true
+  6. Vec<String> -> Vec<&str> -> ["Ada", "Ben"], first is 3 chars
+
+The rule the three failures share: a coercion adjusts the type of
+an expression at a site where the wanted type is already known, and
+it never descends into a generic type to adjust a parameter. The
+moment your value is INSIDE something — an Option, a Vec, a tuple —
+you write the conversion yourself.

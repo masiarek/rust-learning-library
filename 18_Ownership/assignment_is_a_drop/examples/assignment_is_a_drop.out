@@ -1,0 +1,60 @@
+1. Assignment drops the old value
+     built round 1
+     round 1 counted 12 ballots
+     built round 2
+     drop  round 1 (12)
+     still inside the block, one line to go
+     round is now round 2 (30)
+     drop  round 2 (30)
+   `round 1` died on the assignment line. No brace closed, nothing
+   went out of scope, and the statement reads like an edit.
+   Read the order too: BUILT round 2 comes before DROP round 1.
+   The right-hand side is evaluated first, then the old value is
+   dropped, then the new one is stored.
+
+2. Two assignments that drop nothing
+     built owner
+     moved out of `owner`; now assigning to it again:
+     built replacement
+     no drop line appeared — the location held nothing to drop
+     both are alive: owner and replacement
+     drop  owner (1)
+     drop  replacement (2)
+     `let later;` declares a name over an empty location
+     built first value
+     no drop line here either: first value (3)
+     drop  first value (3)
+   An assignment drops what was there. Twice above, nothing was.
+
+3. Writing through &mut T drops too
+     built old
+     built new
+     drop  old (7)
+     the write through `r` dropped what `slot` held
+     slot is now new (8)
+     drop  new (8)
+   `*r = value` is an assignment, so the same rule applies — and
+   you cannot move the old value out through `&mut`, only drop it.
+
+4. Keeping the old value instead of dropping it
+     built outgoing
+     built incoming
+     replace handed the old value back: outgoing (5)
+     no drop line — it is alive, and it is mine now
+     slot holds incoming (6)
+     end of block:
+     drop  outgoing (5)
+     drop  incoming (6)
+   That is the whole difference between `*r = v` and
+   `mem::replace(r, v)`: one drops the old value, one returns it.
+
+5. The other two, on types that need no Drop impl to show it
+     take:  taken = "Ada", name = ""   (name got Default)
+     swap:  a = "second", b = "first"   (nothing dropped, nothing cloned)
+   `take` needs Default, `swap` needs nothing, `replace` needs neither.
+
+6. Why it is worth knowing
+     the loop assigned 3 times, so 3 buffers were freed: "third"
+     clear + push_str reuses one buffer:              "third"
+   Same result, and the first version does an allocation and a free
+   per round because every `=` freed what was there.

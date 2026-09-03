@@ -1,0 +1,43 @@
+Part 1 — a String passed by value.
+
+    header at a different address inside the callee?  true
+    heap buffer relocated?                            false
+
+  Predicted right if you said yes and no. The 24-byte header was
+  copied into the callee's own slot; the text never moved, however
+  long it is. That asymmetry is why Rust can afford to move by
+  default -- a move is a fixed, small cost that does not grow with
+  the data. And `ballots` is unusable here now: it went IN.
+
+Part 2 — where the free happens.
+
+    (a) passed in, not returned:
+      consume() has it: consumed
+      [drop] consumed freed
+        ...and the free already happened, inside consume()
+
+    (b) passed in and returned:
+      pass_through() has it: returned
+        ...and nothing was freed: the value moved out through
+        the return slot, into `returned`, which now owns it
+
+  The frame is a place; the value is a thing. Ending a frame frees
+  whatever is still standing in it, and a returned value is not.
+
+Part 3 — four nested frames.
+
+    four distinct frames?                    true
+    each below the frame that called it?     true
+    the whole chain under 4 KiB from main?   true
+
+  Which of those three is a claim about RUST?
+    None of them. All three are claims about this build.
+    Compile the same functions without #[inline(never)] and at -O
+    and the descending answer flips to false -- the four calls were
+    folded into one frame, so there is no `d3` frame to be below
+    `d2`. What survives optimization is the part the borrow checker
+    actually enforces: `d3`'s local cannot outlive `d3`, whether or
+    not `d3` still exists as a frame.
+
+  `returned` is still alive until here:
+      [drop] returned freed

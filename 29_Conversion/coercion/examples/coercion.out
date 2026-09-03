@@ -1,0 +1,51 @@
+1. Seven coercions, none of them written down
+     &String  -> &str      width(&owned)      = 6
+     &Vec<i32>-> &[i32]    count(&v)          = 3
+     &[i32; 4]-> &[i32]    count(&arr)        = 4
+     &mut Vec -> &Vec      peek(&mut m)       = 7
+     fn item  -> fn ptr    apply(double, 21)  = 42
+     Box<Square> -> Box<dyn Shape>            = 9
+     &u8      -> &dyn Debug                   = 42
+   Every one of those arguments was written as `&x` and arrived as
+   a different type. Nothing on the call site says so.
+
+2. It happens at named places, not everywhere
+     let with a type          let s: &str = &owned;   -> ballot
+     a return value           fn f(s: &String) -> &str -> ballot
+     a struct field           Holder { text: &owned } -> ballot
+     ...plus function arguments, as above. Those are `coercion
+     sites`: the compiler only looks for one where it already
+     knows the type it wants.
+
+3. Where it does not happen
+     Option<&String> -> Option<&str>   : no. Coercion does not
+       reach inside another type. Fix: `.as_deref()`, or
+       `.map(|s| s.as_str())`.
+       held.as_deref() = Some("x")
+     u8 + u16                         : no. Rust has no numeric
+       promotion at all. Fix: `u16::from(small) + big`.
+       u16::from(small) + big = 3
+     longer(&owned, "vote")           : no. A generic parameter
+       is not a coercion site; `T` is inferred from the first
+       argument and the second must already be that type.
+       longer(owned.as_str(), "vote") = true
+     width(owned)                     : no. Deref coercion works
+       on references; `String` by value is not `&String`.
+       width(&owned) = 6
+
+4. Method calls look like coercion and are a separate rule
+     owned.len()      = 6   <- auto-deref: String, then str
+     v.first()        = Some(10)   <- auto-deref: Vec, then [i32]
+     (&owned).len()   = 6   <- auto-deref again, through &
+   The receiver of a method call gets `&`, `&mut` and `*` inserted
+   until something fits. That is why `v.first()` finds a slice
+   method — and why removing a `&` often changes nothing.
+
+5. What to write when nothing fires for you
+     &String -> &str      &owned  ·  owned.as_str()
+     Vec<String> -> Vec<&str>          v.iter().map(String::as_str)
+     Option<String> -> Option<&str>    held.as_deref()
+     Vec<T>  -> &[T]      &v      ·  v.as_slice()
+     u8      -> u16       u16::from(small)
+   The named method is never wrong, and it is what to reach for
+   the moment the type sits inside anything else.
