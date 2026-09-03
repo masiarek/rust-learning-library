@@ -1,12 +1,12 @@
 1. The same call, twice: the same address
    call 1 produced 7042, call 2 produced 9013
    both locals lived at the same address:  true
-   the first Ballot was not moved aside. Its region was reissued.
+   the first Point was not moved aside. Its region was reissued.
 
 2. A different type, from the same place: the same region
-   tally returned 60, from a u64 rather than a Ballot
-   within 256 bytes of where the Ballots were: true
-   the bytes that spelled a Ballot now spell something else entirely
+   sum_of returned 60, from a u64 rather than a Point
+   within 256 bytes of where the Points were:  true
+   the bytes that spelled a Point now spell something else entirely
 
 3. Depth is reused too, not just the top
    a 21-frame call bottomed out well below the shallow ones: true
@@ -16,7 +16,7 @@
 
 4. Four ways a location stops holding a valid value
    (a) the frame was released:
-       cast() returned, and its Ballot's slot became free real estate
+       plot() returned, and its Point's slot became free real estate
    (b) the value was moved out:
        `owned` was moved into `moved`; the old slot holds bytes,
        and the compiler will not let you read them

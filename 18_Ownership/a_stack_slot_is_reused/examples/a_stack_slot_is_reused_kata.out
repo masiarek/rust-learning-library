@@ -8,7 +8,7 @@ Part 1 — the same call twice.
 
 Part 2 — a different function, from the same place.
 
-    a u64 local, within 256 bytes of the Ballots:  true
+    a u64 local, within 256 bytes of the Points:   true
 
   Checked as a distance, not an equality: a different function has a
   different frame layout, so its local sits at a different offset
@@ -25,11 +25,11 @@ Part 3 — what the two errors each tell you.
 
 Part 4 — the two fixes, both compiling above.
 
-    returned by value:   Ballot { precinct: 7, score: 5 }
+    returned by value:   Point { x: 7, y: 5 }
     ...moved into a slot main provided, so no frame outlived it
-    borrowed from an argument: Ballot { precinct: 2, score: 9 }
-    ...precinct 2 won it with 9 points
-    ...the reference borrows `roster`, which is main's, so it is
+    borrowed from an argument: Point { x: 2, y: 9 }
+    ...the highest y is 9 at x = 2
+    ...the reference borrows `points`, which is main's, so it is
     alive for as long as the caller keeps it alive
 
   Which would I write? Return the value. Borrowing from an argument

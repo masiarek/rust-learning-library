@@ -10,17 +10,17 @@
  *
  * The compiler does warn here -- clang calls it -Wreturn-stack-address, gcc
  * calls it -Wreturn-local-addr. It still produces a binary, and the warning
- * only sees the `return &b` it can point at: move that line behind a helper
- * and both compilers go quiet while the bug stays exactly the same.
+ * only sees the `return &p` it can point at: move that line behind a helper
+ * and clang goes quiet while the bug stays exactly the same (measured).
  */
 #include <stdio.h>
 
-struct Ballot { unsigned precinct; unsigned score; };
+struct Point { unsigned x; unsigned y; };
 
 /* Returns a pointer into a frame that is released as this returns. */
-struct Ballot *cast(unsigned precinct, unsigned score) {
-    struct Ballot b = { precinct, score };
-    return &b;                      /* the frame ends on the next line */
+struct Point *plot(unsigned x, unsigned y) {
+    struct Point p = { x, y };
+    return &p;                      /* the frame ends on the next line */
 }
 
 /* An ordinary call that reissues the same region for its own locals. */
@@ -31,15 +31,15 @@ unsigned reuse(void) {
 }
 
 int main(void) {
-    struct Ballot *kept = cast(7, 42);
+    struct Point *kept = plot(7, 42);
 
-    printf("before the region is reissued: precinct=%u score=%u\n",
-           kept->precinct, kept->score);
+    printf("before the region is reissued: x=%u y=%u\n",
+           kept->x, kept->y);
 
     reuse();                        /* ...same region, different contents */
 
-    printf("after:                        precinct=%u score=%u\n",
-           kept->precinct, kept->score);
+    printf("after:                        x=%u y=%u\n",
+           kept->x, kept->y);
 
     return 0;
 }

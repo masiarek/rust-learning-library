@@ -16,17 +16,17 @@ use std::fmt;
 
 /// A value that announces its own death, so the moment a frame lets go of it
 /// is visible rather than asserted.
-struct Ballot(u32);
+struct Counter(u32);
 
-impl fmt::Display for Ballot {
+impl fmt::Display for Counter {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Ballot({})", self.0)
+        write!(f, "Counter({})", self.0)
     }
 }
 
-impl Drop for Ballot {
+impl Drop for Counter {
     fn drop(&mut self) {
-        println!("       [drop] Ballot({}) freed", self.0);
+        println!("       [drop] Counter({}) freed", self.0);
     }
 }
 
@@ -37,10 +37,10 @@ fn here(anchor: &u8) -> usize {
 
 /// Takes its argument BY VALUE, so `x` is a local variable of this call.
 #[inline(never)]
-fn count(x: Ballot, caller_frame: usize) -> u32 {
+fn report(x: Counter, caller_frame: usize) -> u32 {
     let anchor = 0u8;
     let mine = here(&anchor);
-    println!("   inside count: x = {x}");
+    println!("   inside report: x = {x}");
     println!("   my frame is below the caller's?  {}", mine < caller_frame);
     println!("   x is a local of THIS call, and drops here unless it leaves");
     x.0
@@ -48,7 +48,7 @@ fn count(x: Ballot, caller_frame: usize) -> u32 {
 
 /// The same shape, but the value leaves by the return path instead of dropping.
 #[inline(never)]
-fn stamp(mut x: Ballot) -> Ballot {
+fn bump(mut x: Counter) -> Counter {
     x.0 += 100;
     x // moved into a slot the CALLER provided; not freed here
 }
@@ -82,10 +82,10 @@ fn main() {
     let main_frame = here(&anchor);
 
     println!("1. A call reserves a region, and it is not the caller's");
-    let a = Ballot(1);
-    let n = count(a, main_frame); //         `a` is MOVED into the parameter slot
-    println!("   count returned {n}; `a` is gone from main, because it went IN");
-    println!("   and the drop line above ran inside count, before it returned");
+    let a = Counter(1);
+    let n = report(a, main_frame); //         `a` is MOVED into the parameter slot
+    println!("   report returned {n}; `a` is gone from main, because it went IN");
+    println!("   and the drop line above ran inside report, before it returned");
 
     println!("\n2. Nesting: every further call is another region, below the last");
     let mut frames = Vec::new();
@@ -101,14 +101,14 @@ fn main() {
     println!("   ...and all four are released by the time level_1 returns.");
 
     println!("\n3. A parameter is a local, so it can leave by the return path");
-    let b = Ballot(7);
-    let stamped = stamp(b); //               in by move, out by move: no drop yet
-    println!("   stamp returned {stamped} and freed nothing on the way out");
+    let b = Counter(7);
+    let bumped = bump(b); //               in by move, out by move: no drop yet
+    println!("   bump returned {bumped} and freed nothing on the way out");
     println!("   the VALUE outlived the frame it was standing in; the frame did not");
 
     println!("\n4. A block is not a frame, but it ends a name just the same");
     {
-        let c = Ballot(9);
+        let c = Counter(9);
         println!("   c = {c}, alive inside this block");
     }
     println!("   past the brace the name is gone, and the value went with it");
@@ -124,5 +124,5 @@ fn main() {
     println!("   so `&u8` costs {} bytes to hold a value that is {}.",
              size_of::<&u8>(), size_of::<u8>());
 
-    println!("\n   main ends here, and `stamped` drops last:");
+    println!("\n   main ends here, and `bumped` drops last:");
 }

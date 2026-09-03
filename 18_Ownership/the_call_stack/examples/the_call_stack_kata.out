@@ -7,7 +7,7 @@ Part 1 — a String passed by value.
   copied into the callee's own slot; the text never moved, however
   long it is. That asymmetry is why Rust can afford to move by
   default -- a move is a fixed, small cost that does not grow with
-  the data. And `ballots` is unusable here now: it went IN.
+  the data. And `text` is unusable here now: it went IN.
 
 Part 2 — where the free happens.
 

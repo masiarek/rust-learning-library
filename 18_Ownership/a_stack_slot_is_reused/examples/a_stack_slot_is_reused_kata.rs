@@ -8,17 +8,17 @@
 //!   rustc --edition 2024 a_stack_slot_is_reused_kata.rs -o /tmp/assirk && /tmp/assirk
 
 #[derive(Debug)]
-struct Ballot {
-    precinct: u32,
-    score: u32,
+struct Point {
+    x: u32,
+    y: u32,
 }
 
 /// Part 1. Records where its own local sat, and hands back the address as a
 /// plain number -- which is legal, and useless, and exactly the point.
 #[inline(never)]
-fn address_of_local(precinct: u32) -> usize {
-    let b = Ballot { precinct, score: 0 };
-    &b as *const Ballot as usize
+fn address_of_local(x: u32) -> usize {
+    let p = Point { x, y: 0 };
+    &p as *const Point as usize
 }
 
 /// Part 2. A different local, a different type, called from the same place.
@@ -30,13 +30,13 @@ fn address_of_other_local() -> usize {
 
 // Part 3, the two refusals. Neither can be written here, so both are quoted.
 //
-//   fn make() -> &Ballot { let b = Ballot { .. }; &b }
+//   fn make() -> &Point { let p = Point { .. }; &p }
 //     error[E0106]: missing lifetime specifier
 //     ...the SIGNATURE is wrong: a returned reference has to borrow from
 //        something, and this function has nothing to borrow from.
 //
-//   fn make<'a>(seed: &'a u32) -> &'a Ballot { let b = Ballot { .. }; &b }
-//     error[E0515]: cannot return reference to local variable `b`
+//   fn make<'a>(seed: &'a u32) -> &'a Point { let p = Point { .. }; &p }
+//     error[E0515]: cannot return reference to local variable `p`
 //     ...the signature is now writable, so the BODY gets checked, and the
 //        real bug is named: "returns a reference to data owned by the
 //        current function". The first error asks where the lifetime comes
@@ -44,15 +44,15 @@ fn address_of_other_local() -> usize {
 
 /// Part 4, fix one: return the VALUE. It moves into a slot the caller owns.
 #[inline(never)]
-fn built(precinct: u32) -> Ballot {
-    Ballot { precinct, score: 5 }
+fn built(x: u32) -> Point {
+    Point { x, y: 5 }
 }
 
 /// Part 4, fix two: borrow from an argument, which outlives the call.
 /// Elision fills the lifetime in, so no `'a` has to be written.
 #[inline(never)]
-fn highest(ballots: &[Ballot]) -> &Ballot {
-    ballots.iter().max_by_key(|b| b.score).expect("non-empty")
+fn highest(points: &[Point]) -> &Point {
+    points.iter().max_by_key(|p| p.y).expect("non-empty")
 }
 
 fn main() {
@@ -66,7 +66,7 @@ fn main() {
 
     println!("\nPart 2 — a different function, from the same place.\n");
     let other = address_of_other_local();
-    println!("    a u64 local, within 256 bytes of the Ballots:  {}",
+    println!("    a u64 local, within 256 bytes of the Points:   {}",
              other.abs_diff(first) < 256);
     println!("\n  Checked as a distance, not an equality: a different function has a");
     println!("  different frame layout, so its local sits at a different offset");
@@ -85,15 +85,15 @@ fn main() {
     println!("    returned by value:   {owned:?}");
     println!("    ...moved into a slot main provided, so no frame outlived it");
 
-    let roster = vec![
-        Ballot { precinct: 1, score: 3 },
-        Ballot { precinct: 2, score: 9 },
-        Ballot { precinct: 3, score: 4 },
+    let points = vec![
+        Point { x: 1, y: 3 },
+        Point { x: 2, y: 9 },
+        Point { x: 3, y: 4 },
     ];
-    let top = highest(&roster);
+    let top = highest(&points);
     println!("    borrowed from an argument: {top:?}");
-    println!("    ...precinct {} won it with {} points", top.precinct, top.score);
-    println!("    ...the reference borrows `roster`, which is main's, so it is");
+    println!("    ...the highest y is {} at x = {}", top.y, top.x);
+    println!("    ...the reference borrows `points`, which is main's, so it is");
     println!("    alive for as long as the caller keeps it alive");
 
     println!("\n  Which would I write? Return the value. Borrowing from an argument");

@@ -5,17 +5,17 @@
 **One line:** Calling a function reserves a region of the stack for its parameters and locals, moves the arguments into it, and releases the whole region on return — so the address of a local means something only between those two moments.
 
 ```rust
-struct Ballot(u32);
+struct Counter(u32);
 
-fn count(x: Ballot) -> u32 {
+fn report(x: Counter) -> u32 {
     x.0                       // `x` is a local variable of THIS call
 }
 
-let a = Ballot(1);
-let n = count(a);             // the value moves into x's slot; `a` is gone
+let a = Counter(1);
+let n = report(a);            // the value moves into x's slot; `a` is gone
 ```
 
-Nothing in that code says *stack*. It is what `count(a)` does anyway: a region appears, `a`'s value is moved into it, `x` uses it for the length of the call, and the region goes away when `count` returns.
+Nothing in that code says *stack*. It is what `report(a)` does anyway: a region appears, `a`'s value is moved into it, `x` uses it for the length of the call, and the region goes away when `report` returns.
 
 ## A call is a region, not a jump
 
@@ -30,11 +30,11 @@ The last row is why stack allocation costs nothing worth measuring. Freeing a fr
 
 ## The argument becomes a local
 
-`fn count(x: Ballot)` takes its argument **by value**, so `x` is not a view of the caller's `a`. The value was moved in, `a` is unusable afterwards, and it is `count` that will free it — which the example below shows by putting a `Drop` on the type and watching where the free happens.
+`fn report(x: Counter)` takes its argument **by value**, so `x` is not a view of the caller's `a`. The value was moved in, `a` is unusable afterwards, and it is `report` that will free it — which the example below shows by putting a `Drop` on the type and watching where the free happens.
 
 Two consequences worth having:
 
-- **`x` can be mutated** if you write `fn stamp(mut x: Ballot)`. The `mut` is on the local, not on the caller's variable, and the caller sees nothing.
+- **`x` can be mutated** if you write `fn bump(mut x: Counter)`. The `mut` is on the local, not on the caller's variable, and the caller sees nothing.
 - **`x` can leave.** Returning it moves the value into a slot the *caller* provided, so it outlives the frame it was standing in. A value is not tied to the region it happened to be in; the region is just where it was.
 
 ## Nesting: frames stack up, and come back down in order
@@ -48,12 +48,12 @@ Calling from inside a call reserves another region below the first. Four nested 
 
 ```text
 1. A call reserves a region, and it is not the caller's
-   inside count: x = Ballot(1)
+   inside report: x = Counter(1)
    my frame is below the caller's?  true
    x is a local of THIS call, and drops here unless it leaves
-       [drop] Ballot(1) freed
-   count returned 1; `a` is gone from main, because it went IN
-   and the drop line above ran inside count, before it returned
+       [drop] Counter(1) freed
+   report returned 1; `a` is gone from main, because it went IN
+   and the drop line above ran inside report, before it returned
 
 2. Nesting: every further call is another region, below the last
    four nested calls, four distinct frames:  4
@@ -62,12 +62,12 @@ Calling from inside a call reserves another region below the first. Four nested 
    ...and all four are released by the time level_1 returns.
 
 3. A parameter is a local, so it can leave by the return path
-   stamp returned Ballot(107) and freed nothing on the way out
+   bump returned Counter(107) and freed nothing on the way out
    the VALUE outlived the frame it was standing in; the frame did not
 
 4. A block is not a frame, but it ends a name just the same
-   c = Ballot(9), alive inside this block
-       [drop] Ballot(9) freed
+   c = Counter(9), alive inside this block
+       [drop] Counter(9) freed
    past the brace the name is gone, and the value went with it
 
 5. Why `&x` is what forces a slot to exist at all
@@ -77,8 +77,8 @@ Calling from inside a call reserves another region below the first. Four nested 
    `&small` landed inside main's own frame:  true
    so `&u8` costs 8 bytes to hold a value that is 1.
 
-   main ends here, and `stamped` drops last:
-       [drop] Ballot(107) freed
+   main ends here, and `bumped` drops last:
+       [drop] Counter(107) freed
 ```
 <!-- /output -->
 
@@ -114,13 +114,13 @@ None of that changes the model. A value's **lifetime** is a fact about the progr
 
 ## If you are coming from another language
 
-**Python.** You have the same mechanism and almost none of the consequences. `def count(x)` creates a frame object with its own local namespace, exactly as here, and `x` is a local name that rebinding cannot reach out of. What differs is what the name holds: Python passes a *reference to a heap object*, so `count(a)` leaves `a` perfectly usable and a mutation through `x` is visible to the caller — the famous mutable-default-argument surprise is this and nothing more. Rust's `count(a)` **moves**, so `a` is gone; to get Python's behaviour you write `count(&a)` and the signature says which one you meant. Two other things transfer: `sys.setrecursionlimit` is Python's software counterpart to a real stack bound (CPython counts frames rather than bytes, which is why the limit is 1,000 and not "8 MiB"), and a `RecursionError` is a catchable exception where Rust's overflow is not — [the next page](../recursion_and_the_stack/README.md) is about that difference. And `locals()` has no Rust equivalent, because a frame here is not an object; it is an offset from a register.
+**Python.** You have the same mechanism and almost none of the consequences. `def report(x)` creates a frame object with its own local namespace, exactly as here, and `x` is a local name that rebinding cannot reach out of. What differs is what the name holds: Python passes a *reference to a heap object*, so `report(a)` leaves `a` perfectly usable and a mutation through `x` is visible to the caller — the famous mutable-default-argument surprise is this and nothing more. Rust's `report(a)` **moves**, so `a` is gone; to get Python's behaviour you write `report(&a)` and the signature says which one you meant. Two other things transfer: `sys.setrecursionlimit` is Python's software counterpart to a real stack bound (CPython counts frames rather than bytes, which is why the limit is 1,000 and not "8 MiB"), and a `RecursionError` is a catchable exception where Rust's overflow is not — [the next page](../recursion_and_the_stack/README.md) is about that difference. And `locals()` has no Rust equivalent, because a frame here is not an object; it is an offset from a register.
 
-**ABAP.** A `FORM`/`METHOD` call builds a stack entry with its own local `DATA`, and the ABAP debugger's call stack is showing you exactly the structure this page is about. `USING` versus `CHANGING` is the distinction Rust spells `x: Ballot` versus `x: &mut Ballot` — pass-by-value versus pass-by-reference — with two differences worth knowing. ABAP's `USING` copies and leaves the caller's variable intact; Rust's by-value **moves**, so the caller's name goes dead, and the compiler tells you rather than letting you read a stale copy. And ABAP checks nothing about how long a reference is kept: a field-symbol assigned to a local of a `FORM` that has since returned is the exact bug on [the third page of this arc](../a_stack_slot_is_reused/README.md), and it produces a dump at run time in whichever unrelated place happens to read it. `LOCAL` is the third case and has no counterpart here — Rust has no globals you save and restore, which is most of why its call stack is simpler to reason about than ABAP's.
+**ABAP.** A `FORM`/`METHOD` call builds a stack entry with its own local `DATA`, and the ABAP debugger's call stack is showing you exactly the structure this page is about. `USING` versus `CHANGING` is the distinction Rust spells `x: Counter` versus `x: &mut Counter` — pass-by-value versus pass-by-reference — with two differences worth knowing. ABAP's `USING` copies and leaves the caller's variable intact; Rust's by-value **moves**, so the caller's name goes dead, and the compiler tells you rather than letting you read a stale copy. And ABAP checks nothing about how long a reference is kept: a field-symbol assigned to a local of a `FORM` that has since returned is the exact bug on [the third page of this arc](../a_stack_slot_is_reused/README.md), and it produces a dump at run time in whichever unrelated place happens to read it. `LOCAL` is the third case and has no counterpart here — Rust has no globals you save and restore, which is most of why its call stack is simpler to reason about than ABAP's.
 
-**C.** The mechanism is identical, down to the register conventions, and one habit has to go. `struct Ballot b; count(b);` copies the struct into the callee's frame and both copies remain valid; in Rust the same line **moves** it, and the caller's is statically dead. So the C reflex of "pass a pointer to avoid the copy" becomes "pass a reference to avoid the *move*", and the reason changes: not performance, but who is responsible for freeing. The other habit worth unlearning is that `return &local` is a warning you can build past in C and is [rejected outright](../a_stack_slot_is_reused/README.md#what-rust-does-instead) here.
+**C.** The mechanism is identical, down to the register conventions, and one habit has to go. `struct Counter b; report(b);` copies the struct into the callee's frame and both copies remain valid; in Rust the same line **moves** it, and the caller's is statically dead. So the C reflex of "pass a pointer to avoid the copy" becomes "pass a reference to avoid the *move*", and the reason changes: not performance, but who is responsible for freeing. The other habit worth unlearning is that `return &local` is a warning you can build past in C and is [rejected outright](../a_stack_slot_is_reused/README.md#what-rust-does-instead) here.
 
-**C++.** Everything about frames is the same, and the default is inverted. `count(a)` copies in C++ and moves in Rust, so the expensive thing is the one you must ask for here and the one you must suppress there. `Ballot&&` and `std::move` have no counterpart because moving is not a special overload — it is what `=` and argument passing already do. What C++ calls a *dangling reference to a local* is the same bug as ever; the difference is only that here it does not compile.
+**C++.** Everything about frames is the same, and the default is inverted. `report(a)` copies in C++ and moves in Rust, so the expensive thing is the one you must ask for here and the one you must suppress there. `Counter&&` and `std::move` have no counterpart because moving is not a special overload — it is what `=` and argument passing already do. What C++ calls a *dangling reference to a local* is the same bug as ever; the difference is only that here it does not compile.
 
 ## Practice
 
@@ -153,21 +153,21 @@ fn receive(s: String) -> (usize, usize) {
 }
 
 /// Part 2. A value that says when it is freed.
-struct Receipt(&'static str);
+struct Marker(&'static str);
 
-impl Drop for Receipt {
+impl Drop for Marker {
     fn drop(&mut self) {
         println!("      [drop] {} freed", self.0);
     }
 }
 
 #[inline(never)]
-fn consume(r: Receipt) {
+fn consume(r: Marker) {
     println!("      consume() has it: {}", r.0);
 } //                                        <- freed HERE
 
 #[inline(never)]
-fn pass_through(r: Receipt) -> Receipt {
+fn pass_through(r: Marker) -> Marker {
     println!("      pass_through() has it: {}", r.0);
     r
 } //                                        <- freed by whoever takes it
@@ -203,11 +203,11 @@ fn d1(f: &mut Vec<usize>) {
 
 fn main() {
     println!("Part 1 — a String passed by value.\n");
-    let ballots = String::from("Riverside, Oakdale, Hillcrest");
-    let header_before = &ballots as *const String as usize;
-    let bytes_before = ballots.as_ptr() as usize;
+    let text = String::from("the quick brown fox jumps over it");
+    let header_before = &text as *const String as usize;
+    let bytes_before = text.as_ptr() as usize;
 
-    let (header_inside, bytes_inside) = receive(ballots);
+    let (header_inside, bytes_inside) = receive(text);
 
     println!("    header at a different address inside the callee?  {}",
              header_before != header_inside);
@@ -217,15 +217,15 @@ fn main() {
     println!("  copied into the callee's own slot; the text never moved, however");
     println!("  long it is. That asymmetry is why Rust can afford to move by");
     println!("  default -- a move is a fixed, small cost that does not grow with");
-    println!("  the data. And `ballots` is unusable here now: it went IN.");
+    println!("  the data. And `text` is unusable here now: it went IN.");
 
     println!("\nPart 2 — where the free happens.\n");
     println!("    (a) passed in, not returned:");
-    consume(Receipt("consumed"));
+    consume(Marker("consumed"));
     println!("        ...and the free already happened, inside consume()");
 
     println!("\n    (b) passed in and returned:");
-    let returned = pass_through(Receipt("returned"));
+    let returned = pass_through(Marker("returned"));
     println!("        ...and nothing was freed: the value moved out through");
     println!("        the return slot, into `returned`, which now owns it");
 
@@ -275,7 +275,7 @@ Part 1 — a String passed by value.
   copied into the callee's own slot; the text never moved, however
   long it is. That asymmetry is why Rust can afford to move by
   default -- a move is a fixed, small cost that does not grow with
-  the data. And `ballots` is unusable here now: it went IN.
+  the data. And `text` is unusable here now: it went IN.
 
 Part 2 — where the free happens.
 
@@ -327,7 +327,7 @@ Part 3 — four nested frames.
 
 Wywołanie funkcji rezerwuje **ramkę stosu** (*stack frame*) — obszar na parametry i zmienne lokalne tej konkretnej instancji wywołania. Argumenty są do niej **przenoszone** (nie kopiowane, jak w C), ciało funkcji z niej korzysta, a przy powrocie cały obszar znika naraz: wskaźnik stosu wraca na swoje miejsce i to jest całe zwalnianie pamięci.
 
-Trzy rzeczy, które warto zapamiętać. Po pierwsze, **parametr jest zmienną lokalną** — `fn count(x: Ballot)` nie daje podglądu na zmienną wywołującego, tylko przejmuje wartość; po wywołaniu nazwa `a` w funkcji wywołującej jest martwa. Po drugie, **wartość może opuścić ramkę** przez `return` — wtedy nie jest zwalniana, tylko przenoszona do miejsca przygotowanego przez wywołującego. Po trzecie, **ramka to miejsce, a nie wartość**: wartość żyje dopóki ktoś jest za nią odpowiedzialny, a ramka to tylko obszar, w którym akurat stała.
+Trzy rzeczy, które warto zapamiętać. Po pierwsze, **parametr jest zmienną lokalną** — `fn report(x: Counter)` nie daje podglądu na zmienną wywołującego, tylko przejmuje wartość; po wywołaniu nazwa `a` w funkcji wywołującej jest martwa. Po drugie, **wartość może opuścić ramkę** przez `return` — wtedy nie jest zwalniana, tylko przenoszona do miejsca przygotowanego przez wywołującego. Po trzecie, **ramka to miejsce, a nie wartość**: wartość żyje dopóki ktoś jest za nią odpowiedzialny, a ramka to tylko obszar, w którym akurat stała.
 
 Uwaga na przypis, który wszyscy pomijają: to, że coś „leży na stosie”, jest cechą jednej kompilacji, a nie języka. Mała wartość może w całości zmieścić się w rejestrze i nigdy nie dotknąć pamięci, a optymalizator potrafi wkompilować cztery wywołania w jedną ramkę (`-O` w przykładzie wyżej). Model myślowy zostaje ten sam — **czas życia wartości** jest własnością programu, a miejsce jej przechowywania własnością buildu.
 

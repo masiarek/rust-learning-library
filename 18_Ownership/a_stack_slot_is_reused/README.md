@@ -2,19 +2,19 @@
 
 **Level:** 201 · working knowledge
 
-**One line:** A released frame is not cleared, it is reissued — the next call gets the same bytes for its own locals — so an address that held a valid `Ballot` a moment ago is now somebody else's, which is the concrete reason a reference may not outlive what it borrows.
+**One line:** A released frame is not cleared, it is reissued — the next call gets the same bytes for its own locals — so an address that held a valid `Point` a moment ago is now somebody else's, which is the concrete reason a reference may not outlive what it borrows.
 
 ```rust
-fn cast(precinct: u32, score: u32) -> u32 {
-    let b = Ballot { precinct, score };   // lives at some address
-    b.precinct * 1000 + b.score
-}                                          // ...which is free again here
+fn plot(x: u32, y: u32) -> u32 {
+    let p = Point { x, y };       // lives at some address
+    p.x * 1000 + p.y
+}                                 // ...which is free again here
 
-let first = cast(7, 42);
-let second = cast(9, 13);                  // same address, different Ballot
+let first = plot(7, 42);
+let second = plot(9, 13);         // same address, a different Point
 ```
 
-Both calls put their local in the same place. Nothing moved it aside and nothing wiped it: `cast` returned, the stack pointer went back, and the second call was handed the region the first one had been using.
+Both calls put their local in the same place. Nothing moved it aside and nothing wiped it: `plot` returned, the stack pointer went back, and the second call was handed the region the first one had been using.
 
 ## The verified output
 
@@ -25,12 +25,12 @@ Both calls put their local in the same place. Nothing moved it aside and nothing
 1. The same call, twice: the same address
    call 1 produced 7042, call 2 produced 9013
    both locals lived at the same address:  true
-   the first Ballot was not moved aside. Its region was reissued.
+   the first Point was not moved aside. Its region was reissued.
 
 2. A different type, from the same place: the same region
-   tally returned 60, from a u64 rather than a Ballot
-   within 256 bytes of where the Ballots were: true
-   the bytes that spelled a Ballot now spell something else entirely
+   sum_of returned 60, from a u64 rather than a Point
+   within 256 bytes of where the Points were:  true
+   the bytes that spelled a Point now spell something else entirely
 
 3. Depth is reused too, not just the top
    a 21-frame call bottomed out well below the shallow ones: true
@@ -40,7 +40,7 @@ Both calls put their local in the same place. Nothing moved it aside and nothing
 
 4. Four ways a location stops holding a valid value
    (a) the frame was released:
-       cast() returned, and its Ballot's slot became free real estate
+       plot() returned, and its Point's slot became free real estate
    (b) the value was moved out:
        `owned` was moved into `moved`; the old slot holds bytes,
        and the compiler will not let you read them
@@ -63,7 +63,7 @@ Three observations, in the order the program makes them.
 
 **The same function called twice from the same place gets the same address.** Not *an equivalent* address — the same one. It follows from how frames are allocated: the stack pointer was restored to exactly where it had been, so the second call started from exactly the same offset. The example wears `#[inline(never)]` to keep that observable — [inline the calls and there are no two frames to compare](../the_call_stack/README.md#the-footnote-everyone-skips) — but the mechanism is what matters, and it is the one the released region is subject to either way.
 
-**A different function gets the same region.** `tally` keeps a `u64` where `cast` kept a `Ballot`, a few bytes away in the same few hundred. The bytes that spelled a `Ballot` now spell something else, and nothing about the memory records that it changed meaning.
+**A different function gets the same region.** `sum_of` keeps a `u64` where `plot` kept a `Point`, a few bytes away in the same few hundred. The bytes that spelled a `Point` now spell something else, and nothing about the memory records that it changed meaning.
 
 **Depth is reused too.** A 21-frame call reaches far below the shallow ones and, once it returns, leaves no trace at all — the next shallow call lands exactly where its predecessors did. The deepest point a program reached is invisible afterwards, because nothing was erased on the way back up.
 
@@ -80,27 +80,27 @@ The screenshot-friendly version of this page is one sentence: *a memory location
 
 The first and last are two halves of the same event, separated in time. The middle two are [moves](../ownership_and_moves/README.md) and [drops](../scope_is_about_names/README.md), which the rest of this section covers.
 
-What all four share is the thing that makes them dangerous: **the address stays perfectly readable.** No hardware fault, no flag, nothing that distinguishes "this is a `Ballot`" from "these bytes were a `Ballot` until three instructions ago". A pointer holds an address, and an address alone cannot tell you which of those it is.
+What all four share is the thing that makes them dangerous: **the address stays perfectly readable.** No hardware fault, no flag, nothing that distinguishes "this is a `Point`" from "these bytes were a `Point` until three instructions ago". A pointer holds an address, and an address alone cannot tell you which of those it is.
 
 ## What C does with that
 
 Reading the old bytes is not something safe Rust can express, which is why the example above stops at comparing addresses. C will do it, so the demonstration lives there:
 
 ```c title="c_comparison/use_after_return.c — undefined behaviour on purpose, not checked by CI"
-struct Ballot *cast(unsigned precinct, unsigned score) {
-    struct Ballot b = { precinct, score };
-    return &b;                      /* the frame ends on the next line */
+struct Point *plot(unsigned x, unsigned y) {
+    struct Point p = { x, y };
+    return &p;                      /* the frame ends on the next line */
 }
 ```
 
-```text
-before the region is reissued: precinct=7 score=42
-after:                        precinct=2981865904 score=32759
+```text title="One run. The second line is undefined, so it differs between runs and machines."
+before the region is reissued: x=7 y=42
+after:                        x=3116579248 y=32759
 ```
 
 The pointer read correctly the first time. That is the worst possible outcome: the bug was invisible until an unrelated call — `reuse()`, which does nothing but fill some locals — was inserted between the two reads.
 
-Clang does warn (`-Wreturn-stack-address`) and still produces a binary. The warning is a syntactic check on the `return &b` it can see: [put that line behind a helper](c_comparison/use_after_return.c) that just hands the pointer back and it goes quiet, with the bug unchanged. That is the general shape of the problem — *whether a pointer outlives its frame* is not a local property of one line, which is why it takes a checker that reasons about the whole function rather than a lint.
+Clang does warn (`-Wreturn-stack-address`) and still produces a binary. The warning is a syntactic check on the `return &p` it can see: [put that line behind a helper](c_comparison/use_after_return.c) that just hands the pointer back and it goes quiet — measured on clang, which then prints 7 with no diagnostic at all. That is the general shape of the problem — *whether a pointer outlives its frame* is not a local property of one line, which is why it takes a checker that reasons about the whole function rather than a lint.
 
 ## What Rust does instead
 
@@ -108,10 +108,10 @@ Two refusals, and the difference between them is worth reading carefully. Neithe
 
 ```text title="Abridged — real rustc output from refusals/dead_frame.rs, edition 2024, rustc 1.98.0"
 error[E0106]: missing lifetime specifier
-  --> dead_frame.rs:14:27
+  --> dead_frame.rs:14:20
    |
-14 | fn cast(precinct: u32) -> &Ballot {
-   |                           ^ expected named lifetime parameter
+14 | fn plot(x: u32) -> &Point {
+   |                    ^ expected named lifetime parameter
    |
    = help: this function's return type contains a borrowed value, but there is no value for it to be borrowed from
 ```
@@ -119,16 +119,16 @@ error[E0106]: missing lifetime specifier
 The signature is rejected before the body is even considered: a returned reference must borrow from *something the caller already has*, and this function has no argument to borrow from. Supply one and the signature becomes writable — at which point the body is checked, and the same bug is caught a second time, by name:
 
 ```text title="Real rustc output from refusals/dead_frame_named.rs, edition 2024, rustc 1.98.0"
-error[E0515]: cannot return reference to local variable `b`
+error[E0515]: cannot return reference to local variable `p`
   --> dead_frame_named.rs:13:5
    |
-13 |     &b
+13 |     &p
    |     ^^ returns a reference to data owned by the current function
 ```
 
-*"Data owned by the current function"* is this page in five words. `b` lives in the frame, the frame ends when the function returns, and no annotation can make the region survive — which is the thing [`<'a>` does not do](../lifetime_annotations/README.md): it names a relationship between lifetimes that already exist, it does not extend one.
+*"Data owned by the current function"* is this page in five words. `p` lives in the frame, the frame ends when the function returns, and no annotation can make the region survive — which is the thing [`<'a>` does not do](../lifetime_annotations/README.md): it names a relationship between lifetimes that already exist, it does not extend one.
 
-The fix is never a cleverer lifetime. It is to return the value instead of a reference to it — `-> Ballot`, moving it into a slot the caller provided — or to borrow from an argument that outlives the call.
+The fix is never a cleverer lifetime. It is to return the value instead of a reference to it — `-> Point`, moving it into a slot the caller provided — or to borrow from an argument that outlives the call.
 
 ## The rule this is the reason for
 
@@ -154,7 +154,7 @@ That is also why [the "clone everything" advice](../how_to_learn_lifetimes/READM
 
 1. Write a function that makes a local, records its address as a `usize`, and returns it. Call it twice and compare the two numbers. Predict the answer first, then explain why it is not a coincidence.
 2. Call a *different* function, with a differently-typed local, from the same place. Predict whether its local is inside the region the first one used, and check it with a distance rather than an equality.
-3. Now try to keep a reference instead of an address: `-> &Ballot` on a function that makes a local one. You will get `E0106`; add a `&u32` argument so a lifetime is available, and you will get `E0515`. Write down what the second message tells you that the first does not.
+3. Now try to keep a reference instead of an address: `-> &Point` on a function that makes a local one. You will get `E0106`; add a `&u32` argument so a lifetime is available, and you will get `E0515`. Write down what the second message tells you that the first does not.
 4. Then fix it twice — once by returning the value, once by borrowing from an argument — and say which of the two you would actually write.
 
 <details markdown="1">
@@ -174,17 +174,17 @@ That is also why [the "clone everything" advice](../how_to_learn_lifetimes/READM
 //!   rustc --edition 2024 a_stack_slot_is_reused_kata.rs -o /tmp/assirk && /tmp/assirk
 
 #[derive(Debug)]
-struct Ballot {
-    precinct: u32,
-    score: u32,
+struct Point {
+    x: u32,
+    y: u32,
 }
 
 /// Part 1. Records where its own local sat, and hands back the address as a
 /// plain number -- which is legal, and useless, and exactly the point.
 #[inline(never)]
-fn address_of_local(precinct: u32) -> usize {
-    let b = Ballot { precinct, score: 0 };
-    &b as *const Ballot as usize
+fn address_of_local(x: u32) -> usize {
+    let p = Point { x, y: 0 };
+    &p as *const Point as usize
 }
 
 /// Part 2. A different local, a different type, called from the same place.
@@ -196,13 +196,13 @@ fn address_of_other_local() -> usize {
 
 // Part 3, the two refusals. Neither can be written here, so both are quoted.
 //
-//   fn make() -> &Ballot { let b = Ballot { .. }; &b }
+//   fn make() -> &Point { let p = Point { .. }; &p }
 //     error[E0106]: missing lifetime specifier
 //     ...the SIGNATURE is wrong: a returned reference has to borrow from
 //        something, and this function has nothing to borrow from.
 //
-//   fn make<'a>(seed: &'a u32) -> &'a Ballot { let b = Ballot { .. }; &b }
-//     error[E0515]: cannot return reference to local variable `b`
+//   fn make<'a>(seed: &'a u32) -> &'a Point { let p = Point { .. }; &p }
+//     error[E0515]: cannot return reference to local variable `p`
 //     ...the signature is now writable, so the BODY gets checked, and the
 //        real bug is named: "returns a reference to data owned by the
 //        current function". The first error asks where the lifetime comes
@@ -210,15 +210,15 @@ fn address_of_other_local() -> usize {
 
 /// Part 4, fix one: return the VALUE. It moves into a slot the caller owns.
 #[inline(never)]
-fn built(precinct: u32) -> Ballot {
-    Ballot { precinct, score: 5 }
+fn built(x: u32) -> Point {
+    Point { x, y: 5 }
 }
 
 /// Part 4, fix two: borrow from an argument, which outlives the call.
 /// Elision fills the lifetime in, so no `'a` has to be written.
 #[inline(never)]
-fn highest(ballots: &[Ballot]) -> &Ballot {
-    ballots.iter().max_by_key(|b| b.score).expect("non-empty")
+fn highest(points: &[Point]) -> &Point {
+    points.iter().max_by_key(|p| p.y).expect("non-empty")
 }
 
 fn main() {
@@ -232,7 +232,7 @@ fn main() {
 
     println!("\nPart 2 — a different function, from the same place.\n");
     let other = address_of_other_local();
-    println!("    a u64 local, within 256 bytes of the Ballots:  {}",
+    println!("    a u64 local, within 256 bytes of the Points:   {}",
              other.abs_diff(first) < 256);
     println!("\n  Checked as a distance, not an equality: a different function has a");
     println!("  different frame layout, so its local sits at a different offset");
@@ -251,15 +251,15 @@ fn main() {
     println!("    returned by value:   {owned:?}");
     println!("    ...moved into a slot main provided, so no frame outlived it");
 
-    let roster = vec![
-        Ballot { precinct: 1, score: 3 },
-        Ballot { precinct: 2, score: 9 },
-        Ballot { precinct: 3, score: 4 },
+    let points = vec![
+        Point { x: 1, y: 3 },
+        Point { x: 2, y: 9 },
+        Point { x: 3, y: 4 },
     ];
-    let top = highest(&roster);
+    let top = highest(&points);
     println!("    borrowed from an argument: {top:?}");
-    println!("    ...precinct {} won it with {} points", top.precinct, top.score);
-    println!("    ...the reference borrows `roster`, which is main's, so it is");
+    println!("    ...the highest y is {} at x = {}", top.y, top.x);
+    println!("    ...the reference borrows `points`, which is main's, so it is");
     println!("    alive for as long as the caller keeps it alive");
 
     println!("\n  Which would I write? Return the value. Borrowing from an argument");
@@ -286,7 +286,7 @@ Part 1 — the same call twice.
 
 Part 2 — a different function, from the same place.
 
-    a u64 local, within 256 bytes of the Ballots:  true
+    a u64 local, within 256 bytes of the Points:   true
 
   Checked as a distance, not an equality: a different function has a
   different frame layout, so its local sits at a different offset
@@ -303,11 +303,11 @@ Part 3 — what the two errors each tell you.
 
 Part 4 — the two fixes, both compiling above.
 
-    returned by value:   Ballot { precinct: 7, score: 5 }
+    returned by value:   Point { x: 7, y: 5 }
     ...moved into a slot main provided, so no frame outlived it
-    borrowed from an argument: Ballot { precinct: 2, score: 9 }
-    ...precinct 2 won it with 9 points
-    ...the reference borrows `roster`, which is main's, so it is
+    borrowed from an argument: Point { x: 2, y: 9 }
+    ...the highest y is 9 at x = 2
+    ...the reference borrows `points`, which is main's, so it is
     alive for as long as the caller keeps it alive
 
   Which would I write? Return the value. Borrowing from an argument
@@ -336,7 +336,7 @@ Zwolniona ramka nie jest **czyszczona** — jest **wydawana ponownie**. Wskaźni
 
 Cztery drogi do tego, że pod danym adresem nie ma już poprawnej wartości: ramka została zwolniona, wartość została **przeniesiona** (`move`), wartość została **wypuszczona** (`drop`) na końcu zasięgu, albo obszar został **ponownie wykorzystany** przez późniejsze wywołanie. Wspólny mianownik jest groźny: **adres nadal daje się odczytać.** Nic w pamięci nie zapisuje, że bajty zmieniły znaczenie.
 
-W C można taki wskaźnik zwrócić i odczytać — kompilator ostrzega, ale buduje program, a ostrzeżenie znika, gdy ukryjemy `return &b` za pomocniczą funkcją. Rust odmawia dwa razy: `E0106` (brak czasu życia, od czego miałaby pożyczać zwracana referencja?) i `E0515` — *cannot return reference to local variable* — czyli „referencja do danych będących własnością tej funkcji”.
+W C można taki wskaźnik zwrócić i odczytać — kompilator ostrzega, ale buduje program, a ostrzeżenie znika, gdy ukryjemy `return &p` za pomocniczą funkcją. Rust odmawia dwa razy: `E0106` (brak czasu życia, od czego miałaby pożyczać zwracana referencja?) i `E0515` — *cannot return reference to local variable* — czyli „referencja do danych będących własnością tej funkcji”.
 
 Stąd bierze się cała reguła: **referencja nie może przeżyć wartości, którą pożycza.** To musi być rozstrzygnięte przed uruchomieniem programu, bo potem nie ma już żadnego śladu — bajty wyglądają poprawnie.
 

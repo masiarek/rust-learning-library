@@ -7,16 +7,16 @@
 //
 //   rustc --edition 2024 dead_frame.rs
 //   error[E0106]: missing lifetime specifier
-//    --> dead_frame.rs:4:27
+//    --> dead_frame.rs:14:27
 
-struct Ballot { precinct: u32 }
+struct Point { x: u32 }
 
-fn cast(precinct: u32) -> &Ballot {
-    let b = Ballot { precinct };
-    &b
+fn plot(x: u32) -> &Point {
+    let p = Point { x };
+    &p
 }
 
 fn main() {
-    let kept = cast(7);
-    println!("{}", kept.precinct);
+    let kept = plot(7);
+    println!("{}", kept.x);
 }

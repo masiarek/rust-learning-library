@@ -14,21 +14,21 @@ fn receive(s: String) -> (usize, usize) {
 }
 
 /// Part 2. A value that says when it is freed.
-struct Receipt(&'static str);
+struct Marker(&'static str);
 
-impl Drop for Receipt {
+impl Drop for Marker {
     fn drop(&mut self) {
         println!("      [drop] {} freed", self.0);
     }
 }
 
 #[inline(never)]
-fn consume(r: Receipt) {
+fn consume(r: Marker) {
     println!("      consume() has it: {}", r.0);
 } //                                        <- freed HERE
 
 #[inline(never)]
-fn pass_through(r: Receipt) -> Receipt {
+fn pass_through(r: Marker) -> Marker {
     println!("      pass_through() has it: {}", r.0);
     r
 } //                                        <- freed by whoever takes it
@@ -64,11 +64,11 @@ fn d1(f: &mut Vec<usize>) {
 
 fn main() {
     println!("Part 1 — a String passed by value.\n");
-    let ballots = String::from("Riverside, Oakdale, Hillcrest");
-    let header_before = &ballots as *const String as usize;
-    let bytes_before = ballots.as_ptr() as usize;
+    let text = String::from("the quick brown fox jumps over it");
+    let header_before = &text as *const String as usize;
+    let bytes_before = text.as_ptr() as usize;
 
-    let (header_inside, bytes_inside) = receive(ballots);
+    let (header_inside, bytes_inside) = receive(text);
 
     println!("    header at a different address inside the callee?  {}",
              header_before != header_inside);
@@ -78,15 +78,15 @@ fn main() {
     println!("  copied into the callee's own slot; the text never moved, however");
     println!("  long it is. That asymmetry is why Rust can afford to move by");
     println!("  default -- a move is a fixed, small cost that does not grow with");
-    println!("  the data. And `ballots` is unusable here now: it went IN.");
+    println!("  the data. And `text` is unusable here now: it went IN.");
 
     println!("\nPart 2 — where the free happens.\n");
     println!("    (a) passed in, not returned:");
-    consume(Receipt("consumed"));
+    consume(Marker("consumed"));
     println!("        ...and the free already happened, inside consume()");
 
     println!("\n    (b) passed in and returned:");
-    let returned = pass_through(Receipt("returned"));
+    let returned = pass_through(Marker("returned"));
     println!("        ...and nothing was freed: the value moved out through");
     println!("        the return slot, into `returned`, which now owns it");
 

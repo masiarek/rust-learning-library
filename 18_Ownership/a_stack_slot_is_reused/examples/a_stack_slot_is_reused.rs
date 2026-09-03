@@ -1,5 +1,5 @@
 //! The region a returned call occupied is not cleared. It is handed to the
-//! next call, so one address holds a Ballot now and something else in a moment.
+//! next call, so one address holds a Point now and something else in a moment.
 //!
 //! Every claim below is a comparison between two addresses taken in the same
 //! run. The addresses themselves differ every run and are never printed.
@@ -11,23 +11,23 @@
 //!   rustc --edition 2024 a_stack_slot_is_reused.rs -o /tmp/assir && /tmp/assir
 
 #[derive(Debug)]
-struct Ballot {
-    precinct: u32,
-    score: u32,
+struct Point {
+    x: u32,
+    y: u32,
 }
 
 /// Returns where its own local sat, so two calls can be compared.
 #[inline(never)]
-fn cast(precinct: u32, score: u32) -> (usize, u32) {
-    let b = Ballot { precinct, score };
-    let at = &b as *const Ballot as usize;
-    (at, b.precinct * 1000 + b.score)
+fn plot(x: u32, y: u32) -> (usize, u32) {
+    let p = Point { x, y };
+    let at = &p as *const Point as usize;
+    (at, p.x * 1000 + p.y)
 }
 
 /// A different type, a different size, called from the same place.
 #[inline(never)]
-fn tally(counts: [u64; 3]) -> (usize, u64) {
-    let total: u64 = counts.iter().sum();
+fn sum_of(values: [u64; 3]) -> (usize, u64) {
+    let total: u64 = values.iter().sum();
     let at = &total as *const u64 as usize;
     (at, total)
 }
@@ -53,22 +53,22 @@ impl Drop for Loud {
 
 fn main() {
     println!("1. The same call, twice: the same address");
-    let (first_at, first) = cast(7, 42);
-    let (second_at, second) = cast(9, 13);
+    let (first_at, first) = plot(7, 42);
+    let (second_at, second) = plot(9, 13);
     println!("   call 1 produced {first}, call 2 produced {second}");
     println!("   both locals lived at the same address:  {}", first_at == second_at);
-    println!("   the first Ballot was not moved aside. Its region was reissued.");
+    println!("   the first Point was not moved aside. Its region was reissued.");
 
     println!("\n2. A different type, from the same place: the same region");
-    let (tally_at, total) = tally([10, 20, 30]);
-    println!("   tally returned {total}, from a u64 rather than a Ballot");
-    println!("   within 256 bytes of where the Ballots were: {}",
-             tally_at.abs_diff(first_at) < 256);
-    println!("   the bytes that spelled a Ballot now spell something else entirely");
+    let (sum_at, total) = sum_of([10, 20, 30]);
+    println!("   sum_of returned {total}, from a u64 rather than a Point");
+    println!("   within 256 bytes of where the Points were:  {}",
+             sum_at.abs_diff(first_at) < 256);
+    println!("   the bytes that spelled a Point now spell something else entirely");
 
     println!("\n3. Depth is reused too, not just the top");
     let bottom = deep(20);
-    let (again_at, _) = cast(1, 1);
+    let (again_at, _) = plot(1, 1);
     println!("   a 21-frame call bottomed out well below the shallow ones: {}",
              bottom < again_at);
     println!("   and the next shallow call still lands where the others did:  {}",
@@ -78,7 +78,7 @@ fn main() {
 
     println!("\n4. Four ways a location stops holding a valid value");
     println!("   (a) the frame was released:");
-    println!("       cast() returned, and its Ballot's slot became free real estate");
+    println!("       plot() returned, and its Point's slot became free real estate");
     println!("   (b) the value was moved out:");
     let owned = Loud("moved-away");
     let moved = owned; //           `owned` names nothing now; the slot is stale
