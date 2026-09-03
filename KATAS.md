@@ -150,7 +150,6 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K130 | [Three predictions about one call — which of the two addresses moved, where the free happened, and which of your three claims was about Rust rather than about one build](18_Ownership/the_call_stack/README.md#practice) | [The call stack](18_Ownership/the_call_stack/README.md) | 101 → 201 |
 | K131 | [Prove the reuse, then get the compiler to stop you exploiting it — the same address twice, `E0106` before `E0515`, and the two fixes that are not annotations](18_Ownership/a_stack_slot_is_reused/README.md#practice) | [A stack slot is reused](18_Ownership/a_stack_slot_is_reused/README.md) | 201 |
 | K132 | [Freeze a candidate column three ways — handles and buffers for `String`, `Box<str>` and an interned `Rc<str>`, then the `.to_owned()` that clones a pointer instead of the text](14_Strings/boxed_str/README.md#practice) | [The third owned form](14_Strings/boxed_str/README.md) | 201 → 301 |
-| K133 | [Freeze a candidate column three ways — `String`, `Box<str>`, then interned `Rc<str>`, with all six numbers predicted before the run, and the `.to_owned()` that allocates on one row but not the other](14_Strings/boxed_str/README.md#practice) | [The third owned form](14_Strings/boxed_str/README.md) | 201 → 301 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -264,7 +263,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K44 · [The results table that would not sort](19_Numbers/what_a_float_stores/README.md#practice)
 - K87 · [Make the sum land on the number you would have typed](19_Numbers/letting_the_compiler_reorder/README.md#practice)
 
-**[Strings](14_Strings/README.md)** — 22 katas
+**[Strings](14_Strings/README.md)** — 21 katas
 
 - K61 · [One `&str` parameter, three callers](14_Strings/string_vs_str/README.md#practice)
 - K62 · [Cut a name in half without panicking](14_Strings/string_slices/README.md#practice)
@@ -287,7 +286,6 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K79 · [Six searches, and the two that want a regex](14_Strings/walking_a_string/README.md#practice)
 - K88 · [Let the source pick the spelling](14_Strings/making_a_string/README.md#practice)
 - K132 · [Freeze a candidate column three ways](14_Strings/boxed_str/README.md#practice)
-- K133 · [Freeze a candidate column three ways](14_Strings/boxed_str/README.md#practice)
 
 **[Enums](13_Enums/README.md)** — 1 kata
 
