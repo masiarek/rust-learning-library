@@ -1,0 +1,36 @@
+1. Every nested call adds a frame, and nothing leaves until it returns
+   entering frame 1
+   entering frame 2
+   entering frame 3
+   entering frame 4
+   deepest frame reached; 4 markers are alive at once
+       [drop] the marker in frame 4 is released
+       [drop] the marker in frame 3 is released
+       [drop] the marker in frame 2 is released
+       [drop] the marker in frame 1 is released
+   ...and they are released in reverse, innermost first
+
+2. Depth is the cost, not the work
+   sum_recursive(5000) = 12502500   5000 frames, one per step
+   sum_iterative(5000) = 12502500   one frame, whatever n is
+   same answer; only one of the two has a depth limit
+   sum_iterative(1000000) = 500000500000
+   the recursive version cannot be asked that. Part 4 shows what happens.
+
+3. The bound is chosen when a thread is spawned, and never grows
+   a thread asked for 256 KiB ran 1,000 frames fine: 500500
+   there is no reallocation and no growth: a stack is a fixed region,
+   so the only question is whether the depth fits the one you asked for
+
+4. Running out is an abort. Not a panic, not a Result.
+   child recursed without a base case, and exited successfully? false
+   the runtime named the reason on stderr:                      true
+   the same run wrapped in catch_unwind, exited successfully?   false
+   and it still died with the same message:                     true
+   catch_unwind catches PANICS. An overflow does not unwind, so there
+   is nothing to catch -- the process is killed where it stands.
+
+5. What this leaves behind
+   a panic runs every Drop on the way out; an abort runs none.
+   files stay open, locks stay locked, buffers stay unflushed --
+   the OS reclaims the memory, and nothing else gets a say.
