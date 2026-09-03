@@ -7,7 +7,7 @@
    *************** Results ****************
 
 3. Option<&T> takes callers the other shape cannot:
-   — 461 ballots
+   — 461 rows
    — unofficial
    —
       A `&Option<String>` parameter would have rejected the middle

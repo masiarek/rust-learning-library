@@ -39,7 +39,7 @@
   None.unwrap_or_default()          -> 0   T::default(), no argument
   None.map_or(-1, |v| v * 10)       -> -1  transform, or a default
   Some(4).map_or(-1, |v| v * 10)    -> 40  same call, value present
-  Err(e).unwrap_or_else(|e| e.len())-> 18  the fallback FROM the error
+  Err(e).unwrap_or_else(|e| e.len())-> 17  the fallback FROM the error
       The rule is one question: does the default already exist? A
       literal, a constant, a copy of something on the stack — pass it,
       unwrap_or is clearer. Anything you have to BUILD — allocate,
@@ -51,9 +51,9 @@
              unwrap_or(0) total = 8, but 3 of 3 marked
   left blank [Some(5), Some(3), None]
              unwrap_or(0) total = 8, but 2 of 3 marked
-      Both total 8, which is correct: a blank tabulates as zero. What
+      Both total 8, which is correct: a blank sums as zero. What
       is not recoverable is the second number — after unwrap_or(0) the
-      two ballots are the same array of u8 and no later code can tell
+      two rows are the same array of u8 and no later code can tell
       them apart. So apply the default at the BOUNDARY where the
       distinction stops mattering (the sum), never when loading the
       data, or you have thrown away a fact you still needed.

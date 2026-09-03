@@ -46,22 +46,22 @@ This is the whole reason `?` scales past one error type. Give your error an `imp
 use std::num::ParseIntError;
 
 #[derive(Debug)]
-enum TallyError {
+enum RowError {
     Malformed(String),
     NotANumber(ParseIntError),
 }
 
-impl From<ParseIntError> for TallyError {
+impl From<ParseIntError> for RowError {
     fn from(e: ParseIntError) -> Self {
-        TallyError::NotANumber(e)
+        RowError::NotANumber(e)
     }
 }
 
-fn strict_score(row: &str) -> Result<u32, TallyError> {
+fn strict_score(row: &str) -> Result<u32, RowError> {
     let (_name, count) = row
         .split_once('=')
-        .ok_or_else(|| TallyError::Malformed(row.to_string()))?;
-    Ok(count.parse::<u32>()?)          // ParseIntError in, TallyError out
+        .ok_or_else(|| RowError::Malformed(row.to_string()))?;
+    Ok(count.parse::<u32>()?)          // ParseIntError in, RowError out
 }
 
 fn main() {
@@ -69,14 +69,14 @@ fn main() {
     for row in ["Ada=5", "Cara=oops", "Dev"] {
         match strict_score(row) {
             Ok(n) => println!("{row}: {n}"),                          // Ada=5: 5
-            Err(TallyError::NotANumber(e)) => println!("{row}: {e}"), // Cara=oops: invalid digit found in string
-            Err(TallyError::Malformed(r)) => println!("{row}: no '=' in {r:?}"), // Dev: no '=' in "Dev"
+            Err(RowError::NotANumber(e)) => println!("{row}: {e}"), // Cara=oops: invalid digit found in string
+            Err(RowError::Malformed(r)) => println!("{row}: no '=' in {r:?}"), // Dev: no '=' in "Dev"
         }
     }
 }
 ```
 
-The last line of `strict_score` returns a `ParseIntError` and the function is declared to return `TallyError`. Nobody wrote a conversion there; the `From` impl was found by type. That is the mechanism behind `thiserror`'s `#[from]` attribute and behind `anyhow`'s catch-all — both of them generate or provide the `From` impls that `?` then finds.
+The last line of `strict_score` returns a `ParseIntError` and the function is declared to return `RowError`. Nobody wrote a conversion there; the `From` impl was found by type. That is the mechanism behind `thiserror`'s `#[from]` attribute and behind `anyhow`'s catch-all — both of them generate or provide the `From` impls that `?` then finds.
 
 Note the first `?` in that function too: it is applied to an `Option`, and `ok_or_else` is what made it a `Result` first. That pairing — [a transform to change the shape, then `?` to leave](../transforms_instead_of_match/README.md) — is most of what idiomatic error plumbing looks like.
 
@@ -167,7 +167,7 @@ def score(row):
     return int(count)              # ValueError leaves here too, invisibly
 ```
 
-Every line in Python is potentially an exit; nothing marks which. In Rust the `?` marks them, so an exit is one character but never an *invisible* one, and a line without `?` cannot leave early. The second difference is the signature: `score`'s Python type tells you nothing about failure, while `Result<u32, TallyError>` lists it — which is what makes an exhaustive `match` at the caller possible at all.
+Every line in Python is potentially an exit; nothing marks which. In Rust the `?` marks them, so an exit is one character but never an *invisible* one, and a line without `?` cannot leave early. The second difference is the signature: `score`'s Python type tells you nothing about failure, while `Result<u32, RowError>` lists it — which is what makes an exhaustive `match` at the caller possible at all.
 
 The Python habit that transfers badly is the bare `except:` at the top of a script. Its Rust spelling is `Box<dyn Error>`, and it has the same property: it makes the program run and makes the failures indistinguishable.
 
@@ -211,9 +211,9 @@ What does not line up is the older half of ABAP: `sy-subrc` and `MESSAGE ... RAI
    Ben=2        -> 2
    Cara=oops    -> count is not a number: invalid digit found in string
    Dev          -> row has no '=': "Dev"
-   `strict_score` returns TallyError, but its last `?` was applied to
+   `strict_score` returns RowError, but its last `?` was applied to
    a ParseIntError, and nobody wrote a conversion at that spot — the
-   `impl From<ParseIntError> for TallyError` did it, silently.
+   `impl From<ParseIntError> for RowError` did it, silently.
 
 4. `?` works on Option too, and means something different
    initial("Ada=5") = Some('A')
@@ -254,7 +254,7 @@ What does not line up is the older half of ABAP: `sy-subrc` and `MESSAGE ... RAI
 
 Po polsku `?` bywa nazywany operatorem propagacji błędu i ta nazwa jest dobra, o ile pamięta się, czym propagacja tutaj **nie** jest: `?` to `return`, a nie `throw`. Nie ma rozwijania stosu, nie ma łapania — linia z trzema `?` ma po prostu trzy wyjścia z funkcji, za to wyjścia widoczne gołym okiem. Błąd nie „leci” sam trzy poziomy w górę, jak wyjątek w Javie czy Pythonie: każdy poziom musi postawić u siebie własny `?`, tyle że kosztuje to jeden znak, a kompilator nie pozwoli o nim zapomnieć. W domknięciu (*closure*) ta sama reguła liczy się względem samego domknięcia — `?` w środku `.map(|x| …)` wychodzi z **domknięcia**, a nie z funkcji dookoła, i to jest tu najczęstsza pomyłka.
 
-Druga połowa operatora bywa przeoczana: w rozwinięciu stoi `Err(e) => return Err(From::from(e))`. Konwersja typu błędu dzieje się po cichu, a odpowiednia implementacja `From` dobierana jest po **typie zwracanym przez funkcję**, mimo że w miejscu, gdzie stoi `?`, nikt żadnej konwersji nie napisał. Dlatego jeden `impl From<ParseIntError> for TallyError` sprawia, że każdy `?` w module zaczyna oddawać `TallyError`. Na tym mechanizmie stoją `thiserror` (atrybut `#[from]`) i `anyhow` — one tylko generują albo dostarczają te implementacje `From`, których `?` potem szuka. Sam operator nie jest zresztą wbudowany na stałe w `Result`: definiuje go cecha (*trait*) `Try`, którą implementuje też `Option` — tam kroku konwersji po prostu nie ma, bo `None` nie niesie niczego do przekonwertowania.
+Druga połowa operatora bywa przeoczana: w rozwinięciu stoi `Err(e) => return Err(From::from(e))`. Konwersja typu błędu dzieje się po cichu, a odpowiednia implementacja `From` dobierana jest po **typie zwracanym przez funkcję**, mimo że w miejscu, gdzie stoi `?`, nikt żadnej konwersji nie napisał. Dlatego jeden `impl From<ParseIntError> for RowError` sprawia, że każdy `?` w module zaczyna oddawać `RowError`. Na tym mechanizmie stoją `thiserror` (atrybut `#[from]`) i `anyhow` — one tylko generują albo dostarczają te implementacje `From`, których `?` potem szuka. Sam operator nie jest zresztą wbudowany na stałe w `Result`: definiuje go cecha (*trait*) `Try`, którą implementuje też `Option` — tam kroku konwersji po prostu nie ma, bo `None` nie niesie niczego do przekonwertowania.
 
 Warto od razu rozpoznawać dwa komunikaty `E0277`. Pierwszy — *the `?` operator can only be used on `Result`s, not `Option`s, in a function that returns `Result`* — pojawia się przy mieszaniu obu typów w jednej funkcji, a podpowiedź *use `.ok_or(...)?`* jest i lekarstwem, i wyjaśnieniem reguły: kompilator nie wymyśli za ciebie treści błędu, bo to właśnie ona byłaby najważniejszym słowem w komunikacie dla użytkownika. Drugi dotyczy `?` w funkcji zwracającej `()`, najczęściej w `main`, i sam proponuje `fn main() -> Result<(), Box<dyn std::error::Error>>`. `Box<dyn Error>` przyjmuje `?` po dowolnym typie błędu — wygodnie w programie, stratnie w bibliotece, bo kod wywołujący dostaje tekst zamiast typu, po którym dałoby się zrobić `match`. I jeszcze jedno dla czytających starsze materiały: w miejscu dzisiejszego `?` zobaczysz tam makro `try!` — to jego poprzednik sprzed Rusta 1.13, a od edycji 2018 `try` jest słowem zastrzeżonym i makro trzeba by zapisać jako `r#try!`. W nowym kodzie nie ma po nie powodu sięgać.
 

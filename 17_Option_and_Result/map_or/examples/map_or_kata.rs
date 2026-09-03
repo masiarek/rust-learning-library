@@ -27,9 +27,9 @@ fn main() {
     println!("      its fallback must already be the same type as the value.");
 
     println!("\nEager and lazy, the same rule as the unwrap family:");
-    let seats: Option<u32> = Some(3);
-    println!("  map_or       -> {}", seats.map_or(expensive_default(), |s| s * 2));
-    println!("  map_or_else  -> {}", seats.map_or_else(expensive_default_lazy, |s| s * 2));
+    let columns: Option<u32> = Some(3);
+    println!("  map_or       -> {}", columns.map_or(expensive_default(), |s| s * 2));
+    println!("  map_or_else  -> {}", columns.map_or_else(expensive_default_lazy, |s| s * 2));
 
     println!("\nWhere a match still wins — when both arms have something to say:");
     match &counted {
@@ -42,7 +42,7 @@ fn main() {
 }
 
 fn expensive_default() -> u32 {
-    println!("      …building the default (ran even though seats was Some)");
+    println!("      …building the default (ran even though columns was Some)");
     0
 }
 

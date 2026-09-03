@@ -32,7 +32,7 @@ What a panic costs: unwinding is tidy about memory, not about work
       the process stops where it stands and no destructor runs.)
 
 ──── Step 4: In a thread, only that thread dies
-  worker panicked, join() -> Err("the worker was promised a quorum")
+  worker panicked, join() -> Err("the worker was promised a limit")
   main is still running, and prints this line
       A panic unwinds one thread. `join` hands you the payload as an
       Err, so the parent decides — which is the choice the unwrap

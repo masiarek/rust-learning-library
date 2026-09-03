@@ -90,7 +90,7 @@ Note what that function does with each half: the *absence* of the field and the 
 
 ## Practice
 
-**Four causes, one `None`.** A config line gives a seat count. It can be missing, non-numeric, zero, or larger than the ballot supports. Write the version that returns `Option<u32>`, then the version that keeps the reason, and print both over the same five inputs.
+**Four causes, one `None`.** A config line gives a seat count. It can be missing, non-numeric, zero, or larger than the row supports. Write the version that returns `Option<u32>`, then the version that keeps the reason, and print both over the same five inputs.
 
 Try writing the operator-facing error message from the `Option` version. You will find yourself guessing which of the four happened — that guess is the downgrade, and it is invisible in the signature. Then find the call in your own solution where `None` really was the right answer all along.
 
@@ -109,39 +109,39 @@ use std::fmt;
 use std::num::ParseIntError;
 
 /// The line everyone writes first. `.ok()` is where the reason goes to die.
-fn seats_lossy(raw: &str) -> Option<u32> {
+fn columns_lossy(raw: &str) -> Option<u32> {
     raw.trim().parse::<u32>().ok().filter(|n| (1..=20).contains(n))
 }
 
 #[derive(Debug)]
-enum SeatsError {
+enum ColumnsError {
     Missing,
     NotANumber(ParseIntError),
     Zero,
     TooMany(u32),
 }
 
-impl fmt::Display for SeatsError {
+impl fmt::Display for ColumnsError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            SeatsError::Missing => write!(f, "no seat count was given"),
-            SeatsError::NotANumber(e) => write!(f, "not a whole number: {e}"),
-            SeatsError::Zero => write!(f, "an election with 0 seats elects nobody"),
-            SeatsError::TooMany(n) => write!(f, "{n} seats is past the 20 this ballot supports"),
+            ColumnsError::Missing => write!(f, "no seat count was given"),
+            ColumnsError::NotANumber(e) => write!(f, "not a whole number: {e}"),
+            ColumnsError::Zero => write!(f, "a table with 0 columns holds nothing"),
+            ColumnsError::TooMany(n) => write!(f, "{n} columns is past the 20 this row supports"),
         }
     }
 }
 
-fn seats(raw: &str) -> Result<u32, SeatsError> {
+fn columns(raw: &str) -> Result<u32, ColumnsError> {
     let raw = raw.trim();
     if raw.is_empty() {
-        return Err(SeatsError::Missing);
+        return Err(ColumnsError::Missing);
     }
-    let n = raw.parse::<u32>().map_err(SeatsError::NotANumber)?;
+    let n = raw.parse::<u32>().map_err(ColumnsError::NotANumber)?;
     match n {
-        0 => Err(SeatsError::Zero),
+        0 => Err(ColumnsError::Zero),
         1..=20 => Ok(n),
-        _ => Err(SeatsError::TooMany(n)),
+        _ => Err(ColumnsError::TooMany(n)),
     }
 }
 
@@ -150,20 +150,20 @@ fn main() {
 
     println!("Option — the caller cannot tell a typo from a policy limit:");
     for raw in lines {
-        println!("  {:>7} -> {:?}", format!("{raw:?}"), seats_lossy(raw));
+        println!("  {:>7} -> {:?}", format!("{raw:?}"), columns_lossy(raw));
     }
 
     println!("\nResult — every one of them can be answered differently:");
     for raw in lines {
-        match seats(raw) {
-            Ok(n) => println!("  {:>7} -> {n} seats", format!("{raw:?}")),
+        match columns(raw) {
+            Ok(n) => println!("  {:>7} -> {n} columns", format!("{raw:?}")),
             Err(e) => println!("  {:>7} -> {e}", format!("{raw:?}")),
         }
     }
 
     println!("\nThe one case where None was right all along:");
-    let ballots = ["ada", "ben"];
-    println!("  ballots.iter().position(|b| *b == \"cara\") -> {:?}", ballots.iter().position(|b| *b == "cara"));
+    let rows = ["ada", "ben"];
+    println!("  rows.iter().position(|b| *b == \"cara\") -> {:?}", rows.iter().position(|b| *b == "cara"));
     println!("      There is exactly one reason that is absent, and the caller");
     println!("      already knows it. Nothing was discarded to say None here.");
 }
@@ -182,14 +182,14 @@ Option — the caller cannot tell a typo from a policy limit:
      "99" -> None
 
 Result — every one of them can be answered differently:
-      "3" -> 3 seats
+      "3" -> 3 columns
        "" -> no seat count was given
   "three" -> not a whole number: invalid digit found in string
-      "0" -> an election with 0 seats elects nobody
-     "99" -> 99 seats is past the 20 this ballot supports
+      "0" -> a table with 0 columns holds nothing
+     "99" -> 99 columns is past the 20 this row supports
 
 The one case where None was right all along:
-  ballots.iter().position(|b| *b == "cara") -> None
+  rows.iter().position(|b| *b == "cara") -> None
       There is exactly one reason that is absent, and the caller
       already knows it. Nothing was discarded to say None here.
 ```

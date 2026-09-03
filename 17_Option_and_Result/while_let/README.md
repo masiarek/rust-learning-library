@@ -146,7 +146,7 @@ fn main() {
     // here with a counter so the example terminates and can be verified — in
     // real code there is no counter, and the program simply hangs.
     // Not `mut` — and that is the tell: this loop never changes the queue.
-    let queue = vec!["late ballot"];
+    let queue = vec!["late row"];
     let mut passes = 0;
     println!("\nA body that never shortens the queue:");
     while let Some(item) = queue.last() {
@@ -181,9 +181,9 @@ Draining with `while let Some(x) = stack.pop()`:
   is exactly the line the next demo forgets.
 
 A body that never shortens the queue:
-  pass 1: still holding "late ballot"
-  pass 2: still holding "late ballot"
-  pass 3: still holding "late ballot"
+  pass 1: still holding "late row"
+  pass 2: still holding "late row"
+  pass 3: still holding "late row"
   (stopped by a counter that only exists in this demo)
   `last()` peeks; `pop()` advances. Nothing in the language knows
   which one your loop needed — `while let` re-tests the pattern and

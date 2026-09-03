@@ -4,7 +4,7 @@ Option — one sad answer for four different problems:
   "x" -> None
   "9" -> None
 
-Result — the caller can tell them apart, and tell the voter:
+Result — the caller can tell them apart, and tell the user:
   "4" -> counted as 4
    "" -> rejected: the cell was blank
   "x" -> rejected: not a number: invalid digit found in string

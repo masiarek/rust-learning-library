@@ -56,7 +56,7 @@ fn main() {
         println!("  {:>3} -> {:?}", format!("{raw:?}"), score_option(raw));
     }
 
-    println!("\nResult — the caller can tell them apart, and tell the voter:");
+    println!("\nResult — the caller can tell them apart, and tell the user:");
     for raw in cells {
         match score_result(raw) {
             Ok(n) => println!("  {:>3} -> counted as {n}", format!("{raw:?}")),

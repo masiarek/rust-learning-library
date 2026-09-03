@@ -91,7 +91,7 @@ fn step4() {
     println!("      Python's `favnum or 42` answers 42 for BOTH of these, because 0 is");
     println!("      falsy. ABAP says the same with IS INITIAL: 0 and 'never set' are one");
     println!("      value. Rust keeps them apart, which is the difference between a");
-    println!("      ballot that scored a candidate 0 and one that left them blank.");
+    println!("      form that answered a question 0 and one that left it blank.");
 }
 
 // ─────────────────────────────────────────────────────────── Step 5

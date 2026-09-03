@@ -20,9 +20,9 @@
    Ben=2        -> 2
    Cara=oops    -> count is not a number: invalid digit found in string
    Dev          -> row has no '=': "Dev"
-   `strict_score` returns TallyError, but its last `?` was applied to
+   `strict_score` returns RowError, but its last `?` was applied to
    a ParseIntError, and nobody wrote a conversion at that spot — the
-   `impl From<ParseIntError> for TallyError` did it, silently.
+   `impl From<ParseIntError> for RowError` did it, silently.
 
 4. `?` works on Option too, and means something different
    initial("Ada=5") = Some('A')

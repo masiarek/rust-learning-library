@@ -33,7 +33,7 @@ Some and None: reading an Option
       Python's `favnum or 42` answers 42 for BOTH of these, because 0 is
       falsy. ABAP says the same with IS INITIAL: 0 and 'never set' are one
       value. Rust keeps them apart, which is the difference between a
-      ballot that scored a candidate 0 and one that left them blank.
+      form that answered a question 0 and one that left it blank.
 
 ──── Step 5: The trap: `match favnum` MOVES the value, and i32 hides it
   match fav_num  -> Some(3)

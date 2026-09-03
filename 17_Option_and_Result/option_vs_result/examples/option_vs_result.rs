@@ -39,10 +39,10 @@ fn step1() {
 fn step2() {
     banner(2, "match — the form that always works");
 
-    let ballots: Option<u32> = Some(461);
-    match ballots {
-        Some(n) => println!("  Option: counted {n} ballots"),
-        None => println!("  Option: no ballot file loaded"),
+    let rows: Option<u32> = Some(461);
+    match rows {
+        Some(n) => println!("  Option: counted {n} rows"),
+        None => println!("  Option: no input file loaded"),
     }
 
     match "5,2,0".parse::<u32>() {
@@ -69,8 +69,8 @@ fn step3() {
     };
     println!("  let-else          -> bound {text:?} for the rest of the function");
 
-    let quorum: Option<u32> = None;
-    println!("  unwrap_or         -> {}", quorum.unwrap_or(0));
+    let limit: Option<u32> = None;
+    println!("  unwrap_or         -> {}", limit.unwrap_or(0));
 
     let m: u32 = Some(7).unwrap_or_else(|| {
         println!("  (this never prints — unwrap_or_else is lazy)");
@@ -135,7 +135,7 @@ fn step6() {
     banner(6, "Crossing between the two");
 
     let maybe: Option<u32> = None;
-    let up: Result<u32, &str> = maybe.ok_or("no quorum recorded");
+    let up: Result<u32, &str> = maybe.ok_or("no limit recorded");
     println!("  Option -> Result  .ok_or(reason) -> {up:?}");
 
     let res = "nope".parse::<u32>();
@@ -166,42 +166,42 @@ fn step7() {
 // A real error type. Three variants, because a caller might act differently on each.
 
 #[derive(Debug)]
-enum BallotError {
+enum RowError {
     Empty,
     BadScore(ParseIntError),
     OutOfRange { got: u32, max: u32 },
 }
 
-impl fmt::Display for BallotError {
+impl fmt::Display for RowError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            BallotError::Empty => write!(f, "the ballot line was empty"),
-            BallotError::BadScore(e) => write!(f, "not a number: {e}"),
-            BallotError::OutOfRange { got, max } => {
+            RowError::Empty => write!(f, "the input line was empty"),
+            RowError::BadScore(e) => write!(f, "not a number: {e}"),
+            RowError::OutOfRange { got, max } => {
                 write!(f, "score {got} is above the {max} cap")
             }
         }
     }
 }
 
-impl Error for BallotError {}
+impl Error for RowError {}
 
-// THIS is what lets `?` turn a ParseIntError into a BallotError automatically.
-impl From<ParseIntError> for BallotError {
+// THIS is what lets `?` turn a ParseIntError into a RowError automatically.
+impl From<ParseIntError> for RowError {
     fn from(e: ParseIntError) -> Self {
-        BallotError::BadScore(e)
+        RowError::BadScore(e)
     }
 }
 
-fn parse_ballot(line: &str) -> Result<Vec<u32>, BallotError> {
+fn parse_row(line: &str) -> Result<Vec<u32>, RowError> {
     if line.trim().is_empty() {
-        return Err(BallotError::Empty);
+        return Err(RowError::Empty);
     }
     let mut out = Vec::new();
     for tok in line.split(',') {
-        let score: u32 = tok.trim().parse()?; // ParseIntError -> BallotError, via From
+        let score: u32 = tok.trim().parse()?; // ParseIntError -> RowError, via From
         if score > 5 {
-            return Err(BallotError::OutOfRange { got: score, max: 5 });
+            return Err(RowError::OutOfRange { got: score, max: 5 });
         }
         out.push(score);
     }
@@ -211,20 +211,20 @@ fn parse_ballot(line: &str) -> Result<Vec<u32>, BallotError> {
 fn step8() {
     banner(8, "Designing the E in Result<T, E>");
     for line in ["5,2,0", "", "5,x,0", "5,9,0"] {
-        match parse_ballot(line) {
+        match parse_row(line) {
             Ok(v) => println!("  {line:?} -> ok {v:?}"),
             Err(e) => println!("  {line:?} -> error: {e}"),
         }
     }
-    println!("      `?` did the ParseIntError -> BallotError conversion. That is `From`, not magic.");
+    println!("      `?` did the ParseIntError -> RowError conversion. That is `From`, not magic.");
 }
 
 // ─────────────────────────────────────────────────────────── Step 9
 // When you don't want to enumerate every failure, erase the type.
 fn load_and_total(line: &str) -> Result<u32, Box<dyn Error>> {
-    let ballot = parse_ballot(line)?; // BallotError   -> Box<dyn Error>
+    let row = parse_row(line)?; // RowError   -> Box<dyn Error>
     let weight: u32 = "3".parse()?; // ParseIntError -> Box<dyn Error>
-    Ok(ballot.iter().sum::<u32>() * weight)
+    Ok(row.iter().sum::<u32>() * weight)
 }
 
 fn step9() {

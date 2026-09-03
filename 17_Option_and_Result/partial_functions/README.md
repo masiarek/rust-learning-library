@@ -77,7 +77,7 @@ Once a function can be undefined for *several* reasons the caller might act on d
 
 ## Practice
 
-**The average of nothing.** Write `mean(xs: &[f64]) -> Option<f64>`, total over every slice a caller can hand you, and print it for a scored candidate and an unscored one.
+**The average of nothing.** Write `mean(xs: &[f64]) -> Option<f64>`, total over every slice a caller can hand you, and print it for a question that got ratings and one that got none.
 
 Write the unguarded version first and print its answer for an empty slice. It does not panic, which is the point — it hands back `NaN` and lets it travel. Then say in one line what your `None` means, and check that it is *not* "the average is 0".
 
@@ -109,7 +109,7 @@ fn mean(xs: &[f64]) -> Option<f64> {
 fn report(label: &str, xs: &[f64]) {
     match mean(xs) {
         Some(m) => println!("  {label:<14} -> average score {m}"),
-        None => println!("  {label:<14} -> nobody scored this candidate"),
+        None => println!("  {label:<14} -> nobody rated this item"),
     }
 }
 
@@ -129,7 +129,7 @@ fn main() {
 
     println!("\nWhat None means here is a decision, so write it down:");
     println!("  mean(unscored) is None because there is no such average —");
-    println!("  NOT because the average is 0, which is a score a voter can give.");
+    println!("  NOT because the average is 0, which is a rating somebody can give.");
     println!("  mean(&[0.0, 0.0]) -> {:?}", mean(&[0.0, 0.0]));
 }
 ```
@@ -147,11 +147,11 @@ The naive version, on the input it has no answer for:
 
 The total version says so instead:
   scored         -> average score 4
-  unscored       -> nobody scored this candidate
+  unscored       -> nobody rated this item
 
 What None means here is a decision, so write it down:
   mean(unscored) is None because there is no such average —
-  NOT because the average is 0, which is a score a voter can give.
+  NOT because the average is 0, which is a rating somebody can give.
   mean(&[0.0, 0.0]) -> Some(0.0)
 ```
 <!-- /output -->

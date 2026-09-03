@@ -30,7 +30,7 @@ Take that `help` at face value only if you mean it — see [the lab coat](#the-l
 
 ## The payoff: fall back *and* keep the reason
 
-A bad row in a ballot file must not stop the count. It also must not vanish. `unwrap_or_else` is the only member of the family that can do both, because the closure is handed the thing every other member drops:
+A bad row in a input file must not stop the count. It also must not vanish. `unwrap_or_else` is the only member of the family that can do both, because the closure is handed the thing every other member drops:
 
 ```rust
 let s = score(raw).unwrap_or_else(|why| {
@@ -62,7 +62,7 @@ The closure runs only on the sad path — six lookups with two misses build the 
 
 ```text
 size_of_val(&|| 50)             = 0
-size_of_val(&move || seats * 2) = 2
+size_of_val(&move || columns * 2) = 2
 size_of_val(&move || fallback)  = 24  (a String moved in)
 ```
 
@@ -119,14 +119,14 @@ Identical in every way that matters: same value, same discarded error, same cost
 "4x".parse::<u32>().expect("unreadable score");
 
 "4x".parse::<u32>()
-    .unwrap_or_else(|e| panic!("ballot line 12: {e} — rerun the export"));
+    .unwrap_or_else(|e| panic!("input line 12: {e} — rerun the export"));
 ```
 
 The two messages that come out:
 
 ```text
 unreadable score: ParseIntError { kind: InvalidDigit }
-ballot line 12: invalid digit found in string — rerun the export
+input line 12: invalid digit found in string — rerun the export
 ```
 
 `expect` puts `Debug` at the end; the closure puts `Display` in the middle of a sentence, beside the context — which row, which file, what to do — that makes the panic actionable rather than merely accurate. That is the whole trade, and the only reason to prefer the longer form.
@@ -290,7 +290,7 @@ The same fallback written three ways, and what each forgets:
 
 ──── Step 6: A closure is a struct, and FnOnce means it may eat its captures
   size_of_val(&|| 50)             = 0
-  size_of_val(&move || seats * 2) = 2
+  size_of_val(&move || columns * 2) = 2
   size_of_val(&move || fallback)  = 24  (a String moved in)
   missing.unwrap_or_else(that closure) -> "(unnamed)"
   Some(7).unwrap_or_else(|| 50)   -> 7

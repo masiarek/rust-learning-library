@@ -35,35 +35,35 @@ fn score(row: &str) -> Result<u32, ParseIntError> {
 // -------------------------------------------- `?` converting the error type
 
 #[derive(Debug)]
-enum TallyError {
+enum RowError {
     Malformed(String),
     NotANumber(ParseIntError),
 }
 
-impl fmt::Display for TallyError {
+impl fmt::Display for RowError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            TallyError::Malformed(row) => write!(f, "row has no '=': {row:?}"),
-            TallyError::NotANumber(e) => write!(f, "count is not a number: {e}"),
+            RowError::Malformed(row) => write!(f, "row has no '=': {row:?}"),
+            RowError::NotANumber(e) => write!(f, "count is not a number: {e}"),
         }
     }
 }
 
-impl Error for TallyError {}
+impl Error for RowError {}
 
 /// This is the whole mechanism: `?` calls `From::from` on the way out, so the
-/// `ParseIntError` becomes a `TallyError` with nothing written at the call site.
-impl From<ParseIntError> for TallyError {
+/// `ParseIntError` becomes a `RowError` with nothing written at the call site.
+impl From<ParseIntError> for RowError {
     fn from(e: ParseIntError) -> Self {
-        TallyError::NotANumber(e)
+        RowError::NotANumber(e)
     }
 }
 
-fn strict_score(row: &str) -> Result<u32, TallyError> {
+fn strict_score(row: &str) -> Result<u32, RowError> {
     let (_name, count) = row
         .split_once('=')
-        .ok_or_else(|| TallyError::Malformed(row.to_string()))?;
-    Ok(count.parse::<u32>()?) //  <-- ParseIntError in, TallyError out
+        .ok_or_else(|| RowError::Malformed(row.to_string()))?;
+    Ok(count.parse::<u32>()?) //  <-- ParseIntError in, RowError out
 }
 
 // ------------------------------------------------------------ `?` on `Option`
@@ -78,7 +78,7 @@ fn initial(row: &str) -> Option<char> {
 fn total(rows: &[&str]) -> Result<u32, Box<dyn Error>> {
     let mut sum = 0;
     for row in rows {
-        sum += strict_score(row)?; // TallyError -> Box<dyn Error>, also via From
+        sum += strict_score(row)?; // RowError -> Box<dyn Error>, also via From
     }
     Ok(sum)
 }
@@ -111,9 +111,9 @@ fn main() {
             Err(e) => println!("   {row:<12} -> {e}"),
         }
     }
-    println!("   `strict_score` returns TallyError, but its last `?` was applied to");
+    println!("   `strict_score` returns RowError, but its last `?` was applied to");
     println!("   a ParseIntError, and nobody wrote a conversion at that spot — the");
-    println!("   `impl From<ParseIntError> for TallyError` did it, silently.");
+    println!("   `impl From<ParseIntError> for RowError` did it, silently.");
 
     println!("\n4. `?` works on Option too, and means something different");
     for row in SHEET {

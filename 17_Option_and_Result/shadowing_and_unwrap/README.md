@@ -105,13 +105,13 @@ let score = 42;
 **Keeping one name while the type changes underneath it.** That is the whole feature, and it is why it turns up next to unwrapping so often:
 
 ```rust
-fn tally(quorum: Option<u32>) -> u32 {
-    let quorum = quorum.unwrap_or(0);   // Option<u32> in, u32 out, same name
+fn tally(limit: Option<u32>) -> u32 {
+    let limit = limit.unwrap_or(0);   // Option<u32> in, u32 out, same name
     …
 }
 ```
 
-Without it you would be inventing `quorum_opt` and `quorum_value`, and every later line would have to remember which one it is holding. The `Option` version is gone from that point on — not hidden by convention, *inaccessible* — so nothing downstream can use the wrong one.
+Without it you would be inventing `limit_opt` and `limit_value`, and every later line would have to remember which one it is holding. The `Option` version is gone from that point on — not hidden by convention, *inaccessible* — so nothing downstream can use the wrong one.
 
 The same move, three ways you will see it:
 
@@ -313,11 +313,11 @@ fn main() {
       error no matter how the inside of the block is written.
 
 ──── Step 4: What shadowing IS for: the name stays, the type changes
-  before: quorum is None   type core::option::Option<i32>
-  after:  quorum is 0      type i32
+  before: limit is None   type core::option::Option<i32>
+  after:  limit is 0      type i32
       This is the one place the two ideas genuinely meet: unwrapping
       changes the TYPE, and shadowing lets the NAME survive the change.
-      Without it you would invent quorum_opt / quorum_value pairs.
+      Without it you would invent limit_opt / limit_value pairs.
 
 ──── Step 5: A shadow ends with its block; the outer name comes back
   inside the block  -> 84
@@ -332,8 +332,8 @@ fn main() {
       NEW variable, so the type may change — which is the whole point.
 
 ──── Step 7: The idiom worth copying: let-else
-  seats_for(Some(3)) -> 3
-  seats_for(None)    -> 1
+  columns_for(Some(3)) -> 3
+  columns_for(None)    -> 1
       Inside the function, `config` is a u32 rather than an Option<u32>
       from that line on, and nothing downstream can forget to unwrap it.
 ```
@@ -370,6 +370,6 @@ Przesłanianie (*shadowing*) i rozpakowywanie (*unwrapping*) `Option`/`Result` t
 
 Krążące po sieci wyjaśnienie twierdzi, że przesłanianie „pozwala zachować wartość po `.unwrap()`”, dzięki czemu oryginalny `Option` zostaje nietknięty. Program, którym się to ilustruje, faktycznie wypisuje `84`, a potem `42` — tyle że zasługa nie należy do przesłaniania, tylko do `Copy`. Usuń przesłonięcie, a `maybe_number` będzie w ostatniej linii równie żywe; zamień `Option<i32>` na `Option<String>` i zostaw resztę bez zmian, a ten sam kod przestanie się kompilować: `error[E0382]: use of partially moved value`, a przypis pod błędem sam wskaże mechanizm — `String` nie implementuje `Copy`. Chodzi więc o własność i częściowe przeniesienie własności (*partial move*), nie o nazwy, dlatego wszystkie lekarstwa są własnościowe: pożycz cały `Option` (`&maybe_name`), pożycz we wzorcu (`Some(ref name)`), sięgnij po `.as_ref()` albo `.as_deref()`. `.clone()` zostaw na koniec — kompilator zadawał pytanie o to, jak długo potrzebujesz wartości, a nie zgłaszał sprzeciw.
 
-Trzecie twierdzenie jest wręcz odwrócone: przesłonięta nazwa niczego nie „przechowuje”, bo to ona znika pierwsza — kończy się razem z blokiem, a nazwa zewnętrzna wraca. Do czego więc przesłanianie służy naprawdę? Do utrzymania jednej nazwy, gdy zmienia się typ pod nią: `let quorum = quorum.unwrap_or(0);` wchodzi jako `Option<u32>`, wychodzi jako `u32`, i od tej linii wersja opcjonalna nie jest „niezalecana”, tylko **nieosiągalna**. `mut` nigdy by tego nie wyraziło, bo `mut` nie zmienia typu — jedna zmienna, typ ustalony raz, a próba kończy się na `E0308: mismatched types`. Zamiast pary nazw w rodzaju `quorum_opt` / `quorum_value`, o którą trzeba się troszczyć do końca funkcji, zostaje jedna nazwa i pewność, że konwersja jest już za tobą. Najbardziej warta zapamiętania forma to `let Some(config) = config else { return … };` — ścieżka porażki zostaje na górze, a niżej `config` jest po prostu wartością.
+Trzecie twierdzenie jest wręcz odwrócone: przesłonięta nazwa niczego nie „przechowuje”, bo to ona znika pierwsza — kończy się razem z blokiem, a nazwa zewnętrzna wraca. Do czego więc przesłanianie służy naprawdę? Do utrzymania jednej nazwy, gdy zmienia się typ pod nią: `let limit = limit.unwrap_or(0);` wchodzi jako `Option<u32>`, wychodzi jako `u32`, i od tej linii wersja opcjonalna nie jest „niezalecana”, tylko **nieosiągalna**. `mut` nigdy by tego nie wyraziło, bo `mut` nie zmienia typu — jedna zmienna, typ ustalony raz, a próba kończy się na `E0308: mismatched types`. Zamiast pary nazw w rodzaju `limit_opt` / `limit_value`, o którą trzeba się troszczyć do końca funkcji, zostaje jedna nazwa i pewność, że konwersja jest już za tobą. Najbardziej warta zapamiętania forma to `let Some(config) = config else { return … };` — ścieżka porażki zostaje na górze, a niżej `config` jest po prostu wartością.
 
 **Szukaj po polsku:** przesłanianie zmiennych · przesłanianie a mutowalność · `rust shadowing vs mut` · `rust E0382 partially moved value` · `rust let else`

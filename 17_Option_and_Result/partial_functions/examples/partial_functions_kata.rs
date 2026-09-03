@@ -19,7 +19,7 @@ fn mean(xs: &[f64]) -> Option<f64> {
 fn report(label: &str, xs: &[f64]) {
     match mean(xs) {
         Some(m) => println!("  {label:<14} -> average score {m}"),
-        None => println!("  {label:<14} -> nobody scored this candidate"),
+        None => println!("  {label:<14} -> nobody rated this item"),
     }
 }
 
@@ -39,6 +39,6 @@ fn main() {
 
     println!("\nWhat None means here is a decision, so write it down:");
     println!("  mean(unscored) is None because there is no such average —");
-    println!("  NOT because the average is 0, which is a score a voter can give.");
+    println!("  NOT because the average is 0, which is a rating somebody can give.");
     println!("  mean(&[0.0, 0.0]) -> {:?}", mean(&[0.0, 0.0]));
 }

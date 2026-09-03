@@ -22,10 +22,10 @@ fn banner(n: u32, title: &str) {
 fn step1() {
     banner(1, "Two shapes: no argument on Option, the error on Result");
 
-    let quorum: Option<u16> = None;
+    let limit: Option<u16> = None;
     let parsed: Result<u16, String> = Err("'4x' is not a number".to_string());
 
-    println!("  None.unwrap_or_else(|| 50)                -> {}", quorum.unwrap_or_else(|| 50));
+    println!("  None.unwrap_or_else(|| 50)                -> {}", limit.unwrap_or_else(|| 50));
     println!(
         "  Err(e).unwrap_or_else(|e| e.len() as u16) -> {}",
         parsed.unwrap_or_else(|e| e.len() as u16)
@@ -202,13 +202,13 @@ fn step6() {
     banner(6, "A closure is a struct, and FnOnce means it may eat its captures");
 
     let capture_nothing = || 50u16;
-    let seats = 3u16;
-    let capture_a_copy = move || seats * 2;
+    let columns = 3u16;
+    let capture_a_copy = move || columns * 2;
     let fallback = String::from("(unnamed)");
     let capture_and_consume = move || fallback;
 
     println!("  size_of_val(&|| 50)             = {}", size_of_val(&capture_nothing));
-    println!("  size_of_val(&move || seats * 2) = {}", size_of_val(&capture_a_copy));
+    println!("  size_of_val(&move || columns * 2) = {}", size_of_val(&capture_a_copy));
     println!("  size_of_val(&move || fallback)  = {}  (a String moved in)", size_of_val(&capture_and_consume));
 
     let missing: Option<String> = None;

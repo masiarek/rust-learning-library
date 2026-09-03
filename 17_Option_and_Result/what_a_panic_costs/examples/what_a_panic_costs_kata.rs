@@ -1,6 +1,6 @@
 //! Kata solution: read what the panic left behind, then make the failure a value.
 //!
-//! A batch job records five ballot rows and the third one never arrived. Part 1
+//! A batch job records five input rows and the third one never arrived. Part 1
 //! unwraps, so you can see exactly how much work is done, what never runs, and
 //! what still gets cleaned up. Parts 2 and 3 hand the same fact to the caller as
 //! a return value — first as a failure that names the row, then as a result that

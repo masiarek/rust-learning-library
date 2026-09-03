@@ -119,7 +119,7 @@ fn step4() {
     banner(4, "Which member of the family");
 
     let missing: Option<i32> = None;
-    let bad: Result<i32, String> = Err("no quorum recorded".to_string());
+    let bad: Result<i32, String> = Err("no limit recorded".to_string());
 
     println!("  None.unwrap_or(0)                 -> {}   value already in hand", missing.unwrap_or(0));
     println!("  None.unwrap_or_else(|| 6 * 7)     -> {}  costs something to build", missing.unwrap_or_else(|| 6 * 7));
@@ -141,19 +141,19 @@ fn step4() {
 fn step5() {
     banner(5, "A default erases the difference it stood for");
 
-    // Same three candidates. One voter scored Cara 0; one left her blank.
+    // Same three questions. One form answered the third 0; one left it blank.
     let scored_zero: [Option<u8>; 3] = [Some(5), Some(3), Some(0)];
     let left_blank: [Option<u8>; 3] = [Some(5), Some(3), None];
 
-    for (label, ballot) in [("scored 0", scored_zero), ("left blank", left_blank)] {
-        let total: u32 = ballot.iter().map(|s| s.unwrap_or(0) as u32).sum();
-        let marked = ballot.iter().flatten().count();
-        println!("  {label:<10} {ballot:?}");
+    for (label, row) in [("scored 0", scored_zero), ("left blank", left_blank)] {
+        let total: u32 = row.iter().map(|s| s.unwrap_or(0) as u32).sum();
+        let marked = row.iter().flatten().count();
+        println!("  {label:<10} {row:?}");
         println!("             unwrap_or(0) total = {total}, but {marked} of 3 marked");
     }
-    println!("      Both total 8, which is correct: a blank tabulates as zero. What");
+    println!("      Both total 8, which is correct: a blank sums as zero. What");
     println!("      is not recoverable is the second number — after unwrap_or(0) the");
-    println!("      two ballots are the same array of u8 and no later code can tell");
+    println!("      two rows are the same array of u8 and no later code can tell");
     println!("      them apart. So apply the default at the BOUNDARY where the");
     println!("      distinction stops mattering (the sum), never when loading the");
     println!("      data, or you have thrown away a fact you still needed.");

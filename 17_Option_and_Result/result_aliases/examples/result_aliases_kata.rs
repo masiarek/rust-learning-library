@@ -6,31 +6,31 @@ use std::convert::Infallible;
 use std::fmt;
 
 #[derive(Debug)]
-pub enum TallyError {
-    NoBallots,
+pub enum RowError {
+    NoRows,
     BadRow { row: usize },
 }
 
-impl fmt::Display for TallyError {
+impl fmt::Display for RowError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            TallyError::NoBallots => write!(f, "no ballots were supplied"),
-            TallyError::BadRow { row } => write!(f, "row {row} is not a number"),
+            RowError::NoRows => write!(f, "no rows were supplied"),
+            RowError::BadRow { row } => write!(f, "row {row} is not a number"),
         }
     }
 }
 
 /// The alias: one parameter instead of two, with the E pinned once.
-pub type Result<T> = std::result::Result<T, TallyError>;
+pub type Result<T> = std::result::Result<T, RowError>;
 
-/// Reads as `-> Result<u32>`, and is really `-> std::result::Result<u32, TallyError>`.
+/// Reads as `-> Result<u32>`, and is really `-> std::result::Result<u32, RowError>`.
 fn total(rows: &[&str]) -> Result<u32> {
     if rows.is_empty() {
-        return Err(TallyError::NoBallots);
+        return Err(RowError::NoRows);
     }
     let mut sum = 0;
     for (i, r) in rows.iter().enumerate() {
-        sum += r.trim().parse::<u32>().map_err(|_| TallyError::BadRow { row: i })?;
+        sum += r.trim().parse::<u32>().map_err(|_| RowError::BadRow { row: i })?;
     }
     Ok(sum)
 }
@@ -66,9 +66,9 @@ fn main() {
     println!("      letting `let Ok(n) = always_ok(21);` be irrefutable.");
 
     println!("\nReading the E back is a matter of following one line:");
-    println!("  `type Result<T> = std::result::Result<T, TallyError>;`");
-    println!("  so `-> Result<u32>` fails with TallyError, whose variants are the");
-    println!("  actual list of things that can go wrong: NoBallots, BadRow.");
+    println!("  `type Result<T> = std::result::Result<T, RowError>;`");
+    println!("  so `-> Result<u32>` fails with RowError, whose variants are the");
+    println!("  actual list of things that can go wrong: NoRows, BadRow.");
     println!("  std::io::Result<T>, std::fmt::Result and ParseResult are the same");
     println!("  trick, and the E is the thing you were looking for in each.");
 }

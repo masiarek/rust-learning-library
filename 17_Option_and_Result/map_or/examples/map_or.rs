@@ -44,15 +44,15 @@ fn step1() {
 fn step2() {
     banner(2, "The default is written first and runs last");
 
-    let quorum: Option<u32> = Some(40);
+    let limit: Option<u32> = Some(40);
 
-    let by_match = match quorum {
+    let by_match = match limit {
         Some(q) => q * 2,
         None => 100,
     };
-    let by_map_or = quorum.map_or(100, |q| q * 2);
+    let by_map_or = limit.map_or(100, |q| q * 2);
     println!("  match: Some(q) => q*2, None => 100   -> {by_match}");
-    println!("  quorum.map_or(100, |q| q * 2)        -> {by_map_or}");
+    println!("  limit.map_or(100, |q| q * 2)        -> {by_map_or}");
     println!("      Same answer, opposite reading order: the match names the happy case");
     println!("      first, map_or names the fallback first. Nothing enforces the habit —");
     println!("      but swapping the two arguments is a type error, not a silent bug, so");
@@ -133,30 +133,30 @@ fn step5() {
 
 // ─────────────────────────────────────────────────────────── Step 6
 #[derive(Debug)]
-struct Ballot {
-    voter: &'static str,
+struct Row {
+    label: &'static str,
     score: Option<u8>,
 }
 
 fn step6() {
     banner(6, "Where a match still wins");
 
-    let ballots = [
-        Ballot { voter: "Ada", score: Some(5) },
-        Ballot { voter: "Ben", score: None },
-        Ballot { voter: "Cara", score: Some(0) },
+    let rows = [
+        Row { label: "speed", score: Some(5) },
+        Row { label: "price", score: None },
+        Row { label: "support", score: Some(0) },
     ];
 
     // Fine: one short expression per branch, and the result is one value.
-    for b in &ballots {
-        println!("  {:<5} {}", b.voter, b.score.map_or("—".to_string(), |s| format!("{s}/5")));
+    for b in &rows {
+        println!("  {:<8} {}", b.label, b.score.map_or("—".to_string(), |s| format!("{s}/5")));
     }
 
     // Not fine as a one-liner: two branches that each do more than one thing.
     let mut counted = 0u32;
     let mut abstained = 0u32;
     let mut total = 0u32;
-    for b in &ballots {
+    for b in &rows {
         match b.score {
             Some(s) => {
                 counted += 1;

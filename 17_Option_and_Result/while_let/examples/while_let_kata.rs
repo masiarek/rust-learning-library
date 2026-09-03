@@ -30,7 +30,7 @@ fn main() {
     // here with a counter so the example terminates and can be verified — in
     // real code there is no counter, and the program simply hangs.
     // Not `mut` — and that is the tell: this loop never changes the queue.
-    let queue = vec!["late ballot"];
+    let queue = vec!["late row"];
     let mut passes = 0;
     println!("\nA body that never shortens the queue:");
     while let Some(item) = queue.last() {

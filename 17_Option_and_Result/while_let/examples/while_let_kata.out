@@ -10,9 +10,9 @@ Draining with `while let Some(x) = stack.pop()`:
   is exactly the line the next demo forgets.
 
 A body that never shortens the queue:
-  pass 1: still holding "late ballot"
-  pass 2: still holding "late ballot"
-  pass 3: still holding "late ballot"
+  pass 1: still holding "late row"
+  pass 2: still holding "late row"
+  pass 3: still holding "late row"
   (stopped by a counter that only exists in this demo)
   `last()` peeks; `pop()` advances. Nothing in the language knows
   which one your loop needed — `while let` re-tests the pattern and

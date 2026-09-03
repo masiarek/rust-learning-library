@@ -61,9 +61,9 @@ if let Some(name) = winner { … }          // do something only when present
 
 let Some(text) = raw else { return; };    // bind, or bail — the guard clause
 
-quorum.unwrap_or(0)                       // default, computed eagerly
-quorum.unwrap_or_else(|| expensive())     // default, computed only if needed
-quorum.unwrap_or_default()                // T::default(), for 0 / "" / empty
+limit.unwrap_or(0)                       // default, computed eagerly
+limit.unwrap_or_else(|| expensive())     // default, computed only if needed
+limit.unwrap_or_default()                // T::default(), for 0 / "" / empty
 ```
 
 `let … else` is the one to internalise. It keeps the happy path unindented at the left margin, which is what stops Rust error handling from turning into a staircase.
@@ -114,7 +114,7 @@ Two constraints worth knowing before they bite you:
 ## Step 6 — Crossing between the two
 
 ```rust
-maybe.ok_or("no quorum recorded")   // Option<T> → Result<T, E>   you SUPPLY a reason
+maybe.ok_or("no limit recorded")   // Option<T> → Result<T, E>   you SUPPLY a reason
 maybe.ok_or_else(|| build_err())    // same, lazily
 res.ok()                            // Result<T, E> → Option<T>   you DISCARD the reason
 res.err()                           // Result<T, E> → Option<E>   keep only the reason
@@ -134,18 +134,18 @@ For a library, name your failures. One variant per thing a caller might reasonab
 
 ```rust
 #[derive(Debug)]
-enum BallotError {
+enum RowError {
     Empty,
     BadScore(ParseIntError),
     OutOfRange { got: u32, max: u32 },
 }
 
-impl From<ParseIntError> for BallotError {
-    fn from(e: ParseIntError) -> Self { BallotError::BadScore(e) }
+impl From<ParseIntError> for RowError {
+    fn from(e: ParseIntError) -> Self { RowError::BadScore(e) }
 }
 ```
 
-With `Display` and `Error` implemented, plus that `From`, this now works — the `?` converts a `ParseIntError` into a `BallotError` on its own:
+With `Display` and `Error` implemented, plus that `From`, this now works — the `?` converts a `ParseIntError` into a `RowError` on its own:
 
 ```rust
 let score: u32 = tok.trim().parse()?;
@@ -159,9 +159,9 @@ For an application (as opposed to a library), erase the error type:
 
 ```rust
 fn load_and_total(line: &str) -> Result<u32, Box<dyn Error>> {
-    let ballot = parse_ballot(line)?;   // BallotError    → Box<dyn Error>
+    let row = parse_row(line)?;   // RowError    → Box<dyn Error>
     let weight: u32 = "3".parse()?;     // ParseIntError  → Box<dyn Error>
-    Ok(ballot.iter().sum::<u32>() * weight)
+    Ok(row.iter().sum::<u32>() * weight)
 }
 ```
 
@@ -173,9 +173,9 @@ Two unrelated error types flow through one function because both convert into th
 
 ## Practice
 
-**The reason the caller could have used.** Write `score_result(raw: &str) -> Result<u8, ScoreError>` for one 0–5 cell of a ballot, where the cell may be blank, may not be a number, and may be above the cap. Name one error variant per thing a caller might handle differently, and give it a `From<ParseIntError>` so `?` does the conversion for you.
+**The reason the caller could have used.** Write `score_result(raw: &str) -> Result<u8, ScoreError>` for one 0–5 cell of a row, where the cell may be blank, may not be a number, and may be above the cap. Name one error variant per thing a caller might handle differently, and give it a `From<ParseIntError>` so `?` does the conversion for you.
 
-Write the `Option` version first — `.parse().ok()` and a range check — then try to write the message the voter sees. That sentence is the information the type threw away.
+Write the `Option` version first — `.parse().ok()` and a range check — then try to write the message the user sees. That sentence is the information the type threw away.
 
 <details markdown="1">
 <summary><strong>Solution</strong></summary>
@@ -242,7 +242,7 @@ fn main() {
         println!("  {:>3} -> {:?}", format!("{raw:?}"), score_option(raw));
     }
 
-    println!("\nResult — the caller can tell them apart, and tell the voter:");
+    println!("\nResult — the caller can tell them apart, and tell the user:");
     for raw in cells {
         match score_result(raw) {
             Ok(n) => println!("  {:>3} -> counted as {n}", format!("{raw:?}")),
@@ -266,7 +266,7 @@ Option — one sad answer for four different problems:
   "x" -> None
   "9" -> None
 
-Result — the caller can tell them apart, and tell the voter:
+Result — the caller can tell them apart, and tell the user:
   "4" -> counted as 4
    "" -> rejected: the cell was blank
   "x" -> rejected: not a number: invalid digit found in string
@@ -298,7 +298,7 @@ Every line below came from actually compiling and running [`option_vs_result.rs`
       "why not?" has many answers, so Err carries one.
 
 ──── Step 2: match — the form that always works
-  Option: counted 461 ballots
+  Option: counted 461 rows
   Result: could not parse — invalid digit found in string
       The compiler rejects the match if you forget an arm. That is the whole safety story.
 
@@ -324,7 +324,7 @@ Every line below came from actually compiling and running [`option_vs_result.rs`
       `?` on an Option needs an Option-returning fn; on a Result, a Result-returning fn.
 
 ──── Step 6: Crossing between the two
-  Option -> Result  .ok_or(reason) -> Err("no quorum recorded")
+  Option -> Result  .ok_or(reason) -> Err("no limit recorded")
   Result -> Option  .ok()          -> None   (the reason is thrown away)
       Going up you must SUPPLY a reason; going down you DISCARD one. That asymmetry is the point.
 
@@ -335,10 +335,10 @@ Every line below came from actually compiling and running [`option_vs_result.rs`
 
 ──── Step 8: Designing the E in Result<T, E>
   "5,2,0" -> ok [5, 2, 0]
-  "" -> error: the ballot line was empty
+  "" -> error: the input line was empty
   "5,x,0" -> error: not a number: invalid digit found in string
   "5,9,0" -> error: score 9 is above the 5 cap
-      `?` did the ParseIntError -> BallotError conversion. That is `From`, not magic.
+      `?` did the ParseIntError -> RowError conversion. That is `From`, not magic.
 
 ──── Step 9: Box<dyn Error> — two unrelated error types in one function
   load_and_total("5,2,0") -> Ok(21)
@@ -414,6 +414,6 @@ Dwie rzeczy mechaniczne, na których potyka się każdy. Pierwsza to `map` kontr
 
 Przechodzenie między dwoma typami jest **niesymetryczne** i w tej niesymetrii jest cała lekcja. W górę, przez `maybe.ok_or("brak kworum")`, musisz **wymyślić** informację, której `None` nigdy nie miał. W dół, przez `res.ok()`, po prostu **wyrzucasz** powód — dlatego `.ok()` zasługuje na drugie spojrzenie w przeglądzie kodu, bo to miejsce, w którym giną szczegóły błędu. Do kompletu `.transpose()` przewraca zagnieżdżenie w obie strony, między `Option<Result<T, E>>` a `Result<Option<T>, E>`, czyli między zdaniem „mogę nie mieć wartości, a jej parsowanie może się nie udać” a zdaniem „parsowanie może się nie udać, a wynik może zgodnie z prawem być pusty”.
 
-Zostaje decyzja projektowa, którą w Ruscie myli się najczęściej: jaki ma być `E`. W bibliotece **nazwij** swoje niepowodzenia — jeden wariant wyliczenia na każdą rzecz, którą kod wywołujący mógłby obsłużyć inaczej — i dopisz `impl From<ParseIntError> for BallotError`, żeby `?` samo robiło konwersję; crate `thiserror` pisze dokładnie ten szablon za ciebie i niczego więcej nie wnosi. W aplikacji odwrotnie: skasuj typ błędu do `Box<dyn Error>` (albo weź `anyhow`), bo wtedy dwa niepowiązane błędy przepłyną przez jedną funkcję, a i tak nikt nigdy nie zrobi na nich `match`a. Rozstrzyga jedno pytanie — *czy ktokolwiek będzie po tym robił `match`?* I uwaga na koniec, bo krótkie polskie tutoriale uczą czegoś przeciwnego: `unwrap()` jest w porządku w testach i w kodzie na jeden raz, ale we wszystkim, co idzie dalej, pisz `.expect("dlaczego to nie może zawieść")` — ten komunikat to twój zapisany dowód i to jego przeczytasz w komunikacie paniki pół roku później.
+Zostaje decyzja projektowa, którą w Ruscie myli się najczęściej: jaki ma być `E`. W bibliotece **nazwij** swoje niepowodzenia — jeden wariant wyliczenia na każdą rzecz, którą kod wywołujący mógłby obsłużyć inaczej — i dopisz `impl From<ParseIntError> for RowError`, żeby `?` samo robiło konwersję; crate `thiserror` pisze dokładnie ten szablon za ciebie i niczego więcej nie wnosi. W aplikacji odwrotnie: skasuj typ błędu do `Box<dyn Error>` (albo weź `anyhow`), bo wtedy dwa niepowiązane błędy przepłyną przez jedną funkcję, a i tak nikt nigdy nie zrobi na nich `match`a. Rozstrzyga jedno pytanie — *czy ktokolwiek będzie po tym robił `match`?* I uwaga na koniec, bo krótkie polskie tutoriale uczą czegoś przeciwnego: `unwrap()` jest w porządku w testach i w kodzie na jeden raz, ale we wszystkim, co idzie dalej, pisz `.expect("dlaczego to nie może zawieść")` — ten komunikat to twój zapisany dowód i to jego przeczytasz w komunikacie paniki pół roku później.
 
 **Szukaj po polsku:** Option czy Result · obsługa błędów w Ruscie · operator znaku zapytania · `rust result vs option when to use` · `rust ? operator From conversion` · `rust thiserror anyhow`

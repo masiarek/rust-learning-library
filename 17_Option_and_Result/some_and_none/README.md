@@ -93,13 +93,13 @@ favnum.unwrap()             // the value, or a panic
 This is the part that catches people arriving from almost any other language.
 
 ```rust
-Some(0).unwrap_or(42)   // -> 0   the voter answered, and the answer was zero
-None.unwrap_or(42)      // -> 42  the voter never answered
+Some(0).unwrap_or(42)   // -> 0   they answered, and the answer was zero
+None.unwrap_or(42)      // -> 42  they never answered
 ```
 
 An `Option` distinguishes *"the value is zero"* from *"there is no value"*. Most languages do not, and the shorthand everyone reaches for quietly collapses the two: Python's `favnum or 42` answers `42` for both, because `0` is falsy; ABAP's `IS INITIAL` says the same thing, because an integer that was never set and an integer set to `0` are the same bit pattern.
 
-The distinction is not academic. In the [star-voting-library ↗](https://github.com/masiarek/star-voting-library) a ballot that scores a candidate **0** and a ballot that leaves them **blank** tabulate identically — both count as zero — but they mean opposite things about the voter, and any report that wants to say *"how many people declined to score anyone"* needs the two kept apart. `Option<Score>` is that distinction, made a property of the type rather than of the reader's memory.
+The distinction is not academic. On a survey form, a question answered **0** and a question left **blank** sum identically — both add zero — but they mean opposite things about the person, and any report that wants to say *"how many people skipped every question"* needs the two kept apart. `Option<Score>` is that distinction, made a property of the type rather than of the reader's memory.
 
 ## The trap: `match favnum` moves the value
 
@@ -255,7 +255,7 @@ Some and None: reading an Option
       Python's `favnum or 42` answers 42 for BOTH of these, because 0 is
       falsy. ABAP says the same with IS INITIAL: 0 and 'never set' are one
       value. Rust keeps them apart, which is the difference between a
-      ballot that scored a candidate 0 and one that left them blank.
+      form that answered a question 0 and one that left it blank.
 
 ──── Step 5: The trap: `match favnum` MOVES the value, and i32 hides it
   match fav_num  -> Some(3)

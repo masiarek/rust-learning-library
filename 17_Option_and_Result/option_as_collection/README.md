@@ -103,7 +103,7 @@ It is also the one place `Option` earns its keep purely as a *mechanism* rather 
 
 ## Practice
 
-**No `match` allowed.** Given `Vec<Option<u8>>` — one entry per registered voter, `None` where no ballot came back — report how many ballots were cast, their total, and their mean, using only iterator methods. Then move a `String` out of an `Option` field you have only a `&mut` to.
+**No `match` allowed.** Given `Vec<Option<u8>>` — one entry per question on a form, `None` where it was left unanswered — report how many were answered, their total, and their mean, using only iterator methods. Then move a `String` out of an `Option` field you have only a `&mut` to.
 
 Reach for `flatten` before `filter_map`, and notice that neither one needed you to say what `None` means — the empty container simply contributes nothing. For the second half, try a plain move out of the borrowed field first and read what the borrow checker wants instead.
 
@@ -114,12 +114,12 @@ Reach for `flatten` before `filter_map`, and notice that neither one needed you 
 *[`option_as_collection_kata.rs`](examples/option_as_collection_kata.rs) in full — pasted here by `tools/run_examples.py` from the file CI compiles and runs.*
 
 ```rust
-//! Kata solution: count the ballots that exist, without writing a match.
+//! Kata solution: count the rows that exist, without writing a match.
 //!
 //!   rustc --edition 2024 option_as_collection_kata.rs -o /tmp/oack && /tmp/oack
 
 fn main() {
-    // One entry per registered voter; None means the ballot never came back.
+    // One entry per question on the form; None means it was left unanswered.
     let returned: Vec<Option<u8>> = vec![Some(5), None, Some(3), Some(0), None];
 
     // An Option is a container of zero or one item, so `flatten` drops the
@@ -129,9 +129,9 @@ fn main() {
 
     println!("Iterating an Option like the one-item collection it is:");
     println!("  entries       -> {}", returned.len());
-    println!("  ballots cast  -> {counted}");
-    println!("  score total   -> {total}");
-    println!("  mean of cast  -> {:.2}", total as f64 / counted as f64);
+    println!("  answered      -> {counted}");
+    println!("  rating total  -> {total}");
+    println!("  mean answered -> {:.2}", total as f64 / counted as f64);
 
     // filter_map is the same move with the transform folded in.
     let doubled: Vec<u32> = returned.iter().filter_map(|s| s.map(|n| n as u32 * 2)).collect();
@@ -145,15 +145,15 @@ fn main() {
 
     // take(): move the value out of a field you only have a &mut to, leaving
     // None behind. The borrow checker would refuse a plain move.
-    let mut pending: Option<String> = Some("Cara's late ballot".to_string());
-    let collected = collect_ballot(&mut pending);
+    let mut pending: Option<String> = Some("Cara's late row".to_string());
+    let collected = collect_row(&mut pending);
     println!("\ntake() — moving out of something you only borrow:");
     println!("  collected -> {collected:?}");
     println!("  pending   -> {pending:?}   (left as None, not a copy)");
-    println!("  again     -> {:?}", collect_ballot(&mut pending));
+    println!("  again     -> {:?}", collect_row(&mut pending));
 }
 
-fn collect_ballot(slot: &mut Option<String>) -> Option<String> {
+fn collect_row(slot: &mut Option<String>) -> Option<String> {
     slot.take()
 }
 ```
@@ -165,9 +165,9 @@ fn collect_ballot(slot: &mut Option<String>) -> Option<String> {
 ```text
 Iterating an Option like the one-item collection it is:
   entries       -> 5
-  ballots cast  -> 3
-  score total   -> 8
-  mean of cast  -> 2.67
+  answered      -> 3
+  rating total  -> 8
+  mean answered -> 2.67
   doubled       -> [10, 6, 0]
 
 The zero-or-one shape shows up directly, too:
@@ -176,7 +176,7 @@ The zero-or-one shape shows up directly, too:
   Some(5).into_iter().chain(None).collect::<Vec<_>>() -> [5]
 
 take() — moving out of something you only borrow:
-  collected -> Some("Cara's late ballot")
+  collected -> Some("Cara's late row")
   pending   -> None   (left as None, not a copy)
   again     -> None
 ```

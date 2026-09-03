@@ -172,7 +172,7 @@ fn step4() {
     panic::set_hook(Box::new(|_| {})); // the child's message would go to stderr
     let handle = thread::spawn(|| -> u32 {
         let missing: Option<u32> = None;
-        missing.expect("the worker was promised a quorum")
+        missing.expect("the worker was promised a limit")
     });
     let joined = handle.join();
     panic::set_hook(prior);

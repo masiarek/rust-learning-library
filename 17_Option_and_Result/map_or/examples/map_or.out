@@ -10,7 +10,7 @@
 
 ──── Step 2: The default is written first and runs last
   match: Some(q) => q*2, None => 100   -> 80
-  quorum.map_or(100, |q| q * 2)        -> 80
+  limit.map_or(100, |q| q * 2)        -> 80
       Same answer, opposite reading order: the match names the happy case
       first, map_or names the fallback first. Nothing enforces the habit —
       but swapping the two arguments is a type error, not a silent bug, so
@@ -47,9 +47,9 @@
       words. (is_none_or is the newer of the two: Rust 1.82.)
 
 ──── Step 6: Where a match still wins
-  Ada   5/5
-  Ben   —
-  Cara  0/5
+  speed    5/5
+  price    —
+  support  0/5
   counted 2, abstained 1, total 5
       The first loop is exactly what map_or is for: two short expressions
       producing one value. The second is not — the branches update three

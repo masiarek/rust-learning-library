@@ -39,9 +39,9 @@ fn step1() {
 }
 
 // ─────────────────────────────────────────────────────────── Step 2
-struct Ballot(Vec<u8>);
+struct Row(Vec<u8>);
 
-impl fmt::Display for Ballot {
+impl fmt::Display for Row {
     // Not `Result<(), fmt::Error>` spelled out — everyone writes the alias.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{:?}", self.0)
@@ -54,12 +54,12 @@ fn step2() {
     println!("  std::io::Result<T>      = Result<T, std::io::Error>");
     println!("  std::fmt::Result        = Result<(), std::fmt::Error>   <- NO parameters at all");
     println!("  std::thread::Result<T>  = Result<T, Box<dyn Any + Send>>");
-    println!("  a Display impl returning fmt::Result -> {}", Ballot(vec![5, 2, 0]));
+    println!("  a Display impl returning fmt::Result -> {}", Row(vec![5, 2, 0]));
     println!("      fmt::Result pins BOTH slots, which is why `Ok(())` ends every fmt impl.");
 }
 
 // ─────────────────────────────────────────────────────────── Step 3
-mod ballot {
+mod row {
     use std::fmt;
 
     #[derive(Debug)]
@@ -72,7 +72,7 @@ mod ballot {
     impl fmt::Display for Error {
         fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
             match self {
-                Error::Empty => write!(f, "the ballot line was empty"),
+                Error::Empty => write!(f, "the input line was empty"),
                 Error::NotANumber(tok) => write!(f, "{tok:?} is not a score"),
                 Error::OutOfRange { got, max } => write!(f, "score {got} is above the {max} cap"),
             }
@@ -108,24 +108,24 @@ fn step3() {
     banner(3, "Writing your own alias");
 
     for line in ["5,2,0", "", "5,x,0", "5,9,0"] {
-        match ballot::parse(line) {
+        match row::parse(line) {
             Ok(v) => println!("  parse({line:?}) -> Ok({v:?})"),
             Err(e) => println!("  parse({line:?}) -> Err: {e}"),
         }
     }
     println!("      pub type Result<T> = std::result::Result<T, Error>;");
     println!("      Inside the module `Result` now means YOUR Result. Outside it is");
-    println!("      `ballot::Result<T>`, and the prelude's two-parameter one is untouched.");
+    println!("      `row::Result<T>`, and the prelude's two-parameter one is untouched.");
 }
 
 // ─────────────────────────────────────────────────────────── Step 4
 fn step4() {
     banner(4, "Ok(()) — the other slot emptied out");
 
-    let done: ballot::Result<()> = Ok(());
+    let done: row::Result<()> = Ok(());
     println!("  a function that only succeeds or fails -> {done:?}");
 
-    let e = ballot::Error::OutOfRange { got: 9, max: 5 };
+    let e = row::Error::OutOfRange { got: 9, max: 5 };
     println!("  Display of the error  -> {e}");
     println!("  Debug of the error    -> {e:?}");
     println!("      A failing `fn main() -> Result<(), E>` prints the DEBUG form after");
@@ -160,7 +160,7 @@ fn step6() {
     let rows = [
         ("Infallible", "cannot fail; the Result is there for a trait's sake"),
         ("io::Error", "one concrete failure, ask it for .kind()"),
-        ("BallotError (your enum)", "a fixed menu; the caller can match on it"),
+        ("RowError (your enum)", "a fixed menu; the caller can match on it"),
         ("Box<dyn Error>", "anything at all; nobody downstream will match"),
     ];
     for (e, meaning) in rows {

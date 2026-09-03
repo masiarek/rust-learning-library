@@ -15,12 +15,12 @@
 
 ──── Step 3: Writing your own alias
   parse("5,2,0") -> Ok([5, 2, 0])
-  parse("") -> Err: the ballot line was empty
+  parse("") -> Err: the input line was empty
   parse("5,x,0") -> Err: "x" is not a score
   parse("5,9,0") -> Err: score 9 is above the 5 cap
       pub type Result<T> = std::result::Result<T, Error>;
       Inside the module `Result` now means YOUR Result. Outside it is
-      `ballot::Result<T>`, and the prelude's two-parameter one is untouched.
+      `row::Result<T>`, and the prelude's two-parameter one is untouched.
 
 ──── Step 4: Ok(()) — the other slot emptied out
   a function that only succeeds or fails -> Ok(())
@@ -41,7 +41,7 @@
 ──── Step 6: Reading the E slot back
   Result<T, Infallible              > cannot fail; the Result is there for a trait's sake
   Result<T, io::Error               > one concrete failure, ask it for .kind()
-  Result<T, BallotError (your enum) > a fixed menu; the caller can match on it
+  Result<T, RowError (your enum)    > a fixed menu; the caller can match on it
   Result<T, Box<dyn Error>          > anything at all; nobody downstream will match
       This is the only question the second parameter answers, and an
       alias does not remove the answer — it just moves it one hop away.

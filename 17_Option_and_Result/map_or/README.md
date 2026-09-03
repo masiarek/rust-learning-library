@@ -26,7 +26,7 @@ That is the case it exists for — when the fallback and the transformed value a
 ## The default is written first and runs last
 
 ```rust
-match quorum {                      quorum.map_or(100, |q| q * 2)
+match limit {                      limit.map_or(100, |q| q * 2)
     Some(q) => q * 2,
     None => 100,
 }
@@ -148,9 +148,9 @@ fn main() {
     println!("      its fallback must already be the same type as the value.");
 
     println!("\nEager and lazy, the same rule as the unwrap family:");
-    let seats: Option<u32> = Some(3);
-    println!("  map_or       -> {}", seats.map_or(expensive_default(), |s| s * 2));
-    println!("  map_or_else  -> {}", seats.map_or_else(expensive_default_lazy, |s| s * 2));
+    let columns: Option<u32> = Some(3);
+    println!("  map_or       -> {}", columns.map_or(expensive_default(), |s| s * 2));
+    println!("  map_or_else  -> {}", columns.map_or_else(expensive_default_lazy, |s| s * 2));
 
     println!("\nWhere a match still wins — when both arms have something to say:");
     match &counted {
@@ -163,7 +163,7 @@ fn main() {
 }
 
 fn expensive_default() -> u32 {
-    println!("      …building the default (ran even though seats was Some)");
+    println!("      …building the default (ran even though columns was Some)");
     0
 }
 
@@ -185,7 +185,7 @@ The type changes, which is the reason to reach for map_or:
       its fallback must already be the same type as the value.
 
 Eager and lazy, the same rule as the unwrap family:
-      …building the default (ran even though seats was Some)
+      …building the default (ran even though columns was Some)
   map_or       -> 6
   map_or_else  -> 6
 
@@ -217,7 +217,7 @@ Where a match still wins — when both arms have something to say:
 
 ──── Step 2: The default is written first and runs last
   match: Some(q) => q*2, None => 100   -> 80
-  quorum.map_or(100, |q| q * 2)        -> 80
+  limit.map_or(100, |q| q * 2)        -> 80
       Same answer, opposite reading order: the match names the happy case
       first, map_or names the fallback first. Nothing enforces the habit —
       but swapping the two arguments is a type error, not a silent bug, so
@@ -254,9 +254,9 @@ Where a match still wins — when both arms have something to say:
       words. (is_none_or is the newer of the two: Rust 1.82.)
 
 ──── Step 6: Where a match still wins
-  Ada   5/5
-  Ben   —
-  Cara  0/5
+  speed    5/5
+  price    —
+  support  0/5
   counted 2, abstained 1, total 5
       The first loop is exactly what map_or is for: two short expressions
       producing one value. The second is not — the branches update three

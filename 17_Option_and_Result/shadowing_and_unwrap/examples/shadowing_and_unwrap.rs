@@ -75,14 +75,14 @@ fn step3() {
 fn step4() {
     banner(4, "What shadowing IS for: the name stays, the type changes");
 
-    let quorum: Option<i32> = None;
-    println!("  before: quorum is {:?}   type {}", quorum, type_of(&quorum));
+    let limit: Option<i32> = None;
+    println!("  before: limit is {:?}   type {}", limit, type_of(&limit));
 
-    let quorum = quorum.unwrap_or(0); // shadowing across the unwrap
-    println!("  after:  quorum is {}      type {}", quorum, type_of(&quorum));
+    let limit = limit.unwrap_or(0); // shadowing across the unwrap
+    println!("  after:  limit is {}      type {}", limit, type_of(&limit));
     println!("      This is the one place the two ideas genuinely meet: unwrapping");
     println!("      changes the TYPE, and shadowing lets the NAME survive the change.");
-    println!("      Without it you would invent quorum_opt / quorum_value pairs.");
+    println!("      Without it you would invent limit_opt / limit_value pairs.");
 }
 
 // ─────────────────────────────────────────────────────────── Step 5
@@ -117,7 +117,7 @@ fn step6() {
 }
 
 // ─────────────────────────────────────────────────────────── Step 7
-fn seats_for(config: Option<u32>) -> u32 {
+fn columns_for(config: Option<u32>) -> u32 {
     // let-else: shadow the name, drop the wrapper, keep the happy path unindented.
     let Some(config) = config else {
         return 1;
@@ -128,8 +128,8 @@ fn seats_for(config: Option<u32>) -> u32 {
 fn step7() {
     banner(7, "The idiom worth copying: let-else");
 
-    println!("  seats_for(Some(3)) -> {}", seats_for(Some(3)));
-    println!("  seats_for(None)    -> {}", seats_for(None));
+    println!("  columns_for(Some(3)) -> {}", columns_for(Some(3)));
+    println!("  columns_for(None)    -> {}", columns_for(None));
     println!("      Inside the function, `config` is a u32 rather than an Option<u32>");
     println!("      from that line on, and nothing downstream can forget to unwrap it.");
 }

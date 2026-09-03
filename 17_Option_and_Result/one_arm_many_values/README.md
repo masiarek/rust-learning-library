@@ -232,7 +232,7 @@ rustc --edition 2024 17_Option_and_Result/one_arm_many_values/examples/one_arm_m
 ──── Step 5: Every alternative must bind the same names
   let (Ok(n) | Err(n)) = Err(7);   -> n = 7
       Useful when both arms carry the same thing and you do not care yet
-      which one you got — a line number, a parsed value, a ballot id.
+      which one you got — a line number, a parsed value, a row id.
   Some(x) | None => x              -> does not compile
       error[E0408]: variable `x` is not bound in all patterns
       There is no value for `x` when the None side matched, and Rust will
@@ -500,7 +500,7 @@ claim you can check on every input, for a function this small, in four lines.
 
 - [`Some` and `None`](../some_and_none/README.md) — where `match` is introduced, and the arms that make it exhaustive
 - [`if let`](../if_let/README.md) — one arm instead of all of them, and what the compiler stops checking in exchange
-- [Six kinds of zero](../six_kinds_of_zero/README.md) — a `match` over ballot markers, and the catch-all that quietly refiled two of them
+- [Six kinds of zero](../six_kinds_of_zero/README.md) — a `match` over row markers, and the catch-all that quietly refiled two of them
 - [What a warning is asking](../../15_First_Programs/what_a_warning_is_asking/README.md) — including the unreachable arm, and why the fix is rarely to silence it
 - [Bit flags](../../19_Numbers/bit_flags/README.md) — the *other* `|`, on the computing side of the `=>`
 - [Rust reference: pattern syntax ↗](https://doc.rust-lang.org/reference/patterns.html) · [`unreachable_patterns` ↗](https://doc.rust-lang.org/rustc/lints/listing/warn-by-default.html#unreachable-patterns)

@@ -169,7 +169,7 @@ fn step5() {
     let (Ok(n) | Err(n)) = outcome;
     println!("  let (Ok(n) | Err(n)) = Err(7);   -> n = {n}");
     println!("      Useful when both arms carry the same thing and you do not care yet");
-    println!("      which one you got — a line number, a parsed value, a ballot id.");
+    println!("      which one you got — a line number, a parsed value, a row id.");
 
     println!("  Some(x) | None => x              -> does not compile");
     println!("      error[E0408]: variable `x` is not bound in all patterns");

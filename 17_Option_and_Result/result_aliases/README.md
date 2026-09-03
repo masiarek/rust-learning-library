@@ -22,7 +22,7 @@ So `io::Result<usize>` **is** `Result<usize, io::Error>`. Not a similar type, no
 
 ## Why anyone does this
 
-Because the `E` repeats. A module with fifteen fallible functions would otherwise write `Result<_, ballot::Error>` fifteen times, and the reader would learn nothing new on the fourteenth. Pinning it once puts the interesting parameter — the `T` — where the eye already is.
+Because the `E` repeats. A module with fifteen fallible functions would otherwise write `Result<_, row::Error>` fifteen times, and the reader would learn nothing new on the fourteenth. Pinning it once puts the interesting parameter — the `T` — where the eye already is.
 
 The cost is one hop: a newcomer reading `io::Result<usize>` cannot see the error type at all. That is the trade, and it is worth naming out loud, because it is the reason this page exists. **An alias does not answer "what can go wrong?" — it moves the answer one click away.**
 
@@ -52,7 +52,7 @@ pub fn parse(line: &str) -> Result<Vec<u32>> { … }
 Two details that trip people up:
 
 - **Write the right-hand side as `std::result::Result`.** You are defining something called `Result` in this scope; if you refer to the prelude's `Result` by bare name on the right, you are referring to the alias you are in the middle of defining.
-- **Callers outside the module still have the normal one.** They write `ballot::Result<T>` (or import it), and their own `Result<T, E>` keeps working. You have shadowed the name inside your module, not replaced it globally.
+- **Callers outside the module still have the normal one.** They write `row::Result<T>` (or import it), and their own `Result<T, E>` keeps working. You have shadowed the name inside your module, not replaced it globally.
 
 ## `Ok(())` — the same trick on the other slot
 
@@ -60,8 +60,8 @@ Two details that trip people up:
 
 ```rust
 fn main() -> Result<(), Box<dyn Error>> {
-    let ballot = parse("5,9,0")?;   // `?` works in main, because main returns Result
-    println!("{ballot:?}");
+    let row = parse("5,9,0")?;   // `?` works in main, because main returns Result
+    println!("{row:?}");
     Ok(())
 }
 ```
@@ -104,7 +104,7 @@ The last row is the design decision, not just a spelling: **libraries name their
 
 ## Practice
 
-**Expand the alias.** Define your own `type Result<T> = std::result::Result<T, TallyError>;`, write two functions against it — one returning a value, one returning `Ok(())` — and print what each does on good and bad input.
+**Expand the alias.** Define your own `type Result<T> = std::result::Result<T, RowError>;`, write two functions against it — one returning a value, one returning `Ok(())` — and print what each does on good and bad input.
 
 Then read the `E` back the way you would in an unfamiliar crate: follow the alias to its definition and list the error's variants. That list is the real answer to *what can go wrong here*, and it is the thing the one-parameter signature hid. Add an `Infallible` function to see the other extreme — an error type with no values, so the failing arm cannot be reached.
 
@@ -123,31 +123,31 @@ use std::convert::Infallible;
 use std::fmt;
 
 #[derive(Debug)]
-pub enum TallyError {
-    NoBallots,
+pub enum RowError {
+    NoRows,
     BadRow { row: usize },
 }
 
-impl fmt::Display for TallyError {
+impl fmt::Display for RowError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            TallyError::NoBallots => write!(f, "no ballots were supplied"),
-            TallyError::BadRow { row } => write!(f, "row {row} is not a number"),
+            RowError::NoRows => write!(f, "no rows were supplied"),
+            RowError::BadRow { row } => write!(f, "row {row} is not a number"),
         }
     }
 }
 
 /// The alias: one parameter instead of two, with the E pinned once.
-pub type Result<T> = std::result::Result<T, TallyError>;
+pub type Result<T> = std::result::Result<T, RowError>;
 
-/// Reads as `-> Result<u32>`, and is really `-> std::result::Result<u32, TallyError>`.
+/// Reads as `-> Result<u32>`, and is really `-> std::result::Result<u32, RowError>`.
 fn total(rows: &[&str]) -> Result<u32> {
     if rows.is_empty() {
-        return Err(TallyError::NoBallots);
+        return Err(RowError::NoRows);
     }
     let mut sum = 0;
     for (i, r) in rows.iter().enumerate() {
-        sum += r.trim().parse::<u32>().map_err(|_| TallyError::BadRow { row: i })?;
+        sum += r.trim().parse::<u32>().map_err(|_| RowError::BadRow { row: i })?;
     }
     Ok(sum)
 }
@@ -183,9 +183,9 @@ fn main() {
     println!("      letting `let Ok(n) = always_ok(21);` be irrefutable.");
 
     println!("\nReading the E back is a matter of following one line:");
-    println!("  `type Result<T> = std::result::Result<T, TallyError>;`");
-    println!("  so `-> Result<u32>` fails with TallyError, whose variants are the");
-    println!("  actual list of things that can go wrong: NoBallots, BadRow.");
+    println!("  `type Result<T> = std::result::Result<T, RowError>;`");
+    println!("  so `-> Result<u32>` fails with RowError, whose variants are the");
+    println!("  actual list of things that can go wrong: NoRows, BadRow.");
     println!("  std::io::Result<T>, std::fmt::Result and ParseResult are the same");
     println!("  trick, and the E is the thing you were looking for in each.");
 }
@@ -198,12 +198,12 @@ fn main() {
 ```text
 The alias hides the E; the behaviour is unchanged:
   ["5", "3"] -> 8
-  [] -> no ballots were supplied
+  [] -> no rows were supplied
   ["5", "x"] -> row 1 is not a number
 
 Ok(()) — the success that carries nothing:
   check(['5','3']) -> Ok(())
-  check([])        -> Err(NoBallots)
+  check([])        -> Err(NoRows)
 
 Infallible — an error type with no values:
   always_ok(21) -> Ok(42)
@@ -212,9 +212,9 @@ Infallible — an error type with no values:
       letting `let Ok(n) = always_ok(21);` be irrefutable.
 
 Reading the E back is a matter of following one line:
-  `type Result<T> = std::result::Result<T, TallyError>;`
-  so `-> Result<u32>` fails with TallyError, whose variants are the
-  actual list of things that can go wrong: NoBallots, BadRow.
+  `type Result<T> = std::result::Result<T, RowError>;`
+  so `-> Result<u32>` fails with RowError, whose variants are the
+  actual list of things that can go wrong: NoRows, BadRow.
   std::io::Result<T>, std::fmt::Result and ParseResult are the same
   trick, and the E is the thing you were looking for in each.
 ```
@@ -248,12 +248,12 @@ Every line below came from actually compiling and running [`result_aliases.rs`](
 
 ──── Step 3: Writing your own alias
   parse("5,2,0") -> Ok([5, 2, 0])
-  parse("") -> Err: the ballot line was empty
+  parse("") -> Err: the input line was empty
   parse("5,x,0") -> Err: "x" is not a score
   parse("5,9,0") -> Err: score 9 is above the 5 cap
       pub type Result<T> = std::result::Result<T, Error>;
       Inside the module `Result` now means YOUR Result. Outside it is
-      `ballot::Result<T>`, and the prelude's two-parameter one is untouched.
+      `row::Result<T>`, and the prelude's two-parameter one is untouched.
 
 ──── Step 4: Ok(()) — the other slot emptied out
   a function that only succeeds or fails -> Ok(())
@@ -274,7 +274,7 @@ Every line below came from actually compiling and running [`result_aliases.rs`](
 ──── Step 6: Reading the E slot back
   Result<T, Infallible              > cannot fail; the Result is there for a trait's sake
   Result<T, io::Error               > one concrete failure, ask it for .kind()
-  Result<T, BallotError (your enum) > a fixed menu; the caller can match on it
+  Result<T, RowError (your enum)    > a fixed menu; the caller can match on it
   Result<T, Box<dyn Error>          > anything at all; nobody downstream will match
       This is the only question the second parameter answers, and an
       alias does not remove the answer — it just moves it one hop away.
@@ -309,7 +309,7 @@ rustc --edition 2024 17_Option_and_Result/result_aliases/examples/result_aliases
 
 `Result<T, E>` ma dwa parametry, ale w podpisach ze standardowej biblioteki widać jeden albo żaden — bo `E` zostało przypięte aliasem typu (*type alias*). `io::Result<usize>` **to jest** `Result<usize, io::Error>` — nie typ podobny i nie opakowanie, tylko ten sam typ zapisany krócej. Alias nie tworzy nowego typu i nie wymaga żadnej konwersji — kompilator rozwija go, zanim cokolwiek sprawdzi. Ma to jedną cenę, o której warto pamiętać przy czytaniu cudzego kodu: drugi parametr jest jedyną częścią typu mówiącą, **co może pójść nie tak**, a alias przesuwa tę odpowiedź o jedno kliknięcie dalej. Rozwinięcie aliasu nie jest więc ciekawostką, tylko normalnym krokiem w czytaniu obcego crate'a.
 
-Przy definiowaniu własnego aliasu czekają dwie pułapki naraz. Po prawej stronie trzeba napisać pełną ścieżkę `std::result::Result`, bo sama nazwa `Result` odnosi się w tym miejscu już do aliasu, który właśnie definiujesz. Druga to przesłanianie (*shadowing*) na poziomie typów: wewnątrz twojego modułu `Result` znaczy odtąd twój jednoparametrowy `Result`, więc `Result<u32, ParseIntError>` przestaje się kompilować, a komunikat — `type alias takes 1 generic argument but 2 generic arguments were supplied` — brzmi jak bzdura, dopóki nie przypomnisz sobie, na który `Result` właśnie patrzysz. Na zewnątrz modułu nic się nie zmienia: tam nadal jest zwykły dwuparametrowy `Result`, a twój nazywa się `ballot::Result<T>`.
+Przy definiowaniu własnego aliasu czekają dwie pułapki naraz. Po prawej stronie trzeba napisać pełną ścieżkę `std::result::Result`, bo sama nazwa `Result` odnosi się w tym miejscu już do aliasu, który właśnie definiujesz. Druga to przesłanianie (*shadowing*) na poziomie typów: wewnątrz twojego modułu `Result` znaczy odtąd twój jednoparametrowy `Result`, więc `Result<u32, ParseIntError>` przestaje się kompilować, a komunikat — `type alias takes 1 generic argument but 2 generic arguments were supplied` — brzmi jak bzdura, dopóki nie przypomnisz sobie, na który `Result` właśnie patrzysz. Na zewnątrz modułu nic się nie zmienia: tam nadal jest zwykły dwuparametrowy `Result`, a twój nazywa się `row::Result<T>`.
 
 Drugą stroną tej samej sztuczki jest `Ok(())` — „udało się i nie ma czego oddać”. `fmt::Result` przypina **oba** sloty naraz (`Result<(), fmt::Error>`), dlatego każda implementacja `Display` kończy się na `Ok(())`. I tu czai się niespodzianka, która łapie każdego raz: kiedy `fn main() -> Result<(), E>` zwróci `Err`, środowisko uruchomieniowe wypisuje `Error: ` i formę **`Debug`**, a nie `Display`. Na ekranie pojawia się `Error: OutOfRange { got: 9, max: 5 }`, a nie starannie napisane `score 9 is above the 5 cap`. Jeśli ten komunikat ma czytać człowiek, wypisz go sam i zakończ przez `std::process::exit`.
 

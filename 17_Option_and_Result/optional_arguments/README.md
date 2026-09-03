@@ -159,7 +159,7 @@ fn main() {
     println!("   {}", banner_opt("Results", Some(40)));
 
     println!("\n3. Option<&T> takes callers the other shape cannot:");
-    let owned = String::from("461 ballots");
+    let owned = String::from("461 rows");
     println!("   {}", footer(Some(&owned)));
     println!("   {}", footer(Some("unofficial")));
     println!("   {}", footer(None));
@@ -186,7 +186,7 @@ fn main() {
    *************** Results ****************
 
 3. Option<&T> takes callers the other shape cannot:
-   — 461 ballots
+   — 461 rows
    — unofficial
    —
       A `&Option<String>` parameter would have rejected the middle

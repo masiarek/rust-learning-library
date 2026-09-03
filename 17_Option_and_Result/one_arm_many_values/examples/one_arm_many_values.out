@@ -53,7 +53,7 @@
 ──── Step 5: Every alternative must bind the same names
   let (Ok(n) | Err(n)) = Err(7);   -> n = 7
       Useful when both arms carry the same thing and you do not care yet
-      which one you got — a line number, a parsed value, a ballot id.
+      which one you got — a line number, a parsed value, a row id.
   Some(x) | None => x              -> does not compile
       error[E0408]: variable `x` is not bound in all patterns
       There is no value for `x` when the None side matched, and Rust will

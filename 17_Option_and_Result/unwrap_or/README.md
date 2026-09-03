@@ -74,14 +74,14 @@ Three ways to keep the option alive, one per shape:
 
 ## What the default erases
 
-A fallback does not just fill a hole; it makes the hole unfindable. Two ballots, three candidates:
+A fallback does not just fill a hole; it makes the hole unfindable. Two rows, three questions:
 
 ```text
 scored 0   [Some(5), Some(3), Some(0)]  -> total 8, 3 of 3 marked
 left blank [Some(5), Some(3), None]     -> total 8, 2 of 3 marked
 ```
 
-Both total 8, and that is correct — a blank tabulates as zero. But after `unwrap_or(0)` the two are the same `[u8; 3]`, and no code downstream can tell a deliberate zero from an unmarked square. Turnout, "how many voters used the whole ballot", any question about *participation* rather than *score* is now unanswerable.
+Both total 8, and that is correct — a blank sums as zero. But after `unwrap_or(0)` the two are the same `[u8; 3]`, and no code downstream can tell a deliberate zero from an unmarked square. Completion rate, "how many forms answered every question", any question about *participation* rather than *rating* is now unanswerable.
 
 So: **apply the default at the boundary where the distinction stops mattering** — inside the sum — and never when loading the data. This is the same instinct as not writing `-1` for "missing" in a column of scores, and it is most of the reason `Option<T>` is a different type from `T` in the first place.
 
@@ -243,7 +243,7 @@ Borrowing instead of consuming:
   None.unwrap_or_default()          -> 0   T::default(), no argument
   None.map_or(-1, |v| v * 10)       -> -1  transform, or a default
   Some(4).map_or(-1, |v| v * 10)    -> 40  same call, value present
-  Err(e).unwrap_or_else(|e| e.len())-> 18  the fallback FROM the error
+  Err(e).unwrap_or_else(|e| e.len())-> 17  the fallback FROM the error
       The rule is one question: does the default already exist? A
       literal, a constant, a copy of something on the stack — pass it,
       unwrap_or is clearer. Anything you have to BUILD — allocate,
@@ -255,9 +255,9 @@ Borrowing instead of consuming:
              unwrap_or(0) total = 8, but 3 of 3 marked
   left blank [Some(5), Some(3), None]
              unwrap_or(0) total = 8, but 2 of 3 marked
-      Both total 8, which is correct: a blank tabulates as zero. What
+      Both total 8, which is correct: a blank sums as zero. What
       is not recoverable is the second number — after unwrap_or(0) the
-      two ballots are the same array of u8 and no later code can tell
+      two rows are the same array of u8 and no later code can tell
       them apart. So apply the default at the BOUNDARY where the
       distinction stops mattering (the sum), never when loading the
       data, or you have thrown away a fact you still needed.

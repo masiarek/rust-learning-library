@@ -58,7 +58,7 @@ Two footnotes that change the picture:
 ## In a thread, only that thread dies
 
 ```text
-worker panicked, join() -> Err("the worker was promised a quorum")
+worker panicked, join() -> Err("the worker was promised a limit")
 main is still running, and prints this line
 ```
 
@@ -84,7 +84,7 @@ When continuing would be worse than stopping — the invariant is broken, and an
 
 ## Practice
 
-**What the panic left behind.** A batch job records five ballot rows, each one an `Option<u32>`, and the third row never arrived. The version you are given unwraps it.
+**What the panic left behind.** A batch job records five input rows, each one an `Option<u32>`, and the third row never arrived. The version you are given unwraps it.
 
 Write it in three parts. **First** run the unwrapping version and *read the damage*: how many rows made it into the ledger, which rows were never looked at, what the caller received, and what still got cleaned up on the way out. **Then** rewrite the function so the missing row is a return value — not a bare `None`, since which row is missing is the useful half. **Finally** write the version a caller usually actually wants: total the rows that are answerable and report the gaps, so one missing row does not cost you the other four.
 
@@ -99,7 +99,7 @@ Try it before opening this. The mistake worth making on purpose is running part 
 ```rust
 //! Kata solution: read what the panic left behind, then make the failure a value.
 //!
-//! A batch job records five ballot rows and the third one never arrived. Part 1
+//! A batch job records five input rows and the third one never arrived. Part 1
 //! unwraps, so you can see exactly how much work is done, what never runs, and
 //! what still gets cleaned up. Parts 2 and 3 hand the same fact to the caller as
 //! a return value — first as a failure that names the row, then as a result that
@@ -277,7 +277,7 @@ What a panic costs: unwinding is tidy about memory, not about work
       the process stops where it stands and no destructor runs.)
 
 ──── Step 4: In a thread, only that thread dies
-  worker panicked, join() -> Err("the worker was promised a quorum")
+  worker panicked, join() -> Err("the worker was promised a limit")
   main is still running, and prints this line
       A panic unwinds one thread. `join` hands you the payload as an
       Err, so the parent decides — which is the choice the unwrap

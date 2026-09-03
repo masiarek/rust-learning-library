@@ -5,7 +5,7 @@ The type changes, which is the reason to reach for map_or:
       its fallback must already be the same type as the value.
 
 Eager and lazy, the same rule as the unwrap family:
-      …building the default (ran even though seats was Some)
+      …building the default (ran even though columns was Some)
   map_or       -> 6
   map_or_else  -> 6
 

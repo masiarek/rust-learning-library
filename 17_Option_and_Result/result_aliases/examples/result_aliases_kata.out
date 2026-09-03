@@ -1,11 +1,11 @@
 The alias hides the E; the behaviour is unchanged:
   ["5", "3"] -> 8
-  [] -> no ballots were supplied
+  [] -> no rows were supplied
   ["5", "x"] -> row 1 is not a number
 
 Ok(()) — the success that carries nothing:
   check(['5','3']) -> Ok(())
-  check([])        -> Err(NoBallots)
+  check([])        -> Err(NoRows)
 
 Infallible — an error type with no values:
   always_ok(21) -> Ok(42)
@@ -14,8 +14,8 @@ Infallible — an error type with no values:
       letting `let Ok(n) = always_ok(21);` be irrefutable.
 
 Reading the E back is a matter of following one line:
-  `type Result<T> = std::result::Result<T, TallyError>;`
-  so `-> Result<u32>` fails with TallyError, whose variants are the
-  actual list of things that can go wrong: NoBallots, BadRow.
+  `type Result<T> = std::result::Result<T, RowError>;`
+  so `-> Result<u32>` fails with RowError, whose variants are the
+  actual list of things that can go wrong: NoRows, BadRow.
   std::io::Result<T>, std::fmt::Result and ParseResult are the same
   trick, and the E is the thing you were looking for in each.

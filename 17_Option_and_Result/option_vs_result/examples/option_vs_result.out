@@ -8,7 +8,7 @@
       "why not?" has many answers, so Err carries one.
 
 ──── Step 2: match — the form that always works
-  Option: counted 461 ballots
+  Option: counted 461 rows
   Result: could not parse — invalid digit found in string
       The compiler rejects the match if you forget an arm. That is the whole safety story.
 
@@ -34,7 +34,7 @@
       `?` on an Option needs an Option-returning fn; on a Result, a Result-returning fn.
 
 ──── Step 6: Crossing between the two
-  Option -> Result  .ok_or(reason) -> Err("no quorum recorded")
+  Option -> Result  .ok_or(reason) -> Err("no limit recorded")
   Result -> Option  .ok()          -> None   (the reason is thrown away)
       Going up you must SUPPLY a reason; going down you DISCARD one. That asymmetry is the point.
 
@@ -45,10 +45,10 @@
 
 ──── Step 8: Designing the E in Result<T, E>
   "5,2,0" -> ok [5, 2, 0]
-  "" -> error: the ballot line was empty
+  "" -> error: the input line was empty
   "5,x,0" -> error: not a number: invalid digit found in string
   "5,9,0" -> error: score 9 is above the 5 cap
-      `?` did the ParseIntError -> BallotError conversion. That is `From`, not magic.
+      `?` did the ParseIntError -> RowError conversion. That is `From`, not magic.
 
 ──── Step 9: Box<dyn Error> — two unrelated error types in one function
   load_and_total("5,2,0") -> Ok(21)
