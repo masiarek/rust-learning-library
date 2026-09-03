@@ -65,12 +65,12 @@ fn main() {
     // ───────────────────────────────────────────────────────────── 4
     banner(4, "An inner-block shadow ends; the outer value never moved");
     {
-        let ballot = Noisy("outer");
+        let item = Noisy("outer");
         {
-            let ballot = Noisy("inner");
-            println!("  inside the block -> {}", ballot.0);
+            let item = Noisy("inner");
+            println!("  inside the block -> {}", item.0);
         }
-        println!("  after the block  -> {}   the outer value was never touched", ballot.0);
+        println!("  after the block  -> {}   the outer value was never touched", item.0);
     }
     println!("      Two different mechanisms that look alike: the inner binding");
     println!("      DIED at its brace, while a same-scope shadow merely goes");

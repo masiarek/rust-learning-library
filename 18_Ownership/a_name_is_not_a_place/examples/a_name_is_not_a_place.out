@@ -37,8 +37,8 @@
   weight = 61.5 kg
 
 ──── Where each one ends: a block
-  shadow: inside the block,  quorum  = 100
-  shadow: after it,          quorum  = 5    <- restored
-  mut:    inside the block,  turnout = 100
-  mut:    after it,          turnout = 100  <- kept
-  block:  handed out of it,  quorum  = 101  <- carried
+  shadow: inside the block,  base  = 100
+  shadow: after it,          base  = 5    <- restored
+  mut:    inside the block,  counter = 100
+  mut:    after it,          counter = 100  <- kept
+  block:  handed out of it,  base  = 101  <- carried

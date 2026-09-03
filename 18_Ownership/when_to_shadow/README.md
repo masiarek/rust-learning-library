@@ -57,26 +57,26 @@ name.to_uppercase()
 **Freeze after building.** The `mut` was scoped to the *building*, not to the variable's life:
 
 ```rust
-let mut tally = Vec::new();
-tally.push(5);
-let tally = tally;   // cannot be pushed to from here on
+let mut totals = Vec::new();
+totals.push(5);
+let totals = totals;   // cannot be pushed to from here on
 ```
 
 **Narrow into a [newtype](../../16_Structs/newtype_score/README.md).** The loose form is still alive but nothing can reach it, so no later line can pass a raw number where an id is due:
 
 ```rust
 let id = 42_u32;
-let id = BallotId(id);
+let id = OrderId(id);
 ```
 
 **Clone for a move, inside a block.** The shadow lives and dies in the braces, and the outer name survives — the cheapest way to hand a thread its own handle:
 
 ```rust
 let counted = {
-    let ballots = Arc::clone(&ballots);
-    thread::spawn(move || ballots.len())
+    let rows = Arc::clone(&rows);
+    thread::spawn(move || rows.len())
 };
-println!("{} {}", counted.join().unwrap(), ballots.len());  // 3 3
+println!("{} {}", counted.join().unwrap(), rows.len());  // 3 3
 ```
 
 And the small ones you will write without thinking: `let s = s.as_str();`, `let line = line.trim();`, `let x = *x;` inside a loop, `let result = dbg!(result);` for an instrumentation line you can delete later without touching anything else.
@@ -122,7 +122,7 @@ Both locks are held to the end of the scope, and there is no longer a name that 
 let threshold: usize = 3;        // the minimum score that counts
 println!("minimum: {threshold}");
 
-// …a later edit needs the ballot count, and reaches for the nearest good word
+// …a later edit needs the row count, and reaches for the nearest good word
 let threshold = scores.len();    // a DIFFERENT quantity
 let counted = scores.iter().filter(|&&s| s >= threshold).count();
 ```
@@ -138,16 +138,16 @@ This is the case for a second name — and note *why*. Not because shadowing is 
 Functions live in the same namespace as values, so a `let` hides one:
 
 ```rust
-fn ballots_cast() -> usize { 461 }
+fn rows_read() -> usize { 461 }
 
-let ballots_cast = ballots_cast();
-let again = ballots_cast();   // does not compile
+let rows_read = rows_read();
+let again = rows_read();   // does not compile
 ```
 
 ```text
 error[E0618]: expected function, found `usize`
   |
-1 | fn ballots_cast() -> usize { 461 }
+1 | fn rows_read() -> usize { 461 }
   | -------------------------- this function of the same name is available here,
   |                            but it's shadowed by the local binding
 ```
@@ -180,7 +180,7 @@ So the only lint that catches the worst bug is the one that also condemns the id
 
 ## Practice
 
-**Three shadows, one of them earned.** Write a function that reads a handful of ballot cards — a name and a score as untrimmed text — and reports two numbers: the total score, and how many cards scored at or above some minimum. Put three shadows in it on purpose:
+**Three shadows, one of them earned.** Write a function that reads a handful of survey cards — a label and a rating as untrimmed text — and reports two numbers: the total rating, and how many cards scored at or above some minimum. Put three shadows in it on purpose:
 
 1. one that parses a card's raw text into a number,
 2. one inside the loop that computes `total + this_card`,
@@ -215,7 +215,7 @@ Then fix it — and the point of the exercise is that **the two fixes are differ
 //!
 //!   rustc --edition 2024 when_to_shadow_kata.rs -o /tmp/wtsk && /tmp/wtsk
 
-/// One voter's card as it arrives: a name and their scores as raw text.
+/// One survey card as it arrives: a label and its ratings as raw text.
 const CARDS: [(&str, &str); 5] = [
     ("Ada", " 5 "),
     ("Ben", "2"),
@@ -238,11 +238,11 @@ const SUPPORT_AT_LEAST: usize = 3;
 // which is the accumulator bug reported in a vocabulary that does not contain
 // the word "shadow". Nothing at all is said about `threshold`.
 #[allow(unused_mut)]
-fn tally_broken() -> (usize, usize) {
+fn summarize_broken() -> (usize, usize) {
     let mut total = 0;
 
     for (_who, raw) in CARDS {
-        // Shadow #1 — EARNED. Same concept (this voter's score), better form:
+        // Shadow #1 — EARNED. Same concept (this card's rating), better form:
         // &str with spaces -> &str trimmed -> usize. No second name needed.
         let raw = raw.trim();
         let raw: usize = raw.parse().expect("every card above is a number");
@@ -259,16 +259,16 @@ fn tally_broken() -> (usize, usize) {
     // Shadow #3 — one name, two concepts. `threshold` was a SCORE; now it is a
     // COUNT of cards. Both are usize, both are read, so nothing warns.
     let threshold = CARDS.len();
-    let supporters = CARDS
+    let strong = CARDS
         .iter()
         .filter(|(_who, raw)| raw.trim().parse::<usize>().unwrap_or(0) >= threshold)
         .count();
 
-    (total, supporters)
+    (total, strong)
 }
 
 // ─────────────────────────────────────────────────────────── the two fixes
-fn tally_fixed() -> (usize, usize) {
+fn summarize_fixed() -> (usize, usize) {
     let mut total = 0;
 
     for (_who, raw) in CARDS {
@@ -285,30 +285,30 @@ fn tally_fixed() -> (usize, usize) {
     // and the moment they have honest names the bug is unwriteable.
     let min_score = SUPPORT_AT_LEAST;
     let card_count = CARDS.len();
-    let supporters = CARDS
+    let strong = CARDS
         .iter()
         .filter(|(_who, raw)| raw.trim().parse::<usize>().unwrap_or(0) >= min_score)
         .count();
 
     println!("  counting support at {min_score} or above, over {card_count} cards");
 
-    (total, supporters)
+    (total, strong)
 }
 
 fn main() {
     println!("──── The broken version");
-    let (total, supporters) = tally_broken();
+    let (total, strong) = summarize_broken();
     println!("  total score = {total}      (five cards scoring 5, 2, 4, 0, 3)");
-    println!("  supporters  = {supporters}      (should be the scores of 3 or more)");
+    println!("  strong  = {strong}      (should be the scores of 3 or more)");
     println!("      Both numbers are wrong, and both look like they could be");
     println!("      right — which is the whole hazard. A total of 0 reads as a");
-    println!("      blank election, and 1 supporter as a weak field. Neither");
+    println!("      blank form, and 1 supporter as a weak field. Neither");
     println!("      number looks like a bug; they look like a finding.");
 
     println!("\n──── The fixed version");
-    let (total, supporters) = tally_fixed();
+    let (total, strong) = summarize_fixed();
     println!("  total score = {total}     (5 + 2 + 4 + 0 + 3)");
-    println!("  supporters  = {supporters}      (5, 4 and 3 clear the bar of 3)");
+    println!("  strong  = {strong}      (5, 4 and 3 clear the bar of 3)");
 
     println!("\n──── Why the two fixes differ");
     println!("  The lost sum was a shadow standing where `mut` belonged: the");
@@ -334,16 +334,16 @@ fn main() {
 ──── The broken version
   counting support at 3 or above
   total score = 0      (five cards scoring 5, 2, 4, 0, 3)
-  supporters  = 1      (should be the scores of 3 or more)
+  strong  = 1      (should be the scores of 3 or more)
       Both numbers are wrong, and both look like they could be
       right — which is the whole hazard. A total of 0 reads as a
-      blank election, and 1 supporter as a weak field. Neither
+      blank form, and 1 supporter as a weak field. Neither
       number looks like a bug; they look like a finding.
 
 ──── The fixed version
   counting support at 3 or above, over 5 cards
   total score = 14     (5 + 2 + 4 + 0 + 3)
-  supporters  = 3      (5, 4 and 3 clear the bar of 3)
+  strong  = 3      (5, 4 and 3 clear the bar of 3)
 
 ──── Why the two fixes differ
   The lost sum was a shadow standing where `mut` belonged: the
@@ -387,9 +387,9 @@ fn main() {
   generic -> concrete:  /etc/hosts
   unwrap-and-narrow:    ADA
   frozen after build:   [5, 3]
-      From this line on, `tally` cannot be pushed to. The `mut`
+      From this line on, `totals` cannot be pushed to. The `mut`
       was scoped to the building, not to the variable's life.
-  narrowed to newtype:  BallotId(42)
+  narrowed to newtype:  OrderId(42)
       The bare u32 is still alive, but nothing can reach it —
       so no later line can pass a raw number where an id is due.
   clone-for-move:       thread counted 3, outer still has 3
@@ -424,7 +424,7 @@ fn main() {
 ──── Step 5: One name, two concepts — the failure with no warning
   scores      = [5, 2, 4, 0, 3]
   minimum score to count: 3
-  threshold   = 5   (the ballot count, not the minimum score)
+  threshold   = 5   (the row count, not the minimum score)
   counted     = 1   — expected 3, the scores that are >= 3
       Both bindings are `usize` and both are read, so there is no
       warning to catch it. The compiler cannot know that the first
@@ -433,9 +433,9 @@ fn main() {
       unsafe — because the two values are not the same thing.
 
 ──── Step 6: A shadow hides a function just as happily as a value
-  ballots_cast = 461
+  rows_read = 461
       The name is now a usize, so the function is unreachable:
-        let again = ballots_cast();
+        let again = rows_read();
         error[E0618]: expected function, found `usize`
           | this function of the same name is available here,
           | but it's shadowed by the local binding

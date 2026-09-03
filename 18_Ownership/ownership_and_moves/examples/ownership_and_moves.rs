@@ -124,7 +124,7 @@ fn step5() {
 fn step6() {
     banner(6, "Asking for a second one, and getting one out of a collection");
 
-    let original = String::from("ballot");
+    let original = String::from("parcel");
     let copy = original.clone();
     println!("  clone     original = {original:?}, copy = {copy:?}   (two allocations)");
 

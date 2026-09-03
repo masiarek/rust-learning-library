@@ -18,14 +18,14 @@ impl Drop for Loud {
     }
 }
 
-struct Ballot {
-    voter: String,
+struct Review {
+    author: String,
     score: u8,
 }
 
-impl Ballot {
-    fn voter(&self) -> &str {
-        &self.voter
+impl Review {
+    fn author(&self) -> &str {
+        &self.author
     }
 }
 
@@ -51,16 +51,16 @@ fn main() {
 
     println!();
     println!("──── 3. Two fields of one struct are two places");
-    let mut ballot = Ballot { voter: String::from("Ada"), score: 3 };
-    let who = &ballot.voter;
-    ballot.score = 5;
-    println!("  &ballot.voter held, ballot.score written anyway: {who} {}", ballot.score);
-    println!("  The checker split the struct: `voter` is locked, `score` is not.");
-    let name = ballot.voter();
-    println!("  ballot.voter() takes &self, so it locks ALL of ballot — and this");
+    let mut review = Review { author: String::from("Ada"), score: 3 };
+    let who = &review.author;
+    review.score = 5;
+    println!("  &review.author held, review.score written anyway: {who} {}", review.score);
+    println!("  The checker split the struct: `author` is locked, `score` is not.");
+    let name = review.author();
+    println!("  review.author() takes &self, so it locks ALL of review — and this");
     println!("  is the last line allowed to read `name`: {name}");
-    ballot.score = 7;
-    println!("  ballot.score = {}   <- written after `name`'s last use", ballot.score);
+    review.score = 7;
+    println!("  review.score = {}   <- written after `name`'s last use", review.score);
 
     println!();
     println!("──── 4. A `ref` binding keeps the WHOLE value alive");

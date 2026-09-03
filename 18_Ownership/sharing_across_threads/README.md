@@ -44,7 +44,7 @@ Read the bottom half first. `thread::spawn` requires `F: Send + 'static`, the cl
 A reads 0, B reads 0, A writes 1, B writes 1   ->  two increments, counter says 1
 ```
 
-On an ordinary tally that is a wrong number. On a *reference* count it is a freed value that somebody still holds, which is a use-after-free reached without writing a line of `unsafe`. `Arc` closes it by making the three steps indivisible — one instruction the hardware will not split.
+On an ordinary counter that is a wrong number. On a *reference* count it is a freed value that somebody still holds, which is a use-after-free reached without writing a line of `unsafe`. `Arc` closes it by making the three steps indivisible — one instruction the hardware will not split.
 
 That is the whole difference between the two types, and it is why `Rc` across threads is *refused* rather than merely discouraged: the bug it would cause is not one the borrow checker could catch later.
 
@@ -53,8 +53,8 @@ That is the whole difference between the two types, and it is why `Rc` across th
 `Arc<T>` derefs to `&T` and stops, exactly as `Rc` does — the same `E0596`, with the same `DerefMut` explanation, [shown on the `Rc` page](../reference_counting/README.md#shared-means-read-only). Sharing a counter is not the same as being allowed to change it.
 
 ```rust
-let tally = Arc::new(Mutex::new(Vec::new()));
-let mine = Arc::clone(&tally);
+let collected = Arc::new(Mutex::new(Vec::new()));
+let mine = Arc::clone(&collected);
 thread::spawn(move || mine.lock().unwrap().push(41));
 ```
 
@@ -64,7 +64,7 @@ Two wrappers, two jobs, and neither substitutes for the other. Drop the `Arc` an
 
 ```rust
 for id in 0..8 {
-    let mine = Arc::clone(&tally);          // the line people forget
+    let mine = Arc::clone(&collected);          // the line people forget
     handles.push(thread::spawn(move || mine.lock().unwrap().push(id)));
 }
 ```
@@ -77,12 +77,12 @@ for id in 0..8 {
 
 ```rust
 let total: u32 = thread::scope(|s| {
-    let workers: Vec<_> = precincts.chunks(2).map(|c| s.spawn(move || c.iter().sum::<u32>())).collect();
+    let workers: Vec<_> = chunks_in.chunks(2).map(|c| s.spawn(move || c.iter().sum::<u32>())).collect();
     workers.into_iter().map(|w| w.join().unwrap()).sum()
 });
 ```
 
-No `'static`, no `Arc`, no count — and `precincts` is still usable afterwards. Reach for this first. `Arc` is for threads that genuinely outlive the borrow.
+No `'static`, no `Arc`, no count — and `chunks_in` is still usable afterwards. Reach for this first. `Arc` is for threads that genuinely outlive the borrow.
 
 **Single-threaded code should not pay for it.** `Arc` reads like the safe default and `Rc` like the optimisation, so the habit is to use `Arc` everywhere and stop thinking. Atomic operations are not free, and nothing warns: the profile is the only place it shows.
 
@@ -141,16 +141,16 @@ fn main() {
     println!("  (b) pushing through a shared `Arc<Vec<u32>>`");
     println!("      error[E0596]: cannot borrow data in an `Arc` as mutable");
     println!("      Fix: Arc<Mutex<T>>. Arc grants the ownership, Mutex the write.");
-    let tally = Arc::new(Mutex::new(Vec::new()));
+    let collected = Arc::new(Mutex::new(Vec::new()));
     let mut handles = Vec::new();
     for id in 0..4u32 {
-        let mine = Arc::clone(&tally);
+        let mine = Arc::clone(&collected);
         handles.push(thread::spawn(move || mine.lock().unwrap().push(id)));
     }
     for h in handles {
         h.join().unwrap();
     }
-    let mut rows = tally.lock().unwrap().clone();
+    let mut rows = collected.lock().unwrap().clone();
     rows.sort(); // the order they arrived in is the scheduler's business
     println!("      four threads wrote {rows:?}\n");
 
@@ -219,16 +219,16 @@ fn main() {
     println!("    why you cannot test your way to noticing one.");
 
     println!("\nPart 3 — the Arc you can delete.\n");
-    let precincts = vec![41u32, 17, 88, 5];
+    let batches = vec![41u32, 17, 88, 5];
     let total: u32 = thread::scope(|s| {
-        let workers: Vec<_> = precincts
+        let workers: Vec<_> = batches
             .chunks(2)
             .map(|chunk| s.spawn(move || chunk.iter().sum::<u32>()))
             .collect();
         workers.into_iter().map(|w| w.join().unwrap()).sum()
     });
-    println!("  thread::scope summed {precincts:?} to {total} with no Arc at all,");
-    println!("  and `precincts` is still usable here: {}", precincts.len());
+    println!("  thread::scope summed {batches:?} to {total} with no Arc at all,");
+    println!("  and `batches` is still usable here: {}", batches.len());
     println!("\n  The rule to carry away: Arc is for threads that OUTLIVE the");
     println!("  borrow. A scoped thread cannot, so it needs no owner and no");
     println!("  count. Reach for the scope first and pay for the Arc second.");
@@ -279,7 +279,7 @@ Part 2 — predict the two totals.
 Part 3 — the Arc you can delete.
 
   thread::scope summed [41, 17, 88, 5] to 151 with no Arc at all,
-  and `precincts` is still usable here: 4
+  and `batches` is still usable here: 4
 
   The rule to carry away: Arc is for threads that OUTLIVE the
   borrow. A scoped thread cannot, so it needs no owner and no

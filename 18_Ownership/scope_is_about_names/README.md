@@ -41,10 +41,10 @@ This is the same fact [a shadow does not drop](../shadowing_does_not_drop/README
 Ask most people when a borrow ends and they will say "at the brace". It ends at its **last use**:
 
 ```rust
-let mut ballots = vec!["Ada"];
-let first = &ballots[0];      // the borrow starts
+let mut orders = vec!["alpha"];
+let first = &orders[0];      // the borrow starts
 println!("{first}");          // ...and ends here
-ballots.push("Ben");          // legal: nothing is borrowed any more
+orders.push("beta");          // legal: nothing is borrowed any more
 ```
 
 Move that `println!` below the `push` and the same four lines stop compiling — `error[E0502]`, with the note *"immutable borrow later used here"* pointing at the line you moved. Nothing about the braces changed. What changed was where the borrow was last used, which is the entirety of its life.
@@ -71,14 +71,14 @@ Scope end is the *default* moment a value dies, and five ordinary things move it
     drop: carried out
 
 ──── 2. A borrow ends at its last use, not at the brace
-  first   = Ada   <- and ends here, at its last use
-  ballots = ["Ada", "Ben"]   <- mutated afterwards, same block, no error
+  first   = alpha   <- and ends here, at its last use
+  orders = ["alpha", "beta"]   <- mutated afterwards, same block, no error
   Move that first println! BELOW the push and it stops compiling:
-      error[E0502]: cannot borrow `ballots` as mutable because it is
+      error[E0502]: cannot borrow `orders` as mutable because it is
                     also borrowed as immutable
-        |   let first = &ballots[0];
+        |   let first = &orders[0];
         |                ------- immutable borrow occurs here
-        |   ballots.push("Ben");
+        |   orders.push("beta");
         |   ^^^^^^^^^^^^^^^^^^^ mutable borrow occurs here
         |   println!("{first}");
         |              ----- immutable borrow later used here
@@ -105,8 +105,8 @@ Scope end is the *default* moment a value dies, and five ordinary things move it
   drop(x) is not a keyword and not magic: it takes x and returns ()
 
 ──── 4. Held, or not: `try_lock` answers what style cannot
-  after `let _      = tally.lock()`:  try_lock succeeds = true
-  after `let _guard = tally.lock()`:  try_lock succeeds = false
+  after `let _      = counter.lock()`:  try_lock succeeds = true
+  after `let _guard = counter.lock()`:  try_lock succeeds = false
   Same thread, same mutex, one identifier apart, and `try_lock` can
   tell them apart. The first is an unlocked critical section that
   reads exactly like a locked one — which is why rustc DENIES it
@@ -116,9 +116,9 @@ Scope end is the *default* moment a value dies, and five ordinary things move it
   no error, no warning — the value is already gone
 
 ──── 5. Some names are in scope before they are written
-  quorum() = 7   <- called above its own definition
+  limit() = 7   <- called above its own definition
   A `let` cannot do that. Read one above its own line and you get
-      error[E0425]: cannot find value `quorum` in this scope
+      error[E0425]: cannot find value `limit` in this scope
   Items are in scope for the entire block; a binding's scope starts
   at its `let` and runs to the brace. Same word, two different rules.
 ```
@@ -138,13 +138,13 @@ The `let _` rule above is the one with teeth, so Rust special-cases the worst in
 
 ```text
 error: non-binding let on a synchronization lock
-    |     let _ = tally.lock().unwrap();
+    |     let _ = counter.lock().unwrap();
     |         ^ this lock is not assigned to a binding and is immediately dropped
     |
     = note: `#[deny(let_underscore_lock)]` (part of `#[deny(let_underscore)]`) on by default
 ```
 
-Deny by default, in `rustc` itself — no clippy, no flag. The run above needs an `#[allow]` to demonstrate the bug at all, and with the allow in place `try_lock` answers the question that style cannot: after `let _ = tally.lock()` a second lock **succeeds**, because nothing is held. After `let _guard = tally.lock()` it fails. Same thread, same mutex, one identifier apart.
+Deny by default, in `rustc` itself — no clippy, no flag. The run above needs an `#[allow]` to demonstrate the bug at all, and with the allow in place `try_lock` answers the question that style cannot: after `let _ = counter.lock()` a second lock **succeeds**, because nothing is held. After `let _guard = counter.lock()` it fails. Same thread, same mutex, one identifier apart.
 
 Note what the lint covers, though: **std's locks, not the pattern.** Your own RAII guard — a transaction, a span, a file lock, a permit — gets no diagnostic whatsoever, as the last two lines of that block show. See [lock poisoning](../../09_Advanced/mutex_poisoning/README.md) for what a held guard costs a second thread, and [what a warning is asking](../../15_First_Programs/what_a_warning_is_asking/README.md) for the `unused variable` that suggests this spelling in the first place.
 
@@ -154,8 +154,8 @@ Scope is about names, and not every name is a binding. **Items** — `fn`, `stru
 
 ```rust
 fn main() {
-    println!("{}", quorum());   // fine: the item is in scope for the whole block
-    fn quorum() -> u32 { 7 }
+    println!("{}", limit());   // fine: the item is in scope for the whole block
+    fn limit() -> u32 { 7 }
 }
 ```
 

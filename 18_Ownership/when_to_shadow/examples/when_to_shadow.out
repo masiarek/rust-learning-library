@@ -15,9 +15,9 @@
   generic -> concrete:  /etc/hosts
   unwrap-and-narrow:    ADA
   frozen after build:   [5, 3]
-      From this line on, `tally` cannot be pushed to. The `mut`
+      From this line on, `totals` cannot be pushed to. The `mut`
       was scoped to the building, not to the variable's life.
-  narrowed to newtype:  BallotId(42)
+  narrowed to newtype:  OrderId(42)
       The bare u32 is still alive, but nothing can reach it —
       so no later line can pass a raw number where an id is due.
   clone-for-move:       thread counted 3, outer still has 3
@@ -52,7 +52,7 @@
 ──── Step 5: One name, two concepts — the failure with no warning
   scores      = [5, 2, 4, 0, 3]
   minimum score to count: 3
-  threshold   = 5   (the ballot count, not the minimum score)
+  threshold   = 5   (the row count, not the minimum score)
   counted     = 1   — expected 3, the scores that are >= 3
       Both bindings are `usize` and both are read, so there is no
       warning to catch it. The compiler cannot know that the first
@@ -61,9 +61,9 @@
       unsafe — because the two values are not the same thing.
 
 ──── Step 6: A shadow hides a function just as happily as a value
-  ballots_cast = 461
+  rows_read = 461
       The name is now a usize, so the function is unreachable:
-        let again = ballots_cast();
+        let again = rows_read();
         error[E0618]: expected function, found `usize`
           | this function of the same name is available here,
           | but it's shadowed by the local binding

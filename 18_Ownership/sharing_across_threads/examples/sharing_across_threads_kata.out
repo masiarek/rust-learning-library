@@ -37,7 +37,7 @@ Part 2 — predict the two totals.
 Part 3 — the Arc you can delete.
 
   thread::scope summed [41, 17, 88, 5] to 151 with no Arc at all,
-  and `precincts` is still usable here: 4
+  and `batches` is still usable here: 4
 
   The rule to carry away: Arc is for threads that OUTLIVE the
   borrow. A scoped thread cannot, so it needs no owner and no

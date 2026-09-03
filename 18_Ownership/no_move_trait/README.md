@@ -6,14 +6,14 @@
 
 ```rust
 #[derive(Debug)]
-struct Ballot(u8);      // Debug, and nothing else
+struct Order(u8);       // Debug, and nothing else
 
-let a = Ballot(5);
+let a = Order(5);
 let b = a;              // moved — no trait was consulted
-println!("{b:?}");      // Ballot(5)
+println!("{b:?}");      // Order(5)
 ```
 
-`Ballot` implements one trait, and it is not the one that made this a move. Moving is the ground state.
+`Order` implements one trait, and it is not the one that made this a move. Moving is the ground state.
 
 ---
 

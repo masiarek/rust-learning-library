@@ -85,23 +85,23 @@ fn main() {
 
     banner("Where each one ends: a block");
 
-    let quorum = 5;
+    let base = 5;
     {
-        let quorum = quorum * 20; //        a declaration, and it ends at the brace
-        println!("  shadow: inside the block,  quorum  = {quorum}");
+        let base = base * 20; //        a declaration, and it ends at the brace
+        println!("  shadow: inside the block,  base  = {base}");
     }
-    println!("  shadow: after it,          quorum  = {quorum:<3}  <- restored");
+    println!("  shadow: after it,          base  = {base:<3}  <- restored");
 
-    let mut turnout = 5;
+    let mut counter = 5;
     {
-        turnout *= 20; //                   a write into a place declared outside
-        println!("  mut:    inside the block,  turnout = {turnout}");
+        counter *= 20; //                   a write into a place declared outside
+        println!("  mut:    inside the block,  counter = {counter}");
     }
-    println!("  mut:    after it,          turnout = {turnout:<3}  <- kept");
+    println!("  mut:    after it,          counter = {counter:<3}  <- kept");
 
-    let quorum = {
-        let raw = quorum * 20; //           the work still happens in the block
+    let base = {
+        let raw = base * 20; //           the work still happens in the block
         raw + 1 //                          but the value is handed out of it
     };
-    println!("  block:  handed out of it,  quorum  = {quorum:<3}  <- carried");
+    println!("  block:  handed out of it,  base  = {base:<3}  <- carried");
 }

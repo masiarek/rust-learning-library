@@ -25,7 +25,7 @@ fn just_look(s: &str) -> usize {
 fn step1() {
     banner(1, "The alternative to borrowing is giving it back");
 
-    let owned = String::from("ballot");
+    let owned = String::from("hello");
     let (n, owned) = take_and_return(owned);
     println!("  moved in and out -> len {n}, and we have {owned:?} again");
     println!("  borrowed         -> len {}, and we never lost it", just_look(&owned));

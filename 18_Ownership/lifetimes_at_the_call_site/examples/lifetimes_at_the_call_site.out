@@ -1,15 +1,15 @@
 ──── 1. Two lifetimes: only the returned one stays locked
-  chosen  = Ada 5, Ben 3
+  chosen  = alpha
   scratch = scratch — mutated while `chosen` is still alive
   The push_str happened while `chosen` was still in use. `scratch`
   was released the moment the call returned, because the return type
   names `'a` and nothing else — so no result can point into it.
 
 ──── 2. One lifetime: both stay locked
-  chosen2 = Ada 5, Ben 3
+  chosen2 = alpha
   Same body, same call, one character different in the signature —
   and now `scratch2.push_str(..)` on the line above would be E0502.
-  The body returns `tally` in BOTH functions. The compiler never looked.
+  The body returns `kept` in BOTH functions. The compiler never looked.
 
 ──── 3. The signature is the whole contract
   `either` always returns its first argument. Its signature does not

@@ -32,7 +32,7 @@
       makes the buffer the callee's problem, and it drops there.
 
 ──── The trap: drop() AFTER the shadow drops the wrong thing
-    dropped `ballots`... and the buffer is still alive:
+    dropped `records`... and the buffer is still alive:
     ...doing report work, during which nothing above is needed...
     DROP E: still held (8 bytes freed)
       `drop` takes whatever the name means NOW, and after a shadow

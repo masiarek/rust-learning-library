@@ -122,11 +122,11 @@ The other half of the confusion. `x = 6` on an `i32` really does overwrite four 
   weight = 61.5 kg
 
 ──── Where each one ends: a block
-  shadow: inside the block,  quorum  = 100
-  shadow: after it,          quorum  = 5    <- restored
-  mut:    inside the block,  turnout = 100
-  mut:    after it,          turnout = 100  <- kept
-  block:  handed out of it,  quorum  = 101  <- carried
+  shadow: inside the block,  base  = 100
+  shadow: after it,          base  = 5    <- restored
+  mut:    inside the block,  counter = 100
+  mut:    after it,          counter = 100  <- kept
+  block:  handed out of it,  base  = 101  <- carried
 ```
 <!-- /output -->
 
@@ -196,30 +196,30 @@ At which point A's shape is the right answer to a slightly different question. K
 Not one of the five rows mentions the difference you will actually trip over: **the two effects end at different times.** A shadow is a *declaration*, so it expires with the block that declared it and the outer name comes back. A write goes into a place declared somewhere else, so it outlives the block it happened in.
 
 ```rust
-let quorum = 5;
+let base = 5;
 {
-    let quorum = quorum * 20;   // a declaration — it ends at the brace
+    let base = base * 20;   // a declaration — it ends at the brace
 }
-// quorum is 5 again out here
+// base is 5 again out here
 
-let mut turnout = 5;
+let mut counter = 5;
 {
-    turnout *= 20;              // a write into a place declared outside
+    counter *= 20;              // a write into a place declared outside
 }
-// turnout is 100 out here
+// counter is 100 out here
 ```
 
 The `Where each one ends` group in the verified output above is those two blocks running. Neither one is surprising on its own; what makes the pair worth a row is that the source lines look equally local, and only one of them is.
 
-This is the mechanical reason behind the worst shadowing bug in the set. A loop body is a block, so a shadowed accumulator is rebuilt from the outer value and thrown away at every brace — [the tally that never tallies](../when_to_shadow/README.md#1-the-accumulator-that-never-accumulates), which compiles, runs, and complains only that a `mut` it no longer uses could be dropped. **If the new value has to outlive the block that computes it, a shadow cannot do the job at all**, and no error will say so.
+This is the mechanical reason behind the worst shadowing bug in the set. A loop body is a block, so a shadowed accumulator is rebuilt from the outer value and thrown away at every brace — [the total that never totals](../when_to_shadow/README.md#1-the-accumulator-that-never-accumulates), which compiles, runs, and complains only that a `mut` it no longer uses could be dropped. **If the new value has to outlive the block that computes it, a shadow cannot do the job at all**, and no error will say so.
 
 The escape hatch is that [a block is an *expression*](../../15_First_Programs/a_block_is_an_expression/README.md), so the work can stay scoped while the result leaves:
 
 ```rust
-let quorum = {
-    let raw = quorum * 20;   // scratch names die at the brace
+let base = {
+    let raw = base * 20;   // scratch names die at the brace
     raw + 1                  // the value is handed out
-};                           // quorum is 101, and `raw` never existed outside
+};                           // base is 101, and `raw` never existed outside
 ```
 
 One qualifier, because it cuts the other way: a *same-scope* shadow does not end early either — it holds the name to the end of the enclosing block, and [the value it hid outlives it](../shadowing_does_not_drop/README.md), dropping afterwards rather than sooner. Scope is what ends a shadow; it is not a way to end a value.

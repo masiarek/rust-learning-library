@@ -1,80 +1,80 @@
-//! Kata solution: the tally that never tallied.
+//! Kata solution: the total that never totalled.
 //!
 //! A shadowed accumulator inside a loop. The compiler says nothing, the
-//! per-ballot log looks fine, the report prints a real candidate's name — and
+//! per-round log looks fine, the report prints a real player's name — and
 //! the number behind that name is zero. Then: which of clippy's three shadow
 //! lints finds it, and what that one costs you elsewhere in this same file.
 //!
 //!   rustc --edition 2024 nothing_checks_a_shadow_kata.rs -o /tmp/ncask && /tmp/ncask
 
-const CANDIDATES: [&str; 3] = ["Ada", "Ben", "Cara"];
+const PLAYERS: [&str; 3] = ["Ada", "Ben", "Cara"];
 
-/// Three ballots, 0–5 scores. Ben is the honest winner: 3 + 5 + 2 = 10,
+/// Three rounds, 0–5 points each. Ben is the honest leader: 3 + 5 + 2 = 10,
 /// against Ada's 9 and Cara's 6.
-const BALLOTS: [[u32; 3]; 3] = [[5, 3, 0], [4, 5, 1], [0, 2, 5]];
+const ROUNDS: [[u32; 3]; 3] = [[5, 3, 0], [4, 5, 1], [0, 2, 5]];
 
 fn banner(title: &str) {
     println!("\n──── {title}");
 }
 
-fn winner(totals: [u32; 3]) -> &'static str {
+fn leader(totals: [u32; 3]) -> &'static str {
     let mut best = 0;
     for i in 1..totals.len() {
         if totals[i] > totals[best] {
             best = i;
         }
     }
-    CANDIDATES[best]
+    PLAYERS[best]
 }
 
 // ─────────────────────────────────────────────────────────────── the bug
-fn tally_buggy() -> [u32; 3] {
+fn total_buggy() -> [u32; 3] {
     let totals = [0u32; 3];
-    for ballot in BALLOTS {
+    for round in ROUNDS {
         // Reads the OUTER `totals` — which is still [0, 0, 0] — adds one
-        // ballot, and drops the result at the closing brace.
+        // round, and drops the result at the closing brace.
         let totals = [
-            totals[0] + ballot[0],
-            totals[1] + ballot[1],
-            totals[2] + ballot[2],
+            totals[0] + round[0],
+            totals[1] + round[1],
+            totals[2] + round[2],
         ];
-        println!("  counted {ballot:?}  running total {totals:?}");
+        println!("  counted {round:?}  running total {totals:?}");
     }
     totals
 }
 
 // ─────────────────────────────────────────────────────────────── the fixes
-fn tally_mut() -> [u32; 3] {
+fn total_mut() -> [u32; 3] {
     let mut totals = [0u32; 3];
-    for ballot in BALLOTS {
+    for round in ROUNDS {
         for i in 0..totals.len() {
-            totals[i] += ballot[i];
+            totals[i] += round[i];
         }
     }
     totals
 }
 
-fn tally_fold() -> [u32; 3] {
-    BALLOTS.iter().fold([0u32; 3], |mut acc, ballot| {
+fn total_fold() -> [u32; 3] {
+    ROUNDS.iter().fold([0u32; 3], |mut acc, round| {
         for i in 0..acc.len() {
-            acc[i] += ballot[i];
+            acc[i] += round[i];
         }
         acc
     })
 }
 
-fn tally_distinct_names() -> [u32; 3] {
+fn total_distinct_names() -> [u32; 3] {
     let mut running = [0u32; 3];
-    for ballot in BALLOTS {
+    for round in ROUNDS {
         for i in 0..running.len() {
-            running[i] += ballot[i];
+            running[i] += round[i];
         }
     }
     running
 }
 
 // A CORRECT shadow, in the same file, for the lint to have an opinion about.
-fn parse_quorum(raw: &str) -> u32 {
+fn parse_limit(raw: &str) -> u32 {
     let raw = raw.trim(); // &str -> &str
     let raw: u32 = raw.parse().unwrap_or(0); // &str -> u32, the Book's own idiom
     raw
@@ -82,17 +82,17 @@ fn parse_quorum(raw: &str) -> u32 {
 
 fn main() {
     // ────────────────────────────────────────────────────────── 1
-    banner("As shipped: a log that looks fine and a winner that is not");
-    let totals = tally_buggy();
-    println!("  Winner: {}", winner(totals));
-    println!("      Nothing above looks alarming. Every ballot was counted, each");
-    println!("      running total is a real number, and Ada is a real candidate.");
+    banner("As shipped: a log that looks fine and a leader that is not");
+    let totals = total_buggy();
+    println!("  Leader: {}", leader(totals));
+    println!("      Nothing above looks alarming. Every round was counted, each");
+    println!("      running total is a real number, and Ada is a real player.");
     println!("      Two things give it away, and only in hindsight:");
     println!("  totals = {totals:?}");
-    println!("      Every 'running total' was just that ballot echoed back, and");
-    println!("      the accumulator never left zero. `winner` broke the all-zero");
+    println!("      Every 'running total' was just that round echoed back, and");
+    println!("      the accumulator never left zero. `leader` broke the all-zero");
     println!("      tie by index, so the report named whoever was first in the");
-    println!("      candidate list. The honest winner is Ben, with 10.");
+    println!("      player list. The honest leader is Ben, with 10.");
 
     // ────────────────────────────────────────────────────────── 2
     banner("What the compiler had to say about it: nothing");
@@ -117,10 +117,10 @@ fn main() {
     println!("  warning: `totals` is shadowed");
     println!("    --> src/main.rs:36:13        <- the bug");
     println!("  warning: `raw` is shadowed");
-    println!("    --> src/main.rs:78:9         <- parse_quorum, line 1");
+    println!("    --> src/main.rs:78:9         <- parse_limit, line 1");
     println!("  warning: `raw` is shadowed");
-    println!("    --> src/main.rs:79:9         <- parse_quorum, line 2");
-    println!("      parse_quorum(\"  42 \") = {}", parse_quorum("  42 "));
+    println!("    --> src/main.rs:79:9         <- parse_limit, line 2");
+    println!("      parse_limit(\"  42 \") = {}", parse_limit("  42 "));
     println!("      ...which is correct code, flagged twice. It is the idiom");
     println!("      chapter 3.1 of the Book teaches.");
 
@@ -140,10 +140,10 @@ fn main() {
 
     // ────────────────────────────────────────────────────────── 5
     banner("Three fixes, and the one to ship");
-    let (a, b, c) = (tally_mut(), tally_fold(), tally_distinct_names());
-    println!("  1. `mut`, no shadow      -> {a:?}  winner {}", winner(a));
-    println!("  2. fold, no accumulator  -> {b:?}  winner {}", winner(b));
-    println!("  3. no name reused        -> {c:?}  winner {}", winner(c));
+    let (a, b, c) = (total_mut(), total_fold(), total_distinct_names());
+    println!("  1. `mut`, no shadow      -> {a:?}  leader {}", leader(a));
+    println!("  2. fold, no accumulator  -> {b:?}  leader {}", leader(b));
+    println!("  3. no name reused        -> {c:?}  leader {}", leader(c));
     println!("      Fix 2 is the one to ship, and the reason generalises past this");
     println!("      bug: it removes the BINDING, so the mistake has nowhere to");
     println!("      live. Fix 1 works, and is the honest counter-example to");

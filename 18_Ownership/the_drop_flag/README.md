@@ -163,46 +163,46 @@ For each, say how many drops happen and *where the line for each one sits in the
 //!
 //!   rustc --edition 2024 the_drop_flag_kata.rs -o /tmp/tdfk && /tmp/tdfk
 
-struct Ballot(&'static str);
+struct Order(&'static str);
 
-impl Drop for Ballot {
+impl Drop for Order {
     fn drop(&mut self) {
         println!("       drop {}", self.0);
     }
 }
 
-fn file_it(b: Ballot) {
+fn ship_it(b: Order) {
     println!("       filed {}", b.0);
 }
 
 /// Returns early while it still owns the value.
 fn early_return_owning(short: bool) {
-    let b = Ballot("A");
+    let b = Order("A");
     if short {
         println!("       returning early, still owning it:");
         return;
     }
-    file_it(b);
+    ship_it(b);
 }
 
 /// Returns early after handing the value away.
 fn early_return_moved(short: bool) {
-    let b = Ballot("B");
+    let b = Order("B");
     if short {
-        file_it(b);
+        ship_it(b);
         println!("       returning early, having moved it out:");
         return;
     }
-    file_it(b);
+    ship_it(b);
 }
 
 /// Moves the value out on one iteration, then leaves the loop.
 fn moved_in_a_loop() {
-    let b = Ballot("C");
+    let b = Order("C");
     for round in 0..3 {
         println!("       round {round}");
         if round == 1 {
-            file_it(b);
+            ship_it(b);
             break;
         }
     }
@@ -211,12 +211,12 @@ fn moved_in_a_loop() {
 
 /// The same shape with the emptiness written down.
 fn moved_in_a_loop_visibly() {
-    let mut slot = Some(Ballot("D"));
+    let mut slot = Some(Order("D"));
     for round in 0..3 {
         println!("       round {round}, holding = {}", slot.is_some());
         if round == 1 {
             if let Some(b) = slot.take() {
-                file_it(b);
+                ship_it(b);
             }
         }
     }

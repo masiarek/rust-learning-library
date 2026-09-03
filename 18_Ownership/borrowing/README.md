@@ -239,8 +239,8 @@ The bug the rule exists to prevent:
 
 ```text
 ──── Step 1: The alternative to borrowing is giving it back
-  moved in and out -> len 6, and we have "ballot" again
-  borrowed         -> len 6, and we never lost it
+  moved in and out -> len 5, and we have "hello" again
+  borrowed         -> len 5, and we never lost it
       Same answer. The first signature makes every caller thread the
       value back through a tuple; the second one just asks to look.
 

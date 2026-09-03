@@ -5,20 +5,20 @@
 //!   rustc --edition 2024 lifetimes_at_the_call_site.rs -o /tmp/lacs && /tmp/lacs
 
 /// Two lifetimes. The return type names only `'a`, so `y` is released at the call.
-fn tally_of<'a, 'b>(tally: &'a str, _scratch: &'b str) -> &'a str {
-    tally
+fn first_of<'a, 'b>(kept: &'a str, _scratch: &'b str) -> &'a str {
+    kept
 }
 
 /// One lifetime for both. The caller must now keep BOTH alive, whatever the body does.
-fn either<'a>(tally: &'a str, _scratch: &'a str) -> &'a str {
-    tally
+fn either<'a>(kept: &'a str, _scratch: &'a str) -> &'a str {
+    kept
 }
 
 fn main() {
     println!("──── 1. Two lifetimes: only the returned one stays locked");
-    let tally = String::from("Ada 5, Ben 3");
+    let kept = String::from("alpha");
     let mut scratch = String::from("scratch");
-    let chosen = tally_of(&tally, &scratch);
+    let chosen = first_of(&kept, &scratch);
     scratch.push_str(" — mutated while `chosen` is still alive");
     println!("  chosen  = {chosen}");
     println!("  scratch = {scratch}");
@@ -28,13 +28,13 @@ fn main() {
 
     println!();
     println!("──── 2. One lifetime: both stay locked");
-    let tally2 = String::from("Ada 5, Ben 3");
+    let kept2 = String::from("alpha");
     let scratch2 = String::from("scratch");
-    let chosen2 = either(&tally2, &scratch2);
+    let chosen2 = either(&kept2, &scratch2);
     println!("  chosen2 = {chosen2}");
     println!("  Same body, same call, one character different in the signature —");
     println!("  and now `scratch2.push_str(..)` on the line above would be E0502.");
-    println!("  The body returns `tally` in BOTH functions. The compiler never looked.");
+    println!("  The body returns `kept` in BOTH functions. The compiler never looked.");
 
     println!();
     println!("──── 3. The signature is the whole contract");

@@ -4,7 +4,7 @@
 
 use std::borrow::Cow;
 
-/// Ballot lines arrive from a CSV. Most are already clean; the ones a Windows
+/// Address lines arrive from a CSV. Most are already clean; the ones a Windows
 /// machine wrote carry a stray `\r`. Only those need a new buffer — and the
 /// return type has to cover both cases without deciding in advance.
 fn clean(raw: &str) -> Cow<'_, str> {

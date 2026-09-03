@@ -81,11 +81,11 @@ The fix is to end its scope or move it, both of which the [Practice](#practice) 
 A same-scope shadow and an inner-block binding read almost identically and do different things:
 
 ```rust
-let ballot = Noisy("outer");
+let item = Noisy("outer");
 {
-    let ballot = Noisy("inner");   // a new binding in a new scope
+    let item = Noisy("inner");   // a new binding in a new scope
 }                                  // ← "inner" DIES here
-println!("{}", ballot.0);          // "outer" was never touched
+println!("{}", item.0);          // "outer" was never touched
 ```
 
 The inner binding is **destroyed** at its brace. A same-scope shadow merely goes nameless and lives on to the end of the enclosing scope. Both make the outer name unreachable for a stretch; only one of them frees anything.
@@ -203,7 +203,7 @@ It even distinguishes the heap case from the stack case. So the honest compariso
 
 ## Practice
 
-**The value you can no longer free.** Write a function that loads ballots into a buffer, shadows that name with a summary derived from it (a count, say), and then does a long stretch of unrelated work. Give the buffer a `Drop` that prints, and find out how long it actually stays alive.
+**The value you can no longer free.** Write a function that loads records into a buffer, shadows that name with a summary derived from it (a count, say), and then does a long stretch of unrelated work. Give the buffer a `Drop` that prints, and find out how long it actually stays alive.
 
 Then make it die *before* the work starts — three ways, and decide which one you would ship.
 
@@ -218,7 +218,7 @@ Worth getting wrong on purpose: reach for `drop(buffer)` **after** the shadow an
 ```rust
 //! Kata solution: the value you can no longer free.
 //!
-//! A shadow removes a NAME. If the value behind that name is a 40 MB ballot
+//! A shadow removes a NAME. If the value behind that name is a 40 MB record
 //! buffer and the shadow is a one-line summary of it, the buffer is still
 //! there — held to the end of the scope, with nothing left that can reach it
 //! to release it early. The instrument is the same as the lesson's: a value
@@ -263,9 +263,9 @@ fn main() {
     // ─────────────────────────────────────────────────────────── problem
     banner("The problem", "shadowed, so it cannot be released");
     {
-        let ballots = Buffer::load("A: shadowed");
-        let ballots = ballots.count_marked(); // usize now — buffer is nameless
-        println!("    marked = {ballots}");
+        let records = Buffer::load("A: shadowed");
+        let records = records.count_marked(); // usize now — buffer is nameless
+        println!("    marked = {records}");
         long_unrelated_work("report");
         println!("    (the buffer is STILL alive right here)");
     }
@@ -276,11 +276,11 @@ fn main() {
     // ─────────────────────────────────────────────────────────── 1
     banner("Fix 1", "drop it explicitly, BEFORE the shadow");
     {
-        let ballots = Buffer::load("B: dropped early");
-        let marked = ballots.count_marked();
-        drop(ballots); // must happen while the name still means the buffer
-        let ballots = marked;
-        println!("    marked = {ballots}");
+        let records = Buffer::load("B: dropped early");
+        let marked = records.count_marked();
+        drop(records); // must happen while the name still means the buffer
+        let records = marked;
+        println!("    marked = {records}");
         long_unrelated_work("report");
     }
     println!("      Correct, and it relies on a human remembering. Move that");
@@ -289,11 +289,11 @@ fn main() {
     // ─────────────────────────────────────────────────────────── 2
     banner("Fix 2", "give it a scope that ends: the block expression");
     {
-        let ballots = {
+        let records = {
             let raw = Buffer::load("C: scoped");
             raw.count_marked()
         }; // raw dies HERE, structurally
-        println!("    marked = {ballots}");
+        println!("    marked = {records}");
         long_unrelated_work("report");
     }
     println!("      The one to ship. The lifetime is stated by the shape of the");
@@ -304,8 +304,8 @@ fn main() {
     // ─────────────────────────────────────────────────────────── 3
     banner("Fix 3", "hand it to something that consumes it");
     {
-        let ballots = Buffer::load("D: moved in").into_count_marked();
-        println!("    marked = {ballots}");
+        let records = Buffer::load("D: moved in").into_count_marked();
+        println!("    marked = {records}");
         long_unrelated_work("report");
     }
     println!("      Best when a real function already wants ownership: the move");
@@ -314,11 +314,11 @@ fn main() {
     // ─────────────────────────────────────────────────────────── 4
     banner("The trap", "drop() AFTER the shadow drops the wrong thing");
     {
-        let ballots = Buffer::load("E: still held");
+        let records = Buffer::load("E: still held");
         // A String summary rather than a usize one — and that detail is the trap.
-        let ballots = format!("{} marked", ballots.count_marked());
-        drop(ballots); // a REAL drop, of the summary. Not a warning in sight.
-        println!("    dropped `ballots`... and the buffer is still alive:");
+        let records = format!("{} marked", records.count_marked());
+        drop(records); // a REAL drop, of the summary. Not a warning in sight.
+        println!("    dropped `records`... and the buffer is still alive:");
         long_unrelated_work("report");
     }
     println!("      `drop` takes whatever the name means NOW, and after a shadow");
@@ -378,7 +378,7 @@ fn main() {
       makes the buffer the callee's problem, and it drops there.
 
 ──── The trap: drop() AFTER the shadow drops the wrong thing
-    dropped `ballots`... and the buffer is still alive:
+    dropped `records`... and the buffer is still alive:
     ...doing report work, during which nothing above is needed...
     DROP E: still held (8 bytes freed)
       `drop` takes whatever the name means NOW, and after a shadow

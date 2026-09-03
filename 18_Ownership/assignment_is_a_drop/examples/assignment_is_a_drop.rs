@@ -5,25 +5,25 @@
 use std::mem;
 
 /// A value that announces its own death, so the schedule is readable.
-struct Tally(&'static str, u32);
+struct Batch(&'static str, u32);
 
-impl Drop for Tally {
+impl Drop for Batch {
     fn drop(&mut self) {
         println!("     drop  {} ({})", self.0, self.1);
     }
 }
 
 /// Announces its own birth too, so the ORDER of the two is visible.
-fn built(name: &'static str, n: u32) -> Tally {
+fn built(name: &'static str, n: u32) -> Batch {
     println!("     built {}", name);
-    Tally(name, n)
+    Batch(name, n)
 }
 
 fn main() {
     println!("1. Assignment drops the old value");
     {
         let mut round = built("round 1", 12);
-        println!("     round 1 counted {} ballots", round.1);
+        println!("     round 1 counted {} items", round.1);
         round = built("round 2", 30);
         println!("     still inside the block, one line to go");
         println!("     round is now {} ({})", round.0, round.1);

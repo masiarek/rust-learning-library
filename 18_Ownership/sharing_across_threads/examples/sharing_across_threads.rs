@@ -80,10 +80,10 @@ fn main() {
 
     println!();
     println!("4. `Arc` grants the ownership; `Mutex` grants the write");
-    let tally = Arc::new(Mutex::new(Vec::new()));
+    let collected = Arc::new(Mutex::new(Vec::new()));
     let mut handles = Vec::new();
     for id in 0..THREADS {
-        let mine = Arc::clone(&tally);
+        let mine = Arc::clone(&collected);
         handles.push(thread::spawn(move || {
             mine.lock().unwrap().push(id * 10);
         }));
@@ -91,7 +91,7 @@ fn main() {
     for h in handles {
         h.join().unwrap();
     }
-    let mut rows = tally.lock().unwrap().clone();
+    let mut rows = collected.lock().unwrap().clone();
     rows.sort(); // arrival order is the scheduler's business, so do not print it
     println!("   {THREADS} threads wrote into one Vec: {rows:?}");
     println!("   `Arc<T>` alone hands out `&T`, so it cannot be pushed to at all.");
@@ -100,15 +100,15 @@ fn main() {
 
     println!();
     println!("5. When no counting is needed at all");
-    let precincts = vec![41_u32, 17, 88, 5];
+    let chunks_in = vec![41_u32, 17, 88, 5];
     let total: u32 = thread::scope(|s| {
-        let workers: Vec<_> = precincts
+        let workers: Vec<_> = chunks_in
             .chunks(2)
             .map(|chunk| s.spawn(move || chunk.iter().sum::<u32>()))
             .collect();
         workers.into_iter().map(|w| w.join().unwrap()).sum()
     });
-    println!("   thread::scope borrowed {precincts:?} with no Arc: total {total}");
+    println!("   thread::scope borrowed {chunks_in:?} with no Arc: total {total}");
     println!("   A scoped thread cannot outlive the borrow, so the compiler needs");
     println!("   no `'static` and you need no owner per thread. Reach for this");
     println!("   first; `Arc` is for the threads that DO outlive the scope.");

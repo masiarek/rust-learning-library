@@ -3,7 +3,7 @@ Part 1 — predict the stack size of six types.
     type           size  why
     i32               4  the slot IS the value
     [i32; 5]         20  five of them, still no header
-    Precinct          8  two u32 fields, nothing more
+    Point             8  two u32 fields, nothing more
     &str             16  pointer + length: a view needs both
     Box<i32>          8  one pointer, the i32 is elsewhere
     String           24  pointer + length + capacity
@@ -28,9 +28,9 @@ Part 3 — predict which of seven lines allocates, then count.
 
     let moved = source;              alloc 0
       ...and the buffer did not move: true
-    let copied = precinct;           alloc 0
+    let copied = point;              alloc 0
       ...a Copy type has no heap side to touch, and both names
-         are still alive: precinct 7 / copied 431 registered
+         are still alive: point 7 / copied 431
     let view = &moved[..];           alloc 0
       ...a borrow is a pointer and a length, both on the stack
     moved.clone()                    alloc 1

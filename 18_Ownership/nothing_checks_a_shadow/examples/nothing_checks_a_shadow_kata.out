@@ -1,17 +1,17 @@
 
-──── As shipped: a log that looks fine and a winner that is not
+──── As shipped: a log that looks fine and a leader that is not
   counted [5, 3, 0]  running total [5, 3, 0]
   counted [4, 5, 1]  running total [4, 5, 1]
   counted [0, 2, 5]  running total [0, 2, 5]
-  Winner: Ada
-      Nothing above looks alarming. Every ballot was counted, each
-      running total is a real number, and Ada is a real candidate.
+  Leader: Ada
+      Nothing above looks alarming. Every round was counted, each
+      running total is a real number, and Ada is a real player.
       Two things give it away, and only in hindsight:
   totals = [0, 0, 0]
-      Every 'running total' was just that ballot echoed back, and
-      the accumulator never left zero. `winner` broke the all-zero
+      Every 'running total' was just that round echoed back, and
+      the accumulator never left zero. `leader` broke the all-zero
       tie by index, so the report named whoever was first in the
-      candidate list. The honest winner is Ben, with 10.
+      player list. The honest leader is Ben, with 10.
 
 ──── What the compiler had to say about it: nothing
   $ rustc --edition 2024 nothing_checks_a_shadow_kata.rs
@@ -34,10 +34,10 @@
   warning: `totals` is shadowed
     --> src/main.rs:36:13        <- the bug
   warning: `raw` is shadowed
-    --> src/main.rs:78:9         <- parse_quorum, line 1
+    --> src/main.rs:78:9         <- parse_limit, line 1
   warning: `raw` is shadowed
-    --> src/main.rs:79:9         <- parse_quorum, line 2
-      parse_quorum("  42 ") = 42
+    --> src/main.rs:79:9         <- parse_limit, line 2
+      parse_limit("  42 ") = 42
       ...which is correct code, flagged twice. It is the idiom
       chapter 3.1 of the Book teaches.
 
@@ -55,9 +55,9 @@
       but make it deliberately, not hoping to catch one accumulator.
 
 ──── Three fixes, and the one to ship
-  1. `mut`, no shadow      -> [9, 10, 6]  winner Ben
-  2. fold, no accumulator  -> [9, 10, 6]  winner Ben
-  3. no name reused        -> [9, 10, 6]  winner Ben
+  1. `mut`, no shadow      -> [9, 10, 6]  leader Ben
+  2. fold, no accumulator  -> [9, 10, 6]  leader Ben
+  3. no name reused        -> [9, 10, 6]  leader Ben
       Fix 2 is the one to ship, and the reason generalises past this
       bug: it removes the BINDING, so the mistake has nowhere to
       live. Fix 1 works, and is the honest counter-example to

@@ -10,11 +10,11 @@
   c = S(9)   <- legal once `s` is done, not once `r` is
 
 ──── 3. Two fields of one struct are two places
-  &ballot.voter held, ballot.score written anyway: Ada 5
-  The checker split the struct: `voter` is locked, `score` is not.
-  ballot.voter() takes &self, so it locks ALL of ballot — and this
+  &review.author held, review.score written anyway: Ada 5
+  The checker split the struct: `author` is locked, `score` is not.
+  review.author() takes &self, so it locks ALL of review — and this
   is the last line allowed to read `name`: Ada
-  ballot.score = 7   <- written after `name`'s last use
+  review.score = 7   <- written after `name`'s last use
 
 ──── 4. A `ref` binding keeps the WHOLE value alive
   (a) both halves bound normally — neither dies before the brace:

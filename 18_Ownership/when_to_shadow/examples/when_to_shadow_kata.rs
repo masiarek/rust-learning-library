@@ -16,7 +16,7 @@
 //!
 //!   rustc --edition 2024 when_to_shadow_kata.rs -o /tmp/wtsk && /tmp/wtsk
 
-/// One voter's card as it arrives: a name and their scores as raw text.
+/// One survey card as it arrives: a label and its ratings as raw text.
 const CARDS: [(&str, &str); 5] = [
     ("Ada", " 5 "),
     ("Ben", "2"),
@@ -39,11 +39,11 @@ const SUPPORT_AT_LEAST: usize = 3;
 // which is the accumulator bug reported in a vocabulary that does not contain
 // the word "shadow". Nothing at all is said about `threshold`.
 #[allow(unused_mut)]
-fn tally_broken() -> (usize, usize) {
+fn summarize_broken() -> (usize, usize) {
     let mut total = 0;
 
     for (_who, raw) in CARDS {
-        // Shadow #1 — EARNED. Same concept (this voter's score), better form:
+        // Shadow #1 — EARNED. Same concept (this card's rating), better form:
         // &str with spaces -> &str trimmed -> usize. No second name needed.
         let raw = raw.trim();
         let raw: usize = raw.parse().expect("every card above is a number");
@@ -60,16 +60,16 @@ fn tally_broken() -> (usize, usize) {
     // Shadow #3 — one name, two concepts. `threshold` was a SCORE; now it is a
     // COUNT of cards. Both are usize, both are read, so nothing warns.
     let threshold = CARDS.len();
-    let supporters = CARDS
+    let strong = CARDS
         .iter()
         .filter(|(_who, raw)| raw.trim().parse::<usize>().unwrap_or(0) >= threshold)
         .count();
 
-    (total, supporters)
+    (total, strong)
 }
 
 // ─────────────────────────────────────────────────────────── the two fixes
-fn tally_fixed() -> (usize, usize) {
+fn summarize_fixed() -> (usize, usize) {
     let mut total = 0;
 
     for (_who, raw) in CARDS {
@@ -86,30 +86,30 @@ fn tally_fixed() -> (usize, usize) {
     // and the moment they have honest names the bug is unwriteable.
     let min_score = SUPPORT_AT_LEAST;
     let card_count = CARDS.len();
-    let supporters = CARDS
+    let strong = CARDS
         .iter()
         .filter(|(_who, raw)| raw.trim().parse::<usize>().unwrap_or(0) >= min_score)
         .count();
 
     println!("  counting support at {min_score} or above, over {card_count} cards");
 
-    (total, supporters)
+    (total, strong)
 }
 
 fn main() {
     println!("──── The broken version");
-    let (total, supporters) = tally_broken();
+    let (total, strong) = summarize_broken();
     println!("  total score = {total}      (five cards scoring 5, 2, 4, 0, 3)");
-    println!("  supporters  = {supporters}      (should be the scores of 3 or more)");
+    println!("  strong  = {strong}      (should be the scores of 3 or more)");
     println!("      Both numbers are wrong, and both look like they could be");
     println!("      right — which is the whole hazard. A total of 0 reads as a");
-    println!("      blank election, and 1 supporter as a weak field. Neither");
+    println!("      blank form, and 1 supporter as a weak field. Neither");
     println!("      number looks like a bug; they look like a finding.");
 
     println!("\n──── The fixed version");
-    let (total, supporters) = tally_fixed();
+    let (total, strong) = summarize_fixed();
     println!("  total score = {total}     (5 + 2 + 4 + 0 + 3)");
-    println!("  supporters  = {supporters}      (5, 4 and 3 clear the bar of 3)");
+    println!("  strong  = {strong}      (5, 4 and 3 clear the bar of 3)");
 
     println!("\n──── Why the two fixes differ");
     println!("  The lost sum was a shadow standing where `mut` belonged: the");

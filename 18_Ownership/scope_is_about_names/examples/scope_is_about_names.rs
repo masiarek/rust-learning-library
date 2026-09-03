@@ -18,7 +18,7 @@ impl Drop for Tracked {
 }
 
 /// Two fields, declared in this order, to be watched at the brace.
-struct Ballot {
+struct Order {
     _marked: Tracked,
     _counted: Tracked,
 }
@@ -44,17 +44,17 @@ fn main() {
 
     banner("2. A borrow ends at its last use, not at the brace");
 
-    let mut ballots = vec!["Ada"];
-    let first = &ballots[0]; //             the borrow starts here
+    let mut orders = vec!["alpha"];
+    let first = &orders[0]; //             the borrow starts here
     println!("  first   = {first}   <- and ends here, at its last use");
-    ballots.push("Ben"); //                 legal: nothing is borrowed any more
-    println!("  ballots = {ballots:?}   <- mutated afterwards, same block, no error");
+    orders.push("beta"); //                 legal: nothing is borrowed any more
+    println!("  orders = {orders:?}   <- mutated afterwards, same block, no error");
     println!("  Move that first println! BELOW the push and it stops compiling:");
-    println!("      error[E0502]: cannot borrow `ballots` as mutable because it is");
+    println!("      error[E0502]: cannot borrow `orders` as mutable because it is");
     println!("                    also borrowed as immutable");
-    println!("        |   let first = &ballots[0];");
+    println!("        |   let first = &orders[0];");
     println!("        |                ------- immutable borrow occurs here");
-    println!("        |   ballots.push(\"Ben\");");
+    println!("        |   orders.push(\"beta\");");
     println!("        |   ^^^^^^^^^^^^^^^^^^^ mutable borrow occurs here");
     println!("        |   println!(\"{{first}}\");");
     println!("        |              ----- immutable borrow later used here");
@@ -71,7 +71,7 @@ fn main() {
     println!("  ^ reverse declaration order — the last one declared dies first");
 
     {
-        let _ballot = Ballot {
+        let _order = Order {
             _marked: Tracked("field declared first"),
             _counted: Tracked("field declared second"),
         };
@@ -95,24 +95,24 @@ fn main() {
 
     banner("4. Held, or not: `try_lock` answers what style cannot");
 
-    let tally = Mutex::new(0_u32);
+    let counter = Mutex::new(0_u32);
     {
         // Written without the allow, this is a hard ERROR, not a warning:
         //   error: non-binding let on a synchronization lock
         //   note: `#[deny(let_underscore_lock)]` (part of `#[deny(let_underscore)]`)
         //         on by default
         #[allow(let_underscore_lock)]
-        let _ = tally.lock().unwrap();
+        let _ = counter.lock().unwrap();
         println!(
-            "  after `let _      = tally.lock()`:  try_lock succeeds = {}",
-            tally.try_lock().is_ok()
+            "  after `let _      = counter.lock()`:  try_lock succeeds = {}",
+            counter.try_lock().is_ok()
         );
     }
     {
-        let _guard = tally.lock().unwrap();
+        let _guard = counter.lock().unwrap();
         println!(
-            "  after `let _guard = tally.lock()`:  try_lock succeeds = {}",
-            tally.try_lock().is_ok()
+            "  after `let _guard = counter.lock()`:  try_lock succeeds = {}",
+            counter.try_lock().is_ok()
         );
     }
     println!("  Same thread, same mutex, one identifier apart, and `try_lock` can");
@@ -128,14 +128,14 @@ fn main() {
 
     banner("5. Some names are in scope before they are written");
 
-    println!("  quorum() = {}   <- called above its own definition", quorum());
+    println!("  limit() = {}   <- called above its own definition", limit());
 
-    fn quorum() -> u32 {
+    fn limit() -> u32 {
         7
     } //                                    an ITEM: in scope for the whole block
 
     println!("  A `let` cannot do that. Read one above its own line and you get");
-    println!("      error[E0425]: cannot find value `quorum` in this scope");
+    println!("      error[E0425]: cannot find value `limit` in this scope");
     println!("  Items are in scope for the entire block; a binding's scope starts");
     println!("  at its `let` and runs to the brace. Same word, two different rules.");
 }

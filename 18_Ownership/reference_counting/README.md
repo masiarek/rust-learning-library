@@ -100,11 +100,11 @@ Two `Rc`s pointing at each other never reach zero. Nothing is unsafe and nothing
 
 ## Practice
 
-**Predict the count four times, then find the edge that leaks.** One roster, three tallies, and a precinct whose voters point back at it.
+**Predict the count four times, then find the edge that leaks.** One roster, three scoreboards, and a team whose members point back at it.
 
-1. Write `Rc<Vec<String>>` shared by three `Tally` structs. Predict `strong_count` after the `Rc::new`, after two tallies exist, inside a block holding a third, and after that block ends. Then print it at all four points.
+1. Write `Rc<Vec<String>>` shared by three `Scoreboard` structs. Predict `strong_count` after the `Rc::new`, after two scoreboards exist, inside a block holding a third, and after that block ends. Then print it at all four points.
 2. Replace one `Rc::clone` with `(*roster).clone()`. Say which of the four numbers changes and why, before running it — then name the bug that version makes writable.
-3. Give a `Precinct` a `Vec<Rc<Voter>>` and each `Voter` a back-reference to its precinct. Predict whether `Drop` runs when the precinct goes out of scope, first with `Rc<Precinct>` on the back edge and then with `Weak<Precinct>`. Check both.
+3. Give a `Team` a `Vec<Rc<Member>>` and each `Member` a back-reference to its team. Predict whether `Drop` runs when the team goes out of scope, first with `Rc<Team>` on the back edge and then with `Weak<Team>`. Check both.
 
 <details markdown="1">
 <summary><strong>Solution</strong></summary>
@@ -121,21 +121,21 @@ use std::cell::RefCell;
 use std::rc::{Rc, Weak};
 
 /// Part 1 and 2: one roster, several readers.
-struct Tally {
+struct Scoreboard {
     roster: Rc<Vec<String>>,
-    votes: Vec<u32>,
+    points: Vec<u32>,
 }
 
-impl Tally {
+impl Scoreboard {
     fn new(roster: &Rc<Vec<String>>) -> Self {
-        Tally { roster: Rc::clone(roster), votes: vec![0; roster.len()] }
+        Scoreboard { roster: Rc::clone(roster), points: vec![0; roster.len()] }
     }
-    fn cast(&mut self, i: usize) {
-        self.votes[i] += 1;
+    fn score(&mut self, i: usize) {
+        self.points[i] += 1;
     }
     fn leader(&self) -> &str {
         let best = self
-            .votes
+            .points
             .iter()
             .enumerate()
             .max_by_key(|(i, v)| (**v, std::cmp::Reverse(*i)))
@@ -145,34 +145,34 @@ impl Tally {
     }
 }
 
-/// Part 3: a precinct owns its voters, and each voter refers back to it.
-struct Precinct {
+/// Part 3: a team owns its members, and each member refers back to it.
+struct Team {
     name: &'static str,
-    voters: RefCell<Vec<Rc<Voter>>>,
+    members: RefCell<Vec<Rc<Member>>>,
 }
 
-struct Voter {
+struct Member {
     name: &'static str,
-    /// The back edge. `Weak` is the answer; `Rc<Precinct>` here is the leak.
-    precinct: RefCell<Weak<Precinct>>,
+    /// The back edge. `Weak` is the answer; `Rc<Team>` here is the leak.
+    team: RefCell<Weak<Team>>,
 }
 
-impl Drop for Precinct {
+impl Drop for Team {
     fn drop(&mut self) {
-        println!("     drop ran for precinct {}", self.name);
+        println!("     drop ran for team {}", self.name);
     }
 }
 
-impl Drop for Voter {
+impl Drop for Member {
     fn drop(&mut self) {
-        println!("     drop ran for voter {}", self.name);
+        println!("     drop ran for member {}", self.name);
     }
 }
 
-fn enroll(precinct: &Rc<Precinct>, name: &'static str) {
-    let voter = Rc::new(Voter { name, precinct: RefCell::new(Weak::new()) });
-    *voter.precinct.borrow_mut() = Rc::downgrade(precinct);
-    precinct.voters.borrow_mut().push(voter);
+fn enroll(team: &Rc<Team>, name: &'static str) {
+    let member = Rc::new(Member { name, team: RefCell::new(Weak::new()) });
+    *member.team.borrow_mut() = Rc::downgrade(team);
+    team.members.borrow_mut().push(member);
 }
 
 fn main() {
@@ -181,28 +181,28 @@ fn main() {
     let roster = Rc::new(vec!["Ada".to_string(), "Ben".to_string(), "Cara".to_string()]);
     println!("  (a) let roster = Rc::new(..)        predicted 1  actual {}", Rc::strong_count(&roster));
 
-    let mut morning = Tally::new(&roster);
-    let mut evening = Tally::new(&roster);
-    println!("  (b) two Tally::new(&roster)         predicted 3  actual {}", Rc::strong_count(&roster));
+    let mut morning = Scoreboard::new(&roster);
+    let mut evening = Scoreboard::new(&roster);
+    println!("  (b) two Scoreboard::new(&roster)    predicted 3  actual {}", Rc::strong_count(&roster));
 
     {
-        let _absentee = Tally::new(&roster);
+        let _spare = Scoreboard::new(&roster);
         println!("  (c) a third, inside a block         predicted 4  actual {}", Rc::strong_count(&roster));
     }
     println!("  (d) the block ended                 predicted 3  actual {}", Rc::strong_count(&roster));
 
     println!("\n  The count tracks OWNERS, not uses. `morning` and `evening` are");
-    println!("  still alive at (d), so the roster is; `_absentee` is not, so its");
+    println!("  still alive at (d), so the roster is; `_spare` is not, so its");
     println!("  share went back. The Vec is freed when the last one leaves, and");
     println!("  no single owner's scope decides that.");
 
-    morning.cast(0);
-    morning.cast(0);
-    morning.cast(1);
-    evening.cast(2);
-    evening.cast(2);
-    evening.cast(2);
-    println!("\n  Three Tally values, one roster, three names stored once:");
+    morning.score(0);
+    morning.score(0);
+    morning.score(1);
+    evening.score(2);
+    evening.score(2);
+    evening.score(2);
+    println!("\n  Three Scoreboard values, one roster, three names stored once:");
     println!("    morning leader {}   evening leader {}", morning.leader(), evening.leader());
 
     println!("\nPart 2 — swap one Rc::clone for a deep clone. Which numbers move?\n");
@@ -212,29 +212,29 @@ fn main() {
     println!("                                   common with this one.");
     println!("  same buffer as the roster?  {}", roster.as_ptr() == independent.as_ptr());
     println!("  Three fresh Strings and a fresh Vec, so a name edited here would");
-    println!("  not be seen by any Tally. That divergence is the bug the count");
+    println!("  not be seen by any Scoreboard. That divergence is the bug the count");
     println!("  was preventing, and it compiles either way.");
 
     println!("\nPart 3 — the back edge, and whether Drop runs.\n");
-    println!("  With `precinct: RefCell<Rc<Precinct>>` the prediction is NOTHING");
-    println!("  prints: the precinct owns each voter and each voter owns the");
-    println!("  precinct, so both counts stop at 1 and neither reaches zero.");
-    println!("  `Weak` breaks it — a voter can SEE its precinct without owning it:\n");
+    println!("  With `team: RefCell<Rc<Team>>` the prediction is NOTHING");
+    println!("  prints: the team owns each member and each member owns the");
+    println!("  team, so both counts stop at 1 and neither reaches zero.");
+    println!("  `Weak` breaks it — a member can SEE its team without owning it:\n");
     {
-        let riverside = Rc::new(Precinct { name: "Riverside", voters: RefCell::new(Vec::new()) });
+        let riverside = Rc::new(Team { name: "Riverside", members: RefCell::new(Vec::new()) });
         enroll(&riverside, "Ada");
         enroll(&riverside, "Ben");
-        let ada = Rc::clone(&riverside.voters.borrow()[0]);
-        let seen = ada.precinct.borrow().upgrade().map(|p| p.name);
-        println!("    Ada can still reach her precinct: {seen:?}");
-        println!("    strong precinct {}   weak precinct {}   strong Ada {}",
+        let ada = Rc::clone(&riverside.members.borrow()[0]);
+        let seen = ada.team.borrow().upgrade().map(|t| t.name);
+        println!("    Ada can still reach her team: {seen:?}");
+        println!("    strong team {}   weak team {}   strong Ada {}",
                  Rc::strong_count(&riverside),
                  Rc::weak_count(&riverside),
                  Rc::strong_count(&ada));
         println!("    leaving the block:");
     }
-    println!("\n  All three ran, in owner order: the precinct's count hit zero");
-    println!("  first, which dropped its Vec, which dropped the voters.");
+    println!("\n  All three ran, in owner order: the team's count hit zero");
+    println!("  first, which dropped its Vec, which dropped the members.");
     println!("  The rule to carry away: a cycle needs every edge to be an owner,");
     println!("  so make exactly one of them an observer. Child-to-parent is");
     println!("  almost always the one to demote.");
@@ -249,16 +249,16 @@ fn main() {
 Part 1 — predict the count at four points.
 
   (a) let roster = Rc::new(..)        predicted 1  actual 1
-  (b) two Tally::new(&roster)         predicted 3  actual 3
+  (b) two Scoreboard::new(&roster)    predicted 3  actual 3
   (c) a third, inside a block         predicted 4  actual 4
   (d) the block ended                 predicted 3  actual 3
 
   The count tracks OWNERS, not uses. `morning` and `evening` are
-  still alive at (d), so the roster is; `_absentee` is not, so its
+  still alive at (d), so the roster is; `_spare` is not, so its
   share went back. The Vec is freed when the last one leaves, and
   no single owner's scope decides that.
 
-  Three Tally values, one roster, three names stored once:
+  Three Scoreboard values, one roster, three names stored once:
     morning leader Ada   evening leader Cara
 
 Part 2 — swap one Rc::clone for a deep clone. Which numbers move?
@@ -268,25 +268,25 @@ Part 2 — swap one Rc::clone for a deep clone. Which numbers move?
                                    common with this one.
   same buffer as the roster?  false
   Three fresh Strings and a fresh Vec, so a name edited here would
-  not be seen by any Tally. That divergence is the bug the count
+  not be seen by any Scoreboard. That divergence is the bug the count
   was preventing, and it compiles either way.
 
 Part 3 — the back edge, and whether Drop runs.
 
-  With `precinct: RefCell<Rc<Precinct>>` the prediction is NOTHING
-  prints: the precinct owns each voter and each voter owns the
-  precinct, so both counts stop at 1 and neither reaches zero.
-  `Weak` breaks it — a voter can SEE its precinct without owning it:
+  With `team: RefCell<Rc<Team>>` the prediction is NOTHING
+  prints: the team owns each member and each member owns the
+  team, so both counts stop at 1 and neither reaches zero.
+  `Weak` breaks it — a member can SEE its team without owning it:
 
-    Ada can still reach her precinct: Some("Riverside")
-    strong precinct 1   weak precinct 2   strong Ada 2
+    Ada can still reach her team: Some("Riverside")
+    strong team 1   weak team 2   strong Ada 2
     leaving the block:
-     drop ran for precinct Riverside
-     drop ran for voter Ada
-     drop ran for voter Ben
+     drop ran for team Riverside
+     drop ran for member Ada
+     drop ran for member Ben
 
-  All three ran, in owner order: the precinct's count hit zero
-  first, which dropped its Vec, which dropped the voters.
+  All three ran, in owner order: the team's count hit zero
+  first, which dropped its Vec, which dropped the members.
   The rule to carry away: a cycle needs every edge to be an owner,
   so make exactly one of them an observer. Child-to-parent is
   almost always the one to demote.

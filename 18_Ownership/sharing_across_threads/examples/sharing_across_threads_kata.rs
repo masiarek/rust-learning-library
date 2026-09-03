@@ -27,16 +27,16 @@ fn main() {
     println!("  (b) pushing through a shared `Arc<Vec<u32>>`");
     println!("      error[E0596]: cannot borrow data in an `Arc` as mutable");
     println!("      Fix: Arc<Mutex<T>>. Arc grants the ownership, Mutex the write.");
-    let tally = Arc::new(Mutex::new(Vec::new()));
+    let collected = Arc::new(Mutex::new(Vec::new()));
     let mut handles = Vec::new();
     for id in 0..4u32 {
-        let mine = Arc::clone(&tally);
+        let mine = Arc::clone(&collected);
         handles.push(thread::spawn(move || mine.lock().unwrap().push(id)));
     }
     for h in handles {
         h.join().unwrap();
     }
-    let mut rows = tally.lock().unwrap().clone();
+    let mut rows = collected.lock().unwrap().clone();
     rows.sort(); // the order they arrived in is the scheduler's business
     println!("      four threads wrote {rows:?}\n");
 
@@ -105,16 +105,16 @@ fn main() {
     println!("    why you cannot test your way to noticing one.");
 
     println!("\nPart 3 — the Arc you can delete.\n");
-    let precincts = vec![41u32, 17, 88, 5];
+    let batches = vec![41u32, 17, 88, 5];
     let total: u32 = thread::scope(|s| {
-        let workers: Vec<_> = precincts
+        let workers: Vec<_> = batches
             .chunks(2)
             .map(|chunk| s.spawn(move || chunk.iter().sum::<u32>()))
             .collect();
         workers.into_iter().map(|w| w.join().unwrap()).sum()
     });
-    println!("  thread::scope summed {precincts:?} to {total} with no Arc at all,");
-    println!("  and `precincts` is still usable here: {}", precincts.len());
+    println!("  thread::scope summed {batches:?} to {total} with no Arc at all,");
+    println!("  and `batches` is still usable here: {}", batches.len());
     println!("\n  The rule to carry away: Arc is for threads that OUTLIVE the");
     println!("  borrow. A scoped thread cannot, so it needs no owner and no");
     println!("  count. Reach for the scope first and pay for the Arc second.");

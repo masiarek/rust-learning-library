@@ -1,6 +1,6 @@
 //! Kata solution: the value you can no longer free.
 //!
-//! A shadow removes a NAME. If the value behind that name is a 40 MB ballot
+//! A shadow removes a NAME. If the value behind that name is a 40 MB record
 //! buffer and the shadow is a one-line summary of it, the buffer is still
 //! there — held to the end of the scope, with nothing left that can reach it
 //! to release it early. The instrument is the same as the lesson's: a value
@@ -45,9 +45,9 @@ fn main() {
     // ─────────────────────────────────────────────────────────── problem
     banner("The problem", "shadowed, so it cannot be released");
     {
-        let ballots = Buffer::load("A: shadowed");
-        let ballots = ballots.count_marked(); // usize now — buffer is nameless
-        println!("    marked = {ballots}");
+        let records = Buffer::load("A: shadowed");
+        let records = records.count_marked(); // usize now — buffer is nameless
+        println!("    marked = {records}");
         long_unrelated_work("report");
         println!("    (the buffer is STILL alive right here)");
     }
@@ -58,11 +58,11 @@ fn main() {
     // ─────────────────────────────────────────────────────────── 1
     banner("Fix 1", "drop it explicitly, BEFORE the shadow");
     {
-        let ballots = Buffer::load("B: dropped early");
-        let marked = ballots.count_marked();
-        drop(ballots); // must happen while the name still means the buffer
-        let ballots = marked;
-        println!("    marked = {ballots}");
+        let records = Buffer::load("B: dropped early");
+        let marked = records.count_marked();
+        drop(records); // must happen while the name still means the buffer
+        let records = marked;
+        println!("    marked = {records}");
         long_unrelated_work("report");
     }
     println!("      Correct, and it relies on a human remembering. Move that");
@@ -71,11 +71,11 @@ fn main() {
     // ─────────────────────────────────────────────────────────── 2
     banner("Fix 2", "give it a scope that ends: the block expression");
     {
-        let ballots = {
+        let records = {
             let raw = Buffer::load("C: scoped");
             raw.count_marked()
         }; // raw dies HERE, structurally
-        println!("    marked = {ballots}");
+        println!("    marked = {records}");
         long_unrelated_work("report");
     }
     println!("      The one to ship. The lifetime is stated by the shape of the");
@@ -86,8 +86,8 @@ fn main() {
     // ─────────────────────────────────────────────────────────── 3
     banner("Fix 3", "hand it to something that consumes it");
     {
-        let ballots = Buffer::load("D: moved in").into_count_marked();
-        println!("    marked = {ballots}");
+        let records = Buffer::load("D: moved in").into_count_marked();
+        println!("    marked = {records}");
         long_unrelated_work("report");
     }
     println!("      Best when a real function already wants ownership: the move");
@@ -96,11 +96,11 @@ fn main() {
     // ─────────────────────────────────────────────────────────── 4
     banner("The trap", "drop() AFTER the shadow drops the wrong thing");
     {
-        let ballots = Buffer::load("E: still held");
+        let records = Buffer::load("E: still held");
         // A String summary rather than a usize one — and that detail is the trap.
-        let ballots = format!("{} marked", ballots.count_marked());
-        drop(ballots); // a REAL drop, of the summary. Not a warning in sight.
-        println!("    dropped `ballots`... and the buffer is still alive:");
+        let records = format!("{} marked", records.count_marked());
+        drop(records); // a REAL drop, of the summary. Not a warning in sight.
+        println!("    dropped `records`... and the buffer is still alive:");
         long_unrelated_work("report");
     }
     println!("      `drop` takes whatever the name means NOW, and after a shadow");

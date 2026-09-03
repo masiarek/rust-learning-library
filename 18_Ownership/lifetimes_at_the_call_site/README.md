@@ -5,9 +5,9 @@
 **One line:** Passing `&a` and `&b` into one function locks **both** for as long as you keep the result — because the compiler reads only the signature, never the body — and giving the parameters two different lifetimes is what releases the one the result cannot have come from.
 
 ```rust
-fn tally_of<'a, 'b>(tally: &'a str, _scratch: &'b str) -> &'a str { tally }
+fn first_of<'a, 'b>(kept: &'a str, _scratch: &'b str) -> &'a str { kept }
 
-let chosen = tally_of(&tally, &scratch);
+let chosen = first_of(&kept, &scratch);
 scratch.push_str(" — mutated");     // legal: `scratch` was released at the call
 println!("{chosen}");
 ```
@@ -27,8 +27,8 @@ Might. That is the whole difficulty. At the call site the compiler does not know
 Two functions with **identical bodies**:
 
 ```rust
-fn tally_of<'a, 'b>(tally: &'a str, _scratch: &'b str) -> &'a str { tally }
-fn either<'a>(tally: &'a str, _scratch: &'a str) -> &'a str { tally }
+fn first_of<'a, 'b>(kept: &'a str, _scratch: &'b str) -> &'a str { kept }
+fn either<'a>(kept: &'a str, _scratch: &'a str) -> &'a str { kept }
 ```
 
 Both return their first argument, always. Only the first lets the caller touch the second argument afterwards:
@@ -37,7 +37,7 @@ Both return their first argument, always. Only the first lets the caller touch t
 error[E0502]: cannot borrow `scratch` as mutable because it is also borrowed as immutable
   --> one_lifetime_locks_both.rs:9:5
    |
- 8 |     let chosen = either(&tally, &scratch);
+ 8 |     let chosen = either(&kept, &scratch);
    |                                 -------- immutable borrow occurs here
  9 |     scratch.push_str(" — mutated");
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ mutable borrow occurs here
@@ -54,14 +54,14 @@ The practical consequence is the useful half of this page: **one lifetime on eve
 `'b: 'a` reads like a weaker statement than reusing one name — it only says `'b` outlives `'a`. At the call site it is not weaker:
 
 ```rust
-fn tally_of<'a, 'b: 'a>(tally: &'a str, _scratch: &'b str) -> &'a str { tally }
+fn first_of<'a, 'b: 'a>(kept: &'a str, _scratch: &'b str) -> &'a str { kept }
 ```
 
 ```text
 error[E0502]: cannot borrow `scratch` as mutable because it is also borrowed as immutable
   --> outlives_bound_relocks.rs:9:5
    |
- 8 |     let chosen = tally_of(&tally, &scratch);
+ 8 |     let chosen = first_of(&kept, &scratch);
    |                                   -------- immutable borrow occurs here
  9 |     scratch.push_str(" — mutated");
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ mutable borrow occurs here
@@ -75,7 +75,7 @@ Once `'b` is known to cover `'a`, a `&'b str` can be used as a `&'a str` — tha
 
 You never choose the regions. The compiler picks them at the **call site**, from the borrows you actually passed, and it picks the smallest ones that make the call and its result type-check. `'a` and `'b` in the signature are parameters, exactly like `T` — the caller supplies them, and different calls supply different ones.
 
-Which is why the regions are usually much shorter than the variables' scopes: `'a` is not "how long `tally` lives", it is "the stretch of code over which this call's result is used". The lock lifts at the last use of anything that may point into the argument, and not at any brace.
+Which is why the regions are usually much shorter than the variables' scopes: `'a` is not "how long `kept` lives", it is "the stretch of code over which this call's result is used". The lock lifts at the last use of anything that may point into the argument, and not at any brace.
 
 ## The whole verified run
 
@@ -84,17 +84,17 @@ Which is why the regions are usually much shorter than the variables' scopes: `'
 
 ```text
 ──── 1. Two lifetimes: only the returned one stays locked
-  chosen  = Ada 5, Ben 3
+  chosen  = alpha
   scratch = scratch — mutated while `chosen` is still alive
   The push_str happened while `chosen` was still in use. `scratch`
   was released the moment the call returned, because the return type
   names `'a` and nothing else — so no result can point into it.
 
 ──── 2. One lifetime: both stay locked
-  chosen2 = Ada 5, Ben 3
+  chosen2 = alpha
   Same body, same call, one character different in the signature —
   and now `scratch2.push_str(..)` on the line above would be E0502.
-  The body returns `tally` in BOTH functions. The compiler never looked.
+  The body returns `kept` in BOTH functions. The compiler never looked.
 
 ──── 3. The signature is the whole contract
   `either` always returns its first argument. Its signature does not

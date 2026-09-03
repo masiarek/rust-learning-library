@@ -181,9 +181,9 @@ fn measure<T>(label: &str, work: impl FnOnce() -> T) -> T {
 }
 
 #[derive(Clone, Copy, Debug)]
-struct Precinct {
-    id: u32,
-    registered: u32,
+struct Point {
+    x: u32,
+    y: u32,
 }
 
 fn main() {
@@ -191,7 +191,7 @@ fn main() {
     println!("    {:<14} {:>4}  {}", "type", "size", "why");
     println!("    {:<14} {:>4}  {}", "i32", size_of::<i32>(), "the slot IS the value");
     println!("    {:<14} {:>4}  {}", "[i32; 5]", size_of::<[i32; 5]>(), "five of them, still no header");
-    println!("    {:<14} {:>4}  {}", "Precinct", size_of::<Precinct>(), "two u32 fields, nothing more");
+    println!("    {:<14} {:>4}  {}", "Point", size_of::<Point>(), "two u32 fields, nothing more");
     println!("    {:<14} {:>4}  {}", "&str", size_of::<&str>(), "pointer + length: a view needs both");
     println!("    {:<14} {:>4}  {}", "Box<i32>", size_of::<Box<i32>>(), "one pointer, the i32 is elsewhere");
     println!("    {:<14} {:>4}  {}", "String", size_of::<String>(), "pointer + length + capacity");
@@ -214,16 +214,16 @@ fn main() {
 
     println!("\nPart 3 — predict which of seven lines allocates, then count.\n");
 
-    let source = String::from("Riverside precinct");
+    let source = String::from("a heap-allocated string");
     let before_move = source.as_ptr();
     let moved = measure("let moved = source;", || source);
     println!("      ...and the buffer did not move: {}", before_move == moved.as_ptr());
 
-    let precinct = Precinct { id: 7, registered: 431 };
-    let copied = measure("let copied = precinct;", || precinct);
+    let point = Point { x: 7, y: 431 };
+    let copied = measure("let copied = point;", || point);
     println!("      ...a Copy type has no heap side to touch, and both names");
-    println!("         are still alive: precinct {} / copied {} registered",
-             precinct.id, copied.registered);
+    println!("         are still alive: point {} / copied {}",
+             point.x, copied.y);
 
     let _view: &str = measure("let view = &moved[..];", || &moved[..]);
     println!("      ...a borrow is a pointer and a length, both on the stack");
@@ -260,7 +260,7 @@ Part 1 — predict the stack size of six types.
     type           size  why
     i32               4  the slot IS the value
     [i32; 5]         20  five of them, still no header
-    Precinct          8  two u32 fields, nothing more
+    Point             8  two u32 fields, nothing more
     &str             16  pointer + length: a view needs both
     Box<i32>          8  one pointer, the i32 is elsewhere
     String           24  pointer + length + capacity
@@ -285,9 +285,9 @@ Part 3 — predict which of seven lines allocates, then count.
 
     let moved = source;              alloc 0
       ...and the buffer did not move: true
-    let copied = precinct;           alloc 0
+    let copied = point;              alloc 0
       ...a Copy type has no heap side to touch, and both names
-         are still alive: precinct 7 / copied 431 registered
+         are still alive: point 7 / copied 431
     let view = &moved[..];           alloc 0
       ...a borrow is a pointer and a length, both on the stack
     moved.clone()                    alloc 1

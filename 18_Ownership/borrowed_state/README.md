@@ -75,12 +75,12 @@ This is [non-lexical lifetimes](../borrowing/README.md) seen from the owner's si
 The lock is on a **place**, and a struct field is its own place. Borrow one field and the others stay free:
 
 ```rust
-let who = &ballot.voter;
-ballot.score = 5;           // fine: `voter` is locked, `score` is not
+let who = &review.author;
+review.score = 5;           // fine: `author` is locked, `score` is not
 println!("{who}");
 ```
 
-A method call is the exception, and the reason catches people out: `ballot.voter()` takes `&self`, so it borrows *all* of `ballot`, not the field it happens to return. Same visible result, a lock four times the size. When a borrow error appears only after you tidy a field access into a getter, this is why — and the fix is usually to keep the field access, or to split the struct so the two halves can be borrowed independently.
+A method call is the exception, and the reason catches people out: `review.author()` takes `&self`, so it borrows *all* of `review`, not the field it happens to return. Same visible result, a lock four times the size. When a borrow error appears only after you tidy a field access into a getter, this is why — and the fix is usually to keep the field access, or to split the struct so the two halves can be borrowed independently.
 
 ## `ref` keeps the whole value alive
 
@@ -110,11 +110,11 @@ The borrow is of one field, but the thing being held open is the temporary that 
   c = S(9)   <- legal once `s` is done, not once `r` is
 
 ──── 3. Two fields of one struct are two places
-  &ballot.voter held, ballot.score written anyway: Ada 5
-  The checker split the struct: `voter` is locked, `score` is not.
-  ballot.voter() takes &self, so it locks ALL of ballot — and this
+  &review.author held, review.score written anyway: Ada 5
+  The checker split the struct: `author` is locked, `score` is not.
+  review.author() takes &self, so it locks ALL of review — and this
   is the last line allowed to read `name`: Ada
-  ballot.score = 7   <- written after `name`'s last use
+  review.score = 7   <- written after `name`'s last use
 
 ──── 4. A `ref` binding keeps the WHOLE value alive
   (a) both halves bound normally — neither dies before the brace:

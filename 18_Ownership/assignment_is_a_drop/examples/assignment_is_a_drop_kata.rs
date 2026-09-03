@@ -69,7 +69,7 @@ fn main() {
         println!("       end of block:");
     }
 
-    println!("\nTally: two of the six dropped anything where the statement sits,");
+    println!("\nBatch: two of the six dropped anything where the statement sits,");
     println!("       A and D. B and C did not, because an assignment drops what");
     println!("       was THERE and both locations were empty; E did not, because");
     println!("       `let` declares rather than writes; F did not, because the old");

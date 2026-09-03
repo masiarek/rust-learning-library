@@ -154,12 +154,12 @@ fn main() {
 
     println!();
     println!("5. `Rc<RefCell<T>>` is how a shared value gets written to");
-    let tally = Rc::new(RefCell::new(0u32));
-    let counter_a = Rc::clone(&tally);
-    let counter_b = Rc::clone(&tally);
+    let shared = Rc::new(RefCell::new(0u32));
+    let counter_a = Rc::clone(&shared);
+    let counter_b = Rc::clone(&shared);
     *counter_a.borrow_mut() += 5;
     *counter_b.borrow_mut() += 3;
-    println!("   two owners wrote through the same cell: {}", tally.borrow());
+    println!("   two owners wrote through the same cell: {}", shared.borrow());
     println!("   `Rc` grants the ownership; `RefCell` grants the write. Neither");
     println!("   substitutes for the other, and the borrow rule moves to run time.");
 

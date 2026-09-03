@@ -9,14 +9,14 @@
     drop: carried out
 
 ──── 2. A borrow ends at its last use, not at the brace
-  first   = Ada   <- and ends here, at its last use
-  ballots = ["Ada", "Ben"]   <- mutated afterwards, same block, no error
+  first   = alpha   <- and ends here, at its last use
+  orders = ["alpha", "beta"]   <- mutated afterwards, same block, no error
   Move that first println! BELOW the push and it stops compiling:
-      error[E0502]: cannot borrow `ballots` as mutable because it is
+      error[E0502]: cannot borrow `orders` as mutable because it is
                     also borrowed as immutable
-        |   let first = &ballots[0];
+        |   let first = &orders[0];
         |                ------- immutable borrow occurs here
-        |   ballots.push("Ben");
+        |   orders.push("beta");
         |   ^^^^^^^^^^^^^^^^^^^ mutable borrow occurs here
         |   println!("{first}");
         |              ----- immutable borrow later used here
@@ -43,8 +43,8 @@
   drop(x) is not a keyword and not magic: it takes x and returns ()
 
 ──── 4. Held, or not: `try_lock` answers what style cannot
-  after `let _      = tally.lock()`:  try_lock succeeds = true
-  after `let _guard = tally.lock()`:  try_lock succeeds = false
+  after `let _      = counter.lock()`:  try_lock succeeds = true
+  after `let _guard = counter.lock()`:  try_lock succeeds = false
   Same thread, same mutex, one identifier apart, and `try_lock` can
   tell them apart. The first is an unlocked critical section that
   reads exactly like a locked one — which is why rustc DENIES it
@@ -54,8 +54,8 @@
   no error, no warning — the value is already gone
 
 ──── 5. Some names are in scope before they are written
-  quorum() = 7   <- called above its own definition
+  limit() = 7   <- called above its own definition
   A `let` cannot do that. Read one above its own line and you get
-      error[E0425]: cannot find value `quorum` in this scope
+      error[E0425]: cannot find value `limit` in this scope
   Items are in scope for the entire block; a binding's scope starts
   at its `let` and runs to the brace. Same word, two different rules.

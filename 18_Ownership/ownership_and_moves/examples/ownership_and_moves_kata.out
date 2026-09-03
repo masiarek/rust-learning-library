@@ -1,6 +1,6 @@
 Borrowing: responsibility never moves.
   inspecting P12
-  still usable afterwards -> BallotBox { precinct: "P12" }
+  still usable afterwards -> Parcel { label: "P12" }
 
 Moving into a function: the free happens THERE.
   sealing P3
@@ -9,11 +9,11 @@ Moving into a function: the free happens THERE.
   `handed_over` is now unusable: E0382, borrow of moved value.
 
 Move out and back again:
-  returned -> BallotBox { precinct: "P7 (stamped)" }
+  returned -> Parcel { label: "P7 (stamped)" }
 
 Moves are tracked per field, not per variable:
-  moved out the note -> "chain of custody"
-  pair.0 is still owned here -> BallotBox { precinct: "P1" }
+  moved out the note -> "tracking number"
+  pair.0 is still owned here -> Parcel { label: "P1" }
 
 And integers only *feel* different because they are Copy:
   count 461, also 461 — both usable, nothing was transferred

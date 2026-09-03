@@ -68,7 +68,7 @@ fn shout(name: Option<String>) -> String {
     name.to_uppercase()
 }
 
-struct BallotId(u32);
+struct OrderId(u32);
 
 fn step2() {
     banner(2, "The idioms: same concept, better form");
@@ -77,31 +77,31 @@ fn step2() {
     println!("  unwrap-and-narrow:    {}", shout(Some("  ada  ".to_string())));
 
     // Idiom: freeze. Build it mutably, then take the `mut` away for good.
-    let mut tally = Vec::new();
-    tally.push(5);
-    tally.push(3);
-    let tally = tally;
-    println!("  frozen after build:   {tally:?}");
-    println!("      From this line on, `tally` cannot be pushed to. The `mut`");
+    let mut totals = Vec::new();
+    totals.push(5);
+    totals.push(3);
+    let totals = totals;
+    println!("  frozen after build:   {totals:?}");
+    println!("      From this line on, `totals` cannot be pushed to. The `mut`");
     println!("      was scoped to the building, not to the variable's life.");
 
     // Idiom: narrow into a newtype, and the loose form becomes unnameable.
     let id = 42_u32;
-    let id = BallotId(id);
-    println!("  narrowed to newtype:  BallotId({})", id.0);
+    let id = OrderId(id);
+    println!("  narrowed to newtype:  OrderId({})", id.0);
     println!("      The bare u32 is still alive, but nothing can reach it —");
     println!("      so no later line can pass a raw number where an id is due.");
 
     // Idiom: clone-for-move, shadowed INSIDE a block so the outer name survives.
-    let ballots = Arc::new(vec![5, 3, 0]);
+    let rows = Arc::new(vec![5, 3, 0]);
     let counted = {
-        let ballots = Arc::clone(&ballots);
-        thread::spawn(move || ballots.len())
+        let rows = Arc::clone(&rows);
+        thread::spawn(move || rows.len())
     };
     println!(
         "  clone-for-move:       thread counted {}, outer still has {}",
         counted.join().expect("the thread does not panic"),
-        ballots.len()
+        rows.len()
     );
     println!("      The shadow lived and died inside the braces. Shadowing in an");
     println!("      inner block is the cheapest way to keep a name you still need.");
@@ -180,12 +180,12 @@ fn step5() {
     println!("  scores      = {scores:?}");
     println!("  minimum score to count: {threshold}");
 
-    // Months later, a different edit needs the ballot count and reaches for the
+    // Months later, a different edit needs the row count and reaches for the
     // nearest reasonable word. Both bindings are usize; both are read.
-    let threshold = scores.len(); // "how many ballots we have" — a DIFFERENT idea
+    let threshold = scores.len(); // "how many rows we have" — a DIFFERENT idea
     let counted = scores.iter().filter(|&&s| s >= threshold).count();
 
-    println!("  threshold   = {threshold}   (the ballot count, not the minimum score)");
+    println!("  threshold   = {threshold}   (the row count, not the minimum score)");
     println!("  counted     = {counted}   — expected 3, the scores that are >= 3");
     println!("      Both bindings are `usize` and both are read, so there is no");
     println!("      warning to catch it. The compiler cannot know that the first");
@@ -197,17 +197,17 @@ fn step5() {
 // ───────────────────────────────────────────────────────────────────── 6
 // And the one the compiler does catch outright, with a message that names the
 // mechanism. Functions live in the value namespace, so a `let` hides one.
-fn ballots_cast() -> usize {
+fn rows_read() -> usize {
     461
 }
 
 fn step6() {
     banner(6, "A shadow hides a function just as happily as a value");
 
-    let ballots_cast = ballots_cast();
-    println!("  ballots_cast = {ballots_cast}");
+    let rows_read = rows_read();
+    println!("  rows_read = {rows_read}");
     println!("      The name is now a usize, so the function is unreachable:");
-    println!("        let again = ballots_cast();");
+    println!("        let again = rows_read();");
     println!("        error[E0618]: expected function, found `usize`");
     println!("          | this function of the same name is available here,");
     println!("          | but it's shadowed by the local binding");

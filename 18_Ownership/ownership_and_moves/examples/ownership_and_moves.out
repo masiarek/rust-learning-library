@@ -43,7 +43,7 @@
       is tracking each field separately, not the variable.
 
 ──── Step 6: Asking for a second one, and getting one out of a collection
-  clone     original = "ballot", copy = "ballot"   (two allocations)
+  clone     original = "parcel", copy = "parcel"   (two allocations)
   &v[0]     "x"   — indexing yields a place, not a value:
             `let first = v[0];` is error[E0507], cannot move out of index
   remove    owned = "x", v is now ["y"]

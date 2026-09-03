@@ -5,17 +5,17 @@
 **One line:** `x = value` is not an edit — it frees whatever `x` was holding, so a value can die in the middle of a function, on a line with no closing brace anywhere near it.
 
 ```rust
-struct Tally(&'static str);
+struct Batch(&'static str);
 
-impl Drop for Tally {
+impl Drop for Batch {
     fn drop(&mut self) {
         println!("drop {}", self.0);
     }
 }
 
 fn main() {
-    let mut round = Tally("round 1");
-    round = Tally("round 2");     // drop round 1
+    let mut round = Batch("round 1");
+    round = Batch("round 2");     // drop round 1
     println!("now {}", round.0);  // now round 2
 }                                 // drop round 2
 ```
@@ -37,12 +37,12 @@ So the new value already exists when the old one dies — which is why `v = v.in
 An assignment drops what was **there**. Twice in ordinary Rust, nothing is:
 
 ```rust
-let mut owner = Tally("owner");
+let mut owner = Batch("owner");
 let elsewhere = owner;          // moved out — the location is now empty
-owner = Tally("replacement");   // legal, and drops nothing
+owner = Batch("replacement");   // legal, and drops nothing
 
 let later;                      // declared, holding nothing
-later = Tally("first value");   // also drops nothing
+later = Batch("first value");   // also drops nothing
 ```
 
 Re-initialising a moved-out binding surprises people twice over — first that it compiles at all, then that it is silent. Both follow from the same rule, and the compiler tracks which of the two situations a location is in; when it cannot tell statically, it keeps [a hidden boolean on the stack](../the_drop_flag/README.md) to decide at run time.
@@ -50,8 +50,8 @@ Re-initialising a moved-out binding surprises people twice over — first that i
 The third case is the one to hold beside these, because it looks identical and is not:
 
 ```rust
-let e = Tally("eight");
-let e = Tally("nine");    // a shadow. Nothing is dropped, and `eight` is still alive.
+let e = Batch("eight");
+let e = Batch("nine");    // a shadow. Nothing is dropped, and `eight` is still alive.
 ```
 
 `let` **declares**; `=` **writes**. A shadow adds a second variable and hides the first name, so both values live to the end of the block and [the shadow drops first](../shadowing_does_not_drop/README.md). One character of difference in what you type, and a completely different schedule.
@@ -60,7 +60,7 @@ let e = Tally("nine");    // a shadow. Nothing is dropped, and `eight` is still 
 
 ```rust
 let r = &mut slot;
-*r = Tally("new");     // drop old
+*r = Batch("new");     // drop old
 ```
 
 `*r = value` is an assignment, so it drops too. And it has to: you cannot move a value *out* through a `&mut`, because that would leave the borrowed location empty while somebody else still has a reference to it. Dropping is the only thing the write can do with the old value.
@@ -111,7 +111,7 @@ Read that as an edit and the release is invisible. `rustc` will tell you when th
 ```text
 1. Assignment drops the old value
      built round 1
-     round 1 counted 12 ballots
+     round 1 counted 12 items
      built round 2
      drop  round 1 (12)
      still inside the block, one line to go
@@ -256,7 +256,7 @@ fn main() {
         println!("       end of block:");
     }
 
-    println!("\nTally: two of the six dropped anything where the statement sits,");
+    println!("\nBatch: two of the six dropped anything where the statement sits,");
     println!("       A and D. B and C did not, because an assignment drops what");
     println!("       was THERE and both locations were empty; E did not, because");
     println!("       `let` declares rather than writes; F did not, because the old");
@@ -310,7 +310,7 @@ F. mem::replace                     let old = replace(&mut f, T(11));
        drop ten
        drop eleven
 
-Tally: two of the six dropped anything where the statement sits,
+Batch: two of the six dropped anything where the statement sits,
        A and D. B and C did not, because an assignment drops what
        was THERE and both locations were empty; E did not, because
        `let` declares rather than writes; F did not, because the old

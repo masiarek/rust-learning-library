@@ -39,7 +39,7 @@ F. mem::replace                     let old = replace(&mut f, T(11));
        drop ten
        drop eleven
 
-Tally: two of the six dropped anything where the statement sits,
+Batch: two of the six dropped anything where the statement sits,
        A and D. B and C did not, because an assignment drops what
        was THERE and both locations were empty; E did not, because
        `let` declares rather than writes; F did not, because the old
