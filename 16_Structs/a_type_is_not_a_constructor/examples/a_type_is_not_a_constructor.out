@@ -1,18 +1,18 @@
 1. Three flavors, three spellings — and only ONE of them is a call
-   named-field   Ballot { voter, score }  ->  Ballot { voter: "Ada", score: 5 }
-   tuple struct  Precinct(7)              ->  Precinct(7)
+   named-field   Player { name, score }   ->  Player { name: "Ada", score: 5 }
+   tuple struct  Meters(7)                ->  Meters(7)
    unit struct   Sealed                   ->  Sealed
-   ...ordinary values, with ordinary fields: named.voter = "Ada", named.score = 5, tuple.0 = 7
-   The braces are a literal; the bare name is a value. `Ballot()` is
+   ...ordinary values, with ordinary fields: named.name = "Ada", named.score = 5, tuple.0 = 7
+   The braces are a literal; the bare name is a value. `Player()` is
    not a shorter spelling of either one:
      error[E0423]: expected function, tuple struct or tuple variant,
-                   found struct `Ballot`
-     help: use struct literal syntax instead: `Ballot { voter: val, score: val }`
+                   found struct `Player`
+     help: use struct literal syntax instead: `Player { name: val, score: val }`
 
 2. The tuple struct's name really IS a function — the other two are not
-   let make: fn(u32) -> Precinct = Precinct;   make(12) = Precinct(12)
-   [3, 7, 12].map(Precinct) = [Precinct(3), Precinct(7), Precinct(12)]
-   `.map(Ballot)` is E0423: `expected value, found struct `Ballot``.
+   let make: fn(u32) -> Meters = Meters;   make(12) = Meters(12)
+   [3, 7, 12].map(Meters) = [Meters(3), Meters(7), Meters(12)]
+   `.map(Player)` is E0423: `expected value, found struct `Player``.
    So 'constructor' is literal for one flavor and a figure of speech for the rest.
 
 3. `Sealed` is two declarations sharing a name
@@ -21,24 +21,24 @@
    `struct AlsoEmpty {}` declares only the type, so it needs `AlsoEmpty {}`.
 
 4. `new` is a convention, and std does not even keep to it
-   Ballot::new("Ben", 3)   Ballot { voter: "Ben", score: 3 }
-   Ballot::blank()         Ballot { voter: "(unmarked)", score: 0 }
+   Player::new("Ben", 3)   Player { name: "Ben", score: 3 }
+   Player::blank()         Player { name: "(unnamed)", score: 0 }
    Vec::<u8>::new()        []
    String::from("Cara")    "Cara"
    u8::default()           0
    Four names for 'make me one'. None of them is a keyword.
 
 5. `:` supplies a TYPE, `=` supplies a VALUE — and only the second is required
-   let decided: Ballot;  assigned on every path, exactly once
-   turnout = 431  ->  Ballot { voter: "Cara", score: 4 }
+   let chosen: Player;  assigned on every path, exactly once
+   high_score = 431  ->  Player { name: "Cara", score: 4 }
    No `mut`: one assignment is not a mutation. Read it before assigning
    and the compiler stops you:
-     error[E0381]: used binding `decided` isn't initialized
+     error[E0381]: used binding `chosen` isn't initialized
 
-6. So `let b: Ballot();` is both mistakes in eight characters
+6. So `let p: Player();` is both mistakes in eight characters
      error[E0214]: parenthesized type parameters may only be used with a `Fn` trait
        after `:` rustc is reading a TYPE, and `Name(..)` in type position is
        the `Fn(A) -> B` sugar, which only the Fn traits may use.
-     error[E0381]: used binding `b` isn't initialized
+     error[E0381]: used binding `p` isn't initialized
        and no value was ever supplied, because `=` never appeared.
-   The fix is one character and one pair of braces: `let b = Ballot { .. };`
+   The fix is one character and one pair of braces: `let p = Player { .. };`

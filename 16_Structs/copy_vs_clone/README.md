@@ -33,7 +33,7 @@ A framing borrowed from languages where the choice really is how far a copy reac
 
 ```rust
 let mut two = one;      // Copy
-two.registered = 999;   // one.registered is still 100
+two.y = 999;   // one.y is still 100
 ```
 
 **`Clone` is not a promise of depth.** It is a promise of an independently *owned* value, and how far that reaches is the type's business. `Rc::clone` copies a pointer and bumps a count — the shallowest clone there is, and the idiomatic one in any shared-ownership code:
@@ -45,7 +45,7 @@ let independent = (*shared).clone();  // this is the one that duplicates the dat
 
 `String::clone` allocates, `Rc::clone` does not, `&T::clone` copies a pointer — one trait, three depths. Nothing in the trait says which you get, so read the type, not the method name. ([`ToOwned`](../../12_Traits/to_owned/README.md) is where that `Rc` trap bites hardest.)
 
-The performance claim rides along with it — *`Copy` is faster than `Clone`, because cloning allocates.* A derived `Clone` on a `Copy` type is the same `memcpy` the `=` was already doing, and `one.clone()` on a `Precinct` allocates nothing. Allocation is a property of `String` and `Vec`, not of either trait.
+The performance claim rides along with it — *`Copy` is faster than `Clone`, because cloning allocates.* A derived `Clone` on a `Copy` type is the same `memcpy` the `=` was already doing, and `one.clone()` on a `Point` allocates nothing. Allocation is a property of `String` and `Vec`, not of either trait.
 
 Depth is not the axis. **Who asks** is: the compiler, silently, at every `=`; or you, in writing, at one call site.
 
@@ -67,7 +67,7 @@ Always `#[derive(Clone, Copy)]` together. `E0204` points at the offending field,
 
 ```rust
 #[derive(Debug, Clone)]   // no Copy
-struct Tally { counted: u32 }
+struct Counter { count: u32 }
 ```
 
 One `u32`, still moves. You opt in, not the fields. `Copy` is a promise to callers that adding a `String` later would silently break.
@@ -90,11 +90,11 @@ On a *generic* type the two are not interchangeable. The derive writes a bound y
 struct Derived<'a, T>(&'a T);
 ```
 
-That bound is about `T`, but the field is `&T`, and a shared reference copies whatever `T` is. So `Derived<'_, Ballot>` refuses to copy for a reason that appears nowhere in the code you wrote:
+That bound is about `T`, but the field is `&T`, and a shared reference copies whatever `T` is. So `Derived<'_, Message>` refuses to copy for a reason that appears nowhere in the code you wrote:
 
 ```text
 error[E0382]: borrow of moved value: `d`
-  move occurs because `d` has type `Derived<'_, Ballot>`, which does not implement the `Copy` trait
+  move occurs because `d` has type `Derived<'_, Message>`, which does not implement the `Copy` trait
   note: derived `Clone` adds implicit bounds on type parameters
   help: consider manually implementing `Clone` to avoid undesired bounds
 ```
@@ -171,10 +171,10 @@ Two traps for a C++ reader. `std::move` does not move anything — it is a cast,
 
 ## Practice
 
-**One `E0382`, three fixes, and the field that removes one.** Write `Reading { precinct: u32, turnout: u32 }`, a function taking it **by value**, call it twice.
+**One `E0382`, three fixes, and the field that removes one.** Write `Reading { sensor: u32, millivolts: u32 }`, a function taking it **by value**, call it twice.
 
 1. Fix three ways — derive `Copy`, `.clone()` at the call site, take `&Reading`. Rank them by what each costs the *caller*.
-2. Change `precinct` to `String` and retry all three. One is impossible: get the error, explain it in one sentence about heap allocations.
+2. Change `sensor` to `String` and retry all three. One is impossible: get the error, explain it in one sentence about heap allocations.
 3. Predict which of `#[derive(Clone)]`, `#[derive(Copy)]`, `impl Drop` can coexist. Check.
 
 <details markdown="1">
@@ -191,22 +191,22 @@ Two traps for a C++ reader. `std::move` does not move anything — it is a cast,
 // ---- Round 1: all fields Copy, so all three fixes are available -----------
 #[derive(Debug, Clone, Copy)]
 struct Reading {
-    precinct: u32,
-    turnout: u32,
+    sensor: u32,
+    millivolts: u32,
 }
 
-fn report(r: Reading) -> String { format!("p{} turnout {}", r.precinct, r.turnout) }
-fn report_ref(r: &Reading) -> String { format!("p{} turnout {}", r.precinct, r.turnout) }
+fn report(r: Reading) -> String { format!("s{} reads {} mV", r.sensor, r.millivolts) }
+fn report_ref(r: &Reading) -> String { format!("s{} reads {} mV", r.sensor, r.millivolts) }
 
 // ---- Round 2: one String field, and Copy is now impossible ----------------
 #[derive(Debug, Clone)]
 struct Named {
-    precinct: String, // <- this one field forbids Copy for the whole struct
-    turnout: u32,
+    sensor: String, // <- this one field forbids Copy for the whole struct
+    millivolts: u32,
 }
 
-fn name_it(n: Named) -> String { format!("{} turnout {}", n.precinct, n.turnout) }
-fn name_it_ref(n: &Named) -> String { format!("{} turnout {}", n.precinct, n.turnout) }
+fn name_it(n: Named) -> String { format!("{} reads {} mV", n.sensor, n.millivolts) }
+fn name_it_ref(n: &Named) -> String { format!("{} reads {} mV", n.sensor, n.millivolts) }
 
 fn main() {
     println!("The bug: calling a by-value function twice.");
@@ -215,7 +215,7 @@ fn main() {
     println!("    error[E0382]: use of moved value: `r`\n");
 
     println!("Fix 1 — derive Copy. The call sites do not change at all.");
-    let r = Reading { precinct: 7, turnout: 431 };
+    let r = Reading { sensor: 7, millivolts: 431 };
     println!("    {}", report(r));
     println!("    {}   <- same `r`, copied again", report(r));
 
@@ -232,8 +232,8 @@ fn main() {
     println!("  it is a real allocation, and it is often papering over a signature");
     println!("  that should have taken `&` in the first place.");
 
-    println!("\nRound 2 — swap `precinct` to a String, and one fix disappears.");
-    let n = Named { precinct: "Riverside".to_string(), turnout: 431 };
+    println!("\nRound 2 — swap `sensor` to a String, and one fix disappears.");
+    let n = Named { sensor: "thermistor".to_string(), millivolts: 431 };
     println!("    #[derive(Copy)] is now:");
     println!("      error[E0204]: the trait `Copy` cannot be implemented for this type");
     println!("        this field does not implement `Copy`");
@@ -263,14 +263,14 @@ The bug: calling a by-value function twice.
     error[E0382]: use of moved value: `r`
 
 Fix 1 — derive Copy. The call sites do not change at all.
-    p7 turnout 431
-    p7 turnout 431   <- same `r`, copied again
+    s7 reads 431 mV
+    s7 reads 431 mV   <- same `r`, copied again
 
 Fix 2 — clone at the call site. Visible, and it costs.
-    p7 turnout 431
+    s7 reads 431 mV
 
 Fix 3 — take a reference. Nothing is duplicated at all.
-    p7 turnout 431
+    s7 reads 431 mV
 
 Which to ship? Fix 3, then Fix 1, and Fix 2 last.
   A reference asks for the least and copies nothing, so it is the
@@ -279,7 +279,7 @@ Which to ship? Fix 3, then Fix 1, and Fix 2 last.
   it is a real allocation, and it is often papering over a signature
   that should have taken `&` in the first place.
 
-Round 2 — swap `precinct` to a String, and one fix disappears.
+Round 2 — swap `sensor` to a String, and one fix disappears.
     #[derive(Copy)] is now:
       error[E0204]: the trait `Copy` cannot be implemented for this type
         this field does not implement `Copy`
@@ -288,9 +288,9 @@ Round 2 — swap `precinct` to a String, and one fix disappears.
     That is the double-free `Copy` exists to make unrepresentable.
 
     So only two fixes remain:
-      clone     Riverside turnout 431
-      reference Riverside turnout 431
-      and `n` is still alive: Named { precinct: "Riverside", turnout: 431 }
+      clone     thermistor reads 431 mV
+      reference thermistor reads 431 mV
+      and `n` is still alive: Named { sensor: "thermistor", millivolts: 431 }
 
 The rule to carry away:
   Copy is not 'cheap to duplicate' — it is 'duplicating is JUST a
@@ -310,26 +310,26 @@ The rule to carry away:
 
 ```text
 1. The difference is what `let b = a;` MEANS
-   Precinct is Copy: after `let _also = p;`, p is fine -> Precinct { id: 7, registered: 431 }
-   Ballot is not:   after `let moved = b;`, `b` is E0382
-                    the value lives on as `moved` -> Ballot { voter: "Ada", scores: [5, 2, 0] }
+   Point is Copy: after `let _also = p;`, p is fine -> Point { x: 7, y: 431 }
+   Message is not:  after `let moved = b;`, `b` is E0382
+                    the value lives on as `moved` -> Message { author: "Ada", bytes: [5, 2, 0] }
    Same syntax. Different meaning. The TYPE decides.
 
 2. Passing to a function is the same question
-   consume_precinct(p) = 438 (id+registered), and p survives -> Precinct { id: 7, registered: 431 }
-   consume_ballot(moved) = "Ada cast 3" and `moved` does not survive
+   consume_point(p) = 438 (x+y), and p survives -> Point { x: 7, y: 431 }
+   consume_message(moved) = "Ada sent 3 bytes" and `moved` does not survive
    ...which is why `.clone()` is in that line at all.
 
 3. All-Copy fields is NOT enough — you have to opt in
-   Tally holds one u32 and still is not Copy, because it does
-   not derive Copy. consume_tally(t) MOVES it:
-   consume_tally(t) = 12
+   Counter holds one u32 and still is not Copy, because it does
+   not derive Copy. consume_counter(t) MOVES it:
+   consume_counter(t) = 12
    `t` is now dead. Opting in is deliberate: making a type Copy
    is a promise to your callers that you cannot quietly take back.
 
 4. Clone is a method you call; Copy is something the compiler does
-   original  Ballot { voter: "Ben", scores: [4] }
-   duplicate Ballot { voter: "Ben", scores: [4] }   <- a second heap allocation, on purpose
+   original  Message { author: "Ben", bytes: [4] }
+   duplicate Message { author: "Ben", bytes: [4] }   <- a second heap allocation, on purpose
    `Copy` never allocates: it is a bit-for-bit copy, nothing else.
 
 5. The three refusals, each with its own code
@@ -345,8 +345,8 @@ The rule to carry away:
 
 6. "Copy is shallow, Clone is deep" — both halves are false
    after copying `one` into `two` and editing `two`:
-     one  Precinct { id: 3, registered: 100 }
-     two  Precinct { id: 3, registered: 999 }
+     one  Point { x: 3, y: 100 }
+     two  Point { x: 3, y: 999 }
      same address? false   <- Copy duplicates the BITS, it never aliases
    Rc::clone(&shared):
      same allocation? true   strong_count 2
@@ -354,7 +354,7 @@ The rule to carry away:
    So `Clone` promises a value you may keep — not a depth.
    `Rc` clones a pointer, `String` clones a buffer, and a Copy
    type's derived clone is the same memcpy `=` already does:
-     one.clone() = Precinct { id: 3, registered: 100 }   (no allocation, nothing to free)
+     one.clone() = Point { x: 3, y: 100 }   (no allocation, nothing to free)
    The axis is not deep vs shallow. It is WHO ASKS:
      Copy  the compiler, silently, at every `=`
      Clone you, in writing, at one call site
@@ -365,9 +365,9 @@ The rule to carry away:
        ->  impl<T: Copy> Copy for Derived<T>
    That bound is about T, but the field is `&T`, and a shared
    reference copies whatever T is. So the derived version refuses
-   a Derived<Ballot> that would have been perfectly fine:
+   a Derived<Message> that would have been perfectly fine:
      error[E0382]: borrow of moved value: `d`
-       move occurs because `d` has type `Derived<'_, Ballot>`,
+       move occurs because `d` has type `Derived<'_, Message>`,
        which does not implement the `Copy` trait
        note: derived `Clone` adds implicit bounds on type parameters
        help: consider manually implementing `Clone` to avoid
@@ -375,7 +375,7 @@ The rule to carry away:
    Writing the two impls by hand drops the bound:
      impl<T> Copy for Manual<'_, T> {}
      impl<T> Clone for Manual<'_, T> { fn clone(&self) -> Self { *self } }
-   Manual<Ballot> copies:  "Dev" and "Dev"
+   Manual<Message> copies: "Dev" and "Dev"
    Derived<u32> copies:    431 and 431   <- the bound is met here
    And a Copy type's Clone body is always `*self`. There is
    nothing else it could be: the compiler already copies the bits.
@@ -427,11 +427,11 @@ That is not a careless reading so much as the predictable one: `.clone()` is spe
 
 ## Po polsku
 
-Polski czytelnik przychodzi tu zwykle z parą pojęć „kopia płytka” i „kopia głęboka”, wyniesioną z kursów Javy, C# czy Pythona — i to jest dokładnie ta intuicja, którą ta strona rozbraja, bo obie połowy są tu fałszywe. `Copy` **nie jest** referencją do oryginału: po `let mut two = one;` i `two.registered = 999;` pole `one.registered` nadal wynosi `100`, bo skopiowane zostały bity, a nie wskaźnik na wspólną wartość. Aliasem jest właśnie pythonowe `b = a`, czyli to, czym `Copy` z założenia **nie** jest. `Clone` z kolei nie obiecuje żadnej głębokości, tylko wartość **posiadaną niezależnie**, a jak daleko to sięga, zależy od typu: `Rc::clone` kopiuje wskaźnik i zwiększa licznik w zliczaniu referencji (*reference counting*), `String::clone` alokuje nowy bufor na stercie, a `clone` na `&T` kopiuje sam wskaźnik. Jedna cecha (*trait*), trzy różne głębokości — więc czytaj typ, nie nazwę metody. Prawdziwa oś podziału to nie głębokość, tylko **kto pyta**: kompilator, po cichu, przy każdym `=`, albo ty, na piśmie, w jednym miejscu wywołania.
+Polski czytelnik przychodzi tu zwykle z parą pojęć „kopia płytka” i „kopia głęboka”, wyniesioną z kursów Javy, C# czy Pythona — i to jest dokładnie ta intuicja, którą ta strona rozbraja, bo obie połowy są tu fałszywe. `Copy` **nie jest** referencją do oryginału: po `let mut two = one;` i `two.y = 999;` pole `one.y` nadal wynosi `100`, bo skopiowane zostały bity, a nie wskaźnik na wspólną wartość. Aliasem jest właśnie pythonowe `b = a`, czyli to, czym `Copy` z założenia **nie** jest. `Clone` z kolei nie obiecuje żadnej głębokości, tylko wartość **posiadaną niezależnie**, a jak daleko to sięga, zależy od typu: `Rc::clone` kopiuje wskaźnik i zwiększa licznik w zliczaniu referencji (*reference counting*), `String::clone` alokuje nowy bufor na stercie, a `clone` na `&T` kopiuje sam wskaźnik. Jedna cecha (*trait*), trzy różne głębokości — więc czytaj typ, nie nazwę metody. Prawdziwa oś podziału to nie głębokość, tylko **kto pyta**: kompilator, po cichu, przy każdym `=`, albo ty, na piśmie, w jednym miejscu wywołania.
 
-Stąd druga poprawka do popularnego skrótu: `Copy` nie znaczy „tanio się kopiuje”, tylko „duplikat to sam `memcpy`, i po nim nikt nie jest właścicielem niczego dodatkowego”. Jedno pole typu `String` dyskwalifikuje całą strukturę, bo skopiowanie bit po bicie zduplikowałoby **wskaźnik**: dwóch właścicieli jednej alokacji i dwa zwolnienia tej samej pamięci (*double free*). To nie jest odradzane — tego po prostu nie da się wyrazić, a `E0204` wskazuje palcem konkretne winne pole. Uwaga na `rustc --explain E0204`, które samo formułuje regułę błędnie, i to w obie strony (mówi o typach prymitywnych, choć `&String` jest `Copy`, a struktura z jednym `u32` i własnym `Drop` nie jest — to trzeci kod, `E0184`). Reguła brzmi: **każde pole `Copy`, żaden destruktor, i świadome zgłoszenie się**. Samo posiadanie wyłącznie pól `Copy` nie wystarcza — `Tally` z jednym `u32` nadal się przenosi, bo `Copy` jest obietnicą złożoną wywołującym, której potem nie da się po cichu cofnąć. A ponieważ `Copy` wymaga `Clone` (inaczej `E0277`), pisze się je zawsze razem: `#[derive(Clone, Copy)]`.
+Stąd druga poprawka do popularnego skrótu: `Copy` nie znaczy „tanio się kopiuje”, tylko „duplikat to sam `memcpy`, i po nim nikt nie jest właścicielem niczego dodatkowego”. Jedno pole typu `String` dyskwalifikuje całą strukturę, bo skopiowanie bit po bicie zduplikowałoby **wskaźnik**: dwóch właścicieli jednej alokacji i dwa zwolnienia tej samej pamięci (*double free*). To nie jest odradzane — tego po prostu nie da się wyrazić, a `E0204` wskazuje palcem konkretne winne pole. Uwaga na `rustc --explain E0204`, które samo formułuje regułę błędnie, i to w obie strony (mówi o typach prymitywnych, choć `&String` jest `Copy`, a struktura z jednym `u32` i własnym `Drop` nie jest — to trzeci kod, `E0184`). Reguła brzmi: **każde pole `Copy`, żaden destruktor, i świadome zgłoszenie się**. Samo posiadanie wyłącznie pól `Copy` nie wystarcza — `Counter` z jednym `u32` nadal się przenosi, bo `Copy` jest obietnicą złożoną wywołującym, której potem nie da się po cichu cofnąć. A ponieważ `Copy` wymaga `Clone` (inaczej `E0277`), pisze się je zawsze razem: `#[derive(Clone, Copy)]`.
 
-Osobna pułapka dotyczy typów generycznych: `derive` dopisuje ograniczenie, którego nie napisałeś. Dla `struct Derived<'a, T>(&'a T)` powstaje `impl<T: Copy> Copy for Derived<T>`, a warunek dotyczy `T`, choć polem jest `&T` — referencja współdzielona kopiuje się niezależnie od tego, co za `T` w niej siedzi. Efekt: `Derived<'_, Ballot>` odmawia kopiowania z powodu, którego nie widać w żadnej napisanej przez ciebie linijce, a kompilator sam podpowiada wyjście (*consider manually implementing `Clone` to avoid undesired bounds*). Napisane ręcznie — `impl<T> Copy for Manual<'_, T> {}` plus `fn clone(&self) -> Self { *self }` — nie ma żadnego ograniczenia do spełnienia. Ciało `clone` w typie `Copy` zawsze wygląda tak samo, bo nic innego nie mogłoby tam być: kompilator i tak kopiuje bity.
+Osobna pułapka dotyczy typów generycznych: `derive` dopisuje ograniczenie, którego nie napisałeś. Dla `struct Derived<'a, T>(&'a T)` powstaje `impl<T: Copy> Copy for Derived<T>`, a warunek dotyczy `T`, choć polem jest `&T` — referencja współdzielona kopiuje się niezależnie od tego, co za `T` w niej siedzi. Efekt: `Derived<'_, Message>` odmawia kopiowania z powodu, którego nie widać w żadnej napisanej przez ciebie linijce, a kompilator sam podpowiada wyjście (*consider manually implementing `Clone` to avoid undesired bounds*). Napisane ręcznie — `impl<T> Copy for Manual<'_, T> {}` plus `fn clone(&self) -> Self { *self }` — nie ma żadnego ograniczenia do spełnienia. Ciało `clone` w typie `Copy` zawsze wygląda tak samo, bo nic innego nie mogłoby tam być: kompilator i tak kopiuje bity.
 
 Na koniec para, którą warto zapamiętać jako regułę pożyczania przepisaną na `trait`y: `&T` jest `Copy`, a `&mut T` nie. Oba mają szerokość jednego wskaźnika, ale wyłączność to **cała treść** `&mut T`, więc duplikat byłby zaprzeczeniem typu. Większość ludzi nigdy nie zobaczy tego `E0382`, bo przekazanie `&mut` do funkcji **pożycza ponownie** (*reborrow*) zamiast przenosić — `bump(r); bump(r);` kompiluje się bez szemrania — przenosi dopiero zwykłe `let r2 = r;`. Gdy chcesz ponownego pożyczenia przy `let`, zapisz je wprost: `let r3 = &mut *r;`. A kolejność sięgania po rozwiązania jest odwrotna do odruchu: najpierw referencja (większość „potrzebuję `Copy`” to w rzeczywistości „sygnatura powinna brać `&`”), potem `Copy` dla małych, zwykłych danych, a `.clone()` na końcu i z uzasadnieniem.
 

@@ -1,12 +1,12 @@
 Four spellings of 'make me one'. Three refuse, and they refuse differently.
 
-1. let v: Voter();      TWO errors, not one
+1. let v: Player();     TWO errors, not one
      error[E0214]: parenthesized type parameters may only be used with a `Fn` trait
      error[E0381]: used binding `v` isn't initialized
-   After `:` rustc reads a TYPE. `Voter()` in type position is the
+   After `:` rustc reads a TYPE. `Player()` in type position is the
    `Fn(A) -> B` sugar, and only the Fn traits may use it. Then, separately,
    no `=` ever appeared, so nothing was assigned.
-   fixed:  let v = Voter { .. };        Voter { name: "Ada", seat: 7 }
+   fixed:  let v = Player { .. };       Player { name: "Ada", level: 7 }
 
 2. let s = Sealed();    E0618 — expected function, found struct `Sealed`
    help: `Sealed` is a unit struct, and does not take parentheses
@@ -14,32 +14,32 @@ Four spellings of 'make me one'. Three refuse, and they refuse differently.
    A unit struct declares a type AND a value of that type sharing one name.
    fixed:  let s = Sealed;               Sealed
 
-3. let w = Voter;       E0423 — expected value, found struct `Voter`
-   help: use struct literal syntax instead: `Voter { name: val, seat: val }`
+3. let w = Player;      E0423 — expected value, found struct `Player`
+   help: use struct literal syntax instead: `Player { name: val, level: val }`
    A named-field struct declares ONLY the type. The bare name is not a value.
-   fixed:  let w = Voter { .. };        Voter { name: "Ben", seat: 3 }
-   (fields read the ordinary way: w.name = "Ben", w.seat = 3)
+   fixed:  let w = Player { .. };       Player { name: "Ben", level: 3 }
+   (fields read the ordinary way: w.name = "Ben", w.level = 3)
 
-4. let p = Precinct;    COMPILES — and gives you the wrong thing
-   `p` is not a Precinct. It is the tuple struct's constructor function,
-   of type `fn(u32) -> Precinct {Precinct}`, and the next line is where
+4. let p = Meters;      COMPILES — and gives you the wrong thing
+   `p` is not a Meters. It is the tuple struct's constructor function,
+   of type `fn(u32) -> Meters {Meters}`, and the next line is where
    you find out:
-     error[E0277]: `fn(u32) -> Precinct {Precinct}` doesn't implement `Debug`
-     help: use parentheses to construct this tuple struct: `Precinct(/* u32 */)`
-   fixed:  let p = Precinct(431);        Precinct(431)   (p.0 = 431)
+     error[E0277]: `fn(u32) -> Meters {Meters}` doesn't implement `Debug`
+     help: use parentheses to construct this tuple struct: `Meters(/* u32 */)`
+   fixed:  let p = Meters(431);        Meters(431)   (p.0 = 431)
 
 5. Which name can be passed straight to `.map(..)`?
-   .map(Precinct) works: [Precinct(12), Precinct(40), Precinct(431)]
-   Only the tuple struct. `Precinct` IS a function value, which is exactly
+   .map(Meters) works: [Meters(12), Meters(40), Meters(431)]
+   Only the tuple struct. `Meters` IS a function value, which is exactly
    what refusal 4 was complaining about — the same fact, once as a bug and
-   once as a feature. `Voter` is a type only, and `Sealed` is a type plus a
+   once as a feature. `Player` is a type only, and `Sealed` is a type plus a
    value that takes no arguments; neither is callable.
-   .map(Voter)  -> E0423 expected value, found struct `Voter`
+   .map(Player) -> E0423 expected value, found struct `Player`
    .map(Sealed) -> E0618 expected function, found struct `Sealed`
 
 6. Deferred initialization needs no `mut`
-   let seat: u8;  then one assignment per path  ->  seat = 1
+   let level: u8;  then one assignment per path  ->  level = 1
    `mut` permits a SECOND write. There is no second write here, so the
    binding stays immutable and the compiler still proves it was set
-   before use. That is what `let v: Voter();` was reaching for — it just
+   before use. That is what `let v: Player();` was reaching for — it just
    put a call in the type slot and never supplied the value.

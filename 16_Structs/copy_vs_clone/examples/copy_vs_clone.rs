@@ -6,22 +6,22 @@ use std::rc::Rc;
 
 // Clone only. Duplicating is possible, but you must ask for it by name.
 #[derive(Debug, Clone)]
-struct Ballot {
-    voter: String,   // String is not Copy, so Ballot can never be Copy
-    scores: Vec<u8>,
+struct Message {
+    author: String,  // String is not Copy, so Message can never be Copy
+    bytes: Vec<u8>,
 }
 
 // Copy AND Clone. Every field is Copy, and we opted in.
 #[derive(Debug, Clone, Copy)]
-struct Precinct {
-    id: u32,
-    registered: u32,
+struct Point {
+    x: i32,
+    y: i32,
 }
 
 // All-Copy fields, but NOT opted in. This is the case people trip over.
 #[derive(Debug, Clone)]
-struct Tally {
-    counted: u32,
+struct Counter {
+    count: u32,
 }
 
 // ---- Two ways to write it, and the one difference between them -----------
@@ -40,39 +40,39 @@ impl<T> Clone for Manual<'_, T> {
 
 fn bump(x: &mut u32) { *x += 1; }
 
-fn consume_ballot(b: Ballot) -> String { format!("{} cast {}", b.voter, b.scores.len()) }
-fn consume_precinct(p: Precinct) -> u32 { p.id + p.registered }
-fn consume_tally(t: Tally) -> u32 { t.counted }
+fn consume_message(m: Message) -> String { format!("{} sent {} bytes", m.author, m.bytes.len()) }
+fn consume_point(p: Point) -> i32 { p.x + p.y }
+fn consume_counter(c: Counter) -> u32 { c.count }
 
 fn main() {
     println!("1. The difference is what `let b = a;` MEANS");
-    let p = Precinct { id: 7, registered: 431 };
+    let p = Point { x: 7, y: 431 };
     let _also_p = p; //          Copy   -> p is COPIED, and p is still alive
-    println!("   Precinct is Copy: after `let _also = p;`, p is fine -> {p:?}");
+    println!("   Point is Copy: after `let _also = p;`, p is fine -> {p:?}");
 
-    let b = Ballot { voter: "Ada".to_string(), scores: vec![5, 2, 0] };
+    let b = Message { author: "Ada".to_string(), bytes: vec![5, 2, 0] };
     let moved = b; //            not Copy -> b is MOVED, and b is now dead
-    println!("   Ballot is not:   after `let moved = b;`, `b` is E0382");
+    println!("   Message is not:  after `let moved = b;`, `b` is E0382");
     println!("                    the value lives on as `moved` -> {moved:?}");
     println!("   Same syntax. Different meaning. The TYPE decides.");
 
     println!("\n2. Passing to a function is the same question");
-    println!("   consume_precinct(p) = {} (id+registered), and p survives -> {p:?}",
-             consume_precinct(p));
-    println!("   consume_ballot(moved) = {:?} and `moved` does not survive",
-             consume_ballot(moved.clone()));
+    println!("   consume_point(p) = {} (x+y), and p survives -> {p:?}",
+             consume_point(p));
+    println!("   consume_message(moved) = {:?} and `moved` does not survive",
+             consume_message(moved.clone()));
     println!("   ...which is why `.clone()` is in that line at all.");
 
     println!("\n3. All-Copy fields is NOT enough — you have to opt in");
-    let t = Tally { counted: 12 };
-    println!("   Tally holds one u32 and still is not Copy, because it does");
-    println!("   not derive Copy. consume_tally(t) MOVES it:");
-    println!("   consume_tally(t) = {}", consume_tally(t));
+    let t = Counter { count: 12 };
+    println!("   Counter holds one u32 and still is not Copy, because it does");
+    println!("   not derive Copy. consume_counter(t) MOVES it:");
+    println!("   consume_counter(t) = {}", consume_counter(t));
     println!("   `t` is now dead. Opting in is deliberate: making a type Copy");
     println!("   is a promise to your callers that you cannot quietly take back.");
 
     println!("\n4. Clone is a method you call; Copy is something the compiler does");
-    let original = Ballot { voter: "Ben".to_string(), scores: vec![4] };
+    let original = Message { author: "Ben".to_string(), bytes: vec![4] };
     let duplicate = original.clone(); // explicit, and it allocates
     println!("   original  {original:?}");
     println!("   duplicate {duplicate:?}   <- a second heap allocation, on purpose");
@@ -90,28 +90,28 @@ fn main() {
     println!("     -> a destructor runs once per value; copies would run it twice.");
 
     println!("\n6. \"Copy is shallow, Clone is deep\" — both halves are false");
-    let one = Precinct { id: 3, registered: 100 };
+    let one = Point { x: 3, y: 100 };
     let mut two = one; //                Copy. If this were a reference to `one`...
-    two.registered = 999; //             ...this line would change `one` as well.
+    two.y = 999; //                      ...this line would change `one` as well.
     println!("   after copying `one` into `two` and editing `two`:");
     println!("     one  {one:?}");
     println!("     two  {two:?}");
     println!("     same address? {}   <- Copy duplicates the BITS, it never aliases",
              std::ptr::eq(&one, &two));
 
-    let shared = Rc::new(Ballot { voter: "Cara".to_string(), scores: vec![3, 3] });
+    let shared = Rc::new(Message { author: "Cara".to_string(), bytes: vec![3, 3] });
     let counted = Rc::clone(&shared); // the most idiomatic clone in Rust, and it copies nothing
     println!("   Rc::clone(&shared):");
     println!("     same allocation? {}   strong_count {}",
              Rc::ptr_eq(&shared, &counted), Rc::strong_count(&shared));
-    let independent: Ballot = (*shared).clone(); // THIS one deep-copies
+    let independent: Message = (*shared).clone(); // THIS one deep-copies
     println!("     (*shared).clone() gives a separate Vec? {}",
-             shared.scores.as_ptr() != independent.scores.as_ptr());
+             shared.bytes.as_ptr() != independent.bytes.as_ptr());
     println!("   So `Clone` promises a value you may keep — not a depth.");
     println!("   `Rc` clones a pointer, `String` clones a buffer, and a Copy");
     println!("   type's derived clone is the same memcpy `=` already does:");
-    let cloned_precinct = one.clone();
-    println!("     one.clone() = {cloned_precinct:?}   (no allocation, nothing to free)");
+    let cloned_point = one.clone();
+    println!("     one.clone() = {cloned_point:?}   (no allocation, nothing to free)");
     println!("   The axis is not deep vs shallow. It is WHO ASKS:");
     println!("     Copy  the compiler, silently, at every `=`");
     println!("     Clone you, in writing, at one call site");
@@ -122,9 +122,9 @@ fn main() {
     println!("       ->  impl<T: Copy> Copy for Derived<T>");
     println!("   That bound is about T, but the field is `&T`, and a shared");
     println!("   reference copies whatever T is. So the derived version refuses");
-    println!("   a Derived<Ballot> that would have been perfectly fine:");
+    println!("   a Derived<Message> that would have been perfectly fine:");
     println!("     error[E0382]: borrow of moved value: `d`");
-    println!("       move occurs because `d` has type `Derived<'_, Ballot>`,");
+    println!("       move occurs because `d` has type `Derived<'_, Message>`,");
     println!("       which does not implement the `Copy` trait");
     println!("       note: derived `Clone` adds implicit bounds on type parameters");
     println!("       help: consider manually implementing `Clone` to avoid");
@@ -132,10 +132,10 @@ fn main() {
     println!("   Writing the two impls by hand drops the bound:");
     println!("     impl<T> Copy for Manual<'_, T> {{}}");
     println!("     impl<T> Clone for Manual<'_, T> {{ fn clone(&self) -> Self {{ *self }} }}");
-    let held = Ballot { voter: "Dev".to_string(), scores: vec![1] };
+    let held = Message { author: "Dev".to_string(), bytes: vec![1] };
     let m = Manual(&held);
-    let m2 = m; // Copy, even though Ballot is not
-    println!("   Manual<Ballot> copies:  {:?} and {:?}", m.0.voter, m2.0.voter);
+    let m2 = m; // Copy, even though Message is not
+    println!("   Manual<Message> copies: {:?} and {:?}", m.0.author, m2.0.author);
     let counted = 431u32;
     let d = Derived(&counted);
     let d2 = d; // Copy, because u32 meets the bound the derive wrote

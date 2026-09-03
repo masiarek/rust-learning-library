@@ -13,19 +13,19 @@ three separately would have been three investigations of one mistake.
 
 Edit 2 removed two more, and they were unrelated to each other:
   E0119  conflicting implementations of `Default`  — derive AND impl
-  E0277  can't compare `Voter` with `Voter`        — Eq without PartialEq
+  E0277  can't compare `Player` with `Player`        — Eq without PartialEq
 Keeping the hand-written Default is the right call: it knows a domain
 default the derive could never guess.
-  Voter::default() = seat 0 — unregistered
-  ...where the derive would have said name: "", seat: 0
+  Player::default() = level 0 — anonymous
+  ...where the derive would have said name: "", level: 0
 
 Edit 3 was the only one rustc could not write for you:
   E0063  missing field `name`   — it named the field
   E0277  doesn't implement Display — it suggested {:?} instead
 The suggestion is a real option, and often the right one. Choosing to
 write Display means you decided a human reads this type.
-  Display: seat 7 — Ada
-  Debug:   Voter { name: "Ada", seat: 7 }
+  Display: level 7 — Ada
+  Debug:   Player { name: "Ada", level: 7 }
   and the pair now compares: true
 
 The habit: read all seven before editing any of them, and group them by

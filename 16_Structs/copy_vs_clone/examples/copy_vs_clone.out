@@ -1,24 +1,24 @@
 1. The difference is what `let b = a;` MEANS
-   Precinct is Copy: after `let _also = p;`, p is fine -> Precinct { id: 7, registered: 431 }
-   Ballot is not:   after `let moved = b;`, `b` is E0382
-                    the value lives on as `moved` -> Ballot { voter: "Ada", scores: [5, 2, 0] }
+   Point is Copy: after `let _also = p;`, p is fine -> Point { x: 7, y: 431 }
+   Message is not:  after `let moved = b;`, `b` is E0382
+                    the value lives on as `moved` -> Message { author: "Ada", bytes: [5, 2, 0] }
    Same syntax. Different meaning. The TYPE decides.
 
 2. Passing to a function is the same question
-   consume_precinct(p) = 438 (id+registered), and p survives -> Precinct { id: 7, registered: 431 }
-   consume_ballot(moved) = "Ada cast 3" and `moved` does not survive
+   consume_point(p) = 438 (x+y), and p survives -> Point { x: 7, y: 431 }
+   consume_message(moved) = "Ada sent 3 bytes" and `moved` does not survive
    ...which is why `.clone()` is in that line at all.
 
 3. All-Copy fields is NOT enough — you have to opt in
-   Tally holds one u32 and still is not Copy, because it does
-   not derive Copy. consume_tally(t) MOVES it:
-   consume_tally(t) = 12
+   Counter holds one u32 and still is not Copy, because it does
+   not derive Copy. consume_counter(t) MOVES it:
+   consume_counter(t) = 12
    `t` is now dead. Opting in is deliberate: making a type Copy
    is a promise to your callers that you cannot quietly take back.
 
 4. Clone is a method you call; Copy is something the compiler does
-   original  Ballot { voter: "Ben", scores: [4] }
-   duplicate Ballot { voter: "Ben", scores: [4] }   <- a second heap allocation, on purpose
+   original  Message { author: "Ben", bytes: [4] }
+   duplicate Message { author: "Ben", bytes: [4] }   <- a second heap allocation, on purpose
    `Copy` never allocates: it is a bit-for-bit copy, nothing else.
 
 5. The three refusals, each with its own code
@@ -34,8 +34,8 @@
 
 6. "Copy is shallow, Clone is deep" — both halves are false
    after copying `one` into `two` and editing `two`:
-     one  Precinct { id: 3, registered: 100 }
-     two  Precinct { id: 3, registered: 999 }
+     one  Point { x: 3, y: 100 }
+     two  Point { x: 3, y: 999 }
      same address? false   <- Copy duplicates the BITS, it never aliases
    Rc::clone(&shared):
      same allocation? true   strong_count 2
@@ -43,7 +43,7 @@
    So `Clone` promises a value you may keep — not a depth.
    `Rc` clones a pointer, `String` clones a buffer, and a Copy
    type's derived clone is the same memcpy `=` already does:
-     one.clone() = Precinct { id: 3, registered: 100 }   (no allocation, nothing to free)
+     one.clone() = Point { x: 3, y: 100 }   (no allocation, nothing to free)
    The axis is not deep vs shallow. It is WHO ASKS:
      Copy  the compiler, silently, at every `=`
      Clone you, in writing, at one call site
@@ -54,9 +54,9 @@
        ->  impl<T: Copy> Copy for Derived<T>
    That bound is about T, but the field is `&T`, and a shared
    reference copies whatever T is. So the derived version refuses
-   a Derived<Ballot> that would have been perfectly fine:
+   a Derived<Message> that would have been perfectly fine:
      error[E0382]: borrow of moved value: `d`
-       move occurs because `d` has type `Derived<'_, Ballot>`,
+       move occurs because `d` has type `Derived<'_, Message>`,
        which does not implement the `Copy` trait
        note: derived `Clone` adds implicit bounds on type parameters
        help: consider manually implementing `Clone` to avoid
@@ -64,7 +64,7 @@
    Writing the two impls by hand drops the bound:
      impl<T> Copy for Manual<'_, T> {}
      impl<T> Clone for Manual<'_, T> { fn clone(&self) -> Self { *self } }
-   Manual<Ballot> copies:  "Dev" and "Dev"
+   Manual<Message> copies: "Dev" and "Dev"
    Derived<u32> copies:    431 and 431   <- the bound is met here
    And a Copy type's Clone body is always `*self`. There is
    nothing else it could be: the compiler already copies the bits.

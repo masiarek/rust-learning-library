@@ -1,9 +1,9 @@
 
-──── Step 1: A bare u8 has no opinion about STAR
+──── Step 1: A bare u8 has no opinion about the scale
   total_raw([5, 3, 0])  = 8
   total_raw([5, 30, 0]) = 35
       Both compile, both run, both return a number. The second
-      ballot just outvoted ten honest ones, and no type objected.
+      review just outweighed ten honest ones, and no type objected.
 
 ──── Step 2: Score::new is the only door, and it is checked once
   Score::new(0  ) -> Some(0)
@@ -15,21 +15,21 @@
       Same shape as any partial function: a u8 that is out of
       range has no Score, so the answer is None rather than a lie.
 
-──── Step 3: A whole ballot row, accepted or rejected as a unit
+──── Step 3: A whole review row, accepted or rejected as a unit
   [5, 3, 0] -> accepted, 3 cells
   [5, 30, 0] -> rejected (one bad cell voids the row)
       collect() into Option<Vec<_>> stops at the first None. One
-      illegal cell means you never hold a half-valid ballot.
+      illegal cell means you never hold a half-valid review.
 
 ──── Step 4: Downstream code has nothing left to check
   total(&row)          = 8
   row.iter().max()     = Some(5)
       `total` does no validation because an invalid Score does not
       exist. Ord comes free from the derive, so max/sort behave
-      like the numbers they wrap — which is what a runoff needs.
+      like the numbers they wrap — which is what sorting by rating needs.
 
 ──── Step 5: What actually closes the door is the module boundary
-  Inside `mod ballot`, `Score(7)` still compiles — privacy is per
+  Inside `mod rating`, `Score(7)` still compiles — privacy is per
   module, not per type. Outside it, the same expression is a
   compile error: E0423, "cannot initialize a tuple struct which
   contains private fields".

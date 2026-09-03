@@ -2,7 +2,7 @@
 //!
 //!   rustc --edition 2024 newtype_score_kata.rs -o /tmp/nsk && /tmp/nsk
 
-mod ballot {
+mod rating {
     /// One private field, so the only way in is the door below.
     #[derive(Debug, Clone, Copy, PartialEq)]
     pub struct Score(u8);
@@ -32,7 +32,7 @@ mod ballot {
     }
 }
 
-use ballot::Score;
+use rating::Score;
 
 fn main() {
     println!("The door validates, and says so in the type:");
@@ -40,9 +40,9 @@ fn main() {
         println!("  Score::new({n}) -> {:?}", Score::new(n));
     }
 
-    let ballot: Vec<Score> = [5, 3, 0].iter().filter_map(|n| Score::new(*n)).collect();
-    println!("\n  ballot -> {ballot:?}");
-    println!("  total  -> {}", ballot::total(&ballot));
+    let review: Vec<Score> = [5, 3, 0].iter().filter_map(|n| Score::new(*n)).collect();
+    println!("\n  review -> {review:?}");
+    println!("  total  -> {}", rating::total(&review));
     println!("      `total` does no range checking. It cannot need any: every");
     println!("      value that reaches it came through Score::new.");
 
@@ -52,9 +52,9 @@ fn main() {
     println!("  discouraged; there is no syntax for it.");
 
     println!("\nBut privacy is per MODULE, so the module itself can cheat:");
-    let smuggled = ballot::unchecked_backdoor(9);
+    let smuggled = rating::unchecked_backdoor(9);
     println!("  unchecked_backdoor(9) -> {smuggled:?}   (score {})", smuggled.get());
-    println!("      Nothing outside `mod ballot` could have written that. Keep the");
+    println!("      Nothing outside `mod rating` could have written that. Keep the");
     println!("      module small and the invariant holds; grow it and every new");
     println!("      function in there is another place the guarantee can leak.");
 }

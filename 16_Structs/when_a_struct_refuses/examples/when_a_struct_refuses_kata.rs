@@ -7,28 +7,28 @@ use std::fmt;
 // The struct as it arrives is four lines and refuses seven times:
 //
 //     #[derive(Debug, Default, Eq)]
-//     struct Voter { name: str, seat: u8 }
-//     impl Default for Voter { fn default() -> Self { unimplemented!() } }
-//     fn main() { let v = Voter { seat: 1 }; println!("{}", v); }
+//     struct Player { name: str, level: u8 }
+//     impl Default for Player { fn default() -> Self { unimplemented!() } }
+//     fn main() { let v = Player { level: 1 }; println!("{}", v); }
 //
 // Fixed, with a note on each edit:
 
 #[derive(Debug, PartialEq, Eq)] // edit 2: Default dropped (it clashes), PartialEq added
-struct Voter {
+struct Player {
     name: String, // edit 1: str -> String
-    seat: u8,
+    level: u8,
 }
 
-impl Default for Voter {
+impl Default for Player {
     fn default() -> Self {
-        Voter { name: String::from("unregistered"), seat: 0 }
+        Player { name: String::from("anonymous"), level: 0 }
     }
 }
 
-impl fmt::Display for Voter {
+impl fmt::Display for Player {
     // edit 3: `{}` needs this written by hand
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "seat {} — {}", self.seat, self.name)
+        write!(f, "level {} — {}", self.level, self.name)
     }
 }
 
@@ -48,21 +48,21 @@ fn main() {
 
     println!("Edit 2 removed two more, and they were unrelated to each other:");
     println!("  E0119  conflicting implementations of `Default`  — derive AND impl");
-    println!("  E0277  can't compare `Voter` with `Voter`        — Eq without PartialEq");
+    println!("  E0277  can't compare `Player` with `Player`        — Eq without PartialEq");
     println!("Keeping the hand-written Default is the right call: it knows a domain");
     println!("default the derive could never guess.");
-    println!("  Voter::default() = {}", Voter::default());
-    println!("  ...where the derive would have said name: \"\", seat: 0\n");
+    println!("  Player::default() = {}", Player::default());
+    println!("  ...where the derive would have said name: \"\", level: 0\n");
 
     println!("Edit 3 was the only one rustc could not write for you:");
     println!("  E0063  missing field `name`   — it named the field");
     println!("  E0277  doesn't implement Display — it suggested {{:?}} instead");
     println!("The suggestion is a real option, and often the right one. Choosing to");
     println!("write Display means you decided a human reads this type.");
-    let v = Voter { name: String::from("Ada"), seat: 7 };
+    let v = Player { name: String::from("Ada"), level: 7 };
     println!("  Display: {v}");
     println!("  Debug:   {v:?}");
-    println!("  and the pair now compares: {}", v == Voter { name: "Ada".into(), seat: 7 });
+    println!("  and the pair now compares: {}", v == Player { name: "Ada".into(), level: 7 });
 
     println!("\nThe habit: read all seven before editing any of them, and group them by");
     println!("root cause. rustc reports every error it can reach in one pass — it is not");

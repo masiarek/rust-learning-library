@@ -4,14 +4,14 @@ The bug: calling a by-value function twice.
     error[E0382]: use of moved value: `r`
 
 Fix 1 — derive Copy. The call sites do not change at all.
-    p7 turnout 431
-    p7 turnout 431   <- same `r`, copied again
+    s7 reads 431 mV
+    s7 reads 431 mV   <- same `r`, copied again
 
 Fix 2 — clone at the call site. Visible, and it costs.
-    p7 turnout 431
+    s7 reads 431 mV
 
 Fix 3 — take a reference. Nothing is duplicated at all.
-    p7 turnout 431
+    s7 reads 431 mV
 
 Which to ship? Fix 3, then Fix 1, and Fix 2 last.
   A reference asks for the least and copies nothing, so it is the
@@ -20,7 +20,7 @@ Which to ship? Fix 3, then Fix 1, and Fix 2 last.
   it is a real allocation, and it is often papering over a signature
   that should have taken `&` in the first place.
 
-Round 2 — swap `precinct` to a String, and one fix disappears.
+Round 2 — swap `sensor` to a String, and one fix disappears.
     #[derive(Copy)] is now:
       error[E0204]: the trait `Copy` cannot be implemented for this type
         this field does not implement `Copy`
@@ -29,9 +29,9 @@ Round 2 — swap `precinct` to a String, and one fix disappears.
     That is the double-free `Copy` exists to make unrepresentable.
 
     So only two fixes remain:
-      clone     Riverside turnout 431
-      reference Riverside turnout 431
-      and `n` is still alive: Named { precinct: "Riverside", turnout: 431 }
+      clone     thermistor reads 431 mV
+      reference thermistor reads 431 mV
+      and `n` is still alive: Named { sensor: "thermistor", millivolts: 431 }
 
 The rule to carry away:
   Copy is not 'cheap to duplicate' — it is 'duplicating is JUST a

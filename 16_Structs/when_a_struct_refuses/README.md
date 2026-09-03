@@ -23,12 +23,12 @@ Every error below prints its own fix. Seven of the eight include the exact edit;
 
 ## E0063 — there is no partly-built struct
 
-```text title="Real rustc output"
-error[E0063]: missing field `voter` in initializer of `Ballot`
+```text title="Real rustc output — rustc 1.98.0, edition 2024"
+error[E0063]: missing field `name` in initializer of `Player`
  --> e1.rs:2:22
   |
-2 | fn main() { let _b = Ballot { score: 5 }; }
-  |                      ^^^^^^ missing `voter`
+2 | fn main() { let _b = Player { score: 5 }; }
+  |                      ^^^^^^ missing `name`
 ```
 
 Rust has no uninitialized state for a struct — the moment one exists, every field has a value. So name them all, or hand the job to something that can: `..Default::default()` fills the rest. Watch what that gives you, though: a derived `Default` is **the type's zero, not your domain's**, so a missing name becomes `""` rather than an error.
@@ -37,83 +37,94 @@ Rust has no uninitialized state for a struct — the moment one exists, every fi
 
 **No `Display`, from `{}`.** Rust will not guess how a human should read your type.
 
-```text title="Real rustc output"
-error[E0277]: `Ballot` doesn't implement `std::fmt::Display`
-  |                       --   ^^^^^^^^^^^^^^^^^^^ `Ballot` cannot be formatted with the default formatter
+```text title="Abridged — real rustc 1.98.0 output, without the --> headers"
+error[E0277]: `Player` doesn't implement `std::fmt::Display`
+  |                       --   ^ `Player` cannot be formatted with the default formatter
+help: the trait `std::fmt::Display` is not implemented for `Player`
   = note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
 ```
 
 **No `Debug`, from `{:?}`.** Same code, opposite advice — this one it offers to generate:
 
-```text title="Real rustc output"
-error[E0277]: `Ballot` doesn't implement `Debug`
-  = note: add `#[derive(Debug)]` to `Ballot` or manually `impl Debug for Ballot`
+```text title="Abridged — real rustc 1.98.0 output, without the --> headers"
+error[E0277]: `Player` doesn't implement `Debug`
+  |                       ----   ^ `Player` cannot be formatted using `{:?}` because it doesn't implement `Debug`
+  = help: the trait `Debug` is not implemented for `Player`
+help: consider annotating `Player` with `#[derive(Debug)]`
+  |
+1 + #[derive(Debug)]
 ```
 
 Which of the two you want, and why the language refuses to guess the first, is [Debug and Display](../../15_First_Programs/debug_vs_display/README.md).
 
 **A `str` field.** This one is misfiled by the code: it is not a missing impl at all, it is a missing *size*.
 
-```text title="Real rustc output"
+```text title="Abridged — real rustc 1.98.0 output, without the --> headers"
 error[E0277]: the size for values of type `str` cannot be known at compilation time
-  |                        ^^^ doesn't have a size known at compile-time
+  |                       ^^^ doesn't have a size known at compile-time
   = help: the trait `Sized` is not implemented for `str`
   = note: only the last field of a struct may have a dynamically sized type
+  = help: change the field's type to have a statically known size
 help: borrowed types always have a statically known size
-  |                        &str
+  | struct Player { name: &str, score: u8 }
 help: the `Box` type always has a statically known size and allocates its contents in the heap
-  |                        Box<str>
+  | struct Player { name: Box<str>, score: u8 }
 ```
 
 `str` is the text itself, of unknown length; `&str` is a *reference* to it and `String`/`Box<str>` own it on the heap. All three of those have a size. The `note:` is the part worth keeping: a dynamically sized field is legal, but **only in last position**.
 
 **`#[derive(Eq)]` on its own.**
 
-```text title="Real rustc output"
-error[E0277]: can't compare `Ballot` with `Ballot`
-    |        ^^^^^^ no implementation for `Ballot == Ballot`
-    = help: the trait `PartialEq` is not implemented for `Ballot`
+```text title="Abridged — real rustc 1.98.0 output, without the --> headers"
+error[E0277]: can't compare `Player` with `Player`
+  2 | struct Player { name: String, score: u8 }
+    |        ^^^^^^ no implementation for `Player == Player`
+    = help: the trait `PartialEq` is not implemented for `Player`
 note: required by a bound in `Eq`
-help: consider annotating `Ballot` with `#[derive(PartialEq)]`
+help: consider annotating `Player` with `#[derive(PartialEq)]`
+    |
+  2 + #[derive(PartialEq)]
 ```
 
 `Eq` adds no methods. It is a *promise about* `PartialEq` — that `==` is reflexive, so `a == a` always holds. That promise needs the `==` it is about, which is why the pair is always derived together. (Floats are the reason the split exists: `f64` has `PartialEq` and not `Eq`, because `NaN != NaN`.)
 
 ## E0119 — derived and hand-written are two impls
 
-```text title="Real rustc output"
-error[E0119]: conflicting implementations of trait `Default` for type `Ballot`
+```text title="Abridged — real rustc 1.98.0 output, without the --> header"
+error[E0119]: conflicting implementations of trait `Default` for type `Player`
 1 | #[derive(Default)]
-  |          ^^^^^^^ conflicting implementation for `Ballot`
-3 | impl Default for Ballot { … }
+  |          ^^^^^^^ conflicting implementation for `Player`
+3 | impl Default for Player { … }
   | ----------------------- first implementation here
 ```
 
-A derive *writes an impl*. Two impls of one trait for one type is the coherence rule saying no. Keep whichever knows more — usually the hand-written one, since a derived `Default` can only ever produce the type's zero, while yours can encode a real default like a quorum of ten.
+A derive *writes an impl*. Two impls of one trait for one type is the coherence rule saying no. Keep whichever knows more — usually the hand-written one, since a derived `Default` can only ever produce the type's zero, while yours can encode a real default like a retry limit of ten.
 
 ## E0594 — `mut` belongs to the binding
 
-```text title="Real rustc output"
+```text title="Abridged — real rustc 1.98.0 output, without the --> header"
 error[E0594]: cannot assign to `b.score`, as `b` is not declared as mutable
 6 |     b.score = 6;
   |     ^^^^^^^^^^^ cannot assign
 help: consider changing this to be mutable
 5 |     let mut b = b;
+  |         +++
 ```
 
 Note where the `help:` points — **line 5, not line 6**. The assignment is fine; the rebinding on the line before dropped the `mut`. `let b = b;` is a deliberate idiom for freezing a value after its setup phase, and this error is that idiom working. There is no such thing as a mutable *field*: [a name is not a place](../../18_Ownership/a_name_is_not_a_place/README.md).
 
 ## E0282 — nothing to infer `T` from
 
-```text title="Real rustc output"
+```text title="Abridged — real rustc 1.98.0 output, without the --> header"
 error[E0282]: type annotations needed
-4 |     fn check() { let _q = Tally::quorum(); }
-  |                           ^^^^^^^^^^^^^ cannot infer type of the type parameter `T` declared on the struct `Tally`
+4 |     fn check() { let _q = Stack::capacity(); }
+  |                           ^^^^^^^^^^^^^^^ cannot infer type of the type parameter `T` declared on the struct `Stack`
 help: consider specifying a concrete type for the type parameter `T`
-4 |     fn check() { let _q = Tally::</* Type */>::quorum(); }
+4 |     fn check() { let _q = Stack::</* Type */>::capacity(); }
+  |                                ++++++++++++++
 ```
 
-`quorum()` takes no `T`, returns no `T`, and mentions no `T` — but it lives inside `impl<T> Tally<T>`, so calling it still requires choosing one, and there is nothing in the call to choose from. Three fixes, in order of preference: give it a receiver (`self.quorum()`), name the type (`Tally::<i32>::quorum()`), or — usually the right answer — **move it out of the generic impl**, because a function with no `T` in it never belonged there.
+`capacity()` takes no `T`, returns no `T`, and mentions no `T` — but it lives inside `impl<T> Stack<T>`, so calling it still requires choosing one, and there is nothing in the call to choose from. Three fixes, in order of preference: give it a receiver (`self.capacity()`), name the type (`Stack::<i32>::capacity()`), or — usually the right answer — **move it out of the generic impl**, because a function with no `T` in it never belonged there.
 
 ---
 
@@ -123,9 +134,9 @@ help: consider specifying a concrete type for the type parameter `T`
 
 ```rust
 #[derive(Debug, Default, Eq)]
-struct Voter { name: str, seat: u8 }
-impl Default for Voter { fn default() -> Self { unimplemented!() } }
-fn main() { let v = Voter { seat: 1 }; println!("{}", v); }
+struct Player { name: str, level: u8 }
+impl Default for Player { fn default() -> Self { unimplemented!() } }
+fn main() { let v = Player { level: 1 }; println!("{}", v); }
 ```
 
 1. Read all seven before changing anything. Group them by *cause*, not by line.
@@ -149,28 +160,28 @@ use std::fmt;
 // The struct as it arrives is four lines and refuses seven times:
 //
 //     #[derive(Debug, Default, Eq)]
-//     struct Voter { name: str, seat: u8 }
-//     impl Default for Voter { fn default() -> Self { unimplemented!() } }
-//     fn main() { let v = Voter { seat: 1 }; println!("{}", v); }
+//     struct Player { name: str, level: u8 }
+//     impl Default for Player { fn default() -> Self { unimplemented!() } }
+//     fn main() { let v = Player { level: 1 }; println!("{}", v); }
 //
 // Fixed, with a note on each edit:
 
 #[derive(Debug, PartialEq, Eq)] // edit 2: Default dropped (it clashes), PartialEq added
-struct Voter {
+struct Player {
     name: String, // edit 1: str -> String
-    seat: u8,
+    level: u8,
 }
 
-impl Default for Voter {
+impl Default for Player {
     fn default() -> Self {
-        Voter { name: String::from("unregistered"), seat: 0 }
+        Player { name: String::from("anonymous"), level: 0 }
     }
 }
 
-impl fmt::Display for Voter {
+impl fmt::Display for Player {
     // edit 3: `{}` needs this written by hand
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "seat {} — {}", self.seat, self.name)
+        write!(f, "level {} — {}", self.level, self.name)
     }
 }
 
@@ -190,21 +201,21 @@ fn main() {
 
     println!("Edit 2 removed two more, and they were unrelated to each other:");
     println!("  E0119  conflicting implementations of `Default`  — derive AND impl");
-    println!("  E0277  can't compare `Voter` with `Voter`        — Eq without PartialEq");
+    println!("  E0277  can't compare `Player` with `Player`        — Eq without PartialEq");
     println!("Keeping the hand-written Default is the right call: it knows a domain");
     println!("default the derive could never guess.");
-    println!("  Voter::default() = {}", Voter::default());
-    println!("  ...where the derive would have said name: \"\", seat: 0\n");
+    println!("  Player::default() = {}", Player::default());
+    println!("  ...where the derive would have said name: \"\", level: 0\n");
 
     println!("Edit 3 was the only one rustc could not write for you:");
     println!("  E0063  missing field `name`   — it named the field");
     println!("  E0277  doesn't implement Display — it suggested {{:?}} instead");
     println!("The suggestion is a real option, and often the right one. Choosing to");
     println!("write Display means you decided a human reads this type.");
-    let v = Voter { name: String::from("Ada"), seat: 7 };
+    let v = Player { name: String::from("Ada"), level: 7 };
     println!("  Display: {v}");
     println!("  Debug:   {v:?}");
-    println!("  and the pair now compares: {}", v == Voter { name: "Ada".into(), seat: 7 });
+    println!("  and the pair now compares: {}", v == Player { name: "Ada".into(), level: 7 });
 
     println!("\nThe habit: read all seven before editing any of them, and group them by");
     println!("root cause. rustc reports every error it can reach in one pass — it is not");
@@ -232,19 +243,19 @@ three separately would have been three investigations of one mistake.
 
 Edit 2 removed two more, and they were unrelated to each other:
   E0119  conflicting implementations of `Default`  — derive AND impl
-  E0277  can't compare `Voter` with `Voter`        — Eq without PartialEq
+  E0277  can't compare `Player` with `Player`        — Eq without PartialEq
 Keeping the hand-written Default is the right call: it knows a domain
 default the derive could never guess.
-  Voter::default() = seat 0 — unregistered
-  ...where the derive would have said name: "", seat: 0
+  Player::default() = level 0 — anonymous
+  ...where the derive would have said name: "", level: 0
 
 Edit 3 was the only one rustc could not write for you:
   E0063  missing field `name`   — it named the field
   E0277  doesn't implement Display — it suggested {:?} instead
 The suggestion is a real option, and often the right one. Choosing to
 write Display means you decided a human reads this type.
-  Display: seat 7 — Ada
-  Debug:   Voter { name: "Ada", seat: 7 }
+  Display: level 7 — Ada
+  Debug:   Player { name: "Ada", level: 7 }
   and the pair now compares: true
 
 The habit: read all seven before editing any of them, and group them by
@@ -266,10 +277,10 @@ a queue to be worked one at a time.
 1. E0063 — missing field in initializer
    There is no partly-built struct in Rust. Name every field, or let
    something else supply the rest:
-   named all:            Ballot { voter: "Ada", score: 5 }   (voter "Ada", score 5)
-   ..Default::default(): Ballot { voter: "", score: 5 }   <- and this needs Default to exist
-   note the derived Default gave voter an EMPTY string, not a missing one:
-   the type's zero, which is rarely your domain's. b.voter.is_empty() = true
+   named all:            Player { name: "Ada", score: 5 }   (name "Ada", score 5)
+   ..Default::default(): Player { name: "", score: 5 }   <- and this needs Default to exist
+   note the derived Default gave name an EMPTY string, not a missing one:
+   the type's zero, which is rarely your domain's. b.name.is_empty() = true
 
 2. E0277 — one code, four different problems
    E0277 is 'a trait bound was not satisfied'. For structs it shows up as:
@@ -280,7 +291,7 @@ a queue to be worked one at a time.
 
    2b. no Debug, from `{:?}`
        Same code, opposite advice: this one it WILL generate.
-       Seat(3)
+       Level(3)
 
    2c. `str` as a field type — not a missing impl, a missing SIZE
        str is unsized, so it cannot be a field. Borrow it or box it:
@@ -291,12 +302,12 @@ a queue to be worked one at a time.
    2d. `#[derive(Eq)]` alone — Eq is a promise about PartialEq
        Eq adds no methods. It says == is reflexive, so it needs the
        PartialEq that defines ==. Always derive the pair:
-       Seat(3) == Seat(3) is true
+       Level(3) == Level(3) is true
 
 3. E0119 — conflicting implementations
    #[derive(Default)] AND `impl Default` is two impls of one trait.
    Keep the one that knows something the other cannot:
-   derived would be Quorum { needed: 0 }; ours says needed = 10
+   derived would be Retries { limit: 0 }; ours says limit = 10
 
 4. E0594 — cannot assign, not declared as mutable
    `let b = b;` rebinds. mut belongs to the BINDING, so the new one
@@ -304,10 +315,10 @@ a queue to be worked one at a time.
    The value never changed; the name did.
 
 5. E0282 — type annotations needed
-   `Tally::quorum()` names no T anywhere, but it lives in impl<T>, so
+   `Stack::capacity()` names no T anywhere, but it lives in impl<T>, so
    there is nothing to infer T from. Three fixes, in order of preference:
-     Tally::<i32>::quorum() = 10   name it at the call
-     t.rows()               = 3   or have a receiver to infer from
+     Stack::<i32>::capacity() = 10   name it at the call
+     t.rows()                 = 3   or have a receiver to infer from
      ...or move it out of impl<T> entirely, if it truly has no T in it.
 
 The pattern across all eight: rustc is not withholding a fix.
