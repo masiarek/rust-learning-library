@@ -33,7 +33,7 @@ That is nearly all of it. Everything else in Rust is a conversion you write: [`F
 
 **There is no numeric promotion.** Not on the list, not anywhere:
 
-```text
+```text title="Abridged — real rustc output; a second error (E0277, cannot add u16 to u8) follows it"
 error[E0308]: mismatched types
  --> no_coercion.rs:4:23
   |
