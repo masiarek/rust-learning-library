@@ -13,6 +13,7 @@ These pages are not about making your program better. They are about the loop yo
 | [Adding a dependency](cargo_dependencies/README.md) | 101 → 201 | `search`, `info`, `add` — and the fact that `rayon = "1.12.0"` is a *range*, not the version you got |
 | [bacon](bacon/README.md) | 101 → 201 | A pane that re-runs check, clippy or the tests on every save — the cheapest tool here, and where `watchexec` wins instead |
 | [cargo-nextest](nextest/README.md) | 201 | A process per test rather than a thread, so a test that *aborts* is one failure and not a lost run — and the doctests it silently stops running |
+| [`Cargo.lock`](cargo_lock/README.md) | 201 | Every `cargo` command writes it, `build` and `test` obey it, `cargo install` ignores it without `--locked`, and it never reaches your dependents — plus what `cargo update --precise` cannot do |
 | [Choosing an editor](editors/README.md) | reference | Every editor but RustRover is a front end for the same `rust-analyzer`, so the choice is what the window costs you before it shows you a type — with the pros and cons of six of them, and one verified way the do-it-yourself path fails silently |
 | [Commit on green](commit_on_green/README.md) | 201 | `savepoint` commits on the one transition that matters — red to green — and why that is neither `git stash` nor anything to do with GitHub; plus what squashing is, and `--soft` vs `--hard` |
 | [Compile times](compile_times/README.md) | 201 | A build is four phases, and each optimization reaches exactly one — reduced debug info, the parallel front end, Cranelift, and why a saving is never portable |
@@ -26,6 +27,8 @@ These pages are not about making your program better. They are about the loop yo
 | [rustup](rustup/README.md) | 101 → 201 | The `rustc` on your `PATH` is a 154-byte shim, and the five-rung rule it uses to pick the real one |
 | [Scaffolding a practice tree](scaffolding/README.md) | 201 | What a setup script should write — the workspace root, `.idea/` run configurations, and a `doctor` for the cross-file invariants no single tool owns — and the one thing it must not template |
 | [Strict clippy lints](strict_lints/README.md) | 201 | Denying `unwrap`, `panic` and indexing turns runtime aborts into compile errors — and rejects `n + 1` along the way |
+| [Two versions of one crate](two_versions_of_one_crate/README.md) | 201 | `rand = "0.8"` and `rand = "0.9"` are as far apart as `1` and `2`, so Cargo links both — silently — until a `StdRng` is *a different* `StdRng`; `cargo tree -d` is the check |
+| [Vendoring, and the `[patch]` table](vendoring_and_patch/README.md) | 201 | `cargo vendor` copies the sources in, and "read-only" then means two things: an incremental build ignores your edit, a clean build refuses it by checksum — `[patch.crates-io]` is the sanctioned door |
 | [What MCP is](what_mcp_is/README.md) | 201 | JSON-RPC on a pipe — a whole MCP server in dependency-free Rust, the `println!` that corrupts one, and what *Always allow (`rustrover:*`)* actually grants |
 
 The one tooling page that is a *prerequisite* rather than a refinement lives in Foundations instead: [running a scratch program](../15_First_Programs/rustc_without_cargo/README.md), which is how you run anything in this library at all.
@@ -37,7 +40,7 @@ Rough order, not a promise:
 - **`cargo test`, and the three kinds of test** — unit, integration, and doc tests; what each one can see, and which file it belongs in
 - **Clippy** — the lints worth arguing with, and `#[allow]` as a comment that the compiler checks
 - **Workspaces** — one `target/`, one lockfile, many crates, and the split that actually speeds a build up
-- **`cargo add` and semver** — what a caret requirement really permits, and what `cargo update` is allowed to do to you
+- **Features** — `[features]`, `default-features = false`, and why turning one on in a dependency turns it on for everyone in the build
 
 ## Po polsku
 

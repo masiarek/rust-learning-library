@@ -672,6 +672,12 @@ NAV_ORDER: dict[str, list[str]] = {
         # copied per folder.
         "scratch_with_a_crate",
         "cargo_dependencies",
+        # ...and the file that range resolves into, the case where two
+        # requirements cannot share one entry in it, and the case where the
+        # entry's source is a folder in the repo rather than the registry.
+        "cargo_lock",
+        "two_versions_of_one_crate",
+        "vendoring_and_patch",
         "practice_workspace",
         # Day one, and cheap: settle the whitespace question before anything else.
         "formatting",
@@ -876,6 +882,9 @@ LABELS = {
     "nightly": "Nightly by default",
     "scratch_with_a_crate": "A throwaway that needs a crate",
     "cargo_dependencies": "Adding a dependency",
+    "cargo_lock": "`Cargo.lock`",
+    "two_versions_of_one_crate": "Two versions of one crate",
+    "vendoring_and_patch": "Vendoring and `[patch]`",
     "practice_workspace": "A tree of practice projects",
     "strict_lints": "Strict clippy lints",
     "scaffolding": "Scaffolding a practice tree",

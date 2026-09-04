@@ -39,18 +39,21 @@ Start wherever your question is; each page stands alone.
 | 4 | [Nightly by default](05_Tooling/nightly/README.md) | Should I run `rustup default nightly`? |
 | 5 | [A throwaway that needs a crate](05_Tooling/scratch_with_a_crate/README.md) | My scratch file says `use rand::…` and will not compile — what is missing? |
 | 6 | [Adding a dependency](05_Tooling/cargo_dependencies/README.md) | What did `cargo add` actually write in my manifest? |
-| 7 | [A tree of practice projects](05_Tooling/practice_workspace/README.md) | Forty small projects want the same four config files — do I need a script? |
-| 8 | [Formatting](05_Tooling/formatting/README.md) | Who decides the whitespace, and which formatter just ran? |
-| 9 | [Strict clippy lints](05_Tooling/strict_lints/README.md) | Should my project be forbidden from panicking? |
-| 10 | [bacon](05_Tooling/bacon/README.md) | How do I stop asking the compiler and let it tell me? |
-| 11 | [cargo-nextest](05_Tooling/nextest/README.md) | Is `cargo test` costing me anything? |
-| 12 | [Choosing an editor](05_Tooling/editors/README.md) | Which window am I going to read all of this through? |
-| 13 | [RustRover setup](05_Tooling/rustrover_setup/README.md) | How do I wire the IDE to everything above? |
-| 14 | [RustRover Code Vision](05_Tooling/rustrover_code_vision/README.md) | What is the grey `1 usage` line above every declaration, and which toggle hides it? |
-| 15 | [Neovim with LazyVim](05_Tooling/neovim_setup/README.md) | …or the other window, and the two ways it silently does nothing |
-| 16 | [Scaffolding a practice tree](05_Tooling/scaffolding/README.md) | I keep writing the same seven config files — what should a script write, and what must it not? |
-| 17 | [Compile times](05_Tooling/compile_times/README.md) | Where do the seconds go, and which knob reaches them? |
-| 18 | [devenv](05_Tooling/devenv/README.md) | Should I declare the *whole* environment, and what does Nix cost? |
+| 7 | [`Cargo.lock`](05_Tooling/cargo_lock/README.md) | Who writes the lockfile, who reads it, and which command ignores it? |
+| 8 | [Two versions of one crate](05_Tooling/two_versions_of_one_crate/README.md) | Why is `rand` in my build twice, and why is a `StdRng` "a different `StdRng`"? |
+| 9 | [Vendoring, and the `[patch]` table](05_Tooling/vendoring_and_patch/README.md) | How do I build with no network, and how do I fix a bug in a dependency? |
+| 10 | [A tree of practice projects](05_Tooling/practice_workspace/README.md) | Forty small projects want the same four config files — do I need a script? |
+| 11 | [Formatting](05_Tooling/formatting/README.md) | Who decides the whitespace, and which formatter just ran? |
+| 12 | [Strict clippy lints](05_Tooling/strict_lints/README.md) | Should my project be forbidden from panicking? |
+| 13 | [bacon](05_Tooling/bacon/README.md) | How do I stop asking the compiler and let it tell me? |
+| 14 | [cargo-nextest](05_Tooling/nextest/README.md) | Is `cargo test` costing me anything? |
+| 15 | [Choosing an editor](05_Tooling/editors/README.md) | Which window am I going to read all of this through? |
+| 16 | [RustRover setup](05_Tooling/rustrover_setup/README.md) | How do I wire the IDE to everything above? |
+| 17 | [RustRover Code Vision](05_Tooling/rustrover_code_vision/README.md) | What is the grey `1 usage` line above every declaration, and which toggle hides it? |
+| 18 | [Neovim with LazyVim](05_Tooling/neovim_setup/README.md) | …or the other window, and the two ways it silently does nothing |
+| 19 | [Scaffolding a practice tree](05_Tooling/scaffolding/README.md) | I keep writing the same seven config files — what should a script write, and what must it not? |
+| 20 | [Compile times](05_Tooling/compile_times/README.md) | Where do the seconds go, and which knob reaches them? |
+| 21 | [devenv](05_Tooling/devenv/README.md) | Should I declare the *whole* environment, and what does Nix cost? |
 
 ## Or, by the problem you actually have
 
@@ -60,7 +63,10 @@ Start wherever your question is; each page stands alone.
 | "CI disagrees with me about formatting" | [Nightly by default](05_Tooling/nightly/README.md) — unstable `rustfmt` options are the usual cause — and [Formatting](05_Tooling/formatting/README.md) |
 | "a tutorial told me to use nightly" | [Nightly by default](05_Tooling/nightly/README.md) |
 | "a tutorial's `use rand::…` will not compile" | [A throwaway that needs a crate](05_Tooling/scratch_with_a_crate/README.md) — nothing is missing; the file is being compiled by `rustc` rather than Cargo |
-| "my build got slower" | [Compile times](05_Tooling/compile_times/README.md), then [Adding a dependency](05_Tooling/cargo_dependencies/README.md) on what an unused crate costs |
+| "my build got slower" | [Compile times](05_Tooling/compile_times/README.md), then [Adding a dependency](05_Tooling/cargo_dependencies/README.md) on what an unused crate costs, and `cargo tree -d` from [Two versions of one crate](05_Tooling/two_versions_of_one_crate/README.md) for a subtree compiled twice |
+| "the tool I `cargo install`ed behaves differently from the one I tested" | [`Cargo.lock`](05_Tooling/cargo_lock/README.md) — `cargo install` ignores the lockfile unless you pass `--locked` |
+| "expected `StdRng`, found a different `StdRng`" | [Two versions of one crate](05_Tooling/two_versions_of_one_crate/README.md) — two incompatible lines of one crate, and the type from one is a stranger to the other |
+| "I need to fix a bug in a dependency, today" | [Vendoring, and the `[patch]` table](05_Tooling/vendoring_and_patch/README.md) — and why editing the copy in `vendor/` or `~/.cargo/registry` is the one thing not to do |
 | "my editor, `cargo fmt` and CI disagree with each other" | [Scaffolding a practice tree](05_Tooling/scaffolding/README.md) — its `doctor` checks the cross-file invariants (nightly-only rustfmt options against the pinned channel, `max_width` against `.editorconfig`) that no single tool owns |
 | "I want fewer runtime panics" | [Strict clippy lints](05_Tooling/strict_lints/README.md), and [`expect`](17_Option_and_Result/expect/README.md) for the position it overrules |
 | "onboarding a machine takes a day" | [devenv](05_Tooling/devenv/README.md) |

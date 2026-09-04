@@ -10,6 +10,7 @@
 cargo search rayon    # does a crate like this exist, and what is it called?
 cargo info rayon      # should I use this one?
 cargo add rayon       # put it in the manifest
+cargo remove rayon    # take it out again — `cargo rm` is the same command
 ```
 
 `cargo search` queries crates.io by name and prints one line each. It answers *"what is this called"* and little else — the descriptions are one line and the ranking is not a quality signal.
@@ -22,7 +23,30 @@ rust-version: 1.80
 
 That is a dependency's claim about which compilers it supports, and it is the number that turns "add a crate" into "raise this project's minimum Rust". Worth reading *before* `cargo add`, which is the whole reason the command exists.
 
-`cargo add` then writes the entry and picks the requirement string for you.
+`cargo add` then writes the entry and picks the requirement string for you. It also takes a version and a feature list in one go, with `@`:
+
+```text title="Real output — cargo 1.98.0"
+$ cargo add serde@1.0.229 --features derive
+    Updating crates.io index
+      Adding serde v1.0.229 to dependencies
+             Features:
+             + derive
+             + serde_derive
+             + std
+             - alloc
+             - rc
+             - unstable
+     Locking 7 packages to latest Rust 1.98.0 compatible versions
+```
+
+```toml title="What it wrote"
+[dependencies]
+serde = { version = "1.0.229", features = ["derive"] }
+```
+
+The `+`/`-` list is worth a glance every time: it is the crate's optional features, with the ones now on marked `+`. `derive` switched on `serde_derive` with it, which is why seven packages were locked for one line.
+
+`cargo remove` reverses it — the manifest line goes, and the next command drops the seven from the lockfile.
 
 ## What it wrote is a range
 
@@ -49,7 +73,34 @@ cargo update       # move within the ranges, rewrite the lockfile
 cargo update -n    # ...or just say what would move, and change nothing
 ```
 
-The `-n` form is the useful one day to day, and it is exactly what appears in the [devenv](../devenv/README.md) configuration's shell hook: print what has moved on the way into the project, without touching anything.
+The `-n` form is the useful one day to day, and it is exactly what appears in the [devenv](../devenv/README.md) configuration's shell hook: print what has moved on the way into the project, without touching anything. The lockfile has [a page of its own](../cargo_lock/README.md) — who writes it, who reads it, the one command that ignores it, and what `--precise` can and cannot do.
+
+## The other operators
+
+The bare number is the **default requirement**, and `^1.12.0` spells the same thing. Four more exist, and the recommendation — the Cargo Book's and every talk on the subject — is to use the default unless a *specific* restriction forces one of the others:
+
+| You write | It means | Reach for it when |
+|---|---|---|
+| `1.2.3` or `^1.2.3` | `>=1.2.3, <2.0.0` | always, by default |
+| `0.2.3` | `>=0.2.3, <0.3.0` | a `0.x` crate — the same rule, applied to the left-most **non-zero** component |
+| `~1.2.3` | `>=1.2.3, <1.3.0` | patch releases only; `~1.2` is the same range, `~1` is the whole major |
+| `1.2.*` | `>=1.2.0, <1.3.0` | a wildcard — and a bare `*` is refused by crates.io at publish time |
+| `=1.2.3` | exactly `1.2.3` | a known-bad release above it, or a reproduction case; no leniency and no fixes |
+| `>=1.2, <1.5` | both, comma-separated | a range with a ceiling below the next major — rare and worth a comment |
+
+The `0.x` row is the one that bites. `rand = "0.8"` and `rand = "0.9"` are as far apart to Cargo as `1` and `2` — [Two versions of one crate](../two_versions_of_one_crate/README.md) is what happens when two of your dependencies disagree about that, and it is silent.
+
+## Three tables, not one
+
+`cargo add` puts the crate in `[dependencies]` unless told otherwise, and the other two tables are a flag each:
+
+| Table | The crate is compiled into | Written by |
+|---|---|---|
+| `[dependencies]` | your library or binary | `cargo add rayon` |
+| `[dev-dependencies]` | tests, examples and benches only | `cargo add --dev pretty_assertions` |
+| `[build-dependencies]` | your `build.rs` script, and nothing else | `cargo add --build cc` |
+
+A crate in the wrong table costs every one of your users a download and a compile they did not need. `pretty_assertions` in `[dependencies]` ships in the binary; in `[dev-dependencies]` it never leaves your machine.
 
 ## The ecosystem around it
 
@@ -67,9 +118,13 @@ Neither is required for anything. `search` + `info` + `add` is the whole job; th
 
 ## See also
 
+- [`Cargo.lock`](../cargo_lock/README.md) — the file the range resolves into, who reads it, and the command that does not
+- [Two versions of one crate](../two_versions_of_one_crate/README.md) — when two requirements cannot share one entry, and what the compiler says about it later
+- [Vendoring, and the `[patch]` table](../vendoring_and_patch/README.md) — dependencies that come from a folder in your repo rather than the registry
 - [Pinning the toolchain](../pinning_the_toolchain/README.md) — the same lock-versus-range idea, applied to the compiler
 - [Running a scratch program](../../15_First_Programs/rustc_without_cargo/README.md) — what `cargo new` set up, and what `rustc` does without it
 - [Compile times](../compile_times/README.md) — why an unused dependency is not free
+- [The Cargo Book — specifying dependencies ↗](https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html) — every operator, plus `git =` and `path =` sources
 
 ## Po polsku
 
@@ -79,4 +134,6 @@ Dlatego pliki są dwa i dzielą się rolami: `Cargo.toml` mówi, **na co się zg
 
 Trzecia rzecz, po polsku prawie nieopisana, to skrót **MSRV** — *minimum supported Rust version*, czyli najstarszy kompilator, który dana zależność obsługuje. Wypisuje go `cargo info` w polu `rust-version`, i jest to jedyne pole, które warto przeczytać **przed** `cargo add`: crate z `rust-version: 1.80` po cichu podnosi wymagania całego twojego projektu. Samo polecenie `cargo info` jest przy tym na tyle nowe (weszło na stałe w Ruście 1.82), że starsze polskie poradniki go nie znają i każą szukać tych informacji ręcznie na crates.io.
 
-**Szukaj po polsku:** wersjonowanie semantyczne · czy commitować Cargo.lock · `cargo caret requirement` · `rust MSRV rust-version` · `cargo update --dry-run`
+Pozostałe operatory istnieją po to, żeby ich **nie** używać bez konkretnego powodu: `~1.2.3` dopuszcza tylko wydania *patch* (poniżej `1.3.0`), `=1.2.3` to dokładnie ta wersja i żadna poprawka, `1.2.*` to symbol wieloznaczny, a gołego `*` crates.io nie przyjmie przy publikacji. Ważny jest za to wiersz z zerem: reguła daszka dotyczy skrajnie lewego **niezerowego** składnika, więc `rand = "0.8"` znaczy „poniżej `0.9`” i dla Cargo `0.8` od `0.9` dzieli tyle samo, co `1` od `2`. Polecenie odwrotne do `cargo add` to `cargo remove` (alias `cargo rm`), a wersję i funkcje da się podać za jednym razem: `cargo add serde@1.0.229 --features derive`.
+
+**Szukaj po polsku:** wersjonowanie semantyczne · czy commitować Cargo.lock · `cargo caret requirement` · `rust MSRV rust-version` · `cargo update --dry-run` · `cargo add --features` · `tilde requirement`
