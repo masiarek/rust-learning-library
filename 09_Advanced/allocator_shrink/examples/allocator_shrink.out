@@ -1,0 +1,9 @@
+what one Vec operation asks the allocator for:
+shrink_to_fit, 100 -> 3            alloc 0  realloc 1  dealloc 0   400 bytes -> 12
+  ...and the vector still holds [1, 2, 3]
+shrink_to_fit, 64 -> 0             alloc 0  realloc 0  dealloc 1
+shrink_to_fit, already tight       alloc 0  realloc 0  dealloc 0
+shrink_to(50), 100 -> 50           alloc 0  realloc 1  dealloc 0   400 bytes -> 200
+into_boxed_slice, 100 -> 3         alloc 0  realloc 1  dealloc 0   400 bytes -> 12
+  ...and the box holds [1, 2, 3]
+push past capacity (grow)          alloc 0  realloc 1  dealloc 0   16 bytes -> 32

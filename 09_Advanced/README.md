@@ -21,6 +21,7 @@ Each page is still one idea with a program you can compile and run beside it.
 | [`Send` and `Sync`](send_and_sync/README.md) | 301 | The two methodless traits that decide what may cross a thread boundary, why nobody writes either, and why the error always names a type three layers inside the closure. Stub |
 | [`RwLock` and atomics](rwlock_and_atomics/README.md) | 301 | The two rungs either side of a `Mutex` — and the reason two atomics read together are not atomic together. Stub |
 | [The global allocator](the_global_allocator/README.md) | 301 | Where every heap byte comes from — swapping in a counter that turns `String`'s capacity ladder into events you can see, the three rules that keep such a measurement honest, and why the five ways to make a `String` all cost exactly one allocation |
+| [`Allocator::shrink`](allocator_shrink/README.md) | 301 | The request `Vec::shrink_to_fit` bottoms out in — the three-way branch behind *"may either shrink in-place or reallocate"*, why shrinking to zero is not a shrink, why the old pointer is dead even when the block never moved, and the provided body that turns giving memory back into the most expensive operation available |
 
 ## Planned
 

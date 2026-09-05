@@ -170,7 +170,14 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...with the choice between the two fixed-vs-growable ones settled
         # here, once both have been met.
         "array_or_vec",
+        # ...then the small print under `the_vec`, read once the three numbers
+        # mean something: what the representation promises, and what it refuses
+        # to. It sits before the method reference because it is still a lesson.
+        "vec_guarantees",
         "vec_of_vecs",
+        # ...and the shape between the fixed grid and the nested Vec, which only
+        # reads as a third option once both of those have been met.
+        "vec_of_arrays",
         # ...then the per-method reference for the one type a program uses most.
         # It sits directly under its two lessons rather than at the end of the
         # section, because a reader who wants `Vec::drain` arrives from `the_vec`
@@ -279,6 +286,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "collect_and_fromiterator",
         # A lookup table rather than a lesson, so it sits after the spine.
         "adapters_by_job",
+        # ...then the one row of that table worth a page: two adapters whose
+        # failure modes are both silent, which is why they get the space.
+        "zip_and_enumerate",
         # ...and then the three questions you do not have until you hit them:
         # handing a chain back, the two traits behind rev() and len(), and
         # when not to write a chain at all.
@@ -783,6 +793,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "what_a_union_is",
         # ...and where the bytes those layouts occupy actually came from.
         "the_global_allocator",
+        # ...and the one request every Vec makes of it that has a rule
+        # attached: the pointer you passed in is dead either way.
+        "allocator_shrink",
     ],
     "21_Observability": [
         "README.md",
@@ -826,6 +839,7 @@ LABELS = {
     "read_and_write": "`Read` and `Write`",
     "send_and_sync": "`Send` and `Sync`",
     "rwlock_and_atomics": "`RwLock` and atomics",
+    "allocator_shrink": "`Allocator::shrink`",
     # `clean()` would sentence-case this to "C and cpp", and the underscores
     # are there because a folder name cannot hold a `+`.
     "31_C_and_Cpp": "C and C++",
@@ -904,6 +918,7 @@ LABELS = {
     "implementing_iterator": "Implementing `Iterator`",
     "fold_and_reduce": "`fold` and `reduce`",
     "collect_and_fromiterator": "`collect` and `FromIterator`",
+    "zip_and_enumerate": "`zip` and `enumerate`",
     "returning_an_iterator": "Returning an iterator",
     "double_ended_and_exact_size": "`DoubleEndedIterator` and `ExactSizeIterator`",
     "when_a_loop_beats_a_chain": "When a `for` loop beats a chain",

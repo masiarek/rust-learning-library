@@ -1,5 +1,7 @@
 # `Vec::into_boxed_slice`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Consume the vector and give back a `Box<[T]>` — the buffer, exactly sized.
@@ -10,7 +12,9 @@ pub fn into_boxed_slice(self) -> Box<[T], A>
 
 Stable since **1.0.0**.
 
-It shrinks first (handing back any spare capacity) and then drops the capacity field. The result is **two words instead of three**: a `Box<[T]>` is pointer plus length, where a `Vec<T>` is pointer, length and capacity.
+It shrinks first (handing back any spare capacity) and then drops the capacity field — literally: [`shrink_to_fit`](../vec_shrink_to_fit/README.md) is its first statement, so the two make the [same request of the allocator](../../../09_Advanced/allocator_shrink/README.md). The result is **two words instead of three**: a `Box<[T]>` is pointer plus length, where a `Vec<T>` is pointer, length and capacity.
+
+**Which is why it is only free when there is nothing to hand back.** At `len == capacity` there is no work to do: same allocation, one field dropped, no element moved. With spare capacity the allocator is asked to resize the block, and whether the buffer *moves* — copying every element on the way — is its decision, not something to assert on. Measured here on macOS at rustc 1.98.0, shrinking a `Vec<u32>` from 100 slots to 3 kept the same address; that is one allocator's answer rather than a promise, which is why the number is in this sentence and not in the answer-keyed example below.
 
 The type is the real payoff. `Box<[T]>` says *this will not grow* — useful for a struct field built once and then only read, and one word smaller per value.
 
@@ -89,5 +93,6 @@ and back: [1, 2, 3]
 - [`Vec::leak`](../vec_leak/README.md) — the other consuming conversion to a slice
 - [The `Box`](../../the_box/README.md) — what the pointer half is
 - [`Vec::as_slice`](../vec_as_slice/README.md) — the borrowing version
+- [`Allocator::shrink`](../../../09_Advanced/allocator_shrink/README.md) — the shrink half, one layer down
 
 [`Vec::into_boxed_slice` in the standard library ↗](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.into_boxed_slice)

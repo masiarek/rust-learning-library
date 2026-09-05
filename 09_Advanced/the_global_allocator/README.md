@@ -62,7 +62,7 @@ And the accidental clone becomes a column rather than a claim: `&owned` is `allo
 
 ## The `Allocator` API is a different, unstable thing
 
-`#[global_allocator]` is stable and program-wide. The [`Allocator` trait ↗](https://doc.rust-lang.org/std/alloc/trait.Allocator.html) is the **per-container** version — `Vec::new_in(my_arena)`, a different allocator for one data structure — and it is **nightly only**, behind `#![feature(allocator_api)]`, [tracked since 2018 ↗](https://github.com/rust-lang/rust/issues/32838). Do not plan around it on stable; use the global hook, or a crate that owns its own memory.
+`#[global_allocator]` is stable and program-wide. The [`Allocator` trait ↗](https://doc.rust-lang.org/std/alloc/trait.Allocator.html) is the **per-container** version — `Vec::new_in(my_arena)`, a different allocator for one data structure — and it is **nightly only**, behind `#![feature(allocator_api)]`, [tracked since 2016 ↗](https://github.com/rust-lang/rust/issues/32838). Do not plan around it on stable; use the global hook, or a crate that owns its own memory. One of its methods is worth knowing anyway, because every `Vec` calls it: [`Allocator::shrink`](../allocator_shrink/README.md), which is what `shrink_to_fit` turns into and where the counter above can watch it arrive.
 
 ## If you are coming from another language
 

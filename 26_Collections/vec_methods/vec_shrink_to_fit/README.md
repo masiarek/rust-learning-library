@@ -1,5 +1,7 @@
 # `Vec::shrink_to_fit`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Hand the unused tail of the buffer back to the allocator.
@@ -14,7 +16,7 @@ Nothing else does this. [`clear`](../vec_clear/README.md), [`truncate`](../vec_t
 
 **"As much as possible" is the wording, and it is deliberate.** The promise is `capacity() >= len()` afterwards, not `capacity() == len()`.
 
-It asks the allocator to resize the block, so it is not free — and whether the buffer *moves* is the allocator's decision, not something to assert on. Call it once, when the vector has reached its final size.
+It asks the allocator to resize the block, so it is not free — and whether the buffer *moves* is the allocator's decision, not something to assert on. Call it once, when the vector has reached its final size. [`Allocator::shrink`](../../../09_Advanced/allocator_shrink/README.md) is the request it makes, and the three answers the allocator can give.
 
 For a vector that will never grow again, [`into_boxed_slice`](../vec_into_boxed_slice/README.md) does the same shrink and then drops the capacity field entirely, giving a two-word `Box<[T]>` whose type says the length is fixed.
 
@@ -102,5 +104,6 @@ Box<[u8]> of len 3 — no spare capacity to track
 - [`Vec::into_boxed_slice`](../vec_into_boxed_slice/README.md) — shrink, and drop the capacity field with it
 - [`Vec::capacity`](../vec_capacity/README.md) — the number this changes
 - [`Vec::reserve_exact`](../vec_reserve_exact/README.md) — avoiding the slack in the first place
+- [`Allocator::shrink`](../../../09_Advanced/allocator_shrink/README.md) — what this call turns into one layer down
 
 [`Vec::shrink_to_fit` in the standard library ↗](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.shrink_to_fit)
