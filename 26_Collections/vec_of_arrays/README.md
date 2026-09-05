@@ -403,6 +403,7 @@ fn main() {
 - [Arrays and slices](../arrays_and_slices/README.md) — why `[u8; 4]` and `[u8; 3]` are different types, which is what makes the push above an error
 - [`Vec::into_flattened`](../vec_methods/vec_into_flattened/README.md) — the free conversion out, and why `Vec<Vec<T>>` has no equivalent
 - [`Vec`](../the_vec/README.md) — the three numbers the outer `Vec` is, and how the buffer doubles
+- [Slices of slices](../slice_of_slices/README.md) — the parameter type that takes this grid and the nested one alike, without converting either
 
 ## Sources
 

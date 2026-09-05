@@ -354,6 +354,7 @@ fn main() {
 - [`Vec`](../the_vec/README.md) — the three numbers each of these rows is, and how one grows
 - [A `Vec` of arrays](../vec_of_arrays/README.md) — the same grid with the row width back in the type: one allocation, `Copy` rows, and a wrong-length row the compiler refuses
 - [Arrays and slices](../arrays_and_slices/README.md) — why `[[u8; 4]; 4]` is a different type from `[[u8; 5]; 4]`, and what `chunks` hands back
+- [Slices of slices](../slice_of_slices/README.md) — passing one of these grids to a function, and why `&Vec<Vec<T>>` will not go through a `&[&[T]]` parameter
 - [The global allocator](../../09_Advanced/the_global_allocator/README.md) — the counting allocator this page's numbers come from
 - [`iter`, `iter_mut`, `into_iter`](../../24_Iterators/iter_iter_mut_into_iter/README.md) — which of the three yields the `&mut` that needs the `*`
 - [Interior mutability](../../09_Advanced/interior_mutability/README.md) — `Rc<RefCell<T>>`, the thing you would need to get Python's aliasing on purpose
