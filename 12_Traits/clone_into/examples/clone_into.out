@@ -28,6 +28,16 @@
    clone_into bought none — [T]'s impl clones into the slots in place.
    4-byte slots grow instead; rows past the end of the target are
    pushed as new Strings, and the Vec itself grows to hold them.
+   the same question asked of the Vec, three ways, each into
+   4 roomy slots that are already allocated:
+   Vec<String> dst = src.clone()              alloc 5   realloc 0
+   Vec<String> dst.clone_from(&src)           alloc 0   realloc 0
+   Vec<String> src.clone_into(&mut dst)       alloc 0   realloc 0
+   Vec<String> clone_from (empty dst)         alloc 5   realloc 0
+   clone_from and clone_into tie because they are one function, so
+   only clone() had to buy anything. Same rows all three ways: true
+   The last row is the condition: into an empty Vec the reusing
+   spellings allocate exactly what clone() does. (4 rows either way.)
 
 6. What you trade for it: the buffer keeps its high-water mark
    after a 300-byte row: capacity 300

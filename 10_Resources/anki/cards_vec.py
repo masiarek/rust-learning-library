@@ -524,6 +524,47 @@ dict(id="vec_clear_capacity",
  link=("the_vec", SITE+"26_Collections/the_vec/index.html"),
  tags="rust vec memory"),
 
+dict(id="vec_clone_from_into",
+ front="Copying a <code>Vec&lt;String&gt;</code> into one you already have. Which does the LEAST new allocation?"
+       "<br><br><code>dst = src.clone()</code> &mdash; <code>std::clone::Clone</code>"
+       "<br><code>dst.clone_from(&amp;src)</code> &mdash; <code>std::clone::Clone</code>"
+       "<br><code>src.clone_into(&amp;mut dst)</code> &mdash; <code>std::borrow::ToOwned</code>",
+ back="<b>The last two tie &mdash; they are the same function. <code>clone()</code> is the only one that always pays.</b>"
+      "<br><br>Counted with a counting global allocator, four names into a destination that already holds four roomy "
+      "slots: <code>clone()</code> costs <b>5</b> allocations (the <code>Vec</code>, then one per <code>String</code>); "
+      "<code>clone_from</code> and <code>clone_into</code> cost <b>0</b> each."
+      "<br><br>They tie because <code>Vec::clone_from</code> IS "
+      "<code>SpecCloneIntoVec::clone_into(source.as_slice(), self)</code>, and the blanket "
+      "<code>impl&lt;T: Clone&gt; ToOwned for T</code> defines <code>clone_into</code> as "
+      "<code>target.clone_from(self)</code>. One body, two spellings &mdash; pointing opposite ways, since "
+      "<code>clone_into</code> is called on the SOURCE."
+      "<br><br>Zero rather than one: the overlapping prefix goes through <code>clone_from_slice</code>, so the inner "
+      "<code>String</code> buffers are refilled in place too, not just the <code>Vec</code>&rsquo;s."
+      "<br><br><b>&quot;Already have&quot; is the whole condition.</b> Into an EMPTY <code>Vec</code> all three "
+      "allocate 5 &mdash; there is nothing to reuse. Roomy slots holding 4-byte <code>String</code>s: 0 allocations "
+      "and 4 reallocations. The saving is real only from the second call onward, which is why the pattern is a buffer "
+      "hoisted OUT of a loop.",
+ code='''fn main() {
+    let src = vec![String::from("Ada"), String::from("Ben")];
+    let mut dst = vec![String::with_capacity(8), String::with_capacity(8)];
+    let (vec_buf, str_buf) = (dst.as_ptr(), dst[0].as_ptr());
+
+    dst.clone_from(&src);              // same call as src.clone_into(&mut dst)
+    println!("{} {}", dst.as_ptr() == vec_buf, dst[0].as_ptr() == str_buf);
+
+    let fresh = src.clone();
+    println!("{}", fresh.as_ptr() == vec_buf);
+}''',
+ expect="true true\nfalse",
+ code_on="back",
+ bridge="<b>ABAP:</b> <code>lt_target = lt_source</code> deep-copies the table; the reusing spelling is "
+        "<code>CLEAR lt_target. APPEND LINES OF lt_source TO lt_target.</code> &mdash; and ABAP lets you forget, "
+        "where Rust makes you name which one you meant."
+        "<br><b>Python:</b> <code>dst[:] = src</code> keeps the list object, <code>dst = list(src)</code> builds a new "
+        "one. But Python&rsquo;s elements are references, so nothing there corresponds to refilling the inner buffers.",
+ link=("clone_into", SITE+"12_Traits/clone_into/index.html"),
+ tags="rust vec memory performance"),
+
 dict(id="vec_2d",
  front="Make a 2-row &times; 3-column grid of zeros, then set row 1 column 2 to 9.",
  back="<b><code>let mut g = vec![vec![0; 3]; 2];</code> then <code>g[1][2] = 9;</code></b>"

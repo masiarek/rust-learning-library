@@ -66,6 +66,20 @@ Five buffers become zero: the `Vec`, and one per element. That body is the gener
 
 **Roomy** is two conditions, not one. The impl truncates the target to the source's length, refills the overlapping prefix, and pushes whatever is left over — so four rows into four 4-byte slots reallocate four times, and four rows into two roomy slots still buy two `String`s and grow the `Vec`. Section 5 of the run below counts both. A `Vec<String>` reaches zero only when the target has enough slots *and* each `String` in them has enough capacity.
 
+### Which of the three does the least, on a `Vec<String>`?
+
+Copying a `Vec<String>` into one you already have has three spellings, and the honest answer is that two of them are the same function:
+
+| | allocations |
+|---|---|
+| `dst = src.clone()` — `Clone` | 5 |
+| `dst.clone_from(&src)` — `Clone` | 0 |
+| `src.clone_into(&mut dst)` — `ToOwned` | 0 |
+
+`Vec::clone_from`'s entire body is `SpecCloneIntoVec::clone_into(source.as_slice(), self)` — the impl quoted above — and the blanket `impl<T: Clone> ToOwned for T` defines `clone_into` as `target.clone_from(self)`. So on a `Vec<String>` the bottom two rows are one call written twice, pointing opposite ways, and there is no third answer to pick between them. (The previous table's `to_owned` is the slice's own impl, `fn to_owned(&self) -> Vec<T> { self.to_vec() }`, while `Vec::clone` is `<[T]>::to_vec_in` — the same fresh buffer, which is why the two cost the same five.) The five is 1 + *n*: the `Vec`'s own buffer, then one per `String`.
+
+The zeros are conditional, and the last measurement in section 5 is the condition — the same `clone_from` into an **empty** `Vec` allocates five, exactly what `clone()` does, because reuse needs something to reuse. So the answer to *"which allocates least"* is **whichever of the two you can hand a destination that is already roomy**; where there is no such destination, all three cost the same.
+
 ## Three ways it does not pay
 
 **The target has to have room.** An empty `String` allocates on the first `clone_into` exactly as `to_owned` would; a four-byte one reallocates to grow. The saving is opportunistic, and it is real only from the second call onward — which is why the pattern is a buffer hoisted *out* of a loop, never a fresh one inside it.
@@ -204,6 +218,16 @@ fn test() {
    clone_into bought none — [T]'s impl clones into the slots in place.
    4-byte slots grow instead; rows past the end of the target are
    pushed as new Strings, and the Vec itself grows to hold them.
+   the same question asked of the Vec, three ways, each into
+   4 roomy slots that are already allocated:
+   Vec<String> dst = src.clone()              alloc 5   realloc 0
+   Vec<String> dst.clone_from(&src)           alloc 0   realloc 0
+   Vec<String> src.clone_into(&mut dst)       alloc 0   realloc 0
+   Vec<String> clone_from (empty dst)         alloc 5   realloc 0
+   clone_from and clone_into tie because they are one function, so
+   only clone() had to buy anything. Same rows all three ways: true
+   The last row is the condition: into an empty Vec the reusing
+   spellings allocate exactly what clone() does. (4 rows either way.)
 
 6. What you trade for it: the buffer keeps its high-water mark
    after a 300-byte row: capacity 300

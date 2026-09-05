@@ -147,6 +147,33 @@ fn main() {
     println!("   clone_into bought none — [T]'s impl clones into the slots in place.");
     println!("   4-byte slots grow instead; rows past the end of the target are");
     println!("   pushed as new Strings, and the Vec itself grows to hold them.");
+    // The same job asked of the `Vec` itself rather than a slice of it, in the
+    // three spellings a reader arrives with. Two of them are one function:
+    // `Vec::clone_from` is `SpecCloneIntoVec::clone_into(source.as_slice(), self)`,
+    // and the blanket `impl<T: Clone> ToOwned for T` defines `clone_into` as
+    // `target.clone_from(self)`. All three destinations below start identical.
+    let mut by_clone: Vec<String> = (0..4).map(|_| String::with_capacity(32)).collect();
+    let mut by_clone_from: Vec<String> = (0..4).map(|_| String::with_capacity(32)).collect();
+    let mut by_clone_into: Vec<String> = (0..4).map(|_| String::with_capacity(32)).collect();
+    println!("   the same question asked of the Vec, three ways, each into");
+    println!("   {} roomy slots that are already allocated:", by_clone.len());
+    measure("Vec<String> dst = src.clone()", || by_clone = names.clone());
+    measure("Vec<String> dst.clone_from(&src)", || by_clone_from.clone_from(&names));
+    measure("Vec<String> src.clone_into(&mut dst)", || {
+        names.clone_into(&mut by_clone_into)
+    });
+    // ...and the condition the whole comparison rests on: reuse needs something
+    // to reuse. A fresh destination costs exactly what `clone()` costs.
+    let mut from_empty: Vec<String> = Vec::new();
+    measure("Vec<String> clone_from (empty dst)", || {
+        from_empty.clone_from(&names)
+    });
+    println!("   clone_from and clone_into tie because they are one function, so");
+    println!("   only clone() had to buy anything. Same rows all three ways: {}",
+             by_clone == names && by_clone_from == names && by_clone_into == names);
+    println!("   The last row is the condition: into an empty Vec the reusing");
+    println!("   spellings allocate exactly what clone() does. ({} rows either way.)",
+             from_empty.len());
 
     println!();
     println!("6. What you trade for it: the buffer keeps its high-water mark");
