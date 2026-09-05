@@ -35,20 +35,18 @@ impl<T, A: Allocator> Extend<T> for Vec<T, A>
 
 So `v.extend(&other)` compiles for a `Vec<i32>` and not for a `Vec<String>`:
 
-```rust
+```rust,compile_fail
 fn main() {
     let src = vec![String::from("a")];
     let mut dst: Vec<String> = Vec::new();
-
-    // dst.extend(&src);
+    dst.extend(&src);
     // error[E0271]: type mismatch resolving
     //               `<&Vec<String> as IntoIterator>::Item == String`
     //               expected `String`, found `&String`
-
-    dst.extend_from_slice(&src);
-    assert_eq!(dst, ["a"]);
 }
 ```
+
+Swap in `dst.extend_from_slice(&src)` and it compiles: that call asks only for `Clone`.
 
 `extend_from_slice` asks only for `Clone`, so it takes both. Spelling the iterator out — `dst.extend(src.iter().cloned())` — is the same work said the long way.
 
@@ -56,17 +54,24 @@ It also reserves **once** for the whole slice. `extend` can only pre-reserve whe
 
 ### The element types must match exactly
 
-`&[T]` means *that* `T`. A `Vec<String>` will not take a `&[&str]`, however convertible the elements look. There is nowhere for a conversion to happen: cloning a `&str` gives a `&str`. Use `extend` and convert on the way in.
+`&[T]` means *that* `T`. A `Vec<String>` will not take a `&[&str]`, however convertible the elements look:
+
+```rust,compile_fail
+fn main() {
+    let slice: &[&str] = &["apple", "banana", "cherry"];
+    let mut v: Vec<String> = Vec::new();
+    v.extend_from_slice(slice);
+    // error[E0308]: mismatched types
+    //               expected `&[String]`, found `&[&str]`
+}
+```
+
+There is nowhere for a conversion to happen: cloning a `&str` gives a `&str`. Use `extend` and convert on the way in.
 
 ```rust
 fn main() {
     let slice: &[&str] = &["apple", "banana", "cherry"];
     let mut v: Vec<String> = Vec::new();
-
-    // v.extend_from_slice(slice);
-    // error[E0308]: mismatched types
-    //               expected `&[String]`, found `&[&str]`
-
     v.extend(slice.iter().map(|&s| s.to_string()));
     assert_eq!(v, ["apple", "banana", "cherry"]);
 }
