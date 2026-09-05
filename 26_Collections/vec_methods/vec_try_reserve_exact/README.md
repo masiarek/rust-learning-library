@@ -1,5 +1,7 @@
 # `Vec::try_reserve_exact`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`reserve_exact`](../vec_reserve_exact/README.md) that returns `Err` instead of aborting.

@@ -1,5 +1,7 @@
 # `Vec::set_len`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Set the length field directly. Initialises nothing, drops nothing, checks nothing.

@@ -1,5 +1,7 @@
 # `Vec::dedup_by_key`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`dedup`](../vec_dedup/README.md) comparing a derived key rather than the whole element.

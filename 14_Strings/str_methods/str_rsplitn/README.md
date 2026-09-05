@@ -1,5 +1,7 @@
 # `str::rsplitn`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** At most `n` pieces, splitting from the **right** — the remainder that comes back whole is the *beginning* of the string.

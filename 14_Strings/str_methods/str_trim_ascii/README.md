@@ -1,5 +1,7 @@
 # `str::trim_ascii`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`trim`](../str_trim/README.md) restricted to the five ASCII whitespace bytes — and usable in a `const` context, which `trim` is not.

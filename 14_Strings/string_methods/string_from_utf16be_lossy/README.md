@@ -1,5 +1,7 @@
 # `String::from_utf16be_lossy`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`from_utf16be`](../string_from_utf16be/README.md) that cannot fail — bad sequences become `U+FFFD`.

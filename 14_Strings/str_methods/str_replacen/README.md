@@ -1,5 +1,7 @@
 # `str::replacen`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`replace`](../str_replace/README.md) with a limit — only the first `n` occurrences, counting from the left.

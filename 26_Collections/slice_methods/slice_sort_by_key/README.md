@@ -1,5 +1,7 @@
 # `slice::sort_by_key`
 
+[`slice` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Sort in place by a key you extract from each element.

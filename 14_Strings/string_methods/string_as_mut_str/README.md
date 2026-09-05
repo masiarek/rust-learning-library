@@ -1,5 +1,7 @@
 # `String::as_mut_str`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Borrows the `String` as a `&mut str` — mutable, but **length-preserving**, so only the ASCII in-place edits are available.

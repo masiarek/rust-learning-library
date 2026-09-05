@@ -1,5 +1,7 @@
 # `Vec::retain_mut`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`retain`](../vec_retain/README.md), with a predicate that can also change the element.

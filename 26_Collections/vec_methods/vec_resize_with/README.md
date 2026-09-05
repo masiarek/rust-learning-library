@@ -1,5 +1,7 @@
 # `Vec::resize_with`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`resize`](../vec_resize/README.md), calling a closure once per new slot.

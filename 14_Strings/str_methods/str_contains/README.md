@@ -1,5 +1,7 @@
 # `str::contains`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** `true` if the pattern occurs anywhere — the readable form of `find(..).is_some()`.

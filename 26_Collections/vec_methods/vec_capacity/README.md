@@ -1,5 +1,7 @@
 # `Vec::capacity`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** How many elements fit before the next reallocation — not how many are there.

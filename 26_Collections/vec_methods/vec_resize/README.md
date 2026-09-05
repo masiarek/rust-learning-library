@@ -1,5 +1,7 @@
 # `Vec::resize`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Set the length to `new_len`, padding with clones of a value.

@@ -1,5 +1,7 @@
 # `str::get_unchecked_mut`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`get_mut`](../str_get_mut/README.md) with the checks removed — `unsafe`, same two-clause contract, mutable result.

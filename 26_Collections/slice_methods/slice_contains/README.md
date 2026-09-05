@@ -1,5 +1,7 @@
 # `slice::contains`
 
+[`slice` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Is this value in the slice? A linear scan by `==`.

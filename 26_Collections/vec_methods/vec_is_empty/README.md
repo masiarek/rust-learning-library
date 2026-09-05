@@ -1,5 +1,7 @@
 # `Vec::is_empty`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Whether the vector has no elements.

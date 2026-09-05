@@ -1,5 +1,7 @@
 # `str::make_ascii_lowercase`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Lowercases `A`–`Z` **in place**, allocating nothing — needs a `&mut str`, and returns `()`.

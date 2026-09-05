@@ -1,5 +1,7 @@
 # `Vec::reserve`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Make room for `additional` more elements on top of the current length.

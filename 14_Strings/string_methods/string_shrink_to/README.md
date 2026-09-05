@@ -1,5 +1,7 @@
 # `String::shrink_to`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Shrinks the capacity toward a floor you name — never below `len()`, and never below `min_capacity`.

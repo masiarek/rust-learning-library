@@ -1,5 +1,7 @@
 # `Vec::insert`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Put an element at `index`, shifting everything after it to the right.

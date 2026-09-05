@@ -1,5 +1,7 @@
 # `str::slice_mut_unchecked`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 > **Deprecated — use [`str::get_unchecked_mut`](../str_get_unchecked_mut/README.md) instead.** The page is here because the name is still in older code, and it still compiles; a new call site should not use it.

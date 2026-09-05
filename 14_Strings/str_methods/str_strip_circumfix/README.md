@@ -1,5 +1,7 @@
 # `str::strip_circumfix`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Removes a prefix **and** a suffix in one call, returning `Some(middle)` only if **both** were present.

@@ -1,5 +1,7 @@
 # `str::as_ptr`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** The raw address of the first byte, as `*const u8` — for handing text to C, and for nothing else in ordinary code.

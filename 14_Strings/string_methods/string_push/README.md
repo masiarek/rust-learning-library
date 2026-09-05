@@ -1,5 +1,7 @@
 # `String::push`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Appends one `char`, encoding it as **1–4 UTF-8 bytes** — so `len()` can grow by more than one.

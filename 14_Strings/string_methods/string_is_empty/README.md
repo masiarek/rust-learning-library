@@ -1,5 +1,7 @@
 # `String::is_empty`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** `true` when `len()` is 0 — and note that a **capacity** of any size does not make a string non-empty.

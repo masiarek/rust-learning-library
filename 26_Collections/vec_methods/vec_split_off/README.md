@@ -1,5 +1,7 @@
 # `Vec::split_off`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Cut the vector in two at `at`, returning the tail.

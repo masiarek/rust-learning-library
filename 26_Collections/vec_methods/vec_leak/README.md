@@ -1,5 +1,7 @@
 # `Vec::leak`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Consume the vector and return a slice that outlives it, by never freeing the buffer.

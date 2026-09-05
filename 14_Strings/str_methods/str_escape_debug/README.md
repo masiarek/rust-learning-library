@@ -1,5 +1,7 @@
 # `str::escape_debug`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** An iterator of the characters as Rust's `Debug` would print them — escaping control characters and quotes, leaving printable Unicode alone.

@@ -1,5 +1,7 @@
 # `str::trim_start`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`trim`](../str_trim/README.md) at the front only — leading whitespace removed, trailing whitespace kept.

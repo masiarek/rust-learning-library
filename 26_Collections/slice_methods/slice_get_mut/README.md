@@ -1,5 +1,7 @@
 # `slice::get_mut`
 
+[`slice` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** A mutable reference to an element or a sub-slice, or `None` when the index is out of range.

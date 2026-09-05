@@ -1,5 +1,7 @@
 # `str::escape_unicode`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Escapes **every** character as `\u{...}`, including plain ASCII letters — `"ab"` becomes `\u{61}\u{62}`.

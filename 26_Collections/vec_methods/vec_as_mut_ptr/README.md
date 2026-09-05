@@ -1,5 +1,7 @@
 # `Vec::as_mut_ptr`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** The raw address of the buffer, writable.

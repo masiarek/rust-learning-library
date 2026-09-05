@@ -1,5 +1,7 @@
 # `String::len`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** The number of **bytes**, not characters — the same count as [`str::len`](../../str_methods/str_len/README.md), reached through the same deref.

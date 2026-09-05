@@ -1,5 +1,7 @@
 # `String::replace_range`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Replaces a byte range with different text, in place — and the replacement need not be the same length.

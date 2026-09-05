@@ -1,5 +1,7 @@
 # `str::from_utf8_unchecked`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Reinterprets `&[u8]` as `&str` with **no validation** — `unsafe`, and undefined behaviour if the bytes are not valid UTF-8.

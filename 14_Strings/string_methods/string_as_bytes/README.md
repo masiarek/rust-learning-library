@@ -1,5 +1,7 @@
 # `String::as_bytes`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Borrows the `String`'s UTF-8 bytes as `&[u8]` — free, and identical to [`str::as_bytes`](../../str_methods/str_as_bytes/README.md).

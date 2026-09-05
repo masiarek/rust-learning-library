@@ -1,5 +1,7 @@
 # `str::to_lowercase`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** A new `String` lowercased by the full Unicode rules — which can change the **length**, and is context-sensitive for Greek sigma.

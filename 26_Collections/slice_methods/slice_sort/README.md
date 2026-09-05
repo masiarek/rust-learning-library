@@ -1,5 +1,7 @@
 # `slice::sort`
 
+[`slice` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Sort in place, ascending, keeping equal elements in their original order.

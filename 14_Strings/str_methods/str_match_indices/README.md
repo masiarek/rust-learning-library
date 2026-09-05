@@ -1,5 +1,7 @@
 # `str::match_indices`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Every match paired with the byte offset it starts at — `(usize, &str)`, and the offsets are safe to slice with.

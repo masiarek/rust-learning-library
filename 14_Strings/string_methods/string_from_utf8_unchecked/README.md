@@ -1,5 +1,7 @@
 # `String::from_utf8_unchecked`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Takes a `Vec<u8>` as a `String` with **no validation** — `unsafe`, and undefined behaviour if the bytes are not valid UTF-8.

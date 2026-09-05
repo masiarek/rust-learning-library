@@ -1,5 +1,7 @@
 # `str::split_ascii_whitespace`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`split_whitespace`](../str_split_whitespace/README.md) restricted to the five ASCII whitespace bytes — faster, and deliberately blind to Unicode spaces.

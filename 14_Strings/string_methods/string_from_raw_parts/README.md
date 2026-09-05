@@ -1,5 +1,7 @@
 # `String::from_raw_parts`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Rebuilds a `String` from a pointer, a length and a capacity — `unsafe`, and the counterpart of [`into_raw_parts`](../string_into_raw_parts/README.md).

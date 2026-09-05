@@ -1,5 +1,7 @@
 # `str::replace`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** A new `String` with **every** occurrence of the pattern replaced — the original is untouched, because a `str` cannot change length.

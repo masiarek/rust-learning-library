@@ -1,5 +1,7 @@
 # `str::trim_matches`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Trims a **pattern** from both ends, repeatedly — `"xxhixx".trim_matches('x')` is `"hi"`.

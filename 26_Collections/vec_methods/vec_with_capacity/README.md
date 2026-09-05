@@ -1,5 +1,7 @@
 # `Vec::with_capacity`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** An empty vector with room for `n` elements already allocated.

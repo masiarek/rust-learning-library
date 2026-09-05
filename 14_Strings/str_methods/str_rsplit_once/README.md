@@ -1,5 +1,7 @@
 # `str::rsplit_once`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Splits at the **last** match into exactly two pieces, or `None` — the tool for stem-and-extension.

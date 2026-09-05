@@ -1,5 +1,7 @@
 # `str::find`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** The **byte offset** of the first match, as `Option<usize>` — `None` when there is none, never `-1`.

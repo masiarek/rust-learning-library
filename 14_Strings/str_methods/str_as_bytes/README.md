@@ -1,5 +1,7 @@
 # `str::as_bytes`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Borrows the string's UTF-8 bytes as `&[u8]` — free, since that is already how the text is stored.

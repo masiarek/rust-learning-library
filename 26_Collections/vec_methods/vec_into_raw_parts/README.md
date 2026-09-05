@@ -1,5 +1,7 @@
 # `Vec::into_raw_parts`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Decompose the vector into `(pointer, length, capacity)` and stop managing it.

@@ -1,5 +1,7 @@
 # `str::trim`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Removes leading and trailing Unicode whitespace, returning a **borrowed** sub-slice — nothing is allocated and the original is unchanged.

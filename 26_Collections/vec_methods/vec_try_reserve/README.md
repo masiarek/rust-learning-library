@@ -1,5 +1,7 @@
 # `Vec::try_reserve`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`reserve`](../vec_reserve/README.md) that returns `Err` instead of aborting the process.

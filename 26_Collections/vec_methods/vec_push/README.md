@@ -1,5 +1,7 @@
 # `Vec::push`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Add one element to the end. The commonest `Vec` call there is.

@@ -1,5 +1,7 @@
 # `str::to_uppercase`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** A new `String` uppercased by the full Unicode rules — where a single character can become **two**, so `ß` becomes `SS`.

@@ -1,5 +1,7 @@
 # `String::reserve`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Ensures room for at least `additional` **more** bytes — the argument is a headroom, not a total.

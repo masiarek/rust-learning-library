@@ -1,5 +1,7 @@
 # `str::from_utf8_mut`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`from_utf8`](../str_from_utf8/README.md) over a `&mut [u8]`, yielding `&mut str` — validated once, then editable.

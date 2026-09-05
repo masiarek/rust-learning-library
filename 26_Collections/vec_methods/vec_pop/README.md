@@ -1,5 +1,7 @@
 # `Vec::pop`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Take the last element off, as an `Option`.

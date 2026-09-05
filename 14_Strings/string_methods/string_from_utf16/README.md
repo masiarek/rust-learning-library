@@ -1,5 +1,7 @@
 # `String::from_utf16`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Decodes a `&[u16]` of UTF-16 code units into a `String`, or fails — the way back from Windows, Java and JavaScript text.

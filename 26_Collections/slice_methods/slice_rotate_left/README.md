@@ -1,5 +1,7 @@
 # `slice::rotate_left`
 
+[`slice` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Shift every element `mid` places left, wrapping the first `mid` around to the end.

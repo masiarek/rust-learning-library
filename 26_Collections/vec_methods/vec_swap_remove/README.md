@@ -1,5 +1,7 @@
 # `Vec::swap_remove`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Take the element at `index` out in O(1), by moving the last one into its place.

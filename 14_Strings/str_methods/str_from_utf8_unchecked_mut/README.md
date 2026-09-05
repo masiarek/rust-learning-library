@@ -1,5 +1,7 @@
 # `str::from_utf8_unchecked_mut`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`from_utf8_unchecked`](../str_from_utf8_unchecked/README.md) yielding `&mut str` — unvalidated **and** mutable, so the invariant is yours at both ends.

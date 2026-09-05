@@ -1,5 +1,7 @@
 # `Vec::from_raw_parts`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Rebuild a `Vec` from a pointer, a length and a capacity.

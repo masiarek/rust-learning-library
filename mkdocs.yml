@@ -38,10 +38,32 @@ exclude_docs: |
   /README.md
   __pycache__/
 
-# Built and linkable, but kept out of the sidebar: house conventions are for
-# someone about to write a page, not for a reader browsing lessons.
+# Built and linkable, but kept out of the sidebar. Two kinds of page qualify.
+#
+# House conventions, which are for someone about to write a page rather than for
+# a reader browsing lessons.
+#
+# And the four METHOD REFERENCES -- 194 pages, one folder per method -- whose own
+# folder README is already the directory, and a better one: grouped by what the
+# methods are FOR (Sorting / Searching / The ends / Rearranging ...) with a
+# one-line summary each, instead of an alphabetical run of 83 sidebar rows. Named
+# in both places the sidebar went four levels deep and `HashMap` sat below
+# `slice::binary_search`, so the section a reader was standing in scrolled its own
+# neighbours off the screen. The index page is the door; search still finds every
+# method page by name; and a link from anywhere in the repo still resolves.
+#
+# Nothing moves on disk. Same folders, same URLs, same links in and out -- the
+# sidebar row is the only thing that goes.
+#
+# Leading slash anchors each pattern to the repo root, as the exclude_docs note
+# above explains. `*/README.md` is deliberately one level deep: it takes the
+# per-method pages and leaves the reference's own landing page in the nav.
 not_in_nav: |
   /CONTRIBUTING.md
+  /14_Strings/str_methods/*/README.md
+  /14_Strings/string_methods/*/README.md
+  /26_Collections/vec_methods/*/README.md
+  /26_Collections/slice_methods/*/README.md
 
 theme:
   name: material

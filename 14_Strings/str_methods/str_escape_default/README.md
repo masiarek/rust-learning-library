@@ -1,5 +1,7 @@
 # `str::escape_default`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Escapes to **pure ASCII** — control characters, quotes, and every character above 127 become `\u{...}`.

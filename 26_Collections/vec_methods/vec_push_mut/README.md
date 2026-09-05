@@ -1,5 +1,7 @@
 # `Vec::push_mut`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`push`](../vec_push/README.md), returning a `&mut` to the element it just stored.

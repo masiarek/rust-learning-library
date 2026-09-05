@@ -1,5 +1,7 @@
 # `str::from_utf8`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Validates a `&[u8]` and returns `Result<&str, Utf8Error>` — the checked way in, borrowing rather than copying.

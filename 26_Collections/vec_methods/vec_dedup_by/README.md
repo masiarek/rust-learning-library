@@ -1,5 +1,7 @@
 # `Vec::dedup_by`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`dedup`](../vec_dedup/README.md) with your own definition of "the same".

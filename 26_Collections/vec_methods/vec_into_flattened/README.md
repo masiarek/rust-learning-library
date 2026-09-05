@@ -1,5 +1,7 @@
 # `Vec::into_flattened`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Turn a `Vec<[T; N]>` into a `Vec<T>` without moving anything.

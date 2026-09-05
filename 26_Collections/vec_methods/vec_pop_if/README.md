@@ -1,5 +1,7 @@
 # `Vec::pop_if`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Pop the last element, but only if it passes a test.

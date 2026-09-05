@@ -1,5 +1,7 @@
 # `str::lines`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Splits on `\n`, dropping a trailing `\r` — so it reads both Unix and Windows text, and a final newline does **not** produce an empty last line.

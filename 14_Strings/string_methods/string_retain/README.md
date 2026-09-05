@@ -1,5 +1,7 @@
 # `String::retain`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Keeps only the characters a predicate approves, in one linear in-place pass — the right way to filter a `String`.

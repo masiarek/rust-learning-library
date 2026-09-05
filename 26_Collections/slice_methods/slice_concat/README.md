@@ -1,5 +1,7 @@
 # `slice::concat`
 
+[`slice` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Flatten a slice of slices — or of strings — into one owned `Vec` or `String`.

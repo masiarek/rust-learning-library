@@ -1,5 +1,7 @@
 # `Vec::extend_from_slice`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Clone every element of a slice onto the end.

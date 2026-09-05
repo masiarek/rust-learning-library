@@ -1,5 +1,7 @@
 # `str::trim_end_matches`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Removes the pattern from the back as many times as it occurs — the mirror of [`trim_start_matches`](../str_trim_start_matches/README.md).

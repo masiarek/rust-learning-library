@@ -1,5 +1,7 @@
 # `String::insert_str`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Inserts a `&str` at a byte offset — [`insert`](../string_insert/README.md) for text, with the same O(n) shift and the same two panics.

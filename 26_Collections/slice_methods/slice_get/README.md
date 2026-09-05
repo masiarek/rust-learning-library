@@ -1,5 +1,7 @@
 # `slice::get`
 
+[`slice` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** An element, or a sub-slice, as an `Option` — `None` where `v[i]` would panic.

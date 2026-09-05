@@ -1,5 +1,7 @@
 # `str::split_at_mut_checked`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`split_at_mut`](../str_split_at_mut/README.md) returning `Option` — `None` rather than a panic for a bad offset.

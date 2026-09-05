@@ -1,5 +1,7 @@
 # `Vec::as_mut_slice`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Borrow the whole vector as a `&mut [T]`. Also free.

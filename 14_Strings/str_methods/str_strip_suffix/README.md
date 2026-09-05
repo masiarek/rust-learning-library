@@ -1,5 +1,7 @@
 # `str::strip_suffix`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Removes the suffix once and returns `Some(rest)`, or `None` — the mirror of [`strip_prefix`](../str_strip_prefix/README.md).

@@ -1,5 +1,7 @@
 # `str::trim_right_matches`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 > **Deprecated since Rust 1.33 — use [`str::trim_end_matches`](../str_trim_end_matches/README.md) instead.** The page is here because the name is still in code written before it moved, and it still compiles; a new call site should not use it.

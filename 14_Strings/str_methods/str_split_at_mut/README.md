@@ -1,5 +1,7 @@
 # `str::split_at_mut`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`split_at`](../str_split_at/README.md) for a `&mut str` — two mutable halves at once, which the borrow checker would otherwise refuse.

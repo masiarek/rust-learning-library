@@ -1,5 +1,7 @@
 # `str::trim_start_matches`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Removes the pattern from the front **as many times as it occurs** — `"aaab".trim_start_matches('a')` is `"b"`.

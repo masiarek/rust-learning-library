@@ -1,5 +1,7 @@
 # `str::chars`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** An iterator over Unicode scalar values, yielding `char` — the closest thing Rust has to 'the characters', and still not what a reader would call one.

@@ -1,5 +1,7 @@
 # `String::reserve_exact`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`reserve`](../string_reserve/README.md) without the round-up — asks the allocator for exactly `len() + additional`.

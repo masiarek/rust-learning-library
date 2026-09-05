@@ -1,5 +1,7 @@
 # `str::into_boxed_bytes`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Turns a `Box<str>` into a `Box<[u8]>` without copying — the same bytes, with the UTF-8 promise dropped.

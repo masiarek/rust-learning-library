@@ -1,5 +1,7 @@
 # `Vec::retain`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Keep the elements a predicate approves, in one pass.

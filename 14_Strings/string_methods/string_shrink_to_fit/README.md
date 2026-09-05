@@ -1,5 +1,7 @@
 # `String::shrink_to_fit`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Gives back the spare capacity, dropping it to about `len()` — usually by reallocating and copying.

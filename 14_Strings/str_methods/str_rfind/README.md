@@ -1,5 +1,7 @@
 # `str::rfind`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** The byte offset of the **last** match — the same `Option<usize>` as [`find`](../str_find/README.md), searching from the end.

@@ -1,5 +1,7 @@
 # `str::len`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** The number of **bytes** in the UTF-8 encoding, not the number of characters — `"héllo".len()` is 6.

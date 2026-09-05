@@ -1,5 +1,7 @@
 # `str::get_unchecked`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`get`](../str_get/README.md) with the bounds and boundary checks removed — `unsafe`, and undefined behaviour if the range is wrong.

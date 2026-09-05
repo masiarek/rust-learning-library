@@ -1,5 +1,7 @@
 # `String::pop`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Removes and returns the last `char`, or `None` if empty — the only removal method that is O(1) and cannot panic.

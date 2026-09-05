@@ -1,5 +1,7 @@
 # `slice::windows`
 
+[`slice` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Every overlapping run of `n` consecutive elements — all of them full length.

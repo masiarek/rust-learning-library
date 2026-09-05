@@ -1,5 +1,7 @@
 # `String::split_off`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Splits at a byte offset, **returning the tail as a new `String`** and leaving the head in place — panics off a character boundary.

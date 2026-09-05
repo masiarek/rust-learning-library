@@ -1,5 +1,7 @@
 # `String::from_utf16be`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Decodes **big-endian** UTF-16 from a `&[u8]` — the network byte order, and what a BOM-less UTF-16 file is presumed to be by some specifications.

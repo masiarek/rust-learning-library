@@ -1,5 +1,7 @@
 # `str::split_once`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Splits at the **first** match into exactly two pieces, or returns `None` — the right tool for `key=value`.

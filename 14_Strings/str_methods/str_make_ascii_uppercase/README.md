@@ -1,5 +1,7 @@
 # `str::make_ascii_uppercase`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Uppercases `a`–`z` in place, allocating nothing — the mirror of [`make_ascii_lowercase`](../str_make_ascii_lowercase/README.md).

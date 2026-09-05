@@ -1,5 +1,7 @@
 # `str::trim_ascii_start`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`trim_ascii`](../str_trim_ascii/README.md) at the front only — `const`, ASCII-only, leading bytes removed.

@@ -1,5 +1,7 @@
 # `Vec::drain`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Remove a range and yield the removed elements as an iterator.

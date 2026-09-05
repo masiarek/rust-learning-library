@@ -1,5 +1,7 @@
 # `String::into_bytes`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Consumes the `String` and returns its `Vec<u8>` — no copy, no validation, the same allocation relabelled.

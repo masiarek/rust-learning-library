@@ -1,5 +1,7 @@
 # `str::splitn`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** At most `n` pieces — after `n−1` splits the remainder comes back **whole**, separators and all.

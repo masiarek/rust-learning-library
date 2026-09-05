@@ -1,5 +1,7 @@
 # `String::remove`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Removes the `char` starting at a byte offset and returns it — **panics** if the offset is out of range or inside a character.

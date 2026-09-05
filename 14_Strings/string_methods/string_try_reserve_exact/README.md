@@ -1,5 +1,7 @@
 # `String::try_reserve_exact`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`reserve_exact`](../string_reserve_exact/README.md) returning `Result` — no round-up, and no abort on failure.

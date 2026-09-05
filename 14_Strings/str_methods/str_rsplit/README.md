@@ -1,5 +1,7 @@
 # `str::rsplit`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`split`](../str_split/README.md) from the right — the same pieces, yielded last-to-first.

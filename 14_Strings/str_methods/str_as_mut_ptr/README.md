@@ -1,5 +1,7 @@
 # `str::as_mut_ptr`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** The raw address of the first byte as `*mut u8`, from a `&mut str` — the writable counterpart of [`as_ptr`](../str_as_ptr/README.md).

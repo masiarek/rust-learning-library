@@ -1,5 +1,7 @@
 # `Vec::clear`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Drop every element, keep the buffer.

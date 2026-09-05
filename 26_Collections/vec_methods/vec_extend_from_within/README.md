@@ -1,5 +1,7 @@
 # `Vec::extend_from_within`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Clone a range of this vector onto its own end.

@@ -1,5 +1,7 @@
 # `String::from_utf16_lossy`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`from_utf16`](../string_from_utf16/README.md) that cannot fail — unpaired surrogates become `U+FFFD`.

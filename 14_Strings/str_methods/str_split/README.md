@@ -1,5 +1,7 @@
 # `str::split`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** An iterator over the pieces **between** the matches — *n* matches always yield *n+1* pieces, which is where every surprising empty string comes from.

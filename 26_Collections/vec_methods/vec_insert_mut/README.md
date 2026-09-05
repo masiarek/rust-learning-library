@@ -1,5 +1,7 @@
 # `Vec::insert_mut`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`insert`](../vec_insert/README.md), returning a `&mut` to the element it just placed.

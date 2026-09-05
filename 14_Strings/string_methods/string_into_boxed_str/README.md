@@ -1,5 +1,7 @@
 # `String::into_boxed_str`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Consumes the `String` and returns a `Box<str>` — shrinks to fit and drops the capacity field, saving eight bytes per value.

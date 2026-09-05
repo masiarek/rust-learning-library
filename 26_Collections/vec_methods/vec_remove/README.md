@@ -1,5 +1,7 @@
 # `Vec::remove`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Take the element at `index` out, shifting everything after it left.

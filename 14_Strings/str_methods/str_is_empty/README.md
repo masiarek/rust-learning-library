@@ -1,5 +1,7 @@
 # `str::is_empty`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** `true` when the string holds no bytes — the same test as `len() == 0`, written so the reader does not have to work out which comparison you meant.

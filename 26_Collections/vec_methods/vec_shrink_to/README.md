@@ -1,5 +1,7 @@
 # `Vec::shrink_to`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Shrink the buffer, but never below the floor you name.

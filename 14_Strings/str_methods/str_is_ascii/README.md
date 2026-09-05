@@ -1,5 +1,7 @@
 # `str::is_ascii`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** `true` if every byte is below 128 — the precondition the whole `ascii` family is asking about.

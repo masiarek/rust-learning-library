@@ -1,5 +1,7 @@
 # `slice::reverse`
 
+[`slice` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Reverse the order of the elements, in place.

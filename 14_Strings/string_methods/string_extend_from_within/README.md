@@ -1,5 +1,7 @@
 # `String::extend_from_within`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Appends a copy of one of the string's **own** ranges to its end — self-append without a temporary.

@@ -1,5 +1,7 @@
 # `str::to_ascii_uppercase`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** A new `String` with `a`–`z` uppercased and everything else untouched — length-preserving, unlike [`to_uppercase`](../str_to_uppercase/README.md).

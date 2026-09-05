@@ -1,5 +1,7 @@
 # `str::into_string`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Turns a `Box<str>` into a `String` without copying — the same allocation, given back its spare capacity field.

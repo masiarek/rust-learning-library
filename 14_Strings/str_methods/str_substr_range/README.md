@@ -1,5 +1,7 @@
 # `str::substr_range`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** The byte range a sub-slice occupies **within this string**, or `None` if it is not part of it — an identity question, not a search.

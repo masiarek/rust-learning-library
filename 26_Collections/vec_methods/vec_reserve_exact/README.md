@@ -1,5 +1,7 @@
 # `Vec::reserve_exact`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Reserve without the speculative slack — `len + additional`, and no more.

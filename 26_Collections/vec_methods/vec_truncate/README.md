@@ -1,5 +1,7 @@
 # `Vec::truncate`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Keep the first `len` elements and drop the rest.

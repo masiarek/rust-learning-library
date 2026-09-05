@@ -1,5 +1,7 @@
 # `String::leak`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Consumes the `String` and returns a `&'static mut str` — the memory is **never freed**, and that is the point.

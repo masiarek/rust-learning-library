@@ -1,5 +1,7 @@
 # `str::split_terminator`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`split`](../str_split/README.md) with one change: a **trailing** empty piece is dropped, so text that ends in its own separator counts correctly.

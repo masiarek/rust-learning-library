@@ -1,5 +1,7 @@
 # `slice::last`
 
+[`slice` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** The last element as an `Option<&T>` — the safe spelling of `v[v.len() - 1]`.

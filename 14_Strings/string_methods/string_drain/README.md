@@ -1,5 +1,7 @@
 # `String::drain`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Removes a byte range and **yields the removed characters** as an iterator — the removal you can read on the way out.

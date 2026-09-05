@@ -1,5 +1,7 @@
 # `str::split_whitespace`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Splits on **runs** of Unicode whitespace and drops the empties — the editorial split, for prose and hand-typed input.

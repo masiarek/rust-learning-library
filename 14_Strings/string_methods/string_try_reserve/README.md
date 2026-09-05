@@ -1,5 +1,7 @@
 # `String::try_reserve`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`reserve`](../string_reserve/README.md) that returns `Result` instead of aborting the process when the allocation cannot be made.

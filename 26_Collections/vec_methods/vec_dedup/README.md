@@ -1,5 +1,7 @@
 # `Vec::dedup`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Collapse runs of **consecutive** equal elements to one.

@@ -1,5 +1,7 @@
 # `String::as_mut_vec`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** The underlying `Vec<u8>`, mutably — `unsafe`, because you can resize it and must leave valid UTF-8 behind.

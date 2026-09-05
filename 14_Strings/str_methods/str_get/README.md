@@ -1,5 +1,7 @@
 # `str::get`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Slicing that returns `Option` instead of panicking — `s.get(0..5)` where `&s[0..5]` would bring the program down.

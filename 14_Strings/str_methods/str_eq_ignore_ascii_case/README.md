@@ -1,5 +1,7 @@
 # `str::eq_ignore_ascii_case`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Case-insensitive comparison over `A`–`Z` only, allocating nothing — the right way to compare two ASCII tokens.

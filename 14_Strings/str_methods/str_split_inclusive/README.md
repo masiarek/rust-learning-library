@@ -1,5 +1,7 @@
 # `str::split_inclusive`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Splits after each match, **keeping the separator** on the end of the piece it terminated.

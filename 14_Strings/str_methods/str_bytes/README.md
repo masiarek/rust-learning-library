@@ -1,5 +1,7 @@
 # `str::bytes`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** An iterator over the UTF-8 bytes, yielding `u8` — the streaming form of [`as_bytes`](../str_as_bytes/README.md).

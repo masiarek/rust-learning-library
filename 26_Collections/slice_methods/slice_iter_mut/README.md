@@ -1,5 +1,7 @@
 # `slice::iter_mut`
 
+[`slice` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** An iterator over `&mut T` — edit every element in place.

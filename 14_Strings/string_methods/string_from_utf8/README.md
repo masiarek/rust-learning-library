@@ -1,5 +1,7 @@
 # `String::from_utf8`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Validates a `Vec<u8>` and takes ownership of it as a `String` — no copy, and the failed `Vec` is handed back in the error.

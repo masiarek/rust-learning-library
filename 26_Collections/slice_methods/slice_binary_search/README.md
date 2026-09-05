@@ -1,5 +1,7 @@
 # `slice::binary_search`
 
+[`slice` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Find a value in a **sorted** slice in O(log n) — and, when it is absent, learn where it would go.

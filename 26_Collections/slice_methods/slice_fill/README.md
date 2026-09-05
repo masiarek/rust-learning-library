@@ -1,5 +1,7 @@
 # `slice::fill`
 
+[`slice` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Set every element to a clone of one value.

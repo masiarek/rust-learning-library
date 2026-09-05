@@ -1,5 +1,7 @@
 # `String::into_raw_parts`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Consumes the `String` into `(pointer, length, capacity)` and **stops running its destructor** — the memory is now yours to account for.

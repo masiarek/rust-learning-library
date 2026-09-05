@@ -1,5 +1,7 @@
 # `str::split_at_checked`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`split_at`](../str_split_at/README.md) returning `Option` — `None` for an offset that is out of range **or** inside a character.

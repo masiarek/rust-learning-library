@@ -1,5 +1,7 @@
 # `str::encode_utf16`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** An iterator of `u16` code units in UTF-16 — the encoding Windows APIs, Java and JavaScript use internally.

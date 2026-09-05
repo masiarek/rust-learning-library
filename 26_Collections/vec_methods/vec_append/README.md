@@ -1,5 +1,7 @@
 # `Vec::append`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Move every element of another vector into this one, leaving it empty.
@@ -18,7 +20,7 @@ It takes `&mut Self`, so both vectors must be reachable and distinct: `v.append(
 
 Panics if the new capacity would exceed `isize::MAX` bytes.
 
-**"Moved, not cloned" does not mean nothing is copied.** `append` reserves in the *destination* and does one [`ptr::copy_nonoverlapping`](https://doc.rust-lang.org/std/ptr/fn.copy_nonoverlapping.html) of the whole run, then sets the source's length to zero. No `Clone::clone` runs and no per-element allocation happens — but the bytes do move, the destination may reallocate to make room, and the source's buffer is never adopted. That last part is visible in the example below: the source still reports the capacity it had.
+**"Moved, not cloned" does not mean nothing is copied.** `append` reserves in the *destination* and does one [`ptr::copy_nonoverlapping` ↗](https://doc.rust-lang.org/std/ptr/fn.copy_nonoverlapping.html) of the whole run, then sets the source's length to zero. No `Clone::clone` runs and no per-element allocation happens — but the bytes do move, the destination may reallocate to make room, and the source's buffer is never adopted. That last part is visible in the example below: the source still reports the capacity it had.
 
 If you want the source *consumed* rather than emptied, `v.extend(other)` takes it by value. If you want the source untouched, [`extend_from_slice`](../vec_extend_from_slice/README.md) clones.
 

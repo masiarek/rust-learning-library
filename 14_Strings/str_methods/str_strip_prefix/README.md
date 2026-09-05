@@ -1,5 +1,7 @@
 # `str::strip_prefix`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Removes the prefix **once** and returns `Some(rest)`, or `None` if it was not there — test and remove in a single step.

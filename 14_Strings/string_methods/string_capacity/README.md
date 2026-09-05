@@ -1,5 +1,7 @@
 # `String::capacity`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** How many **bytes** the buffer can hold before it must reallocate — always at least `len()`, and unrelated to the contents.

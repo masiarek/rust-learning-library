@@ -1,5 +1,7 @@
 # `slice::iter`
 
+[`slice` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** An iterator over `&T` — what `for x in &v` calls, and the door to every adapter.

@@ -1,5 +1,7 @@
 # `slice::last_mut`
 
+[`slice` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** A mutable reference to the last element, or `None` on an empty slice.

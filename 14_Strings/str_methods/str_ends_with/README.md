@@ -1,5 +1,7 @@
 # `str::ends_with`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** `true` if the string ends with the pattern — the mirror of [`starts_with`](../str_starts_with/README.md), searching from the back.

@@ -1,5 +1,7 @@
 # `str::get_mut`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`get`](../str_get/README.md) returning `Option<&mut str>` — a checked mutable sub-slice.

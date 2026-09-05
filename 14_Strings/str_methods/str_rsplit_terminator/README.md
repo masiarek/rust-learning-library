@@ -1,5 +1,7 @@
 # `str::rsplit_terminator`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`split_terminator`](../str_split_terminator/README.md) from the right — still drops the *trailing* empty piece, and yields what is left back to front.

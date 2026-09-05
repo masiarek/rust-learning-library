@@ -1,5 +1,7 @@
 # `str::repeat`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** A new `String` holding `n` copies concatenated — `"ab".repeat(3)` is `"ababab"`.

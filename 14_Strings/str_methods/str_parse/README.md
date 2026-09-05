@@ -1,5 +1,7 @@
 # `str::parse`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Parses the string into any type implementing `FromStr`, returning `Result` — and the target type is chosen by **inference**, not by the method name.

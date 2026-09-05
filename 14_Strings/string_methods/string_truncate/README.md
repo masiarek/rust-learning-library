@@ -1,5 +1,7 @@
 # `String::truncate`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Shortens the string to `new_len` bytes, dropping everything after — **panics** if that offset is inside a character.

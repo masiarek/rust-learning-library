@@ -1,5 +1,7 @@
 # `String::with_capacity`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** An empty `String` with room for at least `n` bytes reserved up front — one allocation instead of a doubling sequence.

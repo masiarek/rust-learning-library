@@ -1,5 +1,7 @@
 # `slice::sort_by`
 
+[`slice` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Sort in place by a comparison closure you write — descending order, floats, or several keys at once.

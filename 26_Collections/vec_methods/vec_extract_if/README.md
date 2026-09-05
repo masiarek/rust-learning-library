@@ -1,5 +1,7 @@
 # `Vec::extract_if`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`retain`](../vec_retain/README.md)'s mirror image: it yields the elements it removes.

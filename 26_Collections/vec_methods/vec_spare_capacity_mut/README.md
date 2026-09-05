@@ -1,5 +1,7 @@
 # `Vec::spare_capacity_mut`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** The gap between length and capacity, as writable uninitialised memory.

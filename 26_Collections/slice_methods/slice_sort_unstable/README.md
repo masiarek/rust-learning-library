@@ -1,5 +1,7 @@
 # `slice::sort_unstable`
 
+[`slice` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Sort in place, ascending, without promising that equal elements keep their order — and without allocating.

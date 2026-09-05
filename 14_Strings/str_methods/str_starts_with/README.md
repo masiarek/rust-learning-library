@@ -1,5 +1,7 @@
 # `str::starts_with`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** `true` if the string begins with the pattern — anchored, so it costs the length of the prefix rather than a scan.

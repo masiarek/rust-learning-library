@@ -1,5 +1,7 @@
 # `str::is_char_boundary`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Whether a byte offset is a legal slice endpoint — `true` at the start of a character, at `len()`, and nowhere else.

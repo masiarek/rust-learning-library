@@ -1,5 +1,7 @@
 # `str::matches`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** An iterator over the matched substrings themselves — the pieces the pattern hit, not the gaps between them.

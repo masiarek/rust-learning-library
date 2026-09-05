@@ -1,5 +1,7 @@
 # `str::rmatches`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`matches`](../str_matches/README.md) from the right — the same matches, yielded last-to-first.

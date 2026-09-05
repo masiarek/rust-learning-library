@@ -1,5 +1,7 @@
 # `slice::join`
 
+[`slice` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Flatten a slice of slices or strings into one, with a separator between the pieces.

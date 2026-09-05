@@ -1,5 +1,7 @@
 # `str::char_indices`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Characters paired with the **byte offset** each one starts at — the iterator to use when the answer is going to be a slice endpoint.

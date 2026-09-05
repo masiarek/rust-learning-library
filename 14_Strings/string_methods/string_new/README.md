@@ -1,5 +1,7 @@
 # `String::new`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** An empty `String` that has **not allocated** — capacity 0, no heap buffer until the first byte goes in.

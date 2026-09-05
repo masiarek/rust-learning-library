@@ -1,5 +1,7 @@
 # `String::clear`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Empties the string but **keeps the buffer** — `len()` becomes 0, `capacity()` does not change.

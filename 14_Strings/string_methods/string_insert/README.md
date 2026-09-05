@@ -1,5 +1,7 @@
 # `String::insert`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Inserts one `char` at a byte offset, shifting everything after it — **O(n)**, and it panics off a character boundary.

@@ -1,5 +1,7 @@
 # `str::split_at`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Cuts the string in two at a byte offset, returning both halves — and **panics** if the offset is not a character boundary.

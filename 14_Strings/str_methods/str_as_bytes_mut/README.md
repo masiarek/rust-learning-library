@@ -1,5 +1,7 @@
 # `str::as_bytes_mut`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** The UTF-8 bytes as a writable `&mut [u8]` — `unsafe`, because you are being handed the bytes that the type's validity promise is made about.

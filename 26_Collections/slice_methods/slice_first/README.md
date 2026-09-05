@@ -1,5 +1,7 @@
 # `slice::first`
 
+[`slice` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** The first element as an `Option<&T>` — `None` when the slice is empty, where `v[0]` would panic.

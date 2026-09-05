@@ -1,5 +1,7 @@
 # `Vec::splice`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Replace a range with an iterator, and receive what was removed.

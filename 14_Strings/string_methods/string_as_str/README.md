@@ -1,5 +1,7 @@
 # `String::as_str`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Borrows the whole `String` as a `&str` — usually unnecessary, because deref coercion does it for you.

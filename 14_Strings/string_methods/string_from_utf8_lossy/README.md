@@ -1,5 +1,7 @@
 # `String::from_utf8_lossy`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Decodes bytes, replacing every invalid sequence with `U+FFFD` (`�`) — returns a `Cow`, so valid input costs nothing.

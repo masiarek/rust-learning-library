@@ -1,5 +1,7 @@
 # `slice::swap`
 
+[`slice` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Exchange the elements at two indices.

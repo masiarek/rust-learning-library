@@ -1,5 +1,7 @@
 # `str::rmatch_indices`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** [`match_indices`](../str_match_indices/README.md) from the right — offsets still counted from the front, items yielded back to front.

@@ -1,5 +1,7 @@
 # `str::ceil_char_boundary`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** The nearest character boundary at or **above** a byte offset — rounds up, so the result can exceed the offset you asked for.

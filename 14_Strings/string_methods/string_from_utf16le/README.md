@@ -1,5 +1,7 @@
 # `String::from_utf16le`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Decodes **little-endian** UTF-16 from a `&[u8]` — bytes, not `u16`s, so the endianness is stated rather than assumed.

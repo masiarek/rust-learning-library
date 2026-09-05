@@ -1,5 +1,7 @@
 # `str::to_ascii_lowercase`
 
+[`str` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** A new `String` with `A`–`Z` lowercased and **every other byte left alone** — length-preserving, and blind to accents.

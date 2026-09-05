@@ -1,5 +1,7 @@
 # `String::push_str`
 
+[`String` methods](../README.md) · [Strings](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Appends a `&str` to the end, growing the buffer as needed — the workhorse for building text.
