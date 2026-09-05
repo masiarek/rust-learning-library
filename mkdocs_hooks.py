@@ -186,6 +186,10 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...and the slice methods it reaches through Deref, directly after it:
         # a reader who did not find `sort` on the Vec list is sent here.
         "slice_methods",
+        # ...then the other growable sequence, read once `Vec` is second nature:
+        # it is a `Vec` plus one number, and the page is about what that number
+        # buys at the front and what it costs everywhere a slice was expected.
+        "the_vecdeque",
         "the_hashmap",
         "the_hashset",
         # ...then the sorted pair, read after the hash ones because the page is
@@ -857,6 +861,7 @@ LABELS = {
     "break_and_continue": "`break` and `continue`",
     # 26_Collections — the type names read as code.
     "the_vec": "`Vec`",
+    "the_vecdeque": "`VecDeque`",
     "vec_of_vecs": "Grids and nested `Vec`s",
     "the_hashmap": "`HashMap`",
     "the_hashset": "`HashSet`",

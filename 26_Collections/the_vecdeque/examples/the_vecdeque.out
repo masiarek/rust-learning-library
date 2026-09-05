@@ -1,0 +1,67 @@
+1. The default usage: push_back to add, pop_front to remove
+   run compile  still queued: ["link", "test", "package"]
+   run link     still queued: ["test", "package"]
+   run test     still queued: ["package"]
+   run package  still queued: []
+   Debug prints front to back, exactly like a Vec, and so does iter().
+   Nothing on the outside of the type shows that it is a ring.
+
+2. Four numbers on the stack, not three
+   Vec<u32>            3 words   ptr, len, capacity
+   VecDeque<u32>       4 words   head, len, ptr, capacity
+   VecDeque<[u8; 999]> 4 words   same four — the elements are never in it
+   `head` is the physical slot the front element sits in. That one extra
+   number is the whole difference, and it buys an O(1) pop_front.
+
+3. The elements are allowed to wrap, and as_slices shows it
+   push_back a, b, c        ['a', 'b', 'c']  as_slices (['a', 'b', 'c'], [])
+   pop_front, push_back d,e ['b', 'c', 'd', 'e']  as_slices (['b', 'c', 'd'], ['e'])
+   capacity is still 4, and nothing was copied or reallocated.
+
+      physical slot    0      1      2      3
+                      'e'    'b'    'c'    'd'
+                               ^ head = 1, len = 4
+      logical order     b      c      d      e
+
+   The contents are in TWO pieces, and as_slices hands you both of them:
+   (['b', 'c', 'd'], ['e']). Reading only the first is the bug this page is about.
+
+   One more pop_front       ['c', 'd', 'e']       as_slices (['c', 'd'], ['e'])
+
+      physical slot    0      1      2      3
+                      'e'           'c'    'd'
+                                      ^ head = 2, len = 3
+      logical order     c      d      e
+
+   Slot 1 is free now, and the contents still wrap around it: the
+   elements can be non-contiguous AND have a gap in the middle. Neither
+   the Debug output nor any index you write ever shows that.
+
+4. Indexing is logical, never physical
+   ring[0] = 'c'  <- the front, which physically sits in slot 2
+   ring[2] = 'e'  <- the back, which physically sits in slot 0
+   front Some('c')  back Some('e')  get(9) None
+   contains(&'e') = true, and iter() walks c, d, e in that order.
+
+5. make_contiguous rotates the ring and hands back a real slice
+   make_contiguous() -> ['c', 'd', 'e']   the ring rotated, one piece now
+   ...and slice methods apply to it: sort_by descending -> ['e', 'd', 'c']
+   as_slices is now (['e', 'd', 'c'], []) — the second piece is empty.
+   It costs O(n) and needs &mut, so it is not a free `as_slice()`.
+
+6. Growth is the same amortised doubling a Vec uses
+   cap 0 -> 4 -> 4 -> 4 -> 4 -> 8 -> 8 -> 8 -> 8 -> 16
+   with_capacity(9).capacity() = 9  <- exact, not rounded up
+   Before Rust 1.67 that answer was 15: the buffer was rounded up to a
+   power of two (16) and one slot was always left empty, so that head ==
+   tail could mean "empty". Material written before 2023 describes that
+   layout, and it is gone.
+
+7. Vec and VecDeque convert into each other
+   Vec -> VecDeque   [1, 2, 3, 4]   O(1), guaranteed, no reallocation
+   VecDeque -> Vec   [1, 2, 3, 4]   never reallocates, but rotates first if wrapped
+   a wrapped one     ['b', 'c', 'd', 'e'] in slots (['b', 'c', 'd'], ['e'])
+                     -> ['b', 'c', 'd', 'e']   the O(n) rotation, done for you
+   A VecDeque compares equal to a Vec and to an array of the same
+   contents, so a test never has to convert one to assert on it:
+   d == vec![1, 2, 3] is true, d == [1, 2, 3] is true

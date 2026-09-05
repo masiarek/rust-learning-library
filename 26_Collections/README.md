@@ -13,6 +13,7 @@ Two of them are built into the language and have no `use` line: the tuple and th
 | [What a `Vec` guarantees](vec_guarantees/README.md) | 301 | The promises std makes about the representation itself — never null, never inline, capacity exact to the element — and the three it pointedly does not make |
 | [Grids and nested `Vec`s](vec_of_vecs/README.md) | 201 | One allocation per row, rows that are clones rather than aliases, and the `*` that `iter_mut` needs |
 | [A `Vec` of arrays](vec_of_arrays/README.md) | 201 | `Vec<[T; N]>`: rows of a fixed width in one block, `Copy` rather than moved, and a wrong-length row the compiler rejects |
+| [`VecDeque`](the_vecdeque/README.md) | 201 | The queue: a fourth number, `head`, makes both ends O(1) — and the ring it buys is not a slice, so `as_slices().0` is only ever a prefix of your data |
 | [`HashMap`](the_hashmap/README.md) | 101 → 201 | `entry` is the method the counting loop wants, and the iteration order is different every run |
 | [`HashSet`](the_hashset/README.md) | 101 → 201 | Membership, four set operations, and the `bool` that `insert` hands back |
 | [`BTreeMap` and `BTreeSet`](sorted_collections/README.md) | 101 → 201 | The sorted pair: collecting into one *is* the sort, `range` asks what a hash map cannot, and it orders by the key when what you wanted sorted was the value |
@@ -31,6 +32,7 @@ Two of them are built into the language and have no `use` line: the tuple and th
 | a grid, rows all the same length | a **flat `Vec`** and a width — see [grids](vec_of_vecs/README.md) |
 | a growing list of rows that are all the same fixed width | a **[`Vec<[T; N]>`](vec_of_arrays/README.md)** |
 | a grid whose rows differ in length | a **`Vec<Vec<T>>`** |
+| a queue, or a window that slides — both ends busy | a **[`VecDeque`](the_vecdeque/README.md)** |
 | a key that finds a value | a **`HashMap`** — or a **[`BTreeMap`](sorted_collections/README.md)** if you need it sorted |
 | "have I seen this before?" | a **`HashSet`** — or a **[`BTreeSet`](sorted_collections/README.md)** to get the answers back in order |
 | one value too big for the stack, or a type that contains itself | a **`Box`** |
@@ -41,7 +43,7 @@ Once you have picked one, the **[`Vec` method reference](vec_methods/README.md)*
 
 ## What is deliberately not here
 
-`Rc` and `Arc` are boxes with a reference count, and they belong to the ownership story rather than this one: [`Rc`](../18_Ownership/reference_counting/README.md), [`Arc`](../18_Ownership/sharing_across_threads/README.md). `VecDeque`, `BinaryHeap` and `LinkedList` are real and rarely the answer — the [`std::collections` ↗](https://doc.rust-lang.org/std/collections/index.html) module page opens with a decision table that covers them in about a screen, and it is better than anything this library would add.
+`Rc` and `Arc` are boxes with a reference count, and they belong to the ownership story rather than this one: [`Rc`](../18_Ownership/reference_counting/README.md), [`Arc`](../18_Ownership/sharing_across_threads/README.md). `BinaryHeap` and `LinkedList` are real and rarely the answer — the [`std::collections` ↗](https://doc.rust-lang.org/std/collections/index.html) module page opens with a decision table that covers them in about a screen, and it is better than anything this library would add.
 
 ## Where it goes next
 

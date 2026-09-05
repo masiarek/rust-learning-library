@@ -18,7 +18,7 @@ Panics if `index >= len()`. There is no stable non-panicking sibling (`try_remov
 
 **Removing several elements by index is a trap**: the later indices move as soon as the first one goes. Iterate back to front, or — better — use [`retain`](../vec_retain/README.md), which is a single pass and cannot get the arithmetic wrong.
 
-`remove(0)` in a loop is quadratic. If you are consuming from the front, [`drain`](../vec_drain/README.md), [`VecDeque` ↗](https://doc.rust-lang.org/std/collections/struct.VecDeque.html) or reversing once are all better answers.
+`remove(0)` in a loop is quadratic. If you are consuming from the front, [`drain`](../vec_drain/README.md), [`VecDeque`](../../the_vecdeque/README.md) or reversing once are all better answers.
 
 ## Example
 
