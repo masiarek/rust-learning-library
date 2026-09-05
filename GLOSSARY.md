@@ -468,6 +468,8 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Amortised growth** — `Vec` doubles its capacity when it fills, so *n* pushes cost O(*n*) in total rather than O(*n*²), at the price of copying everything already stored each time it grows. `with_capacity` and `collect` over a known-length iterator skip the copying entirely. The exact sequence is std's choice, not a language guarantee. → [`Vec`](26_Collections/the_vec/README.md)
 
+**Ring buffer** — One heap block plus a `head` index saying which slot the front element is in, which is how a `VecDeque` makes both ends O(1): removing the front bumps `head` instead of shifting everything after it. The contents may therefore wrap past the end of the buffer, and leave a gap in the middle — so they are not one contiguous run, `as_slices` hands back **two** pieces rather than one, and `make_contiguous` is an O(*n*) rotation that buys a real slice. → [`VecDeque`](26_Collections/the_vecdeque/README.md)
+
 **`entry` API** — `*map.entry(k).or_insert(0) += 1`: one hash lookup that inserts a default if the key is absent and hands back a `&mut` to the value either way. The counting loop written any other way costs two or three lookups, and written with `insert` is silently wrong. → [`HashMap`](26_Collections/the_hashmap/README.md)
 
 **Hash randomisation** — std's `HashMap` seeds its hasher per process, so two runs iterate in different orders. A defence against hash-flooding, and the reason anything printed or compared must be sorted first — or come from a [`BTreeMap`](26_Collections/sorted_collections/README.md), which is ordered by key by construction. → [`HashMap`](26_Collections/the_hashmap/README.md)

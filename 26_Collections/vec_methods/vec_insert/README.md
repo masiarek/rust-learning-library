@@ -14,7 +14,7 @@ Stable since **1.0.0**.
 
 O(n − index), not O(1). Every element from `index` onwards moves one place. `insert(0, x)` is therefore the expensive one: it shifts the entire vector.
 
-**Building a list front-first with `insert(0, …)` is quadratic.** Push and [`reverse` ↗](https://doc.rust-lang.org/std/primitive.slice.html#method.reverse) once instead, or use a [`VecDeque` ↗](https://doc.rust-lang.org/std/collections/struct.VecDeque.html) if both ends are hot.
+**Building a list front-first with `insert(0, …)` is quadratic.** Push and [`reverse` ↗](https://doc.rust-lang.org/std/primitive.slice.html#method.reverse) once instead, or use a [`VecDeque`](../../the_vecdeque/README.md) if both ends are hot.
 
 `index == len()` is legal and appends — that is the one past-the-end index that does not panic. Anything above it panics.
 

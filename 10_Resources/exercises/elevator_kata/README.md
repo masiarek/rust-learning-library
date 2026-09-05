@@ -81,11 +81,11 @@ The project is far too big to be [a kata in this library](../../../KATAS.md) —
 | A passenger-id counter that must not live inside a passenger | [`const` and `static`](../../../27_Modules/const_and_static/README.md) |
 | `next_stop() -> Option<u32>` | [Partial functions](../../../17_Option_and_Result/partial_functions/README.md) |
 | One file per concern, and what `mod` actually declares | [One module per file](../../../27_Modules/one_module_per_file/README.md) |
+| A floor queue: `pop_front`, where `Vec::remove(0)` is O(*n*) | [`VecDeque`](../../../26_Collections/the_vecdeque/README.md) — and the ring buffer that makes it O(1) |
+| *"the next stop above me"* in one call, ordered and deduplicating | [`BTreeMap` and `BTreeSet`](../../../26_Collections/sorted_collections/README.md) — `range(current..)` is the method |
 
-And three pages this library does not have yet, all of which the elevator motivates better than anything else would:
+And one page this library does not have yet, which the elevator motivates better than anything else would:
 
-- **[`VecDeque` ↗](https://doc.rust-lang.org/std/collections/struct.VecDeque.html)** — a floor queue is `pop_front`, and [`Vec`](../../../26_Collections/the_vec/README.md)`::remove(0)` is O(n). [Collections](../../../26_Collections/README.md) has no deque page.
-- **[`BTreeSet` ↗](https://doc.rust-lang.org/std/collections/struct.BTreeSet.html)** — ordered, deduplicating, and `range(current..)` answers *"the next stop above me"* in one call. It is the elevator's core data structure.
 - **Snapshot testing** — [Testing](../../../28_Testing/README.md) covers assertions, placement and doctests, and nothing on approving a rendered blob. Bache's kata is built around exactly that, and the floor grid is the artefact you approve.
 
 ## The shape on disk
