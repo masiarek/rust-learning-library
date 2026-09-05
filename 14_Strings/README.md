@@ -20,6 +20,7 @@ The rest of the section is what follows from the bytes underneath. `len()` count
 | [Walking a `String`](walking_a_string/README.md) | 101 → 201 | Three item types and the split family — splits are the gaps between matches, `char_indices()` is not `chars().enumerate()`, and `split_whitespace()` silently shortens a row |
 | [`&'static str`](static_str/README.md) | 201 | On a literal it is the same type as `&str` — where the annotation starts refusing things, `const` vs `static`, and the three ways a `String` really can yield one |
 | [Six kinds of string](six_kinds_of_string/README.md) | 201 | `OsString`, `CString` and friends are not five more inventions — three promises about the bytes, each owned or borrowed, and narrowing is where a promise gets checked |
+| [`str` is unsized](str_is_unsized/README.md) | 201 | Why you never hold a `str`, only a pointer to one — the size that belongs to the value rather than the type, the fat pointer's second word, `?Sized` as a *relaxation*, and the struct field that makes a whole struct unsized |
 | [Inside a `Split`](inside_a_split/README.md) | 201 → 301 | Why `println!("{:?}", s.split(":"))` prints a struct and not your pieces — the plan read field by field, the pattern that picks the searcher, and the one bool that is `split_terminator` |
 
 ## The method reference
@@ -46,7 +47,7 @@ Strings are the worked example half the ownership pages already use, so the deep
 - [Meet the byte](../19_Numbers/meet_the_byte/README.md) — the unit `len` counts in
 - [`Path` and `PathBuf`](../04_Files/path_and_pathbuf/README.md) — the family's honorary pair, a **stub** for now
 
-[STRINGS.md](../STRINGS.md) is the full map: the same lessons with the question each one answers, plus the eight topics that are still outlines rather than lessons.
+[STRINGS.md](../STRINGS.md) is the full map: the same lessons with the question each one answers, plus the six topics that are still outlines rather than lessons.
 
 [Strings: links, books and videos](resources/README.md) is the reading list — the Book, *Programming Rust* ch. 17, Easy Rust, the essays, and the exercise sets outside this library that map onto these pages.
 

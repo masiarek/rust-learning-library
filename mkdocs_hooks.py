@@ -187,7 +187,7 @@ NAV_ORDER: dict[str, list[str]] = {
         # a reader who did not find `sort` on the Vec list is sent here.
         "slice_methods",
         # ...then the other growable sequence, read once `Vec` is second nature:
-        # it is a `Vec` plus one number, and the page is about what that number
+        # it is `Vec` plus one number, and the page is about what that number
         # buys at the front and what it costs everywhere a slice was expected.
         "the_vecdeque",
         "the_hashmap",
@@ -290,9 +290,6 @@ NAV_ORDER: dict[str, list[str]] = {
         "collect_and_fromiterator",
         # A lookup table rather than a lesson, so it sits after the spine.
         "adapters_by_job",
-        # ...then the one row of that table worth a page: two adapters whose
-        # failure modes are both silent, which is why they get the space.
-        "zip_and_enumerate",
         # ...then the one row of that table worth a page: two adapters whose
         # failure modes are both silent, which is why they get the space.
         "zip_and_enumerate",
@@ -615,6 +612,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # Closes the arc: the other four string types, and the one
         # owned/borrowed pattern all six repeat.
         "six_kinds_of_string",
+        # ...then the mechanism under every page above: the size of a `str`
+        # belongs to the value, so you only ever hold a pointer to one.
+        "str_is_unsized",
         # ...then one deep dive, which needs every page above it: what `split`
         # actually returns before anything consumes it, read field by field.
         "inside_a_split",
@@ -632,7 +632,6 @@ NAV_ORDER: dict[str, list[str]] = {
         "searching_a_string",
         "the_format_language",
         "comparing_strings",
-        "str_is_unsized",
         "string_api_design",
         "when_string_is_too_slow",
         # ...and the outside world: books, essays, the video, and the exercises.
@@ -931,7 +930,6 @@ LABELS = {
     "implementing_iterator": "Implementing `Iterator`",
     "fold_and_reduce": "`fold` and `reduce`",
     "collect_and_fromiterator": "`collect` and `FromIterator`",
-    "zip_and_enumerate": "`zip` and `enumerate`",
     "zip_and_enumerate": "`zip` and `enumerate`",
     "returning_an_iterator": "Returning an iterator",
     "double_ended_and_exact_size": "`DoubleEndedIterator` and `ExactSizeIterator`",
