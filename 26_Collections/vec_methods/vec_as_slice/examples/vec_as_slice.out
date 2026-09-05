@@ -2,6 +2,8 @@
 same buffer: true
 Some(1) Some(1) Some(1)
 6 6 6
+3 3 3
+[3, 2, 1] — sorted and reversed through a slice, without touching the Vec
 15 11
 true true
 empty slice len 0 is_empty true

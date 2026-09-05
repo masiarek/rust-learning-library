@@ -3,6 +3,14 @@
 //!   rustc --edition 2024 arrays_and_slices.rs -o /tmp/aas && /tmp/aas
 
 /// Takes a slice, so it accepts an array of any length, a `Vec`, or part of either.
+/// Takes the mutable half of the same view. It can reorder and overwrite every
+/// element it can see; it can never add or remove one.
+fn zero_the_lowest(scores: &mut [u32]) {
+    if let Some(slot) = scores.iter_mut().min() {
+        *slot = 0;
+    }
+}
+
 fn total(scores: &[u32]) -> u32 {
     scores.iter().sum()
 }
@@ -58,4 +66,22 @@ fn main() {
     println!("   `five` is Copy because u32 is, so `let mut sorted = five` copied it.");
     println!("   windows(2): {:?}", five.windows(2).collect::<Vec<_>>());
     println!("   chunks(2):  {:?}", five.chunks(2).collect::<Vec<_>>());
+
+    println!();
+    println!("6. A slice is not read-only — but its length is fixed");
+    let mut arr = [5u32, 3, 9, 4, 2];
+    let mut v = vec![5u32, 3, 9, 4, 2];
+    zero_the_lowest(&mut arr);
+    zero_the_lowest(&mut v);
+    println!("   zero_the_lowest(&mut [u32]) on an array: {arr:?}");
+    println!("   ...and the same function on a Vec:       {v:?}");
+    println!("   ...and on part of one:");
+    zero_the_lowest(&mut v[..2]);
+    println!("   zero_the_lowest(&mut v[..2])             {v:?}");
+    println!("   &mut [T] is a slice too, so \"slices are read-only\" is wrong:");
+    println!("   sort, reverse, fill and iter_mut all write through one. The");
+    println!("   line is LENGTH, not writing — a slice can change every element");
+    println!("   it can see and can never add or remove one. Which is why a");
+    println!("   function that sorts takes &mut [T] and only a function that");
+    println!("   pushes needs &mut Vec<T>.");
 }

@@ -34,3 +34,15 @@
    `five` is Copy because u32 is, so `let mut sorted = five` copied it.
    windows(2): [[5, 3], [3, 0], [0, 4], [4, 2]]
    chunks(2):  [[5, 3], [0, 4], [2]]
+
+6. A slice is not read-only — but its length is fixed
+   zero_the_lowest(&mut [u32]) on an array: [5, 3, 9, 4, 0]
+   ...and the same function on a Vec:       [5, 3, 9, 4, 0]
+   ...and on part of one:
+   zero_the_lowest(&mut v[..2])             [5, 0, 9, 4, 0]
+   &mut [T] is a slice too, so "slices are read-only" is wrong:
+   sort, reverse, fill and iter_mut all write through one. The
+   line is LENGTH, not writing — a slice can change every element
+   it can see and can never add or remove one. Which is why a
+   function that sorts takes &mut [T] and only a function that
+   pushes needs &mut Vec<T>.

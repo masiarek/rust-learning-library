@@ -1,0 +1,68 @@
+1. Three numbers, and the order of them is not yours to know
+   ptr/len/cap: len 3 cap 3
+   `Vec` is and always will be a (pointer, capacity, length) triplet —
+   no more, no less. The order of the fields is unspecified, and std
+   says outright that the ABI is not stable. Read them with the
+   methods; never assume a layout.
+
+2. The pointer is never null, so Option<Vec<T>> is free
+   size_of::<Option<Vec<u8>>>() == size_of::<Vec<u8>>(): true
+   That is the null-pointer optimization: `None` is spelled with the
+   one bit pattern the pointer promises never to hold, so the wrapper
+   costs nothing.
+
+3. ...but the pointer need not point at an allocation
+   never allocated — new() true vec![] true with_capacity(0) true shrunk-empty true
+   with_capacity(4) did allocate: true
+   The rule is exact: a Vec allocates if and only if
+   size_of::<T>() * capacity() > 0.
+
+4. A zero-sized element never allocates, however many you push
+   pushed 1000 units: still unallocated true, capacity is usize::MAX true
+   Note what this breaks: "capacity() == 0 means it has not
+   allocated" is false here. The size*capacity rule still holds.
+
+5. Nothing is ever stored inline
+   size_of::<Vec<[u8; 4096]>>() == size_of::<Vec<u8>>(): true
+   `Vec` will never do the "small" optimization some C++ string and
+   vector implementations do, where a few elements live in the struct
+   itself. Two reasons std gives: the contents would stop having a
+   stable address when the Vec is merely moved, and every access would
+   pay for a branch. If you want that, it is a crate, not the std type.
+
+6. capacity() is exact, so you can predict every reallocation
+   push #0: len 0 of cap 3  ->  cap 3   (len == cap? false)
+   push #1: len 1 of cap 3  ->  cap 3   (len == cap? false)
+   push #2: len 2 of cap 3  ->  cap 3   (len == cap? false)
+   push #3: len 3 of cap 3  ->  cap 6   (len == cap? true)
+   `push` and `insert` reallocate when len == capacity and never
+   otherwise. The reported capacity is completely accurate and can be
+   relied on — which is what makes `with_capacity` a promise rather
+   than a hint. Bulk insertions are the carve-out: std reserves the
+   right to reallocate in those even when it need not.
+
+7. It never shrinks itself
+   after clear(): len 0 cap 64
+   after shrink_to_fit(): len 0 cap 0
+   Emptying a Vec and refilling it to the same length should cost the
+   allocator nothing — which is the behaviour you want in a loop, and
+   the reason handing memory back has to be asked for.
+
+8. When len == capacity, Box<[T]> is free in both directions
+   vec![1,2,3]: len 3 cap 3 — equal, so into_boxed_slice()
+   neither reallocates nor moves the elements. Back again: len 3 cap 3
+   with slack (len 3 of cap 10), the conversion has to shrink first,
+   and the spare capacity is gone for good: len 3 cap 3
+
+9. The one thing you may do to the spare capacity
+   wrote into the excess capacity, then set_len: "abcd"
+
+10. Three things that are NOT promises
+   The growth factor. Doubling is this std's current choice; the only
+   promise is amortised O(1) push.
+   The drop order — today it is front to back: 1 2 3 
+   ...but std says the order has changed before and may change again.
+   And erasure. Removed elements are neither overwritten nor preserved;
+   the freed buffer may be handed to the next allocation as it stands.
+   Zeroing it yourself is not reliable either — the optimizer is free to
+   delete a write nothing reads. Use a crate built for the job.

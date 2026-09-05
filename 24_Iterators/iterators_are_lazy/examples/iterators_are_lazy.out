@@ -41,13 +41,3 @@
    expensive first:   1 kept, expensive test ran 6 times
    same answer, different amount of work. Order the chain so the
    cheapest, most selective test runs first.
-
-7. Observing an iterator SPENDS it
-   IntoIter(["a", "b"])                <- Debug on the iterator: free, takes nothing
-   let first = it.next();       first = Some("a")
-   println!("{:?}", it.next())  prints Some("b")
-   println!("{:?}", it.next())  prints None
-   first is STILL Some("a"): a stored value, not a repeated call.
-   But assert_eq!(it.next(), Some("b")) would panic here — left None,
-   right Some("b") — because the two prints above already took both.
-   Printing an iterator is free; printing what next() returns is not.

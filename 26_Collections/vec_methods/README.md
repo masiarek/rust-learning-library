@@ -155,6 +155,7 @@ Five methods where the compiler stops helping. Each page says what the safe alte
 ## See also
 
 - [The `Vec`](../the_vec/README.md) — the type itself: three numbers, and how they grow
+- [What a `Vec` guarantees](../vec_guarantees/README.md) — the *Guarantees* section made runnable, including the layout note quoted above
 - [Arrays and slices](../arrays_and_slices/README.md) — where the other half of the methods live
 - [Vec of Vecs](../vec_of_vecs/README.md) — the nested case, and when to flatten it
 - [Collections](../README.md) — the six types a program is made of

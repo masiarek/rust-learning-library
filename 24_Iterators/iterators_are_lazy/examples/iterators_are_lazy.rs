@@ -101,17 +101,4 @@ fn main() {
     println!("   expensive first:   {b} kept, expensive test ran {} times", cheap_first.get());
     println!("   same answer, different amount of work. Order the chain so the");
     println!("   cheapest, most selective test runs first.");
-
-    println!();
-    println!("7. Observing an iterator SPENDS it");
-    let mut it = vec!["a".to_string(), "b".to_string()].into_iter();
-    println!("   {it:?}                <- Debug on the iterator: free, takes nothing");
-    let first = it.next();
-    println!("   let first = it.next();       first = {first:?}");
-    println!("   println!(\"{{:?}}\", it.next())  prints {:?}", it.next());
-    println!("   println!(\"{{:?}}\", it.next())  prints {:?}", it.next());
-    println!("   first is STILL {first:?}: a stored value, not a repeated call.");
-    println!("   But assert_eq!(it.next(), Some(\"b\")) would panic here — left None,");
-    println!("   right Some(\"b\") — because the two prints above already took both.");
-    println!("   Printing an iterator is free; printing what next() returns is not.");
 }

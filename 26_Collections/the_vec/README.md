@@ -318,6 +318,7 @@ fn main() {
 
 ## See also
 
+- [What a `Vec` guarantees](../vec_guarantees/README.md) — the small print under this page: why the pointer is never null but need not point anywhere, why `capacity()` can be relied on to the element, and the three things std refuses to promise
 - [`Vec` methods](../vec_methods/README.md) — one page per method, with a compiled example each: the reference this lesson is the introduction to
 - [Arrays and slices](../arrays_and_slices/README.md) — the type `Vec` derefs to, and where its methods actually live
 - [Grids and nested `Vec`s](../vec_of_vecs/README.md) — what `vec![vec![0; w]; h]` allocates, and the flatter thing most grids should be

@@ -16,6 +16,21 @@ fn main() {
     fn total(xs: &[i32]) -> i32 { xs.iter().sum() }
     println!("{} {} {}", total(&v), total(v.as_slice()), total(&v[..]));
 
+    // A `let` is a coercion site too, and the ANNOTATION is what does the work:
+    // a bare `let u = &v;` gives you a &Vec<i32>, not a slice.
+    let u: &[i32] = &v;
+    let w: &[_] = &v;                 // the element type can be inferred
+    let plain = &v;                   // ...but this one is still a &Vec<i32>
+    println!("{} {} {}", u.len(), w.len(), plain.capacity());
+
+    // "Slices are read-only objects" is a sentence std's own Vec page uses,
+    // and it is true of &[T] rather than of slices. &mut [T] is a slice too:
+    // what a slice cannot change is the LENGTH.
+    let mut m = vec![3, 1, 2];
+    m.as_mut_slice().sort();
+    m[..].reverse();
+    println!("{m:?} — sorted and reversed through a slice, without touching the Vec");
+
     // Which is the argument for taking &[T] rather than &Vec<T> in a signature:
     // the same function then accepts an array and a slice too.
     let arr = [4, 5, 6];

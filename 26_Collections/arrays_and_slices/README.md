@@ -70,6 +70,28 @@ Two of them answer nothing. `sort` and `reverse` write back into the array and r
 
 Writing `fn total(scores: &Vec<u32>)` compiles and looks equivalent. It is not: it refuses arrays, refuses slices, refuses `&v[1..]`, and buys nothing at all, because the only things it can do with a `&Vec` are the things `&[T]` already offers. **Take `&[T]` unless you need to push.** Clippy has a lint for it (`ptr_arg`), which is how most people find out.
 
+## The mutable half, and a sentence to disbelieve
+
+`Vec`'s own documentation says *"A `Vec` can be mutable. On the other hand, slices are read-only objects."* Read that as being about `&[T]` specifically, because as a statement about slices it is false, and believing it costs you the better half of the parameter rule above.
+
+```rust
+fn zero_the_lowest(scores: &mut [u32]) {
+    if let Some(slot) = scores.iter_mut().min() { *slot = 0; }
+}
+```
+
+That takes a slice, and it writes. So do [`sort`](../slice_methods/slice_sort/README.md), [`reverse`](../slice_methods/slice_reverse/README.md), [`fill`](../slice_methods/slice_fill/README.md), [`swap`](../slice_methods/slice_swap/README.md) and [`iter_mut`](../slice_methods/slice_iter_mut/README.md) — half the [slice methods](../slice_methods/README.md) reference, in fact, and `sort` on an array works only because the array coerces to a `&mut [T]` first.
+
+**The line is length, not writing.** A slice can reorder and overwrite every element it can see; it can never add or remove one, because the capacity — the number that would have to change — was left behind with the `Vec`. So the parameter rule has two halves that are the same rule:
+
+| the function | the parameter |
+|---|---|
+| reads | `&[T]` |
+| reorders, overwrites, fills | `&mut [T]` |
+| pushes, removes, resizes | `&mut Vec<T>` |
+
+Only the third one has any business naming `Vec`, and that is the whole of when `&mut Vec<T>` is right.
+
 ## If you are coming from another language
 
 - **Python.** A Python list is Rust's `Vec`, and Rust's array is the thing Python does not have — a fixed-length, stack-allocated block whose length the compiler knows. The slicing syntax is nearly identical and half-open in both, `xs[1:3]` versus `&xs[1..3]`, so the off-by-one instincts transfer. Two real differences: a Python slice **copies**, and a Rust slice **borrows** — `&v[1..]` is a view into `v`, so `v` cannot be mutated while it is alive, which is a compile error rather than the aliasing surprise it would be in Python. And negative indices do not exist: `xs[-1]` is `xs.last()`, which returns `Option` because the list may be empty, and that `Option` is Python's `IndexError` moved from run time to the type.
@@ -121,6 +143,18 @@ Writing `fn total(scores: &Vec<u32>)` compiles and looks equivalent. It is not: 
    `five` is Copy because u32 is, so `let mut sorted = five` copied it.
    windows(2): [[5, 3], [3, 0], [0, 4], [4, 2]]
    chunks(2):  [[5, 3], [0, 4], [2]]
+
+6. A slice is not read-only — but its length is fixed
+   zero_the_lowest(&mut [u32]) on an array: [5, 3, 9, 4, 0]
+   ...and the same function on a Vec:       [5, 3, 9, 4, 0]
+   ...and on part of one:
+   zero_the_lowest(&mut v[..2])             [5, 0, 9, 4, 0]
+   &mut [T] is a slice too, so "slices are read-only" is wrong:
+   sort, reverse, fill and iter_mut all write through one. The
+   line is LENGTH, not writing — a slice can change every element
+   it can see and can never add or remove one. Which is why a
+   function that sorts takes &mut [T] and only a function that
+   pushes needs &mut Vec<T>.
 ```
 <!-- /output -->
 

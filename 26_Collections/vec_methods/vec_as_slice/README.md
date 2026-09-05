@@ -1,5 +1,7 @@
 # `Vec::as_slice`
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** reference · for working programmers
 
 **One line:** Borrow the whole vector as a `&[T]`. Free.
@@ -15,6 +17,10 @@ A slice is the vector's pointer and length with the capacity left behind — no 
 You rarely have to write it, because `Vec<T>` implements `Deref<Target = [T]>` and the compiler inserts the call. `v.first()`, `v.as_slice().first()` and `(*v).first()` are the same call. **That deref is where most of what people call "Vec methods" actually live** — `sort`, `iter`, `contains`, `windows`, `chunks`, `binary_search`, `first`, `last`, `join` are all slice methods.
 
 Where you do write it: to name the type at a coercion site the compiler will not guess, and to pass a `&[T]`.
+
+A `let` is a coercion site as well, and there the **annotation** is what does the work — `let u: &[i32] = &v;` gives a slice, `let u: &[_] = &v;` gives the same with the element type inferred, and a bare `let u = &v;` gives you a `&Vec<i32>` that has coerced nothing. Nothing about the `&` chose it either way.
+
+**One sentence on std's own `Vec` page is worth correcting as you read it:** *"A `Vec` can be mutable. On the other hand, slices are read-only objects."* That holds for `&[T]` and not for slices as such — [`&mut [T]`](../vec_as_mut_slice/README.md) is a slice too, and [`sort`](../../slice_methods/slice_sort/README.md), [`reverse`](../../slice_methods/slice_reverse/README.md), [`fill`](../../slice_methods/slice_fill/README.md) and [`iter_mut`](../../slice_methods/slice_iter_mut/README.md) all write through one. The real line is not read versus write but **length**: a slice can reorder and overwrite every element it can see, and can never add or remove one. That is the whole difference between the two types, and it is why `&mut [T]` is the right parameter for a function that sorts and `&mut Vec<T>` the right one for a function that pushes.
 
 Which is the argument for taking **`&[T]` rather than `&Vec<T>`** in a function signature. A `&Vec<u32>` coerces to `&[u32]` at the call site, so the slice costs the caller nothing and accepts arrays and sub-slices too. [`clippy::ptr_arg` ↗](https://rust-lang.github.io/rust-clippy/master/index.html#ptr_arg) is warn-by-default about exactly this.
 
@@ -44,6 +50,21 @@ fn main() {
     fn total(xs: &[i32]) -> i32 { xs.iter().sum() }
     println!("{} {} {}", total(&v), total(v.as_slice()), total(&v[..]));
 
+    // A `let` is a coercion site too, and the ANNOTATION is what does the work:
+    // a bare `let u = &v;` gives you a &Vec<i32>, not a slice.
+    let u: &[i32] = &v;
+    let w: &[_] = &v;                 // the element type can be inferred
+    let plain = &v;                   // ...but this one is still a &Vec<i32>
+    println!("{} {} {}", u.len(), w.len(), plain.capacity());
+
+    // "Slices are read-only objects" is a sentence std's own Vec page uses,
+    // and it is true of &[T] rather than of slices. &mut [T] is a slice too:
+    // what a slice cannot change is the LENGTH.
+    let mut m = vec![3, 1, 2];
+    m.as_mut_slice().sort();
+    m[..].reverse();
+    println!("{m:?} — sorted and reversed through a slice, without touching the Vec");
+
     // Which is the argument for taking &[T] rather than &Vec<T> in a signature:
     // the same function then accepts an array and a slice too.
     let arr = [4, 5, 6];
@@ -67,6 +88,8 @@ fn main() {
 same buffer: true
 Some(1) Some(1) Some(1)
 6 6 6
+3 3 3
+[3, 2, 1] — sorted and reversed through a slice, without touching the Vec
 15 11
 true true
 empty slice len 0 is_empty true
