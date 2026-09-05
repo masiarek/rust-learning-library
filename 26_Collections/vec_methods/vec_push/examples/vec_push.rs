@@ -1,3 +1,9 @@
+#[derive(Debug)]
+struct Point {
+    x: i32,
+    y: i32,
+}
+
 fn main() {
     let mut v = Vec::new();
     v.push("Ada");
@@ -36,6 +42,29 @@ fn main() {
     names.push(owned);
     // println!("{owned}");   // error[E0382]: borrow of moved value: `owned`
     println!("{names:?}");
+
+    // T is decided by the FIRST push — the element type is inferred backwards
+    // from what goes in. Delete the pushes and the line below is
+    // error[E0282]: type annotations needed for `Vec<_>`.
+    let mut points = Vec::new();
+    points.push(Point { x: 1, y: 2 });
+    points.push(Point { x: 3, y: 4 });
+    let corner = Point { x: 5, y: 6 };
+    points.push(corner);
+    // println!("{corner:?}");  // error[E0382] again — a struct moves like a String
+    for point in &points { println!("point ({}, {})", point.x, point.y); }
+
+    // Pushing a Vec moves three words. The row's heap buffer is not copied and
+    // does not move, which is what makes a Vec<Vec<T>> cheap to build a row at
+    // a time — the allocation happened at `vec![...]`, not at the push.
+    let row = vec![1, 2, 3];
+    let buffer = row.as_ptr();
+    let mut rows: Vec<Vec<i32>> = Vec::new();
+    rows.push(row);
+    rows.push(vec![4, 5, 6]);
+    println!("{} words moved per row; row buffer moved: {}",
+             size_of::<Vec<i32>>() / size_of::<usize>(), buffer != rows[0].as_ptr());
+    for r in &rows { println!("  {r:?}"); }
 
     // Pushing while holding a reference into the Vec is refused at compile
     // time, because a reallocation would leave that reference dangling.

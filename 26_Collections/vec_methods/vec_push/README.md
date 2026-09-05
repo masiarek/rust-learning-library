@@ -12,9 +12,13 @@ pub fn push(&mut self, value: T)
 
 Stable since **1.0.0**. Its `const` form is still unstable.
 
+`T` is whatever the vector holds, and on a `Vec::new()` the **first push is what decides it** — the element type is inferred backwards from the value you put in, so deleting the pushes turns the `let` above them into `error[E0282]: type annotations needed for Vec<_>`. An integer, a `String`, a struct of your own, another `Vec`: same call, no special cases.
+
 Amortised O(1): most pushes are a write into spare capacity, and the occasional one reallocates and copies everything stored so far. Doubling is what makes *n* pushes cost O(*n*) in total rather than O(*n*²).
 
-It takes the value **by value**, so it moves. Pushing a `String` you still want afterwards is the `error[E0382]: borrow of moved value` that everybody meets once; [`extend_from_slice`](../vec_extend_from_slice/README.md) clones instead, and `push(x.clone())` says the cost out loud.
+It takes the value **by value**, so it moves. Pushing a `String` you still want afterwards is the `error[E0382]: borrow of moved value` that everybody meets once; [`extend_from_slice`](../vec_extend_from_slice/README.md) clones instead, and `push(x.clone())` says the cost out loud. A struct of your own moves for the same reason unless it derives `Copy`, which is where most people meet that error the second time.
+
+Pushing a `Vec` into a `Vec` moves **three words** — pointer, length, capacity, 24 bytes on a 64-bit target. The row's heap buffer is not copied and does not move, which is what makes a `Vec<Vec<T>>` cheap to build a row at a time: the allocation happened at the `vec![...]`, not at the push. [Grids and nested `Vec`s](../../vec_of_vecs/README.md) counts them.
 
 **You cannot push while holding a reference into the vector.** The borrow checker refuses it, and the reason is the reallocation above: the buffer may move, which would leave that reference dangling. This is the rule that makes `Vec` safe where a C++ `vector` merely documents the hazard.
 
@@ -28,6 +32,12 @@ Panics if the new capacity would exceed `isize::MAX` bytes.
 *[`vec_push.rs`](examples/vec_push.rs) in full — pasted here by `tools/run_examples.py` from the file CI compiles and runs.*
 
 ```rust
+#[derive(Debug)]
+struct Point {
+    x: i32,
+    y: i32,
+}
+
 fn main() {
     let mut v = Vec::new();
     v.push("Ada");
@@ -67,6 +77,29 @@ fn main() {
     // println!("{owned}");   // error[E0382]: borrow of moved value: `owned`
     println!("{names:?}");
 
+    // T is decided by the FIRST push — the element type is inferred backwards
+    // from what goes in. Delete the pushes and the line below is
+    // error[E0282]: type annotations needed for `Vec<_>`.
+    let mut points = Vec::new();
+    points.push(Point { x: 1, y: 2 });
+    points.push(Point { x: 3, y: 4 });
+    let corner = Point { x: 5, y: 6 };
+    points.push(corner);
+    // println!("{corner:?}");  // error[E0382] again — a struct moves like a String
+    for point in &points { println!("point ({}, {})", point.x, point.y); }
+
+    // Pushing a Vec moves three words. The row's heap buffer is not copied and
+    // does not move, which is what makes a Vec<Vec<T>> cheap to build a row at
+    // a time — the allocation happened at `vec![...]`, not at the push.
+    let row = vec![1, 2, 3];
+    let buffer = row.as_ptr();
+    let mut rows: Vec<Vec<i32>> = Vec::new();
+    rows.push(row);
+    rows.push(vec![4, 5, 6]);
+    println!("{} words moved per row; row buffer moved: {}",
+             size_of::<Vec<i32>>() / size_of::<usize>(), buffer != rows[0].as_ptr());
+    for r in &rows { println!("  {r:?}"); }
+
     // Pushing while holding a reference into the Vec is refused at compile
     // time, because a reallocation would leave that reference dangling.
     let mut v = vec![1, 2, 3];
@@ -90,6 +123,12 @@ reallocations during 17 pushes:
   3 reallocations for 17 pushes
 first capacity: u8 8 u64 4 [u8; 2048] 1
 ["moved"]
+point (1, 2)
+point (3, 4)
+point (5, 6)
+3 words moved per row; row buffer moved: false
+  [1, 2, 3]
+  [4, 5, 6]
 [1, 2, 3, 4] first was 1
 ```
 <!-- /output -->
@@ -101,5 +140,6 @@ first capacity: u8 8 u64 4 [u8; 2048] 1
 - [`Vec::insert`](../vec_insert/README.md) — the same, at a chosen index
 - [`Vec::extend_from_slice`](../vec_extend_from_slice/README.md) — many at once, cloned
 - [`Vec::capacity`](../vec_capacity/README.md) — what the reallocations are doing
+- [Grids and nested `Vec`s](../../vec_of_vecs/README.md) — what a `Vec` of `Vec`s costs once you have built one
 
 [`Vec::push` in the standard library ↗](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.push)

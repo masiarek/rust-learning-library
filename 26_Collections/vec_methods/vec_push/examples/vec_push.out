@@ -7,4 +7,10 @@ reallocations during 17 pushes:
   3 reallocations for 17 pushes
 first capacity: u8 8 u64 4 [u8; 2048] 1
 ["moved"]
+point (1, 2)
+point (3, 4)
+point (5, 6)
+3 words moved per row; row buffer moved: false
+  [1, 2, 3]
+  [4, 5, 6]
 [1, 2, 3, 4] first was 1
