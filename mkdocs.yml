@@ -98,6 +98,10 @@ theme:
 # dependency): sidebar section labels, which MkDocs derives from folder names.
 hooks:
   - mkdocs_hooks.py
+  # ...and one that strips the `,ignore` / `,compile_fail` attribute off a
+  # ```rust fence. superfences does not accept a comma info string and drops
+  # the whole block to literal text; the checker and GitHub both want it.
+  - fence_hooks.py
 
 plugins:
   - search
