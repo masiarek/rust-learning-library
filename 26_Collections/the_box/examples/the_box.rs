@@ -73,7 +73,16 @@ fn main() {
     println!("   named(21) = {}, shifted(21) = {}", named(21), shifted(21));
     println!("   size_of::<Box<dyn Fn(u32) -> u32>>() = {} — pointer to the value",
              size_of::<Box<dyn Fn(u32) -> u32>>());
-    println!("   AND pointer to its vtable. A `dyn` box is fat; a `Box<T>` is not.");
+    println!("   AND pointer to its vtable. A `dyn` box is fat.");
+    println!("   So is any box over something with no size of its own: the");
+    println!("   missing number rides beside the pointer, a vtable for dyn");
+    println!("   and a length for a slice.");
+    println!("   size_of::<Box<[u32; 64]>>() = {}  — an array's length is in its type",
+             size_of::<Box<[u32; 64]>>());
+    println!("   size_of::<Box<[u32]>>()     = {} — a slice's is not, so it rides along",
+             size_of::<Box<[u32]>>());
+    println!("   size_of::<Box<str>>()       = {} — the same shape, over UTF-8 bytes",
+             size_of::<Box<str>>());
 
     println!();
     println!("5. What it is not");

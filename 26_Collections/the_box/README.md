@@ -63,7 +63,7 @@ fn main() {
 }
 ```
 
-Two closures with different captures have two different anonymous types and two different sizes. `Box<dyn Fn(u32) -> u32>` gives them one type by putting each on the heap and holding a pointer — plus a second pointer to its vtable, which is why `size_of::<Box<dyn Fn(u32) -> u32>>()` is 16 while `size_of::<Box<u32>>()` is 8. **A `dyn` box is fat; a plain `Box<T>` is not.**
+Two closures with different captures have two different anonymous types and two different sizes. `Box<dyn Fn(u32) -> u32>` gives them one type by putting each on the heap and holding a pointer — plus a second pointer to its vtable, which is why `size_of::<Box<dyn Fn(u32) -> u32>>()` is 16 while `size_of::<Box<u32>>()` is 8. **A `dyn` box is fat.** So is a `Box<[T]>` and a `Box<str>`, for the same reason worn differently: when what the box points at has no size of its own, the missing number travels beside the pointer — a vtable for `dyn`, a *length* for a slice. The pair to hold on to differs by four characters: the `Box<[u32; 64]>` at the top of this page is 8 bytes because an array's length is part of its type, and `Box<[u32]>` is 16 because a slice's is not. Only a `Box<T>` over a sized `T` is a bare pointer.
 
 ## `Option<Box<T>>` is free
 
@@ -120,7 +120,13 @@ Dropping the head of a long boxed list drops its `next`, which drops *its* next 
    two closures with different captures, one type: Box<dyn Fn>
    named(21) = 42, shifted(21) = 121
    size_of::<Box<dyn Fn(u32) -> u32>>() = 16 — pointer to the value
-   AND pointer to its vtable. A `dyn` box is fat; a `Box<T>` is not.
+   AND pointer to its vtable. A `dyn` box is fat.
+   So is any box over something with no size of its own: the
+   missing number rides beside the pointer, a vtable for dyn
+   and a length for a slice.
+   size_of::<Box<[u32; 64]>>() = 8  — an array's length is in its type
+   size_of::<Box<[u32]>>()     = 16 — a slice's is not, so it rides along
+   size_of::<Box<str>>()       = 16 — the same shape, over UTF-8 bytes
 
 5. What it is not
    Box is single ownership. One owner, dropped when that owner goes
@@ -287,6 +293,8 @@ fn main() {
 - [`Rc`: the clone that copies a pointer](../../18_Ownership/reference_counting/README.md) — `Box` when one owner is not enough
 - [Returning a trait](../../12_Traits/returning_a_trait/README.md) — `impl Trait` versus `Box<dyn Trait>`, and when the box is unavoidable
 - [Static vs dynamic dispatch](../../12_Traits/static_vs_dynamic_dispatch/README.md) — what the second pointer in a fat box is for
+- [`Vec::into_boxed_slice`](../vec_methods/vec_into_boxed_slice/README.md) — the usual way to get a `Box<[T]>`, the other fat box
+- [The third owned form](../../14_Strings/boxed_str/README.md) — `Box<str>`, the same shape over UTF-8
 
 ## Sources
 
@@ -296,7 +304,7 @@ fn main() {
 
 `Box<T>` to najprostszy inteligentny wskaźnik (*smart pointer*) w Ruscie: jedna wartość ląduje na stercie, a na stosie zostaje 8 bajtów adresu. Nazwy typu się nie tłumaczy — mówi się „`Box`”, nigdy „pudełko” — i warto wiedzieć, dlaczego po polsku brzmi to obco: polski przekład Tour of Rust urywa się na rozdziale 5, a inteligentne wskaźniki są w rozdziale 8, więc na tym terenie ustalonego polskiego słownictwa po prostu nie ma. Dzięki `Deref<Target = T>` `Box` zachowuje się jak wartość, którą trzyma — pola, metody i `&*b` sięgają przez niego same. Jedynym wyjątkiem jest samo `*b`: to nie pożyczenie, tylko **przeniesienie własności** wartości na zewnątrz i wypuszczenie (*drop*) `Box`a.
 
-Powody, dla których w ogóle się po niego sięga, są dwa i oba dotyczą rozmiaru. Pierwszy: typ, który zawiera sam siebie. Bez `Box`a każdy wariant `Then` zawierałby całe `Round`, które zawiera całe `Round`, i kompilator nie umiałby zapisać rozmiaru — stąd `error[E0072]` i komunikat *„recursive type `Round` has infinite size”*. Zwróć uwagę, co rustc podpowiada: `Box`, `Rc` **albo `&`** — cykl przerywa każde pośrednictwo, a `Box` jest tym, które przy okazji **posiada** to, na co wskazuje; po wstawieniu go `size_of::<Round>()` to 24. Drugi powód: rozmiar znany dopiero w czasie działania. Dwa domknięcia (*closures*) o różnych przechwyceniach mają dwa różne, anonimowe typy, a `Box<dyn Fn(u32) -> u32>` daje im jeden wspólny — kosztem drugiego wskaźnika, na tablicę metod (*vtable*), przez co zajmuje 16 bajtów zamiast 8. Pudełko z `dyn` jest grube, zwykłe `Box<T>` nie.
+Powody, dla których w ogóle się po niego sięga, są dwa i oba dotyczą rozmiaru. Pierwszy: typ, który zawiera sam siebie. Bez `Box`a każdy wariant `Then` zawierałby całe `Round`, które zawiera całe `Round`, i kompilator nie umiałby zapisać rozmiaru — stąd `error[E0072]` i komunikat *„recursive type `Round` has infinite size”*. Zwróć uwagę, co rustc podpowiada: `Box`, `Rc` **albo `&`** — cykl przerywa każde pośrednictwo, a `Box` jest tym, które przy okazji **posiada** to, na co wskazuje; po wstawieniu go `size_of::<Round>()` to 24. Drugi powód: rozmiar znany dopiero w czasie działania. Dwa domknięcia (*closures*) o różnych przechwyceniach mają dwa różne, anonimowe typy, a `Box<dyn Fn(u32) -> u32>` daje im jeden wspólny — kosztem drugiego wskaźnika, na tablicę metod (*vtable*), przez co zajmuje 16 bajtów zamiast 8. Pudełko z `dyn` jest grube — i nie tylko ono: grube jest każde pudełko na coś, co samo nie zna swojego rozmiaru, bo brakująca liczba jedzie wtedy obok wskaźnika. Dla `dyn` jest to tablica metod, dla `Box<[T]>` i `Box<str>` — długość. Widać to na parze różniącej się o cztery znaki: `Box<[u32; 64]>` zajmuje 8 bajtów, bo długość tablicy siedzi w typie, a `Box<[u32]>` już 16, bo długość wycinka (*slice*) w typie nie siedzi. Cienki jest tylko `Box<T>` nad `T` o znanym rozmiarze.
 
 Na koniec trzy rzeczy praktyczne. `Option<Box<T>>` nie kosztuje ani bajtu więcej niż sam `Box` — `Box` nigdy nie bywa pusty, więc kompilator używa wzorca samych zer na oznaczenie `None` (*null-pointer optimisation*). To dokładnie ten „wskaźnik, który może być pusty” znany z C, tyle że sprawdzenie przeniosło się do systemu typów. Dalej pułapka, o którą łatwo się potknąć: domyślny `Drop` jest **rekurencyjny**, więc długa lista złożona z `Box`ów przepełnia stos w destruktorze, na końcu zasięgu, ze śladem stosu, który nie wskazuje żadnej linii napisanej przez ciebie — dlatego prawdziwe listy implementują `Drop` ręcznie, a strukturę o nieznanej głębokości obchodzi się pętlą `while let`, nie rekurencją. I wreszcie to, czym `Box` nie jest: to pojedyncza własność. Dwóch właścicieli to `Rc`, dwa wątki to `Arc`, a sięganie po `Box` tylko po to, żeby „przenieść coś na stertę”, dokłada alokację i skok w pamięci, nic nie dając w zamian — `Vec`, `String` i `HashMap` i tak już trzymają swoje dane na stercie.
 
