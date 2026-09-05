@@ -3,7 +3,18 @@
    size_of::<Vec<[u8; 999]>>() = 24  — the same three, whatever T is
    The elements are not in the Vec. The Vec is a receipt for them.
 
-2. Growth is amortised doubling, and you can watch it
+2. One type per Vec — and the compiler works out which
+   vec![1, 2, 3]           -> Vec<i32>
+   vec![1, 2, 3u64]        -> Vec<u64>   — the LAST element decided
+   let a: Vec<f64> = ...   -> Vec<f64>   — the annotation decided
+   `vec![1, "two", 3.0]` is error[E0308], and it names the second
+   element: one type per Vec, and rustc stops at the first quarrel.
+   Two ways to hold a mixture, both of which give every element
+   ONE type:
+   enum, closed set:   Int(7), Text("seven"), Real(7.5)
+   Box<dyn>, open set: 7, seven, 7.5
+
+3. Growth is amortised doubling, and you can watch it
    Vec::new()            len 0 cap 0
    push(1) reallocated   len 1 cap 0 -> 4
    push(5) reallocated   len 5 cap 4 -> 8
@@ -13,19 +24,33 @@
    costs O(n) in total rather than O(n^2), and the exact sequence is
    this std's choice, not a promise in the language.
 
-3. If you know the size, say so
+4. If you know the size, say so
    with_capacity(9): cap 9 -> 9 — no reallocation at all
    Same nine values, one allocation instead of three, and no copying
    of the old contents.
 
-4. A Vec derefs to a slice, so slice methods just work
+5. What `growable` costs
+   [f64; 4]        32 bytes, all payload, in one place
+   Vec<f64> of 4   24 header + 32 heap = 56 bytes, in two
+   moving it copied the 24-byte header and not one element: true
+   100 pushes = 100 capacity checks and 6 allocator calls
+   So the bookkeeping is paid at the EDGES — allocate, grow, free —
+   and per element it is one pointer hop the optimizer hoists out of
+   a loop. Which is why `use a Vec` is still the default advice.
+
+6. A Vec derefs to a slice, so slice methods just work
    total(&v) = 45 — `total` takes &[u32] and was handed a &Vec<u32>
    v.first() = Some(1), v.contains(&5) = true
    v.iter().rev().take(3): [9, 8, 7]
+   &Vec<f64>   as &[f64]: [0.0, 0.707, 1.0, 0.707]
+   &[f64; 4]   as &[f64]: [0.0, -0.707, -1.0, -0.707]
+   Two owners, two storage stories, ONE borrowed type: 16 bytes of
+   pointer-and-length from the heap, 16 from the stack — the same
+   type, so the same function takes either.
    Write &[T] in a signature and both callers work. Write &Vec<T>
    and you have refused arrays, slices and everything borrowed.
 
-5. Removing: the one that keeps order, and the one that is fast
+7. Removing: the one that keeps order, and the one that is fast
    remove(1)      -> b, left ['a', 'c', 'd', 'e', 'f']   (everything after shifts down)
    swap_remove(1) -> b, left ['a', 'f', 'c', 'd', 'e']   (the last element fills the hole)
    O(n) versus O(1). If you are about to sort anyway, take the O(1).

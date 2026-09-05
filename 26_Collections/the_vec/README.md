@@ -43,6 +43,41 @@ Three pushes, and the fourth slot is already paid for: `len` counts the three, `
 
 `len` is what you almost always want. `capacity` matters exactly once: when you are about to fill it.
 
+## One type per `Vec`, and the compiler works out which
+
+A `Vec<T>` is homogeneous, exactly as an array is: one `T`, chosen once, for every element. Which `T` is a question of inference rather than a rule about position.
+
+```rust
+fn main() {
+    let inferred = vec![1, 2, 3];            // Vec<i32> — nothing said otherwise
+    let suffixed = vec![1, 2, 3u64];         // Vec<u64> — the LAST element decided
+    let annotated: Vec<f64> = vec![1.0];     // Vec<f64> — the annotation decided
+    // let mixed = vec![1, "two", 3.0];      // error[E0308]: expected integer, found `&str`
+    println!("{} {} {}", inferred[2], suffixed[2], annotated[0]);   // 3 3 1
+}
+```
+
+"The first element sets the type" is the usual summary and `vec![1, 2, 3u64]` disproves it — unsuffixed integer literals are still open when the third one arrives and closes them. What is true is that there is exactly one answer, and rustc stops at the first element that disagrees with it:
+
+```text
+error[E0308]: mismatched types
+ --> mixed.rs:2:25
+  |
+2 |     let mixed = vec![1, "two", 3.0];
+  |                         ^^^^^ expected integer, found `&str`
+```
+
+One error, naming the second element. The `3.0` is never reached and never mentioned, so fixing the `&str` earns you a second compile and a second error.
+
+Two ways to hold a mixture, and they are the same trick — give every element one type:
+
+| | when | element type |
+|---|---|---|
+| an [enum](../../13_Enums/variants_that_carry_data/README.md) | the set of possibilities is closed and you wrote it | `Vec<Value>` |
+| a boxed [trait object](../../12_Traits/static_vs_dynamic_dispatch/README.md) | the set is open — a plugin registry, a value chosen at run time | `Vec<Box<dyn Display>>` |
+
+The `Box` is not decoration. `T` must be [`Sized`](../vec_methods/README.md#the-signatures) — an implicit bound nothing writes down — so `Vec<dyn Display>` is `error[E0277]`, and the box is the layer of indirection that gives every element the one known size a `Vec` lays out its buffer with. Same bound behind `Vec<str>` and `Vec<[T]>` being rejected.
+
 ## Growth is amortised doubling, and you can watch it
 
 Nine pushes into a `Vec::new()` cause three reallocations — capacity goes 0 → 4 → 8 → 16 — and each one copies everything already stored into the new buffer. Doubling is what makes pushing *n* items cost O(*n*) in total instead of O(*n*²); the exact sequence is this std's choice, not a promise in the language.
@@ -59,9 +94,50 @@ fn main() {
 
 One allocation instead of three, and nothing copied. `collect()` does this for you when the iterator knows its own length — a range does, a `filter` does not.
 
+## What `growable` costs
+
+Nothing is free, and it is worth knowing which line of your program pays.
+
+| | `[f64; 4]` | `Vec<f64>` of 4 |
+|---|---|---|
+| bytes | 32, all payload | 24 header + 32 heap = 56 |
+| in how many places | one | two |
+| to construct | nothing | an allocator call |
+| to reach element *i* | one memory access | load the pointer, then the element |
+| to `push` | impossible | compare `len` against `capacity`, and occasionally reallocate |
+
+Read the last two rows together, because the second is the one people over-weight. A hundred pushes into a `Vec::new()` is a hundred capacity comparisons and **six** allocator calls — the bookkeeping is paid at the *edges*, on construction, growth and drop, not per element. The pointer hop is real and the optimizer hoists it out of any loop that does not reallocate, which is why the cost almost never shows up where a newcomer expects it and why *"use a `Vec`"* survives as the default advice. [Array or `Vec`?](../array_or_vec/README.md) is the whole trade, including the four things the array buys back.
+
+The move is the clearest picture of what the header actually is:
+
+```rust
+fn main() {
+    let wave: Vec<f64> = vec![0.0, 0.707, 1.0, 0.707];
+    let elements_were = wave.as_ptr();
+    let moved = wave;                                  // a move, not a copy
+    println!("{}", moved.as_ptr() == elements_were);   // true
+}
+```
+
+Twenty-four bytes changed hands and not one `f64` was touched. Moving an array of the same four values copies all thirty-two — which is the same fact from the other side, and the reason the array is `Copy` and the `Vec` is not.
+
 ## It derefs to a slice, so slice methods just work
 
 Everything on [arrays and slices](../arrays_and_slices/README.md) applies here: [`first`](../slice_methods/slice_first/README.md), [`last`](../slice_methods/slice_last/README.md), [`contains`](../slice_methods/slice_contains/README.md), [`sort`](../slice_methods/slice_sort/README.md), [`windows`](../slice_methods/slice_windows/README.md), [`iter`](../slice_methods/slice_iter/README.md), and indexing that panics while [`.get`](../slice_methods/slice_get/README.md) returns `Option` — each with a page of its own in the [`slice` methods](../slice_methods/README.md) reference. That is also the argument for `&[T]` over `&Vec<T>` in a signature — a `&Vec<u32>` coerces to `&[u32]` at the call site, so taking the slice costs the caller nothing and accepts three more kinds of argument.
+
+Written out, the coercion is invisible enough to miss:
+
+```rust
+fn main() {
+    let v: Vec<f64> = vec![0.0, 0.707, 1.0, 0.707];
+    let a: [f64; 4] = [0.0, -0.707, -1.0, -0.707];
+    let sv: &[f64] = &v;   // slice of a Vec   — borrowed from the heap buffer
+    let sa: &[f64] = &a;   // slice of an array — borrowed from the stack
+    println!("{} {}", sv.len(), sa.len());   // 4 4
+}
+```
+
+Two owners with nothing in common — one heap allocation with a growth policy, one inline block of thirty-two bytes — and `&[f64]` is the same 16-byte pointer-and-length for both. Both annotations are load-bearing, which is the part that is easy to miss: drop them and `&v` is a `&Vec<f64>`, `&a` is a `&[f64; 4]`, and neither is a slice. The `&` never chose — the `let` is a coercion site and the written type is what fires it, which is the same coercion [`as_slice`](../vec_methods/vec_as_slice/README.md) gives a name to. `&[T]` is therefore the type to write in a signature, and the reason arrays and slices is a lesson `Vec` sends you to rather than repeating.
 
 ## Removing: the one that keeps order, and the one that is fast
 
@@ -106,8 +182,8 @@ Rust does stop you doing this *while iterating*: `for x in &v { v.remove(…) }`
 
 ## If you are coming from another language
 
-- **Python.** `Vec` is `list`, closely: `push`/`append`, `pop`/`pop`, `remove(i)`/`del xs[i]`, `retain`/a comprehension. The differences are the ones type and ownership bring. A `Vec<T>` holds one type, so there is no `[1, "two", 3.0]`; `xs[i]` panics rather than raising something you can catch, and `.get(i)` is the version that returns `Option`; and `v2 = v1` **moves** where Python aliases, so the double-mutation bug that Python's shared reference causes is a compile error. The one habit to unlearn is `for i in range(len(xs))` — Rust's `for x in &v` is both faster and impossible to get wrong, and the index form is where the deletion trap above lives. Python's `list.pop(0)` is O(*n*) for the same reason `Vec::remove(0)` is; `VecDeque` is Rust's `collections.deque`.
-- **ABAP.** A `Vec<T>` is a `STANDARD TABLE OF ty` and the correspondence is close enough to be useful: `APPEND` is `push`, `DELETE itab INDEX i` is `remove`, `READ TABLE … INDEX` is `get`, `LOOP AT` is `for x in &v`. Two things transfer directly. `DELETE itab WHERE cond` is `retain` with the condition negated — one statement, one pass, and the same reason to prefer it over deleting in a loop. And the ABAP rule that you must not `DELETE` from the table you are looping over is Rust's borrow checker, enforced by convention there and by the compiler here. What ABAP has that `Vec` does not is the sorted and hashed table kinds with their key declarations; in Rust those are separate types — `BTreeMap` and `HashMap` — rather than a property of the table.
+- **Python.** `Vec` is `list`, closely: `push`/`append`, `pop`/`pop`, `remove(i)`/`del xs[i]`, `retain`/a comprehension. The differences are the ones type and ownership bring. A `Vec<T>` holds one type, so `[1, "two", 3.0]` has no direct translation — and the reason Python's list does not need one is worth carrying across: every CPython list slot is already a pointer to a boxed object, so the list is heterogeneous the way `Vec<Box<dyn Any>>` is, not the way a hypothetical `Vec<Anything>` would be. Rust makes you write the box and name what the boxed things have in common. `xs[i]` panics rather than raising something you can catch, and `.get(i)` is the version that returns `Option`; and `v2 = v1` **moves** where Python aliases, so the double-mutation bug that Python's shared reference causes is a compile error. The one habit to unlearn is `for i in range(len(xs))` — Rust's `for x in &v` is both faster and impossible to get wrong, and the index form is where the deletion trap above lives. Python's `list.pop(0)` is O(*n*) for the same reason `Vec::remove(0)` is; `VecDeque` is Rust's `collections.deque`.
+- **ABAP.** A `Vec<T>` is a `STANDARD TABLE OF ty` and the correspondence is close enough to be useful: `APPEND` is `push`, `DELETE itab INDEX i` is `remove`, `READ TABLE … INDEX` is `get`, `LOOP AT` is `for x in &v`. Three things transfer directly. A `STANDARD TABLE OF ty` is homogeneous for exactly the reason a `Vec<T>` is — one row type, declared once — so the discipline needs no unlearning, and ABAP's answer for a mixed column is the same as Rust's: a structure with a type field, which is an enum wearing a different name. `DELETE itab WHERE cond` is `retain` with the condition negated — one statement, one pass, and the same reason to prefer it over deleting in a loop. And the ABAP rule that you must not `DELETE` from the table you are looping over is Rust's borrow checker, enforced by convention there and by the compiler here. What ABAP has that `Vec` does not is the sorted and hashed table kinds with their key declarations; in Rust those are separate types — `BTreeMap` and `HashMap` — rather than a property of the table.
 - **C++.** `std::vector` exactly, down to the growth strategy and `reserve` being `with_capacity`. `swap_remove` is the idiom C++ programmers write by hand as `std::swap(v[i], v.back()); v.pop_back();`. Iterator invalidation is the same hazard and Rust turns it into a compile error.
 - **Java / C#.** `ArrayList<T>` / `List<T>`, with `ensureCapacity` / the capacity constructor. `ConcurrentModificationException` is thrown at run time for the case Rust rejects at compile time.
 
@@ -124,7 +200,18 @@ Rust does stop you doing this *while iterating*: `for x in &v { v.remove(…) }`
    size_of::<Vec<[u8; 999]>>() = 24  — the same three, whatever T is
    The elements are not in the Vec. The Vec is a receipt for them.
 
-2. Growth is amortised doubling, and you can watch it
+2. One type per Vec — and the compiler works out which
+   vec![1, 2, 3]           -> Vec<i32>
+   vec![1, 2, 3u64]        -> Vec<u64>   — the LAST element decided
+   let a: Vec<f64> = ...   -> Vec<f64>   — the annotation decided
+   `vec![1, "two", 3.0]` is error[E0308], and it names the second
+   element: one type per Vec, and rustc stops at the first quarrel.
+   Two ways to hold a mixture, both of which give every element
+   ONE type:
+   enum, closed set:   Int(7), Text("seven"), Real(7.5)
+   Box<dyn>, open set: 7, seven, 7.5
+
+3. Growth is amortised doubling, and you can watch it
    Vec::new()            len 0 cap 0
    push(1) reallocated   len 1 cap 0 -> 4
    push(5) reallocated   len 5 cap 4 -> 8
@@ -134,19 +221,33 @@ Rust does stop you doing this *while iterating*: `for x in &v { v.remove(…) }`
    costs O(n) in total rather than O(n^2), and the exact sequence is
    this std's choice, not a promise in the language.
 
-3. If you know the size, say so
+4. If you know the size, say so
    with_capacity(9): cap 9 -> 9 — no reallocation at all
    Same nine values, one allocation instead of three, and no copying
    of the old contents.
 
-4. A Vec derefs to a slice, so slice methods just work
+5. What `growable` costs
+   [f64; 4]        32 bytes, all payload, in one place
+   Vec<f64> of 4   24 header + 32 heap = 56 bytes, in two
+   moving it copied the 24-byte header and not one element: true
+   100 pushes = 100 capacity checks and 6 allocator calls
+   So the bookkeeping is paid at the EDGES — allocate, grow, free —
+   and per element it is one pointer hop the optimizer hoists out of
+   a loop. Which is why `use a Vec` is still the default advice.
+
+6. A Vec derefs to a slice, so slice methods just work
    total(&v) = 45 — `total` takes &[u32] and was handed a &Vec<u32>
    v.first() = Some(1), v.contains(&5) = true
    v.iter().rev().take(3): [9, 8, 7]
+   &Vec<f64>   as &[f64]: [0.0, 0.707, 1.0, 0.707]
+   &[f64; 4]   as &[f64]: [0.0, -0.707, -1.0, -0.707]
+   Two owners, two storage stories, ONE borrowed type: 16 bytes of
+   pointer-and-length from the heap, 16 from the stack — the same
+   type, so the same function takes either.
    Write &[T] in a signature and both callers work. Write &Vec<T>
    and you have refused arrays, slices and everything borrowed.
 
-5. Removing: the one that keeps order, and the one that is fast
+7. Removing: the one that keeps order, and the one that is fast
    remove(1)      -> b, left ['a', 'c', 'd', 'e', 'f']   (everything after shifts down)
    swap_remove(1) -> b, left ['a', 'f', 'c', 'd', 'e']   (the last element fills the hole)
    O(n) versus O(1). If you are about to sort anyway, take the O(1).
@@ -321,6 +422,7 @@ fn main() {
 - [What a `Vec` guarantees](../vec_guarantees/README.md) — the small print under this page: why the pointer is never null but need not point anywhere, why `capacity()` can be relied on to the element, and the three things std refuses to promise
 - [`Vec` methods](../vec_methods/README.md) — one page per method, with a compiled example each: the reference this lesson is the introduction to
 - [Arrays and slices](../arrays_and_slices/README.md) — the type `Vec` derefs to, and where its methods actually live
+- [Array or `Vec`?](../array_or_vec/README.md) — the same two types from the deciding end: what the array buys, and the four cases where the length really is a fact about the problem
 - [Grids and nested `Vec`s](../vec_of_vecs/README.md) — what `vec![vec![0; w]; h]` allocates, and the flatter thing most grids should be
 - [`Box`](../the_box/README.md) — one value on the heap, where `Vec` is many
 - [Stack and heap](../../18_Ownership/stack_and_heap/README.md) — what the pointer points at, and what it costs to follow
