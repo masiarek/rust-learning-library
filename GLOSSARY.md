@@ -390,7 +390,7 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **`String`** — The owned, growable text type: three words on the stack (pointer, length, capacity), UTF-8 bytes on the heap. A `Vec<u8>` that promises valid UTF-8, with the same `new` / `with_capacity` / `reserve` vocabulary. Own it in fields, build it for returns — and take `&str` in parameters. → [`String` vs `&str`](14_Strings/string_vs_str/README.md), [The anatomy of a `String`](14_Strings/anatomy_of_a_string/README.md)
 
-**String slice (`&str`)** — A borrowed view of UTF-8 text living anywhere — the binary, a `String`'s heap buffer, a stack array: one pointer plus one length, owning nothing. `Copy`, read-only, and the type every text-reading parameter should take, since literals, `String`s and slices all arrive as one for free. → [`String` vs `&str`](14_Strings/string_vs_str/README.md)
+**String slice (`&str`)** — A borrowed view of UTF-8 text living anywhere — the binary, a `String`'s heap buffer, a stack array: one pointer plus one length, owning nothing. `Copy`, read-only, and the type every text-reading parameter should take, since literals, `String`s and slices all arrive as one for free. → [`String` vs `&str`](14_Strings/string_vs_str/README.md), and the reading that makes it the same kind of thing as `&[T]` and `&Path` — `String` as `StringBuf` → [The names hide the pattern](14_Strings/string_vs_str/README.md#the-names-hide-the-pattern)
 
 **String literal** — `"…"` in source: a `&'static str` whose bytes are baked into the executable's read-only data — not the stack, not the heap — alive for the whole run. "Stack-allocated string" in a tutorial is this fact, misplaced. → [`String` vs `&str`](14_Strings/string_vs_str/README.md)
 
