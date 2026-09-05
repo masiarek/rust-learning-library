@@ -1,0 +1,7 @@
+[1, 2] [2, 3] [3, 4] 
+3 windows of 2 from 4 elements
+[3, -2, 4]
+true false
+0
+[[1, 2], [3, 4]]
+windows(0) panicked: true

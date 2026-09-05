@@ -1,0 +1,4 @@
+Some(30) None
+newest 30
+Some(30) still has 3 elements
+last 30, rest [10, 20]

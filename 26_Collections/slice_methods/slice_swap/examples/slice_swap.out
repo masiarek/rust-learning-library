@@ -1,0 +1,4 @@
+["d", "b", "c", "a"]
+["d", "b", "c", "a"]  <- a == b is a no-op
+[5, 4, 3, 2, 1]
+swap(0, 9) on 5 elements panicked: true

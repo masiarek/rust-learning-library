@@ -1,0 +1,7 @@
+Some(20) None
+Some([20, 30])
+None  <- not clamped, not a panic
+None  <- reversed range
+Some([])  <- empty range at the end is fine
+0
+Some(30)

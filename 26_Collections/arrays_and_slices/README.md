@@ -50,7 +50,7 @@ The split is the same one `HashMap` makes: **`[i]` is a claim, `.get(i)` is a qu
 
 ## The methods are on the slice
 
-Almost nothing is defined on the array type itself. `first`, `last`, `contains`, `sort`, `windows`, `chunks`, `split_at`, `iter` — all of these live on `[T]`, and the array and `Vec` reach them by deref coercion. So learning slice methods once covers both.
+Almost nothing is defined on the array type itself. [`first`](../slice_methods/slice_first/README.md), [`last`](../slice_methods/slice_last/README.md), [`contains`](../slice_methods/slice_contains/README.md), [`sort`](../slice_methods/slice_sort/README.md), [`windows`](../slice_methods/slice_windows/README.md), [`chunks`](../slice_methods/slice_chunks/README.md), [`split_at` ↗](https://doc.rust-lang.org/std/primitive.slice.html#method.split_at), [`iter`](../slice_methods/slice_iter/README.md) — all of these live on `[T]`, and the array and `Vec` reach them by deref coercion. So learning slice methods once covers both, and the [`slice` methods](../slice_methods/README.md) reference gives each of the everyday ones a page.
 
 ```rust
 fn main() {

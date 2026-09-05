@@ -1,0 +1,4 @@
+Some(10) None
+first is 10
+Some(20) [10, 20, 30]
+head 10, tail [20, 30]

@@ -1,0 +1,6 @@
+descending: [9, 5, 3, 1]
+by length, then name: ["fig", "date", "kiwi", "pear", "apple"]
+longest first: ["apple", "date", "kiwi", "pear", "fig"]
+[-1.0, 0.0, 2.5]
+[-1.0, 2.5, NaN]   <- total_cmp puts NaN last, and never panics
+[(1, "a"), (2, "b"), (3, "c")]

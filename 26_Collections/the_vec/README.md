@@ -23,9 +23,9 @@ fn main() {
 
 | field | says |
 |---|---|
-| pointer | where the elements are |
-| **len** | how many are initialised |
-| **capacity** | how many fit before the next allocation |
+| [pointer](../vec_methods/vec_as_ptr/README.md) | where the elements are |
+| [**len**](../vec_methods/vec_len/README.md) | how many are initialised |
+| [**capacity**](../vec_methods/vec_capacity/README.md) | how many fit before the next allocation |
 
 `len` is what you almost always want. `capacity` matters exactly once: when you are about to fill it.
 
@@ -47,7 +47,7 @@ One allocation instead of three, and nothing copied. `collect()` does this for y
 
 ## It derefs to a slice, so slice methods just work
 
-Everything on [arrays and slices](../arrays_and_slices/README.md) applies here: `first`, `last`, `contains`, `sort`, `windows`, `iter`, and indexing that panics while `.get` returns `Option`. That is also the argument for `&[T]` over `&Vec<T>` in a signature — a `&Vec<u32>` coerces to `&[u32]` at the call site, so taking the slice costs the caller nothing and accepts three more kinds of argument.
+Everything on [arrays and slices](../arrays_and_slices/README.md) applies here: [`first`](../slice_methods/slice_first/README.md), [`last`](../slice_methods/slice_last/README.md), [`contains`](../slice_methods/slice_contains/README.md), [`sort`](../slice_methods/slice_sort/README.md), [`windows`](../slice_methods/slice_windows/README.md), [`iter`](../slice_methods/slice_iter/README.md), and indexing that panics while [`.get`](../slice_methods/slice_get/README.md) returns `Option` — each with a page of its own in the [`slice` methods](../slice_methods/README.md) reference. That is also the argument for `&[T]` over `&Vec<T>` in a signature — a `&Vec<u32>` coerces to `&[u32]` at the call site, so taking the slice costs the caller nothing and accepts three more kinds of argument.
 
 ## Removing: the one that keeps order, and the one that is fast
 

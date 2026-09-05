@@ -1,0 +1,6 @@
+[3, 4, 5, 1, 2]
+[1, 2, 3, 4, 5]  <- rotate_right undoes it
+[1, 2, 3, 4, 5]
+Ann Bob Cal Ann 
+[2, 3, 1]
+rotate_left(7) on 3 elements panicked: true

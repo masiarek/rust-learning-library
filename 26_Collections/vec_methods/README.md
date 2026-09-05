@@ -24,15 +24,15 @@ Four failed. Three were loose statements with no enclosing item, which a reader 
 
 | you probably want | it is a **slice** method |
 |---|---|
-| sorting | `sort`, `sort_unstable`, `sort_by`, `sort_by_key` |
-| searching | `contains`, `binary_search`, `iter().position(…)` |
-| the ends | `first`, `last`, `first_mut`, `last_mut` |
-| safe indexing | `get`, `get_mut` — and the index may be a **range**: `v.get(1..3)` is `Some(&v[1..3])`, `v.get(1..99)` is `None` rather than a clamp or a panic |
-| iterating | `iter`, `iter_mut`, `chunks`, `windows` |
-| rearranging | `reverse`, `swap`, `rotate_left`, `fill` |
-| joining | `concat`, `join` |
+| sorting | [`sort`](../slice_methods/slice_sort/README.md), [`sort_unstable`](../slice_methods/slice_sort_unstable/README.md), [`sort_by`](../slice_methods/slice_sort_by/README.md), [`sort_by_key`](../slice_methods/slice_sort_by_key/README.md) |
+| searching | [`contains`](../slice_methods/slice_contains/README.md), [`binary_search`](../slice_methods/slice_binary_search/README.md), [`iter().position(…)` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.position) |
+| the ends | [`first`](../slice_methods/slice_first/README.md), [`last`](../slice_methods/slice_last/README.md), [`first_mut`](../slice_methods/slice_first_mut/README.md), [`last_mut`](../slice_methods/slice_last_mut/README.md) |
+| safe indexing | [`get`](../slice_methods/slice_get/README.md), [`get_mut`](../slice_methods/slice_get_mut/README.md) — and the index may be a **range**: `v.get(1..3)` is `Some(&v[1..3])`, `v.get(1..99)` is `None` rather than a clamp or a panic |
+| iterating | [`iter`](../slice_methods/slice_iter/README.md), [`iter_mut`](../slice_methods/slice_iter_mut/README.md), [`chunks`](../slice_methods/slice_chunks/README.md), [`windows`](../slice_methods/slice_windows/README.md) |
+| rearranging | [`reverse`](../slice_methods/slice_reverse/README.md), [`swap`](../slice_methods/slice_swap/README.md), [`rotate_left`](../slice_methods/slice_rotate_left/README.md), [`fill`](../slice_methods/slice_fill/README.md) |
+| joining | [`concat`](../slice_methods/slice_concat/README.md), [`join`](../slice_methods/slice_join/README.md) |
 
-They are documented under [arrays and slices](../arrays_and_slices/README.md) and on [`slice` ↗](https://doc.rust-lang.org/std/primitive.slice.html) in std. **This list holds only what `Vec` itself defines** — which is, almost exactly, the operations that change the *length* or the *buffer*. Anything that works within a fixed length belongs to the slice.
+Each of those has a page of its own in the [`slice` methods](../slice_methods/README.md) reference, built to the same promise as this one; [arrays and slices](../arrays_and_slices/README.md) is the lesson, and [`slice` ↗](https://doc.rust-lang.org/std/primitive.slice.html) in std is the full list. **This list holds only what `Vec` itself defines** — which is, almost exactly, the operations that change the *length* or the *buffer*. Anything that works within a fixed length belongs to the slice.
 
 That split is the single most useful thing to know about the type: `Vec` owns and resizes, `[T]` is a window on elements that already exist.
 

@@ -1,0 +1,5 @@
+["fig", "pear", "kiwi", "apple"]   <- stable: pear stays before kiwi
+["apple", "pear", "kiwi", "fig"]   <- Reverse for descending
+[("dev", "Ben"), ("ops", "Ada"), ("ops", "Cara")]
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]   key computed more times than there are elements: true
+[("a", 1), ("b", 2)]

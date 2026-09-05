@@ -63,6 +63,8 @@ EDITION = "2024"  # the edition run_examples.py builds with; keep them together
 # that earned it. Read the docstring above before extending this.
 SCOPE = (
     "26_Collections/vec_methods",  # a per-method reference; every fence is a whole demonstration
+    "26_Collections/slice_methods",  # its slice-side companion, built to the same promise
+    "14_Strings/str_methods",      # the tree that one was modelled on; same promise, brought up to it
 )
 
 SKIP_DIRS = {".git", "site", ".venv", "target", "__pycache__", ".github"}
@@ -238,7 +240,12 @@ def main() -> int:
             if ignored or proven:
                 print(f"  skipped as `ignore` {ignored}, proven by `compile_fail` {proven}")
             print()
-            if not problems:
+            if not fences:
+                print("No hand-authored fences here at all — every Rust block is inside a "
+                      "generated block, which run_examples.py already owns. Adding this tree "
+                      "to SCOPE checks nothing today, but gates the first snippet anyone "
+                      "writes into the prose.")
+            elif not problems:
                 print("Every fence compiles. This tree is a candidate for SCOPE — add it "
                       "only if its pages really do promise a pasteable fence.")
             else:

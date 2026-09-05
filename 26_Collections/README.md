@@ -16,6 +16,7 @@ Two of them are built into the language and have no `use` line: the tuple and th
 | [`BTreeMap` and `BTreeSet`](sorted_collections/README.md) | 101 → 201 | The sorted pair: collecting into one *is* the sort, `range` asks what a hash map cannot, and it orders by the key when what you wanted sorted was the value |
 | [`Box`](the_box/README.md) | 201 | One value on the heap: a type that contains itself, and a size known only at run time |
 | [`Vec` methods](vec_methods/README.md) | reference | One page per method — all 46 on stable, plus the three `IntoIterator` impls |
+| [`slice` methods](slice_methods/README.md) | reference | One page per slice method the `Vec` reference points at — the 22 reached through `Deref`, from `sort` to `join` |
 
 ## Which one
 
@@ -33,7 +34,7 @@ Two of them are built into the language and have no `use` line: the tuple and th
 
 `String` and `&str` are the seventh and eighth entries in that table, and they have [a section of their own](../14_Strings/README.md).
 
-Once you have picked one, the **[`Vec` method reference](vec_methods/README.md)** is the per-method companion to the `Vec` lesson: a page each for `drain`, `retain`, `swap_remove`, `splice` and the other 42, every one with a program CI compiles and runs. It also answers the question the lesson raises and does not settle — why `sort` and `iter` are not on it. (They are slice methods, reached through `Deref`.)
+Once you have picked one, the **[`Vec` method reference](vec_methods/README.md)** is the per-method companion to the `Vec` lesson: a page each for `drain`, `retain`, `swap_remove`, `splice` and the other 42, every one with a program CI compiles and runs. It also answers the question the lesson raises and does not settle — why `sort` and `iter` are not on it. (They are slice methods, reached through `Deref` — and the **[`slice` method reference](slice_methods/README.md)** gives each of those 22 a page of the same shape.)
 
 ## What is deliberately not here
 

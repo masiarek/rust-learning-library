@@ -176,6 +176,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # section, because a reader who wants `Vec::drain` arrives from `the_vec`
         # and should not have to scroll past the hash maps to find it.
         "vec_methods",
+        # ...and the slice methods it reaches through Deref, directly after it:
+        # a reader who did not find `sort` on the Vec list is sent here.
+        "slice_methods",
         "the_hashmap",
         "the_hashset",
         # ...then the sorted pair, read after the hash ones because the page is
@@ -557,6 +560,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "binding_at",
     ],
     "26_Collections/vec_methods": ["README.md"],
+    "26_Collections/slice_methods": ["README.md"],
     "14_Strings/str_methods": ["README.md"],
     "14_Strings/string_methods": ["README.md"],
     "14_Strings": [
@@ -935,6 +939,7 @@ LABELS = {
     "string_methods": "`String` methods",
     # 26_Collections — the third method reference, same shape as the pair above.
     "vec_methods": "`Vec` methods",
+    "slice_methods": "`slice` methods",
     # 15_First_Programs
     "rustc_without_cargo": "Running a scratch program",
     "what_an_annotation_does": "What a type annotation does",
@@ -1030,7 +1035,18 @@ VEC_METHODS = """
     split_off swap_remove truncate try_reserve try_reserve_exact with_capacity
 """.split()
 
+# The slice method reference under 26_Collections/slice_methods: the 22 slice
+# methods the Vec reference points at. LISTED like the others, since
+# `string_slices` and `str_slice_unchecked` are folders elsewhere that a bare
+# prefix rule could confuse.
+SLICE_METHODS = """
+    binary_search chunks concat contains fill first first_mut get get_mut
+    iter iter_mut join last last_mut reverse rotate_left sort sort_by
+    sort_by_key sort_unstable swap windows
+""".split()
+
 LABELS.update({f"str_{m}": f"str::{m}" for m in STR_METHODS})
+LABELS.update({f"slice_{m}": f"slice::{m}" for m in SLICE_METHODS})
 LABELS.update({f"vec_{m}": f"Vec::{m}" for m in VEC_METHODS})
 LABELS.update({f"string_{m}": f"String::{m}" for m in STRING_METHODS})
 
