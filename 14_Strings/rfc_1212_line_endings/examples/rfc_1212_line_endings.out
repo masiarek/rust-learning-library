@@ -1,0 +1,40 @@
+WHAT RFC 1212 CHANGED
+  before  unix    ["name,qty", "bolt,12"]
+  before  windows ["name,qty\r", "bolt,12\r"]
+  today   unix    ["name,qty", "bolt,12"]
+  today   windows ["name,qty", "bolt,12"]
+  the two agree now: true
+
+BURNTSUSHI'S DIAGNOSIS: THE OLD BEHAVIOUR WAS NOT EVEN CONSISTENT
+  lf   ended "\n"   -> "bolt,12"   trimmed all of it
+  crlf ended "\r\n" -> "bolt,12\r" trimmed the \n only
+
+THE SURPRISE "NONE I CAN THINK OF" DID NOT SEE
+  no final \n   ["name,qty", "bolt,12\r"]
+  same, lf only ["name,qty", "bolt,12"]
+  last line ends with \r: true
+  and it fails the obvious test: last == "bolt,12" is false
+  a lone \r splits nothing: ["old\rmac"]
+
+BufRead::lines GOT THE SAME CHANGE; read_line DID NOT
+  lines      ["name,qty", "bolt,12"]
+  lines tail ["name,qty", "bolt,12\r"]
+  read_line  "name,qty\r\n"   <- the terminator is still yours to strip
+
+BRSON'S QUESTION, ASKED IN THE THREAD AND NEVER ANSWERED BY THE RFC
+  read 19 bytes, wrote 17 bytes back, identical: false
+
+THE UNICODE SEPARATORS THE RFC WAS ASKED FOR AND REFUSED
+  char         lines()  is_whitespace  split_whitespace
+  VT   U+000B  1        true           ["a", "b"]
+  FF   U+000C  1        true           ["a", "b"]
+  NEL  U+0085  1        true           ["a", "b"]
+  LS   U+2028  1        true           ["a", "b"]
+  PS   U+2029  1        true           ["a", "b"]
+
+THE ALTERNATIVES THE RFC POINTED AT, AS THEY BEHAVE TODAY
+  split('\n')        ["name,qty\r", "bolt,12\r", ""]
+  split_inclusive    ["name,qty\r\n", "bolt,12\r\n"]
+  BufRead::split     [[97, 98, 13], [99, 100, 13]]
+                     ^ Vec<u8>, not String -- and the 13 is the \r
+  lines_any          ["name,qty", "bolt,12"]

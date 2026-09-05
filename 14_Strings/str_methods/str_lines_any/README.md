@@ -49,6 +49,7 @@ identical: true
 ## See also
 
 - [`str::lines`](../str_lines/README.md) — the method to use
+- [RFC 1212 — how `lines()` learned about `\r\n`](../../rfc_1212_line_endings/README.md) — the 2015 proposal that deprecated this name
 
 [`str::lines_any` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.lines_any)
 

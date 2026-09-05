@@ -72,6 +72,7 @@ split  4
 - [`str::split_terminator`](../str_split_terminator/README.md) — the general form of the trailing-empty rule
 - [`str::trim_end`](../str_trim_end/README.md) — what to reach for when only the very end needs cleaning
 - [`str::lines_any`](../str_lines_any/README.md) — the deprecated older spelling
+- [RFC 1212 — how `lines()` learned about `\r\n`](../../rfc_1212_line_endings/README.md) — why it behaves this way, and the trailing `\r` this page's rules imply
 
 [`str::lines` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.lines)
 

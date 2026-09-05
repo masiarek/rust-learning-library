@@ -606,6 +606,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "rfc_69_byte_literals",
         # ...and how to walk them: three item types, and the split family.
         "walking_a_string",
+        # ...and the RFC behind the one method on that page nobody expects
+        # to have a history: what `lines()` does with `\r\n`, and why.
+        "rfc_1212_line_endings",
         # The lifetime half, once the two types are solid: three spellings of
         # one type, and the claim about String that is not true.
         "static_str",
@@ -957,6 +960,7 @@ LABELS = {
     "meet_the_char": "Meet the `char`",
     "static_str": "`&'static str`",
     "rfc_69_byte_literals": "RFC 69: byte literals",
+    "rfc_1212_line_endings": "RFC 1212: line endings",
     "parsing_a_string": "Parsing out of a string",
     "the_format_language": "The format mini-language",
     "when_string_is_too_slow": "When `String` is too slow",
