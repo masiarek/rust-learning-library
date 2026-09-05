@@ -21,6 +21,20 @@ fn main() {
 
 `size_of::<Vec<T>>()` is 24 on a 64-bit machine **whatever `T` is** — a `Vec<[u8; 999]>` is also 24 bytes. The elements are not in the `Vec`; the `Vec` is a receipt for them.
 
+```text
+let mut scores: Vec<u32> = Vec::new();
+scores.push(5); scores.push(3); scores.push(0);
+
+        stack                          heap
+  ┌───────────┬────┐
+  │ ptr       │  ●─┼──────────▶ ┌───┬───┬───┬───┐
+  │ len       │  3 │            │ 5 │ 3 │ 0 │   │
+  │ capacity  │  4 │            └───┴───┴───┴───┘
+  └───────────┴────┘            └─── len ───┘  ↑ bought, not yet filled
+```
+
+Three pushes, and the fourth slot is already paid for: `len` counts the three, `capacity` counts the four. A [`String`](../../14_Strings/anatomy_of_a_string/README.md) is the same picture with `u8` cells, and a slice `&[T]` is the picture minus `capacity` — a pointer and a length, no ownership, no room to grow.
+
 | field | says |
 |---|---|
 | [pointer](../vec_methods/vec_as_ptr/README.md) | where the elements are |
