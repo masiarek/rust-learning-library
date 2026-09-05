@@ -11,6 +11,24 @@ fn main() {
     names.extend_from_slice(&rest);
     println!("{names:?}  rest {rest:?}");
 
+    // extend(&v) goes through Extend<&T>, which demands T: Copy — so it takes
+    // numbers and refuses the Strings above:
+    //     names.extend(&rest);   // error[E0271]: expected `String`, found `&String`
+    // extend_from_slice asks only for Clone, which is why the method exists.
+    let nums = vec![1, 2, 3];
+    let mut copied: Vec<i32> = Vec::new();
+    copied.extend(&nums);
+    println!("extend(&v) needs Copy: {copied:?}");
+
+    // The element types must match exactly. A Vec<String> will not take a
+    // &[&str], because cloning a &str gives a &str, not a String:
+    //     owned.extend_from_slice(words);   // error[E0308]: expected `&[String]`
+    // Convert on the way in with extend instead.
+    let words: &[&str] = &["apple", "banana", "cherry"];
+    let mut owned: Vec<String> = Vec::new();
+    owned.extend(words.iter().map(|&s| s.to_string()));
+    println!("{owned:?} from {words:?}");
+
     // A &Vec<T> coerces to &[T], so this is how you concatenate two vectors
     // you both want to keep.
     let a = vec![1, 2];

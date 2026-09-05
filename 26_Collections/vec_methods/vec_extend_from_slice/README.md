@@ -16,11 +16,59 @@ Stable since **1.6.0**.
 
 The source is a `&[T]` and stays yours. A `&Vec<T>` coerces to `&[T]`, so this is how you concatenate two vectors you both want to keep.
 
-It reserves **once** for the whole slice, which is the advantage over `extend()` from an arbitrary iterator: `extend` can only pre-reserve when the iterator reports its length, and a `filter` chain does not.
+Panics if the new capacity exceeds `isize::MAX` bytes. Reserving the room first with [`try_reserve`](../vec_try_reserve/README.md) makes that allocation fallible, since the call then has nothing left to allocate.
 
 For bytes there is a shorthand worth knowing: `buf.extend_from_slice(b"hello")` and `buf.extend_from_slice(s.as_bytes())` are how a `Vec<u8>` gets built.
 
 When you do **not** need the source afterwards, [`append`](../vec_append/README.md) moves instead of cloning and drops the `Clone` bound with it.
+
+## `extend_from_slice` vs `extend`
+
+std's own note is that this method *is* `extend`, "except that it also works with slice elements that are `Clone` but not `Copy`" — and that it may be deprecated if Rust ever gets specialization.
+
+That exception is the reason it exists: `Vec` has two `Extend` impls, and the one taking references demands `Copy`.
+
+```text
+impl<'a, T: Copy + 'a, A: Allocator> Extend<&'a T> for Vec<T, A>
+impl<T, A: Allocator> Extend<T> for Vec<T, A>
+```
+
+So `v.extend(&other)` compiles for a `Vec<i32>` and not for a `Vec<String>`:
+
+```rust,compile_fail
+fn main() {
+    let src = vec![String::from("a")];
+    let mut dst: Vec<String> = Vec::new();
+    dst.extend(&src);   // error[E0271]: expected `String`, found `&String`
+}
+```
+
+`extend_from_slice` asks only for `Clone`, so it takes both. Spelling the iterator out — `dst.extend(src.iter().cloned())` — is the same work said the long way.
+
+It also reserves **once** for the whole slice. `extend` can only pre-reserve when the iterator reports its length, and a `filter` chain does not.
+
+### The element types must match exactly
+
+`&[T]` means *that* `T`. A `Vec<String>` will not take a `&[&str]`, however convertible the elements look:
+
+```rust,compile_fail
+fn main() {
+    let slice: &[&str] = &["apple", "banana", "cherry"];
+    let mut v: Vec<String> = Vec::new();
+    v.extend_from_slice(slice);   // error[E0308]: expected `&[String]`, found `&[&str]`
+}
+```
+
+There is nowhere for a conversion to happen: cloning a `&str` gives a `&str`. Use `extend` and convert on the way in.
+
+```rust
+fn main() {
+    let slice: &[&str] = &["apple", "banana", "cherry"];
+    let mut v: Vec<String> = Vec::new();
+    v.extend(slice.iter().map(|&s| s.to_string()));
+    assert_eq!(v, ["apple", "banana", "cherry"]);
+}
+```
 
 ## Example
 
@@ -40,6 +88,24 @@ fn main() {
     let rest = vec![String::from("Ben"), String::from("Cara")];
     names.extend_from_slice(&rest);
     println!("{names:?}  rest {rest:?}");
+
+    // extend(&v) goes through Extend<&T>, which demands T: Copy — so it takes
+    // numbers and refuses the Strings above:
+    //     names.extend(&rest);   // error[E0271]: expected `String`, found `&String`
+    // extend_from_slice asks only for Clone, which is why the method exists.
+    let nums = vec![1, 2, 3];
+    let mut copied: Vec<i32> = Vec::new();
+    copied.extend(&nums);
+    println!("extend(&v) needs Copy: {copied:?}");
+
+    // The element types must match exactly. A Vec<String> will not take a
+    // &[&str], because cloning a &str gives a &str, not a String:
+    //     owned.extend_from_slice(words);   // error[E0308]: expected `&[String]`
+    // Convert on the way in with extend instead.
+    let words: &[&str] = &["apple", "banana", "cherry"];
+    let mut owned: Vec<String> = Vec::new();
+    owned.extend(words.iter().map(|&s| s.to_string()));
+    println!("{owned:?} from {words:?}");
 
     // A &Vec<T> coerces to &[T], so this is how you concatenate two vectors
     // you both want to keep.
@@ -71,6 +137,8 @@ fn main() {
 ```text
 [1, 2, 3, 4, 5]  source still usable: [3, 4, 5]
 ["Ada", "Ben", "Cara"]  rest ["Ben", "Cara"]
+extend(&v) needs Copy: [1, 2, 3]
+["apple", "banana", "cherry"] from ["apple", "banana", "cherry"]
 [1, 2, 3, 4] from [1, 2] and [3, 4]
 100 bytes in one go: len 100 cap 100
 hello world
