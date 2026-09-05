@@ -26,6 +26,8 @@ The same 4×4 grid of `u8`, written three ways. The allocation counts below are 
 
 At 1000 rows the nested form is 1001 allocations against the flat form's 1. The middle column is the whole reason to pay it: rows that need not agree on a length is a thing neither other shape can express.
 
+When the rows are all the same width but there are a changing number of them, there is a fourth shape between the first two — [a `Vec` of arrays](../vec_of_arrays/README.md), `Vec<[u8; 4]>`, which grows like the second and allocates like the third.
+
 The outer `Vec` in the nested form is three `usize`s wide — pointer, length, capacity — and holds none of the data. That is [the same three numbers](../the_vec/README.md) a `Vec` always is; there are just five of them stacked here.
 
 ## `{:?}` prints one line, not a picture
@@ -350,6 +352,7 @@ fn main() {
 ## See also
 
 - [`Vec`](../the_vec/README.md) — the three numbers each of these rows is, and how one grows
+- [A `Vec` of arrays](../vec_of_arrays/README.md) — the same grid with the row width back in the type: one allocation, `Copy` rows, and a wrong-length row the compiler refuses
 - [Arrays and slices](../arrays_and_slices/README.md) — why `[[u8; 4]; 4]` is a different type from `[[u8; 5]; 4]`, and what `chunks` hands back
 - [The global allocator](../../09_Advanced/the_global_allocator/README.md) — the counting allocator this page's numbers come from
 - [`iter`, `iter_mut`, `into_iter`](../../24_Iterators/iter_iter_mut_into_iter/README.md) — which of the three yields the `&mut` that needs the `*`
