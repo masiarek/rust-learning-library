@@ -4,7 +4,7 @@
 
 **One line:** A handful of prefixes decide what the compiler does with the characters between your quotes — none, `r`, `b`, `c`, and the `br` / `cr` combinations — and the difference between `"C:\temp\new"` and `r"C:\temp\new"` is a tab and a newline you never typed.
 
-```rust
+```rust,ignore
 let typed = r"C:\temp\new";    // 11 bytes: exactly the characters you see
 let cooked = "C:\temp\new";    //  9 bytes: \t became a tab, \n a newline
 ```
@@ -77,7 +77,7 @@ Every backslash in a Windows path, a regex, or a chunk of embedded JSON is an es
 
 The `#` count is a delimiter you widen until the text fits:
 
-```rust
+```rust,ignore
 let quote = r#"he said "hi""#;        // the text contains "
 let awkward = r##"a "# sequence"##;   // the text contains "#
 ```
@@ -88,10 +88,12 @@ Nothing dedents a multi-line literal, so a raw string is indented the way you wr
 
 `\x` stops at `\x7F` in a `str`, because above that a single byte is not valid UTF-8 on its own. In a byte string it goes to `\xFF`, since `b"…"` promises nothing about encoding — that is what it is for.
 
-```rust,ignore
-let high = "\xF5";        // does not compile
-let polish = b"ł";        // does not compile either
-let nul = c"a\0b";        // nor this
+```rust,compile_fail
+fn main() {
+    let high = "\xF5";        // does not compile
+    let polish = b"ł";        // does not compile either
+    let nul = c"a\0b";        // nor this
+}
 ```
 
 ```text title="Abridged — real rustc output for escapes.rs, aborting line dropped"
@@ -129,7 +131,7 @@ The third one is the C string type showing through the syntax: a `CStr` ends at 
 
 An escape is resolved at compile time, so by run time there is no `\t` left to print — there is a tab. `Display` writes that tab; [`Debug`](../../15_First_Programs/debug_vs_display/README.md) writes the escape back, quotes included, which is why `{:?}` is the one to reach for when the question is *what is actually in this string*.
 
-```rust
+```rust,ignore
 println!("{}", "a\tb");     // a	b
 println!("{:?}", "a\tb");   // "a\tb"
 ```
