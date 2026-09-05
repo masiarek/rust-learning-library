@@ -1,0 +1,38 @@
+1. Print the index and both elements
+   Index: 0, Integer: 10, Float: 1.1
+   Index: 1, Integer: 20, Float: 2.2
+   Index: 2, Integer: 30, Float: 3.3
+   Index: 3, Integer: 40, Float: 4.4
+
+2. Concatenate into a new Vec<String>
+   ["0: hello and goodbye", "1: rust and c++", "2: world and earth"]
+
+3. Sum each pair
+   Index: 0, Sum: 8
+   Index: 1, Sum: 16
+   Index: 2, Sum: 24
+
+4. Keep the pairs whose sum is even — three ways to get past the &
+   (a) deref at push     [(2, 4), (2, 8), (4, 2)]
+   (b) deref in pattern  [(2, 4), (2, 8), (4, 2)]
+   (c) .copied() first   [(2, 4), (2, 8), (4, 2)]
+   Identical. (c) is the one to reach for in a chain: filter hands
+   its closure a reference to the item, so a chain over references
+   makes the pattern &(x, y) where (b) would have written (&x, &y).
+
+5. Multiply each pair by its index
+   [0, 20, 84]
+   `i as i32` is not decoration: enumerate counts in usize, and
+   there is no silent widening to i32. Drop the cast and what
+   rustc says depends on whether the Vec was annotated — see the
+   lesson: unannotated, it does not mention the multiply at all.
+
+6. The prediction: one vector is longer than the other
+   long has 8 items, short has 6
+   pairs examined: 6
+   kept: [(2, 4), (2, 8), (4, 2)]
+   6 and 8 were never tested. zip ended the sequence when the
+   shorter side ran out, and the only evidence is a count nobody
+   printed. If both sides are supposed to be the same length, say
+   so before the loop:
+   assert_eq! would fail here: 8 != 6

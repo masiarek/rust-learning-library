@@ -1,0 +1,34 @@
+1. zip pairs, enumerate numbers
+   ["0: 10 => a", "1: 20 => b", "2: 30 => c"]
+
+2. The other order gives the same data in a different shape
+   .zip().enumerate()  [(0, (10, "a")), (1, (20, "b")), (2, (30, "c"))]
+   .enumerate().zip()  [((0, 10), "a"), ((1, 20), "b"), ((2, 30), "c")]
+   Same six values. The pattern that destructures them is not the
+   same: (i, (id, tag)) above, ((i, id), tag) below.
+
+3. zip stops at the shorter side, and says nothing
+   4 ids, 3 tags -> 3 pairs
+   [(10, "a"), (20, "b"), (30, "c")]
+   40 is gone. No panic, no warning, no `Result` — the loop just
+   runs one row short, and every count downstream is wrong by one.
+
+4. enumerate numbers what reaches IT, not the source
+   .filter().enumerate()  [(0, 10), (1, 30), (2, 50)]
+   .enumerate().filter()  [(0, 10), (2, 30), (4, 50)]
+   Put enumerate first for a position in the ORIGINAL sequence;
+   last for a row number in the output.
+
+5. zip takes an IntoIterator, not an iterator
+   .zip(&owned)       [(10, 100), (20, 200), (30, 300)]   owned still usable: [100, 200, 300]
+   .zip(owned)        [(10, 100), (20, 200), (30, 300)]   owned is gone: E0382 on any further use
+   The pairs print the same; the item types do not. .zip(&owned)
+   yields (&i32, &i32), .zip(owned) yields (&i32, i32).
+
+6. The index is a usize
+   [0, 20, 60]
+   Drop the `as i32` and this stops compiling — but WHERE rustc
+   points depends on the annotation. `let ids: Vec<i32>` gets you
+   `cannot multiply usize by &i32`; without it, `ids` is inferred
+   as Vec<usize> and the error lands on collect, blaming
+   FromIterator and never mentioning the multiply.
