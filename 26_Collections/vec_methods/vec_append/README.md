@@ -16,9 +16,26 @@ The source is left **empty but alive**, and it keeps its allocation. That makes 
 
 It takes `&mut Self`, so both vectors must be reachable and distinct: `v.append(&mut v)` is two mutable borrows of one value and does not compile. ([`clippy::extend_with_drain` ↗](https://rust-lang.github.io/rust-clippy/master/index.html#extend_with_drain), warn by default, pushes `v.extend(w.drain(..))` towards this method.)
 
-Panics if the combined length would exceed `isize::MAX` bytes.
+Panics if the new capacity would exceed `isize::MAX` bytes.
+
+**"Moved, not cloned" does not mean nothing is copied.** `append` reserves in the *destination* and does one [`ptr::copy_nonoverlapping`](https://doc.rust-lang.org/std/ptr/fn.copy_nonoverlapping.html) of the whole run, then sets the source's length to zero. No `Clone::clone` runs and no per-element allocation happens — but the bytes do move, the destination may reallocate to make room, and the source's buffer is never adopted. That last part is visible in the example below: the source still reports the capacity it had.
 
 If you want the source *consumed* rather than emptied, `v.extend(other)` takes it by value. If you want the source untouched, [`extend_from_slice`](../vec_extend_from_slice/README.md) clones.
+
+## `append` vs `drain`
+
+They overlap on exactly one case — moving everything out of a vector you intend to keep — and `append` is the better spelling of that one:
+
+| | `dst.append(&mut src)` | `src.drain(range)` |
+|---|---|---|
+| how much | all of `src`, always | any range, including `..` |
+| where it goes | the end of another `Vec<T>` | an iterator — anywhere at all |
+| on the way out | nothing; it is a bulk copy | `.map()`, `.filter()`, `.rev()`, `.collect()` |
+| the source | emptied, buffer kept | range removed, buffer kept |
+
+So `drain` earns its place by being the *general* one. It can take a slice out of the middle and leave the rest in order; it can hand the removed elements to a `String`, a `HashSet`, a channel, or a function that takes an iterator; it can transform them on the way. `append` can do none of that — it only ever concatenates one whole `Vec<T>` onto another.
+
+Read the other direction, `append` is the fast path for the case it does cover. `dst.extend(src.drain(..))` is the same result routed through the iterator protocol, which is why [`clippy::extend_with_drain` ↗](https://rust-lang.github.io/rust-clippy/master/index.html#extend_with_drain) (`perf`, **warn** by default) rewrites it back to `append`. Clippy keeps three more lints for reaching for `drain` when something simpler exists — [`drain_collect` ↗](https://rust-lang.github.io/rust-clippy/master/index.html#drain_collect) (warn) for `.drain(..).collect()`, and the allow-by-default [`clear_with_drain` ↗](https://rust-lang.github.io/rust-clippy/master/index.html#clear_with_drain) and [`iter_with_drain` ↗](https://rust-lang.github.io/rust-clippy/master/index.html#iter_with_drain) — and between them they draw the boundary: `drain` is for a **range you want back**, not for emptying, clearing, or consuming.
 
 ## Example
 
@@ -64,6 +81,22 @@ fn main() {
         all.append(&mut part);
     }
     println!("{all:?}");
+
+    // Why drain exists. append takes ALL of another Vec and puts it on the end
+    // of this one. drain takes a RANGE, and hands the removed elements back as
+    // an iterator — so they can be transformed on the way out, and can land
+    // somewhere that is not the tail of a Vec.
+    let mut ids = vec![10, 20, 30, 40, 50];
+    let head: String = ids.drain(..2).map(|n| n.to_string()).collect::<Vec<_>>().join("-");
+    println!("drain took a range, into a String: {head:?}  left {ids:?}");
+
+    // Spelled with the full range and extended onto another vector, it is
+    // append the slow way round — clippy::extend_with_drain (perf, warn by
+    // default) rewrites it back.
+    let mut from = vec![1, 2, 3];
+    let mut onto = vec![0];
+    onto.extend(from.drain(..));
+    println!("extend + drain(..) does the same as append: {onto:?}  from {from:?}");
 }
 ```
 <!-- /source -->
@@ -78,6 +111,8 @@ moved [1, 2, 3] — non-Clone values — source now len 0
 source kept its buffer: true
 refilled without allocating: [9]
 [1, 2, 3, 4, 5]
+drain took a range, into a String: "10-20"  left [30, 40, 50]
+extend + drain(..) does the same as append: [0, 1, 2, 3]  from []
 ```
 <!-- /output -->
 

@@ -36,4 +36,20 @@ fn main() {
         all.append(&mut part);
     }
     println!("{all:?}");
+
+    // Why drain exists. append takes ALL of another Vec and puts it on the end
+    // of this one. drain takes a RANGE, and hands the removed elements back as
+    // an iterator — so they can be transformed on the way out, and can land
+    // somewhere that is not the tail of a Vec.
+    let mut ids = vec![10, 20, 30, 40, 50];
+    let head: String = ids.drain(..2).map(|n| n.to_string()).collect::<Vec<_>>().join("-");
+    println!("drain took a range, into a String: {head:?}  left {ids:?}");
+
+    // Spelled with the full range and extended onto another vector, it is
+    // append the slow way round — clippy::extend_with_drain (perf, warn by
+    // default) rewrites it back.
+    let mut from = vec![1, 2, 3];
+    let mut onto = vec![0];
+    onto.extend(from.drain(..));
+    println!("extend + drain(..) does the same as append: {onto:?}  from {from:?}");
 }

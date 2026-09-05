@@ -4,3 +4,5 @@ moved [1, 2, 3] — non-Clone values — source now len 0
 source kept its buffer: true
 refilled without allocating: [9]
 [1, 2, 3, 4, 5]
+drain took a range, into a String: "10-20"  left [30, 40, 50]
+extend + drain(..) does the same as append: [0, 1, 2, 3]  from []

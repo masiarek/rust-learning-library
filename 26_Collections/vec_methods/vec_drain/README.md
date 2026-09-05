@@ -99,5 +99,6 @@ drain past the end panicked: true
 - [`Vec::extract_if`](../vec_extract_if/README.md) — remove by predicate rather than by range, and lazily
 - [`Vec::splice`](../vec_splice/README.md) — drain, and put something else in its place
 - [`Vec::into_iter`](../vec_into_iter/README.md) — the consuming version
+- [`Vec::append`](../vec_append/README.md) — moving *everything* into another vector, in one bulk copy rather than through an iterator
 
 [`Vec::drain` in the standard library ↗](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.drain)
