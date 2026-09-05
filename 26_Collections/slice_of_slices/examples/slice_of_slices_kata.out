@@ -1,0 +1,16 @@
+1. Vec<Vec<i32>> through a &[&[i32]] signature
+   column_sums = [111, 22, 3]
+   the conversion cost 1 allocation(s); the call itself 1
+   (the call allocates too: column_sums builds its own Vec)
+
+2. [[i32; 3]; 2] through the same signature
+   column_sums = [5, 7, 9]
+   `fixed.iter()` yields &[i32; 3], and as_slice() forgets the 3.
+
+3. The signature that takes both, unconverted
+   from Vec<Vec<i32>> : [111, 22, 3]
+   from [[i32; 3]; 2] : [5, 7, 9]
+   allocations for both calls: 2 — two result Vecs, no row arrays
+
+4. If only the Vec<Vec<i32>> ever called it: &[Vec<i32>]
+   `&owned` coerces to that directly — no generics, no conversion.
