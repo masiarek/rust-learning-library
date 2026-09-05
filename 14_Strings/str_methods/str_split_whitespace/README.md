@@ -72,6 +72,7 @@ whitespace route  ["alice", "42"]  -> 2 fields, and 42 is now column 2
 ## See also
 
 - [`str::split_ascii_whitespace`](../str_split_ascii_whitespace/README.md) — the ASCII-only, faster version
+- [RFC 1054 — the method that renamed itself to promise less](../../rfc_1054_str_words/README.md) — why it is not called `words()`, and why it is a method rather than a pattern
 - [`str::split`](../str_split/README.md) — the mechanical version, for delimited data
 - [`str::trim`](../str_trim/README.md) — the ends only, without splitting
 - [`str::lines`](../str_lines/README.md) — when the unit is a line rather than a word

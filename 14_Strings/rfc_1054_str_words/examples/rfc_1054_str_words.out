@@ -1,0 +1,40 @@
+WHAT SHIPPED IS THE RFC'S FORMULA, VERBATIM
+  split_whitespace()            ["the", "quick", "brown", "fox"]
+  split(is_whitespace).filter() ["the", "quick", "brown", "fox"]
+  identical: true
+
+WHY IT IS A METHOD AND NOT A PATTERN (lilyball's objection)
+  " a b ".split(is_whitespace)  ["", "a", "b", ""]
+  " a b ".split_whitespace()    ["a", "b"]
+  a Pattern cannot drop the leading and trailing empties;
+  the .filter() is what the method exists to carry.
+
+THE ANSWER EVERYONE REACHES FOR FIRST
+  split(' ')  ["", "", "the", "quick\tbrown\nfox", "", ""]
+  it neither collapses runs nor knows a tab is whitespace.
+
+THE ARGUMENT THE RFC WON: "A WORD" HAS NO PORTABLE DEFINITION
+  私は学生です  ("I am a student") has no spaces in it at all,
+  so split_whitespace finds 1 piece for its 6 chars,
+  where a Japanese reader finds several words.
+  punctuation rides along too: ["don't", "stop,", "e.g.", "now"]
+  UAX #29 would answer all of this. std declined to ship an answer.
+
+...AND "WHITESPACE" TURNS OUT TO BE AMBIGUOUS TOO
+  char            is_whitespace  split_whitespace  split_ascii_ws  lines
+  SPACE  U+0020   true           2                 2               1
+  TAB    U+0009   true           2                 2               1
+  VT     U+000B   true           2                 1               1
+  FF     U+000C   true           2                 2               1
+  NBSP   U+00A0   true           2                 1               1
+  NEL    U+0085   true           2                 1               1
+  OGHAM  U+1680   true           2                 1               1
+  LS     U+2028   true           2                 1               1
+  PS     U+2029   true           2                 1               1
+  ZWSP   U+200B   false          1                 1               1
+  FS     U+001C   false          1                 1               1
+  VT is ASCII and IS whitespace, yet split_ascii_whitespace skips it,
+  because is_ascii_whitespace is the WhatWG set, minus U+000B.
+  ZWSP is called a space and is not one (White_Space=no).
+  FS is not whitespace here; Python's split() DOES split on it.
+  LS and PS split words here but are NOT line endings -- see RFC 1212.

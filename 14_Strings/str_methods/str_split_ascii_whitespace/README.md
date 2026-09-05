@@ -62,6 +62,7 @@ same as unicode: true
 ## See also
 
 - [`str::split_whitespace`](../str_split_whitespace/README.md) — the Unicode-aware version
+- [RFC 1054 — the method that renamed itself to promise less](../../rfc_1054_str_words/README.md) — the two definitions of whitespace std ships, and the VERTICAL TAB between them
 - [`str::trim_ascii`](../str_trim_ascii/README.md) — the same ASCII-only restriction, for trimming
 - [`str::is_ascii`](../str_is_ascii/README.md) — checking the assumption first
 - [`str::split`](../str_split/README.md) — an explicit delimiter instead

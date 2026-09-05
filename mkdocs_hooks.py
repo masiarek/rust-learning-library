@@ -609,6 +609,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...and the RFC behind the one method on that page nobody expects
         # to have a history: what `lines()` does with `\r\n`, and why.
         "rfc_1212_line_endings",
+        # ...and its companion, one method along the same page: the rename
+        # that made `words()` stop claiming to know what a word is.
+        "rfc_1054_str_words",
         # The lifetime half, once the two types are solid: three spellings of
         # one type, and the claim about String that is not true.
         "static_str",
@@ -961,6 +964,7 @@ LABELS = {
     "static_str": "`&'static str`",
     "rfc_69_byte_literals": "RFC 69: byte literals",
     "rfc_1212_line_endings": "RFC 1212: line endings",
+    "rfc_1054_str_words": "RFC 1054: str::words",
     "parsing_a_string": "Parsing out of a string",
     "the_format_language": "The format mini-language",
     "when_string_is_too_slow": "When `String` is too slow",
