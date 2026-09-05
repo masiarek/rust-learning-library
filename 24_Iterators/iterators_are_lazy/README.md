@@ -96,6 +96,27 @@ fn main() {
 
 Rust gives you the second warning too — *"`Iterator::map` call that discard the iterator's values … this function returns `()`, which is likely not what you wanted"* — which is worth reading as the compiler noticing that your closure returned nothing to map *to*. Reach for `for_each`, or a plain `for` loop, which is a consumer by construction.
 
+## The trap on the other side: observing an iterator spends it
+
+Laziness means the work happens when a consumer asks. `next` is a consumer, so **asking in order to look is still asking** — and a `println!` that prints `it.next()` has permanently taken that item:
+
+```rust
+fn main() {
+    let mut it = vec!["a".to_string(), "b".to_string()].into_iter();
+    println!("{it:?}");             // IntoIter(["a", "b"]) - free, takes nothing
+    let first = it.next();
+    println!("{:?}", it.next());    // Some("b") - and "b" is now gone
+    // assert_eq!(it.next(), Some("b".to_string()));   // would panic: left None
+    println!("{first:?}");          // Some("a") - a stored value, still there
+}
+```
+
+The two prints look alike and are not. `println!("{it:?}")` borrows the iterator and shows what is left in it, costing nothing. `println!("{:?}", it.next())` calls a method that takes `&mut self` and hands back the item by value — the printing is a side effect of a consumption that has already happened.
+
+Which is why the assert fails where it does. `first` holds up, because it is a value that was saved rather than a call that was repeated; every later `next()` returns `None`, because [`vec::IntoIter` ↗](https://doc.rust-lang.org/std/vec/struct.IntoIter.html) is a [`FusedIterator` ↗](https://doc.rust-lang.org/std/iter/trait.FusedIterator.html) and an exhausted iterator goes on saying so. **The debugging print is what broke the test**, and deleting the print makes the test pass — which is close to the worst shape a bug can have.
+
+The habit that avoids it: **collect once, then look at the collection.** `let items: Vec<_> = it.collect();` gives you something that can be printed, indexed and asserted against as often as you like, because a `Vec` is not spent by being read. When you do want to take part of an iterator and keep the rest, `by_ref()` is the method that says so.
+
 ## If you are coming from another language
 
 - **Python.** This is the Python 2 → 3 change, and if you lived through it you already own the model: `map` and `filter` used to return lists and now return lazy iterators, `range` stopped materialising, and `itertools.islice` is `take`. So the mistake Python teaches you to avoid — `map(print, xs)` printing nothing at the REPL in Python 3 — is exactly the trap above, and Rust's version comes with a compiler warning instead of a silent no-op. Two differences that matter. A Python generator is *one-shot* and Rust's iterator is too, but Python re-running `for x in gen` silently yields nothing while Rust's borrow checker refuses the second use outright. And Python's laziness stops at the syntax: a list comprehension is eager, a generator expression is lazy, and the only difference is a bracket — `[f(x) for x in xs]` versus `(f(x) for x in xs)`. In Rust the split is visible in the type: `Map<...>` is a plan, `Vec<...>` is a result.
@@ -153,6 +174,16 @@ Rust gives you the second warning too — *"`Iterator::map` call that discard th
    expensive first:   1 kept, expensive test ran 6 times
    same answer, different amount of work. Order the chain so the
    cheapest, most selective test runs first.
+
+7. Observing an iterator SPENDS it
+   IntoIter(["a", "b"])                <- Debug on the iterator: free, takes nothing
+   let first = it.next();       first = Some("a")
+   println!("{:?}", it.next())  prints Some("b")
+   println!("{:?}", it.next())  prints None
+   first is STILL Some("a"): a stored value, not a repeated call.
+   But assert_eq!(it.next(), Some("b")) would panic here — left None,
+   right Some("b") — because the two prints above already took both.
+   Printing an iterator is free; printing what next() returns is not.
 ```
 <!-- /output -->
 
