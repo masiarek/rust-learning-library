@@ -1,0 +1,8 @@
+Four references, one function:
+   &str          fat  pointer, 2 words — the value is 5 bytes
+   &[i32]        fat  pointer, 2 words — the value is 12 bytes
+   &dyn Display  fat  pointer, 2 words — the value is 4 bytes
+   &i32          thin pointer, 1 word — the value is 4 bytes
+
+Remove the `?Sized` and only the last call still compiles:
+`i32` is the only one of the four targets whose size is in its type.
