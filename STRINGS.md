@@ -63,8 +63,9 @@ flowchart LR
 | 9 | [Walking a `String`](14_Strings/walking_a_string/README.md) | 101 → 201 | Three item types and the split family — and why `split(' ')` and `split_whitespace()` disagree about empty fields |
 | 10 | [`&'static str`](14_Strings/static_str/README.md) | 201 | Is it different from `&str`? On a literal, no — and the claim that a `String` can never yield one is false |
 | 11 | [Six kinds of string](14_Strings/six_kinds_of_string/README.md) | 201 | Why `OsString` and `CString` exist, and the one owned/borrowed pattern all six types repeat |
-| 12 | [Inside a `Split`](14_Strings/inside_a_split/README.md) | 201 → 301 | Why printing `s.split(":")` with `{:?}` gives a struct full of `crit_pos` and `byteset` instead of `["a", "b", "c"]` — and what every field of it means |
-| 13 | [The third owned form](14_Strings/boxed_str/README.md) | 201 → 301 | `Box<str>`, `Rc<str>`, `Arc<str>`: the capacity word dropped, and the interning move that makes a repeated column stop paying per row |
+| 12 | [`str` is unsized](14_Strings/str_is_unsized/README.md) | 201 | Why you never hold a `str`, only a pointer to one — the size that belongs to the value, the fat pointer's second word, and `?Sized` as a relaxation |
+| 13 | [Inside a `Split`](14_Strings/inside_a_split/README.md) | 201 → 301 | Why printing `s.split(":")` with `{:?}` gives a struct full of `crit_pos` and `byteset` instead of `["a", "b", "c"]` — and what every field of it means |
+| 14 | [The third owned form](14_Strings/boxed_str/README.md) | 201 → 301 | `Box<str>`, `Rc<str>`, `Arc<str>`: the capacity word dropped, and the interning move that makes a repeated column stop paying per row |
 
 ## The lessons strings lean on
 
@@ -84,7 +85,7 @@ Strings are the worked example half the library's ownership pages already use, s
 
 ## Still written as outlines
 
-Named honestly, because a map that only lists what exists is a map of the wrong territory. Each of these 7 is a **stub** — a real page at a real URL, carrying the questions the finished lesson has to answer and the links to its neighbours, but with no runnable example behind it yet. That is the boundary this library draws: a stub states what it does not know, and nothing on it has been through the check that backs every other claim here.
+Named honestly, because a map that only lists what exists is a map of the wrong territory. Each of these 6 is a **stub** — a real page at a real URL, carrying the questions the finished lesson has to answer and the links to its neighbours, but with no runnable example behind it yet. That is the boundary this library draws: a stub states what it does not know, and nothing on it has been through the check that backs every other claim here.
 
 | The page | Level | What it will answer |
 |---|---|---|
@@ -92,7 +93,6 @@ Named honestly, because a map that only lists what exists is a map of the wrong 
 | [Searching without splitting](14_Strings/searching_a_string/README.md) | 101 → 201 | `find` / `rfind` / `contains` / `starts_with`, and `Pattern` as the trait that unifies them with the split family |
 | [The format mini-language](14_Strings/the_format_language/README.md) | 201 | `{:>8.3}`, `{:#x}`, `{val:^width$}`: fill, align, sign, width, precision, and the `$` that makes them dynamic |
 | [Comparing and sorting text](14_Strings/comparing_strings/README.md) | 201 | `Ord` on strings is byte order, which is not human order; case folding vs `to_lowercase` |
-| [`str` is unsized](14_Strings/str_is_unsized/README.md) | 201 | `?Sized`, why you only ever meet `str` behind a pointer, and what a fat pointer is |
 | [String parameters worth copying](14_Strings/string_api_design/README.md) | 201 → 301 | `impl AsRef<str>`, `Into<String>`, and when a signature should take `impl Display` |
 | [When `String` is too slow](14_Strings/when_string_is_too_slow/README.md) | 301 | `with_capacity` in anger, `smallstr` / `smartstring`, and avoiding a `format!` that a literal would do |
 

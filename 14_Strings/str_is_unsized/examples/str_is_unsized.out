@@ -1,0 +1,30 @@
+1. The size belongs to the VALUE, not to the type
+   size_of_val("hello")        = 5
+   size_of_val("hello, world") = 12
+   both values have type `str`, and they are not the same size
+   size_of::<str>()            = does not compile (E0277)
+
+2. So a `str` lives behind a pointer, measured in machine words
+   &str          2 words   pointer + length
+   &String       1 word    pointer (the String holds its own len)
+   String        3 words   pointer + length + capacity
+   Box<str>      2 words   pointer + length, owned, no capacity
+
+3. The second word IS the length: a subslice shares the first one
+   s.as_ptr() == head.as_ptr()  true
+   s.len() 12   head.len() 5   same bytes, different length word
+
+4. `?Sized` is what lets one function take all three
+   bytes_behind("hello")         = 5
+   bytes_behind(&[1, 2, 3])      = 12   (3 x i32)
+   bytes_behind(&7i32 as &dyn D) = 4    (size_of_val follows the vtable)
+
+5. Every fat pointer is two words — but the second word differs
+   &str          2 words   the second is a LENGTH
+   &[i32]        2 words   the second is a LENGTH
+   &dyn Display  2 words   the second is a VTABLE pointer
+   &i32          1 word    sized target, nothing to carry
+
+6. It is contagious: a struct ending in a `str` is unsized too
+   &Record       2 words   Record { id: u32, text: str }
+   you cannot write the literal, and you cannot put `text` first
