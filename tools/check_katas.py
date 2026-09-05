@@ -7,7 +7,7 @@ a row, and every re-sort rewrites all of them. Nothing about a page's own conten
 reveals that its row is missing, stale, or pointing somewhere else — so this
 check is the thing standing in for a reader who noticed.
 
-Four things it will not let past:
+Six things it will not let past:
 
 1. **An orphan kata.** A lesson with a ``## Practice`` section and no row is a
    published exercise nobody can find from the index.
@@ -26,6 +26,10 @@ Four things it will not let past:
    different question from "what do I do next?" — and a hand-maintained second
    copy of eighty rows would be wrong within a week. It is generated between
    markers from the table above it, so it cannot disagree; ``--fix`` rewrites it.
+6. **A row that did not parse.** A line that opens like a kata row but does not
+   match is named by line number and printed back. It used to vanish instead —
+   and return as an orphan page plus a misnumbering cascade, neither of which
+   pointed at the row that actually needed editing.
 
 Stdlib only, and no network: same rule as run_examples.py.
 
@@ -43,10 +47,26 @@ REPO = Path(__file__).resolve().parent.parent
 INDEX = REPO / "KATAS.md"
 SKIP_DIRS = {".git", "site", ".venv", "target", "__pycache__", ".github"}
 
+# The two label captures are bounded by the *cell* (``[^|]+``) rather than by the
+# first ``]``. A kata title is free to contain brackets — ``&[&[i32]]``, ``v[0]``,
+# a lifetime, a rustdoc ``[`Vec`](std::vec::Vec)`` — and the old ``[^\]]+`` stopped
+# dead at the first ``]``, so a title about slice notation did not match and its
+# row was dropped in silence. **The trap to avoid is re-excluding ``]``** from
+# either class; a table cell cannot contain a bare ``|``, so bounding on ``|`` is
+# both the widest correct class and the one that cannot run into the next cell.
+# (Greedy vs non-greedy is *not* what is load-bearing here — the trailing
+# ``\|\s*\[`` constrains the split either way, verified on both — so the
+# self-check below pins the resulting split rather than the quantifier.)
 ROW = re.compile(
-    r"^\|\s*K(?P<num>\d+)\s*\|\s*\[(?P<kata>[^\]]+)\]\((?P<kata_href>[^)]+)\)\s*"
-    r"\|\s*\[(?P<lesson>[^\]]+)\]\((?P<lesson_href>[^)]+)\)\s*\|\s*(?P<level>[^|]+)\|"
+    r"^\|\s*K(?P<num>\d+)\s*\|\s*\[(?P<kata>[^|]+)\]\((?P<kata_href>[^)]+)\)\s*"
+    r"\|\s*\[(?P<lesson>[^|]+)\]\((?P<lesson_href>[^)]+)\)\s*\|\s*(?P<level>[^|]+)\|"
 )
+# A line that opens like a kata row. One that matches this and not ROW is
+# malformed rather than absent, and has to say so in its own words: an unparsed
+# row simply drops out of ``rows``, and every check below is derived from that
+# list — so the lesson comes back as an orphan page and every row after it as
+# misnumbered. Three wrong answers, none of them naming the line to edit.
+SUSPECT_ROW = re.compile(r"^\|\s*K\d+\s*\|")
 # "**K7 — …**" or "**K7 …**" at the head of a Practice section.
 NUMBER_IN_PROSE = re.compile(r"\*\*K\d+\b")
 
@@ -110,14 +130,111 @@ def practice_pages() -> set[Path]:
     return {p for p in pages() if re.search(r"^## Practice\s*$", p.read_text(encoding="utf-8"), re.M)}
 
 
+def selfcheck() -> list[str]:
+    """Prove the row parser still accepts the shapes that have broken it.
+
+    Run on every invocation rather than behind a ``--selftest`` flag, and
+    returned rather than ``assert``ed, for the same reason twice: CI invokes this
+    tool with no arguments, so a flag-guarded test would never run there, and
+    ``assert`` vanishes under ``python3 -O``. A gate able to silently skip its own
+    test is precisely the failure this file exists to catch.
+    """
+    failures: list[str] = []
+
+    # The 2026-09-05 regression. Correctly formatted, both links resolving, and
+    # dropped on the floor — reported as an orphan page plus a 26-line
+    # misnumbering cascade, neither of which mentioned the row.
+    bracketed = (
+        "| K110 | [the conversion a `&[&[i32]]` parameter forces on a `Vec<Vec<i32>>`]"
+        "(26_Collections/slice_of_slices/README.md#practice) | "
+        "[Slices of slices](26_Collections/slice_of_slices/README.md) | 201 → 301 |"
+    )
+    m = ROW.match(bracketed)
+    if not m:
+        failures.append("ROW rejects a `]` inside a link label — the slice-notation trap is back")
+    else:
+        got = (
+            m.group("num"), m.group("kata"), m.group("kata_href"),
+            m.group("lesson"), m.group("lesson_href"), m.group("level").strip(),
+        )
+        want = (
+            "110",
+            "the conversion a `&[&[i32]]` parameter forces on a `Vec<Vec<i32>>`",
+            "26_Collections/slice_of_slices/README.md#practice",
+            "Slices of slices",
+            "26_Collections/slice_of_slices/README.md",
+            "201 → 301",
+        )
+        if got != want:
+            failures.append(f"ROW mis-split a bracketed label: {got!r} != {want!r}")
+
+    # A label containing a whole ``](...)`` of its own — rustdoc's intra-doc link
+    # syntax, which this library has every reason to write about. Nothing about
+    # this row is ambiguous to a reader; it is ambiguous to a parser, so pin the
+    # split rather than trust a quantifier to fall the right way.
+    nested = (
+        "| K42 | [the intra-doc link form [`Vec`](std::vec::Vec) and when it resolves]"
+        "(21_Docs/intra_doc_links/README.md#practice) | "
+        "[Intra-doc links](21_Docs/intra_doc_links/README.md) | 201 |"
+    )
+    m = ROW.match(nested)
+    if not m:
+        failures.append("ROW rejects a label containing its own `](` (rustdoc intra-doc link)")
+    elif m.group("kata_href") != "21_Docs/intra_doc_links/README.md#practice":
+        failures.append(
+            "ROW split a nested-link label at the wrong `](`: "
+            f"kata_href={m.group('kata_href')!r}"
+        )
+
+    # An ordinary row still splits exactly where it always did.
+    plain = "| K1 | [A title](a/b/README.md#practice) | [A lesson](a/b/README.md) | 101 |"
+    m = ROW.match(plain)
+    if not m or m.group("kata") != "A title" or m.group("lesson") != "A lesson":
+        failures.append("ROW no longer parses an ordinary row")
+
+    # And a genuinely malformed row is still caught rather than dropped.
+    malformed = "| K7 | [no closing bracket(a/README.md) | [L](a/README.md) | 101 |"
+    if ROW.match(malformed) or not SUSPECT_ROW.match(malformed):
+        failures.append("a malformed row would go unreported — SUSPECT_ROW and ROW disagree")
+
+    return failures
+
+
 def main() -> int:
     problems: list[str] = []
+
+    broken = selfcheck()
+    if broken:
+        print(f"FAILED: {Path(__file__).name} cannot parse its own test rows:")
+        for b in broken:
+            print(f"  - {b}")
+        return 1
 
     if not INDEX.exists():
         print(f"ERROR: {INDEX.name} is missing")
         return 1
 
-    rows = [m for m in (ROW.match(line) for line in INDEX.read_text(encoding="utf-8").splitlines()) if m]
+    lines = INDEX.read_text(encoding="utf-8").splitlines()
+    rows = [m for m in (ROW.match(line) for line in lines) if m]
+
+    # Before anything is derived from `rows`. A line that opens like a kata row
+    # and did not parse makes every count below it wrong, so name it and stop —
+    # the cascade would otherwise bury the one line that needs editing.
+    unparsed = [
+        (n, line) for n, line in enumerate(lines, 1)
+        if SUSPECT_ROW.match(line) and not ROW.match(line)
+    ]
+    if unparsed:
+        print("FAILED:")
+        for n, line in unparsed:
+            print(
+                f"  - {INDEX.name} line {n}: looks like a kata row but did not parse. "
+                "The shape is `| K<n> | [kata](link) | [lesson](link) | level |`; "
+                "a literal `|` inside a cell will break it"
+            )
+            print(f"      {line.strip()}")
+        return 1
+
     if not rows:
         print(f"ERROR: no kata rows parsed out of {INDEX.name} — has the table changed shape?")
         return 1
