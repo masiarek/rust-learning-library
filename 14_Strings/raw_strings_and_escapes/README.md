@@ -153,6 +153,7 @@ println!("{:?}", "a\tb");   // "a\tb"
 
 ## See also
 
+- [RFC 69 — how Rust got `b'A'`](../rfc_69_byte_literals/README.md) — where the `b` rows came from, and the three questions the proposal left open
 - [Meet the `char`](../meet_the_char/README.md) — `'🦀'`, and why it is four bytes
 - [Meet the byte](../../19_Numbers/meet_the_byte/README.md) — `b'A'` as a number
 - [Six kinds of string](../six_kinds_of_string/README.md) — what `&CStr` and `&[u8]` promise

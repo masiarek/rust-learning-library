@@ -601,6 +601,12 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...then what those bytes encode: a char is not a byte, and
         # "how many characters" has three honest answers.
         "meet_the_char",
+        # ...then every way to write one down in source: the five prefixes and
+        # their raw combinations, and the escapes each one honours.
+        "raw_strings_and_escapes",
+        # ...and where that table came from: one two-page RFC, its three
+        # unresolved questions, and the pattern syntax that changed under it.
+        "rfc_69_byte_literals",
         # ...and how to walk them: three item types, and the split family.
         "walking_a_string",
         # The lifetime half, once the two types are solid: three spellings of
@@ -625,7 +631,6 @@ NAV_ORDER: dict[str, list[str]] = {
         "parsing_a_string",
         "searching_a_string",
         "the_format_language",
-        "raw_strings_and_escapes",
         "comparing_strings",
         "str_is_unsized",
         "string_api_design",
@@ -953,6 +958,7 @@ LABELS = {
     "walking_a_string": "Walking a `String`",
     "meet_the_char": "Meet the `char`",
     "static_str": "`&'static str`",
+    "rfc_69_byte_literals": "RFC 69: byte literals",
     "parsing_a_string": "Parsing out of a string",
     "the_format_language": "The format mini-language",
     "when_string_is_too_slow": "When `String` is too slow",

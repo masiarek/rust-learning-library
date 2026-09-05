@@ -401,6 +401,7 @@ fn main() {
 - [What a float actually stores](../what_a_float_stores/README.md) — where "53 significand bits" stops being trivia
 - [Type inference](../../15_First_Programs/type_inference/README.md) — what decides the type when there is no suffix
 - [Meet the `char`](../../14_Strings/meet_the_char/README.md) — the other half of `b'A'` versus `'A'`
+- [RFC 69 — how Rust got `b'A'`](../../14_Strings/rfc_69_byte_literals/README.md) — the two-page proposal that added the `b` prefix, and why it borrowed the spelling from Python without borrowing the semantics
 - [The Rust Reference: Literal expressions ↗](https://doc.rust-lang.org/reference/expressions/literal-expr.html) — the grammar itself, including every suffix the parser accepts
 
 ## Po polsku
