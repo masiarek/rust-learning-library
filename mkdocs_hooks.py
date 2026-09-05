@@ -289,6 +289,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...then the one row of that table worth a page: two adapters whose
         # failure modes are both silent, which is why they get the space.
         "zip_and_enumerate",
+        # ...then the one row of that table worth a page: two adapters whose
+        # failure modes are both silent, which is why they get the space.
+        "zip_and_enumerate",
         # ...and then the three questions you do not have until you hit them:
         # handing a chain back, the two traits behind rev() and len(), and
         # when not to write a chain at all.
@@ -918,6 +921,7 @@ LABELS = {
     "implementing_iterator": "Implementing `Iterator`",
     "fold_and_reduce": "`fold` and `reduce`",
     "collect_and_fromiterator": "`collect` and `FromIterator`",
+    "zip_and_enumerate": "`zip` and `enumerate`",
     "zip_and_enumerate": "`zip` and `enumerate`",
     "returning_an_iterator": "Returning an iterator",
     "double_ended_and_exact_size": "`DoubleEndedIterator` and `ExactSizeIterator`",
