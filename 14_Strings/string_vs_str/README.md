@@ -106,6 +106,9 @@ The split is not a Rust invention, either. Python has it too, at build time rath
 | `s[4:7]` | a **new string**, copied out | `&s[4..7]` — a view, nothing copied |
 | immutable | every `str`, always | `&str` is read-only, but `str` is only fixed-**length** — see the trap above |
 | `s.encode()` / `b.decode()` | text ⇄ bytes, and only the way back can fail | `as_bytes()` is free · `str::from_utf8` returns a `Result` — same asymmetry, no exception |
+| `io.StringIO()` / `"".join(parts)` | text you are still building, kept apart from finished `str` | `String` — the growable buffer is a type of its own, and `&str` is the finished text |
+
+The last row is the one Python programmers already practise without a name for it: you reach for `StringIO` or a list-then-`join` because appending to a `str` copies it every time. Rust has the same two things and calls them `String` and `&str`; the difference is that the compiler knows which one you are holding.
 
 The habit that transfers: Python slices cost an allocation each, so you learned not to slice in a loop. Rust's `&str` removes the cost — a slice is a window — and the compiler enforces what the window may not do: outlive the text, or watch it while it changes.
 
