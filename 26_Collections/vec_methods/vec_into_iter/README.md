@@ -1,5 +1,7 @@
 # `Vec::into_iter` — and the three `IntoIterator` impls
 
+[`Vec` methods](../README.md) · [Collections](../../README.md)
+
 **Level:** 201 · working knowledge
 
 **One line:** `Vec` implements `IntoIterator` three times — for `Vec<T>`, `&Vec<T>` and `&mut Vec<T>` — and which one you get, along with whether the vector survives, is decided by the receiver rather than by the method name.
@@ -120,7 +122,7 @@ fn main() {
 
 Both compile. Swap the literals for run-time values and only the second still does:
 
-```text title="Abridged — real rustc output, without the file-and-line header"
+```text title="Abridged — real rustc output, without the file-and-line header or the trailing summary"
 error[E0716]: temporary value dropped while borrowed
   |
 3 |     let refs: Vec<&i32> = [x, y].iter().collect();
@@ -134,9 +136,16 @@ help: consider consuming the `[i32; 2]` when turning it into an `Iterator`
   |
 3 |     let refs: Vec<&i32> = [x, y].into_iter().collect();
   |                                  +++++
+help: consider using a `let` binding to create a longer lived value
+  |
+3 ~     let binding = [x, y];
+4 ~     let refs: Vec<&i32> = binding.iter().collect();
+  |
 ```
 
-The first version worked because of **rvalue static promotion**: an array literal of constants is lifted to a `'static` constant, so references into it outlive the statement. Once the values come from variables there is nothing to promote, the array is an ordinary temporary, and the references die at the semicolon. Nothing about `Vec` changed — the collection is the same in both — and rustc's own suggestion is to stop borrowing.
+The first version worked because of **rvalue static promotion**: an array literal of constants is lifted to a `'static` constant, so references into it outlive the statement. Once the values come from variables there is nothing to promote, the array is an ordinary temporary, and the references die at the semicolon. Nothing about `Vec` changed — the collection is the same in both.
+
+**rustc offers two fixes, and they do not produce the same thing.** `into_iter()` stops borrowing and gives a `Vec<i32>`; binding the array to a variable keeps the borrow alive long enough and gives the `Vec<&i32>` you asked for. Which one you want depends on whether the references were the point. Reach for the first unless they were.
 
 Worth knowing when you check this yourself: `{:?}` prints `[1, 2]` for both `Vec<&i32>` and `Vec<i32>`, because `Debug for &T` forwards to `T`. The output cannot tell you which you built; only the type annotation can.
 
@@ -231,7 +240,8 @@ fn main() {
     println!("   [1, 2].iter().collect()          -> Vec<&i32>, len {}", from_literal.len());
     println!("   [x, y].into_iter().collect()     -> Vec<i32>,  len {}", from_runtime.len());
     println!("   [x, y].iter().collect() would be error[E0716] — the array is a");
-    println!("   temporary, and rustc's own fix is to add `into_`.");
+    println!("   temporary. rustc offers two fixes: add `into_` (giving Vec<i32>),");
+    println!("   or bind the array first (keeping the Vec<&i32> you asked for).");
     println!("   Debug prints both as {from_literal:?}, so the output cannot tell");
     println!("   you which is which — only the type can.");
 
@@ -279,7 +289,8 @@ fn main() {
    [1, 2].iter().collect()          -> Vec<&i32>, len 2
    [x, y].into_iter().collect()     -> Vec<i32>,  len 2
    [x, y].iter().collect() would be error[E0716] — the array is a
-   temporary, and rustc's own fix is to add `into_`.
+   temporary. rustc offers two fixes: add `into_` (giving Vec<i32>),
+   or bind the array first (keeping the Vec<&i32> you asked for).
    Debug prints both as [1, 2], so the output cannot tell
    you which is which — only the type can.
 

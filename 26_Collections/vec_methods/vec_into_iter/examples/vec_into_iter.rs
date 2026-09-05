@@ -75,7 +75,8 @@ fn main() {
     println!("   [1, 2].iter().collect()          -> Vec<&i32>, len {}", from_literal.len());
     println!("   [x, y].into_iter().collect()     -> Vec<i32>,  len {}", from_runtime.len());
     println!("   [x, y].iter().collect() would be error[E0716] — the array is a");
-    println!("   temporary, and rustc's own fix is to add `into_`.");
+    println!("   temporary. rustc offers two fixes: add `into_` (giving Vec<i32>),");
+    println!("   or bind the array first (keeping the Vec<&i32> you asked for).");
     println!("   Debug prints both as {from_literal:?}, so the output cannot tell");
     println!("   you which is which — only the type can.");
 

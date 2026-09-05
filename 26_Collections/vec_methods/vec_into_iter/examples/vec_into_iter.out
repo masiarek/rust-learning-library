@@ -28,7 +28,8 @@
    [1, 2].iter().collect()          -> Vec<&i32>, len 2
    [x, y].into_iter().collect()     -> Vec<i32>,  len 2
    [x, y].iter().collect() would be error[E0716] — the array is a
-   temporary, and rustc's own fix is to add `into_`.
+   temporary. rustc offers two fixes: add `into_` (giving Vec<i32>),
+   or bind the array first (keeping the Vec<&i32> you asked for).
    Debug prints both as [1, 2], so the output cannot tell
    you which is which — only the type can.
 
