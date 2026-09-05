@@ -2,7 +2,7 @@
 
 **Level:** reference · the reading list
 
-**One line:** Where the [strings section](../README.md) got its material, and where to go when a lesson here is not enough — the normative sources first, then the book chapters worth owning, then the essays, the video, and the exercises to actually type.
+**One line:** Where the [strings section](../README.md) got its material, and where to go when a lesson here is not enough — the normative sources first, then the book chapters worth owning, then the essays, the videos, and the exercises to actually type.
 
 **The route through the lessons is [STRINGS.md](../../STRINGS.md).** This page is the outside world; that one is the order to read this library in.
 
@@ -43,6 +43,7 @@ The one thread worth reading rather than searching:
 ## Video
 
 - [Easy Rust 013: String and `&str` ↗](https://youtu.be/pSyaGzGg26o) — Dave MacLeod, the spoken companion to [ch. 14 ↗](https://dhghomon.github.io/easy_rust/Chapter_14.html) above. Short, and it takes the *why does this need a `&`* question seriously instead of asserting the answer.
+- [When to use `String` and `&str`? ↗](https://youtu.be/GrIudQW_i_U) — Smart Contract Programmer, ~8½ min, and the one that walks **all six forms in order** instead of the usual two: [0:39 ↗](https://www.youtube.com/watch?v=GrIudQW_i_U&t=39s) `String` · [1:49 ↗](https://www.youtube.com/watch?v=GrIudQW_i_U&t=109s) `&String` · [3:01 ↗](https://www.youtube.com/watch?v=GrIudQW_i_U&t=181s) `&mut String` · [3:59 ↗](https://www.youtube.com/watch?v=GrIudQW_i_U&t=239s) `str` · [5:11 ↗](https://www.youtube.com/watch?v=GrIudQW_i_U&t=311s) `&str` · [6:03 ↗](https://www.youtube.com/watch?v=GrIudQW_i_U&t=363s) `&mut str` · [6:42 ↗](https://www.youtube.com/watch?v=GrIudQW_i_U&t=402s) why `str` works as neither a parameter nor a return type · [8:06 ↗](https://www.youtube.com/watch?v=GrIudQW_i_U&t=486s) the when-to-use-which summary. Its [code is published ↗](https://github.com/t4sk/hello-rust/blob/main/src/bin/borrow_string_str.rs), which is the reason to reach for it over a longer video: the unsized argument arrives as something you can compile rather than a sentence — `let a: str = "hello";` beside `let b: str = "hello rust";`, two lengths wanting one type, which is [`str` is unsized](../str_is_unsized/README.md) in two lines. **Two things it leaves half-done.** It reaches `&mut str`, calls it *“possible but uncommon”*, and never mutates one — so the half worth seeing goes missing: a `&mut str` really can rewrite bytes in place ([`make_ascii_uppercase`](../str_methods/str_make_ascii_uppercase/README.md), reached through [`as_mut_str`](../string_methods/string_as_mut_str/README.md)), it just cannot change how many there are. And the published code files `fn make_str() -> &str` under the comment *“reference outlives value s”*, which is the wrong diagnosis: `let s = "";` is a `&'static str` and outlives nothing, the error is **`E0106`, missing lifetime specifier**, and it is the *signature* at fault, not the body — write `-> &'static str` and that same body compiles and runs (checked on 1.98.0). `E0106` in full is in [`String` vs `&str`](../string_vs_str/README.md).
 
 ## Exercises worth typing
 
