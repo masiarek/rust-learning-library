@@ -324,6 +324,53 @@ dict(id="str_literal_type",
  link=("static_str", SITE+"14_Strings/static_str/index.html"),
  tags="rust strings lifetimes"),
 
+dict(id="str_unsized",
+ front="Does this compile?<br><br>And what does it tell you about why you always meet <code>&amp;str</code> rather than bare <code>str</code>?",
+ code='''fn main() {
+    let s: str = *"hello";
+    println!("{s}");
+}''',
+ code_on="front",
+ fails="E0277",
+ back="<b>No &mdash; <code>E0277</code>: the size for values of type <code>str</code> cannot be known at compilation time.</b>"
+      "<br><br>A <code>str</code> is a run of UTF-8 bytes and nothing else &mdash; no length travels with it, so the compiler "
+      "cannot say how much stack one needs. <code>Sized</code> is not implemented for it, and rustc's own help line is the fix: "
+      "<i>consider borrowing here</i>."
+      "<br><br>The length lives in the <b>pointer</b>, which is why you only ever meet a <code>str</code> behind one: "
+      "<code>&amp;str</code>, <code>Box&lt;str&gt;</code>, <code>Rc&lt;str&gt;</code>. That is what the std docs mean by "
+      "<i>usually seen in its borrowed form</i> &mdash; and the same rule, for the same reason, governs <code>[T]</code> "
+      "and <code>dyn Trait</code>."
+      "<br><br>Sharper still: <code>size_of::&lt;str&gt;()</code> does not compile either. The size is a property of the "
+      "value, not of the type.",
+ bridge="<b>Python:</b> every value is already a pointer to a heap object, so the question never arises. Rust makes you say "
+        "which of the two you are holding.<br><b>ABAP:</b> the same split as <code>TYPE c LENGTH 5</code> against "
+        "<code>TYPE string</code> &mdash; a sized field you can declare, versus a handle to something whose length is not "
+        "in the type.",
+ link=("str is unsized", SITE+"14_Strings/str_is_unsized/index.html"),
+ tags="rust strings types compile-error"),
+
+dict(id="str_fat_pointer",
+ front="What does this print?<br><br>Why is the reference to the <b>borrowed</b> type bigger than the reference to the <b>owned</b> one?",
+ code='''fn main() {
+    println!("{} {} {} {}",
+        size_of::<&str>(), size_of::<&String>(),
+        size_of::<String>(), size_of::<Box<str>>());
+}''',
+ code_on="front",
+ expect="16 8 24 16",
+ back="<b>16 8 24 16.</b> <code>&amp;str</code> is a <b>fat pointer</b> &mdash; address + length, two words &mdash; because "
+      "the <code>str</code> at the far end carries no length of its own. <code>&amp;String</code> is one word, a plain "
+      "address, because the <code>String</code> it points at already holds its own len and capacity."
+      "<br><br>Those 8 extra bytes are exactly what buys the ability to point <i>into the middle</i> of a string: every "
+      "<code>&amp;s[1..4]</code>, every <code>split</code> item, every <code>trim</code> result is a length the pointer had "
+      "to carry. A <code>&amp;String</code> can only ever name a whole one."
+      "<br><br><code>Box&lt;str&gt;</code> is the same fat pointer owning instead of borrowing: 16 bytes, no capacity field "
+      "&mdash; which is the 8 it saves over <code>String</code>.",
+ bridge="<b>Python:</b> <code>sys.getsizeof</code> measures the object; a reference has no size you can ask about, let alone "
+        "one that varies by what it points at.<br><b>ABAP:</b> a <code>REF TO</code> is one handle whatever sits behind it.",
+ link=("str is unsized", SITE+"14_Strings/str_is_unsized/index.html"),
+ tags="rust strings types memory"),
+
 dict(id="str_capacity",
  front="What does this print? (<code>len</code> vs <code>capacity</code>)",
  code='''fn main() {
@@ -461,6 +508,30 @@ dict(id="str_bytes_roundtrip",
  code_on="back",
  link=("string_from_utf8", SITE+"14_Strings/string_methods/string_from_utf8/index.html"),
  tags="rust strings result"),
+
+dict(id="str_from_utf8_borrowed",
+ front="You have a <code>&amp;[u8]</code> and want a <code>&amp;str</code>, with no allocation. Which function &mdash; and how does it differ from <code>String::from_utf8</code>?",
+ code='''fn main() {
+    let bytes: &[u8] = b"hello";
+    let s: &str = std::str::from_utf8(bytes).unwrap();
+    println!("{s} {}", s.len());
+}''',
+ expect="hello 5",
+ code_on="back",
+ back="<b><code>std::str::from_utf8(&amp;[u8]) -&gt; Result&lt;&amp;str, Utf8Error&gt;</code></b> &mdash; it validates the "
+      "bytes where they lie and hands back a borrowed view. Nothing is copied and nothing is allocated."
+      "<br><br><code>String::from_utf8(Vec&lt;u8&gt;)</code> is the owned twin: it takes the vector <i>by value</i> and "
+      "reuses that exact allocation as the <code>String</code>'s buffer. Same UTF-8 check, different ownership &mdash; so "
+      "the question is never which is faster, but which one you are holding: a borrow, or a <code>Vec</code>."
+      "<br><br>This is the split the docs point at with <i>see also the <code>std::str</code> module</i>: the <b>type</b> "
+      "<code>str</code> carries the methods you call on text you already have; the <b>module</b> <code>std::str</code> "
+      "carries the free functions that make a <code>&amp;str</code> out of something that is not one yet.",
+ bridge="<b>Python:</b> <code>bytes.decode()</code> always builds a new <code>str</code>. The borrowed form has no direct "
+        "equivalent &mdash; <code>memoryview</code> is the nearest thing, and it exists for the same reason."
+        "<br><b>ABAP:</b> converting an <code>xstring</code> to a <code>string</code> always produces a new value; there is "
+        "no view-over-the-bytes form at all.",
+ link=("string_from_utf8", SITE+"14_Strings/string_methods/string_from_utf8/index.html"),
+ tags="rust strings result api-design"),
 
 dict(id="str_lines",
  front="Split text into lines. Which method &mdash; and what does it do about <code>\\r\\n</code> and a trailing newline?",

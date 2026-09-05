@@ -2,7 +2,7 @@
 
 **Level:** reference · for working programmers
 
-**One line:** Five spaced-repetition decks — 161 cards over the primitive types, `String`, `Vec`, iterators and ownership — whose every code block was compiled and run by `verify.py` before the deck was written, so a card cannot claim output the compiler did not produce.
+**One line:** Five spaced-repetition decks — 164 cards over the primitive types, `String`, `Vec`, iterators and ownership — whose every code block was compiled and run by `verify.py` before the deck was written, so a card cannot claim output the compiler did not produce.
 
 ## Import
 
@@ -10,7 +10,7 @@ Anki → **File → Import** → pick the file → Import. Nothing to configure:
 
 | file | deck | cards |
 |---|---|---|
-| `Rust_Strings.txt` | `Rust::Strings` | 31 |
+| `Rust_Strings.txt` | `Rust::Strings` | 34 |
 | `Rust_Vec.txt` | `Rust::Vec` | 33 |
 | `Rust_Iterators.txt` | `Rust::Iterators` | 32 |
 | `Rust_Ownership.txt` | `Rust::Ownership` | 31 |
@@ -23,7 +23,7 @@ Re-importing is safe and idempotent: Anki matches on the first field, so an edit
 Reading an explanation and understanding it is not the same act as retrieving it, and only the second one is what a card can train. So no card here asks you to recognise a definition. Every one asks you to **produce** something:
 
 - **Predict the output** — a program on the front, its verified stdout on the back. The strongest card type in the deck, because you cannot fake having answered one.
-- **Does this compile?** — eleven cards over seven distinct errors (`E0106`, `E0277`, `E0382`, `E0499`, `E0502`, `E0507`, `E0515`). These are the errors you will actually hit, and knowing the number means knowing the shape of the mistake.
+- **Does this compile?** — twelve cards over seven distinct errors (`E0106`, `E0277`, `E0382`, `E0499`, `E0502`, `E0507`, `E0515`). These are the errors you will actually hit, and knowing the number means knowing the shape of the mistake.
 - **Write the line** — "reverse a string", "join with a comma", "return an iterator from a function".
 - **Choose between two** — `remove` vs `swap_remove`, `fold` vs `reduce`, `filter` vs `take_while`, `&str` vs `&String`.
 
@@ -59,11 +59,11 @@ That gate is not ceremony. Building these four decks it caught a wrong claim abo
 
 ## What is not here
 
-Cards are deliberately not written for every method — the [`String`](../../14_Strings/string_methods/README.md) and [`Vec`](../../26_Collections/the_vec/README.md) references already do that job, and a deck that mirrors a reference is a deck you stop reviewing. These 161 are the facts that a working programmer forgets and is then bitten by.
+Cards are deliberately not written for every method — the [`String`](../../14_Strings/string_methods/README.md) and [`Vec`](../../26_Collections/the_vec/README.md) references already do that job, and a deck that mirrors a reference is a deck you stop reviewing. These 164 are the facts that a working programmer forgets and is then bitten by.
 
 ## Po polsku
 
-Anki to darmowy program do powtórek rozłożonych w czasie (*spaced repetition*), po polsku najczęściej nazywanych po prostu „systemem powtórek" albo SRS. Te talie mają 161 kart o typach prostych, `String`, `Vec`, iteratorach i własności, a ich wyróżnikiem jest to, że **każdy blok kodu został skompilowany i uruchomiony**, zanim karta powstała — więc karta nie może twierdzić czegoś, czego kompilator nie wypisał.
+Anki to darmowy program do powtórek rozłożonych w czasie (*spaced repetition*), po polsku najczęściej nazywanych po prostu „systemem powtórek" albo SRS. Te talie mają 164 karty o typach prostych, `String`, `Vec`, iteratorach i własności, a ich wyróżnikiem jest to, że **każdy blok kodu został skompilowany i uruchomiony**, zanim karta powstała — więc karta nie może twierdzić czegoś, czego kompilator nie wypisał.
 
 Karty są po angielsku i tak zostaje, z tego samego powodu, dla którego cała ta biblioteka trzyma angielskie terminy w widoku: powtarzasz nazwy metod, komunikaty błędów i słowa kluczowe, czyli dokładnie te ciągi znaków, które zobaczysz w terminalu. Karta ucząca `pożyczanie` zamiast `borrow of moved value` nie przygotowałaby do niczego. Jeśli robisz sobie własne karty po polsku, warto trzymać tę samą zasadę: polskie zdanie, angielski termin w środku.
 
