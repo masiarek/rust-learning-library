@@ -65,6 +65,13 @@ SCOPE = (
     "26_Collections/vec_methods",  # a per-method reference; every fence is a whole demonstration
     "26_Collections/slice_methods",  # its slice-side companion, built to the same promise
     "14_Strings/str_methods",      # the tree that one was modelled on; same promise, brought up to it
+    # Two lesson pages rather than trees. Both are *about* code that does not
+    # compile — escape errors, a doc comment that ends early, a kata of
+    # misplaced `///`s — so the claim on the page is exactly what
+    # `compile_fail` checks. Their remaining fences are one-line illustrations
+    # and say so with `ignore`.
+    "14_Strings/raw_strings_and_escapes",
+    "15_First_Programs/comments_that_compile",
 )
 
 SKIP_DIRS = {".git", "site", ".venv", "target", "__pycache__", ".github"}

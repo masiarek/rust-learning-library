@@ -290,7 +290,7 @@ The macro matched `#[$m:meta]` — an *attribute* fragment. A `//` comment could
 
 What it costs is that a block comment ends at the first `*/`, and a doc comment's job is to contain **examples**:
 
-````rust,ignore
+````rust,compile_fail
 /** Strips a C comment.
 
 ```
@@ -414,7 +414,7 @@ The documentation was run, and the lie in it was caught with a line number. That
 
 Three of the four doc comments below are misplaced. For each one, predict which of the three answers you get — a warning, `E0585`, or `E0753` — then move it so it does what was clearly meant:
 
-```rust
+```rust,compile_fail
 struct Ballot { score: u8 }
 
 fn main() {

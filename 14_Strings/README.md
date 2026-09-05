@@ -49,6 +49,8 @@ Strings are the worked example half the ownership pages already use, so the deep
 
 [Strings: links, books and videos](resources/README.md) is the reading list — the Book, *Programming Rust* ch. 17, Easy Rust, the essays, and the exercise sets outside this library that map onto these pages.
 
+The bytes underneath are a library of their own. Everything this section takes as given — what UTF-8 *is*, why `ż` costs two bytes and an emoji four, and who checks that a run of bytes really is UTF-8 before `from_utf8` will hand back a `&str` — is the subject of the sibling [encodings learning library ↗](https://masiarek.github.io/encodings-learning-library/), which teaches the same ground in Python, C and the shell alongside Rust. [Validation is a boundary ↗](https://masiarek.github.io/encodings-learning-library/03_Encodings/validation_is_a_boundary/index.html) is the page that pairs with this chapter: it reads `core`'s own validator, and shows what the `&str` invariant buys that a C `char *` and a Python `str` do not — the check runs once, so `chars()` afterwards does not run it again.
+
 ## Po polsku
 
 Tekst w Ruscie to dwa typy i jeden podział: `String` jest właścicielem swoich bajtów (łańcuch znaków, dane na stercie, można je rozbudowywać), a `&str` to tylko podgląd na cudzy tekst — wycinek łańcucha (*string slice*), czyli para „wskaźnik + długość”. Stąd praktyczna reguła całego działu: parametr funkcji bierze `&str`, bo chce tylko czytać, a pole struktury trzyma `String`, bo musi przeżyć wywołanie, które je stworzyło. Literał w kodzie nie leży ani na stosie, ani na stercie — siedzi w samym pliku wykonywalnym, dlatego ma typ `&'static str`.
