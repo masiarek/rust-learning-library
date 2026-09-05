@@ -1,0 +1,39 @@
+1. A list that grows, of rows that do not
+   192.168.0.1
+   10.0.0.1
+   127.0.0.1
+   The Vec's length is data; each row's is part of its type.
+
+2. Vec::new() allocates nothing until you push
+   Vec::new()             -> 0 allocations, capacity 0
+   three pushes           -> 1 allocation, capacity 4
+   The first push takes capacity 4 in one block. Rows two and
+   three cost nothing at all: they were already paid for.
+
+3. One allocation for a thousand rows, not a thousand and one
+   vec![[0u8; 4]; 1000]      -> 1 allocation
+   vec![vec![0u8; 4]; 1000]  -> 1001 allocations
+   1000 rows of four bytes either way; 1000 in one block, 1000 in a
+   thousand separate ones the outer Vec only points at.
+   Row 1 begins 4 bytes after row 0 — one block, no gaps.
+
+4. The rows are Copy, so pushing one does not consume it
+   after addrs.push(loopback), loopback is still [127, 0, 0, 1]
+   the Vec<u8> row moves instead: push consumes it, and reading
+   it afterwards is error[E0382]: borrow of moved value
+   addrs holds 4 rows, rows holds 1
+
+5. What each loop hands you
+   for row in &addrs      -> &[u8; 4]
+   for octet in row       -> &u8
+   for octet in *row      -> u8
+   The `*` copies the row out, because [u8; 4] is Copy. Without
+   it you iterate a &[u8; 4] and get references — which print
+   identically, so `{}` will never tell you which one you have.
+
+6. Flat, and back again
+   as_flattened(): 4 rows -> 16 bytes, borrowed, no copy
+   into_flattened(): the same buffer, retyped — 16 bytes
+   18 bytes regroup into 4 addresses, with [8, 8] left over
+   The trip back is fallible and the type says so: a slice has no
+   length in its type, so try_into is the step that supplies one.

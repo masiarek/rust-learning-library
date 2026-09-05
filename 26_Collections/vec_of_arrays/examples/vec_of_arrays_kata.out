@@ -1,0 +1,38 @@
+1. A short row at the end of the buffer
+   14 bytes in
+     192.168.0.1
+     10.0.0.1
+     127.0.0.1
+   leftover: [8, 8] — 2 bytes, not enough for a row
+   Nothing was dropped silently: remainder() is the part the
+   iterator refused, and it is a slice you can keep and prepend
+   to the next read.
+
+2. Why the obvious one-liner does not compile
+   bytes.chunks_exact(4).collect::<Vec<[u8; 4]>>()
+   -> error[E0277]: a value of type `Vec<[u8; 4]>` cannot be
+      built from an iterator over elements of type `&[u8]`
+   A &[u8] has its length in the value; a [u8; 4] has it in the
+   type. Converting between them is exactly what try_into does,
+   and it returns a Result because in general it can fail.
+
+3. The bill, for a thousand addresses
+   shape          rows   allocations
+   Vec<[u8; 4]>   1000      1
+   Vec<Vec<u8>>   1000   1001
+   One, not two: chunks_exact knows its own length, so collect
+   reserves the whole buffer up front instead of doubling into
+   it. The nested form pays that once too — the extra thousand
+   are the rows themselves, each its own block.
+
+4. Fixed-width rows sort and dedup for free
+   10.0.0.1  127.0.0.1  192.168.0.1
+   [u8; 4] is Ord and Eq because u8 is, so the derive ladder
+   reaches the row without anyone writing an impl.
+
+5. What only Vec<Vec<u8>> could have held
+   [[10, 0, 0, 1], [255, 255]] — row lengths [4, 2]
+   Here that is not a feature. An address that is not four bytes
+   is a bug, and Vec<[u8; 4]> makes it one the compiler catches:
+   push([10, 0, 0]) is error[E0308], expected an array with a
+   size of 4, found one with a size of 3.
