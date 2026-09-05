@@ -46,9 +46,7 @@ fn main() {
 }
 ```
 
-Swap in `dst.extend_from_slice(&src)` and it compiles: that call asks only for `Clone`.
-
-`extend_from_slice` asks only for `Clone`, so it takes both. Spelling the iterator out — `dst.extend(src.iter().cloned())` — is the same work said the long way.
+Swap in `dst.extend_from_slice(&src)` and it compiles: that call asks only for `Clone`, so it takes both. Spelling the iterator out — `dst.extend(src.iter().cloned())` — is the same work said the long way.
 
 It also reserves **once** for the whole slice. `extend` can only pre-reserve when the iterator reports its length, and a `filter` chain does not.
 
