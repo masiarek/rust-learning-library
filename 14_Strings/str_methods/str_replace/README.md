@@ -17,8 +17,10 @@ It always allocates, even when nothing matched — the return type is `String`, 
 **Chained replaces are not simultaneous**, which is the classic bug:
 
 ```rust
-// Meant to swap a and b. Does not.
-println!("{}", "ab".replace('a', "b").replace('b', "a"));  // aa
+fn main() {
+    // Meant to swap a and b. Does not.
+    println!("{}", "ab".replace('a', "b").replace('b', "a"));  // aa
+}
 ```
 
 The first pass turns `ab` into `bb`, and the second turns both into `aa`. Anything that looks like a substitution table needs a single pass — build it by hand with [`match_indices`](../str_match_indices/README.md), or use a crate.

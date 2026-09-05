@@ -15,9 +15,11 @@ No conversion happens. A `&str` *is* a `&[u8]` plus a promise that the bytes are
 Reach for it when the job is genuinely about bytes: writing to a socket, hashing, comparing against a byte literal, or an ASCII scan where indexing is legal because every byte is one character.
 
 ```rust
-let s = "hello";
-println!("{}", s.as_bytes()[0]);       // 104 — you cannot write s[0]
-println!("{:?}", &b"hello"[..]);       // b"..." is the byte-string literal
+fn main() {
+    let s = "hello";
+    println!("{}", s.as_bytes()[0]);       // 104 — you cannot write s[0]
+    println!("{:?}", &b"hello"[..]);       // b"..." is the byte-string literal
+}
 ```
 
 The trap is treating the result as characters. `s.as_bytes()[i]` is a byte, and on any non-ASCII text a single character occupies several of them, so a loop over bytes that assumes "one byte, one character" is right on English input and wrong on the first accented name. `s.as_bytes().len()` is exactly [`len`](../str_len/README.md).

@@ -13,9 +13,11 @@ Stable since **1.45.0**.
 The `Option` is what makes this better than `starts_with` plus a slice. The alternative spelling has to repeat the prefix's length by hand:
 
 ```rust
-let flag = "--verbose";
-if flag.starts_with("--") { println!("{}", &flag[2..]); }   // the 2 must match "--"
-if let Some(n) = flag.strip_prefix("--") { println!("{n}"); } // nothing to get wrong
+fn main() {
+    let flag = "--verbose";
+    if flag.starts_with("--") { println!("{}", &flag[2..]); }   // the 2 must match "--"
+    if let Some(n) = flag.strip_prefix("--") { println!("{n}"); } // nothing to get wrong
+}
 ```
 
 That hand-written offset is where multi-byte prefixes break: `"é".len()` is 2, so `&s[1..]` panics.

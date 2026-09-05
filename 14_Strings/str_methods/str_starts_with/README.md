@@ -15,11 +15,13 @@ Takes the same [pattern](../README.md#the-pattern-argument) shapes as everything
 When you are going to remove the prefix afterwards, [`strip_prefix`](../str_strip_prefix/README.md) does both in one step and cannot get the length wrong:
 
 ```rust
-let flag = "--verbose";
-// starts_with then slice: the 2 has to match the "--" by hand
-if flag.starts_with("--") { println!("{}", &flag[2..]); }
-// strip_prefix: no arithmetic to get wrong
-if let Some(name) = flag.strip_prefix("--") { println!("{name}"); }
+fn main() {
+    let flag = "--verbose";
+    // starts_with then slice: the 2 has to match the "--" by hand
+    if flag.starts_with("--") { println!("{}", &flag[2..]); }
+    // strip_prefix: no arithmetic to get wrong
+    if let Some(name) = flag.strip_prefix("--") { println!("{name}"); }
+}
 ```
 
 The byte-arithmetic version is where a multi-byte prefix goes wrong: `"é".len()` is 2, so a hand-written `&s[1..]` panics.

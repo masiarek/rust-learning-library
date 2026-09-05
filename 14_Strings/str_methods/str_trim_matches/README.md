@@ -17,9 +17,11 @@ Not whitespace but whatever pattern you give it, and it keeps going as long as t
 The pattern must be a `DoubleEndedSearcher`, which in practice means a `char`, a `&[char]`, or a closure — **not a multi-character `&str`**. `"abcabc".trim_matches("abc")` does not compile. Use the two one-sided methods when the pattern is a string:
 
 ```rust
-let s = "abcXabc";
-let inner = s.trim_start_matches("abc").trim_end_matches("abc");
-println!("{inner}");  // X
+fn main() {
+    let s = "abcXabc";
+    let inner = s.trim_start_matches("abc").trim_end_matches("abc");
+    println!("{inner}");  // X
+}
 ```
 
 Removing quotes is the everyday use — and the everyday bug, because `trim_matches('"')` on `"\"\"\""` eats all three, and on `hi"` removes a quote that had no partner. When the quotes must be balanced, `strip_prefix` and `strip_suffix` in an `and_then` chain is the honest version.

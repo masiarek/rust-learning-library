@@ -17,8 +17,10 @@ Stable since **1.2.0**.
 With a `&str` pattern every item is the same text and the useful part is the count. It gets interesting with a `&[char]` or a predicate, where each item tells you *which* character matched:
 
 ```rust
-let vowels: String = "programming".matches(|c| "aeiou".contains(c)).collect();
-println!("{vowels}");  // oai
+fn main() {
+    let vowels: String = "programming".matches(|c| "aeiou".contains(c)).collect();
+    println!("{vowels}");  // oai
+}
 ```
 
 ## Example

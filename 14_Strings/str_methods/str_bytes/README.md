@@ -13,8 +13,10 @@ Stable since **1.0.0**.
 `bytes()` and `as_bytes()` expose the same data. Take the slice when you want to index, slice or pass it on; take the iterator when you want to chain adaptors, because `Bytes` is `ExactSizeIterator` and `DoubleEndedIterator` and composes with the rest of the iterator toolkit.
 
 ```rust
-let s = "hello";
-println!("{}", s.bytes().filter(|b| *b == b'l').count());  // 2
+fn main() {
+    let s = "hello";
+    println!("{}", s.bytes().filter(|b| *b == b'l').count());  // 2
+}
 ```
 
 It yields *bytes*, so on non-ASCII text the count is not the character count and no single item is a character. [`chars`](../str_chars/README.md) is the iterator that yields characters; [`char_indices`](../str_char_indices/README.md) is the one that yields characters with the byte offsets you can slice at.

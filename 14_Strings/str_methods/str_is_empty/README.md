@@ -15,8 +15,10 @@ There is nothing to it beyond `self.len() == 0`, and that is the point: `is_empt
 **Empty is not blank.** A string of three spaces is not empty, and this is the single most common bug in input handling — a form field the user tabbed through still arrives as `"   "`. Test the trimmed value instead:
 
 ```rust
-let field = "   ";
-println!("{} {}", field.is_empty(), field.trim().is_empty());  // false true
+fn main() {
+    let field = "   ";
+    println!("{} {}", field.is_empty(), field.trim().is_empty());  // false true
+}
 ```
 
 Empty is also not "missing". If a value can legitimately be absent, that is `Option<String>`, and collapsing `None` and `Some("")` into one empty string throws away the difference between *the user left it blank* and *we never asked*.

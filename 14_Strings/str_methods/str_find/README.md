@@ -15,8 +15,10 @@ The return is an `Option`, which is the whole difference from the C-family `inde
 The offset is in **bytes**, and it is always on a character boundary, so it is safe to slice at:
 
 ```rust
-let s = "key=value";
-if let Some(i) = s.find('=') { println!("{:?} {:?}", &s[..i], &s[i + 1..]); }
+fn main() {
+    let s = "key=value";
+    if let Some(i) = s.find('=') { println!("{:?} {:?}", &s[..i], &s[i + 1..]); }
+}
 ```
 
 That `i + 1` is only right because `'='` is one byte. For a multi-byte or `&str` pattern the end of the match is `i + pat.len()` — which is exactly the arithmetic [`split_once`](../str_split_once/README.md) does for you, and the reason to prefer it for this shape.
