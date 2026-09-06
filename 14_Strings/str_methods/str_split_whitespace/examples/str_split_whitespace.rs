@@ -5,9 +5,16 @@ fn main() {
     println!("{:?}", messy.split(' ').collect::<Vec<&str>>());
     println!("{} vs {} pieces", messy.split_whitespace().count(), messy.split(' ').count());
 
+    // Trimming first is the half-fix: it takes the ends and leaves the runs.
+    println!("{:?}", messy.trim().split(' ').collect::<Vec<&str>>());
+    println!("{} pieces after trim, and the answer is still {}",
+             messy.trim().split(' ').count(), messy.split_whitespace().count());
+
     // Never yields an empty piece.
     println!("{:?}", "   ".split_whitespace().collect::<Vec<&str>>());
     println!("{:?}", "".split_whitespace().collect::<Vec<&str>>());
+    println!("{:?} <- the empty string is one piece to split, none to split_whitespace",
+             "".split(' ').collect::<Vec<&str>>());
 
     // Unicode whitespace, not just the ASCII five.
     println!("{:?}", "a\u{00A0}b".split_whitespace().collect::<Vec<&str>>());

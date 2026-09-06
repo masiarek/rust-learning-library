@@ -14,11 +14,13 @@ Stable since **1.1.0**.
 
 Unlike [`split(' ')`](../str_split/README.md), this collapses consecutive whitespace and trims the ends, so it never yields an empty piece. `"  a   b  ".split_whitespace()` is `["a", "b"]`, where `split(' ')` gives seven items, four of them empty.
 
+**Trimming first is the half-fix**, and it is the one people reach for once the empties show up: `.trim()` takes the four off the ends of that string and leaves the four in the middle, so twelve pieces become eight where the answer is four. Runs are the harder half, and collapsing them is the whole of what this method adds over `trim().split(' ')`.
+
 Whitespace means `char::is_whitespace` — the Unicode definition, which includes tabs, newlines, non-breaking space and a dozen others. [`split_ascii_whitespace`](../str_split_ascii_whitespace/README.md) is the narrower, faster version.
 
 **Never use it on delimited data.** On a fixed-column row it silently merges empty fields, so column 3 becomes column 2 and nothing errors — the bug shows up much later as a value in the wrong place. Use `split(',')` for anything with a delimiter, and this for anything a human typed as sentences.
 
-The empty string, and a string of only whitespace, both yield no pieces.
+The empty string, and a string of only whitespace, both yield no pieces — where `split(' ')` gives the empty string back as **one** piece, because *n* matches always yield *n+1* and there is no special case for an empty haystack. [Splitting on nothing](../../splitting_on_nothing/README.md) follows that arithmetic to its end.
 
 ## Example
 
@@ -33,9 +35,16 @@ fn main() {
     println!("{:?}", messy.split(' ').collect::<Vec<&str>>());
     println!("{} vs {} pieces", messy.split_whitespace().count(), messy.split(' ').count());
 
+    // Trimming first is the half-fix: it takes the ends and leaves the runs.
+    println!("{:?}", messy.trim().split(' ').collect::<Vec<&str>>());
+    println!("{} pieces after trim, and the answer is still {}",
+             messy.trim().split(' ').count(), messy.split_whitespace().count());
+
     // Never yields an empty piece.
     println!("{:?}", "   ".split_whitespace().collect::<Vec<&str>>());
     println!("{:?}", "".split_whitespace().collect::<Vec<&str>>());
+    println!("{:?} <- the empty string is one piece to split, none to split_whitespace",
+             "".split(' ').collect::<Vec<&str>>());
 
     // Unicode whitespace, not just the ASCII five.
     println!("{:?}", "a\u{00A0}b".split_whitespace().collect::<Vec<&str>>());
@@ -60,8 +69,11 @@ fn main() {
 ["the", "quick", "brown", "fox"]
 ["", "", "the", "", "", "quick", "\t", "brown", "\n", "fox", "", ""]
 4 vs 12 pieces
+["the", "", "", "quick", "\t", "brown", "\n", "fox"]
+8 pieces after trim, and the answer is still 4
 []
 []
+[""] <- the empty string is one piece to split, none to split_whitespace
 ["a", "b"]
 split(',')        ["alice", "", "42"]  -> 3 fields
 whitespace route  ["alice", "42"]  -> 2 fields, and 42 is now column 2
@@ -75,6 +87,7 @@ whitespace route  ["alice", "42"]  -> 2 fields, and 42 is now column 2
 - [RFC 1054 — the method that renamed itself to promise less](../../rfc_1054_str_words/README.md) — why it is not called `words()`, and why it is a method rather than a pattern
 - [`str::split`](../str_split/README.md) — the mechanical version, for delimited data
 - [`str::trim`](../str_trim/README.md) — the ends only, without splitting
+- [Splitting on nothing](../../splitting_on_nothing/README.md) — the same n+1 rule with an empty pattern, where it produces five pieces from three characters
 - [`str::lines`](../str_lines/README.md) — when the unit is a line rather than a word
 
 [`str::split_whitespace` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split_whitespace)

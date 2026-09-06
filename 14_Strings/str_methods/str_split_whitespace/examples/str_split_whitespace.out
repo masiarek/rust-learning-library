@@ -1,8 +1,11 @@
 ["the", "quick", "brown", "fox"]
 ["", "", "the", "", "", "quick", "\t", "brown", "\n", "fox", "", ""]
 4 vs 12 pieces
+["the", "", "", "quick", "\t", "brown", "\n", "fox"]
+8 pieces after trim, and the answer is still 4
 []
 []
+[""] <- the empty string is one piece to split, none to split_whitespace
 ["a", "b"]
 split(',')        ["alice", "", "42"]  -> 3 fields
 whitespace route  ["alice", "42"]  -> 2 fields, and 42 is now column 2
