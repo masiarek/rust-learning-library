@@ -91,7 +91,7 @@ Strings are the worked example half the library's ownership pages already use, s
 
 ## Still written as outlines
 
-Named honestly, because a map that only lists what exists is a map of the wrong territory. Each of these 5 is a **stub** — a real page at a real URL, carrying the questions the finished lesson has to answer and the links to its neighbours, but with no runnable example behind it yet. That is the boundary this library draws: a stub states what it does not know, and nothing on it has been through the check that backs every other claim here.
+Named honestly, because a map that only lists what exists is a map of the wrong territory. Each of these is a **stub** — a real page at a real URL, carrying the questions the finished lesson has to answer and the links to its neighbours, but with no runnable example behind it yet. That is the boundary this library draws: a stub states what it does not know, and nothing on it has been through the check that backs every other claim here.
 
 | The page | Level | What it will answer |
 |---|---|---|
