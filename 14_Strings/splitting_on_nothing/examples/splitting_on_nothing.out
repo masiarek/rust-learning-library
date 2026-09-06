@@ -1,0 +1,32 @@
+1. Three characters, five pieces
+   split("")           ["", "a", "b", "c", ""]
+   chars()             ['a', 'b', 'c']
+
+2. Where the five come from — the matches, at their byte offsets
+   match_indices("")   [(0, ""), (1, ""), (2, ""), (3, "")]
+   4 matches, 5 pieces — the same n+1 as any other pattern
+   "xaxbxcx".split('x') ["", "a", "b", "c", ""]   <- four matches too
+
+3. Even the empty string has one position in it
+   "".split(',')       [""]   0 matches, 1 piece
+   "".split("")        ["", ""]   1 match,  2 pieces
+
+4. The positions are CHAR boundaries, not byte offsets
+   "añb".len()         4 bytes, 3 chars
+   char_indices()      [(0, 'a'), (1, 'ñ'), (3, 'b')]
+   split("")           ["", "a", "ñ", "b", ""]
+   byte 2 is inside 'ñ': is_char_boundary(2) = false, and no piece starts there
+
+5. ...but a char boundary is not a LETTER boundary
+   "a\u{301}" renders as á    -> ["", "a", "\u{301}", ""]
+   "👍🏽" renders as 👍🏽      -> 4 pieces: the two ends, and the emoji cut in two
+
+6. The rest of the family, all on the empty pattern
+   split_terminator    ["", "a", "b", "c"]
+   split_inclusive     ["", "a", "b", "c"]
+   rsplit              ["", "c", "b", "a", ""]
+   splitn(3, "")       ["", "a", "bc"]   <- 3 pieces, and only ONE of them a character
+
+7. Each character as a &str, which is what split("") is usually reached for
+   filtered            ["a", "b", "c"]
+   from char_indices   ["a", "ñ", "b"]   <- same idea, and it never made an empty

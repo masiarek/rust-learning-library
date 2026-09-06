@@ -24,6 +24,8 @@ Stable since **1.0.0**.
 
 None of that is the method being unhelpful; the count is forced by the arithmetic. If you want the empties gone, that is a different question and [`split_whitespace`](../str_split_whitespace/README.md) (for prose) or a [`.filter(|p| !p.is_empty())` ↗](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.filter) (for anything else) answers it.
 
+An **empty** pattern is the case that surprises everyone, and it is the same rule with nothing left to hide behind: it matches at every char boundary, so `"abc".split("")` is four matches and five pieces — `["", "a", "b", "c", ""]`. [Splitting on nothing](../../splitting_on_nothing/README.md) works it through, including the boundaries it is not allowed to land on.
+
 **Use `split` for delimited data and `split_whitespace` for prose.** Reaching for the wrong one silently shifts your columns: on `"a,,c"`, dropping the empty makes column 3 become column 2, and nothing errors.
 
 Pieces are borrowed from the original string; nothing is allocated. The pattern is the usual four shapes.
@@ -84,6 +86,7 @@ columns: 3 kept, 2 after filtering
 - [`str::splitn`](../str_splitn/README.md) — stop after n−1 splits and keep the rest whole
 - [`str::split_once`](../str_split_once/README.md) — exactly two pieces, or nothing
 - [`str::matches`](../str_matches/README.md) — the matches instead of the gaps
+- [Splitting on nothing](../../splitting_on_nothing/README.md) — the empty pattern: five pieces from three characters, and why it is char boundaries rather than byte offsets
 
 [`str::split` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split)
 
