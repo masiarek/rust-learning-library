@@ -1,0 +1,25 @@
+1. While every door maintains it
+   counts = [12, 30, 8]
+   total() = 50   holds() = true
+
+2. One ordinary `pub fn` later
+   counts = [12, 30, 8, 100]
+   total() = 50   holds() = false
+   The number is wrong by exactly the value that skipped the cache.
+   No `unsafe`, no panic, no error -- a quietly wrong answer.
+
+3. Where the audit has to look
+   `total` is private, so only this module can desync it.
+   The suspect list is every fn in `mod tally`, not every caller.
+
+4. Three fixes, in the order to prefer them
+   a. delete `record_unchecked` -- the invariant has one door again
+   b. make it private, so the leak cannot escape the module
+   c. keep it and call `resync` -- last resort, because it is
+      now a rule a reader has to remember rather than one the
+      type enforces
+   after resync: total() = 150   holds() = true
+
+5. Make it checkable, not just documented
+   debug_assert!(t.holds()) costs nothing in release and turns
+   the comment into something a test run can fail on.
