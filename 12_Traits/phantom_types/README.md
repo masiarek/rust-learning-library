@@ -199,7 +199,7 @@ The rule of thumb: reach for a phantom type when mixing the two kinds is a *bug*
 - [A score is not a number](../../16_Structs/newtype_score/README.md) — the same instinct without generics: one type, one door, no tag
 - [The right to post is a value](../../09_Advanced/one_account_one_review/README.md) — typestate built from distinct types and move semantics, and the hole neither approach closes
 - [Static vs dynamic dispatch](../static_vs_dynamic_dispatch/README.md) — where to go when the tag has to be a run-time choice after all
-- [Traits: links and videos](../resources/README.md) — including Will Crichton's Strange Loop talk, which reaches this page's `Bounded` / `Unbounded` idea by live-coding a progress bar until the wrong call has nowhere to live
+- [Traits: links and videos](../resources/README.md) — including Will Crichton's Strange Loop talk, which live-codes a progress bar until the wrong call has nowhere to live: the same typestate move, and instructive for where it differs — its `Bounded` tag *holds* the length and the delimiters, so the parameter is doing this page's job without being phantom at all
 - [Reference counting](../../18_Ownership/reference_counting/README.md) — the same silence with the opposite obligation: an `Rc`'s `.clone()` never says which of two jobs it is doing and nothing makes you say, while a phantom parameter cannot be inferred at all, so `E0282` makes you name it at every construction
 
 ## Po polsku
