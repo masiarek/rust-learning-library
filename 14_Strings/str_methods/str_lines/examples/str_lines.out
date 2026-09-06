@@ -6,3 +6,9 @@ split  4
 ["alpha", "beta", "gamma", ""]
 ["old\rmac"]
 3
+["a", "", "b"]
+[""] <- one empty line, not none
+[] vs [""] <- the empty string is the only one lines() gives nothing for
+identical on "a\n\nb": true
+["a\r", "\r", "b\r", ""]
+blank line is_empty()? split false / lines true

@@ -21,6 +21,12 @@ Two decisions make this method behave the way people expect and `split('\n')` no
 
 A lone `\r` is **not** a line ending here — old Mac OS 9 text comes back as one line.
 
+**Blank lines are kept.** The terminator rule is about the *last* newline, not about empty pieces: `"a\n\nb"` is three lines with an empty one in the middle, and `"\n"` on its own is one empty line rather than none. The empty string is the only input this method yields nothing at all for — where `split('\n')` still hands back one piece, because [*n* matches yield *n+1*](../../splitting_on_nothing/README.md) with no special case for an empty haystack.
+
+Which leaves exactly two things the two methods argue about, and blank lines are not among them. On text with no `\r` and no final newline they are the same function: `"a\n\nb"` splits identically both ways.
+
+**And the `\r` outlives the line it was on.** In a Windows file a blank line arrives from `split('\n')` as `"\r"` — one invisible character — so `line.is_empty()` is **false** and the usual `.filter(|l| !l.is_empty())` quietly stops removing anything. The carriage return is not just noise on the end of a line; it is what makes an empty line non-empty.
+
 Lines are borrowed from the original string; nothing is allocated.
 
 ## Example
@@ -47,6 +53,22 @@ fn main() {
 
     // No final newline: still three lines.
     println!("{}", "alpha\nbeta\ngamma".lines().count());
+
+    // Blank lines are KEPT. The terminator rule is about the last newline.
+    println!("{:?}", "a\n\nb".lines().collect::<Vec<&str>>());
+    println!("{:?} <- one empty line, not none", "\n".lines().collect::<Vec<&str>>());
+    println!("{:?} vs {:?} <- the empty string is the only one lines() gives nothing for",
+             "".lines().collect::<Vec<&str>>(), "".split('\n').collect::<Vec<&str>>());
+
+    // With no \r and no final newline there is nothing left to disagree about.
+    println!("identical on \"a\\n\\nb\": {}", "a\n\nb".lines().eq("a\n\nb".split('\n')));
+
+    // The trap that outlives the \r: a blank line in a Windows file is "\r".
+    let blank = "a\r\n\r\nb\r\n";
+    println!("{:?}", blank.split('\n').collect::<Vec<&str>>());
+    println!("blank line is_empty()? split {} / lines {}",
+             blank.split('\n').nth(1).unwrap().is_empty(),
+             blank.lines().nth(1).unwrap().is_empty());
 }
 ```
 <!-- /source -->
@@ -63,6 +85,12 @@ split  4
 ["alpha", "beta", "gamma", ""]
 ["old\rmac"]
 3
+["a", "", "b"]
+[""] <- one empty line, not none
+[] vs [""] <- the empty string is the only one lines() gives nothing for
+identical on "a\n\nb": true
+["a\r", "\r", "b\r", ""]
+blank line is_empty()? split false / lines true
 ```
 <!-- /output -->
 
@@ -72,12 +100,13 @@ split  4
 - [`str::split_terminator`](../str_split_terminator/README.md) — the general form of the trailing-empty rule
 - [`str::trim_end`](../str_trim_end/README.md) — what to reach for when only the very end needs cleaning
 - [`str::lines_any`](../str_lines_any/README.md) — the deprecated older spelling
+- [Splitting on nothing](../../splitting_on_nothing/README.md) — the n+1 rule that gives the empty string one piece here and none to `lines()`
 - [RFC 1212 — how `lines()` learned about `\r\n`](../../rfc_1212_line_endings/README.md) — why it behaves this way, and the trailing `\r` this page's rules imply
 
 [`str::lines` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.lines)
 
 ## Po polsku
 
-`lines()` robi dwie rzeczy, których `split('\n')` nie robi: usuwa `\r` stojący tuż przed `\n` i traktuje końcowy znak nowej linii jako **zakończenie** wiersza, a nie separator — więc `"a\nb\n"` to dwa wiersze, nie trzy. Z polskiej perspektywy ważniejsze jest to pierwsze, bo praktycznie każdy plik, który przeszedł przez Windows (Notatnik, eksport CSV z Excela, `core.autocrlf` w gicie), kończy wiersze sekwencją CRLF, a `\r` doklejony na końcu wycinka łańcucha (*string slice*) jest w `println!` niewidoczny i po cichu psuje każde porównanie w rodzaju `wiersz == "tak"` — pokaże go dopiero `{:?}`. Samotny `\r` (stare Mac OS 9) nie jest tu końcem wiersza, a same wiersze są pożyczane z oryginalnego łańcucha, więc nic się nie alokuje.
+`lines()` robi dwie rzeczy, których `split('\n')` nie robi: usuwa `\r` stojący tuż przed `\n` i traktuje końcowy znak nowej linii jako **zakończenie** wiersza, a nie separator — więc `"a\nb\n"` to dwa wiersze, nie trzy. Z polskiej perspektywy ważniejsze jest to pierwsze, bo praktycznie każdy plik, który przeszedł przez Windows (Notatnik, eksport CSV z Excela, `core.autocrlf` w gicie), kończy wiersze sekwencją CRLF, a `\r` doklejony na końcu wycinka łańcucha (*string slice*) jest w `println!` niewidoczny i po cichu psuje każde porównanie w rodzaju `wiersz == "tak"` — pokaże go dopiero `{:?}`. Samotny `\r` (stare Mac OS 9) nie jest tu końcem wiersza, a same wiersze są pożyczane z oryginalnego łańcucha, więc nic się nie alokuje. Pusty wiersz **nie znika**: reguła o zakończeniu dotyczy ostatniego znaku nowej linii, a nie pustych kawałków — `"a\n\nb"` to trzy wiersze, a sam `"\n"` to jeden wiersz pusty, nie zero. I stąd bierze się pułapka, która przeżywa cały ten opis: w pliku windowsowym pusty wiersz wraca z `split('\n')` jako `"\r"`, czyli jeden niewidoczny znak, więc `is_empty()` daje **false** i typowe odfiltrowanie pustych wierszy przez `.filter(|l| !l.is_empty())` przestaje cokolwiek usuwać.
 
 **Szukaj po polsku:** podział tekstu na wiersze · znaki końca wiersza CRLF · powrót karetki · `rust str lines vs split` · `rust strip trailing carriage return`
