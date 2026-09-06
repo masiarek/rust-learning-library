@@ -1,0 +1,62 @@
+1. `==` and `<` ask the bytes, and nothing else
+   "Zebra" < "apple"  = true
+   'Z' = 90, 'a' = 97   <- 90 < 97, so the capital wins
+   a.cmp(b)                    = Less
+   a.as_bytes().cmp(b.as_bytes()) = Less   <- the same call
+
+2. Lexicographic is not alphabetical
+   Adamczyk
+   Echo
+   Zawadzki
+   zebra
+   éclair
+   Łukasiewicz
+   żaba
+   Three blocks, in this order: capitals, lowercase ASCII, then
+   everything above U+007F. No alphabet is arranged that way.
+
+3. ...but it IS code point order, which is worth knowing
+   every scalar value encodes above the one before it: true
+   So sorting bytes and sorting code points give the same order.
+   That is a property of UTF-8, not of Rust — and it is why the
+   answer is reproducible everywhere while still being wrong for a reader.
+
+4. Two ways to ignore case, and what each one misses
+   left                   right                     ascii  lowercase
+   Content-Type           content-type               true       true
+   ŁÓDŹ                   łódź                      false       true
+   eq_ignore_ascii_case folds 26 letters and allocates nothing.
+   to_lowercase() knows the whole table and allocates two Strings.
+
+5. Lowercasing is not folding — the German ß
+   "STRASSE".to_lowercase() = "strasse"
+   "straße".to_lowercase() = "straße"
+   equal after lowercasing?  false
+   equal after UPPERcasing?  true
+   Case mapping is not symmetric: 'ß' uppercases to "SS", and
+   nothing lowercases "ss" back to 'ß'. Caseless matching wants case
+   FOLDING, which std does not have.
+
+6. ...so "uppercase both sides instead" is not the fix either
+   'İ'.to_lowercase() = "i\u{307}" (2 chars)
+   "İ".to_lowercase() == "i"  = false
+   'ı'.to_uppercase() = "I"
+   "ı".to_uppercase() == "I".to_uppercase() = true
+   Turkish 'ı' and 'i' are different letters, and uppercasing merges
+   them. Case mapping is locale-independent here by design: `str` has
+   no locale, so it cannot have the Turkish answer or the other one.
+
+7. Same letter, two spellings
+   café and café print the same and are 5 bytes vs 6
+   composed == decomposed              = false
+   lowercased on both sides            = false
+   No comparison in std repairs this. It is normalization, and it
+   belongs to the unicode-normalization crate.
+
+8. Sorting with a key, and paying for it once
+   sort_by_key        allocated 20 Strings for 8 words
+   sort_by_cached_key allocated 8 Strings for 8 words
+   both orders: true
+   ["Alpha", "Bravo", "charlie", "delta", "echo", "Foxtrot", "golf", "Hotel"]
+   Case-insensitive is as far as a key gets you. A key that sorts
+   Ł between L and M is a collation table, and that is a crate.

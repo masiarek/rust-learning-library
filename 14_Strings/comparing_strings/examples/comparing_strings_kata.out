@@ -1,0 +1,35 @@
+Round 1 -- one question, three answers
+   a                b                     ==   ascii  lowered  what it is
+   "Content-Type"   "content-type"     false    true     true  ASCII token
+   "STRASSE"        "straße"           false   false    false  German ß
+   "ŁÓDŹ"           "łódź"             false   false     true  Polish diacritics
+   "café"           "cafe\u{301}"      false   false    false  one accent, two spellings
+   Row 2 is the one to look at: every answer is `false`, and the right
+   answer is `true`. Caseless matching is case FOLDING, and std has
+   none -- 'ß' folds to "ss", which no case MAPPING will do for you.
+   Row 4 is not a case question at all; the two spellings differ before
+   any case rule is applied, and no comparison in std repairs that.
+
+Round 2 -- three orders over one list
+   sort()                     ["Adamczyk", "Lewandowski", "Zawadzki", "Ćwikła", "Łukasiewicz", "Żeromski"]
+   sort_by_key(to_lowercase)  ["Adamczyk", "Lewandowski", "Zawadzki", "Ćwikła", "Łukasiewicz", "Żeromski"]
+   sort_by_cached_key(key)    ["Adamczyk", "Ćwikła", "Lewandowski", "Łukasiewicz", "Zawadzki", "Żeromski"]
+   Only the third is Polish: 'Ć' next to C, 'Ł' between L and M, 'Ż'
+   after Z. The first two agree with each other and with nobody else.
+
+Round 3 -- the same list, two languages, one row of the table
+   german_base   ["Apfel", "Äpfel", "Över", "Zetter"]
+   swedish_base  ["Apfel", "Zetter", "Äpfel", "Över"]
+   Neither is a bug. German files 'Ä' under A; Swedish makes it the
+   27th letter. The two keys differ in three match arms and produce
+   two different, correct orders for the same four words.
+
+Round 4 -- what a per-character table cannot say at all
+   by character  ["chata", "hora", "irsky"]
+   Czech sorts 'ch' as ONE letter between H and I, so the answer wanted
+   is ["hora", "chata", "irsky"]. No mapping from char to char can
+   express a two-character letter, so the shape of the key is wrong
+   here, not its contents.
+   The order is not a property of the string. It is a property of the
+   LANGUAGE -- which is why correct collation ships as data (CLDR, ICU)
+   rather than as an algorithm you can derive.
