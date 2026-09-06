@@ -159,6 +159,8 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K139 | [Measure a column four ways, then truncate it without breaking a letter — the rows where three limit rules disagree, the value that splits all three, and the `get(..n)` that returns `None` where a slice would panic](14_Strings/four_lengths/README.md#practice) | [Four lengths](14_Strings/four_lengths/README.md) | 201 |
 | K140 | [The invariant nobody wrote down — one ordinary `pub fn` desyncs a cached total, and the wrong answer arrives with no `unsafe`, no panic and no error](09_Advanced/what_an_invariant_is/README.md#practice) | [What an invariant is](09_Advanced/what_an_invariant_is/README.md) | 301 |
 | K141 | [Give every slice a `.middle()`, then find out why your `.first()` never runs — one trait, two methods, and only one of them reachable through a dot](12_Traits/extension_traits/README.md#practice) | [Extension traits](12_Traits/extension_traits/README.md) | 201 |
+| K142 | [Two numbers, one prefix, and the trait you cannot name — a character index beside `find`'s byte offset, the `starts_with` constant that goes stale, and the three stable helpers that stand in for `P: Pattern`](14_Strings/searching_a_string/README.md#practice) | [Searching without splitting](14_Strings/searching_a_string/README.md) | 101 → 201 |
+| K143 | [Escape it twice, then escape it once — the swap no ordering can perform, the last-`n` replacement `replacen` counts from the wrong end, and what a stale offset does to a string that has already changed length](14_Strings/replacing_in_a_string/README.md#practice) | [Replacing part of a string](14_Strings/replacing_in_a_string/README.md) | 101 → 201 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -273,7 +275,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K44 · [The results table that would not sort](19_Numbers/what_a_float_stores/README.md#practice)
 - K88 · [Make the sum land on the number you would have typed](19_Numbers/letting_the_compiler_reorder/README.md#practice)
 
-**[Strings](14_Strings/README.md)** — 24 katas
+**[Strings](14_Strings/README.md)** — 26 katas
 
 - K61 · [One `&str` parameter, three callers](14_Strings/string_vs_str/README.md#practice)
 - K62 · [Cut a name in half without panicking](14_Strings/string_slices/README.md#practice)
@@ -299,6 +301,8 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K137 · [Freeze a candidate column three ways](14_Strings/boxed_str/README.md#practice)
 - K138 · [Rebuild `char::from_u32`, then price the fixed width](14_Strings/why_char_is_32_bits/README.md#practice)
 - K139 · [Measure a column four ways, then truncate it without breaking a letter](14_Strings/four_lengths/README.md#practice)
+- K142 · [Two numbers, one prefix, and the trait you cannot name](14_Strings/searching_a_string/README.md#practice)
+- K143 · [Escape it twice, then escape it once](14_Strings/replacing_in_a_string/README.md#practice)
 
 **[Enums](13_Enums/README.md)** — 1 kata
 

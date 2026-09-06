@@ -67,6 +67,8 @@ flowchart LR
 | 13 | [Inside a `Split`](14_Strings/inside_a_split/README.md) | 201 → 301 | Why printing `s.split(":")` with `{:?}` gives a struct full of `crit_pos` and `byteset` instead of `["a", "b", "c"]` — and what every field of it means |
 | 14 | [The third owned form](14_Strings/boxed_str/README.md) | 201 → 301 | `Box<str>`, `Rc<str>`, `Arc<str>`: the capacity word dropped, and the interning move that makes a repeated column stop paying per row |
 | 15 | [Four lengths, and which one the other system means](14_Strings/four_lengths/README.md) | 201 | One string, four counts — and why a name that fits a `VARCHAR(12)` can bounce off an `nvarchar(12)` |
+| 16 | [Searching without splitting](14_Strings/searching_a_string/README.md) | 101 → 201 | Is it there, where is it, does it start like this — and why one trait makes a `char`, a `&str` and a closure the same argument |
+| 17 | [Replacing part of a string](14_Strings/replacing_in_a_string/README.md) | 101 → 201 | `replace` hands back a new `String`; `replace_range` and `retain` are the two that edit in place, and a chain of replaces is not a substitution table |
 
 ## The lessons strings lean on
 
@@ -86,12 +88,11 @@ Strings are the worked example half the library's ownership pages already use, s
 
 ## Still written as outlines
 
-Named honestly, because a map that only lists what exists is a map of the wrong territory. Each of these 6 is a **stub** — a real page at a real URL, carrying the questions the finished lesson has to answer and the links to its neighbours, but with no runnable example behind it yet. That is the boundary this library draws: a stub states what it does not know, and nothing on it has been through the check that backs every other claim here.
+Named honestly, because a map that only lists what exists is a map of the wrong territory. Each of these 5 is a **stub** — a real page at a real URL, carrying the questions the finished lesson has to answer and the links to its neighbours, but with no runnable example behind it yet. That is the boundary this library draws: a stub states what it does not know, and nothing on it has been through the check that backs every other claim here.
 
 | The page | Level | What it will answer |
 |---|---|---|
 | [Parsing out of a string](14_Strings/parsing_a_string/README.md) | 101 → 201 | `.parse()` beyond the one worked example, `FromStr` for your own type, and what to do with the `Result` that is not `.unwrap()` |
-| [Searching without splitting](14_Strings/searching_a_string/README.md) | 101 → 201 | `find` / `rfind` / `contains` / `starts_with`, and `Pattern` as the trait that unifies them with the split family |
 | [The format mini-language](14_Strings/the_format_language/README.md) | 201 | `{:>8.3}`, `{:#x}`, `{val:^width$}`: fill, align, sign, width, precision, and the `$` that makes them dynamic |
 | [Comparing and sorting text](14_Strings/comparing_strings/README.md) | 201 | `Ord` on strings is byte order, which is not human order; case folding vs `to_lowercase` |
 | [String parameters worth copying](14_Strings/string_api_design/README.md) | 201 → 301 | `impl AsRef<str>`, `Into<String>`, and when a signature should take `impl Display` |

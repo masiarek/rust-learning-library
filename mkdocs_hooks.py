@@ -621,6 +621,12 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...and its companion, one method along the same page: the rename
         # that made `words()` stop claiming to know what a word is.
         "rfc_1054_str_words",
+        # ...then the questions you ask about text without cutting it up,
+        # and the one trait that makes their arguments interchangeable.
+        "searching_a_string",
+        # ...and what to do once you have found it: the replace that does
+        # not replace, and the two methods that really edit in place.
+        "replacing_in_a_string",
         # The lifetime half, once the two types are solid: three spellings of
         # one type, and the claim about String that is not true.
         "static_str",
@@ -641,10 +647,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # would hide the most-linked-to part of the section.
         "str_methods",
         "string_methods",
-        # The nine that are outlines so far — ordered as they would be read,
+        # The five that are outlines so far — ordered as they would be read,
         # not as they were written. Each is a real URL from the day it is a stub.
         "parsing_a_string",
-        "searching_a_string",
         "the_format_language",
         "comparing_strings",
         "string_api_design",
@@ -972,6 +977,8 @@ LABELS = {
     "making_a_string": "Making a `String`",
     "building_a_string": "Building a `String`",
     "walking_a_string": "Walking a `String`",
+    "searching_a_string": "Searching without splitting",
+    "replacing_in_a_string": "Replacing part of a string",
     "meet_the_char": "Meet the `char`",
     "why_char_is_32_bits": "Why a `char` is 32 bits",
     "static_str": "`&'static str`",
