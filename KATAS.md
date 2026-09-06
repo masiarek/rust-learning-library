@@ -158,6 +158,7 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K138 | [Rebuild `char::from_u32`, then price the fixed width — the 2,048 refusals, the ratio for four alphabets, and the one `Option` that doubles](14_Strings/why_char_is_32_bits/README.md#practice) | [Why a `char` is 32 bits wide](14_Strings/why_char_is_32_bits/README.md) | 201 → 301 |
 | K139 | [Measure a column four ways, then truncate it without breaking a letter — the rows where three limit rules disagree, the value that splits all three, and the `get(..n)` that returns `None` where a slice would panic](14_Strings/four_lengths/README.md#practice) | [Four lengths](14_Strings/four_lengths/README.md) | 201 |
 | K140 | [The invariant nobody wrote down — one ordinary `pub fn` desyncs a cached total, and the wrong answer arrives with no `unsafe`, no panic and no error](09_Advanced/what_an_invariant_is/README.md#practice) | [What an invariant is](09_Advanced/what_an_invariant_is/README.md) | 301 |
+| K141 | [Give every slice a `.middle()`, then find out why your `.first()` never runs — one trait, two methods, and only one of them reachable through a dot](12_Traits/extension_traits/README.md#practice) | [Extension traits](12_Traits/extension_traits/README.md) | 201 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -303,13 +304,14 @@ The table above is the order to attempt them in. This is the same katas grouped 
 
 - K86 · [Which defence catches a silent catch-all](13_Enums/a_typo_becomes_a_binding/README.md#practice)
 
-**[Traits](12_Traits/README.md)** — 5 katas
+**[Traits](12_Traits/README.md)** — 6 katas
 
 - K90 · [Predict the owned twin before you run it](12_Traits/to_owned/README.md#practice)
 - K92 · [Four loops that all look like reuse](12_Traits/clone_into/README.md#practice)
 - K128 · [Four impls for one `*`, and an operator that should not exist](12_Traits/operators_are_traits/README.md#practice)
 - K129 · [Three drop orders, and the guard released one line early](12_Traits/drop_and_raii/README.md#practice)
 - K134 · [Three calls, three causes](12_Traits/no_method_named/README.md#practice)
+- K141 · [Give every slice a `.middle()`, then find out why your `.first()` never runs](12_Traits/extension_traits/README.md#practice)
 
 **[Generics](22_Generics/README.md)** — 2 katas
 

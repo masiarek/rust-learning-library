@@ -502,6 +502,8 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **`TryFrom` / `TryInto`** — The same pair plus a `type Error`, for a conversion allowed to refuse. `u8::try_from(300i32)` reports what `300i32 as u8` swallows. For text, implement `FromStr` instead and get `.parse()`. → [`TryFrom` and `TryInto`](29_Conversion/tryfrom_and_tryinto/README.md)
 
+**Extension trait** — A trait you declare yourself purely so you can implement it for a type you did not write, which is the only way to add a method behind a dot on `str`, `Vec` or an iterator. An inherent `impl` on a foreign type is `E0116`; the local trait satisfies the orphan rule below. Usually paired with a blanket impl (`impl<I: Iterator> Ext for I`) so one line reaches every such type. Two costs: it is invisible until imported, and an inherent method of the same name wins silently. → [Extension traits](12_Traits/extension_traits/README.md)
+
 **Orphan rule** — You may implement a trait for a type when the trait or the type (or a type parameter of the impl) is local to your crate. `impl From<Vec<u8>> for String` is `E0117` because neither is; the way round it is a newtype. Coherence is the reason: two crates could otherwise write the same impl differently. → [`From` and `Into`](29_Conversion/from_and_into/README.md)
 
 **`as` cast** — The built-in conversion that always succeeds, and therefore loses data four ways without saying so: narrowing keeps the low bits, signedness reinterprets them, float→int truncates then saturates (`NaN` → 0), and int→float rounds. Reach for `From` when it cannot fail and `TryFrom` when it can. → [Casting with `as`](29_Conversion/casting_with_as/README.md)

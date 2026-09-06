@@ -132,6 +132,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...and what the compiler says when a call finds nothing: one error
         # code over four causes, of which "not in scope" is only the second.
         "no_method_named",
+        # ...and the first thing you do with all of that: put a method of your
+        # own behind a dot on a type the standard library owns.
+        "extension_traits",
         # ...and the traits every earlier page has been calling without the
         # syntax admitting it: `+` is one, and so is `[]`.
         "operators_are_traits",
