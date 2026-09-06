@@ -1,0 +1,59 @@
+Round 1 - the four counts std can and cannot give you
+   sample            bytes  chars  utf-16   clusters
+                    .len() count()   units   (no std)
+   --------------------------------------------------
+   plain ASCII           4      4       4          4
+   NFC - one char        5      4       4          4
+   NFD - two chars       6      5       5          4
+   Polish               10      6       6          6
+   emoji                 4      1       2          1
+   flag                  8      2       4          2
+   family               18      5       8          1
+   Four columns, four different numbers for the same seven strings.
+   Only the first two are O(1) and O(n) in std; the fourth is a crate.
+
+Round 2 - every system you talk to already picked a column
+   bytes     HTTP Content-Length, Postgres octet_length, a VARCHAR sized in bytes
+   chars     Postgres char_length, Python len(), Rust .chars().count()
+   utf-16    JavaScript .length, Java, C#, SQL Server nvarchar(n)
+   clusters  the person who counted before hitting your character limit
+
+Round 3 - so the same string fits, or does not, depending who asks
+   Does it fit a limit of 10?  (n) = the count that system would use
+
+   sample            byte column  char column     nvarchar
+   plain ASCII           yes (4)      yes (4)      yes (4)
+   NFC - one char        yes (5)      yes (4)      yes (4)
+   NFD - two chars       yes (6)      yes (5)      yes (5)
+   Polish               yes (10)      yes (6)      yes (6)
+   emoji                 yes (4)      yes (1)      yes (2)
+   flag                  yes (8)      yes (2)      yes (4)
+   family               NO  (18)      yes (5)      yes (8)
+
+   The Polish row is the one to look at: 10 bytes, 6 chars, 6 utf-16
+   units. It fits every column here -- and one more letter would
+   overflow the byte column while the other two still had room.
+
+Round 4 - the UTF-16 column is the one Rust never shows you
+   emoji    "😀"  bytes 4  chars 1  utf-16 2
+   Polish   "Zażółć"  bytes 10  chars 6  utf-16 6
+   An emoji is ONE char and TWO utf-16 units -- a surrogate pair.
+   That is why JavaScript says "\u{1F600}".length === 2, and why a
+   nvarchar(1) rejects it. encode_utf16() is how you ask for that
+   number without leaving Rust.
+
+Round 5 - what wc counts, and which method matches
+   text = "Zażółć gęślą jaźń\n"
+   wc -c   27   text.len()
+   wc -m   18   text.chars().count()
+   wc -w    3   text.split_whitespace().count()
+   wc -l    1   text.matches('\n').count()  -- NEWLINES, not lines
+   .lines() says 1 too -- they agree here, because the text ends in
+   a newline. Take it away and they stop agreeing:
+
+   "a\nb\n" matches('\n') = 2   .lines() = 2
+   "a\nb"   matches('\n') = 1   .lines() = 2
+
+   wc -l is a newline count, and so is matches(). .lines() counts
+   lines. The two answers differ on exactly the files a person
+   would call badly formed, which is most files.

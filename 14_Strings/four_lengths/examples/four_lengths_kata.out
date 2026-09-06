@@ -1,0 +1,52 @@
+Round 1 - four measurements of one column
+   value             bytes  chars  utf-16
+   Nowak                 5      5       5
+   Łukasiewicz          12     11      11
+   Żeromski              9      8       8
+   中村                    6      2       2
+   Zoë 😀                 9      5       6
+   😀😀😀😀😀                20      5      10
+
+Round 2 - the same limit, three different verdicts
+   A column declared as 8 units. Which rows does each rule reject?
+
+   value               VARCHAR char_length   nvarchar
+   Nowak                    ok         ok         ok
+   Łukasiewicz          REJECT     REJECT     REJECT
+   Żeromski             REJECT         ok         ok
+   中村                       ok         ok         ok
+   Zoë 😀                REJECT         ok         ok
+   😀😀😀😀😀                REJECT         ok     REJECT
+
+   3 row(s) where the three rules disagree. Every one of them
+   is a row that loads into one database and bounces off another.
+   The five-emoji row splits all three ways: 20 bytes, 5 chars,
+   10 utf-16 units -- rejected by two rules and accepted by one.
+
+Round 3 - truncating to a byte limit is where it actually breaks
+   Nowak            -> "Nowak" (5 bytes of 6 allowed)
+   Łukasiewicz      -> "Łukas" (6 bytes of 6 allowed)
+   Żeromski         -> "Żerom" (6 bytes of 6 allowed)
+   中村               -> "中村" (6 bytes of 6 allowed)
+   Zoë 😀            -> "Zoë " (5 bytes of 6 allowed)
+   😀😀😀😀😀            -> "😀" (4 bytes of 6 allowed)
+
+   &s[..6] would PANIC on the rows where byte 6 lands inside a letter.
+   is_char_boundary() is the check that makes the cut safe, and the
+   loop backing off from `max` is the whole of the fix.
+
+Round 4 - prove the naive cut really does panic
+   get(..1) = None      <- &name[..1] would panic here
+   get(..2) = Some("Ł")
+   get(..6) = Some("Łukas")
+
+   get() is the same question asked politely. Byte 1 is inside 'Ł',
+   which is two bytes, so a limit measured in bytes cannot be applied
+   with a slice unless you check first.
+
+Round 5 - the tables above are misaligned, and that is the lesson
+   Look at the CJK row: it does not line up. `{:<16}` pads to a
+   width counted in CHARS, and 中 occupies two terminal columns.
+   So the formatter picked a fifth answer to 'how long' -- display
+   width -- and std does not have that one either. Even the code
+   printing this table had to choose a count, and chose wrong.
