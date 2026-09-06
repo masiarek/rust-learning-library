@@ -66,6 +66,7 @@ flowchart LR
 | 12 | [`str` is unsized](14_Strings/str_is_unsized/README.md) | 201 | Why you never hold a `str`, only a pointer to one — the size that belongs to the value, the fat pointer's second word, and `?Sized` as a relaxation |
 | 13 | [Inside a `Split`](14_Strings/inside_a_split/README.md) | 201 → 301 | Why printing `s.split(":")` with `{:?}` gives a struct full of `crit_pos` and `byteset` instead of `["a", "b", "c"]` — and what every field of it means |
 | 14 | [The third owned form](14_Strings/boxed_str/README.md) | 201 → 301 | `Box<str>`, `Rc<str>`, `Arc<str>`: the capacity word dropped, and the interning move that makes a repeated column stop paying per row |
+| 15 | [Four lengths, and which one the other system means](14_Strings/four_lengths/README.md) | 201 | One string, four counts — and why a name that fits a `VARCHAR(12)` can bounce off an `nvarchar(12)` |
 
 ## The lessons strings lean on
 

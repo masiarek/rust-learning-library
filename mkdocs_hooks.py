@@ -601,6 +601,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...then the one number that table states without explaining: 21 bits
         # of Unicode rounded up to an addressable width, and what the rest buy.
         "why_char_is_32_bits",
+        # ...then what to do with those counts at a boundary: four lengths for
+        # one string, who means which, and the byte limit that cuts a letter.
+        "four_lengths",
         # ...then every way to write one down in source: the five prefixes and
         # their raw combinations, and the escapes each one honours.
         "raw_strings_and_escapes",
