@@ -118,6 +118,7 @@ Books here are listed so the shelf is complete; [Going deeper](../going_deeper/R
 
 | Subject | Book | Verdict |
 |---|---|---|
+| API design | [Type-Driven API Design in Rust ↗](https://willcrichton.net/rust-api-type-patterns/) | **Read it for** the patterns that have names — witnesses, guards, typestate, registries. Short, free, assumes only The Book, and the only entry here about *designing* Rust rather than writing it |
 | Async | [The Async Book ↗](https://rust-lang.github.io/async-book/) | **Reference** — official, and under active rewrite; chapters vary in polish |
 | Embedded | [The Embedded Rust Book ↗](https://docs.rust-embedded.org/book/) | **Read it** if the target has no operating system |
 | Embedded, hands on | [Discovery ↗](https://docs.rust-embedded.org/discovery/) | **Read it for** real hardware on a desk |

@@ -323,6 +323,12 @@ And it costs exactly what the question warned it would. Ben signed in, his conne
 
 </details>
 
+## Sources
+
+The pattern on this page has a name, and knowing it is worth something when you go looking for the next one. Will Crichton's [Type-Driven API Design in Rust ↗](https://willcrichton.net/rust-api-type-patterns/) calls `Eligible` a [witness ↗](https://willcrichton.net/rust-api-type-patterns/witnesses.html) — a value whose *existence* is proof that a check was passed, so that a function demanding the proof cannot be reached without it, and forgetting the check becomes a type error rather than a security incident. Its worked example is an admin panel and the argument is the one made above: the comment `// IMPORTANT: only call this when logged in as admin!` and a parameter of type `Admin` say the same thing, and one of them is enforced.
+
+The neighbouring chapter, [guards ↗](https://willcrichton.net/rust-api-type-patterns/guards.html), is the variant this page does *not* use: a witness that also carries the capability it certifies, which is what `MutexGuard` is and why unlocking is not a method you can forget. A witness proves you were allowed in; a guard is what you were let in *with*. The spoken version of both is Crichton's Strange Loop 2021 talk, [Type-Driven API Design in Rust ↗](https://youtu.be/bnnacleqg6k) (~41 min), annotated on the [traits reading list](../../12_Traits/resources/README.md).
+
 ## Po polsku
 
 Polski czytelnik ma tu przewagę, bo słownik wyborczy zna ze szkoły: wybory **powszechne, równe, bezpośrednie i tajne**. Ta strona bierze dwa z tych przymiotników — „równe” (jeden człowiek, jeden głos) i „tajne” — i próbuje zapisać je w typach, zamiast w komentarzu albo w regulaminie. Zaczyna jednak od uczciwego przyznania się do braku: Rust nie daje żadnego gotowego frameworka do uwierzytelniania (*authentication*) — nie ma tu odpowiednika `django.contrib.auth` ani Spring Security, wszystko składa się samemu z crate'ów. To realny koszt. W zamian dostaje się coś, czego tamte frameworki nie potrafią: fakt „ten wyborca jest uwierzytelniony” przestaje być `bool`em leżącym **obok** danych, które ma chronić, i staje się wartością, bez której chronionej funkcji po prostu nie da się wywołać.
