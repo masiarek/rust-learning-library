@@ -35,7 +35,7 @@ flowchart LR
 
     ENC --> E1["char: one Unicode scalar,<br/>4 bytes as a value"]
     ENC --> E2["in a String: 1-4 UTF-8 bytes,<br/>so len() counts bytes"]
-    ENC --> E3["bytes, chars, graphemes —<br/>three answers to 'how long'"]
+    ENC --> E3["bytes, chars, UTF-16, graphemes —<br/>four answers to 'how long'"]
     ENC --> E4["walking it: u8, char, &str —<br/>splits are the gaps between matches"]
 
     USE --> U1["to_string comes free<br/>from Display"]

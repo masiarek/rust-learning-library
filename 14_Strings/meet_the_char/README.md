@@ -2,7 +2,7 @@
 
 **Level:** 101 → 201 · working knowledge
 
-**One line:** A `char` is one Unicode scalar value — four bytes, always. Inside a `String` the same character is one to four UTF-8 bytes, which is why `.len()` is not "how many characters", `s[0]` refuses to compile, and "how long is this string" has three honest answers.
+**One line:** A `char` is one Unicode scalar value — four bytes, always. Inside a `String` the same character is one to four UTF-8 bytes, which is why `.len()` is not "how many characters", `s[0]` refuses to compile, and "how long is this string" has four honest answers.
 
 ```rust
 let c: char = 'a';    // single quotes: a char
@@ -13,7 +13,7 @@ Different types, and the difference is not pedantry: `'a'` is a **decoded** char
 
 ---
 
-## Three answers to "how long"
+## Four answers to "how long"
 
 ```rust
 let name = "Zoë";
@@ -27,9 +27,12 @@ The `ë` costs two bytes in UTF-8, so byte count and char count part ways on the
 |---|---|---|
 | **bytes** | `.len()` | O(1) — it is the `len` field |
 | **chars** | `.chars().count()` | O(n) — UTF-8 must be walked |
+| **UTF-16 units** | `.encode_utf16().count()` | O(n) — and you have to know the method is there |
 | **graphemes** | what a *reader* calls one character | a crate — std stops before this |
 
-The third row is real: `"e\u{301}"` — an `e` plus a combining accent — is **two** chars that render as one `é`. The [verified output](#the-verified-output) shows the two spellings printing identically and comparing unequal. Normalizing them into one form is the [`unicode-normalization` ↗](https://crates.io/crates/unicode-normalization) crate's job; counting reader-characters is [`unicode-segmentation` ↗](https://crates.io/crates/unicode-segmentation)'s.
+The grapheme row is real: `"e\u{301}"` — an `e` plus a combining accent — is **two** chars that render as one `é`. The [verified output](#the-verified-output) shows the two spellings printing identically and comparing unequal. Normalizing them into one form is the [`unicode-normalization` ↗](https://crates.io/crates/unicode-normalization) crate's job; counting reader-characters is [`unicode-segmentation` ↗](https://crates.io/crates/unicode-segmentation)'s.
+
+The **UTF-16** row is the one Rust never puts in front of you, and the one other systems mean: `.length` in JavaScript, `String.length()` in Java, C#, `nvarchar(n)` in SQL Server, and `strlen( )` in ABAP all count UTF-16 code units. An emoji is one `char` and **two** of them — a surrogate pair — so `"😀".length` is `2` in a browser and a `nvarchar(1)` refuses it. It matters at a boundary rather than inside your program, which is why it gets its own page: [Four lengths](../four_lengths/README.md).
 
 ## Why `s[0]` does not compile
 
@@ -89,7 +92,7 @@ What changes: ABAP lets the bad slice happen and hands you half a surrogate at r
 
 **One name, three lengths.** Write `inventory(s: &str)` printing one row per char: byte offset, the char, its UTF-8 width, its `U+XXXX` code point (`char_indices`, `len_utf8`, `as u32`). Run it on `"Łódź"`.
 
-Then spell `"Zoé"` twice — composed (`é`) and decomposed (`e\u{301}`) — and: prove the two are `!=` while printing identically; give byte and char counts for both; and say which of the three length answers std cannot compute. Finish with `get` on a range that cuts `Ł` in half.
+Then spell `"Zoé"` twice — composed (`é`) and decomposed (`e\u{301}`) — and: prove the two are `!=` while printing identically; give byte and char counts for both; and say which of the length answers std cannot compute. Finish with `get` on a range that cuts `Ł` in half.
 
 <details markdown="1">
 <summary><strong>Solution</strong></summary>
@@ -126,6 +129,8 @@ fn main() {
     println!("\nRound 3 — which counts can std give you?");
     println!("   bytes:     .len()            -> {} vs {}", composed.len(), decomposed.len());
     println!("   chars:     .chars().count()  -> {} vs {}", composed.chars().count(), decomposed.chars().count());
+    println!("   utf-16:    .encode_utf16().count() -> {} vs {}",
+        composed.encode_utf16().count(), decomposed.encode_utf16().count());
     println!("   graphemes: what a reader sees -> 3 vs 3, but std cannot count");
     println!("              these; the unicode-segmentation crate can");
 
@@ -168,6 +173,7 @@ Round 2 — the same-looking name, spelled two ways
 Round 3 — which counts can std give you?
    bytes:     .len()            -> 4 vs 5
    chars:     .chars().count()  -> 3 vs 4
+   utf-16:    .encode_utf16().count() -> 3 vs 4
    graphemes: what a reader sees -> 3 vs 3, but std cannot count
               these; the unicode-segmentation crate can
 
@@ -509,7 +515,7 @@ fn main() {
     let family = "👨\u{200D}👩\u{200D}👧\u{200D}👦";
     let flag = "🇵🇱";
 
-    println!("1. Three answers to \"how long is it\"");
+    println!("1. Three of the answers to \"how long is it\"");
     println!("   {:<12} {:>5} {:>6} {:>10}", "string", "bytes", "chars", "graphemes");
     for (label, s) in [("cafe+U+0301", cafe), ("family", family), ("flag", flag), ("plain ada", "ada")] {
         println!("   {:<12} {:>5} {:>6} {:>10}", label, s.len(), s.chars().count(), grapheme_count(s));
@@ -557,7 +563,7 @@ fn main() {
 *Verified output of [`grapheme_clusters_kata.rs`](examples/grapheme_clusters_kata.rs) — regenerated by `tools/run_examples.py`, never hand-typed.*
 
 ```text
-1. Three answers to "how long is it"
+1. Three of the answers to "how long is it"
    string       bytes  chars  graphemes
    cafe+U+0301      6      5          4
    family          25      7          1
@@ -634,7 +640,12 @@ fn main() {
    composed   "é"  1 char(s), 2 bytes
    decomposed "e\u{301}"  2 char(s), 3 bytes
    composed == decomposed?  false
-   what a READER calls one character is a third counting — the
+   utf-16 units: 1 vs 2   <- equal to the char count for both,
+                        because every char here is below U+FFFF
+   😀 is where the two part: 1 char, 2 utf-16 units, 4 bytes
+   -- a surrogate pair. JS, Java, C# and nvarchar(n) count 2 here,
+   which is why "😀".length is 2 in a browser
+   what a READER calls one character is a fourth counting — the
    grapheme — and std stops before it; that one needs a crate
 ```
 <!-- /output -->

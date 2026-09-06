@@ -84,7 +84,7 @@ fn main() {
     let family = "👨\u{200D}👩\u{200D}👧\u{200D}👦";
     let flag = "🇵🇱";
 
-    println!("1. Three answers to \"how long is it\"");
+    println!("1. Three of the answers to \"how long is it\"");
     println!("   {:<12} {:>5} {:>6} {:>10}", "string", "bytes", "chars", "graphemes");
     for (label, s) in [("cafe+U+0301", cafe), ("family", family), ("flag", flag), ("plain ada", "ada")] {
         println!("   {:<12} {:>5} {:>6} {:>10}", label, s.len(), s.chars().count(), grapheme_count(s));

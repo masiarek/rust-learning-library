@@ -1,5 +1,5 @@
 //! A char is one Unicode scalar value, four bytes wide. Inside a String the
-//! same character is one to four UTF-8 bytes — so "how long" has three answers.
+//! same character is one to four UTF-8 bytes — so "how long" has four answers.
 //!
 //!   rustc --edition 2024 meet_the_char.rs -o /tmp/mtc && /tmp/mtc
 
@@ -37,6 +37,14 @@ fn main() {
     println!("   composed   {composed:?}  {} char(s), {} bytes", composed.chars().count(), composed.len());
     println!("   decomposed {decomposed:?}  {} char(s), {} bytes", decomposed.chars().count(), decomposed.len());
     println!("   composed == decomposed?  {}", composed == decomposed); // false
-    println!("   what a READER calls one character is a third counting — the");
+    println!("   utf-16 units: {} vs {}   <- equal to the char count for both,",
+        composed.encode_utf16().count(), decomposed.encode_utf16().count());
+    println!("                        because every char here is below U+FFFF");
+    let grin = "\u{1F600}";
+    println!("   {grin} is where the two part: {} char, {} utf-16 units, {} bytes",
+        grin.chars().count(), grin.encode_utf16().count(), grin.len());
+    println!("   -- a surrogate pair. JS, Java, C# and nvarchar(n) count 2 here,");
+    println!("   which is why \"{grin}\".length is 2 in a browser");
+    println!("   what a READER calls one character is a fourth counting — the");
     println!("   grapheme — and std stops before it; that one needs a crate");
 }

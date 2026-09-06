@@ -24,5 +24,10 @@
    composed   "é"  1 char(s), 2 bytes
    decomposed "e\u{301}"  2 char(s), 3 bytes
    composed == decomposed?  false
-   what a READER calls one character is a third counting — the
+   utf-16 units: 1 vs 2   <- equal to the char count for both,
+                        because every char here is below U+FFFF
+   😀 is where the two part: 1 char, 2 utf-16 units, 4 bytes
+   -- a surrogate pair. JS, Java, C# and nvarchar(n) count 2 here,
+   which is why "😀".length is 2 in a browser
+   what a READER calls one character is a fourth counting — the
    grapheme — and std stops before it; that one needs a crate

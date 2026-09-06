@@ -26,6 +26,8 @@ fn main() {
     println!("\nRound 3 — which counts can std give you?");
     println!("   bytes:     .len()            -> {} vs {}", composed.len(), decomposed.len());
     println!("   chars:     .chars().count()  -> {} vs {}", composed.chars().count(), decomposed.chars().count());
+    println!("   utf-16:    .encode_utf16().count() -> {} vs {}",
+        composed.encode_utf16().count(), decomposed.encode_utf16().count());
     println!("   graphemes: what a reader sees -> 3 vs 3, but std cannot count");
     println!("              these; the unicode-segmentation crate can");
 

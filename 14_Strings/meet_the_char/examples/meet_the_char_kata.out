@@ -23,6 +23,7 @@ Round 2 — the same-looking name, spelled two ways
 Round 3 — which counts can std give you?
    bytes:     .len()            -> 4 vs 5
    chars:     .chars().count()  -> 3 vs 4
+   utf-16:    .encode_utf16().count() -> 3 vs 4
    graphemes: what a reader sees -> 3 vs 3, but std cannot count
               these; the unicode-segmentation crate can
 

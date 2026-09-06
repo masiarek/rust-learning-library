@@ -14,7 +14,7 @@ Stable since **1.0.0**. Usable in a `const` context.
 
 `len` reads the length field that every `&str` already carries, so it is O(1) and never looks at the text. What it counts is the unit the text is *stored* in: UTF-8 bytes. ASCII makes the two readings agree, which is why the difference is usually discovered by a name with an accent in it rather than by a test.
 
-There is no method that answers "how many characters", because the question has three honest answers — bytes, [`char`s](../../meet_the_char/README.md), and what a reader would call a letter. Pick the one you mean:
+There is no method that answers "how many characters", because the question has four honest answers — bytes, [`char`s](../../meet_the_char/README.md), UTF-16 code units, and what a reader would call a letter. Pick the one you mean:
 
 | you want | write |
 |---|---|

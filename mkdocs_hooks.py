@@ -596,7 +596,7 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...and how to grow one, plus the operator that eats its left operand.
         "building_a_string",
         # ...then what those bytes encode: a char is not a byte, and
-        # "how many characters" has three honest answers.
+        # "how many characters" has four honest answers.
         "meet_the_char",
         # ...then the one number that table states without explaining: 21 bits
         # of Unicode rounded up to an addressable width, and what the rest buy.

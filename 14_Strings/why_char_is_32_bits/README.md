@@ -373,7 +373,7 @@ fn main() {
 
 ## See also
 
-- [Meet the `char`](../meet_the_char/README.md) — what a `char` is, and the three honest answers to "how long is this string"
+- [Meet the `char`](../meet_the_char/README.md) — what a `char` is, and the four honest answers to "how long is this string"
 - [Values](../../15_First_Programs/values/README.md) — the primitive-types table this page is a footnote to
 - [Meet the byte](../../19_Numbers/meet_the_byte/README.md) — the unit `.len()` counts in
 - [Raw strings, escapes and the literal prefixes](../raw_strings_and_escapes/README.md) — `\u{…}`, `\x`, `b'…'` and the rest
