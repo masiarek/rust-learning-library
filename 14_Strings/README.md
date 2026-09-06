@@ -28,6 +28,7 @@ The rest of the section is what follows from the bytes underneath. `len()` count
 | [Six kinds of string](six_kinds_of_string/README.md) | 201 | `OsString`, `CString` and friends are not five more inventions — three promises about the bytes, each owned or borrowed, and narrowing is where a promise gets checked |
 | [`str` is unsized](str_is_unsized/README.md) | 201 | Why you never hold a `str`, only a pointer to one — the size that belongs to the value rather than the type, the fat pointer's second word, `?Sized` as a *relaxation*, and the struct field that makes a whole struct unsized |
 | [Inside a `Split`](inside_a_split/README.md) | 201 → 301 | Why `println!("{:?}", s.split(":"))` prints a struct and not your pieces — the plan read field by field, the pattern that picks the searcher, and the one bool that is `split_terminator` |
+| [Splitting on nothing](splitting_on_nothing/README.md) | 201 | Why `"abc".split("")` gives five pieces and not three — the empty pattern matches at every char boundary, the two counts an empty string produces, and the special case JavaScript, Go and Python each make instead |
 | [`str::as_str`: the method that was stabilized and taken back](str_as_str/README.md) | 201 → 301 | Why `s.as_str()` on a `&str` is `E0658` and not "no such method" — what to write instead on `Box<str>`, `Rc<str>` and `Cow<str>`, why `.as_ref()` is the disputed answer, and the inherent-beats-trait rule that got the method reverted after it shipped |
 
 ## The method reference

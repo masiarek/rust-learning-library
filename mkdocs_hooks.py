@@ -639,6 +639,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...then one deep dive, which needs every page above it: what `split`
         # actually returns before anything consumes it, read field by field.
         "inside_a_split",
+        # ...and its shortest surprising case, which needs the char boundaries
+        # from `meet_the_char` as well: the pattern that matches everywhere.
+        "splitting_on_nothing",
         # ...and the third owned form, which needs the anatomy page above it.
         "boxed_str",
         # ...and the method that would tidy every one of those, which is not
