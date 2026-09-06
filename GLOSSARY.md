@@ -388,6 +388,10 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Turbofish (`::<T>`)** — The `::<i32>` in `"42".parse::<i32>()` — the same information a type annotation carries, written at the call instead of on the binding. The form to reach for when the value is not being bound to a name. → [What a type annotation does](15_First_Programs/what_an_annotation_does/README.md)
 
+**`FromStr`** — The trait behind `.parse()`. It is generic over its *return* type and takes no arguments, so nothing at the call site names the target and the compiler asks you for it. Implement it and `.parse::<YourType>()` works; implement `Display` and you have the way back out. → [Parsing out of a string](14_Strings/parsing_a_string/README.md)
+
+**`IntErrorKind`** — What `ParseIntError::kind()` returns (stable since 1.55): `Empty`, `InvalidDigit`, `PosOverflow`, `NegOverflow`, `Zero` — a failure the caller can branch on rather than print. `#[non_exhaustive]`, so a `match` needs a `_`. `ParseFloatError` has no equivalent: its `kind` is private, leaving `Display` and `PartialEq`. → [Parsing out of a string](14_Strings/parsing_a_string/README.md)
+
 **`E0284`** — *type annotations needed.* Raised when an expression's type is chosen by its target and there is no target — `let x = "42".parse().unwrap();` being the one everybody meets. The `help:` line offers the fix as a hole to fill: `let x: /* Type */ = …`. → [What a type annotation does](15_First_Programs/what_an_annotation_does/README.md)
 
 **`String`** — The owned, growable text type: three words on the stack (pointer, length, capacity), UTF-8 bytes on the heap. A `Vec<u8>` that promises valid UTF-8, with the same `new` / `with_capacity` / `reserve` vocabulary. Own it in fields, build it for returns — and take `&str` in parameters. → [`String` vs `&str`](14_Strings/string_vs_str/README.md), [The anatomy of a `String`](14_Strings/anatomy_of_a_string/README.md)

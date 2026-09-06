@@ -630,6 +630,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...and what to do once you have found it: the replace that does
         # not replace, and the two methods that really edit in place.
         "replacing_in_a_string",
+        # ...and text on the way IN, which is where the Result starts:
+        # FromStr picks the type, and the failure is the interesting half.
+        "parsing_a_string",
         # The lifetime half, once the two types are solid: three spellings of
         # one type, and the claim about String that is not true.
         "static_str",
@@ -661,7 +664,6 @@ NAV_ORDER: dict[str, list[str]] = {
         # written. Each is a real URL from the day it is a stub. (No counts in
         # this block: every graduation invalidates one, nothing checks them,
         # and between them they went stale at nine, eight, six and five.)
-        "parsing_a_string",
         "the_format_language",
         "string_api_design",
         "when_string_is_too_slow",
