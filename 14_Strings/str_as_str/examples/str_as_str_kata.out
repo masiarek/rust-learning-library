@@ -1,0 +1,32 @@
+Part 1: five owners, and how many conversions you actually write
+   shout(&owned)    "HELLO"
+   shout(&boxed)    "HELLO"
+   shout(&counted)  "HELLO"
+   shout(&shared)   "HELLO"
+   shout(&maybe)    "HELLO"
+   Answer: none of them. Every one of these types derefs to str,
+   so a plain `&x` at a call site expecting &str coerces, and the
+   whole as_str question never arises. That is why the missing
+   method is a papercut rather than a wall.
+
+Part 1b: where the coercion has nothing to aim at
+   .map(|r| &**r)   ["ada", "bob"]
+   A closure's return type is inferred, not demanded, so there is
+   no &str for the compiler to coerce toward and you must say it.
+   This is the case String::as_str exists for, and the case the
+   str_as_str feature wanted to cover for every other owner.
+
+Part 2: the method that changed under you
+   r.as_mut_slice()               -> &mut [u8; 3]
+   Samples::as_mut_slice(&mut r)  -> &mut [u8]
+   The inherent method wins, so the trait's is unreachable
+   through a dot -- and zero_out(r.as_mut_slice()) now fails:
+     error[E0308]: mismatched types
+       expected `&mut [u8]`, found `&mut [u8; 3]`
+
+   Two repairs, and only one of them is yours to make:
+   Samples::as_mut_slice(&mut r)  [0, 0, 0]   name the trait
+   &mut ..[..]                    [0, 0, 0]   reslice the array
+   The second works because [u8; 3] derefs to [u8]. Neither is a
+   fix for the crate that broke: its users' call sites are the
+   ones that changed meaning, and they did not ask for either.

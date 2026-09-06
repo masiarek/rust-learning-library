@@ -1,0 +1,53 @@
+1. On a &str you already have a &str
+   s          "Hello"
+   &s[..]     "Hello"     same pointer: true
+   &*s        "Hello"     same pointer: true
+   All three are one borrow of one buffer -- not copies that
+   happen to be equal. There is no conversion left to perform,
+   which is why the method you reached for is not there.
+
+2. The error, on stable
+   let u = s.as_str();
+     error[E0658]: use of unstable library feature `str_as_str`
+       |     let u = s.as_str();
+       |               ^^^^^^
+       = note: see issue #130366 for more information
+   Note what it is NOT: not `no method named`, not a missing
+   trait import. The method exists, is written, and is fenced
+   off behind #![feature(str_as_str)] -- a nightly-only door.
+
+3. Where the method would have earned its place
+   Box<str>   &*b          -> &str
+   Rc<str>    &*r          -> &str
+   Arc<str>   &*a          -> &str
+   Cow<str>   &*c          -> &str
+   None of these is a String, so String::as_str is unavailable,
+   and `&*` is doing real work rather than nothing. That is the
+   gap the feature was proposed to fill: one spelling, `as_str`,
+   that reads the same on every owner of some text.
+
+4. Why the obvious workaround is the disputed one
+   [u8; 3].as_ref()        -> &[u8]
+   Not &[u8; 3]. AsRef is NOT reflexive: there is no blanket
+   `impl<T> AsRef<T> for T`, so `.as_ref()` on an array finds
+   nothing at that rung, derefs to [u8], and answers as a slice.
+   So `.as_ref()` means 'whatever the deref chain offers first',
+   which is a different question from 'the same thing, as a view'.
+   Reach for `&*x` when you mean the second one.
+
+5. And why the method was taken back
+   p.as_mut_slice()                     -> &mut [u8; 3]
+   ComponentSlice::as_mut_slice(&mut p) -> &mut [u8]
+   One call site, two answers. An inherent method beats a trait
+   method at the same rung, so adding one to a type thousands of
+   crates already extend is a silent, source-breaking change --
+   the calls still compile, and hand back a different type.
+   That is exactly what happened when the feature grew from str
+   to [T]: the new inherent [T]::as_mut_slice shadowed the rgb
+   crate's trait method, and the stabilization was reverted.
+
+6. So, today
+   &str            nothing -- you already have one
+   Box/Rc/Arc<str> &*x, or &x[..]
+   Cow<str>        &*x
+   String          x.as_str()   (stable since 1.7, and unaffected)
