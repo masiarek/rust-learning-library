@@ -1,0 +1,29 @@
+Round 1 — agree with the standard library, then count the holes
+   probed 1179648 values, disagreements with char::from_u32: 0
+   accepted            1112064
+   0x110000 - accepted 2048
+   refused inside the range (the surrogates) 2048 = 0x800
+   The hole is exactly D800..=DFFF, which UTF-16 reserved to encode
+   everything above U+FFFF. UTF-8 needs no such reservation and pays
+   for the hole anyway, because the hole is in Unicode, not in UTF-16.
+
+Round 2 — the price of a fixed width
+   chars  UTF-8  [char]  ratio   text
+      11     11      44   4.0x   "plain ascii"
+      17     26      68   2.6x   "zażółć gęślą jaźń"
+       8     24      32   1.3x   "日本語のテキスト"
+       3     12      12   1.0x   "🦀🦀🦀"
+   The ratio is worst for the text that never needed the range: ASCII
+   pays 4x, and the emoji that genuinely needs 21 bits pays 1.0x. A
+   fixed width taxes the common case to make the rare case uniform.
+
+Round 3 — where the 11 spare bits went
+   size_of::<char>()                 = 4
+   size_of::<Option<char>>()         = 4
+   size_of::<Option<Option<char>>>() = 4
+   size_of::<Result<char, ()>>()     = 4
+   size_of::<u32>()                  = 4
+   size_of::<Option<u32>>()          = 8
+   Every invalid bit pattern is a niche the compiler can spend on a
+   discriminant. char has 4293855232 of them; u32 has none, so the
+   same Option doubles its size.

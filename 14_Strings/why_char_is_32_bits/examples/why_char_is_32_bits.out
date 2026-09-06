@@ -1,0 +1,51 @@
+1. The measurement
+   size_of::<char>()  4 bytes = 32 bits
+   char::MAX          U+10FFFF = 1114111
+   in binary          100001111111111111111
+   bits it needs      21
+
+2. Why not 16 bits
+   U+2A      6 bits  fits in 16          '*'
+   U+5B57   15 bits  fits in 16          '字'
+   U+1F600  17 bits  does NOT fit in 16  '😀'
+   16 bits reaches 63488 scalar values of 1112064 -- under 6% of the space.
+   Almost all everyday text lives in those, which is why 16 bits looked
+   like enough in 1991. It was not, and UTF-16 pairs up the rest.
+
+3. Not every 32-bit pattern is a char
+   char::from_u32(0x000041) = Some('A')
+   char::from_u32(0x00D800) = None
+   char::from_u32(0x00FFFE) = Some('\u{fffe}')
+   char::from_u32(0x10FFFF) = Some('\u{10ffff}')
+   char::from_u32(0x110000) = None
+   0xD800 is half of a UTF-16 surrogate pair -- never a character alone.
+   0x110000 is one past the top. Neither is a bit pattern a char can hold.
+   U+FFFE is accepted: a permanent noncharacter is still a scalar value,
+   and `char` is defined by the scalar range, not by what Unicode assigns.
+
+4. What the spare bit patterns buy
+   21 bits could hold       2097152 values
+   Unicode actually defines 1112064
+   32 bits could hold       4294967296 values
+   size_of::<Option<char>>()         = 4
+   size_of::<Option<Option<char>>>() = 4
+   size_of::<Option<u32>>()          = 8   <- u32 has no spare patterns,
+      so its Option needs a tag beside the value, and then padding.
+
+5. Four bytes is what a char COSTS, not what text costs
+   "Hello, 字!"
+   as a &str, UTF-8           11 bytes
+   as [char], one per scalar  36 bytes
+   Text is stored UTF-8 for this reason; char is the decoded form you
+   compare, classify and range over.
+
+6. The five literals from the primitive-types table
+   code pt   UTF-8  written        prints back as
+   U+2A     1 B      '*'            '*'
+   U+A      1 B      '\n'           '\n'
+   U+5B57   3 B      '字'            '字'
+   U+7F     1 B      '\x7f'         '\u{7f}'
+   U+CA0    3 B      '\u{CA0}'      'ಠ'
+   Every one of them is 4 bytes as a char. The UTF-8 column is what the
+   same character costs inside a String -- and \x is ASCII-only, so
+   anything above U+007F has to be written \u{...}.
