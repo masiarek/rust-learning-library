@@ -416,6 +416,12 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Grapheme cluster** — What a *reader* calls one character: `e` plus a combining accent is two `char`s, one grapheme. The third answer to "how long is this string", and the one std cannot count — that is the `unicode-segmentation` crate's job. → [Meet the `char`](14_Strings/meet_the_char/README.md)
 
+**Lexicographic order** — Comparing two sequences element by element and deciding on the first difference. `Ord for str` is exactly that over the UTF-8 bytes, which makes it fast, total and identical on every machine — and is why `"Zebra" < "apple"`. → [Comparing and sorting text](14_Strings/comparing_strings/README.md)
+
+**Collation** — Ordering text the way a language's dictionary does, as opposed to by code point. It is per-language data (CLDR, ICU), not an algorithm: the same table that files `Ä` under A for German is wrong for Swedish, where it is the 27th letter. Not in std. → [Comparing and sorting text](14_Strings/comparing_strings/README.md)
+
+**Case folding** — The third case mapping, defined for caseless *matching* rather than for display: `ß` folds to `ss`, which neither `to_lowercase` nor `to_uppercase` will do in both directions. std has `to_lowercase`, `to_uppercase` and `eq_ignore_ascii_case`, and no folding at all. → [Comparing and sorting text](14_Strings/comparing_strings/README.md)
+
 **`OsString` / `OsStr`** — Owned and borrowed text exactly as the operating system hands it over — filenames, env vars, arguments — with no UTF-8 promise, because the OS makes none. Narrowing to `&str` is `to_str()` returning an `Option`, and the `None` is a real answer. → [Six kinds of string](14_Strings/six_kinds_of_string/README.md)
 
 **`CString` / `CStr`** — Owned and borrowed text under C's contract: no NUL byte inside, one NUL at the end. `CString::new` refuses an interior NUL with an error naming the byte — the string C would have silently truncated. → [Six kinds of string](14_Strings/six_kinds_of_string/README.md)

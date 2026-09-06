@@ -621,6 +621,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...and its companion, one method along the same page: the rename
         # that made `words()` stop claiming to know what a word is.
         "rfc_1054_str_words",
+        # ...then what `==` and `sort()` actually ask: the bytes, which is
+        # lexicographic order and not any language's alphabetical order.
+        "comparing_strings",
         # ...then the questions you ask about text without cutting it up,
         # and the one trait that makes their arguments interchangeable.
         "searching_a_string",
@@ -654,11 +657,12 @@ NAV_ORDER: dict[str, list[str]] = {
         # would hide the most-linked-to part of the section.
         "str_methods",
         "string_methods",
-        # The five that are outlines so far — ordered as they would be read,
-        # not as they were written. Each is a real URL from the day it is a stub.
+        # The outlines — ordered as they would be read, not as they were
+        # written. Each is a real URL from the day it is a stub. (No count in
+        # this comment: it went stale twice while sessions graduated stubs,
+        # and two doing it at once would collide on the number.)
         "parsing_a_string",
         "the_format_language",
-        "comparing_strings",
         "string_api_design",
         "when_string_is_too_slow",
         # ...and the outside world: books, essays, the video, and the exercises.
