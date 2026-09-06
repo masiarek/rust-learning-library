@@ -653,14 +653,14 @@ NAV_ORDER: dict[str, list[str]] = {
         "str_as_str",
         # The method reference: one page per method, 125 of them. It sits after
         # the lessons and before the stubs because a stub is not a page anyone
-        # reads, and burying a reference this size under nine placeholders
+        # reads, and burying a reference this size under the outlines below
         # would hide the most-linked-to part of the section.
         "str_methods",
         "string_methods",
         # The outlines — ordered as they would be read, not as they were
-        # written. Each is a real URL from the day it is a stub. (No count in
-        # this comment: it went stale twice while sessions graduated stubs,
-        # and two doing it at once would collide on the number.)
+        # written. Each is a real URL from the day it is a stub. (No counts in
+        # this block: every graduation invalidates one, nothing checks them,
+        # and between them they went stale at nine, eight, six and five.)
         "parsing_a_string",
         "the_format_language",
         "string_api_design",
