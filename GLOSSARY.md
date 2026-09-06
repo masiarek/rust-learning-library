@@ -180,6 +180,8 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Undefined behaviour** — A program the language standard declines to define at all, so no output is the "right" one. The reason C's use-after-free can print nothing on one run and the correct answer on the next, and the reason such a program can never have a recorded answer key. → [C and C++](31_C_and_Cpp/README.md) · [A shadow does not drop](18_Ownership/shadowing_does_not_drop/README.md)
 
+**Invariant** — A property true of *every* value of a type, established at the one door that can construct it and assumed by everything downstream without re-checking. `str`'s is that the bytes are valid UTF-8, which is why `.chars()` yields `char` and not `Result<char, _>`. Most of your own are ordinary correctness promises, where breaking one costs a wrong answer rather than undefined behaviour. → [What an invariant is](09_Advanced/what_an_invariant_is/README.md)
+
 **Partial move** — Moving one field out of a struct, leaving the other fields readable but the struct as a whole unusable. Ownership is tracked per field, not per variable. → [Ownership and moves](18_Ownership/ownership_and_moves/README.md)
 
 **Prelude** — The set of names in scope in every Rust file without an import. `Option`, `Result`, and their variants live there, which is why you write `Some(x)` and not `Option::Some(x)`.

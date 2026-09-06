@@ -808,6 +808,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "interval_arithmetic",
         # Layout rather than arithmetic: the other thing `unsafe` buys you, and
         # the enum that already gives it to you safely.
+        # What the SAFETY comments in the next three pages are arguing about,
+        # and the one kind of invariant whose failure is undefined behaviour.
+        "what_an_invariant_is",
         # The keyword itself, before the two features that need it.
         "what_unsafe_turns_off",
         # FFI sits after `unsafe`, which it needs, and before the

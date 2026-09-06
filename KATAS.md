@@ -157,6 +157,7 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K137 | [Freeze a candidate column three ways — handles and buffers for `String`, `Box<str>` and an interned `Rc<str>`, then the `.to_owned()` that clones a pointer instead of the text](14_Strings/boxed_str/README.md#practice) | [The third owned form](14_Strings/boxed_str/README.md) | 201 → 301 |
 | K138 | [Rebuild `char::from_u32`, then price the fixed width — the 2,048 refusals, the ratio for four alphabets, and the one `Option` that doubles](14_Strings/why_char_is_32_bits/README.md#practice) | [Why a `char` is 32 bits wide](14_Strings/why_char_is_32_bits/README.md) | 201 → 301 |
 | K139 | [Measure a column four ways, then truncate it without breaking a letter — the rows where three limit rules disagree, the value that splits all three, and the `get(..n)` that returns `None` where a slice would panic](14_Strings/four_lengths/README.md#practice) | [Four lengths](14_Strings/four_lengths/README.md) | 201 |
+| K140 | [The invariant nobody wrote down — one ordinary `pub fn` desyncs a cached total, and the wrong answer arrives with no `unsafe`, no panic and no error](09_Advanced/what_an_invariant_is/README.md#practice) | [What an invariant is](09_Advanced/what_an_invariant_is/README.md) | 301 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -242,7 +243,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K82 · [Seven errors, five root causes, three edits](16_Structs/when_a_struct_refuses/README.md#practice)
 - K84 · [Four spellings, four error codes](16_Structs/a_type_is_not_a_constructor/README.md#practice)
 
-**[Advanced](09_Advanced/README.md)** — 11 katas
+**[Advanced](09_Advanced/README.md)** — 12 katas
 
 - K37 · [The `Result` the lock hands you](09_Advanced/mutex_poisoning/README.md#practice)
 - K45 · [Spend the entitlement, not just the token](09_Advanced/one_account_one_review/README.md#practice)
@@ -255,6 +256,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K131 · [The same fan-out three ways](09_Advanced/spawning_a_thread/README.md#practice)
 - K132 · [A three-stage pipeline, and the drop that ends it](09_Advanced/channels/README.md#practice)
 - K133 · [The safe line the unsafe block depends on](09_Advanced/what_unsafe_turns_off/README.md#practice)
+- K140 · [The invariant nobody wrote down](09_Advanced/what_an_invariant_is/README.md#practice)
 
 **[Tooling](05_Tooling/README.md)** — 2 katas
 
