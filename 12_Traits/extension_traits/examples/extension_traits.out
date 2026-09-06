@@ -1,0 +1,23 @@
+1. A local trait, implemented for `str`:
+   HELLO!
+   OWNED TOO!
+
+2. One blanket impl reaches every iterator:
+   vec into_iter  -> 3
+   str split      -> 4
+   filtered range -> 4
+
+3. `.progress()` on a plain range, then on a `map`:
+    [   ]
+    [*  ]
+    [** ]
+    [***]
+    [   ]
+    [*  ]
+    [** ]
+    [***]
+
+4. The inherent method wins, and nothing warns:
+   v.len()             = 3
+   SliceExt::len(&v)   = 999
+   v.second()          = Some(20)

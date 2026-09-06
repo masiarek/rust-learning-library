@@ -1,0 +1,14 @@
+middle — no collision, so the dot finds it:
+  [10, 20, 30]    .middle() = Some(20)
+  [10, 20, 30, 40].middle() = Some(30)
+  []              .middle() = None
+
+first — collides, so the dot never gets here:
+  odd.first()           = Some(10)
+  SliceExt::first(&odd) = 999
+
+The give-away is the TYPE, not a warning:
+  by_dot   is core::option::Option<&i32>
+  by_trait is usize
+
+  Two calls, one name, one value — and no diagnostic anywhere.

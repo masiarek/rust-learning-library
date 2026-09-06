@@ -72,6 +72,12 @@ SCOPE = (
     # and say so with `ignore`.
     "14_Strings/raw_strings_and_escapes",
     "15_First_Programs/comments_that_compile",
+    # A third lesson page, added for the same reason: every fence on it is a
+    # whole program making a claim about what rustc does. One is `compile_fail`
+    # (the inherent impl on a foreign type, `E0116`); one is the opposite
+    # assertion — a blanket impl bounded only by `Sized` really does put
+    # `.progress()` on the unit type, and the fence is the proof.
+    "12_Traits/extension_traits",
 )
 
 SKIP_DIRS = {".git", "site", ".venv", "target", "__pycache__", ".github"}
