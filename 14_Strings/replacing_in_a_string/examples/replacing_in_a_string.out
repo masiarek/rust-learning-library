@@ -1,0 +1,52 @@
+1. replace does not replace -- it returns a new String
+   original  "config.old.toml"   <- untouched
+   renamed   "config.new.toml"
+   The receiver is a &str and a str cannot change length, so there
+   is nowhere for an edit to go. The answer comes back as a String.
+
+2. Every occurrence, unless you say how many
+   replace(',', ";")       "a;b;c;d"
+   replacen(',', ";", 1)   "a;b,c,d"
+   replacen(',', ";", 99)  "a;b;c;d"
+   There is no rreplacen: the count always runs from the left.
+
+3. The needle is a Pattern; the replacement is plain text
+   char      "sda1 | sdb2 | sdc3"
+   &str      "hda1 hdb2 hdc3"
+   [char]    "sdaN sdbN sdcN"
+   closure   "sdaN sdbN sdcN"
+   What you cannot do is refer to what matched: the replacement is a
+   &str, not a template. No $1, no backreferences -- that is a regex
+   engine, and std does not ship one.
+
+4. It allocates even when nothing matched
+   "one\ttwo" owned     <- a new String
+   "one two"  borrowed  <- no allocation
+   A bare replace() would have allocated on both rows. contains() is
+   the cheap question that lets the second row skip the copy.
+
+5. A chain of replaces is not simultaneous
+   raw      "a < b & c"
+   < first  "a &amp;lt; b &amp; c"   <- the & it just wrote got escaped again
+   & first  "a &lt; b &amp; c"
+   Ordering saved this pair. It does not scale: each new rule has to
+   be checked against the output of every earlier one.
+
+6. One pass, and the order stops mattering
+   substitute(raw, table)     "a &lt; b &amp; c"
+   substitute(raw, reversed)  "a &lt; b &amp; c"
+   Same answer both ways, because the scan moves past what it wrote.
+   Built from strip_prefix -- the search method from the page before.
+
+7. Editing in place, for real
+   find(char::is_numeric) = 10, then replace_range(10.., "60s")
+   "timeout = 60s"
+   replace_range takes a BYTE RANGE, not a pattern -- which is exactly
+   the number find() hands you, and exactly the number that can panic.
+   retain(is_ascii_digit) "15550109999"   <- deletion in place, no new String
+
+8. The panic replace_range keeps
+   "żółw".replace_range(0..1, "z")  -> panicked: 1 is inside 'ż'
+   0..'ż'.len_utf8() instead        -> "zółw"
+   replace() never has this problem: it only ever cuts where a match
+   started, and a match starts on a character.

@@ -1,0 +1,54 @@
+1. Four questions about one line
+   "2026-09-06 WARN disk usage 91% on /dev/sda1"
+   contains("WARN")      true
+   find("WARN")          Some(11)
+   starts_with("2026")   true
+   matches('/').count()  2
+   contains is find(..).is_some() under a name that reads: true
+
+2. One argument, four shapes -- this is the Pattern trait
+   char                  Some(11)
+   &str                  Some(11)
+   [char] (any one of)   Some(29)
+   FnMut(char) -> bool   Some(0)
+   The same four shapes go to the other families unchanged:
+   split(char::is_whitespace)     ["a", "b", "c"]
+   trim_matches(['[', ']'])       "warn"
+   replace(char::is_numeric, "#") "sda#"
+
+3. find returns a BYTE offset, not a character index
+   "żółw" is 7 bytes and 4 chars
+   find('w')  = 6   <- bytes
+   as a character index that is 3
+   the byte offset is the one that slices: &s[..6] = "żół"
+   and &s[6..] = "w"
+   Feed the character index to a slice instead and one of two
+   things happens. It lands inside a letter and panics:
+   &s[..3]  -> panicked
+   Or it lands on a boundary and is quietly wrong -- two characters
+   asked for, one delivered: &s[..2] = "ż"
+
+4. Option, not -1
+   find("ERROR") = None
+   absent -- and there is no offset lying around to misuse
+   Where a search returns -1, `&line[i..]` is the waiting bug.
+   Here the -1 has no way to exist: usize has no negative value and
+   the answer is not a usize until you have unwrapped it.
+
+5. starts_with, and the method you probably wanted instead
+   starts_with("/dev/")   true
+   strip_prefix("/dev/")  Some("sda1")
+   strip_suffix("1")      Some("/dev/sda")
+   strip_prefix answers the question AND hands back the rest, so the
+   length of the prefix is never written down a second time.
+
+6. Backwards
+   "/usr/local/share/doc"
+   find('/')         Some(0)
+   rfind('/')        Some(16)
+   rsplit_once('/')  Some(("/usr/local/share", "doc"))
+
+7. Two things the search does not do
+   It does not fold case:   false
+   lowercase both sides:    true
+   The empty pattern is everywhere: find("") = Some(0), "".contains("") = true

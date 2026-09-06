@@ -1,0 +1,27 @@
+1. A table no ordering can save
+   "cat dog cat"
+   cat->dog then dog->cat  "cat cat cat"
+   dog->cat then cat->dog  "dog dog dog"
+   Both orders collapse the two words into one. A chain cannot swap
+   anything, because the second pass reads the first pass's output.
+   substitute(...)         "dog cat dog"
+   One pass gets it right and does not care about the order:
+                           "dog cat dog"
+
+2. The last two, which replacen cannot count to
+   "log a, log b, log c"
+   replacen(.., 2)        "LOGFILE a, LOGFILE b, log c"   <- counted from the left
+   replace_last_n(.., 2)  "log a, LOGFILE b, LOGFILE c"
+   same offsets, forwards "log a, LOGFILELOGFILE log c"
+   The forward pass is not wrong about where the matches were. It is
+   wrong about what string it is editing after the first one lands.
+
+3. Two ways to delete, and only one is free
+   retain(|c| c != ' ')   "abc"   <- in place
+   replace(' ', "")       "abc"   <- a new String
+   Same answer, different cost. Now the job retain cannot do:
+   retain(not a, not b)   "c"       <- every a and every b
+   replace("ab", "")      "cba"     <- only the pair "ab"
+   retain is handed one char at a time and never sees a substring, so
+   it cannot express "ab". That is the line between the two families:
+   retain filters characters, replace matches patterns.

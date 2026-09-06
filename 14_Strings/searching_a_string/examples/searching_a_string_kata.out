@@ -1,0 +1,21 @@
+1. The two numbers, and why the bug hides
+   "disk sda1 full"     find Some(10)  chars Some(10)  agree
+   "dysk żółw pełny"    find Some(13)  chars Some(10)  DIFFER
+   Every ASCII test agrees, so a wrong choice ships. The first row of
+   real data with a two-byte letter in it is where you find out.
+   Rule of thumb: bytes for slicing, chars for telling a person.
+
+2. starts_with, then a constant you have to keep right
+   &path[4..]             "/sda1"   <- "/dev/" is 5 bytes, not 4
+   strip_prefix("/dev/")  "sda1"
+   The two lines carry the same string; only one of them carries it
+   twice. strip_prefix has no length to disagree with.
+
+3. The trait you can use but cannot name
+   fn occurs<P: Pattern>(..) is E0658 on stable, so:
+   after_str("a=1;b=2", "b=")            Some("2")
+   from_first("timeout = 30s", numeric)  Some("30s")
+   from_offset(text, rfind(' ') + 1)     Some("30s")
+   The third is the one to reach for when the caller already knows
+   where to look: it is the only one of the three that cannot search
+   for the wrong thing.
