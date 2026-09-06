@@ -161,6 +161,7 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K141 | [Give every slice a `.middle()`, then find out why your `.first()` never runs — one trait, two methods, and only one of them reachable through a dot](12_Traits/extension_traits/README.md#practice) | [Extension traits](12_Traits/extension_traits/README.md) | 201 |
 | K142 | [Two numbers, one prefix, and the trait you cannot name — a character index beside `find`'s byte offset, the `starts_with` constant that goes stale, and the three stable helpers that stand in for `P: Pattern`](14_Strings/searching_a_string/README.md#practice) | [Searching without splitting](14_Strings/searching_a_string/README.md) | 101 → 201 |
 | K143 | [Escape it twice, then escape it once — the swap no ordering can perform, the last-`n` replacement `replacen` counts from the wrong end, and what a stale offset does to a string that has already changed length](14_Strings/replacing_in_a_string/README.md#practice) | [Replacing part of a string](14_Strings/replacing_in_a_string/README.md) | 101 → 201 |
+| K144 | [The conversion you did not need, and the method that changed under you — five owners of one string and how few conversions they need, then an inherent method that silently steals a trait's call site](14_Strings/str_as_str/README.md#practice) | [`str::as_str`](14_Strings/str_as_str/README.md) | 201 → 301 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -275,7 +276,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K44 · [The results table that would not sort](19_Numbers/what_a_float_stores/README.md#practice)
 - K88 · [Make the sum land on the number you would have typed](19_Numbers/letting_the_compiler_reorder/README.md#practice)
 
-**[Strings](14_Strings/README.md)** — 26 katas
+**[Strings](14_Strings/README.md)** — 27 katas
 
 - K61 · [One `&str` parameter, three callers](14_Strings/string_vs_str/README.md#practice)
 - K62 · [Cut a name in half without panicking](14_Strings/string_slices/README.md#practice)
@@ -303,6 +304,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K139 · [Measure a column four ways, then truncate it without breaking a letter](14_Strings/four_lengths/README.md#practice)
 - K142 · [Two numbers, one prefix, and the trait you cannot name](14_Strings/searching_a_string/README.md#practice)
 - K143 · [Escape it twice, then escape it once](14_Strings/replacing_in_a_string/README.md#practice)
+- K144 · [The conversion you did not need, and the method that changed under you](14_Strings/str_as_str/README.md#practice)
 
 **[Enums](13_Enums/README.md)** — 1 kata
 

@@ -641,6 +641,10 @@ NAV_ORDER: dict[str, list[str]] = {
         "inside_a_split",
         # ...and the third owned form, which needs the anatomy page above it.
         "boxed_str",
+        # ...and the method that would tidy every one of those, which is not
+        # there: E0658, the workaround its own author argues against, and the
+        # method-resolution rule that reverted it after it had stabilized.
+        "str_as_str",
         # The method reference: one page per method, 125 of them. It sits after
         # the lessons and before the stubs because a stub is not a page anyone
         # reads, and burying a reference this size under nine placeholders

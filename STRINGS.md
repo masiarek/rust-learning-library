@@ -69,6 +69,7 @@ flowchart LR
 | 15 | [Four lengths, and which one the other system means](14_Strings/four_lengths/README.md) | 201 | One string, four counts — and why a name that fits a `VARCHAR(12)` can bounce off an `nvarchar(12)` |
 | 16 | [Searching without splitting](14_Strings/searching_a_string/README.md) | 101 → 201 | Is it there, where is it, does it start like this — and why one trait makes a `char`, a `&str` and a closure the same argument |
 | 17 | [Replacing part of a string](14_Strings/replacing_in_a_string/README.md) | 101 → 201 | `replace` hands back a new `String`; `replace_range` and `retain` are the two that edit in place, and a chain of replaces is not a substitution table |
+| 18 | [`str::as_str`: the method that was stabilized and taken back](14_Strings/str_as_str/README.md) | 201 → 301 | Why `as_str` works on a `String` and is `E0658` on everything else that owns text — and what an inherent method added to `str` or `[T]` does to the crates that already extend them |
 
 ## The lessons strings lean on
 
