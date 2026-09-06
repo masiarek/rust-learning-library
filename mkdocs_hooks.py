@@ -598,6 +598,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...then what those bytes encode: a char is not a byte, and
         # "how many characters" has three honest answers.
         "meet_the_char",
+        # ...then the one number that table states without explaining: 21 bits
+        # of Unicode rounded up to an addressable width, and what the rest buy.
+        "why_char_is_32_bits",
         # ...then every way to write one down in source: the five prefixes and
         # their raw combinations, and the escapes each one honours.
         "raw_strings_and_escapes",
@@ -961,6 +964,7 @@ LABELS = {
     "building_a_string": "Building a `String`",
     "walking_a_string": "Walking a `String`",
     "meet_the_char": "Meet the `char`",
+    "why_char_is_32_bits": "Why a `char` is 32 bits",
     "static_str": "`&'static str`",
     "rfc_69_byte_literals": "RFC 69: byte literals",
     "rfc_1212_line_endings": "RFC 1212: line endings",
