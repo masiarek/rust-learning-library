@@ -1,0 +1,31 @@
+Round 1 -- one bad value, four handlings
+   expect     panics: port must be a number: ParseIntError { kind: InvalidDigit }
+              -- honest in a scratch program; in a tool someone else
+                 runs it is a stack trace where an error belonged.
+   unwrap_or  8080   <- no complaint, and no way to know it fired
+   match      kept the default, because invalid digit found in string
+   ?          Err(NotANumber("80x"))
+              -- the only one that hands the caller the decision.
+
+Round 2 -- the whitespace that breaks a hand-rolled reader
+      "port=8080"  raw="8080"   -> Ok(8080)                                     ours -> Ok(8080)
+     "port= 8080"  raw=" 8080"  -> Err(invalid digit found in string)           ours -> Ok(8080)
+    "port =8080 "  raw="8080 "  -> Err(invalid digit found in string)           ours -> Ok(8080)
+          "port="  raw=""       -> Err(cannot parse integer from empty string)  ours -> Err(no port given)
+     "port=99999"  raw="99999"  -> Err(number too large to fit in target type)  ours -> Err(99999 is not a usable port)
+         "port=0"  raw="0"      -> Ok(0)                                        ours -> Err(0 is not a usable port)
+   `parse` never trims, so the space a human left after `=` is a
+   parse error in every reader that forgets `.trim()`. Ours trims
+   once, in `from_str`, so no caller has to remember.
+
+Round 3 -- an error you can match on, not just print
+             "port=443"  listening on 443
+                "port="  fill in the port
+            "port=http"  "http" looks like a name, not a port
+           "port=99999"  99999 is above 65535 — pick another
+      "port=4294967296"  4294967296 is above 65535 — pick another
+   Same shape as IntErrorKind, for the same reason: the caller wants
+   to BRANCH on the failure, and a String can only be shown to
+   someone. Note the last row -- 4294967296 overflows u32 before any
+   range check could run -- there is no u32 left to report, so the
+   variant carries the TEXT and says what was actually typed.

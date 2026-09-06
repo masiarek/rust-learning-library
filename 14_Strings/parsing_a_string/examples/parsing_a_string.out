@@ -1,0 +1,77 @@
+1. Three ways to say which type to build
+   annotation  let n: i32 = "42".parse()   -> 42
+   turbofish   "42".parse::<i32>()         -> 42
+   inferred    from the Result's own type   -> 42
+   Nothing in `.parse()` itself names a type, so one of these is
+   always required. Without one it is E0284, not a default of i32.
+
+2. parse takes the WHOLE string, and it is not a tokenizer
+      "42"  Ok(42)
+     "+42"  Ok(42)
+     "-42"  Ok(-42)
+     "042"  Ok(42)
+    " 42 "  Err — invalid digit found in string
+     "42 "  Err — invalid digit found in string
+     "4_2"  Err — invalid digit found in string
+   "1,000"  Err — invalid digit found in string
+    "42.0"  Err — invalid digit found in string
+        ""  Err — cannot parse integer from empty string
+   `4_2` is the surprise: the underscore is LITERAL syntax, read by
+   the compiler, and parse never sees a literal. Trim before parsing.
+
+3. Its digits are ASCII, not Unicode
+   "١٢٣".chars().all(char::is_numeric) = true
+   "١٢٣".parse::<i32>()                = Err(ParseIntError { kind: InvalidDigit })
+   Every char says it is a digit and parse still refuses: it reads
+   b'0'..=b'9' and nothing else. Python's int() accepts these.
+
+4. For an integer, the failure is structured
+                 ""  kind=Empty
+        "forty-two"  kind=InvalidDigit
+     "999999999999"  kind=PosOverflow
+    "-999999999999"  kind=NegOverflow
+   ParseIntError::kind() — stable since 1.55 — is a value you can
+   match on, so "try again" and "pick a bigger type" are
+   distinguishable without reading an error message:
+                   "7" -> 7
+                    "" -> nothing was typed
+                   "x" -> that is not a number
+        "999999999999" -> too big for an i32
+
+5. For a float, it is not
+   ""      -> cannot parse float from empty string
+   "forty" -> invalid float literal
+   different errors?  true
+   ParseFloatError HAS a kind field, and it is pub(super) — there is
+   no accessor on stable, so you get Display and PartialEq and no
+   match. Comparing against a known error is the only way to ask.
+
+6. Floats forgive more than integers do
+    "3.14"  Ok(3.14)
+      "3."  Ok(3.0)
+      ".5"  Ok(0.5)
+    "1e10"  Ok(10000000000.0)
+     "inf"  Ok(inf)
+     "NaN"  Ok(NaN)
+      "-0"  Ok(-0.0)
+    "3,14"  Err — invalid float literal
+    " 1.0"  Err — invalid float literal
+   The decimal separator is a POINT, always. Rust reads no locale, so
+   a CSV exported anywhere that writes 3,14 must be fixed before this.
+
+7. Other targets, and another base
+   "true".parse::<bool>()  = Ok(true)
+   "True".parse::<bool>()  = Err(ParseBoolError)   <- exact spelling only
+   "a".parse::<char>()     = Ok('a')
+   i64::from_str_radix("1a2b", 16) = Ok(6699)
+   from_str_radix is the way in for hex, binary and octal — `parse`
+   is base 10 and has no argument for anything else.
+
+8. FromStr for your own type, and Display as its mirror
+     "1.2.3" -> 1.2.3   (round trip: true)
+       "1.2" -> missing patch
+   "1.2.3.4" -> trailing "4"
+     "1.x.3" -> minor: invalid digit found in string (got "x")
+   Implement FromStr and `.parse::<Version>()` works; implement
+   Display and `.to_string()` works. One pair of traits, both
+   directions, and a round trip you can assert on.
