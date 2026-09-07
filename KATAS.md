@@ -165,6 +165,7 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K145 | [Three questions about nothing — the empty haystack that splits in two, the byte offsets a Polish word refuses to report, and every character as a borrowed `&str`](14_Strings/splitting_on_nothing/README.md#practice) | [Splitting on nothing](14_Strings/splitting_on_nothing/README.md) | 201 |
 | K146 | [One question, three answers, and the row where none of them is right — then a two-level key that files `Ł` between L and M, the three match arms that have to change for Swedish, and the Czech letter no per-character key can express](14_Strings/comparing_strings/README.md#practice) | [Comparing and sorting text](14_Strings/comparing_strings/README.md) | 201 |
 | K147 | [One bad config value handled four ways, the space after `=` that breaks three of them, and a `FromStr` whose error the caller can match on instead of read](14_Strings/parsing_a_string/README.md#practice) | [Parsing out of a string](14_Strings/parsing_a_string/README.md) | 101 → 201 |
+| K148 | [A table sized from its own data, the `{:?}` column that refuses to pad, precision that counts chars rather than bytes, and the last alignment `fmt` cannot fix](14_Strings/the_format_language/README.md#practice) | [The format mini-language](14_Strings/the_format_language/README.md) | 201 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -279,7 +280,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K44 · [The results table that would not sort](19_Numbers/what_a_float_stores/README.md#practice)
 - K88 · [Make the sum land on the number you would have typed](19_Numbers/letting_the_compiler_reorder/README.md#practice)
 
-**[Strings](14_Strings/README.md)** — 30 katas
+**[Strings](14_Strings/README.md)** — 31 katas
 
 - K61 · [One `&str` parameter, three callers](14_Strings/string_vs_str/README.md#practice)
 - K62 · [Cut a name in half without panicking](14_Strings/string_slices/README.md#practice)
@@ -311,6 +312,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K145 · [Three questions about nothing](14_Strings/splitting_on_nothing/README.md#practice)
 - K146 · [One question, three answers, and the row where none of them is right](14_Strings/comparing_strings/README.md#practice)
 - K147 · [One bad config value handled four ways, the space after `=` that breaks three of them, and a `FromStr` whose error the caller can match on instead of read](14_Strings/parsing_a_string/README.md#practice)
+- K148 · [A table sized from its own data, the `{:?}` column that refuses to pad, precision that counts chars rather than bytes, and the last alignment `fmt` cannot fix](14_Strings/the_format_language/README.md#practice)
 
 **[Enums](13_Enums/README.md)** — 1 kata
 

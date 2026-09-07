@@ -633,6 +633,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...and text on the way IN, which is where the Result starts:
         # FromStr picks the type, and the failure is the interesting half.
         "parsing_a_string",
+        # ...and text on the way OUT: a mini-language of its own, in which
+        # the spec is a request each Display and Debug impl may decline.
+        "the_format_language",
         # The lifetime half, once the two types are solid: three spellings of
         # one type, and the claim about String that is not true.
         "static_str",
@@ -664,7 +667,6 @@ NAV_ORDER: dict[str, list[str]] = {
         # written. Each is a real URL from the day it is a stub. (No counts in
         # this block: every graduation invalidates one, nothing checks them,
         # and between them they went stale at nine, eight, six and five.)
-        "the_format_language",
         "string_api_design",
         "when_string_is_too_slow",
         # ...and the outside world: books, essays, the video, and the exercises.

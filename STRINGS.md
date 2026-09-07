@@ -73,6 +73,7 @@ flowchart LR
 | 19 | [Splitting on nothing](14_Strings/splitting_on_nothing/README.md) | 201 | Why `"abc".split("")` yields `["", "a", "b", "c", ""]` — and why the empty string is the one that splits into two pieces |
 | 20 | [Comparing and sorting text](14_Strings/comparing_strings/README.md) | 201 | What `==` and `sort()` actually compare — and why the answer is reproducible on every machine and still wrong for every reader |
 | 21 | [Parsing out of a string](14_Strings/parsing_a_string/README.md) | 101 → 201 | Text on the way in — what names the type, what the string is allowed to look like, and what the failure will tell you |
+| 22 | [The format mini-language](14_Strings/the_format_language/README.md) | 201 | Text on the way out — the whole grammar, and why a format spec is a request an impl is free to ignore |
 
 ## The lessons strings lean on
 
@@ -96,7 +97,6 @@ Named honestly, because a map that only lists what exists is a map of the wrong 
 
 | The page | Level | What it will answer |
 |---|---|---|
-| [The format mini-language](14_Strings/the_format_language/README.md) | 201 | `{:>8.3}`, `{:#x}`, `{val:^width$}`: fill, align, sign, width, precision, and the `$` that makes them dynamic |
 | [String parameters worth copying](14_Strings/string_api_design/README.md) | 201 → 301 | `impl AsRef<str>`, `Into<String>`, and when a signature should take `impl Display` |
 | [When `String` is too slow](14_Strings/when_string_is_too_slow/README.md) | 301 | `with_capacity` in anger, `smallstr` / `smartstring`, and avoiding a `format!` that a literal would do |
 
