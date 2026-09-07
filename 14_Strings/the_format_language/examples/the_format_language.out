@@ -1,0 +1,73 @@
+1. fill, align, width — and the defaults that differ by type
+   [****mid****]  fill '*', centre, width 11
+   [left-------]  fill '-', left
+   [......right]  fill '.', right
+   [      42]  a number with no align defaults RIGHT
+   [ab      ]  a string with no align defaults LEFT
+
+2. sign, #, and the zero that is not a fill character
+   {:+}       +42 and -42
+   {:-}       42   <- accepted, and does nothing at all
+   {:#x}      0xff     {:#b} 0b101     {:#o} 0o10
+   {:#010x}   0x000000ff   <- the 0x counts toward the 10
+   {:010}     -000000042   <- the sign goes BEFORE the zeros
+   {:08.3}    0003.142
+
+3. precision means two different things
+   on a float, digits after the point:  {:.3} of 3.14159 = 3.142
+   on a string, a MAXIMUM LENGTH:       {:.3} of "hello" = hel
+   and they compose:                    {:>8.3}          = [     hel]
+   A spec that truncates text is easy to write by accident when you
+   meant to pad it. `{:8}` pads; `{:.8}` cuts.
+
+4. THE SURPRISE: the spec is state, and an impl has to ask for it
+   Display str    [      ab]   <- honours the width
+   Debug   str    ["ab"]   <- ignores it entirely
+   Debug   char   ['a']   <- ignores it too
+   Debug   i32    [      42]   <- honours it
+   Debug   bool   [    true]   <- honours it
+   Debug   Vec    [[       1,        2]]
+   Debug   Option [Some(       1)]
+   The last two are the ones to look at twice. A container does not
+   pad ITSELF — it hands your formatter down to each element, so the
+   width lands inside the brackets, once per item.
+
+5. The type characters
+   {}      Display     1
+   {:?}    Debug       1.0   <- a float keeps its .0 here
+   {:x?}   Debug, hex  [ff, 1]
+   {:02x?} width rides down to the elements  [ff, 01]
+   {:e}    1.2345e3    <- no '+', no padded exponent, unlike C and Python
+   {:#?}   pretty Debug, one field per line:
+[
+    (
+        1,
+        "a",
+    ),
+]
+
+6. Rounding is half-to-even, and the exceptions are not exceptions
+   {:.0} of 0.5 1.5 2.5 3.5 = 0 2 2 4   <- ties go to the EVEN digit
+   {:.2} of 1.005 = 1.00, which looks wrong until you look at the value:
+      1.005 is stored as 1.00499999999999989342
+      2.675 is stored as 2.67499999999999982236
+   Neither is a tie, so neither is a rounding decision. `fmt` rounded
+   the number it was given correctly; the literal was never that number.
+      2.5 really is stored as 2.50000000000000000000
+
+7. Width and precision computed at run time
+   {:>width$.precision$} -> [     3.14]
+   {:>1$} with a positional -> [    ab]
+   {:.*} takes the precision first -> [3.142]
+   A column sized from the data itself (widest = 10):
+      alpha      |     3.50
+      b          |    12.25
+      gamma_long |     0.12
+
+8. write! into one buffer, format! into a new one
+   write!:  capacity 64 -> 64 (unchanged: true)
+            0:alpha;1:b;2:gamma_long;
+   format!: identical text (true) — and one temporary String per row,
+            allocated and dropped, which is why write! belongs in a loop.
+   Both need `use std::fmt::Write`; writing to a String cannot fail,
+   so the fmt::Result it hands back is always Ok(()).

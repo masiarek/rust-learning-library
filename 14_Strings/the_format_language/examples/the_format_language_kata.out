@@ -1,0 +1,43 @@
+Round 1 -- widths computed from the data
+   name column 8, size column 5
+   main.rs    1204
+   lib.rs    88213
+   build.rs     96
+   żółw.txt      7
+   ---------------
+   total     89520
+   `{:<name_width$}` reads the width from a binding in scope, so the
+   table resizes itself and no number is written down twice.
+
+Round 2 -- the column that refuses to line up
+   Quoting the names with {:?} and padding them:
+      ["main.rs"]
+      ["lib.rs"]
+   Nothing padded. Debug for str never consults the width -- the spec
+   is state on the Formatter and each impl decides whether to read it.
+   Format FIRST, pad the result second:
+      ["main.rs"   ]
+      ["lib.rs"    ]
+   That is the general fix: `format!("{x:?}")` produces a String,
+   and Display for String does honour the width.
+
+Round 3 -- truncating a cell, and what precision counts
+   main.rs   entry point
+   lib.rs    everything else, …
+   build.rs  
+   żółw.txt  four chars, seven…
+   Precision on a string is a MAXIMUM LENGTH, and it counts chars:
+      "żółw" is 7 bytes, 4 chars
+      {:.3} gives [żół] -- three chars, not three bytes
+      so it can never split a character in half, unlike &s[..3].
+
+Round 4 -- the alignment fmt cannot fix
+      [ab    ] 2 chars, 2 bytes
+      [żó    ] 2 chars, 4 bytes
+      [😀😀    ] 2 chars, 8 bytes
+   All three were padded to six, and all three are correct: fmt counts
+   CHARS. A terminal draws CELLS, and an emoji takes two of them, so
+   the last row is two columns wider on screen than the first. std has
+   no notion of display width and cannot -- it is a property of the
+   font and the terminal, not of the string. A table of arbitrary text
+   needs a width crate; a table of ASCII does not.
