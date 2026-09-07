@@ -26,6 +26,8 @@
    split_inclusive     ["", "a", "b", "c"]
    rsplit              ["", "c", "b", "a", ""]
    splitn(3, "")       ["", "a", "bc"]   <- 3 pieces, and only ONE of them a character
+   split_once("")      Some(("", "abc"))   <- never None, for any string
+   rsplit_once("")     Some(("abc", ""))   <- reading order, where rsplitn(2) gives ["", "abc"]
 
 7. Each character as a &str, which is what split("") is usually reached for
    filtered            ["a", "b", "c"]

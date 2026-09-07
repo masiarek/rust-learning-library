@@ -74,9 +74,13 @@ So `split("")` never cuts a *character* in half and cuts a *letter* in half rout
 | [`split_inclusive("")`](../str_methods/str_split_inclusive/README.md) | `["", "a", "b", "c"]` | each piece keeps its terminator, and an empty terminator adds nothing |
 | [`rsplit("")`](../str_methods/str_rsplit/README.md) | `["", "c", "b", "a", ""]` | the same five, back to front |
 | [`splitn(3, "")`](../str_methods/str_splitn/README.md) | `["", "a", "bc"]` | two splits, then stop |
+| [`split_once("")`](../str_methods/str_split_once/README.md) | `Some(("", "abc"))` | the first match is at offset 0, so it splits off nothing |
+| [`rsplit_once("")`](../str_methods/str_rsplit_once/README.md) | `Some(("abc", ""))` | reading order, where [`rsplitn(2, "")`](../str_methods/str_rsplitn/README.md) gives `["", "abc"]` |
 | [`matches("").count()`](../str_methods/str_matches/README.md) | `4` | the matches, not the gaps |
 
 `splitn` is the row to watch. Reached for as *"the first three characters"* it returns one character, one empty string, and the remainder of the word.
+
+The two `_once` rows are the sharpest, because their `Option` exists to report **no match** and against an empty pattern there is no such thing: `split_once("")` is `Some(("", s))` for every string in the language, the empty one included. The advantage that method has over `splitn(2, …)` — a miss you are made to handle rather than a one-element iterator you might not notice — is worth nothing here, since the two return the same two pieces and the miss cannot happen.
 
 ## What to reach for instead
 
@@ -158,6 +162,10 @@ fn main() {
     println!("   rsplit              {:?}", s.rsplit("").collect::<Vec<&str>>());
     println!("   splitn(3, \"\")       {:?}   <- 3 pieces, and only ONE of them a character",
              s.splitn(3, "").collect::<Vec<&str>>());
+    println!("   split_once(\"\")      {:?}   <- never None, for any string",
+             s.split_once(""));
+    println!("   rsplit_once(\"\")     {:?}   <- reading order, where rsplitn(2) gives {:?}",
+             s.rsplit_once(""), s.rsplitn(2, "").collect::<Vec<&str>>());
 
     println!();
     println!("7. Each character as a &str, which is what split(\"\") is usually reached for");
@@ -200,6 +208,8 @@ fn main() {
    split_inclusive     ["", "a", "b", "c"]
    rsplit              ["", "c", "b", "a", ""]
    splitn(3, "")       ["", "a", "bc"]   <- 3 pieces, and only ONE of them a character
+   split_once("")      Some(("", "abc"))   <- never None, for any string
+   rsplit_once("")     Some(("abc", ""))   <- reading order, where rsplitn(2) gives ["", "abc"]
 
 7. Each character as a &str, which is what split("") is usually reached for
    filtered            ["a", "b", "c"]

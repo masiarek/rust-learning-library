@@ -64,7 +64,7 @@ slice.splitn(3, ' ')    // ["bête", "noir", " d'Arrrgh "]
 slice.rsplitn(3, ' ')   // ["", "d'Arrrgh", "bête noir "]
 ```
 
-After *n−1* splits the remainder comes back whole, separators and all. `rsplit*` does the same from the right, and yields its pieces in right-to-left order — the reversed order surprises people more than the direction does.
+After *n−1* splits [`splitn`](../str_methods/str_splitn/README.md) hands the remainder back whole, separators and all. `rsplit*` does the same from the right, and yields its pieces in right-to-left order — the reversed order surprises people more than the direction does. [`rsplit_once`](../str_methods/str_rsplit_once/README.md) is the exception in that family: its tuple stays in reading order, so it and [`rsplitn(2, …)`](../str_methods/str_rsplitn/README.md) return the same two pieces the opposite way round.
 
 ## The pattern is not just a character
 
@@ -87,7 +87,7 @@ for line in config.lines() {
 }
 ```
 
-`lines()` splits on `\n` and handles a trailing `\r`, and drops the final empty piece — so a file ending in a newline gives you no phantom last line. `split_once` takes the **first** separator and returns the rest whole, which is what you want for `key = value` where the value may itself contain the separator. Reaching for `split(" = ")` there loses everything after the second one.
+`lines()` splits on `\n` and handles a trailing `\r`, and drops the final empty piece — so a file ending in a newline gives you no phantom last line. [`split_once`](../str_methods/str_split_once/README.md) takes the **first** separator and returns the rest whole, which is what you want for `key = value` where the value may itself contain the separator. Reaching for `split(" = ")` there loses everything after the second one.
 
 And `trim()` — plus `trim_start`, `trim_end`, and the `trim_matches` family — returns a **slice**, not a new `String`. Nothing is copied.
 

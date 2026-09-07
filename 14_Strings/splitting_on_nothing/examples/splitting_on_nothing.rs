@@ -50,6 +50,10 @@ fn main() {
     println!("   rsplit              {:?}", s.rsplit("").collect::<Vec<&str>>());
     println!("   splitn(3, \"\")       {:?}   <- 3 pieces, and only ONE of them a character",
              s.splitn(3, "").collect::<Vec<&str>>());
+    println!("   split_once(\"\")      {:?}   <- never None, for any string",
+             s.split_once(""));
+    println!("   rsplit_once(\"\")     {:?}   <- reading order, where rsplitn(2) gives {:?}",
+             s.rsplit_once(""), s.rsplitn(2, "").collect::<Vec<&str>>());
 
     println!();
     println!("7. Each character as a &str, which is what split(\"\") is usually reached for");
