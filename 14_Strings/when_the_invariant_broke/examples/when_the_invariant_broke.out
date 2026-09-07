@@ -1,0 +1,17 @@
+CVE-2018-1000810  str::repeat  — capacity by multiplication
+  "ab".len() * n, wrapped   = 0
+  "ab".len().checked_mul(n) = None
+  "ab".repeat(3)            = "ababab"
+  "ab".repeat(n)            = panic "capacity overflow"
+
+CVE-2020-36317  String::retain  — a predicate that panics
+  before        "0è0"  [30, C3, A8, 30]  len 4
+  panic         "the predicate gave up"
+  after         "è"  [C3, A8]  len 2
+  the buffer held [C3, A8, A8, 30]
+  as UTF-8      Err(Utf8Error { valid_up_to: 2, error_len: Some(1) })
+
+CVE-2020-36323  [Borrow<str>]::join  — a Borrow that changes its mind
+  consistent            Ok("x-a")
+  1 byte, then 12       Err("mid > len")
+  12 bytes, then 1      Ok("x-a")

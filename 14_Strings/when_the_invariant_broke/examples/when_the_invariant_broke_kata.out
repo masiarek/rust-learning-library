@@ -1,0 +1,17 @@
+join — a Borrow that grows between the two calls
+  std::join   Err("mid > len")
+  safe_join   "x-a"
+  the difference: safe_join borrows once and believes the answer;
+  join borrows twice, so it must survive two different answers.
+
+retain — a predicate that panics
+  safe_retain Err("the predicate gave up")
+  original    "0è0"  [30, C3, A8, 30]
+  the difference: nothing was written into `s`, so an unwind cannot
+  leave it holding half of a moved character.
+
+repeat — a capacity that would wrap
+  safe_repeat("ab", 3)  Some("ababab")
+  safe_repeat("ab", n)  None
+  the difference: `?` on a `checked_mul` is the same guard std spells
+  `.expect("capacity overflow")`; the bug was that neither was there.

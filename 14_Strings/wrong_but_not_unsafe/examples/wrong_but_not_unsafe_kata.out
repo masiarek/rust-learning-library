@@ -1,0 +1,21 @@
+property 1 — every substring of a word is found in it
+       bananas  unfindable []
+          aaaa  unfindable []
+     abcabcabc  unfindable []
+   mississippi  unfindable []
+        zażółć  unfindable []
+
+property 2 — Σ at the end of a word lowercases to ς
+  k in 1..=64, wrong  []
+
+property 3 — ß uppercases to SS whatever precedes it
+  k in 0..=64, wrong  []
+
+what std's own sigma tests looked like before 2024:
+      ΑΣ  ->  ας        ascii prefix 0
+     Α'Σ  ->  α'ς       ascii prefix 0
+    ΑΣ'Α  ->  ασ'α      ascii prefix 0
+      'Σ  ->  'σ        ascii prefix 1
+     ''Σ  ->  ''σ       ascii prefix 2
+       Σ  ->  σ         ascii prefix 0
+  longest ASCII prefix in the whole set  2

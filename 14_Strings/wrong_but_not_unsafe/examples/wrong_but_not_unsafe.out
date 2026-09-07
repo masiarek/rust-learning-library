@@ -1,0 +1,16 @@
+#16589  "bananas".contains(..)  — every substring, 2014 and now
+  substrings tested          28
+  reported missing           []
+  contains("nana")           true
+  find("nana")               Some(2)
+
+#124714  to_lowercase and the final sigma
+                    ΣΣ  ->  σς
+                  ΟΔΟΣ  ->  οδος
+                    aΣ  ->  aς
+     abcdefghijklmnopΣ  ->  abcdefghijklmnopς
+        'Σ' on its own  ->  σ
+
+  k letters, then Σ — does the word end in ς?
+    k in 1..=32, ending in σ   []
+    k = 0, no word at all      "σ"
