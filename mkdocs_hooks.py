@@ -657,6 +657,11 @@ NAV_ORDER: dict[str, list[str]] = {
         # there: E0658, the workaround its own author argues against, and the
         # method-resolution rule that reverted it after it had stabilized.
         "str_as_str",
+        # ...then the library's own record, which needs every page above it:
+        # three CVEs where safe code broke the UTF-8 invariant, and two bugs
+        # that broke nothing and were simply wrong. Both are about fast paths.
+        "when_the_invariant_broke",
+        "wrong_but_not_unsafe",
         # The method reference: one page per method, 125 of them. It sits after
         # the lessons and before the stubs because a stub is not a page anyone
         # reads, and burying a reference this size under the outlines below
@@ -1001,6 +1006,8 @@ LABELS = {
     "rfc_1212_line_endings": "RFC 1212: line endings",
     "rfc_1054_str_words": "RFC 1054: str::words",
     "parsing_a_string": "Parsing out of a string",
+    "when_the_invariant_broke": "When the UTF-8 invariant broke",
+    "wrong_but_not_unsafe": "Wrong, but not unsafe",
     "the_format_language": "The format mini-language",
     "when_string_is_too_slow": "When `String` is too slow",
     # The two method-reference sections. Set explicitly so the pair is

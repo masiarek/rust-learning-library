@@ -74,6 +74,8 @@ flowchart LR
 | 20 | [Comparing and sorting text](14_Strings/comparing_strings/README.md) | 201 | What `==` and `sort()` actually compare — and why the answer is reproducible on every machine and still wrong for every reader |
 | 21 | [Parsing out of a string](14_Strings/parsing_a_string/README.md) | 101 → 201 | Text on the way in — what names the type, what the string is allowed to look like, and what the failure will tell you |
 | 22 | [The format mini-language](14_Strings/the_format_language/README.md) | 201 | Text on the way out — the whole grammar, and why a format spec is a request an impl is free to ignore |
+| 23 | [When the UTF-8 invariant broke](14_Strings/when_the_invariant_broke/README.md) | 301 | Has `std`'s own string code ever been wrong about memory — and what did safe code have to do to break it? |
+| 24 | [Wrong, but not unsafe](14_Strings/wrong_but_not_unsafe/README.md) | 201 → 301 | And has it ever simply returned the wrong answer, with nothing unsafe anywhere near it? |
 
 ## The lessons strings lean on
 

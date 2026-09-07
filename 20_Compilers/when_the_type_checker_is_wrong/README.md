@@ -162,6 +162,7 @@ And the tool that catches the memory-bug half is one you can already run: applie
 - [C and C++](../../31_C_and_Cpp/README.md) — the nine undefined behaviours Rust is being compared against
 - [What an enum is](../../13_Enums/what_an_enum_is/README.md) — variants, discriminants, and why a variant with a field is a function
 - [Nightly and its tools](../../05_Tooling/nightly/README.md) — where Miri lives
+- [When the UTF-8 invariant broke](../../14_Strings/when_the_invariant_broke/README.md) — the same word one layer up: three CVEs where the compiler was right and `std`'s own `unsafe` was not
 
 ## Sources
 

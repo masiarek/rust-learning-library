@@ -34,6 +34,8 @@ The rest of the section is what follows from the bytes underneath. `len()` count
 | [Splitting on nothing](splitting_on_nothing/README.md) | 201 | Why `"abc".split("")` gives five pieces and not three — the empty pattern matches at every char boundary, the two counts an empty string produces, and the special case JavaScript, Go and Python each make instead |
 | [The third owned form](boxed_str/README.md) | 201 → 301 | An owned string that is not a `String` — drop the capacity word and the handle shrinks to a `&str`'s two words, the text stops being growable, and `Rc<str>` / `Arc<str>` give many owners one buffer, which is what makes a repeated column stop paying per row |
 | [`str::as_str`: the method that was stabilized and taken back](str_as_str/README.md) | 201 → 301 | Why `s.as_str()` on a `&str` is `E0658` and not "no such method" — what to write instead on `Box<str>`, `Rc<str>` and `Cow<str>`, why `.as_ref()` is the disputed answer, and the inherent-beats-trait rule that got the method reverted after it shipped |
+| [When the UTF-8 invariant broke](when_the_invariant_broke/README.md) | 301 | Three CVEs in the string library — `str::repeat`, `String::retain` and `[Borrow<str>]::join` — and one shape between them: `std` skipped a check because a `String` is always valid UTF-8, and safe code with no `unsafe` in it could make that stop being true |
+| [Wrong, but not unsafe](wrong_but_not_unsafe/README.md) | 201 → 301 | Two string bugs with no CVE and no crash — `"bananas".contains("nana")` was `false`, and a Greek word ending in Σ lowercased to the wrong sigma for seventeen releases — both of them in a fast path |
 
 ## The method reference
 

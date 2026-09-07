@@ -166,6 +166,8 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K146 | [One question, three answers, and the row where none of them is right — then a two-level key that files `Ł` between L and M, the three match arms that have to change for Swedish, and the Czech letter no per-character key can express](14_Strings/comparing_strings/README.md#practice) | [Comparing and sorting text](14_Strings/comparing_strings/README.md) | 201 |
 | K147 | [One bad config value handled four ways, the space after `=` that breaks three of them, and a `FromStr` whose error the caller can match on instead of read](14_Strings/parsing_a_string/README.md#practice) | [Parsing out of a string](14_Strings/parsing_a_string/README.md) | 101 → 201 |
 | K148 | [A table sized from its own data, the `{:?}` column that refuses to pad, precision that counts chars rather than bytes, and the last alignment `fmt` cannot fix](14_Strings/the_format_language/README.md#practice) | [The format mini-language](14_Strings/the_format_language/README.md) | 201 |
+| K149 | [Write the safe version of three CVEs — `join`, `retain` and `repeat` with no `unsafe` — drive all three with the hostile input that broke `std`, then name what each fast path has to prove in order to skip the work you just did](14_Strings/when_the_invariant_broke/README.md#practice) | [When the UTF-8 invariant broke](14_Strings/when_the_invariant_broke/README.md) | 301 |
+| K150 | [The test that would have caught it — sweep every substring of a periodic word, sweep the ASCII run before a final sigma, break a third fast path the same way, then measure the ASCII prefix in `std`'s own sigma tests](14_Strings/wrong_but_not_unsafe/README.md#practice) | [Wrong, but not unsafe](14_Strings/wrong_but_not_unsafe/README.md) | 201 → 301 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -280,7 +282,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K44 · [The results table that would not sort](19_Numbers/what_a_float_stores/README.md#practice)
 - K88 · [Make the sum land on the number you would have typed](19_Numbers/letting_the_compiler_reorder/README.md#practice)
 
-**[Strings](14_Strings/README.md)** — 31 katas
+**[Strings](14_Strings/README.md)** — 33 katas
 
 - K61 · [One `&str` parameter, three callers](14_Strings/string_vs_str/README.md#practice)
 - K62 · [Cut a name in half without panicking](14_Strings/string_slices/README.md#practice)
@@ -313,6 +315,8 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K146 · [One question, three answers, and the row where none of them is right](14_Strings/comparing_strings/README.md#practice)
 - K147 · [One bad config value handled four ways, the space after `=` that breaks three of them, and a `FromStr` whose error the caller can match on instead of read](14_Strings/parsing_a_string/README.md#practice)
 - K148 · [A table sized from its own data, the `{:?}` column that refuses to pad, precision that counts chars rather than bytes, and the last alignment `fmt` cannot fix](14_Strings/the_format_language/README.md#practice)
+- K149 · [Write the safe version of three CVEs](14_Strings/when_the_invariant_broke/README.md#practice)
+- K150 · [The test that would have caught it](14_Strings/wrong_but_not_unsafe/README.md#practice)
 
 **[Enums](13_Enums/README.md)** — 1 kata
 
