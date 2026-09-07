@@ -18,5 +18,12 @@ sizes on this target (64-bit pointers):
   Option<Box<u64>>        8   <- the same trick, in the library
   Never                   0   <- no variants, so no bytes
 
+the largest variant sets the size, and every value pays it:
+  Ipv4Addr                4
+  Ipv6Addr               16
+  Naptr                 104   <- two integers and four Strings
+  RecordData            104   <- an A record spends this to store 4 bytes
+  BoxedRecordData        24   <- the rare big variant moved behind a pointer
+
 same variant, different payload: true
 different variant:               false

@@ -2,6 +2,7 @@
 #![allow(dead_code)]
 
 use std::mem::{discriminant, size_of};
+use std::net::{Ipv4Addr, Ipv6Addr};
 
 #[derive(Debug, Clone, Copy)]
 enum Coin { Penny, Nickel, Dime }        // 3 values
@@ -31,6 +32,20 @@ enum HouseLocation {
 enum TagCosts { A(u64), B(u64) }   // every bit pattern of a u64 is a valid u64
 enum TagFree  { A(Box<u64>), B }   // a Box is never null, so null can mean `B`
 enum Never {}                      // no variants: no value can ever exist
+
+/// One DNS record's data. The two integers and four text fields are a NAPTR
+/// record (RFC 2915); an A record is a single IPv4 address.
+struct Naptr {
+    order: u16,
+    preference: u16,
+    flags: String,
+    services: String,
+    regexp: String,
+    replacement: String,
+}
+
+enum RecordData      { A(Ipv4Addr), Aaaa(Ipv6Addr), Naptr(Naptr) }
+enum BoxedRecordData { A(Ipv4Addr), Aaaa(Ipv6Addr), Naptr(Box<Naptr>) }
 
 fn main() {
     // -- counted ------------------------------------------------------------
@@ -63,6 +78,13 @@ fn main() {
     println!("  TagFree                {:>2}   <- tag hidden in the null pointer", size_of::<TagFree>());
     println!("  Option<Box<u64>>       {:>2}   <- the same trick, in the library", size_of::<Option<Box<u64>>>());
     println!("  Never                  {:>2}   <- no variants, so no bytes", size_of::<Never>());
+
+    println!("\nthe largest variant sets the size, and every value pays it:");
+    println!("  Ipv4Addr              {:>3}", size_of::<Ipv4Addr>());
+    println!("  Ipv6Addr              {:>3}", size_of::<Ipv6Addr>());
+    println!("  Naptr                 {:>3}   <- two integers and four Strings", size_of::<Naptr>());
+    println!("  RecordData            {:>3}   <- an A record spends this to store 4 bytes", size_of::<RecordData>());
+    println!("  BoxedRecordData       {:>3}   <- the rare big variant moved behind a pointer", size_of::<BoxedRecordData>());
 
     // -- which variant is this? ---------------------------------------------
     let a = Payment::InCoin(Coin::Penny);

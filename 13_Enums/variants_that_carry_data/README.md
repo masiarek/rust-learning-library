@@ -57,6 +57,29 @@ So the honest rule is: **as big as the largest payload, plus a tag only when the
 
 `Never` is not a curiosity: an enum with no variants is a type no value can inhabit, which is how [`Infallible`](../../17_Option_and_Result/result_aliases/README.md) says *"this `Result` cannot be an `Err`"* and pays nothing for saying it.
 
+## When the largest variant is the rare one
+
+The rule cuts both ways: every value is as big as the largest payload, including the values carrying the smallest one.
+
+```rust
+enum RecordData      { A(Ipv4Addr), Aaaa(Ipv6Addr), Naptr(Naptr) }
+enum BoxedRecordData { A(Ipv4Addr), Aaaa(Ipv6Addr), Naptr(Box<Naptr>) }
+```
+
+| Type | Bytes | Why |
+|---|---|---|
+| `Ipv4Addr` | 4 | one A record |
+| `Ipv6Addr` | 16 | one AAAA record |
+| `Naptr` | 104 | two integers and four `String`s |
+| `RecordData` | **104** | so an A record spends 104 bytes to store 4 |
+| `BoxedRecordData` | **24** | the rare variant moved behind a pointer |
+
+The tag behaves differently in the two, and it changes nothing. In `RecordData` it is free by the niche rule above — `Naptr`'s `String` pointers donate one — so the enum is exactly `size_of::<Naptr>()`. In `BoxedRecordData` it costs 8, because `Ipv6Addr` uses every one of its bit patterns and there are three payloads competing for one spare pattern. The enum still fell from 104 bytes to 24, since the payload rather than the tag was the problem. Boxing does not shrink `Naptr`; it moves it, so the enum need only be the largest payload still stored inline plus that tag — 16 + 8 — which is a number independent of how big the boxed variant is.
+
+Cloudflare made this exact change to 1.1.1.1's DNS cache and [published the numbers ↗](https://blog.cloudflare.com/dns-cache-memory-optimization-1111/) in August 2026. Its `RecordData` was 144 bytes because `NAPTR` is 136, while `A` needs 4 and `AAAA` 16 — and those two are over 80% of the traffic, so most records carried over 120 bytes of padding, on a cache holding over 250 billion entries. Boxing the large variants took the enum to 24 bytes: the same number as the table above, for the same reason.
+
+The trade is paid at the allocator. A boxed payload is a separate allocation rounded up to the next size class — jemalloc puts a 40-byte record in a 48-byte bin — and it lives elsewhere on the heap, so reading it is a pointer hop and possibly another cache line. **Rare and large** is what makes the trade pay; box a common variant instead and every value is charged the allocation.
+
 ## Which variant is this, without a `match`
 
 `std::mem::discriminant` compares the tag and ignores the payload:
@@ -127,6 +150,13 @@ sizes on this target (64-bit pointers):
   Option<Box<u64>>        8   <- the same trick, in the library
   Never                   0   <- no variants, so no bytes
 
+the largest variant sets the size, and every value pays it:
+  Ipv4Addr                4
+  Ipv6Addr               16
+  Naptr                 104   <- two integers and four Strings
+  RecordData            104   <- an A record spends this to store 4 bytes
+  BoxedRecordData        24   <- the rare big variant moved behind a pointer
+
 same variant, different payload: true
 different variant:               false
 ```
@@ -141,6 +171,7 @@ different variant:               false
 - [Nullable pointers](../../17_Option_and_Result/nullable_pointers/README.md) — where the free tag matters most, and what makes a recursive type possible
 - [What a union is](../../09_Advanced/what_a_union_is/README.md) — the untagged version, and the desync only it can have
 - [Six kinds of zero](../../17_Option_and_Result/six_kinds_of_zero/README.md) — when two variants are not enough
+- [`Vec`](../../26_Collections/the_vec/README.md) — the other half of that cache: what the third number costs when nothing will grow again
 
 ## Po polsku
 
