@@ -664,6 +664,7 @@ rustc --edition 2024 14_Strings/meet_the_char/examples/meet_the_char.rs -o /tmp/
 - [Six kinds of string](../six_kinds_of_string/README.md) — the types for text that does *not* keep UTF-8's promise
 - [The Rust Book, ch. 8.2 ↗](https://doc.rust-lang.org/book/ch08-02-strings.html) — its "bytes, scalar values, grapheme clusters" section is this page's origin story
 - [A character is a number ↗](https://masiarek.github.io/encodings-learning-library/02_Characters/a_character_is_a_number/index.html) — the same idea from the encodings library, before any language: how a character got a number at all, and why a `char` is that number rather than the bytes it is stored as
+- [Is it a letter? ↗](https://masiarek.github.io/python-learning-library/01_Text_and_Bytes/is_it_a_letter/index.html) — the same predicates from Python's side, where they are whole-string methods rather than `char` ones. `is_alphabetic` reads the Alphabetic *property* and `str.isalpha()` reads the `L*` *categories*, so they disagree on a combining mark — and on `一`, in the other direction
 
 ## Po polsku
 
