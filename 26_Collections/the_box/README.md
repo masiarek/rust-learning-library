@@ -77,6 +77,29 @@ struct Node { score: u32, next: Option<Box<Node>> }
 
 Dropping the head of a long boxed list drops its `next`, which drops *its* next — one stack frame per node. A list of a hundred thousand nodes overflows the stack **in the destructor**, at the end of a scope, with a backtrace that names nothing you wrote. Real linked-list types implement `Drop` by hand, popping in a loop. The same shape appears in any recursive walk of a boxed structure: Rust does not promise tail-call elimination, so a `while let` cursor is the version to write for data of unknown depth.
 
+## Many boxes, or one
+
+Every `Box::new` is an allocation. A hundred small boxed values are a hundred allocations, each rounded up to whatever size class the allocator keeps bins for, each landing wherever there was room — so reading all of them is a hundred pointer hops into a hundred unrelated places. `Box<T>` is the right tool for *one* value whose size or shape forces it onto the heap. It is the wrong unit of account for a collection you always read end to end.
+
+The alternative is one allocation holding all of them in reading order, each payload carrying its own length in front of it:
+
+```rust
+fn pack(payloads: &[&str]) -> Box<[u8]> {
+    let mut scratch: Vec<u8> = Vec::new();
+    for p in payloads {
+        scratch.extend_from_slice(&(p.len() as u16).to_be_bytes());
+        scratch.extend_from_slice(p.as_bytes());
+    }
+    scratch.into_boxed_slice()
+}
+```
+
+Section 6 of the run below measures three MIME-type strings both ways: **3 allocations and 48 bytes of pointer-and-length**, against **1 allocation and 16**. The `Vec` there is scratch rather than the result — the total is not known until the last payload is written — and [`into_boxed_slice`](../vec_methods/vec_into_boxed_slice/README.md) hands the spare capacity back at the end.
+
+The price is the last line of that section: **indexing became walking.** A boxed slice of boxes can jump straight to element seven; a length-prefixed buffer has to read the first six to learn where the seventh starts.
+
+Cloudflare's 1.1.1.1 DNS cache took that trade and [published the numbers ↗](https://blog.cloudflare.com/dns-cache-memory-optimization-1111/) in August 2026. It had already boxed the [large variants of its record enum](../../13_Enums/variants_that_carry_data/README.md); it then replaced those boxes with one `Box<[u8]>` per cache entry, each record a 2-byte length followed by its raw DNS wire bytes. That change alone bought **13% more insert throughput** and 5% off lookup latency, and it came with a bonus the packing made possible: the bytes were already in the format the reply goes out in, so most records could be copied straight into the response instead of being re-serialized field by field. The lost indexing was affordable because an entry holds a handful of records — on a million-element list the trade runs the other way.
+
 ## If you are coming from another language
 
 - **Python.** Every Python object is already boxed — a name holds a reference to a heap object, always — so `Box` looks like nothing at first. The useful reading is inverted: Rust's *default* is what Python has no word for (the value itself, inline, on the stack), and `Box` is how you ask for what Python always does. The place it becomes concrete is the recursive class: `class Node: def __init__(self, score, next=None)` needs no ceremony because `next` is a reference either way, and Rust's `Option<Box<Node>>` is that same field with the reference made explicit and the `None` checked. `Box<dyn Trait>` is duck typing with the duck written down.
@@ -134,6 +157,16 @@ Dropping the head of a long boxed list drops its `next`, which drops *its* next 
    Rc; for two threads, Arc. Reaching for Box to "put it on the heap"
    when nothing needs the heap just adds an allocation and an
    indirection: a Vec, a String and a HashMap are already heap-backed.
+
+6. Many boxes, or one
+   3 payloads, 34 bytes of text in all
+   as 3 separate Box<str>: 3 allocations, 48 bytes of pointer+length
+   as one length-prefixed Box<[u8]>: 1 allocation, 16 bytes of
+   pointer+length, and 40 bytes on the heap (34 of text plus a
+   2-byte length each) — packed end to end, in reading order.
+   walked back out: ["text/html", "application/json", "image/png"]
+   The price is that indexing became walking: the third payload
+   cannot be found without reading the first two.
 ```
 <!-- /output -->
 

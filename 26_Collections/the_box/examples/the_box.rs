@@ -34,6 +34,31 @@ fn eliminated(r: &Round) -> Vec<&'static str> {
     }
 }
 
+/// Pack every payload after a 2-byte length, end to end, into one allocation.
+/// Built in a scratch `Vec` because the total is not known until it is written,
+/// then handed over as an exactly-sized `Box<[u8]>` — see section 6.
+fn pack(payloads: &[&str]) -> Box<[u8]> {
+    let mut scratch: Vec<u8> = Vec::new();
+    for p in payloads {
+        scratch.extend_from_slice(&(p.len() as u16).to_be_bytes());
+        scratch.extend_from_slice(p.as_bytes());
+    }
+    scratch.into_boxed_slice()
+}
+
+/// Read them back. There is no index to jump with, so it walks.
+fn unpack(buf: &[u8]) -> Vec<&str> {
+    let mut out = Vec::new();
+    let mut i = 0;
+    while i + 2 <= buf.len() {
+        let len = u16::from_be_bytes([buf[i], buf[i + 1]]) as usize;
+        i += 2;
+        out.push(std::str::from_utf8(&buf[i..i + len]).unwrap());
+        i += len;
+    }
+    out
+}
+
 fn main() {
     println!("1. A Box is a pointer, whatever it points at");
     println!("   size_of::<Ballot>()      = {}", size_of::<Ballot>());
@@ -91,4 +116,21 @@ fn main() {
     println!("   Rc; for two threads, Arc. Reaching for Box to \"put it on the heap\"");
     println!("   when nothing needs the heap just adds an allocation and an");
     println!("   indirection: a Vec, a String and a HashMap are already heap-backed.");
+
+    println!();
+    println!("6. Many boxes, or one");
+    let payloads = ["text/html", "application/json", "image/png"];
+    let text: usize = payloads.iter().map(|p| p.len()).sum();
+    let separately: Vec<Box<str>> = payloads.iter().map(|p| Box::from(*p)).collect();
+    let together = pack(&payloads);
+    println!("   {} payloads, {} bytes of text in all", payloads.len(), text);
+    println!("   as {} separate Box<str>: {} allocations, {} bytes of pointer+length",
+             separately.len(), separately.len(), separately.len() * size_of::<Box<str>>());
+    println!("   as one length-prefixed Box<[u8]>: 1 allocation, {} bytes of",
+             size_of::<Box<[u8]>>());
+    println!("   pointer+length, and {} bytes on the heap ({} of text plus a", together.len(), text);
+    println!("   2-byte length each) — packed end to end, in reading order.");
+    println!("   walked back out: {:?}", unpack(&together));
+    println!("   The price is that indexing became walking: the third payload");
+    println!("   cannot be found without reading the first two.");
 }

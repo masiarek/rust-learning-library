@@ -17,7 +17,7 @@ Two of them are built into the language and have no `use` line: the tuple and th
 | [`HashMap`](the_hashmap/README.md) | 101 → 201 | `entry` is the method the counting loop wants, and the iteration order is different every run |
 | [`HashSet`](the_hashset/README.md) | 101 → 201 | Membership, four set operations, and the `bool` that `insert` hands back |
 | [`BTreeMap` and `BTreeSet`](sorted_collections/README.md) | 101 → 201 | The sorted pair: collecting into one *is* the sort, `range` asks what a hash map cannot, and it orders by the key when what you wanted sorted was the value |
-| [`Box`](the_box/README.md) | 201 | One value on the heap: a type that contains itself, and a size known only at run time |
+| [`Box`](the_box/README.md) | 201 | One value on the heap: a type that contains itself, and a size known only at run time — plus when many small boxes should have been one length-prefixed `Box<[u8]>` |
 | [`Vec` methods](vec_methods/README.md) | reference | One page per method — all 46 on stable, plus the three `IntoIterator` impls |
 | [`slice` methods](slice_methods/README.md) | reference | One page per slice method the `Vec` reference points at — the 22 reached through `Deref`, from `sort` to `join` |
 

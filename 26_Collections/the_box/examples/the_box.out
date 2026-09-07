@@ -40,3 +40,13 @@
    Rc; for two threads, Arc. Reaching for Box to "put it on the heap"
    when nothing needs the heap just adds an allocation and an
    indirection: a Vec, a String and a HashMap are already heap-backed.
+
+6. Many boxes, or one
+   3 payloads, 34 bytes of text in all
+   as 3 separate Box<str>: 3 allocations, 48 bytes of pointer+length
+   as one length-prefixed Box<[u8]>: 1 allocation, 16 bytes of
+   pointer+length, and 40 bytes on the heap (34 of text plus a
+   2-byte length each) — packed end to end, in reading order.
+   walked back out: ["text/html", "application/json", "image/png"]
+   The price is that indexing became walking: the third payload
+   cannot be found without reading the first two.
