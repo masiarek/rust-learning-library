@@ -266,6 +266,7 @@ The trap moves rather than disappearing, and it lands on the manual route. `SPLI
 - [`str::trim_end`](../str_methods/str_trim_end/README.md) — the fix that takes too much
 - [RFC 69 — how Rust got `b'A'`](../rfc_69_byte_literals/README.md) — the other RFC this library reads line by line, by the person who settled the Unicode question here
 - [Reading lines efficiently](../../04_Files/reading_lines_efficiently/README.md) — `read_to_string` vs `lines()` vs a reused buffer; a **stub** for now
+- [What ends a line ↗](https://masiarek.github.io/python-learning-library/01_Text_and_Bytes/what_ends_a_line/index.html) — the language that said yes to the proposal this thread rejected: `str.splitlines()` splits on all ten, measured against nine other languages on a ladder from one boundary to ten
 - [RFC 1212 ↗](https://github.com/rust-lang/rfcs/blob/master/text/1212-line-endings.md) — one page; read it, it is shorter than this
 - [rust-lang/rfcs#1212 ↗](https://github.com/rust-lang/rfcs/pull/1212) — the six-week thread, which is the interesting half
 - [rust#28034 ↗](https://github.com/rust-lang/rust/pull/28034) — the implementation, `std: Account for CRLF in {str, BufRead}::lines`
