@@ -18,6 +18,8 @@ It shrinks first (handing back any spare capacity) and then drops the capacity f
 
 The type is the real payoff. `Box<[T]>` says *this will not grow* — useful for a struct field built once and then only read, and one word smaller per value.
 
+A cache entry is the archetype. Cloudflare's 1.1.1.1 resolver replaced the 8 `Vec` and `String` fields in each of its DNS cache entries with `Box<[T]>` and `Box<str>` — 64 header bytes per entry plus the heap slots the doubling had reserved, over 250 billion entries, [more than 15 terabytes ↗](https://blog.cloudflare.com/dns-cache-memory-optimization-1111/) of memory returned.
+
 It is still a slice, so it derefs the same way: `first`, `contains`, `sort` and the rest all work, and it is mutable in place at a fixed length.
 
 The round trip is cheap in both directions: `boxed.into_vec()` gives a `Vec` back with capacity equal to the length, and `Vec::from(boxed)` goes the other way.

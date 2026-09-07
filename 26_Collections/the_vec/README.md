@@ -121,6 +121,21 @@ fn main() {
 
 Twenty-four bytes changed hands and not one `f64` was touched. Moving an array of the same four values copies all thirty-two — which is the same fact from the other side, and the reason the array is `Copy` and the `Vec` is not.
 
+## When the growing is over: `Box<[T]>`
+
+`capacity` is there to make the *next* push cheap. A `Vec` that has finished being built still pays for it — 8 bytes of header, plus whatever slots the doubling bought and nothing filled. [`into_boxed_slice`](../vec_methods/vec_into_boxed_slice/README.md) ends both: it hands the spare slots back to the allocator and drops the field, leaving a `Box<[T]>` of pointer and length. `String` → `Box<str>` is the same trade for text.
+
+Cloudflare published the arithmetic in August 2026. Its 1.1.1.1 resolver holds over 250 billion DNS cache entries at a time and never modifies an entry once written, so a byte per entry is 250 GB of fleet memory and the third number was pure overhead:
+
+| | |
+|---|---|
+| `Vec` and `String` fields per cache entry | 8 |
+| header bytes returned, at 8 per field | 64 |
+| heap slots the doubling had reserved | returned as well |
+| across 250 billion entries | over 15 TB |
+
+That was one of five changes, which together took an entry from 953 bytes to 420 and freed roughly 100 TB. The conversion is one-way by design: a `Box<[T]>` cannot grow, so it is what you do to a buffer you have finished filling, not the type you fill.
+
 ## It derefs to a slice, so slice methods just work
 
 Everything on [arrays and slices](../arrays_and_slices/README.md) applies here: [`first`](../slice_methods/slice_first/README.md), [`last`](../slice_methods/slice_last/README.md), [`contains`](../slice_methods/slice_contains/README.md), [`sort`](../slice_methods/slice_sort/README.md), [`windows`](../slice_methods/slice_windows/README.md), [`iter`](../slice_methods/slice_iter/README.md), and indexing that panics while [`.get`](../slice_methods/slice_get/README.md) returns `Option` — each with a page of its own in the [`slice` methods](../slice_methods/README.md) reference. That is also the argument for `&[T]` over `&Vec<T>` in a signature — a `&Vec<u32>` coerces to `&[u32]` at the call site, so taking the slice costs the caller nothing and accepts three more kinds of argument.
@@ -434,6 +449,8 @@ fn main() {
 ## Sources
 
 [Std library types: Vectors ↗](https://doc.rust-lang.org/rust-by-example/std/vec.html) in Rust by Example, and [`std::vec::Vec` ↗](https://doc.rust-lang.org/std/vec/struct.Vec.html), whose *Capacity and reallocation* section is the authority for everything this page says about growth.
+
+The cache numbers are from [How we saved 100 terabytes of memory by optimizing 1.1.1.1’s DNS cache ↗](https://blog.cloudflare.com/dns-cache-memory-optimization-1111/) — Sebastiaan Neuteboom, Cloudflare, 27 August 2026, whose other four changes are `u16` section offsets in place of two more pointers, an `Option`ed owner name, boxing only an enum's large variants, and finally storing the records as raw wire-format bytes.
 
 ## Po polsku
 
