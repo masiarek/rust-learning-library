@@ -193,6 +193,7 @@ Same boundary, moved from the traceback to the build.
 - [RFC 69 ↗](https://github.com/rust-lang/rfcs/blob/master/text/0069-ascii-literals.md) — two pages; read it, it is short
 - [rust#14646 ↗](https://github.com/rust-lang/rust/issues/14646) — the tracking issue, titled *RFC 23* because the RFC repo renumbered its files to PR numbers afterwards
 - [Byte and byte string literals ↗](https://doc.rust-lang.org/reference/tokens.html#byte-and-byte-string-literals) — the Reference, which is what the RFC became
+- [`bytearray` is the mutable one ↗](https://masiarek.github.io/python-learning-library/01_Text_and_Bytes/bytearray_is_mutable/index.html) — the language that did not add this literal. Python builds a byte buffer by calling `bytearray(b"…")`, and the reason is the same one that makes `b"abc"` here a `&[u8; 3]`: a literal lives in read-only memory, so an editable one would have to be copied first
 
 ## Po polsku
 

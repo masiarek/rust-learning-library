@@ -445,6 +445,7 @@ fn main() {
 - [`iter`, `iter_mut`, `into_iter`](../../24_Iterators/iter_iter_mut_into_iter/README.md) — the three doors onto a `Vec`, and which one consumes it
 - [Collect the iterator into a `Vec`](../../24_Iterators/collect_into_a_vec/README.md) — the other way one of these gets built, and the six questions that never needed it
 - [Building a `String`](../../14_Strings/building_a_string/README.md) — the same capacity story, for text
+- [`bytearray` is the mutable one ↗](https://masiarek.github.io/python-learning-library/01_Text_and_Bytes/bytearray_is_mutable/index.html) — Python's `Vec<u8>`, and the design question this page never has to ask: with no `mut` on a Python name, mutability has to be recorded in the *type*, so Python needs two byte types where Rust needs one `Vec` and a keyword
 
 ## Sources
 
