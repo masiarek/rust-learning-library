@@ -10,7 +10,7 @@ target/
 /tmp_examples/
 
 # Python
-.venv/
+.venv
 __pycache__/
 *.pyc
 
