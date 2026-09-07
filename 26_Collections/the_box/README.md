@@ -23,31 +23,31 @@ Two owners is [`Rc`](../../18_Ownership/reference_counting/README.md); two threa
 ## Reason one: a type that contains itself
 
 ```rust
-enum Round {
-    Final(&'static str),
-    Then(&'static str, Box<Round>),
+enum Route {
+    Endpoint(&'static str),
+    Hop(&'static str, Box<Route>),
 }
 ```
 
 Without the `Box`, that does not compile:
 
 ```text
-error[E0072]: recursive type `Round` has infinite size
- --> round.rs:2:1
+error[E0072]: recursive type `Route` has infinite size
+ --> route.rs:2:1
   |
-2 | enum Round {
+2 | enum Route {
   | ^^^^^^^^^^
-3 |     Final(&'static str),
-4 |     Then(&'static str, Round),
-  |                        ----- recursive without indirection
+3 |     Endpoint(&'static str),
+4 |     Hop(&'static str, Route),
+  |                       ----- recursive without indirection
   |
 help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to break the cycle
   |
-4 |     Then(&'static str, Box<Round>),
-  |                        ++++     +
+4 |     Hop(&'static str, Box<Route>),
+  |                       ++++     +
 ```
 
-Every `Then` would contain a whole `Round`, which contains a whole `Round`, and the compiler has to write down a size before it can lay the type out. A pointer has a size it knows in advance, whatever is on the other end — so `size_of::<Round>()` becomes 24 and the recursion is resolved.
+Every `Hop` would contain a whole `Route`, which contains a whole `Route`, and the compiler has to write down a size before it can lay the type out. A pointer has a size it knows in advance, whatever is on the other end — so `size_of::<Route>()` becomes 24 and the recursion is resolved.
 
 Note what the compiler offers: `Box`, `Rc`, **or `&`**. Any indirection breaks the cycle; `Box` is the one that also owns what it points at.
 
@@ -68,7 +68,7 @@ Two closures with different captures have two different anonymous types and two 
 ## `Option<Box<T>>` is free
 
 ```rust
-struct Node { score: u32, next: Option<Box<Node>> }
+struct Node { words: u32, next: Option<Box<Node>> }
 ```
 
 `size_of::<Option<Box<Node>>>()` is 8 — the same as the `Box` alone. A `Box` can never be null, so the compiler uses the all-zero bit pattern to mean `None`. That is the **null-pointer optimisation**, and it is what makes the linked list above cost exactly what the C version costs, with the null check moved into the type system.
@@ -102,7 +102,7 @@ Cloudflare's 1.1.1.1 DNS cache took that trade and [published the numbers ↗](h
 
 ## If you are coming from another language
 
-- **Python.** Every Python object is already boxed — a name holds a reference to a heap object, always — so `Box` looks like nothing at first. The useful reading is inverted: Rust's *default* is what Python has no word for (the value itself, inline, on the stack), and `Box` is how you ask for what Python always does. The place it becomes concrete is the recursive class: `class Node: def __init__(self, score, next=None)` needs no ceremony because `next` is a reference either way, and Rust's `Option<Box<Node>>` is that same field with the reference made explicit and the `None` checked. `Box<dyn Trait>` is duck typing with the duck written down.
+- **Python.** Every Python object is already boxed — a name holds a reference to a heap object, always — so `Box` looks like nothing at first. The useful reading is inverted: Rust's *default* is what Python has no word for (the value itself, inline, on the stack), and `Box` is how you ask for what Python always does. The place it becomes concrete is the recursive class: `class Node: def __init__(self, words, next=None)` needs no ceremony because `next` is a reference either way, and Rust's `Option<Box<Node>>` is that same field with the reference made explicit and the `None` checked. `Box<dyn Trait>` is duck typing with the duck written down.
 - **ABAP.** A `REF TO` data reference is the closest thing, and the correspondence is good: `CREATE DATA` allocates, `->` dereferences (Rust does it implicitly), and a structure containing a `REF TO` itself is exactly the recursive type this page is about — try to embed the structure directly and the ABAP compiler refuses for the same reason. What `Box` adds is ownership: an ABAP reference does not free anything on scope exit, garbage collection does it when the last reference goes, so `Box`'s "dropped when its owner goes out of scope" is closer to a `CLASS` with a destructor you can rely on. And `Box<dyn Trait>` is a `REF TO if_interface` holding an instance of an implementing class — the same dispatch, the same reason you cannot store the object inline.
 - **C++.** `std::unique_ptr<T>`, almost exactly: single ownership, move-only, freed on scope exit. `Box<dyn Trait>` is `unique_ptr<Base>` with virtual dispatch, and the vtable pointer sits beside the data pointer rather than inside the object. `make_unique` is `Box::new`.
 - **Java / C#.** Everything except a primitive is already a reference, so as with Python the interesting direction is the other one — a Rust struct is a C# `struct`, and `Box<T>` is what makes it behave like a `class`.
@@ -116,28 +116,28 @@ Cloudflare's 1.1.1.1 DNS cache took that trade and [published the numbers ↗](h
 
 ```text
 1. A Box is a pointer, whatever it points at
-   size_of::<Ballot>()      = 256
-   size_of::<Box<Ballot>>() = 8
-   size_of::<Box<u8>>()     = 8
+   size_of::<Board>()      = 256
+   size_of::<Box<Board>>() = 8
+   size_of::<Box<u8>>()    = 8
    The 256 bytes moved to the heap; 8 bytes stayed on the stack.
    Moving a Box copies those 8 bytes and nothing else.
 
 2. It behaves like the value it holds
-   boxed.scores.len() = 64 — no explicit deref needed
-   *boxed moves the value back out: 64 scores
+   boxed.cells.len() = 64 — no explicit deref needed
+   *boxed moves the value back out: 64 cells
    `Box<T>` implements `Deref<Target = T>`, so field access, method
    calls and `&*b` all reach through. `*b` on its own MOVES the value
    out and drops the box — the one operation that is not a borrow.
 
 3. The reason Box exists: a type that contains itself
-   enum Round { Final(&str), Then(&str, Round) }      <- E0072
-   "recursive type `Round` has infinite size". Each `Then` would
-   contain a whole `Round`, which contains a whole `Round`…
+   enum Route { Endpoint(&str), Hop(&str, Route) }      <- E0072
+   "recursive type `Route` has infinite size". Each `Hop` would
+   contain a whole `Route`, which contains a whole `Route`…
    Box breaks the chain, because a pointer has a size the compiler
    can write down before it knows what is on the other end.
-   size_of::<Round>() = 24 — one tag plus the largest variant
-   eliminated(&rounds) = ["Ada", "Ben"]
-   winner(&rounds) = Cara
+   size_of::<Route>() = 24 — one tag plus the largest variant
+   hops(&route) = ["gateway", "backbone"]
+   destination(&route) = example.com
 
 4. And the other reason: a size known only at run time
    two closures with different captures, one type: Box<dyn Fn>
@@ -172,7 +172,7 @@ Cloudflare's 1.1.1.1 DNS cache took that trade and [published the numbers ↗](h
 
 ## Practice
 
-**A list that ends, and the three sizes that explain it.** Build a singly linked list of scores with `Option<Box<Node>>`, then total it two ways: a recursive function, and a `while let` that walks a cursor. Print `size_of` for `Box<Node>`, `Option<Box<Node>>` and `Node`, and explain why the first two are equal.
+**A list that ends, and the three sizes that explain it.** Build a singly linked list of word counts with `Option<Box<Node>>`, then total it two ways: a recursive function, and a `while let` that walks a cursor. Print `size_of` for `Box<Node>`, `Option<Box<Node>>` and `Node`, and explain why the first two are equal.
 
 Then make two things happen that the sizes do not show. Add a type whose `Drop` prints, put two of them in a scope, and predict the order before running it. And take the `Box` out of the `next` field — write down the error code and the fix rustc offers, in its own words.
 
@@ -187,17 +187,17 @@ Then make two things happen that the sizes do not show. Add a type whose `Drop` 
 //!
 //!   rustc --edition 2024 the_box_kata.rs -o /tmp/bk && /tmp/bk
 
-/// A singly linked list of scores. `None` is the end.
+/// A singly linked list of word counts, one per line. `None` is the end.
 #[derive(Debug)]
 struct Node {
-    score: u32,
+    words: u32,
     next: Option<Box<Node>>,
 }
 
-fn from_slice(scores: &[u32]) -> Option<Box<Node>> {
+fn from_slice(counts: &[u32]) -> Option<Box<Node>> {
     let mut head: Option<Box<Node>> = None;
-    for &score in scores.iter().rev() {
-        head = Some(Box::new(Node { score, next: head }));
+    for &words in counts.iter().rev() {
+        head = Some(Box::new(Node { words, next: head }));
     }
     head
 }
@@ -205,7 +205,7 @@ fn from_slice(scores: &[u32]) -> Option<Box<Node>> {
 fn total(node: &Option<Box<Node>>) -> u32 {
     match node {
         None => 0,
-        Some(n) => n.score + total(&n.next),
+        Some(n) => n.words + total(&n.next),
     }
 }
 
@@ -213,7 +213,7 @@ fn to_vec(node: &Option<Box<Node>>) -> Vec<u32> {
     let mut out = Vec::new();
     let mut cursor = node;
     while let Some(n) = cursor {
-        out.push(n.score);
+        out.push(n.words);
         cursor = &n.next;
     }
     out
@@ -230,7 +230,7 @@ impl Drop for Loud {
 fn main() {
     println!("1. The list");
     let list = from_slice(&[5, 3, 0, 4]);
-    println!("   scores : {:?}", to_vec(&list));
+    println!("   words  : {:?}", to_vec(&list));
     println!("   total  : {}", total(&list));
 
     println!();
@@ -278,7 +278,7 @@ fn main() {
 
 ```text
 1. The list
-   scores : [5, 3, 0, 4]
+   words  : [5, 3, 0, 4]
    total  : 12
 
 2. Why it costs nothing to say "or nothing"
@@ -331,13 +331,13 @@ fn main() {
 
 ## Sources
 
-[Std library types: Box, stack and heap ↗](https://doc.rust-lang.org/rust-by-example/std/box.html) in Rust by Example, and [`std::boxed::Box` ↗](https://doc.rust-lang.org/std/boxed/struct.Box.html). The two rustc transcripts above were produced by compiling the two-line broken versions and are quoted in full.
+[Std library types: Box, stack and heap ↗](https://doc.rust-lang.org/rust-by-example/std/box.html) in Rust by Example, and [`std::boxed::Box` ↗](https://doc.rust-lang.org/std/boxed/struct.Box.html). The rustc transcript above was produced by compiling the same enum with its `Box` removed, in a file named `route.rs`, and is quoted in full.
 
 ## Po polsku
 
 `Box<T>` to najprostszy inteligentny wskaźnik (*smart pointer*) w Ruscie: jedna wartość ląduje na stercie, a na stosie zostaje 8 bajtów adresu. Nazwy typu się nie tłumaczy — mówi się „`Box`”, nigdy „pudełko” — i warto wiedzieć, dlaczego po polsku brzmi to obco: polski przekład Tour of Rust urywa się na rozdziale 5, a inteligentne wskaźniki są w rozdziale 8, więc na tym terenie ustalonego polskiego słownictwa po prostu nie ma. Dzięki `Deref<Target = T>` `Box` zachowuje się jak wartość, którą trzyma — pola, metody i `&*b` sięgają przez niego same. Jedynym wyjątkiem jest samo `*b`: to nie pożyczenie, tylko **przeniesienie własności** wartości na zewnątrz i wypuszczenie (*drop*) `Box`a.
 
-Powody, dla których w ogóle się po niego sięga, są dwa i oba dotyczą rozmiaru. Pierwszy: typ, który zawiera sam siebie. Bez `Box`a każdy wariant `Then` zawierałby całe `Round`, które zawiera całe `Round`, i kompilator nie umiałby zapisać rozmiaru — stąd `error[E0072]` i komunikat *„recursive type `Round` has infinite size”*. Zwróć uwagę, co rustc podpowiada: `Box`, `Rc` **albo `&`** — cykl przerywa każde pośrednictwo, a `Box` jest tym, które przy okazji **posiada** to, na co wskazuje; po wstawieniu go `size_of::<Round>()` to 24. Drugi powód: rozmiar znany dopiero w czasie działania. Dwa domknięcia (*closures*) o różnych przechwyceniach mają dwa różne, anonimowe typy, a `Box<dyn Fn(u32) -> u32>` daje im jeden wspólny — kosztem drugiego wskaźnika, na tablicę metod (*vtable*), przez co zajmuje 16 bajtów zamiast 8. Pudełko z `dyn` jest grube — i nie tylko ono: grube jest każde pudełko na coś, co samo nie zna swojego rozmiaru, bo brakująca liczba jedzie wtedy obok wskaźnika. Dla `dyn` jest to tablica metod, dla `Box<[T]>` i `Box<str>` — długość. Widać to na parze różniącej się o cztery znaki: `Box<[u32; 64]>` zajmuje 8 bajtów, bo długość tablicy siedzi w typie, a `Box<[u32]>` już 16, bo długość wycinka (*slice*) w typie nie siedzi. Cienki jest tylko `Box<T>` nad `T` o znanym rozmiarze.
+Powody, dla których w ogóle się po niego sięga, są dwa i oba dotyczą rozmiaru. Pierwszy: typ, który zawiera sam siebie. Bez `Box`a każdy wariant `Hop` zawierałby całe `Route`, które zawiera całe `Route`, i kompilator nie umiałby zapisać rozmiaru — stąd `error[E0072]` i komunikat *„recursive type `Route` has infinite size”*. Zwróć uwagę, co rustc podpowiada: `Box`, `Rc` **albo `&`** — cykl przerywa każde pośrednictwo, a `Box` jest tym, które przy okazji **posiada** to, na co wskazuje; po wstawieniu go `size_of::<Route>()` to 24. Drugi powód: rozmiar znany dopiero w czasie działania. Dwa domknięcia (*closures*) o różnych przechwyceniach mają dwa różne, anonimowe typy, a `Box<dyn Fn(u32) -> u32>` daje im jeden wspólny — kosztem drugiego wskaźnika, na tablicę metod (*vtable*), przez co zajmuje 16 bajtów zamiast 8. Pudełko z `dyn` jest grube — i nie tylko ono: grube jest każde pudełko na coś, co samo nie zna swojego rozmiaru, bo brakująca liczba jedzie wtedy obok wskaźnika. Dla `dyn` jest to tablica metod, dla `Box<[T]>` i `Box<str>` — długość. Widać to na parze różniącej się o cztery znaki: `Box<[u32; 64]>` zajmuje 8 bajtów, bo długość tablicy siedzi w typie, a `Box<[u32]>` już 16, bo długość wycinka (*slice*) w typie nie siedzi. Cienki jest tylko `Box<T>` nad `T` o znanym rozmiarze.
 
 Na koniec trzy rzeczy praktyczne. `Option<Box<T>>` nie kosztuje ani bajtu więcej niż sam `Box` — `Box` nigdy nie bywa pusty, więc kompilator używa wzorca samych zer na oznaczenie `None` (*null-pointer optimisation*). To dokładnie ten „wskaźnik, który może być pusty” znany z C, tyle że sprawdzenie przeniosło się do systemu typów. Dalej pułapka, o którą łatwo się potknąć: domyślny `Drop` jest **rekurencyjny**, więc długa lista złożona z `Box`ów przepełnia stos w destruktorze, na końcu zasięgu, ze śladem stosu, który nie wskazuje żadnej linii napisanej przez ciebie — dlatego prawdziwe listy implementują `Drop` ręcznie, a strukturę o nieznanej głębokości obchodzi się pętlą `while let`, nie rekurencją. I wreszcie to, czym `Box` nie jest: to pojedyncza własność. Dwóch właścicieli to `Rc`, dwa wątki to `Arc`, a sięganie po `Box` tylko po to, żeby „przenieść coś na stertę”, dokłada alokację i skok w pamięci, nic nie dając w zamian — `Vec`, `String` i `HashMap` i tak już trzymają swoje dane na stercie.
 

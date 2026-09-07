@@ -2,33 +2,33 @@
 //!
 //!   rustc --edition 2024 the_box.rs -o /tmp/box && /tmp/box
 
-/// A type big enough that moving it around matters.
+/// A type big enough that moving it around matters: an 8x8 board.
 #[derive(Debug)]
-struct Ballot {
-    scores: [u32; 64],
+struct Board {
+    cells: [u32; 64],
 }
 
 /// The type that cannot exist without a Box — see section 3.
 #[derive(Debug)]
-enum Round {
-    Final(&'static str),
-    Then(&'static str, Box<Round>),
+enum Route {
+    Endpoint(&'static str),
+    Hop(&'static str, Box<Route>),
 }
 
-fn winner(r: &Round) -> &'static str {
+fn destination(r: &Route) -> &'static str {
     match r {
-        Round::Final(name) => name,
-        Round::Then(_, rest) => winner(rest),
+        Route::Endpoint(host) => host,
+        Route::Hop(_, rest) => destination(rest),
     }
 }
 
-/// Everyone eliminated on the way to the winner, outermost first.
-fn eliminated(r: &Round) -> Vec<&'static str> {
+/// Every hop crossed on the way to the endpoint, nearest first.
+fn hops(r: &Route) -> Vec<&'static str> {
     match r {
-        Round::Final(_) => Vec::new(),
-        Round::Then(name, rest) => {
+        Route::Endpoint(_) => Vec::new(),
+        Route::Hop(name, rest) => {
             let mut out = vec![*name];
-            out.extend(eliminated(rest));
+            out.extend(hops(rest));
             out
         }
     }
@@ -61,34 +61,34 @@ fn unpack(buf: &[u8]) -> Vec<&str> {
 
 fn main() {
     println!("1. A Box is a pointer, whatever it points at");
-    println!("   size_of::<Ballot>()      = {}", size_of::<Ballot>());
-    println!("   size_of::<Box<Ballot>>() = {}", size_of::<Box<Ballot>>());
-    println!("   size_of::<Box<u8>>()     = {}", size_of::<Box<u8>>());
+    println!("   size_of::<Board>()      = {}", size_of::<Board>());
+    println!("   size_of::<Box<Board>>() = {}", size_of::<Box<Board>>());
+    println!("   size_of::<Box<u8>>()    = {}", size_of::<Box<u8>>());
     println!("   The 256 bytes moved to the heap; 8 bytes stayed on the stack.");
     println!("   Moving a Box copies those 8 bytes and nothing else.");
 
     println!();
     println!("2. It behaves like the value it holds");
-    let boxed = Box::new(Ballot { scores: [0; 64] });
-    println!("   boxed.scores.len() = {} — no explicit deref needed", boxed.scores.len());
-    let unboxed: Ballot = *boxed;
-    println!("   *boxed moves the value back out: {} scores", unboxed.scores.len());
+    let boxed = Box::new(Board { cells: [0; 64] });
+    println!("   boxed.cells.len() = {} — no explicit deref needed", boxed.cells.len());
+    let unboxed: Board = *boxed;
+    println!("   *boxed moves the value back out: {} cells", unboxed.cells.len());
     println!("   `Box<T>` implements `Deref<Target = T>`, so field access, method");
     println!("   calls and `&*b` all reach through. `*b` on its own MOVES the value");
     println!("   out and drops the box — the one operation that is not a borrow.");
 
     println!();
     println!("3. The reason Box exists: a type that contains itself");
-    println!("   enum Round {{ Final(&str), Then(&str, Round) }}      <- E0072");
-    println!("   \"recursive type `Round` has infinite size\". Each `Then` would");
-    println!("   contain a whole `Round`, which contains a whole `Round`…");
+    println!("   enum Route {{ Endpoint(&str), Hop(&str, Route) }}      <- E0072");
+    println!("   \"recursive type `Route` has infinite size\". Each `Hop` would");
+    println!("   contain a whole `Route`, which contains a whole `Route`…");
     println!("   Box breaks the chain, because a pointer has a size the compiler");
     println!("   can write down before it knows what is on the other end.");
-    let rounds = Round::Then("Ada", Box::new(Round::Then("Ben", Box::new(Round::Final("Cara")))));
-    println!("   size_of::<Round>() = {} — one tag plus the largest variant",
-             size_of::<Round>());
-    println!("   eliminated(&rounds) = {:?}", eliminated(&rounds));
-    println!("   winner(&rounds) = {}", winner(&rounds));
+    let route = Route::Hop("gateway", Box::new(Route::Hop("backbone", Box::new(Route::Endpoint("example.com")))));
+    println!("   size_of::<Route>() = {} — one tag plus the largest variant",
+             size_of::<Route>());
+    println!("   hops(&route) = {:?}", hops(&route));
+    println!("   destination(&route) = {}", destination(&route));
 
     println!();
     println!("4. And the other reason: a size known only at run time");

@@ -2,17 +2,17 @@
 //!
 //!   rustc --edition 2024 the_box_kata.rs -o /tmp/bk && /tmp/bk
 
-/// A singly linked list of scores. `None` is the end.
+/// A singly linked list of word counts, one per line. `None` is the end.
 #[derive(Debug)]
 struct Node {
-    score: u32,
+    words: u32,
     next: Option<Box<Node>>,
 }
 
-fn from_slice(scores: &[u32]) -> Option<Box<Node>> {
+fn from_slice(counts: &[u32]) -> Option<Box<Node>> {
     let mut head: Option<Box<Node>> = None;
-    for &score in scores.iter().rev() {
-        head = Some(Box::new(Node { score, next: head }));
+    for &words in counts.iter().rev() {
+        head = Some(Box::new(Node { words, next: head }));
     }
     head
 }
@@ -20,7 +20,7 @@ fn from_slice(scores: &[u32]) -> Option<Box<Node>> {
 fn total(node: &Option<Box<Node>>) -> u32 {
     match node {
         None => 0,
-        Some(n) => n.score + total(&n.next),
+        Some(n) => n.words + total(&n.next),
     }
 }
 
@@ -28,7 +28,7 @@ fn to_vec(node: &Option<Box<Node>>) -> Vec<u32> {
     let mut out = Vec::new();
     let mut cursor = node;
     while let Some(n) = cursor {
-        out.push(n.score);
+        out.push(n.words);
         cursor = &n.next;
     }
     out
@@ -45,7 +45,7 @@ impl Drop for Loud {
 fn main() {
     println!("1. The list");
     let list = from_slice(&[5, 3, 0, 4]);
-    println!("   scores : {:?}", to_vec(&list));
+    println!("   words  : {:?}", to_vec(&list));
     println!("   total  : {}", total(&list));
 
     println!();
