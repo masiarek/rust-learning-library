@@ -150,6 +150,8 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **`catch_unwind`** — Run a closure and get an `Err` back instead of dying if it panics. For FFI boundaries and test harnesses, not for control flow: it cannot catch an abort, and it says nothing about whether your data is still coherent. → [What a panic costs](17_Option_and_Result/what_a_panic_costs/README.md)
 
+**Backtrace** — The list of stack frames standing at the moment of a panic, printed innermost first — so the caller that was wrong is *below* the line that failed, the reverse of a Python traceback. Off unless `RUST_BACKTRACE` was set before the process started, and thinned by inlining in an optimised build, where the frames between `main` and the panic can vanish entirely. → [Reading a backtrace](17_Option_and_Result/reading_a_backtrace/README.md)
+
 **`#[track_caller]`** — An attribute that makes a panic report the *caller's* line rather than the line inside the callee. It is why `unwrap`'s panic names your code instead of `core/src/option.rs`. → [What a panic costs](17_Option_and_Result/what_a_panic_costs/README.md)
 
 **Partial function** — A function undefined over part of its input range (`first()` on an empty list, `sqrt` of a negative). Returning `Option<T>` makes it **total**: "no answer" becomes one of the answers. → [Partial functions](17_Option_and_Result/partial_functions/README.md)

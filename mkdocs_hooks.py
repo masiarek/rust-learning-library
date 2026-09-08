@@ -418,6 +418,8 @@ NAV_ORDER: dict[str, list[str]] = {
         "the_question_mark_operator",
         "expect",
         "what_a_panic_costs",
+        # ...and then how to read the one thing it printed and this page skipped.
+        "reading_a_backtrace",
         "partial_functions",
         "none_on_error",
         "wrong_guard",

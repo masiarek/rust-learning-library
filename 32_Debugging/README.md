@@ -27,6 +27,7 @@ The everyday tool, and the one with the most surprises in it.
 | [`unwrap` is a TODO you forgot to remove](../02_Errors/unwrap_is_a_todo/README.md) | Where the `unwrap` you are now debugging came from, and why nothing in the default toolchain ever asked about it |
 | [`expect`: writing down the proof](../17_Option_and_Result/expect/README.md) | The sentence is a claim about why this could not fail — and failing to write it is the finding |
 | [What a panic costs](../17_Option_and_Result/what_a_panic_costs/README.md) | Unwinding is tidy about memory and careless about work: every destructor runs, and everything unfinished simply never happens |
+| [Reading a backtrace](../17_Option_and_Result/reading_a_backtrace/README.md) | The frame list the panic message leaves out — why it is off by default, why the caller you want is *below* the panic site, and why an optimised build prints half of it |
 | [What a test asserts](../28_Testing/what_a_test_asserts/README.md) | A test is a function that panics when it is unhappy — the shortest route from "it broke once" to "it cannot break again" |
 
 ## When it will not build
@@ -45,10 +46,9 @@ The everyday tool, and the one with the most surprises in it.
 
 ## What is not here yet
 
-Three gaps, named rather than quietly left out:
+Two gaps, named rather than quietly left out:
 
 - **A real debugger.** `rust-gdb` and `rust-lldb` ship with the toolchain — they are in `$(rustc --print sysroot)/bin` alongside `rustc` and `cargo`, so they are already installed — and no page in this library uses one. They are wrappers that load the pretty-printers, without which a `String` shows as its raw parts.
-- **Backtraces.** A panic names its own file and line, and then tells you to re-run with `RUST_BACKTRACE=1` to display a backtrace. Doing so is the difference between the line that blew up and the call chain that reached it. No page covers reading one.
 - **`tracing` and friends.** [Observability](../21_Observability/README.md) is the section for this and says honestly why its pages are the hardest here to finish: every checked example in this library compiles with `rustc` alone, and that is a crate story.
 
 A page graduates out of that list the way every page here arrives — with a program CI compiles, runs, and diffs against a recorded answer key. [CONTRIBUTING.md](../CONTRIBUTING.md) says how.

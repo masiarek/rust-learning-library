@@ -33,6 +33,7 @@ Red marks the four that can panic. Notice where they land: `unwrap` and `expect`
 | [The `?` operator](the_question_mark_operator/README.md) | 201 | Unwrap, **return**, and convert the error through `From` — three statements in one character, and the third is the one people are surprised by |
 | [`expect`](expect/README.md) | 201 | The message is a claim about why this cannot fail — and being unable to write it is the finding |
 | [What a panic costs](what_a_panic_costs/README.md) | 201 | The other half of `unwrap`: where the panic points, what unwinding gives back (memory) and what it does not (your work), and why the exit code is 101 |
+| [Reading a backtrace](reading_a_backtrace/README.md) | 201 | The caller the panic message will not name: switching the frame list on, reading it innermost-first, and the two functions `--release` inlines out of it |
 | [Partial functions](partial_functions/README.md) | 201 | Why `Option` exists at all: it turns a function that is undefined somewhere into one that always answers |
 | [Returning `None` on error](none_on_error/README.md) | 201 | Why `input.parse().ok()` is usually a downgrade: four distinct causes arriving as one indistinguishable `None` |
 | [Zero wins is not zero games](wrong_guard/README.md) | 201 | A guard on the wrong condition: the input with no answer is the one that gets a number, and `Result` does not stop it |
