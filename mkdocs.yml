@@ -59,6 +59,7 @@ exclude_docs: |
 # above explains. `*/README.md` is deliberately one level deep: it takes the
 # per-method pages and leaves the reference's own landing page in the nav.
 not_in_nav: |
+  /CLAUDE.md
   /CONTRIBUTING.md
   /14_Strings/str_methods/*/README.md
   /14_Strings/string_methods/*/README.md
