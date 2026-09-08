@@ -1,0 +1,45 @@
+THE C SHAPE
+  free(p); ... free(p);
+  Two calls, one block. The second one corrupts the allocator's
+  bookkeeping, and the crash -- if there is one -- happens in some
+  unrelated malloc much later. The bug is not really about
+  memory: it is that TWO PIECES OF CODE both believed they were
+  responsible for the same block.
+
+RUST MAKES RESPONSIBILITY A PROPERTY OF THE VALUE
+  let a = Tracked("one");
+  consume(a);          <- moves it: consume is now responsible
+    consume() took one
+    freeing one
+  consume(a);          <- E0382: use of moved value
+
+  Exactly one binding owns the value at a time, and passing it by
+  value transfers that. So the second call is not a runtime
+  double-free, it is a compile error naming the line that took
+  ownership -- which is also the line a C reviewer would have had
+  to notice by reading the callee.
+
+AND THE DROP HAPPENS EXACTLY ONCE, WHEREVER RESPONSIBILITY ENDED
+  three values, three scopes:
+    inside the block
+    freeing two (block scope)
+    the Vec owns it now, and owns the freeing
+    freeing three (moved into a Vec)
+    d will go last
+
+WHAT ABOUT Rc?
+  Rc<T> shares ownership between several holders and frees when
+  the LAST one goes. That is a different answer to the same
+  question -- responsibility held jointly, counted at runtime --
+  and it still cannot double-free, because no holder can free on
+  its own. You pay a counter for it, which is why it is not the
+  default.
+
+THE PART WORTH CARRYING TO C
+  The C fix is a convention: 'the caller frees', written in a
+  comment. Rust's fix is the same convention, moved into the type
+  system where the compiler can check it -- and the reason it can
+  is that a value has exactly one owner unless you ask otherwise.
+
+  end of main:
+    freeing four (end of main)

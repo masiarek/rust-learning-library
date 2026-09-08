@@ -101,6 +101,133 @@ Deny by default, so it is an error. It only fires when the operands are constant
 - **Python** — `int` is unbounded, so this bug does not exist and the surprise runs the other way: a Rust `i32` is a fixed 32 bits, and choosing the width is now part of writing the program. When you want Python's behaviour you reach for a big-integer crate and pay for it explicitly. What transfers is that `//` and `%` on negatives already taught you that arithmetic has conventions worth checking.
 - **ABAP** — arithmetic overflow raises `CX_SY_ARITHMETIC_OVERFLOW`, catchable, at the moment it happens, which is the panic behaviour and not the wrapping one. Rust wants the same question answered earlier: rather than catching the exception, you decide before the run whether this addition can exceed the range and put your answer in the method name. `TYPE i` is a 4-byte signed integer, so the boundary is the one on this page; `TYPE int8` is the 8-byte one.
 
+## Practice
+
+**The comparison the optimizer deletes.** Explain why `x + 1 > x` is false at `-O0` and true at `-O2` in C, and be precise about what *undefined* licenses the compiler to do.
+
+Then give Rust's two defined behaviours and when each applies, and the four methods that let you say which one you meant. Finish with why `if (x + 1 < x)` is not an overflow test in C — and why unsigned types do not have this problem.
+
+<details markdown="1">
+<summary><strong>Solution</strong></summary>
+
+<!-- source:signed_overflow_kata -->
+*[`signed_overflow_kata.rs`](examples/signed_overflow_kata.rs) in full — pasted here by `tools/run_examples.py` from the file CI compiles and runs.*
+
+```rust
+//! Kata solution: the comparison the optimizer is allowed to delete.
+//!
+//!   rustc --edition 2024 signed_overflow_kata.rs -o /tmp/sok && /tmp/sok
+//!   rustc --edition 2024 -O signed_overflow_kata.rs -o /tmp/sok && /tmp/sok
+
+fn main() {
+    let x = i32::MAX;
+
+    println!("THE C SHAPE");
+    println!("  int x = INT_MAX;  if (x + 1 > x) ...");
+    println!("  At -O0 the addition wraps and the comparison is false. At -O2");
+    println!("  the optimizer reasons: signed overflow is UNDEFINED, therefore");
+    println!("  x + 1 > x cannot be false, therefore the branch is dead -- and");
+    println!("  deletes it. Same source, two behaviours, and neither compiler");
+    println!("  is wrong.");
+    println!();
+
+    println!("RUST'S ANSWER IS TO DEFINE IT, TWICE");
+    println!("  debug builds:   overflow PANICS -- 'attempt to add with overflow'");
+    println!("  release builds: overflow WRAPS, two's complement");
+    println!("  Both are defined behaviour. The optimizer may not assume the");
+    println!("  addition cannot overflow, so no branch anywhere is deleted on");
+    println!("  that reasoning, and the two builds differ in what they DO");
+    println!("  rather than in what is true.");
+    println!();
+
+    println!("AND WHEN YOU CARE, YOU SAY WHICH");
+    println!("  x = i32::MAX = {x}");
+    println!("  x.checked_add(1)     {:?}    <- None: ask, and handle it", x.checked_add(1));
+    println!("  x.wrapping_add(1)    {}      <- wrap, on purpose", x.wrapping_add(1));
+    println!("  x.saturating_add(1)  {}      <- clamp at the maximum", x.saturating_add(1));
+    println!("  x.overflowing_add(1) {:?}   <- the value and a did-it-wrap flag",
+             x.overflowing_add(1));
+    println!();
+    println!("  Four named behaviours where C has one undefined one. The point");
+    println!("  is not that Rust picked a better default -- it is that the");
+    println!("  choice is written at the call site, so a reader can see which");
+    println!("  one this line meant.");
+    println!();
+
+    println!("THE PART THAT TRANSFERS BACK TO C");
+    println!("  'Undefined' does not mean 'unpredictable result'. It means the");
+    println!("  compiler may assume it never happens and rewrite the code around");
+    println!("  that assumption -- so the damage lands somewhere else entirely,");
+    println!("  usually in a check you wrote to prevent it. That is why");
+    println!("  `if (x + 1 < x)` is not an overflow test in C, and why the");
+    println!("  correct test compares against INT_MAX before adding.");
+    println!();
+
+    println!("A DETAIL WORTH KNOWING");
+    println!("  Unsigned overflow in C is DEFINED to wrap, so the same trick is");
+    println!("  not available to the optimizer there. The undefined-ness is a");
+    println!("  property of the signed types alone -- which is why so much");
+    println!("  hardening advice is 'use unsigned', and why that advice brings");
+    println!("  its own family of wrap-around bugs.");
+
+    assert_eq!(x.checked_add(1), None);
+    assert_eq!(x.wrapping_add(1), i32::MIN);
+    assert_eq!(x.saturating_add(1), i32::MAX);
+}
+```
+<!-- /source -->
+
+<!-- output:signed_overflow_kata -->
+*Verified output of [`signed_overflow_kata.rs`](examples/signed_overflow_kata.rs) — regenerated by `tools/run_examples.py`, never hand-typed.*
+
+```text
+THE C SHAPE
+  int x = INT_MAX;  if (x + 1 > x) ...
+  At -O0 the addition wraps and the comparison is false. At -O2
+  the optimizer reasons: signed overflow is UNDEFINED, therefore
+  x + 1 > x cannot be false, therefore the branch is dead -- and
+  deletes it. Same source, two behaviours, and neither compiler
+  is wrong.
+
+RUST'S ANSWER IS TO DEFINE IT, TWICE
+  debug builds:   overflow PANICS -- 'attempt to add with overflow'
+  release builds: overflow WRAPS, two's complement
+  Both are defined behaviour. The optimizer may not assume the
+  addition cannot overflow, so no branch anywhere is deleted on
+  that reasoning, and the two builds differ in what they DO
+  rather than in what is true.
+
+AND WHEN YOU CARE, YOU SAY WHICH
+  x = i32::MAX = 2147483647
+  x.checked_add(1)     None    <- None: ask, and handle it
+  x.wrapping_add(1)    -2147483648      <- wrap, on purpose
+  x.saturating_add(1)  2147483647      <- clamp at the maximum
+  x.overflowing_add(1) (-2147483648, true)   <- the value and a did-it-wrap flag
+
+  Four named behaviours where C has one undefined one. The point
+  is not that Rust picked a better default -- it is that the
+  choice is written at the call site, so a reader can see which
+  one this line meant.
+
+THE PART THAT TRANSFERS BACK TO C
+  'Undefined' does not mean 'unpredictable result'. It means the
+  compiler may assume it never happens and rewrite the code around
+  that assumption -- so the damage lands somewhere else entirely,
+  usually in a check you wrote to prevent it. That is why
+  `if (x + 1 < x)` is not an overflow test in C, and why the
+  correct test compares against INT_MAX before adding.
+
+A DETAIL WORTH KNOWING
+  Unsigned overflow in C is DEFINED to wrap, so the same trick is
+  not available to the optimizer there. The undefined-ness is a
+  property of the signed types alone -- which is why so much
+  hardening advice is 'use unsigned', and why that advice brings
+  its own family of wrap-around bugs.
+```
+<!-- /output -->
+
+</details>
+
 ## See also
 
 - [Meet the byte](../../19_Numbers/meet_the_byte/README.md) — how wide a number actually is, and what the suffix on the type means

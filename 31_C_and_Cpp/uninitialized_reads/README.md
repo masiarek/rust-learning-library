@@ -103,6 +103,135 @@ help: consider assigning a value
 - **Python** — a name that was never assigned raises `NameError` when you touch it, so the bug exists but announces itself, and it announces itself at run time on the branch that reached it. Rust asks the same question at compile time, about all branches at once. What genuinely transfers is the mental model: in both languages a binding is a name, not a box that exists in advance holding rubbish.
 - **ABAP** — this bug does not exist, because every data object is set to its type's initial value: `lv_total` is `0` before you write a line. That convention costs you something else, though, and it is the thing `Option` exists to fix — you cannot tell *"nobody has set this yet"* from *"somebody set it to zero"*. Rust's answer to the ABAP situation is not `let total;` but [`Option<i32>`](../../17_Option_and_Result/some_and_none/README.md), where the two cases are different values of a type the compiler makes you tell apart. See [null dereference](../null_dereference/README.md).
 
+## Practice
+
+**Declare it, then assign it on every path.** Write a function with `let label;` and three branches that each assign it, and confirm it compiles. Then delete one branch and record the error.
+
+Then rewrite the whole thing so the deferred binding is unnecessary, and say what property of the language makes that possible. Finish with the two things this flow analysis tracks besides initialisation, and the escape hatch for a genuinely uninitialised buffer.
+
+<details markdown="1">
+<summary><strong>Solution</strong></summary>
+
+<!-- source:uninitialized_reads_kata -->
+*[`uninitialized_reads_kata.rs`](examples/uninitialized_reads_kata.rs) in full — pasted here by `tools/run_examples.py` from the file CI compiles and runs.*
+
+```rust
+//! Kata solution: declare it, and let the compiler check every path.
+//!
+//!   rustc --edition 2024 uninitialized_reads_kata.rs -o /tmp/urk && /tmp/urk
+
+fn classify(n: i32) -> &'static str {
+    // Declared without a value -- legal, and idiomatic. The compiler checks
+    // that every path reaching the read assigns exactly once first.
+    let label;
+    if n < 0 {
+        label = "negative";
+    } else if n == 0 {
+        label = "zero";
+    } else {
+        label = "positive";
+    }
+    label
+}
+
+fn main() {
+    println!("THE C SHAPE");
+    println!("  int x;  if (cond) x = 1;  printf(\"%d\", x);");
+    println!("  On the path where cond is false, x holds whatever was on the");
+    println!("  stack. -Wall may warn; it also may not, once the assignment is");
+    println!("  two functions away. And reading an uninitialised value is");
+    println!("  UNDEFINED, not merely unpredictable -- so the optimizer may");
+    println!("  assume the path never happens.");
+    println!();
+
+    println!("RUST LETS YOU DECLARE WITHOUT ASSIGNING TOO");
+    for n in [-5, 0, 7] {
+        println!("  classify({n:>2}) = {:?}", classify(n));
+    }
+    println!();
+    println!("  `let label;` with no value is fine. What the compiler checks is");
+    println!("  that every path to the READ assigns first -- so deleting the");
+    println!("  `else` arm above is E0381, 'used binding is possibly-");
+    println!("  uninitialized', naming the branch that skipped it.");
+    println!();
+
+    println!("AND THAT IS WHY THIS IS AN EXPRESSION LANGUAGE");
+    let n = 7;
+    let label = if n < 0 { "negative" } else if n == 0 { "zero" } else { "positive" };
+    println!("  let label = if ... {{ ... }} else {{ ... }};  -> {label:?}");
+    println!("  The if is an expression, so the same code needs no deferred");
+    println!("  binding at all -- every branch must produce a value of the same");
+    println!("  type, and a missing else is a type error rather than a missing");
+    println!("  assignment. Most of the C pattern disappears rather than being");
+    println!("  checked.");
+    println!();
+
+    println!("THE FLOW ANALYSIS IS NOT ONLY ABOUT INITIALISATION");
+    println!("  The same pass tracks MOVES: a value moved out on one branch and");
+    println!("  used after the join is 'possibly moved', reported the same way.");
+    println!("  Initialisedness and ownership are one analysis, which is why");
+    println!("  they produce errors that read alike.");
+    println!();
+
+    println!("THE ESCAPE HATCH, AND WHAT IT ADMITS");
+    println!("  MaybeUninit<T> exists for the cases that genuinely need an");
+    println!("  uninitialised buffer -- reading into it from the OS, say. Every");
+    println!("  read from it is `unsafe`, and the word is the point: you are");
+    println!("  asserting the initialisation the compiler could not check.");
+
+    assert_eq!(classify(-1), "negative");
+    assert_eq!(classify(0), "zero");
+    assert_eq!(label, "positive");
+}
+```
+<!-- /source -->
+
+<!-- output:uninitialized_reads_kata -->
+*Verified output of [`uninitialized_reads_kata.rs`](examples/uninitialized_reads_kata.rs) — regenerated by `tools/run_examples.py`, never hand-typed.*
+
+```text
+THE C SHAPE
+  int x;  if (cond) x = 1;  printf("%d", x);
+  On the path where cond is false, x holds whatever was on the
+  stack. -Wall may warn; it also may not, once the assignment is
+  two functions away. And reading an uninitialised value is
+  UNDEFINED, not merely unpredictable -- so the optimizer may
+  assume the path never happens.
+
+RUST LETS YOU DECLARE WITHOUT ASSIGNING TOO
+  classify(-5) = "negative"
+  classify( 0) = "zero"
+  classify( 7) = "positive"
+
+  `let label;` with no value is fine. What the compiler checks is
+  that every path to the READ assigns first -- so deleting the
+  `else` arm above is E0381, 'used binding is possibly-
+  uninitialized', naming the branch that skipped it.
+
+AND THAT IS WHY THIS IS AN EXPRESSION LANGUAGE
+  let label = if ... { ... } else { ... };  -> "positive"
+  The if is an expression, so the same code needs no deferred
+  binding at all -- every branch must produce a value of the same
+  type, and a missing else is a type error rather than a missing
+  assignment. Most of the C pattern disappears rather than being
+  checked.
+
+THE FLOW ANALYSIS IS NOT ONLY ABOUT INITIALISATION
+  The same pass tracks MOVES: a value moved out on one branch and
+  used after the join is 'possibly moved', reported the same way.
+  Initialisedness and ownership are one analysis, which is why
+  they produce errors that read alike.
+
+THE ESCAPE HATCH, AND WHAT IT ADMITS
+  MaybeUninit<T> exists for the cases that genuinely need an
+  uninitialised buffer -- reading into it from the OS, say. Every
+  read from it is `unsafe`, and the word is the point: you are
+  asserting the initialisation the compiler could not check.
+```
+<!-- /output -->
+
+</details>
+
 ## See also
 
 - [A type is not a constructor](../../16_Structs/a_type_is_not_a_constructor/README.md) — the same rule where it bites hardest, on a struct with fields still to fill

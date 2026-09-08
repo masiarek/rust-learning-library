@@ -114,6 +114,143 @@ The check is on *every* path, without running anything, which is the difference 
 - **Python** — a reference keeps the object alive, so this bug is not available to you and the transferable idea is the opposite one: in Rust, holding a reference does **not** keep anything alive. `&` is a borrow with a deadline, not a co-ownership claim. When you genuinely want the Python behaviour, that is [`Rc`](../../18_Ownership/reference_counting/README.md) or [`Arc`](../../18_Ownership/sharing_across_threads/README.md), and you ask for it by name.
 - **ABAP** — the runtime frees an object when the last reference goes, so the failure you know is the opposite one: a `TYPE REF TO` that is still bound and keeps something alive longer than intended. There is no ABAP equivalent of reading through a freed reference, and the closest analogue — dereferencing an *initial* reference and getting `CX_SY_REF_IS_INITIAL` — is the [null dereference](../null_dereference/README.md) page, not this one.
 
+## Practice
+
+**Write the bug and read the error.** In Rust: create a `String`, `drop` it, then use it. Record the error code and say why `drop` — an ordinary function, not a keyword — is what makes the compiler notice.
+
+Then the harder one, which has no C equivalent at all: make a reference outlive the value it points at, and say which checker catches it and how that differs from the first. Finish with what the whole thing costs at runtime.
+
+<details markdown="1">
+<summary><strong>Solution</strong></summary>
+
+<!-- source:use_after_free_kata -->
+*[`use_after_free_kata.rs`](examples/use_after_free_kata.rs) in full — pasted here by `tools/run_examples.py` from the file CI compiles and runs.*
+
+```rust
+//! Kata solution: write the C bug in Rust, and read the error instead.
+//!
+//!   rustc --edition 2024 use_after_free_kata.rs -o /tmp/uaf && /tmp/uaf
+
+fn main() {
+    println!("THE C SHAPE");
+    println!("  char *p = malloc(16); strcpy(p, \"secret\");");
+    println!("  free(p);");
+    println!("  printf(\"%s\", p);        <- reads a block the allocator now owns");
+    println!("  It usually prints something. That is the instructive part: a");
+    println!("  freed block is not blanked, it is marked AVAILABLE, so the read");
+    println!("  returns whatever lives there now -- often another allocation's");
+    println!("  data, which is how a use-after-free becomes an information leak");
+    println!("  rather than a crash.");
+    println!();
+
+    println!("THE SAME PROGRAM IN RUST");
+    println!("  let s = String::from(\"secret\");");
+    println!("  drop(s);");
+    println!("  println!(\"{{s}}\");        <- E0382: borrow of moved value: `s`");
+    println!();
+    println!("  drop() is not a special form. It is a function taking its");
+    println!("  argument BY VALUE, so calling it moves the String in -- and the");
+    println!("  compiler already tracks that `s` no longer owns anything. The");
+    println!("  free happens when drop's own parameter goes out of scope, one");
+    println!("  line later, and the check that catches the misuse is the same");
+    println!("  move checker that catches passing a value to any function twice.");
+    println!();
+
+    println!("SO WHAT ACTUALLY HAPPENS HERE");
+    let s = String::from("secret");
+    let len = s.len();
+    drop(s);
+    println!("  s was dropped; its length, copied out first, is {len}");
+    println!("  There is no way to write the read. Not 'it panics' -- the");
+    println!("  program does not exist.");
+    println!();
+
+    println!("THE HARDER CASE: A REFERENCE THAT OUTLIVES ITS OWNER");
+    println!("  let r;");
+    println!("  {{ let v = vec![1, 2, 3]; r = &v[0]; }}   <- v dropped here");
+    println!("  println!(\"{{r}}\");                       <- E0597: `v` does not");
+    println!("                                            live long enough");
+    println!("  That is the borrow checker rather than the move checker, and it");
+    println!("  is the one that has no C equivalent at all: C will happily give");
+    println!("  you a pointer into a block that is about to be freed and say");
+    println!("  nothing, at any warning level.");
+    println!();
+
+    let r;
+    let v = vec![10, 20, 30];
+    r = &v[0];
+    println!("  the version that compiles: v outlives r, so r = {r}");
+    println!("  Moving `let v` inside a block would break it, and the error");
+    println!("  names both the borrow and the drop.");
+    println!();
+
+    println!("WHAT THIS COSTS AT RUNTIME");
+    println!("  Nothing. There is no free-list check, no tombstone, no refcount");
+    println!("  -- the analysis happened at compile time and the generated code");
+    println!("  is the same malloc/free pair C would emit. That is the whole");
+    println!("  claim: not a safer allocator, an earlier question.");
+
+    assert_eq!(len, 6);
+    assert_eq!(*r, 10);
+}
+```
+<!-- /source -->
+
+<!-- output:use_after_free_kata -->
+*Verified output of [`use_after_free_kata.rs`](examples/use_after_free_kata.rs) — regenerated by `tools/run_examples.py`, never hand-typed.*
+
+```text
+THE C SHAPE
+  char *p = malloc(16); strcpy(p, "secret");
+  free(p);
+  printf("%s", p);        <- reads a block the allocator now owns
+  It usually prints something. That is the instructive part: a
+  freed block is not blanked, it is marked AVAILABLE, so the read
+  returns whatever lives there now -- often another allocation's
+  data, which is how a use-after-free becomes an information leak
+  rather than a crash.
+
+THE SAME PROGRAM IN RUST
+  let s = String::from("secret");
+  drop(s);
+  println!("{s}");        <- E0382: borrow of moved value: `s`
+
+  drop() is not a special form. It is a function taking its
+  argument BY VALUE, so calling it moves the String in -- and the
+  compiler already tracks that `s` no longer owns anything. The
+  free happens when drop's own parameter goes out of scope, one
+  line later, and the check that catches the misuse is the same
+  move checker that catches passing a value to any function twice.
+
+SO WHAT ACTUALLY HAPPENS HERE
+  s was dropped; its length, copied out first, is 6
+  There is no way to write the read. Not 'it panics' -- the
+  program does not exist.
+
+THE HARDER CASE: A REFERENCE THAT OUTLIVES ITS OWNER
+  let r;
+  { let v = vec![1, 2, 3]; r = &v[0]; }   <- v dropped here
+  println!("{r}");                       <- E0597: `v` does not
+                                            live long enough
+  That is the borrow checker rather than the move checker, and it
+  is the one that has no C equivalent at all: C will happily give
+  you a pointer into a block that is about to be freed and say
+  nothing, at any warning level.
+
+  the version that compiles: v outlives r, so r = 10
+  Moving `let v` inside a block would break it, and the error
+  names both the borrow and the drop.
+
+WHAT THIS COSTS AT RUNTIME
+  Nothing. There is no free-list check, no tombstone, no refcount
+  -- the analysis happened at compile time and the generated code
+  is the same malloc/free pair C would emit. That is the whole
+  claim: not a safer allocator, an earlier question.
+```
+<!-- /output -->
+
+</details>
+
 ## See also
 
 - [Borrowing](../../18_Ownership/borrowing/README.md) — the rule in general, and why it has two kinds of borrow

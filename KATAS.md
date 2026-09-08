@@ -178,6 +178,15 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K158 | [Which of the three can become an fn -- and the closure that is smaller than a pointer](23_Closures/function_pointers/README.md#practice) | [Function pointers](23_Closures/function_pointers/README.md) | 201 |
 | K159 | [Two programs one character apart, and the u32 binding that is not a u32](30_Pattern_Matching/match_ergonomics/README.md#practice) | [Match ergonomics](30_Pattern_Matching/match_ergonomics/README.md) | 201 |
 | K160 | [let _ = guard against let _guard = guard, and the one sentence both follow from](30_Pattern_Matching/the_wildcard/README.md#practice) | [The wildcard `_`](30_Pattern_Matching/the_wildcard/README.md) | 201 |
+| K161 | [Declare without assigning, delete one branch, and read E0381](31_C_and_Cpp/uninitialized_reads/README.md#practice) | [Uninitialized reads](31_C_and_Cpp/uninitialized_reads/README.md) | 201 |
+| K162 | [Option<&T> is the same eight bytes as &T -- and Option<u32> is not](31_C_and_Cpp/null_dereference/README.md#practice) | [Null dereference](31_C_and_Cpp/null_dereference/README.md) | 201 |
+| K163 | [Four ways past the end, and the one rejected without running](31_C_and_Cpp/buffer_overruns/README.md#practice) | [Buffer overruns](31_C_and_Cpp/buffer_overruns/README.md) | 201 |
+| K164 | [The comparison -O2 deletes, and four named behaviours that replace it](31_C_and_Cpp/signed_overflow/README.md#practice) | [Signed overflow](31_C_and_Cpp/signed_overflow/README.md) | 201 |
+| K165 | [Drop it and use it -- then make a reference outlive its owner](31_C_and_Cpp/use_after_free/README.md#practice) | [Use-after-free](31_C_and_Cpp/use_after_free/README.md) | 201 |
+| K166 | [Pass it by value twice, and watch responsibility become a compile error](31_C_and_Cpp/double_free/README.md#practice) | [Double-free](31_C_and_Cpp/double_free/README.md) | 201 |
+| K167 | [Erase while iterating: the bug that returns a plausible wrong answer](31_C_and_Cpp/iterator_invalidation/README.md#practice) | [Iterator invalidation](31_C_and_Cpp/iterator_invalidation/README.md) | 201 |
+| K168 | [Eight threads, one counter, and the two traits that reject the bad program](31_C_and_Cpp/data_races/README.md#practice) | [Data races](31_C_and_Cpp/data_races/README.md) | 201 |
+| K169 | [The early return that cannot hold the lock, and the one-character way to drop it too soon](31_C_and_Cpp/forgotten_unlock/README.md#practice) | [Forgotten unlock](31_C_and_Cpp/forgotten_unlock/README.md) | 201 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -406,6 +415,18 @@ The table above is the order to attempt them in. This is the same katas grouped 
 
 - K159 · [Two programs one character apart, and the u32 binding that is not a u32](30_Pattern_Matching/match_ergonomics/README.md#practice)
 - K160 · [let _ = guard against let _guard = guard, and the one sentence both follow from](30_Pattern_Matching/the_wildcard/README.md#practice)
+
+**[C and Cpp](31_C_and_Cpp/README.md)** — 9 katas
+
+- K161 · [Declare without assigning, delete one branch, and read E0381](31_C_and_Cpp/uninitialized_reads/README.md#practice)
+- K162 · [Option<&T> is the same eight bytes as &T -- and Option<u32> is not](31_C_and_Cpp/null_dereference/README.md#practice)
+- K163 · [Four ways past the end, and the one rejected without running](31_C_and_Cpp/buffer_overruns/README.md#practice)
+- K164 · [The comparison -O2 deletes, and four named behaviours that replace it](31_C_and_Cpp/signed_overflow/README.md#practice)
+- K165 · [Drop it and use it -- then make a reference outlive its owner](31_C_and_Cpp/use_after_free/README.md#practice)
+- K166 · [Pass it by value twice, and watch responsibility become a compile error](31_C_and_Cpp/double_free/README.md#practice)
+- K167 · [Erase while iterating: the bug that returns a plausible wrong answer](31_C_and_Cpp/iterator_invalidation/README.md#practice)
+- K168 · [Eight threads, one counter, and the two traits that reject the bad program](31_C_and_Cpp/data_races/README.md#practice)
+- K169 · [The early return that cannot hold the lock, and the one-character way to drop it too soon](31_C_and_Cpp/forgotten_unlock/README.md#practice)
 
 <!-- by-subject:end -->
 

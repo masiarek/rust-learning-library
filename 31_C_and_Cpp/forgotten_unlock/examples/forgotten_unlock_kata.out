@@ -1,0 +1,39 @@
+THE C SHAPE
+  pthread_mutex_lock(&m);
+  if (bad) return -1;            /* <- lock still held */
+  ...
+  pthread_mutex_unlock(&m);
+  Every path out needs its own unlock, including the paths added
+  next year by somebody who did not read the top of the function.
+  The failure is a deadlock in an unrelated thread, later.
+
+THE RUST VERSION, BOTH PATHS
+  total(&m, false) = Ok(10)
+  total(&m, true)  = Err("refused before summing")
+  ...and the lock is free afterwards: Ok(10)
+
+  `lock()` returns a GUARD, and the guard's Drop releases. There
+  is no unlock call to forget because there is no unlock call --
+  the early return drops the guard exactly as the normal return
+  does, and so does a panic unwinding through the function.
+
+THE DETAIL THAT MAKES IT MORE THAN A CONVENTION
+  The data is inside the Mutex, not beside it. `m.lock()` is the
+  only way to a &mut Vec, so 'accessing without the lock' is not a
+  mistake you can make -- where C's mutex is a separate object
+  and nothing connects it to the data it protects.
+
+AND THE ONE WAY TO STILL GET IT WRONG
+  let _ = m.lock().unwrap();      <- releases IMMEDIATELY
+  let _guard = m.lock().unwrap(); <- held to end of scope
+  `_` is a pattern that binds nothing, so the guard is a temporary
+  that dies at the end of the statement. That is the one remaining
+  way to hold a lock for zero instructions and think you held it,
+  and it is a one-character difference.
+
+C++ HAS THE SAME ANSWER, WITH A GAP
+  std::lock_guard is RAII and does the same job. The difference is
+  that C++ cannot stop you touching the data without it, and
+  cannot stop a reference to the protected data escaping the
+  guard's scope. Rust's borrow checker ties the &mut to the
+  guard's lifetime, so it cannot outlive the lock.

@@ -1,0 +1,36 @@
+THE C SHAPE
+  Config *c = find(name);   /* may return NULL */
+  return c->retries;        /* and here it is dereferenced */
+  The type `Config *` promises to point at a Config. NULL fits in
+  it and answers none of the questions the type promises, so the
+  promise is checked by a convention in a comment.
+
+RUST'S ANSWER IS A DIFFERENT TYPE
+  find("known") -> Some(Config { retries: 3 }), retries 3
+  find("missing") -> None -- and there is no field to reach for
+
+  Option<Config> is not a Config that might be null. It is a
+  two-variant enum, and the ONLY way to the Config inside is a
+  match, an if-let, or a method that names what to do when there
+  is nothing. Forgetting the None case is E0004, not a segfault.
+
+AND IT COSTS NOTHING
+  size_of::<&Config>()          8 bytes
+  size_of::<Option<&Config>>()  8 bytes
+  Identical. A reference can never be null, so the compiler uses
+  the all-zero bit pattern to mean None -- the NICHE optimisation.
+  The safety and the C representation are the same eight bytes,
+  which is also why passing Option<&T> across an FFI boundary is
+  sound and idiomatic.
+
+  It works for anything with a spare pattern:
+  size_of::<Option<Box<u32>>>()   8 bytes
+  size_of::<Option<u32>>()        8 bytes  <- no niche in a u32,
+                                    so this one pays for a tag
+
+THE HABITS THAT REPLACE THE NULL CHECK
+  unwrap_or_default()   0
+  map + unwrap_or       3
+  the ? operator        propagates the None to the caller
+  Each one is a decision about what 'nothing' means HERE, written
+  where it is made -- which is the thing a null check never says.

@@ -1,0 +1,42 @@
+THE C SHAPE
+  int x = INT_MAX;  if (x + 1 > x) ...
+  At -O0 the addition wraps and the comparison is false. At -O2
+  the optimizer reasons: signed overflow is UNDEFINED, therefore
+  x + 1 > x cannot be false, therefore the branch is dead -- and
+  deletes it. Same source, two behaviours, and neither compiler
+  is wrong.
+
+RUST'S ANSWER IS TO DEFINE IT, TWICE
+  debug builds:   overflow PANICS -- 'attempt to add with overflow'
+  release builds: overflow WRAPS, two's complement
+  Both are defined behaviour. The optimizer may not assume the
+  addition cannot overflow, so no branch anywhere is deleted on
+  that reasoning, and the two builds differ in what they DO
+  rather than in what is true.
+
+AND WHEN YOU CARE, YOU SAY WHICH
+  x = i32::MAX = 2147483647
+  x.checked_add(1)     None    <- None: ask, and handle it
+  x.wrapping_add(1)    -2147483648      <- wrap, on purpose
+  x.saturating_add(1)  2147483647      <- clamp at the maximum
+  x.overflowing_add(1) (-2147483648, true)   <- the value and a did-it-wrap flag
+
+  Four named behaviours where C has one undefined one. The point
+  is not that Rust picked a better default -- it is that the
+  choice is written at the call site, so a reader can see which
+  one this line meant.
+
+THE PART THAT TRANSFERS BACK TO C
+  'Undefined' does not mean 'unpredictable result'. It means the
+  compiler may assume it never happens and rewrite the code around
+  that assumption -- so the damage lands somewhere else entirely,
+  usually in a check you wrote to prevent it. That is why
+  `if (x + 1 < x)` is not an overflow test in C, and why the
+  correct test compares against INT_MAX before adding.
+
+A DETAIL WORTH KNOWING
+  Unsigned overflow in C is DEFINED to wrap, so the same trick is
+  not available to the optimizer there. The undefined-ness is a
+  property of the signed types alone -- which is why so much
+  hardening advice is 'use unsigned', and why that advice brings
+  its own family of wrap-around bugs.

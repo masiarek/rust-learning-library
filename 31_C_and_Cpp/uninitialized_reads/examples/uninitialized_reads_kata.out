@@ -1,0 +1,37 @@
+THE C SHAPE
+  int x;  if (cond) x = 1;  printf("%d", x);
+  On the path where cond is false, x holds whatever was on the
+  stack. -Wall may warn; it also may not, once the assignment is
+  two functions away. And reading an uninitialised value is
+  UNDEFINED, not merely unpredictable -- so the optimizer may
+  assume the path never happens.
+
+RUST LETS YOU DECLARE WITHOUT ASSIGNING TOO
+  classify(-5) = "negative"
+  classify( 0) = "zero"
+  classify( 7) = "positive"
+
+  `let label;` with no value is fine. What the compiler checks is
+  that every path to the READ assigns first -- so deleting the
+  `else` arm above is E0381, 'used binding is possibly-
+  uninitialized', naming the branch that skipped it.
+
+AND THAT IS WHY THIS IS AN EXPRESSION LANGUAGE
+  let label = if ... { ... } else { ... };  -> "positive"
+  The if is an expression, so the same code needs no deferred
+  binding at all -- every branch must produce a value of the same
+  type, and a missing else is a type error rather than a missing
+  assignment. Most of the C pattern disappears rather than being
+  checked.
+
+THE FLOW ANALYSIS IS NOT ONLY ABOUT INITIALISATION
+  The same pass tracks MOVES: a value moved out on one branch and
+  used after the join is 'possibly moved', reported the same way.
+  Initialisedness and ownership are one analysis, which is why
+  they produce errors that read alike.
+
+THE ESCAPE HATCH, AND WHAT IT ADMITS
+  MaybeUninit<T> exists for the cases that genuinely need an
+  uninitialised buffer -- reading into it from the OS, say. Every
+  read from it is `unsafe`, and the word is the point: you are
+  asserting the initialisation the compiler could not check.

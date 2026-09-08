@@ -1,0 +1,37 @@
+THE C SHAPE
+  for (int i = 0; i <= 3; i++) sum += readings[i];
+  The fourth read is whatever sits after the array -- a saved
+  register, a frame pointer, part of another variable -- so the
+  sum is a different large number on every run, and at -O2 it may
+  be a different one again.
+
+1. THE INDEX THAT PANICS
+  readings[3] -> index out of bounds: the len is 3 but the index is 3
+  A bounds check, at runtime, on a slice whose length is not known
+  at compile time. It costs a compare-and-branch, and the branch
+  predictor makes it very nearly free -- and it turns a silent
+  wrong answer into a stopped program with a line number.
+
+2. THE ONE THE COMPILER CATCHES OUTRIGHT
+  On a fixed-size array with a constant index, rustc rejects it at
+  compile time: "this operation will panic at runtime". No
+  execution needed -- the length is part of the type [u32; 3].
+
+3. THE FORM THAT CANNOT BE WRONG
+  readings.iter().sum::<u32>() = 49
+  There is no index to get wrong. The iterator knows the length,
+  and the bounds check is usually optimised away entirely because
+  the compiler can prove the range -- so the safe form is also the
+  fast one.
+
+4. AND THE ONE THAT ASKS INSTEAD OF ASSUMING
+  get(2) -> Some(30)
+  get(3) -> None    <- no panic, a value to handle
+  .get() returns Option, so 'past the end' becomes a case in the
+  type rather than a decision about whether to trust the index.
+
+WHAT C HAS INSTEAD
+  Nothing in the language. An array decays to a pointer at the
+  first opportunity and the length is gone -- which is why every
+  C API takes a separate count, and why every one of those counts
+  is a chance to disagree with the buffer it describes.

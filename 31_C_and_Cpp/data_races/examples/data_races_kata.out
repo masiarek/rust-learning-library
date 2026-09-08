@@ -1,0 +1,38 @@
+THE C SHAPE
+  static int counter;   ...   counter++;   /* in 8 threads */
+  counter++ is load, add, store. Two threads can load the same
+  value and both store one more than it, so increments vanish --
+  and the DEBUG build loses them while -O2 may keep the value in a
+  register and produce the right answer, which is the worst
+  possible way to learn about a race.
+
+WRITING IT IN RUST: THE PROGRAM DOES NOT EXIST
+  let mut counter = 0u32;
+  thread::spawn(|| counter += 1);   <- E0373 / E0499
+  A closure sent to another thread may outlive this frame, so it
+  cannot borrow `counter`; and two of them cannot hold `&mut` to
+  one value at all. The check is the ordinary borrow checker --
+  there is no threading special case.
+
+1. THE MUTEX VERSION
+  8 threads x 10000 increments = 80000
+  Exact, every run. The data is INSIDE the mutex, so there is no
+  way to reach it without locking -- unlike a C mutex, which is a
+  separate object you have to remember to take.
+
+2. THE ATOMIC VERSION
+  same total, no lock: 80000
+  fetch_add is one indivisible operation, so the load-add-store
+  window that the C bug lives in does not exist.
+
+WHAT MAKES THIS CHECKABLE AT ALL
+  Two marker traits. `Send` means a value may move to another
+  thread; `Sync` means &T may be shared between them. u32 is both,
+  &mut u32 is not Sync, Rc is neither -- so `thread::spawn`
+  requiring Send is what rejects the bad programs, at the type
+  level, with no runtime cost and no sanitizer.
+
+  Note what is NOT promised: Rust prevents data races, not race
+  CONDITIONS. Two correctly-locked threads can still interleave
+  in an order your logic did not expect. The guarantee is about
+  memory, and it is the half that produces impossible values.
