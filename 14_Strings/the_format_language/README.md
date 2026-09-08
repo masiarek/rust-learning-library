@@ -384,6 +384,7 @@ Round 4 -- the alignment fmt cannot fix
 - [Building a `String`](../building_a_string/README.md) — `write!` against `format!` in a loop, measured
 - [Making a `String`](../making_a_string/README.md) — implementing `Display`, so your own type takes these specs
 - [Four lengths](../four_lengths/README.md) — why a padded column of non-ASCII text still looks ragged
+- [Padding is not alignment ↗](https://masiarek.github.io/python-learning-library/01_Text_and_Bytes/padding_is_not_alignment/index.html) — the same grammar in Python, plus the five older methods it absorbed; `str.center` and `{:^}` disagree by one space there, and Rust has only the one spelling
 - [What a float actually stores](../../19_Numbers/what_a_float_stores/README.md) — the reason `{:.2}` of `1.005` is `1.00`
 - [Strings: links, books and videos](../resources/README.md)
 
