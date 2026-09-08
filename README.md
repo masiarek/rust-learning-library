@@ -55,6 +55,8 @@ Every lesson explains; some of them also ask you to type. Those exercises are co
 
 There is also a slow, optional thread running through them: [**the long way round to a column summary**](ROADMAP.md), which sequences a handful of lessons so that each one is the next thing Rust wants to teach, and the running example happens to be a small file-summarising tool. Every rung stands alone; the tool is the excuse.
 
+What is *not* written yet has its own list: [**TODO.md**](TODO.md) holds the strings vocabulary — 198 terms a reader meets in real Rust string code — with a box per term, ticked when the term is answerable from a lesson or a glossary entry rather than when it has a folder of its own.
+
 ## The course, in order
 
 The sidebar is sorted **alphabetically**, because that is how you find a section you can already name. This is the other question — *what should I read next?* — and it is the order these were written to be read in:
