@@ -23,6 +23,7 @@
 - [Missing is not empty](../missing_is_not_empty/README.md) — the `NotFound` that is not a failure
 - [`anyhow` and context](../../02_Errors/anyhow_and_context/README.md) — putting the filename back into the error
 - [Readers are fallible](../../02_Errors/readers_are_fallible/README.md) — everything that can still go wrong after this succeeded
+- [Opening a file ↗](https://masiarek.github.io/python-learning-library/01_Text_and_Bytes/opening_a_file/index.html) — the same three doors in Python, where `'w'` truncates exactly as `File::create` does; the differences are that Python's text mode transcodes, so `tell()` hands back a cookie rather than a byte offset, and that its stdout switches between line- and block-buffered depending on whether it is a terminal, where `io::stdout()` is a `LineWriter` either way
 
 ## Po polsku
 
