@@ -1,0 +1,47 @@
+
+──── 1. One run, seen from outside
+   stdout  alpha beta -> 2
+           gamma -> 1
+           delta epsilon zeta -> 3
+   stderr  warning: skipping unreadable row 3
+   status  0
+   Three rows counted, one row complained about, and the complaint is
+   not one of the three. Nothing here is a convention the compiler
+   enforces: `println!` writes to the first, `eprintln!` to the second.
+
+──── 2. What a redirect keeps
+   prog > rows.txt
+   rows.txt gets    51 bytes  the 3 answer lines
+   the screen keeps 35 bytes  the warning
+   Neither half is lost and neither is in the other's way. A tool that
+   puts its diagnostics on stdout offers you both or neither.
+
+──── 3. The same warning, one word different
+   stdout  alpha beta -> 2
+           gamma -> 1
+           warning: skipping unreadable row 3
+           delta epsilon zeta -> 3
+   stderr  (nothing)
+   status  0
+
+   a caller counting rows            3 -> 4
+   a caller summing the last column  6 -> 9
+   Both runs exited 0 and neither printed anything a person would call
+   wrong. The warning became data because nothing distinguishes them
+   once they are on the same stream.
+
+──── 4. The number a script reads
+   silent  stderr: error: row 3 is unreadable, giving up    status 0
+   honest  stderr: error: row 3 is unreadable, giving up    status 1
+   The sentence is identical; the number is not. `prog && next` runs
+   `next` after the first and stops at the second, and a CI step
+   passes the first. Zero is success, non-zero is failure, and that is
+   nearly the whole convention.
+
+──── 5. process::exit does not run destructors
+   wrote "total 6" into a BufWriter, then exit(0)
+   without flush  stdout ""  status 0
+   with flush     stdout "total 6\n"  status 0
+   The buffer is yours, so no runtime cleanup knows about it, and
+   `exit` does not unwind — the `Drop` that would have flushed it never
+   runs. A correct message, reported as success, printed by nobody.
