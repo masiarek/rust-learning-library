@@ -374,6 +374,7 @@ fn main() {
 ## See also
 
 - [Meet the `char`](../meet_the_char/README.md) — what a `char` is, and the four honest answers to "how long is this string"
+- [`char` is four bytes ↗](https://masiarek.github.io/encodings-learning-library/05_Rust/char_is_four_bytes/index.html) — the encodings library on the same four bytes: the 21-bit ceiling and the 2,048-code-point hole as facts about Unicode first and about `char` second, and the width put beside what the character costs once it is encoded
 - [Values](../../15_First_Programs/values/README.md) — the primitive-types table this page is a footnote to
 - [Meet the byte](../../19_Numbers/meet_the_byte/README.md) — the unit `.len()` counts in
 - [Raw strings, escapes and the literal prefixes](../raw_strings_and_escapes/README.md) — `\u{…}`, `\x`, `b'…'` and the rest
