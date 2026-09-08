@@ -187,6 +187,8 @@ Collation is a **data** problem, not an algorithm problem. The Unicode Collation
 
 `str.casefold()` is the one line of this table Python wins outright: it is the correct caseless comparison, it is in the standard library, and `"straße".casefold() == "STRASSE".casefold()` is `True`. Everything below it is a wash — `strxfrm` is a global-state trap that Rust simply does not offer, and both languages end at ICU.
 
+What Python lacks is the *word*. Rust's doc comment says outright that its order is not alphabetical; Python's `==` documents nothing, because there is nothing to choose between. .NET calls this mode **ordinal** and makes every string API take it as a parameter, and [Comparison has a mode ↗](https://masiarek.github.io/python-learning-library/01_Text_and_Bytes/comparison_has_a_mode/index.html) is the Python page that borrows the name. Two of its measurements land on this table: Python has a *third* caseless answer in `re.IGNORECASE`, which agrees with `casefold()` on neither of the two rows above it, and `locale.strxfrm` — the `strxfrm` of the row below — raises on a string with an embedded NUL rather than comparing it, where .NET's culture-sensitive comparison is documented to ignore the NUL and call the strings equal. Rust, having neither API, has neither behaviour to get wrong.
+
 **ABAP** *(Not machine-checked — CI cannot run ABAP.)* The same two orders exist, and ABAP puts them one keyword apart.
 
 | ABAP | | Rust |
@@ -410,6 +412,7 @@ Round 4 -- what a per-character table cannot say at all
 - [Walking a `String`](../walking_a_string/README.md) — the iterators a hand-written key is built out of
 - [`str::eq_ignore_ascii_case`](../str_methods/str_eq_ignore_ascii_case/README.md) and [`str::to_lowercase`](../str_methods/str_to_lowercase/README.md) — the two methods above, in reference form
 - [`BTreeMap` and `BTreeSet`](../../26_Collections/sorted_collections/README.md) — the containers that inherit this order, and the total-order requirement behind them
+- [Comparison has a mode ↗](https://masiarek.github.io/python-learning-library/01_Text_and_Bytes/comparison_has_a_mode/index.html) — the same three questions from Python, which has folding and a linguistic API and still ends up ordinal by default; the page that names the mode both languages pick silently, and measures what Python's near-substitutes do instead
 - [Strings: links, books and videos](../resources/README.md)
 
 ## Po polsku
