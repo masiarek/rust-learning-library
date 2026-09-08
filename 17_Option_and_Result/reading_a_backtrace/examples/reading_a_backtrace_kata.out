@@ -1,0 +1,19 @@
+── Part 1: the same panic, on a thread of its own
+our frames in the worker's backtrace: ["unit_price", "cart_total"]
+  unit_price       (where it failed)  present: true
+  cart_total       (its caller)       present: true
+  checkout_request (the submitter)    present: false
+  main                                present: false
+The last two ran on the other stack, so the trail simply ends.
+
+── Part 2: capture the submitter's stack at the handover
+the worker failed with: called `Option::unwrap()` on a `None` value
+the captured stack names:
+  checkout_request  present: true
+  main              present: true
+Those are the two the worker's own backtrace could not see.
+
+── The rule
+Every boundary that moves work to another stack — a thread, a
+channel, an executor — ends the backtrace. Capture on the near
+side and carry it, or the far side reports a chain with no origin.

@@ -1,0 +1,27 @@
+The working caller returns 599 cents.
+
+──── Step 1: the message you get by default
+panicked at   reading_a_backtrace.rs:28:44
+message       called `Option::unwrap()` on a `None` value
+our frames    0
+but it tells you how to ask: true
+
+──── Step 2: the same panic with RUST_BACKTRACE=1
+panicked at   reading_a_backtrace.rs:28:44   <- unchanged
+message       called `Option::unwrap()` on a `None` value   <- unchanged
+our frames, in the order the backtrace printed them:
+   0: unit_price
+   1: cart_total
+   2: main
+
+──── Step 3: which of the two callers was wrong
+the panic named      unit_price   (both callers reach it)
+the backtrace named  cart_total
+is shipping_total in the chain?  false
+innermost frame first, so the caller is the line BELOW the panic site.
+
+──── Step 4: capturing one without a panic, and without the variable
+Backtrace::capture()        RUST_BACKTRACE unset -> Disabled
+Backtrace::capture()        RUST_BACKTRACE=1     -> Captured
+Backtrace::force_capture()  either way           -> Captured
+and it saw this very function: true
