@@ -1,0 +1,33 @@
+THE TRANSITION TABLE, RUN
+  Idle     + Start   -> Loading
+  Loading  + Loaded  -> Ready
+  Ready    + Reset   -> Idle
+  Idle     + Start   -> Loading
+  Loading  + Error   -> Failed
+
+THE WHOLE GRID
+           Start    Loaded   Error    Reset    
+  Idle     Loading  Idle     Idle     Idle     
+  Loading  Loading  Ready    Failed   Loading  
+  Ready    Ready    Ready    Ready    Idle     
+  Failed   Failed   Failed   Failed   Idle     
+
+WHAT THE COMPILER DID FOR YOU
+  Matching on the TUPLE (State, Event) makes the match's subject
+  the cross product, so exhaustiveness checking covers all 4 x 4
+  = 16 cells. Delete any one arm and E0004 names the exact pair
+  you left out -- `(Ready, Error)` and so on.
+
+  Add a fifth state and every incomplete match in the program
+  fails to build, with the missing cells listed. That is a design
+  review the compiler performs for free, every time.
+
+THE ARM THAT THROWS IT AWAY
+  `_ => state` at the bottom would compile today and would also
+  silently absorb every cell you add later. On a state machine
+  that is exactly the code you do NOT want to write: the value of
+  the enum is that forgetting is a build error.
+
+  Writing the ignored cells out as `(Idle, Loaded) | ...` keeps
+  that guarantee AND documents that they were considered -- which
+  a reader cannot tell from a wildcard.

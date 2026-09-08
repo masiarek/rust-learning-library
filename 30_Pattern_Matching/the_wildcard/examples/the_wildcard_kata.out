@@ -1,0 +1,40 @@
+1. `let _ = x;` DROPS IMMEDIATELY
+  let _ = Noisy("A");
+    <- dropped A
+  ...and the drop already happened, above this line.
+
+2. `let _name = x;` DROPS AT THE END OF SCOPE
+  let _b = Noisy("B");
+  ...still alive here.
+
+  The two look like the same 'I do not need this' and they are
+  opposite. `_` is a PATTERN that binds nothing, so the value is
+  never given a name, never owned by anything, and is dropped at
+  the end of the statement. `_b` is a NAME beginning with an
+  underscore -- an ordinary binding that silences the unused
+  warning and keeps the value alive to the end of the block.
+
+  This is the classic lock bug: `let _ = mutex.lock();` releases
+  the guard instantly and protects nothing, while
+  `let _guard = mutex.lock();` holds it for the block.
+
+3. `_` MOVES NOTHING
+  matched with `_`, and owned is untouched: "still here"
+  destructured with `_`: first = "left", tuple intact = "right"
+  Because it binds nothing, there is nothing to move -- so `_`
+  can appear where a real binding would take ownership away.
+
+4. `_` IN A MATCH IS A COMMITMENT
+  `_ => ...` makes a match exhaustive forever, which is right for
+  a type you do not own and wrong for one you do: the next
+  variant will take that arm instead of being reported.
+  `..` is the version that says 'the rest of these FIELDS', and
+  it has the same trade-off inside a struct pattern.
+
+5. AND IT IS NOT A NAME
+  `_` cannot be read: `let _ = 5; println!("{}", _);` is a
+  syntax error, because there is no binding to name. That is the
+  single sentence every surprise above follows from.
+
+  end of main:
+    <- dropped B

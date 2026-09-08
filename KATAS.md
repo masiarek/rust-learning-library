@@ -168,6 +168,16 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K148 | [A table sized from its own data, the `{:?}` column that refuses to pad, precision that counts chars rather than bytes, and the last alignment `fmt` cannot fix](14_Strings/the_format_language/README.md#practice) | [The format mini-language](14_Strings/the_format_language/README.md) | 201 |
 | K149 | [Write the safe version of three CVEs — `join`, `retain` and `repeat` with no `unsafe` — drive all three with the hostile input that broke `std`, then name what each fast path has to prove in order to skip the work you just did](14_Strings/when_the_invariant_broke/README.md#practice) | [When the UTF-8 invariant broke](14_Strings/when_the_invariant_broke/README.md) | 301 |
 | K150 | [The test that would have caught it — sweep every substring of a periodic word, sweep the ASCII run before a final sigma, break a third fast path the same way, then measure the ASCII prefix in `std`'s own sigma tests](14_Strings/wrong_but_not_unsafe/README.md#practice) | [Wrong, but not unsafe](14_Strings/wrong_but_not_unsafe/README.md) | 201 → 301 |
+| K151 | [A closed set of three, and the fourth variant that breaks every match that forgot it](13_Enums/what_an_enum_is/README.md#practice) | [What an enum is](13_Enums/what_an_enum_is/README.md) | 101 → 201 |
+| K152 | [The swapped call nothing can catch, and the same call as a build error](13_Enums/an_enum_instead_of_a_bool/README.md#practice) | [An enum instead of a bool](13_Enums/an_enum_instead_of_a_bool/README.md) | 201 |
+| K153 | [Four shapes one way and four fields the other -- which one makes a circle with a width impossible](13_Enums/variants_that_carry_data/README.md#practice) | [Variants that carry data](13_Enums/variants_that_carry_data/README.md) | 201 |
+| K154 | [Sixteen cells the compiler counted for you, and the wildcard that would throw them away](13_Enums/an_enum_as_a_state_machine/README.md#practice) | [An enum as a state machine](13_Enums/an_enum_as_a_state_machine/README.md) | 201 |
+| K155 | [Four closures, four sizes -- and two with identical source text that are still two types](23_Closures/what_a_closure_is/README.md#practice) | [What a closure is](23_Closures/what_a_closure_is/README.md) | 101 → 201 |
+| K156 | [Put three closures on the ladder, then find what does NOT decide the rung](23_Closures/three_closure_traits/README.md#practice) | [The three closure traits](23_Closures/three_closure_traits/README.md) | 201 |
+| K157 | [Two places move is not optional, and the Copy type that makes it look like it did nothing](23_Closures/the_move_keyword/README.md#practice) | [The `move` keyword](23_Closures/the_move_keyword/README.md) | 201 |
+| K158 | [Which of the three can become an fn -- and the closure that is smaller than a pointer](23_Closures/function_pointers/README.md#practice) | [Function pointers](23_Closures/function_pointers/README.md) | 201 |
+| K159 | [Two programs one character apart, and the u32 binding that is not a u32](30_Pattern_Matching/match_ergonomics/README.md#practice) | [Match ergonomics](30_Pattern_Matching/match_ergonomics/README.md) | 201 |
+| K160 | [let _ = guard against let _guard = guard, and the one sentence both follow from](30_Pattern_Matching/the_wildcard/README.md#practice) | [The wildcard `_`](30_Pattern_Matching/the_wildcard/README.md) | 201 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -318,9 +328,13 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K149 · [Write the safe version of three CVEs](14_Strings/when_the_invariant_broke/README.md#practice)
 - K150 · [The test that would have caught it](14_Strings/wrong_but_not_unsafe/README.md#practice)
 
-**[Enums](13_Enums/README.md)** — 1 kata
+**[Enums](13_Enums/README.md)** — 5 katas
 
 - K86 · [Which defence catches a silent catch-all](13_Enums/a_typo_becomes_a_binding/README.md#practice)
+- K151 · [A closed set of three, and the fourth variant that breaks every match that forgot it](13_Enums/what_an_enum_is/README.md#practice)
+- K152 · [The swapped call nothing can catch, and the same call as a build error](13_Enums/an_enum_instead_of_a_bool/README.md#practice)
+- K153 · [Four shapes one way and four fields the other -- which one makes a circle with a width impossible](13_Enums/variants_that_carry_data/README.md#practice)
+- K154 · [Sixteen cells the compiler counted for you, and the wildcard that would throw them away](13_Enums/an_enum_as_a_state_machine/README.md#practice)
 
 **[Traits](12_Traits/README.md)** — 6 katas
 
@@ -380,6 +394,18 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K125 · [Five assertions, two of which cannot fail](28_Testing/what_a_test_asserts/README.md#practice)
 - K126 · [The test that could not see it](28_Testing/where_a_test_goes/README.md#practice)
 - K127 · [The example that documents half the sentence](28_Testing/doc_tests/README.md#practice)
+
+**[Closures](23_Closures/README.md)** — 4 katas
+
+- K155 · [Four closures, four sizes -- and two with identical source text that are still two types](23_Closures/what_a_closure_is/README.md#practice)
+- K156 · [Put three closures on the ladder, then find what does NOT decide the rung](23_Closures/three_closure_traits/README.md#practice)
+- K157 · [Two places move is not optional, and the Copy type that makes it look like it did nothing](23_Closures/the_move_keyword/README.md#practice)
+- K158 · [Which of the three can become an fn -- and the closure that is smaller than a pointer](23_Closures/function_pointers/README.md#practice)
+
+**[Pattern Matching](30_Pattern_Matching/README.md)** — 2 katas
+
+- K159 · [Two programs one character apart, and the u32 binding that is not a u32](30_Pattern_Matching/match_ergonomics/README.md#practice)
+- K160 · [let _ = guard against let _guard = guard, and the one sentence both follow from](30_Pattern_Matching/the_wildcard/README.md#practice)
 
 <!-- by-subject:end -->
 

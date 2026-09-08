@@ -1,0 +1,36 @@
+1. MATCHING A REFERENCE WITH AN ORDINARY PATTERN
+  name is a &String: "hello", len 5
+  `opt` is still ours afterwards: Some("hello")
+
+  The scrutinee was `&Option<String>` and the pattern was
+  `Some(name)`, which is not a reference pattern. Rather than
+  refusing, the compiler DEREFERENCED the scrutinee and made every
+  binding inside a reference -- so `name: &String`, and nothing
+  moved out of `opt`. That is match ergonomics, RFC 2005.
+
+2. WHAT IT SAVED YOU WRITING
+  the pre-2018 spelling: "hello"
+  Both forms still compile and mean the same thing. The second is
+  what everyone had to write before, and it is why old code is
+  full of `ref`.
+
+3. THE CASE THAT SURPRISES PEOPLE
+  key: "k" is a &String, n: 1 is a &u32
+  n + 1 = 2
+  Every binding became a reference, including the u32 -- which is
+  Copy, so people expect a value and get `&u32`. It usually still
+  works because of auto-deref in arithmetic and method calls, and
+  then fails the one time you need it by value.
+
+4. WHEN YOU DO WANT TO MOVE
+  matching the VALUE (no &) moves it out: "hello"
+  ...and `opt` is no longer usable. Which one you get is decided
+  entirely by whether the scrutinee is a reference -- so `match
+  opt` and `match &opt` are two different programs, one character
+  apart.
+
+THE RULE TO CARRY
+  Ask what the SCRUTINEE is, not what the pattern looks like. A
+  reference scrutinee gives reference bindings, all the way down,
+  and `as_ref()` is the explicit spelling when you want that from
+  an owned value.

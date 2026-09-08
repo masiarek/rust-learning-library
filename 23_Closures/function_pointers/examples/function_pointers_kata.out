@@ -1,0 +1,33 @@
+1. THE SIZES
+  fn(u32) -> u32                    8 bytes
+  a closure capturing nothing       0 bytes
+  a closure capturing one u32       4 bytes
+  A function pointer is one address. A zero-capture closure is
+  zero bytes -- SMALLER -- because the code it runs is known at
+  compile time and does not need to be pointed at.
+
+2. THE COERCION THAT WORKS
+  a non-capturing closure coerces:  apply_ptr(p, 21) = 42
+  a plain fn item coerces too:      apply_ptr(q, 21) = 42
+
+3. THE ONE THAT CANNOT
+  `let r: fn(u32) -> u32 = capturing;` does not compile:
+  a closure that captured has an environment, and a function
+  pointer has nowhere to put one. The error says exactly that --
+  "closures can only be coerced to `fn` types if they do not
+  capture any variables".
+  apply_generic(capturing, 7) = 21
+  ...which works, because a generic bound accepts any closure and
+  monomorphises for its type.
+
+4. NAMING A FUNCTION DOES NOT GIVE YOU A POINTER EITHER
+  `double` on its own has a zero-sized FN ITEM type, unique to
+  that one function -- 0 bytes. It COERCES to a pointer when a
+  pointer is what the context asks for, which is why passing it
+  to apply_ptr works and why `let x = double;` gives you the item
+  type rather than the pointer.
+
+WHEN TO WANT A POINTER
+  An FFI boundary -- C has nothing else. A table of handlers you
+  want all one type. Otherwise take a generic `impl Fn`: it is
+  smaller, it accepts more callers, and it can be inlined.

@@ -1,0 +1,28 @@
+RUNG 1 -- Fn: the body only READS the capture
+  call_fn(reads)     hello / hello
+  Callable many times, and callable through a shared reference.
+  `greeting` is still ours: hello
+
+RUNG 2 -- FnMut: the body MUTATES the capture
+  call_fn_mut(counts) (1, 2)
+  Callable many times, but the caller needs `&mut` to do it --
+  which is why call_fn_mut takes `mut f`. A FnMut is NOT an Fn:
+  handing this to call_fn would not compile.
+
+RUNG 3 -- FnOnce: the body CONSUMES the capture
+  call_fn_once(consumes) consumed
+  It gives the String away, so there is nothing left to give a
+  second time. Calling it twice is a move-out-of-a-moved-value
+  error, and the trait bound is the compiler recording that.
+
+THE LADDER, NOT THE MENU
+  Fn      => also FnMut => also FnOnce
+  So a function taking FnOnce accepts all three, and one taking
+  Fn accepts only the first. Take the LOOSEST bound your body
+  needs -- FnOnce if you call it once -- and you accept the most
+  callers. That is the same reasoning as taking &str over String.
+
+WHAT DOES NOT DECIDE THE RUNG
+  `move` does not. It says where the captured values live, not
+  what the body does with them: `move || println!("{}", n)` on a
+  Copy type is still an Fn. The body is the whole test.

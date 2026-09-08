@@ -1,0 +1,27 @@
+1. RETURNING A CLOSURE NEEDS `move`
+  hello, ada
+  hello, ada
+  The String lives inside the closure now. That is what let it
+  outlive make_greeter, and it is a question about WHERE the
+  value lives -- not about what the body does with it.
+
+2. SENDING ONE TO A THREAD NEEDS `move` FOR THE SAME REASON
+  sum from the other thread: 14
+  The spawned thread may outlive this function, so a borrow of
+  `rows` would be unsound and the compiler says so. `move` gives
+  the Vec to the closure, and naming `rows` below here would now
+  be a use-after-move error.
+
+3. `move` DOES NOT DECIDE THE TRAIT
+  with_move() = 20, without() = 20
+  Both are `Fn`. `move` copied the u32 into one and borrowed it
+  in the other, and neither body mutates or consumes anything --
+  so both sit on the top rung. What the BODY does decides the
+  trait; `move` decides where the capture lives.
+
+4. AND ON A Copy TYPE IT IS ALMOST INVISIBLE
+  n is still usable after the `move` closure: 10
+  Because u32 is Copy, `move` copied it rather than moving it --
+  which is why `move` on a counter you meant to share is a
+  classic silent bug: the closure gets its own copy and your
+  original never changes.

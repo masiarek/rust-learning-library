@@ -1,0 +1,33 @@
+ONE TYPE, FOUR SHAPES OF VALUE
+  Point                              area 0.0000
+  Circle { radius: 1.0 }             area 3.1416
+  Rect { w: 2.0, h: 3.0 }            area 6.0000
+  Label("origin")                    area 0.0000
+
+  the Label arm can read its own String: "origin" is 6 chars
+
+ADDS, RATHER THAN MULTIPLIES
+  A struct with fields A and B can be any combination of the two,
+  so its possibilities MULTIPLY. An enum is exactly one variant at
+  a time, so they ADD. That is what "algebraic data type" means,
+  and it is a modelling decision before it is a memory one:
+  a Circle has no width, and with the enum there is no field for
+  one to be wrong in.
+
+WHAT IT COSTS
+  size_of::<Shape>()         24 bytes
+  size_of::<ShapeStruct>()   56 bytes
+  size_of::<String>()        24 bytes
+  size_of::<f64>()            8 bytes
+
+  An enum is as big as its LARGEST variant plus a discriminant,
+  rounded for alignment -- so it costs what the biggest case
+  needs, not what all the cases need together. The struct pays
+  for every field on every value, and most of them are unused on
+  most values.
+
+AND THE MATCH IS WHERE IT PAYS AGAIN
+  Each arm destructures its own variant, so `radius` exists in
+  the Circle arm and nowhere else. With the struct you would read
+  `s.radius` in a branch chosen by `s.kind`, and nothing checks
+  that you picked the right field for the right kind.

@@ -1,0 +1,30 @@
+SIZE IS WHAT IT CAPTURED
+  captures nothing          0 bytes
+  captures one u64          8 bytes
+  captures a &String too   16 bytes
+  captures a [u8; 32]      32 bytes
+
+  A closure that captures nothing is a zero-sized value: there is
+  nothing to store, so it costs no memory at all. Each capture
+  adds exactly its own field, by reference or by value depending
+  on what the body needs and whether `move` was written.
+
+EVERY CLOSURE HAS ITS OWN TYPE
+  a(1) = 2, b(1) = 2, and both are 0 bytes
+  a and b have identical source text and identical signatures,
+  and they are still two different types. `let mut f = a; f = b;`
+  does not compile -- the error names two closures at two
+  different lines. That is why returning one needs `impl Fn` or a
+  `Box<dyn Fn>`: the type has no name you could write down.
+
+SO WHAT DOES IT DO?
+  captures_one(7)   = 21
+  captures_two(7)   = 7 times 3
+  captures_array(7) = 1
+
+  factor is still usable here: 3
+  label is still usable here: times
+  Neither was moved, because neither body needed to own it -- the
+  compiler captured both by shared reference. `table` WAS moved,
+  because `move` was written, and naming it below this line would
+  not compile.

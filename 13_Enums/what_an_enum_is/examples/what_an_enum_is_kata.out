@@ -1,0 +1,33 @@
+A VALUE IS EXACTLY ONE OF THEM
+  Queued  ->  waiting for a worker
+  Running  ->  in progress
+  Done  ->  finished
+
+WHAT IT COSTS
+  size_of::<Status>()  1 byte
+  Three alternatives fit in one byte, because the value only has
+  to record WHICH of the three it is. A struct with three bools
+  would be three bytes and would also permit five states that
+  mean nothing.
+
+THE PART THAT PAYS FOR ITSELF
+  Add a fourth variant -- `Status::Failed` -- and `describe` stops
+  compiling with E0004: "non-exhaustive patterns: `Status::Failed`
+  not covered". The compiler found every place in the program
+  that has to think about the new case, and named them.
+  That is the whole argument for a closed set: the set is written
+  down in one place, and changing it is a compile error
+  everywhere it matters rather than a silent fallthrough.
+
+AND THE WAY TO GIVE THAT UP BY ACCIDENT
+  A `_ => ...` arm makes the match exhaustive forever. It is the
+  right thing when you genuinely mean "anything else", and it is
+  the wrong thing on a set you own -- because the next variant
+  will quietly take that arm instead of being reported.
+
+COMPARING VALUES
+  Status::Queued == Status::Queued  true
+  Status::Queued == Status::Done    false
+  PartialEq is derived, not free: without the derive, `==` on two
+  Status values does not compile. Rust asks you to say which
+  behaviours a type has rather than assuming them.

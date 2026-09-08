@@ -1,0 +1,34 @@
+THE BOOL VERSION, CALLED TWO WAYS
+  clean_bools(input, true, false)  "  hello world  "
+  clean_bools(input, false, true)  "Hello World"
+  Both compile. One of them is the call the author meant and the
+  other is the arguments swapped, and nothing anywhere can tell
+  you which -- the types are identical, so the compiler has no
+  question to ask.
+
+AT THE CALL SITE, WHICH IS WHERE IT IS READ
+  clean_bools(s, true, false)      <- true what? false what?
+  clean(s, Casing::Lower, Trimming::Keep)
+  The second one is readable without opening the function. That
+  is most of the value, and it costs nothing.
+
+THE ENUM VERSION, WITH THE ARGUMENTS SWAPPED
+  clean(input, Trimming::Trim, Casing::Lower)
+  does not compile: expected `Casing`, found `Trimming`. The
+  backwards call became a build error rather than a wrong answer
+  in production.
+  clean(input, Casing::Lower,    Trimming::Trim) = "hello world"
+  clean(input, Casing::Preserve, Trimming::Keep) = "  Hello World  "
+
+AND IT IS FREE
+  size_of::<bool>()      1 byte
+  size_of::<Casing>()    1 byte
+  Two named variants cost exactly what two unnamed states cost.
+  There is no runtime price for the check, because the check
+  happened at compile time.
+
+WHEN A bool IS STILL RIGHT
+  When the name at the call site already says everything:
+  `v.is_empty()`, `s.contains(c)`, `if found { ... }`. The rule
+  is about PARAMETERS -- a bool you pass in is two unnamed states
+  arriving somewhere the name is gone.
