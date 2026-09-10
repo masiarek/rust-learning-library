@@ -1,0 +1,39 @@
+1. What a clone costs is decided by the type
+   u64           the bits, copied                     alloc 0
+   String        a new buffer, the bytes copied in    alloc 1
+   Box<u64>      a new box                            alloc 1
+   Vec<String>   the buffer, then each of 3 Strings   alloc 4
+   Rc<str>       one count goes up                    alloc 0
+   Arc<str>      one count goes up, atomically        alloc 0
+   One trait, one method name, and anything from nothing to 1 + n.
+
+2. A derived Clone clones every field, so add up the fields
+   Person { u64, String, String }.clone()             alloc 2
+   equal text: true   same buffer: false
+   SharedPerson { u64, Arc<str>, Arc<str> }.clone()   alloc 0
+   equal text: true   same buffer: true
+   0 + 1 + 1 against 0 + 0 + 0, and both lines read `.clone()`.
+   Arc::<str>::from(a String you already have)        alloc 1
+   Switching costs one copy, once: an Arc keeps its counts in front
+   of the text, so the String's buffer cannot be adopted as it is.
+
+3. Change one field, keep the original: three spellings
+   Person { name, ..a.clone() }                       alloc 2
+   Person { id: a.id, name, email: a.email.clone() }  alloc 1
+   Person { name, ..spare }   (spare is used up)      alloc 0
+   All three hold bob <alice@example.com>.
+   `..a.clone()` clones a.name as well, and drops it unread.
+   Naming the kept fields clones only those. Moving clones nothing.
+   SharedPerson { name, ..s.clone() }                 alloc 0
+   With Arc fields the careless spelling is free too: #1 bob <alice@example.com>
+
+4. A collection multiplies it
+   Vec<String> of 1,000: .clone()                     alloc 1001
+   Arc<[String]> of 1,000: Arc::clone                 alloc 0
+   1000 tags either way: one buffer per String plus one for the Vec,
+   against a single increment.
+   Arc::make_mut, another handle alive                alloc 5
+   Arc::make_mut, now the only handle                 alloc 0
+   Clone on write: the first write while shared pays for all of it,
+   1 for the Arc + 1 for the Vec + 1 per String. The copy is unique
+   after that, so the next write pays nothing. `other` kept 3 items.
