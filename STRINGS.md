@@ -119,6 +119,8 @@ Each page states the signature and the stability, explains what the method does 
 
 [Strings: links, books and videos](14_Strings/resources/README.md) collects the outside sources — the Book's ch. 8.2, *Programming Rust* ch. 17, Easy Rust ch. 14 and its video, the essays, the two forum threads worth reading whole — including [*`String` vs `str`, why?* ↗](https://users.rust-lang.org/t/string-vs-str-why/61334), the source of the `StringBuf` reading on the [`String` vs `&str`](14_Strings/string_vs_str/README.md#the-names-hide-the-pattern) page — and the external exercise sets (rustlings' `strings` and `conversions`) that map onto these lessons.
 
+[The string crates](14_Strings/string_crates/README.md) is the crates half: fifteen crates for the jobs `std` leaves out — graphemes, normalization, legacy encodings, bytes that are not UTF-8, short strings off the heap — each beside the lesson here that covers what `std` does instead.
+
 ## Looking a term up
 
 [GLOSSARY.md](GLOSSARY.md) defines the vocabulary these pages use — string slice, string literal, deref coercion, capacity, Unicode scalar value, grapheme cluster, the `OsString` and `CString` pairs — and every entry links the page that explains it properly.

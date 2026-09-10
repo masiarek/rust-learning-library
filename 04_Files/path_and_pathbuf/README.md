@@ -9,6 +9,7 @@
 ## What it has to cover
 
 - Why a path is not a `String`: on Unix a filename is bytes, on Windows it is UTF-16, and neither is guaranteed to be valid UTF-8 — hence `OsStr` underneath
+- The way down and the way out: `as_os_str` / `into_os_string` hand you that `OsStr` / `OsString` unchanged, and `to_str` / `to_string_lossy` are where you decide what a non-UTF-8 path turns into — the same two exits [Six kinds of string](../../14_Strings/six_kinds_of_string/README.md) shows for `OsStr`
 - The consequence you meet first: `println!("{}", path)` does not compile; `path.display()` is the escape hatch and it is lossy on purpose
 - `join` and `push`, and the sharp edge — joining an **absolute** path discards everything to its left
 - The parts: `file_name`, `file_stem`, `extension`, `parent`, and the fact that each returns an `Option`

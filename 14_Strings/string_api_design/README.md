@@ -11,7 +11,7 @@
 ## What this page has to answer
 
 - The default and why it is the default: take `&str`, because deref coercion means a `&String` caller pays nothing.
-- `impl AsRef<str>` — when you want `&str`, `String`, `&String` and `PathBuf` all to work, and the monomorphization cost of getting it.
+- `impl AsRef<str>` — when you want `&str`, `String` and `&String` all to work, and the monomorphization cost of getting it. **Not `PathBuf`**: a path is not promised to be UTF-8, so it implements `AsRef<Path>` and `AsRef<OsStr>` and refuses `AsRef<str>` with `E0277` (measured on 1.98.0) — a function that wants both kinds takes `impl AsRef<Path>`, which a `&str` also satisfies.
 - `impl Into<String>` — when the function is going to own the text anyway, so the caller's existing `String` can be moved in rather than copied.
 - `Cow<'_, str>` in a **return** position, which is the one place it earns its keep: borrow when nothing changed, allocate only on the write.
 - The anti-pattern: taking `String` by value "to keep it simple", and what it costs every caller that has a `&str`.

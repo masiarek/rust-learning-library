@@ -676,7 +676,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # and between them they went stale at nine, eight, six and five.)
         "string_api_design",
         "when_string_is_too_slow",
-        # ...and the outside world: books, essays, the video, and the exercises.
+        # ...and the outside world: the crates std leaves room for, then
+        # books, essays, the video, and the exercises.
+        "string_crates",
         "resources",
     ],
     # Reading order for the command-line-tool arc. These sections are stubs for

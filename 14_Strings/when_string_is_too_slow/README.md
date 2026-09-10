@@ -14,7 +14,7 @@
 - `with_capacity` in anger: the reallocation ladder from [the anatomy page](../anatomy_of_a_string/README.md), and how to know the size up front.
 - Not allocating at all — `write!` into an existing buffer, returning `&str` from an owned input, and `Cow` for the branch that does not change anything.
 - `format!("{x}")` where a `.to_owned()` would do, and clippy's `useless_format`; the cost is real but small, and the readability cost is the bigger one.
-- The crates, and when they are justified: `smallstr` / `smartstring` for short strings inline on the stack, `compact_str`, and the honest note that most programs never need them.
+- The crates, and when they are justified. Keeping a short string's bytes inside the handle instead of on the heap is the **small-string optimization (SSO)**, which `String` never does — `smallstr`, `smartstring` and `compact_str` sell it, and `tinystr` and `arraystring` go further and never allocate, at a fixed maximum length. Then the honest note that most programs never need any of them. [The string crates](../string_crates/README.md) has the table.
 
 ## See also
 
@@ -23,6 +23,7 @@
 - [`Cow`: borrow until somebody writes](../../18_Ownership/clone_on_write/README.md)
 - [The global allocator](../../09_Advanced/the_global_allocator/README.md) — the counter that makes every claim on this page checkable
 - [The third owned form](../boxed_str/README.md)
+- [The string crates](../string_crates/README.md) — the fifteen `std` leaves room for, the SSO family among them
 - [STRINGS.md](../../STRINGS.md) — the map this page is a gap in
 - [Strings: links, books and videos](../resources/README.md) — where to read about it in the meantime
 

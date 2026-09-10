@@ -14,6 +14,8 @@ The first is a dictionary, the second a route, the third the practice. They over
 
 ## The job, for Thursday 2026-09-10 — backlog 1
 
+**Result — done 2026-09-10.** All 198 are answerable. By where the first link goes: **120** to a lesson, **63** to a page of the method reference, **12** to a stub (the term is on a page, but no example backs that page yet), and **3** to a page of the sibling encodings library, which owns the Unicode theory this one leans on. **65** terms gained a glossary entry. The fifteen crates share one new page, [The string crates](14_Strings/string_crates/README.md), since none of them can run here. Three things the sweep found are worth more than the ticks: the stub for [String parameters worth copying](14_Strings/string_api_design/README.md) claimed `PathBuf` satisfies `impl AsRef<str>`, and it does not (`E0277`; corrected in the same sweep); `std::string::ParseError` is a type alias for `Infallible` that no page mentioned; and `Pin<Box<str>>` compiles and pins nothing, because `str` is `Unpin` — both measured on 1.98.0.
+
 Adam's ask, in his words: *"make sure we have a page for all these terms (even if a stub)."* The list is below, unedited apart from grouping and code formatting.
 
 **Audit before writing anything.** [`14_Strings/`](14_Strings/README.md) already holds 33 lessons and [STRINGS.md](STRINGS.md) already maps them, so the honest first pass is a sweep that says, per term, which of three states it is in:
@@ -36,262 +38,264 @@ That order matters because of what a new folder costs. A folder name here is a p
 
 198 terms. A box is ticked when the term is *answerable* — a lesson, or a glossary entry that links to one — not when it has a folder.
 
+**Swept 2026-09-10.** Every box is ticked, and the link beside each term is where its answer is — the first link is the one to read. `glossary` marks a term that gained an entry in [GLOSSARY.md](GLOSSARY.md) in the same sweep.
+
 ### Core types (15)
 
-- [ ] `str`
-- [ ] `String`
-- [ ] `&str`
-- [ ] `&String`
-- [ ] `Box<str>`
-- [ ] `Cow<str>`
-- [ ] `OsStr`
-- [ ] `OsString`
-- [ ] `CStr`
-- [ ] `CString`
-- [ ] `Path`
-- [ ] `PathBuf`
-- [ ] `char`
-- [ ] `u8`
-- [ ] bytes
+- [x] `str` — [`str` is unsized](14_Strings/str_is_unsized/README.md) · [glossary](GLOSSARY.md)
+- [x] `String` — [`String` vs `&str`](14_Strings/string_vs_str/README.md) · [The anatomy of a `String`](14_Strings/anatomy_of_a_string/README.md)
+- [x] `&str` — [`String` vs `&str`](14_Strings/string_vs_str/README.md) · [String slices](14_Strings/string_slices/README.md)
+- [x] `&String` — [`String` vs `&str`](14_Strings/string_vs_str/README.md) · [Coercion: the conversion you never write](29_Conversion/coercion/README.md)
+- [x] `Box<str>` — [The third owned form: `Box<str>`, `Rc<str>`, `Arc<str>`](14_Strings/boxed_str/README.md) · [glossary](GLOSSARY.md)
+- [x] `Cow<str>` — [`Cow`: borrow until somebody writes](18_Ownership/clone_on_write/README.md)
+- [x] `OsStr` — [Six kinds of string](14_Strings/six_kinds_of_string/README.md)
+- [x] `OsString` — [Six kinds of string](14_Strings/six_kinds_of_string/README.md)
+- [x] `CStr` — [Six kinds of string](14_Strings/six_kinds_of_string/README.md) · [Calling C — the call is free, the data is not](09_Advanced/calling_c/README.md)
+- [x] `CString` — [Six kinds of string](14_Strings/six_kinds_of_string/README.md) · [Calling C — the call is free, the data is not](09_Advanced/calling_c/README.md)
+- [x] `Path` — [`Path` and `PathBuf`](04_Files/path_and_pathbuf/README.md) *(stub)* · [Six kinds of string](14_Strings/six_kinds_of_string/README.md) · [glossary](GLOSSARY.md)
+- [x] `PathBuf` — [`Path` and `PathBuf`](04_Files/path_and_pathbuf/README.md) *(stub)* · [glossary](GLOSSARY.md)
+- [x] `char` — [Meet the `char`](14_Strings/meet_the_char/README.md) · [Why a `char` is 32 bits wide](14_Strings/why_char_is_32_bits/README.md)
+- [x] `u8` — [Meet the byte](19_Numbers/meet_the_byte/README.md)
+- [x] bytes — [Meet the byte](19_Numbers/meet_the_byte/README.md)
 
 
 ### Encodings (13)
 
-- [ ] UTF-8
-- [ ] UTF-16
-- [ ] UTF-32
-- [ ] ASCII
-- [ ] WTF-8
-- [ ] Unicode scalar value
-- [ ] Unicode code point
-- [ ] surrogate pairs
-- [ ] byte order mark (BOM)
-- [ ] little-endian
-- [ ] big-endian
-- [ ] locale encoding
-- [ ] platform encoding
+- [x] UTF-8 — [Meet the `char`](14_Strings/meet_the_char/README.md)
+- [x] UTF-16 — [Four lengths, and which one the other system means](14_Strings/four_lengths/README.md) · [glossary](GLOSSARY.md)
+- [x] UTF-32 — [Why a `char` is 32 bits wide](14_Strings/why_char_is_32_bits/README.md) · [glossary](GLOSSARY.md)
+- [x] ASCII — [Meet the byte](19_Numbers/meet_the_byte/README.md) · [`str::is_ascii`](14_Strings/str_methods/str_is_ascii/README.md) · [glossary](GLOSSARY.md)
+- [x] WTF-8 — [Six kinds of string](14_Strings/six_kinds_of_string/README.md) · [`OsStr`, `Path`, and WTF-8 ↗](https://masiarek.github.io/encodings-learning-library/05_Rust/osstr_path_and_wtf8/index.html) · [glossary](GLOSSARY.md)
+- [x] Unicode scalar value — [Why a `char` is 32 bits wide](14_Strings/why_char_is_32_bits/README.md) · [glossary](GLOSSARY.md)
+- [x] Unicode code point — [Why a `char` is 32 bits wide](14_Strings/why_char_is_32_bits/README.md) · [glossary](GLOSSARY.md)
+- [x] surrogate pairs — [Why a `char` is 32 bits wide](14_Strings/why_char_is_32_bits/README.md) · [glossary](GLOSSARY.md)
+- [x] byte order mark (BOM) — [`String::from_utf16le`](14_Strings/string_methods/string_from_utf16le/README.md) · [Byte order and the BOM ↗](https://masiarek.github.io/encodings-learning-library/03_Encodings/byte_order_and_bom/index.html) · [glossary](GLOSSARY.md)
+- [x] little-endian — [Meet the byte](19_Numbers/meet_the_byte/README.md)
+- [x] big-endian — [Meet the byte](19_Numbers/meet_the_byte/README.md)
+- [x] locale encoding — [Comparing and sorting text](14_Strings/comparing_strings/README.md) · [Locale and `LC_CTYPE` ↗](https://masiarek.github.io/encodings-learning-library/06_Terminal/locale_and_lc_ctype/index.html) · [glossary](GLOSSARY.md)
+- [x] platform encoding — [Six kinds of string](14_Strings/six_kinds_of_string/README.md) · [glossary](GLOSSARY.md)
 
 
 ### Conversions (14)
 
-- [ ] `from_utf8`
-- [ ] `from_utf8_lossy`
-- [ ] `to_string_lossy`
-- [ ] `as_bytes`
-- [ ] `as_os_str`
-- [ ] `to_str`
-- [ ] `to_owned`
-- [ ] `into_owned`
-- [ ] `to_string`
-- [ ] `into_string`
-- [ ] `from_utf8_unchecked`
-- [ ] `as_ptr`
-- [ ] `as_mut_ptr`
-- [ ] `into_bytes`
+- [x] `from_utf8` — [`str::from_utf8`](14_Strings/str_methods/str_from_utf8/README.md) · [`String::from_utf8`](14_Strings/string_methods/string_from_utf8/README.md)
+- [x] `from_utf8_lossy` — [`String::from_utf8_lossy`](14_Strings/string_methods/string_from_utf8_lossy/README.md)
+- [x] `to_string_lossy` — [Six kinds of string](14_Strings/six_kinds_of_string/README.md)
+- [x] `as_bytes` — [`str::as_bytes`](14_Strings/str_methods/str_as_bytes/README.md)
+- [x] `as_os_str` — [`Path` and `PathBuf`](04_Files/path_and_pathbuf/README.md) *(stub)*
+- [x] `to_str` — [Six kinds of string](14_Strings/six_kinds_of_string/README.md)
+- [x] `to_owned` — [`ToOwned`: `Clone` for types whose owned twin is a different type](12_Traits/to_owned/README.md)
+- [x] `into_owned` — [`Cow`: borrow until somebody writes](18_Ownership/clone_on_write/README.md)
+- [x] `to_string` — [Making a `String`](14_Strings/making_a_string/README.md)
+- [x] `into_string` — [`str::into_string`](14_Strings/str_methods/str_into_string/README.md)
+- [x] `from_utf8_unchecked` — [`str::from_utf8_unchecked`](14_Strings/str_methods/str_from_utf8_unchecked/README.md)
+- [x] `as_ptr` — [`str::as_ptr`](14_Strings/str_methods/str_as_ptr/README.md)
+- [x] `as_mut_ptr` — [`str::as_mut_ptr`](14_Strings/str_methods/str_as_mut_ptr/README.md)
+- [x] `into_bytes` — [`String::into_bytes`](14_Strings/string_methods/string_into_bytes/README.md)
 
 
 ### Operations (13)
 
-- [ ] slicing
-- [ ] indexing
-- [ ] concatenation
-- [ ] trimming
-- [ ] splitting
-- [ ] pattern matching
-- [ ] substring search
-- [ ] char iteration
-- [ ] byte iteration
-- [ ] grapheme clusters
-- [ ] replacement
-- [ ] case conversion
-- [ ] normalization
+- [x] slicing — [String slices](14_Strings/string_slices/README.md)
+- [x] indexing — [Meet the `char`](14_Strings/meet_the_char/README.md)
+- [x] concatenation — [Concatenating strings](14_Strings/concatenating_strings/README.md)
+- [x] trimming — [`str::trim`](14_Strings/str_methods/str_trim/README.md)
+- [x] splitting — [Walking a `String`](14_Strings/walking_a_string/README.md) · [Inside a `Split`](14_Strings/inside_a_split/README.md)
+- [x] pattern matching — [Searching without splitting](14_Strings/searching_a_string/README.md)
+- [x] substring search — [Searching without splitting](14_Strings/searching_a_string/README.md)
+- [x] char iteration — [Walking a `String`](14_Strings/walking_a_string/README.md)
+- [x] byte iteration — [Walking a `String`](14_Strings/walking_a_string/README.md)
+- [x] grapheme clusters — [Four lengths, and which one the other system means](14_Strings/four_lengths/README.md) · [Meet the `char`](14_Strings/meet_the_char/README.md)
+- [x] replacement — [Replacing part of a string](14_Strings/replacing_in_a_string/README.md)
+- [x] case conversion — [Comparing and sorting text](14_Strings/comparing_strings/README.md)
+- [x] normalization — [Comparing and sorting text](14_Strings/comparing_strings/README.md) · [Normalization ↗](https://masiarek.github.io/encodings-learning-library/04_Python/normalization/index.html) · [glossary](GLOSSARY.md)
 
 
 ### Traits a string type implements (15)
 
-- [ ] `Display`
-- [ ] `Debug`
-- [ ] `ToString`
-- [ ] `FromStr`
-- [ ] `Deref<Target=str>`
-- [ ] `AsRef<str>`
-- [ ] `Borrow<str>`
-- [ ] `Into<String>`
-- [ ] `From<String>`
-- [ ] `PartialEq`
-- [ ] `Eq`
-- [ ] `Ord`
-- [ ] `Hash`
-- [ ] `Clone`
-- [ ] `Copy` (for `&str`)
+- [x] `Display` — [Debug and Display](15_First_Programs/debug_vs_display/README.md)
+- [x] `Debug` — [Debug and Display](15_First_Programs/debug_vs_display/README.md)
+- [x] `ToString` — [Making a `String`](14_Strings/making_a_string/README.md)
+- [x] `FromStr` — [Parsing out of a string](14_Strings/parsing_a_string/README.md)
+- [x] `Deref<Target=str>` — [`String` vs `&str`](14_Strings/string_vs_str/README.md)
+- [x] `AsRef<str>` — [String parameters worth copying](14_Strings/string_api_design/README.md) *(stub)* · [glossary](GLOSSARY.md)
+- [x] `Borrow<str>` — [When the UTF-8 invariant broke](14_Strings/when_the_invariant_broke/README.md) · [glossary](GLOSSARY.md)
+- [x] `Into<String>` — [String parameters worth copying](14_Strings/string_api_design/README.md) *(stub)* · [`From` and `Into`](29_Conversion/from_and_into/README.md)
+- [x] `From<String>` — [`From` and `Into`](29_Conversion/from_and_into/README.md) · [glossary](GLOSSARY.md)
+- [x] `PartialEq` — [The comparison traits](12_Traits/comparison_traits/README.md) *(stub)* · [Comparing and sorting text](14_Strings/comparing_strings/README.md)
+- [x] `Eq` — [The comparison traits](12_Traits/comparison_traits/README.md) *(stub)*
+- [x] `Ord` — [The comparison traits](12_Traits/comparison_traits/README.md) *(stub)* · [Comparing and sorting text](14_Strings/comparing_strings/README.md)
+- [x] `Hash` — [`HashSet`](26_Collections/the_hashset/README.md) · [glossary](GLOSSARY.md)
+- [x] `Clone` — [`Copy` vs `Clone`](16_Structs/copy_vs_clone/README.md)
+- [x] `Copy` (for `&str`) — [`Copy` vs `Clone`](16_Structs/copy_vs_clone/README.md)
 
 
 ### Memory and layout (11)
 
-- [ ] heap allocation
-- [ ] stack allocation
-- [ ] capacity
-- [ ] length
-- [ ] reallocation
-- [ ] fat pointer
-- [ ] thin pointer
-- [ ] string interning
-- [ ] small-string optimization
-- [ ] null-terminated
-- [ ] non-null-terminated
+- [x] heap allocation — [Stack and heap](18_Ownership/stack_and_heap/README.md) · [The anatomy of a `String`](14_Strings/anatomy_of_a_string/README.md)
+- [x] stack allocation — [Stack and heap](18_Ownership/stack_and_heap/README.md)
+- [x] capacity — [The anatomy of a `String`](14_Strings/anatomy_of_a_string/README.md)
+- [x] length — [The anatomy of a `String`](14_Strings/anatomy_of_a_string/README.md) · [Four lengths, and which one the other system means](14_Strings/four_lengths/README.md)
+- [x] reallocation — [The anatomy of a `String`](14_Strings/anatomy_of_a_string/README.md)
+- [x] fat pointer — [`str` is unsized](14_Strings/str_is_unsized/README.md)
+- [x] thin pointer — [`str` is unsized](14_Strings/str_is_unsized/README.md) · [glossary](GLOSSARY.md)
+- [x] string interning — [The third owned form: `Box<str>`, `Rc<str>`, `Arc<str>`](14_Strings/boxed_str/README.md) · [glossary](GLOSSARY.md)
+- [x] small-string optimization — [The string crates](14_Strings/string_crates/README.md) · [When `String` is too slow](14_Strings/when_string_is_too_slow/README.md) *(stub)* · [glossary](GLOSSARY.md)
+- [x] null-terminated — [Six kinds of string](14_Strings/six_kinds_of_string/README.md) · [glossary](GLOSSARY.md)
+- [x] non-null-terminated — [Six kinds of string](14_Strings/six_kinds_of_string/README.md) · [glossary](GLOSSARY.md)
 
 
 ### Raw and FFI (10)
 
-- [ ] `std::ffi`
-- [ ] `std::os::raw`
-- [ ] `c_char`
-- [ ] NUL byte
-- [ ] pointer casting
-- [ ] `transmute`
-- [ ] manual UTF-8 validation
-- [ ] `unsafe`
-- [ ] `extern "C"`
-- [ ] zero-copy
+- [x] `std::ffi` — [Six kinds of string](14_Strings/six_kinds_of_string/README.md) · [Calling C — the call is free, the data is not](09_Advanced/calling_c/README.md)
+- [x] `std::os::raw` — [Calling C — the call is free, the data is not](09_Advanced/calling_c/README.md) · [glossary](GLOSSARY.md)
+- [x] `c_char` — [Calling C — the call is free, the data is not](09_Advanced/calling_c/README.md)
+- [x] NUL byte — [Six kinds of string](14_Strings/six_kinds_of_string/README.md)
+- [x] pointer casting — [What `unsafe` turns off](09_Advanced/what_unsafe_turns_off/README.md) · [glossary](GLOSSARY.md)
+- [x] `transmute` — [Why a `char` is 32 bits wide](14_Strings/why_char_is_32_bits/README.md) · [glossary](GLOSSARY.md)
+- [x] manual UTF-8 validation — [`str::from_utf8`](14_Strings/str_methods/str_from_utf8/README.md) · [UTF-8 by hand ↗](https://masiarek.github.io/encodings-learning-library/03_Encodings/utf8_by_hand/index.html) · [glossary](GLOSSARY.md)
+- [x] `unsafe` — [What `unsafe` turns off](09_Advanced/what_unsafe_turns_off/README.md)
+- [x] `extern "C"` — [Calling C — the call is free, the data is not](09_Advanced/calling_c/README.md)
+- [x] zero-copy — [String slices](14_Strings/string_slices/README.md) · [Inside a `Split`](14_Strings/inside_a_split/README.md) · [glossary](GLOSSARY.md)
 
 
 ### Iterators and views (14)
 
-- [ ] `Chars`
-- [ ] `CharIndices`
-- [ ] `Bytes`
-- [ ] `Lines`
-- [ ] `Split`
-- [ ] `SplitWhitespace`
-- [ ] `RSplit`
-- [ ] `MatchIndices`
-- [ ] `Matches`
-- [ ] `RMatchIndices`
-- [ ] `EncodeUtf16`
-- [ ] `EscapeDebug`
-- [ ] `EscapeDefault`
-- [ ] `EscapeUnicode`
+- [x] `Chars` — [`str::chars`](14_Strings/str_methods/str_chars/README.md)
+- [x] `CharIndices` — [`str::char_indices`](14_Strings/str_methods/str_char_indices/README.md)
+- [x] `Bytes` — [`str::bytes`](14_Strings/str_methods/str_bytes/README.md)
+- [x] `Lines` — [`str::lines`](14_Strings/str_methods/str_lines/README.md)
+- [x] `Split` — [`str::split`](14_Strings/str_methods/str_split/README.md) · [Inside a `Split`](14_Strings/inside_a_split/README.md)
+- [x] `SplitWhitespace` — [`str::split_whitespace`](14_Strings/str_methods/str_split_whitespace/README.md)
+- [x] `RSplit` — [`str::rsplit`](14_Strings/str_methods/str_rsplit/README.md)
+- [x] `MatchIndices` — [`str::match_indices`](14_Strings/str_methods/str_match_indices/README.md)
+- [x] `Matches` — [`str::matches`](14_Strings/str_methods/str_matches/README.md)
+- [x] `RMatchIndices` — [`str::rmatch_indices`](14_Strings/str_methods/str_rmatch_indices/README.md)
+- [x] `EncodeUtf16` — [`str::encode_utf16`](14_Strings/str_methods/str_encode_utf16/README.md)
+- [x] `EscapeDebug` — [`str::escape_debug`](14_Strings/str_methods/str_escape_debug/README.md)
+- [x] `EscapeDefault` — [`str::escape_default`](14_Strings/str_methods/str_escape_default/README.md)
+- [x] `EscapeUnicode` — [`str::escape_unicode`](14_Strings/str_methods/str_escape_unicode/README.md)
 
 
 ### Crates and ecosystem (15)
 
-- [ ] `unicode-segmentation`
-- [ ] `unicode-normalization`
-- [ ] `encoding_rs`
-- [ ] `icu`
-- [ ] `bstr`
-- [ ] `byteorder`
-- [ ] `widestring`
-- [ ] `utf16string`
-- [ ] `compact_str`
-- [ ] `smartstring`
-- [ ] `smallstr`
-- [ ] `tinystr`
-- [ ] `arraystring`
-- [ ] `flexstr`
-- [ ] `cow-utils`
+- [x] `unicode-segmentation` — [The string crates](14_Strings/string_crates/README.md) · [Four lengths, and which one the other system means](14_Strings/four_lengths/README.md) · [glossary](GLOSSARY.md)
+- [x] `unicode-normalization` — [The string crates](14_Strings/string_crates/README.md) · [Comparing and sorting text](14_Strings/comparing_strings/README.md) · [glossary](GLOSSARY.md)
+- [x] `encoding_rs` — [The string crates](14_Strings/string_crates/README.md) · [glossary](GLOSSARY.md)
+- [x] `icu` — [The string crates](14_Strings/string_crates/README.md) · [Comparing and sorting text](14_Strings/comparing_strings/README.md) · [glossary](GLOSSARY.md)
+- [x] `bstr` — [The string crates](14_Strings/string_crates/README.md) · [Six kinds of string](14_Strings/six_kinds_of_string/README.md) · [glossary](GLOSSARY.md)
+- [x] `byteorder` — [The string crates](14_Strings/string_crates/README.md) · [Meet the byte](19_Numbers/meet_the_byte/README.md) · [glossary](GLOSSARY.md)
+- [x] `widestring` — [The string crates](14_Strings/string_crates/README.md) · [`str::encode_utf16`](14_Strings/str_methods/str_encode_utf16/README.md) · [glossary](GLOSSARY.md)
+- [x] `utf16string` — [The string crates](14_Strings/string_crates/README.md) · [glossary](GLOSSARY.md)
+- [x] `compact_str` — [The string crates](14_Strings/string_crates/README.md) · [glossary](GLOSSARY.md)
+- [x] `smartstring` — [The string crates](14_Strings/string_crates/README.md) · [glossary](GLOSSARY.md)
+- [x] `smallstr` — [The string crates](14_Strings/string_crates/README.md) · [glossary](GLOSSARY.md)
+- [x] `tinystr` — [The string crates](14_Strings/string_crates/README.md) · [glossary](GLOSSARY.md)
+- [x] `arraystring` — [The string crates](14_Strings/string_crates/README.md) · [glossary](GLOSSARY.md)
+- [x] `flexstr` — [The string crates](14_Strings/string_crates/README.md)
+- [x] `cow-utils` — [The string crates](14_Strings/string_crates/README.md) · [Replacing part of a string](14_Strings/replacing_in_a_string/README.md) · [glossary](GLOSSARY.md)
 
 
 ### Unicode concepts (12)
 
-- [ ] grapheme
-- [ ] code unit
-- [ ] code point
-- [ ] scalar value
-- [ ] combining character
-- [ ] normalization forms (NFC, NFD, NFKC, NFKD)
-- [ ] case folding
-- [ ] canonical equivalence
-- [ ] compatibility equivalence
-- [ ] invisible characters
-- [ ] zero-width joiner
-- [ ] variation selector
+- [x] grapheme — [Four lengths, and which one the other system means](14_Strings/four_lengths/README.md) · [Meet the `char`](14_Strings/meet_the_char/README.md)
+- [x] code unit — [Four lengths, and which one the other system means](14_Strings/four_lengths/README.md) · [glossary](GLOSSARY.md)
+- [x] code point — [Why a `char` is 32 bits wide](14_Strings/why_char_is_32_bits/README.md) · [glossary](GLOSSARY.md)
+- [x] scalar value — [Why a `char` is 32 bits wide](14_Strings/why_char_is_32_bits/README.md) · [glossary](GLOSSARY.md)
+- [x] combining character — [Meet the `char`](14_Strings/meet_the_char/README.md) · [glossary](GLOSSARY.md)
+- [x] normalization forms (NFC, NFD, NFKC, NFKD) — [Comparing and sorting text](14_Strings/comparing_strings/README.md) · [Normalization ↗](https://masiarek.github.io/encodings-learning-library/04_Python/normalization/index.html) · [glossary](GLOSSARY.md)
+- [x] case folding — [Comparing and sorting text](14_Strings/comparing_strings/README.md)
+- [x] canonical equivalence — [The hard strings ↗](https://masiarek.github.io/encodings-learning-library/14_Resources/hard_strings/index.html) · [Normalization ↗](https://masiarek.github.io/encodings-learning-library/04_Python/normalization/index.html) · [glossary](GLOSSARY.md)
+- [x] compatibility equivalence — [The hard strings ↗](https://masiarek.github.io/encodings-learning-library/14_Resources/hard_strings/index.html) · [Normalization ↗](https://masiarek.github.io/encodings-learning-library/04_Python/normalization/index.html) · [glossary](GLOSSARY.md)
+- [x] invisible characters — [The hard strings ↗](https://masiarek.github.io/encodings-learning-library/14_Resources/hard_strings/index.html) · [glossary](GLOSSARY.md)
+- [x] zero-width joiner — [Meet the `char`](14_Strings/meet_the_char/README.md) · [glossary](GLOSSARY.md)
+- [x] variation selector — [Meet the `char`](14_Strings/meet_the_char/README.md) · [glossary](GLOSSARY.md)
 
 
 ### Error types (6)
 
-- [ ] `Utf8Error`
-- [ ] `FromUtf8Error`
-- [ ] `FromUtf16Error`
-- [ ] `ParseError`
-- [ ] `TryFromIntError`
-- [ ] `Infallible`
+- [x] `Utf8Error` — [`str::from_utf8`](14_Strings/str_methods/str_from_utf8/README.md) · [glossary](GLOSSARY.md)
+- [x] `FromUtf8Error` — [`String::from_utf8`](14_Strings/string_methods/string_from_utf8/README.md) · [glossary](GLOSSARY.md)
+- [x] `FromUtf16Error` — [`String::from_utf16`](14_Strings/string_methods/string_from_utf16/README.md) · [glossary](GLOSSARY.md)
+- [x] `ParseError` — [The `Result` you are reading is probably an alias](17_Option_and_Result/result_aliases/README.md) · [glossary](GLOSSARY.md)
+- [x] `TryFromIntError` — [`TryFrom` and `TryInto`](29_Conversion/tryfrom_and_tryinto/README.md)
+- [x] `Infallible` — [The `Result` you are reading is probably an alias](17_Option_and_Result/result_aliases/README.md) · [The never type `!`](15_First_Programs/the_never_type/README.md)
 
 
 ### Common methods (33)
 
-- [ ] `len()`
-- [ ] `is_empty()`
-- [ ] `contains()`
-- [ ] `starts_with()`
-- [ ] `ends_with()`
-- [ ] `find()`
-- [ ] `rfind()`
-- [ ] `replace()`
-- [ ] `replacen()`
-- [ ] `to_lowercase()`
-- [ ] `to_uppercase()`
-- [ ] `repeat()`
-- [ ] `push()`
-- [ ] `push_str()`
-- [ ] `pop()`
-- [ ] `insert()`
-- [ ] `insert_str()`
-- [ ] `remove()`
-- [ ] `truncate()`
-- [ ] `clear()`
-- [ ] `drain()`
-- [ ] `split_off()`
-- [ ] `retain()`
-- [ ] `reserve()`
-- [ ] `shrink_to_fit()`
-- [ ] `with_capacity()`
-- [ ] `from_raw_parts()`
-- [ ] `make_ascii_lowercase()`
-- [ ] `make_ascii_uppercase()`
-- [ ] `is_ascii()`
-- [ ] `eq_ignore_ascii_case()`
-- [ ] `escape_default()`
-- [ ] `parse::<T>()`
+- [x] `len()` — [`str::len`](14_Strings/str_methods/str_len/README.md) · [Four lengths, and which one the other system means](14_Strings/four_lengths/README.md)
+- [x] `is_empty()` — [`str::is_empty`](14_Strings/str_methods/str_is_empty/README.md)
+- [x] `contains()` — [`str::contains`](14_Strings/str_methods/str_contains/README.md)
+- [x] `starts_with()` — [`str::starts_with`](14_Strings/str_methods/str_starts_with/README.md)
+- [x] `ends_with()` — [`str::ends_with`](14_Strings/str_methods/str_ends_with/README.md)
+- [x] `find()` — [`str::find`](14_Strings/str_methods/str_find/README.md) · [Searching without splitting](14_Strings/searching_a_string/README.md)
+- [x] `rfind()` — [`str::rfind`](14_Strings/str_methods/str_rfind/README.md)
+- [x] `replace()` — [`str::replace`](14_Strings/str_methods/str_replace/README.md) · [Replacing part of a string](14_Strings/replacing_in_a_string/README.md)
+- [x] `replacen()` — [`str::replacen`](14_Strings/str_methods/str_replacen/README.md)
+- [x] `to_lowercase()` — [`str::to_lowercase`](14_Strings/str_methods/str_to_lowercase/README.md) · [Comparing and sorting text](14_Strings/comparing_strings/README.md)
+- [x] `to_uppercase()` — [`str::to_uppercase`](14_Strings/str_methods/str_to_uppercase/README.md)
+- [x] `repeat()` — [`str::repeat`](14_Strings/str_methods/str_repeat/README.md)
+- [x] `push()` — [`String::push`](14_Strings/string_methods/string_push/README.md)
+- [x] `push_str()` — [`String::push_str`](14_Strings/string_methods/string_push_str/README.md)
+- [x] `pop()` — [`String::pop`](14_Strings/string_methods/string_pop/README.md)
+- [x] `insert()` — [`String::insert`](14_Strings/string_methods/string_insert/README.md)
+- [x] `insert_str()` — [`String::insert_str`](14_Strings/string_methods/string_insert_str/README.md)
+- [x] `remove()` — [`String::remove`](14_Strings/string_methods/string_remove/README.md)
+- [x] `truncate()` — [`String::truncate`](14_Strings/string_methods/string_truncate/README.md)
+- [x] `clear()` — [`String::clear`](14_Strings/string_methods/string_clear/README.md)
+- [x] `drain()` — [`String::drain`](14_Strings/string_methods/string_drain/README.md)
+- [x] `split_off()` — [`String::split_off`](14_Strings/string_methods/string_split_off/README.md)
+- [x] `retain()` — [`String::retain`](14_Strings/string_methods/string_retain/README.md)
+- [x] `reserve()` — [`String::reserve`](14_Strings/string_methods/string_reserve/README.md)
+- [x] `shrink_to_fit()` — [`String::shrink_to_fit`](14_Strings/string_methods/string_shrink_to_fit/README.md)
+- [x] `with_capacity()` — [`String::with_capacity`](14_Strings/string_methods/string_with_capacity/README.md)
+- [x] `from_raw_parts()` — [`String::from_raw_parts`](14_Strings/string_methods/string_from_raw_parts/README.md)
+- [x] `make_ascii_lowercase()` — [`str::make_ascii_lowercase`](14_Strings/str_methods/str_make_ascii_lowercase/README.md)
+- [x] `make_ascii_uppercase()` — [`str::make_ascii_uppercase`](14_Strings/str_methods/str_make_ascii_uppercase/README.md)
+- [x] `is_ascii()` — [`str::is_ascii`](14_Strings/str_methods/str_is_ascii/README.md)
+- [x] `eq_ignore_ascii_case()` — [`str::eq_ignore_ascii_case`](14_Strings/str_methods/str_eq_ignore_ascii_case/README.md)
+- [x] `escape_default()` — [`str::escape_default`](14_Strings/str_methods/str_escape_default/README.md)
+- [x] `parse::<T>()` — [`str::parse`](14_Strings/str_methods/str_parse/README.md) · [Parsing out of a string](14_Strings/parsing_a_string/README.md)
 
 
 ### Pointer and safety (11)
 
-- [ ] dangling pointer
-- [ ] null pointer
-- [ ] pointer alignment
-- [ ] memory leak
-- [ ] buffer overflow
-- [ ] out-of-bounds
-- [ ] invalid UTF-8
-- [ ] data race (via `unsafe`)
-- [ ] `MaybeUninit`
-- [ ] `NonNull`
-- [ ] `UnsafeCell`
+- [x] dangling pointer — [Use-after-free](31_C_and_Cpp/use_after_free/README.md)
+- [x] null pointer — [Null dereference](31_C_and_Cpp/null_dereference/README.md) · [Nullable pointers](17_Option_and_Result/nullable_pointers/README.md)
+- [x] pointer alignment — [`Allocator::shrink`](09_Advanced/allocator_shrink/README.md) · [glossary](GLOSSARY.md)
+- [x] memory leak — [`String::leak`](14_Strings/string_methods/string_leak/README.md)
+- [x] buffer overflow — [Buffer overruns](31_C_and_Cpp/buffer_overruns/README.md)
+- [x] out-of-bounds — [Buffer overruns](31_C_and_Cpp/buffer_overruns/README.md) · [String slices](14_Strings/string_slices/README.md)
+- [x] invalid UTF-8 — [`str::from_utf8`](14_Strings/str_methods/str_from_utf8/README.md)
+- [x] data race (via `unsafe`) — [Data races](31_C_and_Cpp/data_races/README.md)
+- [x] `MaybeUninit` — [Uninitialized reads](31_C_and_Cpp/uninitialized_reads/README.md) · [`Vec::spare_capacity_mut`](26_Collections/vec_methods/vec_spare_capacity_mut/README.md) · [glossary](GLOSSARY.md)
+- [x] `NonNull` — [Nullable pointers](17_Option_and_Result/nullable_pointers/README.md) · [glossary](GLOSSARY.md)
+- [x] `UnsafeCell` — [Interior mutability](09_Advanced/interior_mutability/README.md) *(stub)* · [glossary](GLOSSARY.md)
 
 
 ### Patterns and matching (9)
 
-- [ ] string literal
-- [ ] raw string (`r"..."`, `r#"..."#`)
-- [ ] byte string (`b"..."`)
-- [ ] raw byte string (`br"..."`)
-- [ ] multiline string
-- [ ] escape sequences (`\n`, `\t`, `\u{...}`, `\x..`)
-- [ ] char literal
-- [ ] the `Pattern` trait
-- [ ] `Sealed`
+- [x] string literal — [`&'static str`](14_Strings/static_str/README.md) · [Raw strings, escapes and the literal prefixes](14_Strings/raw_strings_and_escapes/README.md)
+- [x] raw string (`r"..."`, `r#"..."#`) — [Raw strings, escapes and the literal prefixes](14_Strings/raw_strings_and_escapes/README.md)
+- [x] byte string (`b"..."`) — [Raw strings, escapes and the literal prefixes](14_Strings/raw_strings_and_escapes/README.md) · [RFC 69 — how Rust got `b'A'`](14_Strings/rfc_69_byte_literals/README.md)
+- [x] raw byte string (`br"..."`) — [Raw strings, escapes and the literal prefixes](14_Strings/raw_strings_and_escapes/README.md)
+- [x] multiline string — [Raw strings, escapes and the literal prefixes](14_Strings/raw_strings_and_escapes/README.md)
+- [x] escape sequences (`\n`, `\t`, `\u{...}`, `\x..`) — [Raw strings, escapes and the literal prefixes](14_Strings/raw_strings_and_escapes/README.md)
+- [x] char literal — [Meet the `char`](14_Strings/meet_the_char/README.md)
+- [x] the `Pattern` trait — [Searching without splitting](14_Strings/searching_a_string/README.md)
+- [x] `Sealed` — [Searching without splitting](14_Strings/searching_a_string/README.md) · [Sealed traits, C-SEALED ↗](https://rust-lang.github.io/api-guidelines/future-proofing.html#sealed-traits-protect-against-downstream-implementations-c-sealed) · [glossary](GLOSSARY.md)
 
 
 ### Smart pointers and wrappers (7)
 
-- [ ] `Rc<str>`
-- [ ] `Arc<str>`
-- [ ] `Mutex<String>`
-- [ ] `RwLock<String>`
-- [ ] `RefCell<String>`
-- [ ] `Cell<&str>`
-- [ ] `Pin<Box<str>>`
+- [x] `Rc<str>` — [The third owned form: `Box<str>`, `Rc<str>`, `Arc<str>`](14_Strings/boxed_str/README.md) · [glossary](GLOSSARY.md)
+- [x] `Arc<str>` — [The third owned form: `Box<str>`, `Rc<str>`, `Arc<str>`](14_Strings/boxed_str/README.md) · [glossary](GLOSSARY.md)
+- [x] `Mutex<String>` — [Lock poisoning](09_Advanced/mutex_poisoning/README.md)
+- [x] `RwLock<String>` — [`RwLock` and atomics](09_Advanced/rwlock_and_atomics/README.md) *(stub)*
+- [x] `RefCell<String>` — [Interior mutability](09_Advanced/interior_mutability/README.md) *(stub)*
+- [x] `Cell<&str>` — [Interior mutability](09_Advanced/interior_mutability/README.md) *(stub)*
+- [x] `Pin<Box<str>>` — [There is no `Move` trait](18_Ownership/no_move_trait/README.md) · [glossary](GLOSSARY.md)
 
 ---
 

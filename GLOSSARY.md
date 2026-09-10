@@ -570,3 +570,99 @@ Short definitions. Every entry links to the page that explains it properly — a
 **Panic safety** — The discipline of leaving every *intermediate* state of a mutation a legal value of its type, because a panic can unwind out of any line. Distinct from memory safety and not checked by anything: `String::retain` shifted bytes left and fixed the length at the end, so a predicate that panicked in between left a `String` claiming bytes that were no longer valid UTF-8 ([CVE-2020-36317 ↗](https://rustsec.org/advisories/CVE-2020-36317.html)). The fix is a `Drop` impl, which runs on the way out either way. → [When the UTF-8 invariant broke](14_Strings/when_the_invariant_broke/README.md)
 
 **Final sigma** — Greek Σ lowercases to σ in general and **ς** at the end of a word — the only mapping in Unicode's `SpecialCasing.txt` that depends on context but not on language, which is why `str::to_lowercase` owes it to you and `char::to_lowercase` cannot give it (one `char` has no word around it). `std` shipped the wrong one from 1.63.0 to 1.79.x, because the ASCII fast path had already consumed the letters the rule looks back at. → [Wrong, but not unsafe](14_Strings/wrong_but_not_unsafe/README.md)
+
+**`str`** — The string slice type itself: UTF-8 bytes whose length is not part of the type, so it is unsized and never held directly — only behind a pointer that carries the length, as `&str`, `Box<str>` or `Rc<str>`. `str` is to `&str` what `[u8]` is to `&[u8]`. → [`str` is unsized](14_Strings/str_is_unsized/README.md)
+
+**`Box<str>` / `Rc<str>` / `Arc<str>`** — Owned text with no capacity word: two words where a `String` has three, and no way to grow. The `Rc` and `Arc` forms make a clone a count increment instead of a copy, which is what makes a repeated value cheap to keep. → [The third owned form: `Box<str>`, `Rc<str>`, `Arc<str>`](14_Strings/boxed_str/README.md)
+
+**`Path` / `PathBuf`** — A filesystem path, borrowed and owned — the `&str` / `String` pattern again, over `OsStr` rather than `str`, because a filename is not promised to be UTF-8. `as_os_str` goes down to that layer; `to_str` and `to_string_lossy` come back up. → [`Path` and `PathBuf`](04_Files/path_and_pathbuf/README.md) *(stub)* · [Six kinds of string](14_Strings/six_kinds_of_string/README.md)
+
+**UTF-16** — Unicode in 16-bit code units: one unit for most characters, a surrogate pair of two for anything above U+FFFF. It is what Windows filenames, Java, C#, JavaScript's `.length` and SQL Server's `nvarchar` count in, so a length from any of them can disagree with every count Rust gives you. → [Four lengths, and which one the other system means](14_Strings/four_lengths/README.md)
+
+**UTF-32** — The fixed-width encoding: every scalar value in one 32-bit unit. Rust has no UTF-32 string type, but a `char` *value* is exactly that unit — 21 bits of Unicode rounded up to a width a machine can address. → [Why a `char` is 32 bits wide](14_Strings/why_char_is_32_bits/README.md)
+
+**ASCII** — Code points `0x00`–`0x7F`: the range where one UTF-8 byte is one character and the byte's value is its code point. Methods with `ascii` in the name act on this range and leave the rest alone — `eq_ignore_ascii_case` folds 26 letters and compares every other byte exactly. → [Meet the byte](19_Numbers/meet_the_byte/README.md) · [`str::is_ascii`](14_Strings/str_methods/str_is_ascii/README.md)
+
+**WTF-8** — "Wobbly" UTF-8: UTF-8's byte pattern stretched to cover the unpaired surrogates a Windows filename may contain, so text that is not valid UTF-16 can still sit in a UTF-8-shaped buffer. It is the kind of detail `OsStr` exists to hide; the sibling encodings library works through the bytes. → [Six kinds of string](14_Strings/six_kinds_of_string/README.md) · [`OsStr`, `Path`, and WTF-8 ↗](https://masiarek.github.io/encodings-learning-library/05_Rust/osstr_path_and_wtf8/index.html)
+
+**Code point / Unicode scalar value** — A code point is any number in Unicode's range, `0..=0x10FFFF`, surrogates included; a scalar value is a code point that is not a surrogate — 1,112,064 of them. A `char` holds exactly one scalar value, which is why `char::from_u32(0xD800)` returns `None`. → [Why a `char` is 32 bits wide](14_Strings/why_char_is_32_bits/README.md)
+
+**Code unit** — The fixed-size piece an encoding writes text in: a byte in UTF-8, a 16-bit unit in UTF-16. A length "in characters" from another system is usually a count of its code units, which is how one name can fit a `VARCHAR(12)` and bounce off an `nvarchar(12)`. → [Four lengths, and which one the other system means](14_Strings/four_lengths/README.md)
+
+**Surrogate pair** — Two UTF-16 code units, one from `D800`–`DBFF` and one from `DC00`–`DFFF`, that together encode one character above U+FFFF. Half of one is not a character, which is why those 2,048 code points are carved out of `char`'s range. → [Why a `char` is 32 bits wide](14_Strings/why_char_is_32_bits/README.md)
+
+**Byte order mark (BOM)** — `U+FEFF` at the start of a text stream, telling a reader which byte order a UTF-16 or UTF-32 file uses; in UTF-8 it marks nothing and is written anyway. `String::from_utf8` keeps it: the bytes `EF BB BF` then `a` decode to two `char`s, the first of them `'\u{feff}'`. → [`String::from_utf16le`](14_Strings/string_methods/string_from_utf16le/README.md) · [Byte order and the BOM ↗](https://masiarek.github.io/encodings-learning-library/03_Encodings/byte_order_and_bom/index.html)
+
+**Locale encoding** — The C-world setting (`LC_CTYPE`) that tells a program which encoding its terminal and filenames use. Rust's `str` never consults it: text is UTF-8 by type, and case mapping is locale-independent by design — `str` has no locale, so it cannot have the Turkish answer or the other one. → [Comparing and sorting text](14_Strings/comparing_strings/README.md) · [Locale and `LC_CTYPE` ↗](https://masiarek.github.io/encodings-learning-library/06_Terminal/locale_and_lc_ctype/index.html)
+
+**Platform encoding** — Whatever the operating system hands you — arbitrary bytes on Unix, possibly ill-formed UTF-16 on Windows — before anyone has checked it is UTF-8. `OsString` / `OsStr` carry it unchanged; `to_str` and `to_string_lossy` are where you decide what a failure looks like. → [Six kinds of string](14_Strings/six_kinds_of_string/README.md)
+
+**Normalization (NFC, NFD, NFKC, NFKD)** — Rewriting text into one agreed spelling so that visually identical strings compare equal — a precomposed `é` and `e` followed by a combining accent become one value. `std` has none: every `==` and every `sort()` compares the bytes you were given, so it takes the `unicode-normalization` crate. → [Comparing and sorting text](14_Strings/comparing_strings/README.md) · [Normalization ↗](https://masiarek.github.io/encodings-learning-library/04_Python/normalization/index.html)
+
+**Canonical and compatibility equivalence** — The two kinds of "same" normalization recognises. *Canonical*: two spellings of one character, like `é` against `e` + `U+0301`, merged by NFC and NFD with nothing lost. *Compatibility*: different characters that stand in for one another, like `ﬁ` for `fi` or `²` for `2`, merged only by NFKC and NFKD, which is a lossy fold. → [The hard strings ↗](https://masiarek.github.io/encodings-learning-library/14_Resources/hard_strings/index.html) · [Normalization ↗](https://masiarek.github.io/encodings-learning-library/04_Python/normalization/index.html)
+
+**Combining character** — A mark that attaches to the character before it, such as `U+0301` COMBINING ACUTE ACCENT: `"e\u{301}"` is two `char`s that draw as one `é` and compare unequal to the precomposed one. → [Meet the `char`](14_Strings/meet_the_char/README.md)
+
+**Zero-width joiner (ZWJ)** — `U+200D`, an invisible character asking the renderer to fuse its neighbours: a family emoji is several people joined by ZWJs — many `char`s, one grapheme. → [Meet the `char`](14_Strings/meet_the_char/README.md)
+
+**Variation selector** — `U+FE0E` / `U+FE0F`: invisible characters that choose text or emoji presentation for the character before them, so two hearts can look almost alike and differ by one `char`. → [Meet the `char`](14_Strings/meet_the_char/README.md)
+
+**Invisible characters** — Code points that draw nothing — zero-width space, soft hyphen, the joiners, a BOM in mid-string — so two strings can look identical and differ. None of them is whitespace to `char::is_whitespace`, so `trim()` leaves every one of them in place. → [The hard strings ↗](https://masiarek.github.io/encodings-learning-library/14_Resources/hard_strings/index.html)
+
+**`AsRef<str>`** — A cheap reference conversion: `fn f(s: impl AsRef<str>)` accepts `&str`, `String` and `&String` alike, at the cost of one compiled copy of `f` per argument type. `PathBuf` is not on that list — a path is not promised to be UTF-8, so it implements `AsRef<Path>` and `AsRef<OsStr>` instead, and `E0277` says so. → [String parameters worth copying](14_Strings/string_api_design/README.md) *(stub)*
+
+**`Borrow<str>`** — The trait that lets a `HashMap<String, V>` be searched with a `&str`: an owned value promises to hash and compare exactly like its borrowed form. Nothing checks the promise, and `[Borrow<str>]::join` was a CVE because an impl could give a different answer each time it was asked. → [When the UTF-8 invariant broke](14_Strings/when_the_invariant_broke/README.md)
+
+**`From<String>`** — What an owned `String` converts into with `.into()`: `Box<str>`, `Vec<u8>`, `Rc<str>`, `Arc<str>`, `PathBuf`, `OsString`, `Cow<str>` and `Box<dyn Error>` all implement it — each one compiled on 1.98.0 for this entry. Your own type joins them with `impl From<String> for YourType`. → [`From` and `Into`](29_Conversion/from_and_into/README.md)
+
+**`Hash`** — What a `HashMap` key or a `HashSet` element needs alongside `Eq`, with one rule: equal values must hash equally. A `String` hashes exactly as the `str` it holds does, which is what lets a set of `String`s be probed with a `&str`. → [`HashSet`](26_Collections/the_hashset/README.md)
+
+**Thin pointer** — A pointer that is one address and nothing else: `&u8`, `&String`, `Box<[u8; 4]>`. A pointer to an unsized value needs a second word — a length, or a vtable — which makes it fat, so `&String` is thin and `&str` is not. → [`str` is unsized](14_Strings/str_is_unsized/README.md)
+
+**String interning** — Storing each distinct string once and handing out cheap handles to it, so a value repeated a thousand times is one allocation. `Rc<str>` / `Arc<str>` is the std-only way: a clone bumps a count and copies no text. → [The third owned form: `Box<str>`, `Rc<str>`, `Arc<str>`](14_Strings/boxed_str/README.md)
+
+**Small-string optimization (SSO)** — Keeping a short string's bytes inside the handle instead of on the heap. `String` never does it — a non-empty `String` always owns a heap buffer — so it is what `compact_str`, `smartstring` and `smallstr` sell; `tinystr` and `arraystring` go further and never allocate, at a fixed maximum length. → [The string crates](14_Strings/string_crates/README.md) · [When `String` is too slow](14_Strings/when_string_is_too_slow/README.md) *(stub)*
+
+**NUL-terminated** — A string whose end is marked by a zero byte instead of a stored length. That is C's convention, so a C string cannot contain a NUL; `CString` / `CStr` keep that promise, while `String` and `&str` carry their length and hold `\0` like any other character. → [Six kinds of string](14_Strings/six_kinds_of_string/README.md)
+
+**Zero-copy** — Answering with a view into data that already exists rather than a copy of it: `&s[0..5]`, every piece a `split` yields, a `&str` field pointing into one owned buffer. The borrow checker is what makes it safe — no view can outlive what it looks at. → [String slices](14_Strings/string_slices/README.md)
+
+**UTF-8 validation** — Checking that bytes follow UTF-8's rules — valid lead and continuation bytes, the shortest form, no surrogates — before calling them a `str`. `str::from_utf8` does it and its `Utf8Error` says how far the valid part went; `from_utf8_unchecked` skips it and makes the caller promise instead. → [`str::from_utf8`](14_Strings/str_methods/str_from_utf8/README.md) · [UTF-8 by hand ↗](https://masiarek.github.io/encodings-learning-library/03_Encodings/utf8_by_hand/index.html)
+
+**`Utf8Error` / `FromUtf8Error` / `FromUtf16Error`** — What the decoders return when the input is not what they promise. `Utf8Error` (from `str::from_utf8`) says how far the valid part went; `FromUtf8Error` (from `String::from_utf8`) hands your `Vec<u8>` back, since the call took it by value; `FromUtf16Error` has no methods of its own, so it cannot tell you where. → [`str::from_utf8`](14_Strings/str_methods/str_from_utf8/README.md) · [`String::from_utf8`](14_Strings/string_methods/string_from_utf8/README.md) · [`String::from_utf16`](14_Strings/string_methods/string_from_utf16/README.md)
+
+**`ParseError` (`std::string`)** — A type alias for `Infallible`: the error type of `String`'s `FromStr`, which cannot fail, since any text is already a valid `String`. Its documentation says it exists for backwards compatibility and may eventually be deprecated. → [The `Result` you are reading is probably an alias](17_Option_and_Result/result_aliases/README.md)
+
+**`std::os::raw`** — The original home of the C types — `c_char`, `c_int` and the rest — kept as a compatibility module whose own documentation says to use `core::ffi` instead. `std::os::raw::c_char` is the same type as `std::ffi::c_char`, not a copy of it. → [Calling C — the call is free, the data is not](09_Advanced/calling_c/README.md)
+
+**Pointer cast** — `p as *const i8`, or `p.cast::<i8>()`: a raw pointer relabelled as pointing at another type, at the same address. Making or casting a raw pointer is safe code; reading through it is the step that needs `unsafe`. → [What `unsafe` turns off](09_Advanced/what_unsafe_turns_off/README.md)
+
+**`transmute`** — `std::mem::transmute`: one type's bits reinterpreted as another's, with no check of any kind. `transmute`-ing a `u32` into a `char` is undefined behaviour for any value that is not a scalar value, because the compiler assumes a `char` never holds one — which is why `char::from_u32` returns an `Option`. → [Why a `char` is 32 bits wide](14_Strings/why_char_is_32_bits/README.md)
+
+**Pointer alignment** — The multiple a type's address must be: 1 for `u8`, and larger for wider types on most targets. An allocator returns memory aligned for the layout it was asked for, and reading through a misaligned pointer is undefined behaviour even when every byte is there. → [`Allocator::shrink`](09_Advanced/allocator_shrink/README.md)
+
+**`MaybeUninit<T>`** — Memory set aside for a `T` that has not been written yet, with the type recording that it may hold garbage. `Vec` hands out its spare capacity as `MaybeUninit`; reading one before writing it is the bug C calls an uninitialized read. → [Uninitialized reads](31_C_and_Cpp/uninitialized_reads/README.md) · [`Vec::spare_capacity_mut`](26_Collections/vec_methods/vec_spare_capacity_mut/README.md)
+
+**`NonNull<T>`** — A raw pointer that is never null. The missing value is a niche, so `Option<NonNull<T>>` is the size of a bare pointer while `Option<*const T>` is not — measured on 1.98.0 — the same trick that makes `Option<Box<T>>` free, available to code that manages its own memory. → [Nullable pointers](17_Option_and_Result/nullable_pointers/README.md)
+
+**`UnsafeCell<T>`** — The one place in the language where a `&T` does not mean read-only. `Cell` and `RefCell` are built on it, and so are the locks and the atomics; code outside those types almost never names it. → [Interior mutability](09_Advanced/interior_mutability/README.md)
+
+**Sealed trait** — A public trait with a private supertrait, so other crates can use it but not implement it — the API Guidelines' C-SEALED. `std`'s `Pattern` is closed a different way: it is unstable, so you can pass a `char`, a `&str` or a closure to `find`, but cannot name `Pattern` in a signature of your own on stable Rust. → [Searching without splitting](14_Strings/searching_a_string/README.md) · [Sealed traits, C-SEALED ↗](https://rust-lang.github.io/api-guidelines/future-proofing.html#sealed-traits-protect-against-downstream-implementations-c-sealed)
+
+**`Pin<P>`** — A pointer whose pointee promises not to move — unless its type is `Unpin`, in which case the promise is empty. `str` is `Unpin`, so `Pin<Box<str>>` compiles and guarantees nothing a `Box<str>` did not; `Pin::into_inner` hands the box straight back. Pinning is for values that point into themselves, such as futures, not for text. → [There is no `Move` trait](18_Ownership/no_move_trait/README.md)
+
+**`unicode-segmentation`** — Grapheme-cluster, word and sentence boundaries by Unicode's UAX #29 — the "how many characters does a reader see" answer, which `std` does not give because `chars()` counts scalar values. → [The string crates](14_Strings/string_crates/README.md) · [Four lengths, and which one the other system means](14_Strings/four_lengths/README.md)
+
+**`unicode-normalization`** — NFC, NFD, NFKC and NFKD for Rust strings, by UAX #15: the crate to add when two spellings of one name have to compare equal. → [The string crates](14_Strings/string_crates/README.md)
+
+**`encoding_rs`** — The WHATWG Encoding Standard, as implemented for Firefox's Gecko engine: decoding and encoding the legacy encodings `std` does not, since `std` reads only UTF-8 and UTF-16. → [The string crates](14_Strings/string_crates/README.md)
+
+**`icu` (ICU4X)** — The meta-crate of the ICU4X project, re-exporting its internationalization components along with the CLDR locale data they are driven by — where the locale-sensitive answers `str` declines to give actually live. → [The string crates](14_Strings/string_crates/README.md) · [Comparing and sorting text](14_Strings/comparing_strings/README.md)
+
+**`bstr`** — A string type for bytes that are mostly text but not promised to be UTF-8, with the `str`-style methods a plain `&[u8]` lacks. → [The string crates](14_Strings/string_crates/README.md) · [Six kinds of string](14_Strings/six_kinds_of_string/README.md)
+
+**`byteorder`** — Reading and writing integers in a chosen byte order, first published in 2015. Most of what it was for, `std`'s integer types now do themselves with `to_le_bytes` / `from_be_bytes`. → [Meet the byte](19_Numbers/meet_the_byte/README.md) · [The string crates](14_Strings/string_crates/README.md)
+
+**`widestring` / `utf16string`** — Owned UTF-16 string types — and UTF-32, in `widestring`'s case — for Windows APIs and other FFI that speak wide strings. `std` stops at conversion, `str::encode_utf16` out and `String::from_utf16` back, and has no UTF-16 string type. `utf16string` has not published a release since 2020. → [`str::encode_utf16`](14_Strings/str_methods/str_encode_utf16/README.md) · [The string crates](14_Strings/string_crates/README.md)
+
+**`cow-utils`** — Copy-on-write versions of the `str` methods that return a new `String` even when nothing needed changing, plus its own stand-in for `Pattern`, because the real one is unstable. → [The string crates](14_Strings/string_crates/README.md) · [Replacing part of a string](14_Strings/replacing_in_a_string/README.md)
