@@ -235,7 +235,8 @@ NAV_ORDER: dict[str, list[str]] = {
     # Ordered by how much a reader has to know to follow the Rust half:
     # the three ownership bugs first, then the two about threads, then the
     # two that are wrong answers rather than crashes, then the two arithmetic
-    # and indexing rows that are run-time checks rather than refusals.
+    # and indexing rows that are run-time checks rather than refusals -- and
+    # last, C++'s own two replies, spatial before temporal as the talk has them.
     "31_C_and_Cpp": [
         "README.md",
         "uninitialized_reads",
@@ -247,6 +248,8 @@ NAV_ORDER: dict[str, list[str]] = {
         "iterator_invalidation",
         "buffer_overruns",
         "signed_overflow",
+        "safe_buffers",
+        "lifetime_safety_in_clang",
     ],
     "01_Foundations": [
         "README.md",
@@ -903,6 +906,8 @@ LABELS = {
     "31_C_and_Cpp": "C and C++",
     "double_free": "Double-free",
     "use_after_free": "Use-after-free",
+    "safe_buffers": "Safe Buffers",
+    "lifetime_safety_in_clang": "Lifetime safety in Clang",
     # 25_Control_Flow -- every one of these is a keyword, and reads as code.
     "if_expressions": "`if` expressions",
     "match_expressions": "`match` expressions",
