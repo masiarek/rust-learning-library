@@ -6,7 +6,9 @@
 
 2. It prints three things, not one
    file:line:col, the EXPRESSION SOURCE TEXT, and the value:
-       [what_dbg_does.rs:19:19] 2 + 3 = 5
+       [what_dbg_does.rs:17:19] 2 + 3 = 5
+   Line 17 is the call in section 1, and column 19 is where `dbg!`
+   starts on it, counting from 1: four spaces and `let doubled = ` come first.
    `2 + 3` is not a string you passed — the macro captured the source.
    That is why `dbg!(x)` beats `println!("x = {:?}", x)`: the label
    cannot go stale when you rename x.

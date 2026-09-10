@@ -96,8 +96,24 @@ fn main() {
     println!("      let _: Vec<char>     = ...collect();               {} items", listed.len());
     println!("      let _: BTreeSet<char> = ...collect();              {} items, {:?}", unique.len(), unique);
 
+    println!("\n5. An empty container — String::new() and Vec::new() look alike");
+    let text: String = String::new();
+    let nums: Vec<i32> = Vec::new();
+    println!("   let text: String   = String::new();   {}", ty(&text));
+    println!("   let nums: Vec<i32> = Vec::new();      {}", ty(&nums));
+    println!("   The first annotation is documentation: String has no type parameter.");
+    println!("   The second is required: an empty Vec<T> has no element to read T from.");
+    println!("      let nums = Vec::new();  dbg!(nums);   // error[E0282]: type annotations needed for `Vec<_>`");
+    println!("      let nums: Vec<_> = Vec::new();        // error[E0282] — `_` asks for the inference that failed");
+    println!("   Printing it or asking its len() does not decide T; both work on a Vec of");
+    println!("   anything. A later line that needs a particular T does:");
+    let mut later = Vec::new();
+    later.push(1u8);
+    println!("   let mut later = Vec::new(); later.push(1u8);   {}", ty(&later));
+
     println!("\nThe rule");
     println!("   Annotate when the expression is ambiguous (a numeric literal, parse,");
-    println!("   collect, into) or when you want a coercion. On \"a\" it is neither, so");
-    println!("   `let s = \"a\";` and `let s: &str = \"a\";` are the same program.");
+    println!("   collect, into, an empty Vec::new()) or when you want a coercion. On \"a\"");
+    println!("   it is neither, so `let s = \"a\";` and `let s: &str = \"a\";` are the same");
+    println!("   program.");
 }

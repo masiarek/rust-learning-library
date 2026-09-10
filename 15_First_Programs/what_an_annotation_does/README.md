@@ -17,6 +17,7 @@ A string literal has exactly one possible type, so there is nothing left for the
 | `1` | `i32` | `u8`, `u64`, `f64`… | **picks** the type |
 | `&some_string` | `&String` | `&str` | **coerces** |
 | `"42".parse()` | *nothing — `E0284`* | `i32` | is **required** |
+| `Vec::new()` | *nothing — `E0282`* | `Vec<i32>` | is **required** |
 
 ---
 
@@ -154,9 +155,37 @@ let unique: BTreeSet<char> = letters.iter().copied().collect(); // 8 items — '
 
 The alternative spelling puts the same information at the call instead of on the binding — `"42".parse::<i32>()`, `letters.iter().collect::<String>()`. That is the [turbofish](../../14_Strings/making_a_string/README.md), and it is the right tool when the value is not being bound to a name.
 
+## An empty container has nothing to infer from
+
+Two constructors with the same shape, and opposite answers:
+
+```rust
+let text: String = String::new();    // optional — String has no type parameter
+let nums: Vec<i32> = Vec::new();     // required — nothing else names the element
+```
+
+`String::new()` can only be a `String`, so its annotation is documentation, like the one on `"a"`. `Vec::new()` is a `Vec<T>` for every `T` at once, and an empty vector has no element to read `T` from. Drop the annotation, keep `dbg!(nums);` as the only use, and:
+
+```text
+error[E0282]: type annotations needed for `Vec<_>`
+ --> e3.rs:2:9
+  |
+2 |     let nums = Vec::new();
+  |         ^^^^   ---------- type must be known at this point
+  |
+help: consider giving `nums` an explicit type, where the type for type parameter `T` is specified
+  |
+2 |     let nums: Vec<T> = Vec::new();
+  |             ++++++++
+```
+
+Printing it does not help: `dbg!(nums)` and `nums.len()` work on a `Vec` of anything, so they choose nothing. A use counts only when it needs a particular element — `nums.push(1u8)` a line later makes it a `Vec<u8>`, because inference reads the whole function, not one line. Nor does `Vec<_>`: the `_` asks the compiler to infer the element, the step that just failed, so `let nums: Vec<_> = Vec::new();` is still `E0282`.
+
+`Vec::<i32>::new()` puts the same information at the call instead. The three places to write the type, and which to pick, are on [When the compiler cannot infer](../../22_Generics/when_the_compiler_cannot_infer/README.md).
+
 ## So when do you write one?
 
-**When the expression is ambiguous** — a numeric literal, `parse`, `collect`, `into`, `default` — or **when you want a coercion**. On `"a"` it is neither.
+**When the expression is ambiguous** — a numeric literal, `parse`, `collect`, `into`, `default`, an empty `Vec::new()` — or **when you want a coercion**. On `"a"` it is neither.
 
 Beyond that it is taste, and the useful rule is that an annotation on a `let` is a *check* as much as a label: it fails the build if the expression ever stops producing what you thought. On a long function, or on a value that came back from something generic, that is worth the six characters. On `let s = "a";` it is not.
 
@@ -175,6 +204,8 @@ The place the two languages *do* line up is more interesting, because Python sol
 Three functions become one function plus three annotations. That is why `E0284` exists and Python has no equivalent error: the moment the type is the thing selecting the code, leaving it out leaves nothing to run.
 
 What changes: in Python, forgetting to say `int` gets you a string that behaves like a string until `"42" + 1` blows up somewhere else. In Rust, forgetting to say `i32` does not compile, and the error points at the `let`.
+
+The empty-container pair is where Python's type checker agrees with rustc outright. mypy passes `text = ""` and rejects `nums = []` with `Need type annotation for "nums"`, and a later `nums.append(1)` in the same scope settles it to `list[int]` — the same backwards reading that lets a later `push` fix a `Vec::new()`. What still differs: mypy's complaint is advisory and the interpreter runs the file anyway; rustc's stops the build.
 
 **ABAP.** Inline declaration is inference and a `DATA` statement is the annotation, so the shape is familiar:
 
@@ -259,10 +290,22 @@ lt_b = VALUE #( ( ... ) ).              " # = take it from the target
       let _: Vec<char>     = ...collect();               9 items
       let _: BTreeSet<char> = ...collect();              8 items, {'R', 'a', 'c', 'e', 'n', 's', 't', 'u'}
 
+5. An empty container — String::new() and Vec::new() look alike
+   let text: String   = String::new();   alloc::string::String
+   let nums: Vec<i32> = Vec::new();      alloc::vec::Vec<i32>
+   The first annotation is documentation: String has no type parameter.
+   The second is required: an empty Vec<T> has no element to read T from.
+      let nums = Vec::new();  dbg!(nums);   // error[E0282]: type annotations needed for `Vec<_>`
+      let nums: Vec<_> = Vec::new();        // error[E0282] — `_` asks for the inference that failed
+   Printing it or asking its len() does not decide T; both work on a Vec of
+   anything. A later line that needs a particular T does:
+   let mut later = Vec::new(); later.push(1u8);   alloc::vec::Vec<u8>
+
 The rule
    Annotate when the expression is ambiguous (a numeric literal, parse,
-   collect, into) or when you want a coercion. On "a" it is neither, so
-   `let s = "a";` and `let s: &str = "a";` are the same program.
+   collect, into, an empty Vec::new()) or when you want a coercion. On "a"
+   it is neither, so `let s = "a";` and `let s: &str = "a";` are the same
+   program.
 ```
 <!-- /output -->
 
@@ -279,14 +322,16 @@ rustc --edition 2024 15_First_Programs/what_an_annotation_does/examples/what_an_
 - [Meet the byte](../../19_Numbers/meet_the_byte/README.md) — why `u8` instead of `i32` is a decision and not a detail
 - [A block is an expression](../a_block_is_an_expression/README.md) — the other place `E0308` catches a beginner, over one semicolon
 - [Shadowing](../../SHADOWING.md) — `let` again with a new annotation is legal, and changes the type
+- [Type inference](../type_inference/README.md) — what the compiler works out when you write no annotation at all, and where it stops
+- [When the compiler cannot infer](../../22_Generics/when_the_compiler_cannot_infer/README.md) — `E0282` in full: the three places to write the missing type, and why a later line can supply it
 - [Type inference ↗](https://doc.rust-lang.org/reference/type-inference.html) · [`E0282` ↗](https://doc.rust-lang.org/error_codes/E0282.html) · [Deref coercion ↗](https://doc.rust-lang.org/book/ch15-02-deref.html#implicit-deref-coercions-with-functions-and-methods)
 
 ## Po polsku
 
 Adnotacja typu (*type annotation*) w Ruscie to nie komentarz i nie podpowiedź dla czytelnika, tylko **wejście do wnioskowania typów** (*type inference*). Dla kogoś, kto przychodzi tu od Pythona, jest to najważniejsza różnica na tej stronie: pythonowe adnotacje typów są bezwładne — leżą w `__annotations__`, czyta je mypy, a interpreter je ignoruje i chwilę później pozwoli tej samej nazwie trzymać `int`. W Ruscie `let m: u8 = 1;` daje inną wartość, w innej ilości pamięci, niż `let n = 1;`, a `let big: u8 = 1_000_000;` w ogóle się nie skompiluje (*literal out of range for `u8`*). Adnotacja współdecyduje o tym, jaki program powstanie — dlatego lepiej mówić o niej „adnotacja typu”, a nie „podpowiedź typu”.
 
-Ta sama składnia pełni jednak cztery zupełnie różne role, zależnie od tego, co stoi po prawej stronie. Przy literale tekstowym `"a"` nie robi nic: literał ma dokładnie jeden możliwy typ, więc nie ma czego rozstrzygać i `let s = "a";` oraz `let s: &str = "a";` to ten sam program. Przy literale liczbowym `1` **wybiera** typ — `i32` nie jest znaczeniem jedynki, tylko wartością domyślną, po którą kompilator sięga, gdy nic innego nie rozstrzyga (a adnotacja jest najgłośniejszym z rozstrzygających). Przy `"42".parse()` jest wręcz **konieczna**: `parse` jest generyczne, więc bez celu nie ma czego policzyć i dostajesz `E0284: type annotations needed`. Najlepiej widać to na `collect()`, gdzie jedno wyrażenie daje trzy różne programy — `String` daje „Rustacean”, `Vec<char>` dziewięć elementów, a `BTreeSet<char>` osiem, bo `'a'` występuje dwa razy.
+Ta sama składnia pełni jednak cztery zupełnie różne role, zależnie od tego, co stoi po prawej stronie. Przy literale tekstowym `"a"` nie robi nic: literał ma dokładnie jeden możliwy typ, więc nie ma czego rozstrzygać i `let s = "a";` oraz `let s: &str = "a";` to ten sam program. Przy literale liczbowym `1` **wybiera** typ — `i32` nie jest znaczeniem jedynki, tylko wartością domyślną, po którą kompilator sięga, gdy nic innego nie rozstrzyga (a adnotacja jest najgłośniejszym z rozstrzygających). Przy `"42".parse()` jest wręcz **konieczna**: `parse` jest generyczne, więc bez celu nie ma czego policzyć i dostajesz `E0284: type annotations needed`. Najlepiej widać to na `collect()`, gdzie jedno wyrażenie daje trzy różne programy — `String` daje „Rustacean”, `Vec<char>` dziewięć elementów, a `BTreeSet<char>` osiem, bo `'a'` występuje dwa razy. Tak samo jest z pustym kontenerem: `String::new()` może być tylko `String`-iem, więc tu adnotacja niczego nie rozstrzyga, ale `Vec::new()` to `Vec<T>` dla każdego `T` naraz, a pusty wektor nie ma elementu, z którego dałoby się ten typ odczytać — bez adnotacji dostajesz `E0282`. Nie pomoże ani samo `dbg!(v)`, bo działa dla wektora czegokolwiek, ani `Vec<_>`, bo podkreślnik prosi właśnie o to wnioskowanie, które zawiodło; rozstrzyga dopiero dalsze użycie wymagające konkretnego typu, na przykład `v.push(1u8)`.
 
 Czwarty przypadek — `let s: &str = &owned;` — myli najczęściej, bo po polsku aż prosi się, żeby nazwać go „rzutowaniem”, a rzutowanie (`as`) to co innego: tam konwersja jest jawna i potrafi zmienić bity, tu nie zmienia się ani jeden bajt. Wyrażenie `&owned` produkuje wyłącznie `&String`; to adnotacja tworzy **miejsce niejawnej konwersji** (*coercion site* — `let` z podanym typem, argument funkcji, pole w literale struktury, pozycja zwracana), a `impl Deref<Target = str>` po stronie `String` jest przepustką, która pozwala kompilatorowi wstawić brakujące wywołanie. Nic się przy tym nie kopiuje: wskaźnik pozostaje ten sam, a 24 bajty na stosie (wskaźnik, długość, pojemność) stają się 16 — pole pojemności zostaje po prostu zapomniane, i właśnie dlatego przez wycinek łańcucha nie da się już dopisywać tekstu. Bez `: &str` po lewej nie ma miejsca konwersji i zostaje `&String`. Gdy wartość nie trafia do nazwanej zmiennej, tę samą informację podaje się przy wywołaniu: `"42".parse::<i32>()` — czyli *turbofish*.
 
-**Szukaj po polsku:** adnotacje typów w Ruscie · wnioskowanie typów · `rust type annotations needed E0284` · `rust deref coercion` · `rust turbofish`
+**Szukaj po polsku:** adnotacje typów w Ruscie · wnioskowanie typów · `rust type annotations needed E0284` · `rust Vec::new E0282` · `rust deref coercion` · `rust turbofish`

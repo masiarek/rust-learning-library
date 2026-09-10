@@ -15,6 +15,7 @@ struct Ballot {
 fn main() {
     println!("1. `dbg!` returns its argument, and that is the whole point");
     let doubled = dbg!(2 + 3) * 10;
+    let dbg_line = line!() - 1; // the dbg! above: it reads its position with this same line!()
     println!("   let doubled = dbg!(2 + 3) * 10;   ->  {doubled}");
     println!("   It evaluated to 5 and handed it straight back, so you can wrap any");
     println!("   sub-expression without restructuring the code around it.");
@@ -22,7 +23,9 @@ fn main() {
 
     println!("\n2. It prints three things, not one");
     println!("   file:line:col, the EXPRESSION SOURCE TEXT, and the value:");
-    println!("       [what_dbg_does.rs:19:19] 2 + 3 = 5");
+    println!("       [what_dbg_does.rs:{dbg_line}:19] 2 + 3 = 5");
+    println!("   Line {dbg_line} is the call in section 1, and column 19 is where `dbg!`");
+    println!("   starts on it, counting from 1: four spaces and `let doubled = ` come first.");
     println!("   `2 + 3` is not a string you passed — the macro captured the source.");
     println!("   That is why `dbg!(x)` beats `println!(\"x = {{:?}}\", x)`: the label");
     println!("   cannot go stale when you rename x.");

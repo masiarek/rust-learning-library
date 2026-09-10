@@ -19,10 +19,12 @@ let doubled = dbg!(2 + 3) * 10;   // doubled == 50
 ## It captures the expression, not just the value
 
 ```text
-[what_dbg_does.rs:19:19] 2 + 3 = 5
+[what_dbg_does.rs:17:19] 2 + 3 = 5
 ```
 
 Three things: **file:line:col**, the **source text** of the expression, and the value. `2 + 3` is not a string you passed — the macro captured it. That is the real argument against hand-rolling `println!("x = {:?}", x)`: the label there is a string literal, so it silently goes stale the moment you rename `x` or paste the line somewhere else. A `dbg!` label cannot lie about what it printed.
+
+The three come from std's own macros — `dbg!` is an `eprintln!` of `file!()`, `line!()`, `column!()`, `stringify!` of the expression, and the value under `{:#?}`. So the file is whatever path the compiler was handed: the bare name when you run `rustc what_dbg_does.rs` in the example's folder, `src/main.rs` under Cargo, which passes paths relative to the workspace root (a workspace member named `main` prints `main/src/main.rs`). Line and column count from 1 to the `d` of `dbg!`: line 17 of the example, and column 19, after four spaces of indent and `let doubled = `.
 
 `dbg!()` with no argument prints just the location, which is a decent "did we get here" probe.
 
@@ -247,7 +249,9 @@ Every `dbg!` line this program prints goes to **stderr**, and the recorded key b
 
 2. It prints three things, not one
    file:line:col, the EXPRESSION SOURCE TEXT, and the value:
-       [what_dbg_does.rs:19:19] 2 + 3 = 5
+       [what_dbg_does.rs:17:19] 2 + 3 = 5
+   Line 17 is the call in section 1, and column 19 is where `dbg!`
+   starts on it, counting from 1: four spaces and `let doubled = ` come first.
    `2 + 3` is not a string you passed — the macro captured the source.
    That is why `dbg!(x)` beats `println!("x = {:?}", x)`: the label
    cannot go stale when you rename x.
@@ -299,7 +303,7 @@ Every `dbg!` line this program prints goes to **stderr**, and the recorded key b
 
 ## Po polsku
 
-Najczęstsze polskie skrócenie brzmi „`dbg!` to krótszy `println!("{:?}")`” i jest fałszywe w miejscu, które decyduje o wszystkim: `dbg!` **oddaje swój argument**. Dzięki temu można je owinąć wokół dowolnego podwyrażenia bez przebudowywania kodu — `let doubled = dbg!(2 + 3) * 10;` nadal daje `50`, a usuwa się je, kasując sześć znaków. `println!` zwraca `()`, więc ta sama sztuczka po prostu się nie skompiluje. Drugą różnicą jest to, że makro przechwytuje **tekst źródłowy** wyrażenia, nie samą wartość: wypisuje `[what_dbg_does.rs:19:19] 2 + 3 = 5`, czyli plik, wiersz, kolumnę, treść wyrażenia i wynik. Etykieta w ręcznie pisanym `println!("x = {:?}", x)` to zwykły literał, który po zmianie nazwy zmiennej zaczyna kłamać — etykieta `dbg!` nie może.
+Najczęstsze polskie skrócenie brzmi „`dbg!` to krótszy `println!("{:?}")`” i jest fałszywe w miejscu, które decyduje o wszystkim: `dbg!` **oddaje swój argument**. Dzięki temu można je owinąć wokół dowolnego podwyrażenia bez przebudowywania kodu — `let doubled = dbg!(2 + 3) * 10;` nadal daje `50`, a usuwa się je, kasując sześć znaków. `println!` zwraca `()`, więc ta sama sztuczka po prostu się nie skompiluje. Drugą różnicą jest to, że makro przechwytuje **tekst źródłowy** wyrażenia, nie samą wartość: wypisuje `[what_dbg_does.rs:17:19] 2 + 3 = 5`, czyli plik, wiersz, kolumnę, treść wyrażenia i wynik. Etykieta w ręcznie pisanym `println!("x = {:?}", x)` to zwykły literał, który po zmianie nazwy zmiennej zaczyna kłamać — etykieta `dbg!` nie może.
 
 Rzecz, która najczęściej zabiera pół godziny: `dbg!` pisze na **standardowe wyjście błędów** (*stderr*), a nie na standardowe wyjście. To jest zamierzone — `cargo run > out.txt` zostawia prawdziwy wynik programu w pliku, a diagnostykę na terminalu — ale ma dwa nieoczywiste skutki. `2>/dev/null` sprawia, że linijki `dbg!` znikają bez śladu, a przy przekierowaniu do potoku **kolejność się rozjeżdża**: stdout jest wtedy buforowane blokowo, stderr nigdy, więc wiersz z `dbg!` potrafi pojawić się przed `println!`, który wykonał się wcześniej. W tym repozytorium wychodzi to jeszcze dobitniej: `tools/run_examples.py` zapisuje wyłącznie stdout, więc wyjścia `dbg!` **nie da się** utrwalić w kluczu odpowiedzi i lekcja musi je *opisać* przez `println!`.
 
