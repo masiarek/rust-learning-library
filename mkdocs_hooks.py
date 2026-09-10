@@ -524,6 +524,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # atomic so it can cross a thread boundary.
         "reference_counting",
         "sharing_across_threads",
+        # ...and what all three are avoiding, priced: a derived Clone is the
+        # sum of its fields, so one `.clone()` is two allocations or none.
+        "what_a_clone_costs",
     ],
     "19_Numbers": [
         "README.md",

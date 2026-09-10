@@ -359,6 +359,7 @@ Part 3 — the back edge, and whether Drop runs.
 - [Ownership and moves](../ownership_and_moves/README.md) — the one-owner rule this type is the sanctioned exception to
 - [`Cow`: borrow until somebody writes](../clone_on_write/README.md) — the other way out of a copy, decided by the data rather than by the owner count
 - [Sharing across threads: `Arc`](../sharing_across_threads/README.md) — the same counter made atomic, and the `Send` refusal that separates them
+- [What a clone costs](../what_a_clone_costs/README.md) — this page's `alloc 0` beside a `String`'s, a `Vec`'s and a whole struct's, and why the call site cannot show which you got
 - [`ToOwned`](../../12_Traits/to_owned/README.md) — where the same misreading bites hardest
 - [The global allocator](../../09_Advanced/the_global_allocator/README.md) — the counting allocator section 2 measures with
 - [`Rc` ↗](https://doc.rust-lang.org/std/rc/struct.Rc.html) · [`Weak` ↗](https://doc.rust-lang.org/std/rc/struct.Weak.html) · [`RefCell` ↗](https://doc.rust-lang.org/std/cell/struct.RefCell.html)

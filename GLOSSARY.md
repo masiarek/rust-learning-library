@@ -16,7 +16,7 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **`Box<dyn Error>`** — A type-erased error: any error can convert into it, so unrelated failures can flow through one function. What applications reach for when nothing downstream will `match` on the cause. → [`Option` vs `Result`](17_Option_and_Result/option_vs_result/README.md)
 
-**`Clone`** — An explicit duplicate, via `.clone()`. May allocate and may run your own code, and is always visible in the source — which is the point, since an allocation you can see is one you can question. `#[derive(Clone)]` clones each field, and `Copy` requires it. → [`Copy` vs `Clone`](16_Structs/copy_vs_clone/README.md)
+**`Clone`** — An explicit duplicate, via `.clone()`. May allocate and may run your own code, and is always visible in the source — which is the point, since an allocation you can see is one you can question. `#[derive(Clone)]` clones each field, and `Copy` requires it. → [`Copy` vs `Clone`](16_Structs/copy_vs_clone/README.md), and what one costs, field by field → [What a clone costs](18_Ownership/what_a_clone_costs/README.md)
 
 **`const` evaluation** — Your code, executed by the compiler during the build rather than by your program at run time. A `const fn` used as an array length forces it; anything that would panic becomes a build error instead. → [What a compiler does before your program runs](20_Compilers/what_a_compiler_does/README.md)
 

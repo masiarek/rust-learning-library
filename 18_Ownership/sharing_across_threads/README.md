@@ -345,6 +345,7 @@ Part 3 — the Arc you can delete.
 ## See also
 
 - [`Rc`: the clone that copies a pointer](../reference_counting/README.md) — the single-threaded original, and the counter this page makes atomic
+- [What a clone costs](../what_a_clone_costs/README.md) — what the atomic count costs beside `Rc`'s, alone and with several threads contending
 - [Marker traits](../../12_Traits/marker_traits/README.md) — `Send` itself: `assert_send::<Arc<i32>>()` compiles and `assert_send::<Rc<i32>>()` does not, on two values of identical size
 - [Mutex poisoning](../../09_Advanced/mutex_poisoning/README.md) — what happens to `Arc<Mutex<T>>` when a thread panics while holding the lock
 - [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) — the trait both counters are implementing

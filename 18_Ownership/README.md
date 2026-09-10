@@ -36,6 +36,7 @@ The back half is names rather than values. Shadowing, scope, and lifetimes are t
 | [`Cow`: borrow until somebody writes](clone_on_write/README.md) | 201 | Borrowed or owned, decided at run time by the data — `to_mut()` is the write that pays for the clone, and the tag costs nothing: `Cow<str>` is the same 24 bytes as `String` |
 | [`Rc`: the clone that copies a pointer](reference_counting/README.md) | 201 | Several owners for one value, counted — `Rc::clone` duplicates a pointer and a number, never the data, which makes it the cheapest `.clone()` in Rust and the most commonly misread one |
 | [Sharing across threads: `Arc`](sharing_across_threads/README.md) | 201 | The same counter made atomic — the difference is not a performance note but the reason one of the two compiles across a thread boundary, and `Arc<Mutex<T>>` is what shared *mutable* state costs |
+| [What a clone costs](what_a_clone_costs/README.md) | 201 | A derived `Clone` clones every field, so it costs what the fields cost — two allocations for two `String`s, none for two `Arc<str>`s, none for a move — and nothing at the call site says which |
 
 `Cow`, `Rc` and `Arc` are the ways out of a copy the one-owner rule would otherwise force: borrow until somebody writes, or let several owners share one value and count them.
 

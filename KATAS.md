@@ -190,6 +190,7 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K170 | [The early return that cannot hold the lock, and the one-character way to drop it too soon](31_C_and_Cpp/forgotten_unlock/README.md#practice) | [Forgotten unlock](31_C_and_Cpp/forgotten_unlock/README.md) | 201 |
 | K171 | [Spanify Clang's own example — a raw pointer and a length, then one slice](31_C_and_Cpp/safe_buffers/README.md#practice) | [Safe Buffers](31_C_and_Cpp/safe_buffers/README.md) | 201 |
 | K172 | [One contract, two spellings — a lifetime in Rust, an attribute in C++](31_C_and_Cpp/lifetime_safety_in_clang/README.md#practice) | [Lifetime safety in Clang](31_C_and_Cpp/lifetime_safety_in_clang/README.md) | 301 |
+| K173 | [Price an order before you run it](18_Ownership/what_a_clone_costs/README.md#practice) | [What a clone costs](18_Ownership/what_a_clone_costs/README.md) | 201 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -243,7 +244,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K56 · [The hour that changed its ad](17_Option_and_Result/one_arm_many_values/README.md#practice)
 - K57 · [Three ways to make `Some(None)` compile](17_Option_and_Result/some_is_a_constructor/README.md#practice)
 
-**[Ownership](18_Ownership/README.md)** — 15 katas
+**[Ownership](18_Ownership/README.md)** — 16 katas
 
 - K12 · [Follow the responsibility](18_Ownership/ownership_and_moves/README.md#practice)
 - K13 · [Many readers, or one writer](18_Ownership/borrowing/README.md#practice)
@@ -260,6 +261,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K131 · [Count the drops on four paths](18_Ownership/the_drop_flag/README.md#practice)
 - K136 · [Three predictions about one call](18_Ownership/the_call_stack/README.md#practice)
 - K137 · [Prove the reuse, then get the compiler to stop you exploiting it](18_Ownership/a_stack_slot_is_reused/README.md#practice)
+- K173 · [Price an order before you run it](18_Ownership/what_a_clone_costs/README.md#practice)
 
 **[Errors](02_Errors/README.md)** — 1 kata
 

@@ -248,7 +248,7 @@ And the syntax trap, which is its own error:
 
 ## See also
 
-- [STRUCTS.md](../../STRUCTS.md) · [`Copy` vs `Clone`](../copy_vs_clone/README.md) · [What a struct is](../what_a_struct_is/README.md) · [Ownership and moves](../../18_Ownership/ownership_and_moves/README.md)
+- [STRUCTS.md](../../STRUCTS.md) · [`Copy` vs `Clone`](../copy_vs_clone/README.md) · [What a struct is](../what_a_struct_is/README.md) · [Ownership and moves](../../18_Ownership/ownership_and_moves/README.md) · [What a clone costs](../../18_Ownership/what_a_clone_costs/README.md)
 
 ## Po polsku
 
