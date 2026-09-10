@@ -79,6 +79,8 @@ fn main() {
              u8::from_str_radix("0xff", 16).map_err(|e| e.to_string()));
     println!("  u8::from_str_radix(\"100\", 16)  = {:?}   <- 0x100 does not fit a u8",
              u8::from_str_radix("100", 16).map_err(|e| e.to_string()));
+    println!("  u8::from_str_radix(\"+f\", 16)   = {:?}   <- a sign is accepted, even for a u8",
+             u8::from_str_radix("+f", 16));
     let printed = format!("{:#x}", 255u8);
     println!("  so {{:#x}} does not round-trip: printed {printed:?}, reads back {:?}",
              u8::from_str_radix(&printed, 16).map_err(|e| e.to_string()));

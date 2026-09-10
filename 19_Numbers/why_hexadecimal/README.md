@@ -140,6 +140,7 @@ The full set of literals, formats, and traps, run:
   u8::from_str_radix("ff", 16)   = Ok(255)
   u8::from_str_radix("0xff", 16) = Err("invalid digit found in string")   <- 'x' is not a hex digit
   u8::from_str_radix("100", 16)  = Err("number too large to fit in target type")   <- 0x100 does not fit a u8
+  u8::from_str_radix("+f", 16)   = Ok(15)   <- a sign is accepted, even for a u8
   so {:#x} does not round-trip: printed "0xff", reads back Err("invalid digit found in string")
   strip it first:                          Ok(255)
 
@@ -189,6 +190,8 @@ Which produces a genuine asymmetry worth knowing: **`{:#x}` prints a prefix that
 
 The other half of the same call is a feature rather than a trap: the *type* bounds the parse, so `u8::from_str_radix("100", 16)` is `Err(PosOverflow)` — `0x100` is 256 and does not fit. The parser refuses rather than truncating.
 
+What it does not refuse is a **sign**. The grammar is *an optional `+` or `-`, then digits*, and the `+` is accepted even by an unsigned type: `u8::from_str_radix("+f", 16)` is `Ok(15)`. So a two-character slice that parses is not two hex digits, and a decoder that parses pairs has to check `is_ascii_hexdigit` first — the one in the [kata](#practice) does.
+
 ## Trap 3: hex of a signed integer is two's complement
 
 ```rust
@@ -203,6 +206,7 @@ No minus sign appears, and the *width of the type shows through* — the same va
 **Python.** The literals are identical (`0xBE`, `0b1011_1110`, `0o276`, and `_` separators since 3.6), and the ideas transfer whole. Three differences will bite you, all of them Rust being stricter or narrower:
 
 - `int("0xbe", 16)` **accepts** the prefix; `u8::from_str_radix("0xbe", 16)` rejects it.
+- A sign goes the other way round: `int('+f', 16)` and `u8::from_str_radix("+f", 16)` both accept it, and `bytes.fromhex('+f')` raises. The first two read a *number* and `fromhex` reads *bytes*, which is the distinction [Hex: number or bytes? ↗](https://masiarek.github.io/encodings-learning-library/01_Bits_and_Bytes/hex_number_or_bytes/index.html) is built on.
 - `bytes.hex()` and `bytes.fromhex()` are in the standard library and pad correctly, so Trap 1 is a bug you would have to write on purpose. Rust's standard library has no `[u8] -> String` hex encoder at all — you write it, or you take the `hex` crate — so the trap is live. (`f"{10:x}"` is unpadded in Python too; you just rarely reach for it.)
 - `format(-1, "x")` is `"-1"` in Python and `"ff"` in Rust. Python's `int` has no width, so it can afford a minus sign; Rust's `i8` has exactly eight bits and prints them.
 
@@ -212,7 +216,7 @@ No minus sign appears, and the *width of the type shows through* — the same va
 
 **The fingerprint that collided.** You want a short hex fingerprint for a ballot file, so two election observers can read it aloud and compare. Write the obvious encoder with `{:x}`, then find two different files it gives the same fingerprint — start with a byte below `0x10` and a byte that ends in zero.
 
-Then fix it, and *prove* the fix rather than asserting it: encode every one of the 65,536 two-byte files and count how many distinct strings each version produces. Finally write the decoder, and decide what it should do with an odd number of characters, with `0x` on the front, and with a character that is not a hex digit — three cases, three different answers.
+Then fix it, and *prove* the fix rather than asserting it: encode every one of the 65,536 two-byte files and count how many distinct strings each version produces. Finally write the decoder, and decide what it should do with an odd number of characters, with `0x` on the front, and with a character that is not a hex digit — three cases, three different answers. Then feed it `+f` and `aéb`: `from_str_radix` alone reads the first as a byte, and slicing two bytes at a time panics on the second.
 
 <details markdown="1">
 <summary><strong>Solution</strong></summary>
@@ -251,16 +255,19 @@ enum HexError {
 /// Read a fingerprint back. Accepts an optional `0x`, because a human will type one.
 fn decode(text: &str) -> Result<Vec<u8>, HexError> {
     let t = text.strip_prefix("0x").or_else(|| text.strip_prefix("0X")).unwrap_or(text);
+    // Check every character before parsing any. `from_str_radix` accepts a
+    // leading `+`, so the pair "+f" would read as 15 — and slicing two bytes at
+    // a time panics when a pair boundary falls inside a character, as in "aéb".
+    if let Some(bad) = t.chars().find(|c| !c.is_ascii_hexdigit()) {
+        return Err(HexError::BadDigit(bad.to_string()));
+    }
     if !t.len().is_multiple_of(2) {
         return Err(HexError::OddLength(t.len()));
     }
-    (0..t.len())
+    Ok((0..t.len())
         .step_by(2)
-        .map(|i| {
-            let pair = &t[i..i + 2];
-            u8::from_str_radix(pair, 16).map_err(|_| HexError::BadDigit(pair.to_string()))
-        })
-        .collect()
+        .map(|i| u8::from_str_radix(&t[i..i + 2], 16).expect("two hex digits, checked above"))
+        .collect())
 }
 
 fn main() {
@@ -302,9 +309,16 @@ fn main() {
     }
 
     println!("\n=== reading a fingerprint back ===");
-    for input in ["0ab042", "0x0ab042", "0AB042", "0ab04", "0ab0zz"] {
+    for input in ["0ab042", "0x0ab042", "0AB042", "0ab04", "0ab0zz", "+f", "aéb"] {
         println!("  {input:<10} -> {:?}", decode(input));
     }
+    println!("  from_str_radix alone reads \"+f\" as {:?} -- it takes a sign, so check the digits first",
+             u8::from_str_radix("+f", 16));
+    std::panic::set_hook(Box::new(|_| {}));
+    let sliced = std::panic::catch_unwind(|| &"aéb"[0..2]);
+    let _ = std::panic::take_hook(); // the default hook back
+    println!("  and slicing \"aéb\" two bytes at a time panics: {} -- the first pair ends inside the é",
+             sliced.is_err());
 
     println!("\n=== the round trip, proved rather than asserted ===");
     let single_ok = (0..=255u8).all(|b| decode(&encode(&[b])) == Ok(vec![b]));
@@ -351,7 +365,11 @@ fn main() {
   0x0ab042   -> Ok([10, 176, 66])
   0AB042     -> Ok([10, 176, 66])
   0ab04      -> Err(OddLength(5))
-  0ab0zz     -> Err(BadDigit("zz"))
+  0ab0zz     -> Err(BadDigit("z"))
+  +f         -> Err(BadDigit("+"))
+  aéb        -> Err(BadDigit("é"))
+  from_str_radix alone reads "+f" as Ok(15) -- it takes a sign, so check the digits first
+  and slicing "aéb" two bytes at a time panics: true -- the first pair ends inside the é
 
 === the round trip, proved rather than asserted ===
   all 256 single bytes round-trip   : true
@@ -382,6 +400,6 @@ Reszta strony wynika z tej jednej własności. Dziesiętnie nie da się tak zapi
 
 Pułapka pierwsza jest w Ruscie realna, nie teoretyczna: `{:x}` **nie dopełnia zerami**. Bajt mniejszy niż `0x10` wypisze się jako jeden znak i szew przepada — `[0x0A, 0xB0]` oraz `[0xAB, 0x00]` dają ten sam łańcuch `"ab0"`. Kod przechodzi wszystkie testy z „realistycznymi” danymi, bo zachowuje się poprawnie dla 240 z 256 bajtów; psuje się tylko na wiodącym zerze, bajcie zerowym albo małej liczbie. Ćwiczenie na tej stronie liczy szkody: spośród 65 536 dwubajtowych plików wersja bez dopełnienia gubi tożsamość 3 600 z nich, a zawodzą dokładnie bajty `0x00..=0x0F`. Piszemy `{:02x}` — i warto wiedzieć, dlaczego akurat w Ruscie ta pułapka żyje: standardowa biblioteka **nie ma** enkodera `[u8] -> String`, więc każdy pisze go sam albo bierze crate `hex`, podczas gdy w Pythonie `bytes.hex()` dopełnia za nas.
 
-Dwie pozostałe pułapki też są warte zapamiętania po polsku. `from_str_radix` przyjmuje **podstawę**, a nie przedrostek, więc `u8::from_str_radix("0xff", 16)` kończy się błędem — `x` nie jest cyfrą szesnastkową — i wychodzi z tego asymetria: `{:#x}` wypisuje przedrostek, którego parser nie odczyta, więc formatowanie i parsowanie nie są tu operacjami odwrotnymi, dopóki sam nie zdejmiesz `0x` przez `strip_prefix`. Za to ograniczenie typem jest zaletą: `u8::from_str_radix("100", 16)` zwraca błąd zamiast obciąć wartość, bo `0x100` to 256. I na koniec liczby ujemne: `format!("{:x}", -1i8)` daje `ff`, a `-1i32` daje `ffffffff` — żadnego minusa, bo heks zapisuje bity, a bity liczby ujemnej to **uzupełnienie do dwóch**; przy okazji widać szerokość typu, w którym wartość była przechowywana. Jeśli chciałeś zapisu dla człowieka, chciałeś systemu dziesiętnego.
+Dwie pozostałe pułapki też są warte zapamiętania po polsku. `from_str_radix` przyjmuje **podstawę**, a nie przedrostek, więc `u8::from_str_radix("0xff", 16)` kończy się błędem — `x` nie jest cyfrą szesnastkową — i wychodzi z tego asymetria: `{:#x}` wypisuje przedrostek, którego parser nie odczyta, więc formatowanie i parsowanie nie są tu operacjami odwrotnymi, dopóki sam nie zdejmiesz `0x` przez `strip_prefix`. Za to ograniczenie typem jest zaletą: `u8::from_str_radix("100", 16)` zwraca błąd zamiast obciąć wartość, bo `0x100` to 256. Znaku natomiast nie odrzuca: `u8::from_str_radix("+f", 16)` to `Ok(15)`, nawet dla typu bez znaku — więc dwa znaki, które się sparsowały, to jeszcze nie dwie cyfry szesnastkowe, i dekoder w ćwiczeniu sprawdza `is_ascii_hexdigit`, zanim cokolwiek sparsuje. I na koniec liczby ujemne: `format!("{:x}", -1i8)` daje `ff`, a `-1i32` daje `ffffffff` — żadnego minusa, bo heks zapisuje bity, a bity liczby ujemnej to **uzupełnienie do dwóch**; przy okazji widać szerokość typu, w którym wartość była przechowywana. Jeśli chciałeś zapisu dla człowieka, chciałeś systemu dziesiętnego.
 
 **Szukaj po polsku:** system szesnastkowy · półbajt · uzupełnienie do dwóch · `rust from_str_radix radix not prefix` · `rust format 02x padding` · `rust hex encode bytes crate`

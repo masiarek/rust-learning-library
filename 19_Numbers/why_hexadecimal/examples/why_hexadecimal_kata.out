@@ -24,7 +24,11 @@
   0x0ab042   -> Ok([10, 176, 66])
   0AB042     -> Ok([10, 176, 66])
   0ab04      -> Err(OddLength(5))
-  0ab0zz     -> Err(BadDigit("zz"))
+  0ab0zz     -> Err(BadDigit("z"))
+  +f         -> Err(BadDigit("+"))
+  aéb        -> Err(BadDigit("é"))
+  from_str_radix alone reads "+f" as Ok(15) -- it takes a sign, so check the digits first
+  and slicing "aéb" two bytes at a time panics: true -- the first pair ends inside the é
 
 === the round trip, proved rather than asserted ===
   all 256 single bytes round-trip   : true

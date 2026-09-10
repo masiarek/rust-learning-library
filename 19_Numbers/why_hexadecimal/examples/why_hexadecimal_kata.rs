@@ -28,16 +28,19 @@ enum HexError {
 /// Read a fingerprint back. Accepts an optional `0x`, because a human will type one.
 fn decode(text: &str) -> Result<Vec<u8>, HexError> {
     let t = text.strip_prefix("0x").or_else(|| text.strip_prefix("0X")).unwrap_or(text);
+    // Check every character before parsing any. `from_str_radix` accepts a
+    // leading `+`, so the pair "+f" would read as 15 — and slicing two bytes at
+    // a time panics when a pair boundary falls inside a character, as in "aéb".
+    if let Some(bad) = t.chars().find(|c| !c.is_ascii_hexdigit()) {
+        return Err(HexError::BadDigit(bad.to_string()));
+    }
     if !t.len().is_multiple_of(2) {
         return Err(HexError::OddLength(t.len()));
     }
-    (0..t.len())
+    Ok((0..t.len())
         .step_by(2)
-        .map(|i| {
-            let pair = &t[i..i + 2];
-            u8::from_str_radix(pair, 16).map_err(|_| HexError::BadDigit(pair.to_string()))
-        })
-        .collect()
+        .map(|i| u8::from_str_radix(&t[i..i + 2], 16).expect("two hex digits, checked above"))
+        .collect())
 }
 
 fn main() {
@@ -79,9 +82,16 @@ fn main() {
     }
 
     println!("\n=== reading a fingerprint back ===");
-    for input in ["0ab042", "0x0ab042", "0AB042", "0ab04", "0ab0zz"] {
+    for input in ["0ab042", "0x0ab042", "0AB042", "0ab04", "0ab0zz", "+f", "aéb"] {
         println!("  {input:<10} -> {:?}", decode(input));
     }
+    println!("  from_str_radix alone reads \"+f\" as {:?} -- it takes a sign, so check the digits first",
+             u8::from_str_radix("+f", 16));
+    std::panic::set_hook(Box::new(|_| {}));
+    let sliced = std::panic::catch_unwind(|| &"aéb"[0..2]);
+    let _ = std::panic::take_hook(); // the default hook back
+    println!("  and slicing \"aéb\" two bytes at a time panics: {} -- the first pair ends inside the é",
+             sliced.is_err());
 
     println!("\n=== the round trip, proved rather than asserted ===");
     let single_ok = (0..=255u8).all(|b| decode(&encode(&[b])) == Ok(vec![b]));
