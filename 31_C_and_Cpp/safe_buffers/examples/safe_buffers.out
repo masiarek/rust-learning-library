@@ -1,0 +1,6 @@
+Box<i32>   1 word
+Box<[i32]> 2 words
+&[i32]     2 words
+owned.get(3)  -> None
+sum(&v)       -> 6
+sum(forged)   -> 6

@@ -1,0 +1,4 @@
+liveness()        -> 42
+either(false)     -> 1
+either(true)      -> 5
+first_word(&text) -> hello

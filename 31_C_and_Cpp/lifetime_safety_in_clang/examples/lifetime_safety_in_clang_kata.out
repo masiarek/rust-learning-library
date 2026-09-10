@@ -1,0 +1,26 @@
+THE CONTRACT, TWO SPELLINGS
+  Rust: fn longer<'a>(a: &'a str, b: &'a str) -> &'a str
+  C++:  std::string_view longer(std::string_view a [[clang::lifetimebound]],
+                                std::string_view b [[clang::lifetimebound]]);
+  Both say the result may point into a or into b. Leave the lifetimes
+  out and rustc refuses the function (E0106). Leave the attributes out
+  and C++ compiles it, and -Wlifetime-safety assumes the result borrows
+  from nothing -- so it stays silent at every caller.
+
+BOTH ARGUMENTS ALIVE
+  longer(&a, &b) = checker
+
+ONE ARGUMENT DIES FIRST
+  let r;
+  { let b = String::from("checker"); r = longer(&a, &b); }
+  println!("{r}");
+  -> E0597: `b` does not live long enough. Refused even on a call where
+     the body would have returned `a`: the checker judges a call by the
+     signature and never reads the body. That is the compositional
+     analysis the talk proposes for C++, and how rustc has always worked.
+
+THE RESULT TIED TO `a` ONLY
+  first(&a, &short_lived) outlives the block: r = borrow
+  In C++ that is [[clang::lifetimebound]] on `a` alone. Clang 23 checks
+  that claim against the body too -- under -Wlifetime-safety-all, as a
+  warning you opt into; rustc checks the body against 'a on every build.

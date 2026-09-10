@@ -1,0 +1,14 @@
+THE LITERAL PORT
+  get_last_raw(ptr, 3) = 3
+  At size 0, `size - 1` is the bug. In C++ the size_t wraps to SIZE_MAX
+  and pointer[SIZE_MAX] is undefined behaviour. This port panics on the
+  subtraction in a debug build -- and under --release it wraps too, and
+  ptr.add() is undefined behaviour exactly as in C++. `unsafe` did not
+  remove the bug; it labelled the function it lives in.
+
+THE SPANIFIED VERSION
+  get_last(&v)      = Some(3)
+  get_last(&[])     = None
+  get_last(&v[..1]) = Some(1)
+  The length travels with the buffer, so no caller can pass a wrong one
+  and there is no subtraction to underflow: last() asks the slice.
