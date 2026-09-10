@@ -1,0 +1,20 @@
+1. Adam's six cases
+   "kitten"    "sitting"   3
+   ""          ""          0
+   "abc"       "abc"       0
+   "abc"       ""          3
+   ""          "abc"       3
+   "intention" "execution" 5
+
+2. Which unit is being edited
+   a          b              chars bytes
+   "kitten"   "sitting"          3     3
+   "café"     "cafe"             1     2
+   "żółw"     "zolw"             3     6
+   "café"     "cafe\u{301}"      2     3
+   ASCII agrees in both units. Here each two-byte letter that differs costs
+   one edit as a char and two as bytes, a replacement plus a deletion:
+   café/cafe is 1 against 2, and żółw/zolw is 3 against 6.
+   The last row is one word spelt two ways, precomposed é against e plus a
+   combining accent: 2 edits in chars, 3 in bytes, and not zero in either
+   until something normalizes both, which std does not do.

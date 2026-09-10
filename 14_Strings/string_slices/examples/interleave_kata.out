@@ -1,0 +1,19 @@
+1. The four original cases that were right
+   "aabcc"  "dbbca"  "aadbbcbcac"  true
+   "aabcc"  "dbbca"  "aadbbbaccc"  false
+   ""       ""       ""            true
+   "ab"     "cd"     "abcd"        true
+
+2. The fifth, which the original test got wrong
+   every interleaving of "ab" and "cd" (6): ["abcd", "acbd", "acdb", "cabd", "cadb", "cdab"]
+   "acbd" is among them          true
+   is_interleave("ab", "cd", "acbd") = true
+   is_interleave("ab", "cd", "bacd") = false
+   The test asserted false for acbd, so a correct solution failed it.
+   Checking a specification against brute force is cheap while the
+   inputs are this small.
+
+3. Slices advance by a character's width, not by one
+   is_interleave("żó", "łw", "żłów") = true
+   Every cut is first.len_utf8() bytes long, so a slice never lands
+   inside a letter and the memo key is still a pair of byte lengths.

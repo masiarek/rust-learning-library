@@ -1,0 +1,18 @@
+1. Adam's three cases
+   "abc" -> ["abc", "acb", "bac", "bca", "cab", "cba"]
+   "aa"  -> ["aa"]
+   ""    -> [""], one arrangement of nothing rather than none
+
+2. How many, and the repeats the skip rule removes
+   input         n!  distinct  returned
+   "abcd"        24        24        24
+   "aabb"        24         6         6
+   "banana"     720        60        60
+   "aaaa"        24         1         1
+   distinct = n! divided by the factorial of each letter's count, and the
+   skip rule produces exactly that many without generating the rest.
+
+3. Permute characters, not bytes
+   "ée" -> ["eé", "ée"]
+   the two bytes of "é" swapped: String::from_utf8 is_err = true
+   A permutation of bytes can be something that is not text at all.

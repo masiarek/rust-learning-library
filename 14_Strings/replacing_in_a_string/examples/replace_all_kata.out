@@ -1,0 +1,24 @@
+1. Adam's three cases, checked against std's own replace
+   "hello world"   "world"   "rust"   -> "hello rust"
+   "aaa"           "a"       "b"      -> "bbb"
+   "hello"         "x"       "y"      -> "hello"
+
+2. Matches are taken left to right, and never overlap
+   "aaaa"          "aa"      "b"      -> "bb"
+   "aaa"           "aa"      "b"      -> "ba"
+   "banana"        "ana"     "_"      -> "b_na"
+   "banana" holds "ana" twice, overlapping at the middle "a". Once the
+   first match is consumed the second no longer exists: one replacement.
+
+3. The empty pattern, and the loop that never moves
+   without the guard: stopped after 10 turns, 3 bytes still left
+   "abc".find("") = Some(0)
+   std  "-a-b-c-"
+   mine "-a-b-c-"
+   An empty needle is found at offset 0 of every remainder, so cutting
+   from.len() bytes off the front cuts nothing. Adam's tests never pass
+   an empty `from`, which is exactly how this loop ships.
+
+4. Byte offsets, and why slicing at them is safe
+   "żółw i żółw".find("ół") = Some(2) — a byte offset, and a char boundary
+   "żOLw i żOLw"

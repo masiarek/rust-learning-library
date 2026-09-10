@@ -1,0 +1,21 @@
+1. Adam's five cases
+   ["flower", "flow", "flight"]                    -> "fl"
+   ["dog", "racecar", "car"]                       -> ""
+   ["interspecies", "interstellar", "interstate"]  -> "inters"
+   []                                              -> ""
+   ["single"]                                      -> "single"
+
+2. The borrowed version allocates nothing
+   borrowed_prefix -> "inters"
+   points into words[0]: true
+   One lifetime parameter is what lets a function hand back a view into
+   its caller's data instead of a copy of it.
+
+3. Bytes are the wrong unit
+   "café" / "cafè": shared bytes 4, a.get(..4) = None, by characters "caf"
+   "é" / "è": shared bytes 1, a.get(..1) = None, by characters ""
+   "Łódź" / "Łomża": shared bytes 2, a.get(..2) = Some("Ł"), by characters "Ł"
+   é is C3 A9 and è is C3 A8: the first byte agrees and the letter does
+   not. Slicing at that count is the panic `get` turns into None.
+   Where the shared bytes happen to end on a boundary, as with Ł, the two
+   answers agree, which is why a byte version passes every ASCII test.

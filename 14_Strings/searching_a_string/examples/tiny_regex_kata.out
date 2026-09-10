@@ -1,0 +1,20 @@
+1. Adam's six cases
+   "aa"           "a*"          true
+   "ab"           ".*"          true
+   "aab"          "c*a*b"       true
+   "mississippi"  "mis*is*p*."  false
+   ""             "a*"          true
+   ""             "a"           false
+
+2. The unit decides what `.` means
+   text     pattern    chars  bytes
+   "é"      "."         true  false
+   "é"      ".."       false   true
+   "日本"     ".."        true  false
+   "日本"     "......"   false   true
+   Over bytes, `.` is half an é and a third of 日. Collecting a Vec<char>
+   once, up front, is what makes the pattern mean what a reader reads.
+
+3. What the slice patterns bought
+   [c, '*', rest @ ..] names the star case directly. The same logic over
+   indices has to check i + 1 < p.len() before it may even look at p[i + 1].

@@ -433,6 +433,8 @@ Adam's katas are written in `cargo test` form, and this library has no Cargo. **
 
 So the house pattern for all twenty is the one `where_a_test_goes.rs` already uses: **keep Adam's `#[test]` functions, and add a `main()`** that walks the same cases in fixed order and prints them. The tests give the reader `cargo test`-shaped practice; the `main()` gives the library its byte-stable recorded output. A harness run may still appear on the page as a labelled fence, never as the diffed artefact.
 
+**Result — done 2026-09-10.** Half of the twenty were already katas in this library, and got a link rather than a copy: a duplicate kata is worse than none, since a reader meets both and learns nothing from the second. The other ten are new — ten programs, each keeping the original `#[test]` functions as the specification and adding a `main()` whose output is the recorded answer. Each also demonstrates the Rust trap under its algorithm, which is usually the unit: bytes or `char`s. Every one passes its tests under `rustc --test`, and one of them only after correcting a test (finding 5). The *Lands on* column below now says which is which.
+
 ### Four things found reading the twenty
 
 Recorded so they are not rediscovered one at a time while writing.
@@ -445,6 +447,10 @@ Recorded so they are not rediscovered one at a time while writing.
 
 4. **Four of them are algorithm katas wearing string clothes.** Kata 13 (regex), 14 (word ladder, a BFS), 15 (interleaving, a DP) and 20 (edit distance, a DP) exercise dynamic programming and graph search; the string is the input, not the subject. That is fine — but this library's katas are about *Rust's behaviour*, and these would be the first that are not. Decide whether they join the set, go to a separate "algorithms on text" group, or stay out. Kata 16 is the counter-example and should definitely be in: `fn longest_palindrome(s: &str) -> &str` returns a slice **borrowed from its input**, which is lifetime elision doing exactly the thing [Step 4](#the-eight-steps) of the progression is about.
 
+5. **One test was wrong.** Kata 15 asserted `!is_interleave("ab", "cd", "acbd")`, but a, c, b, d takes a and b from "ab" and c and d from "cd", each in order — so it *is* an interleaving, and a correct solution fails the original test. The published kata corrects the line, keeps the original in a comment, adds a genuine negative (`"bacd"`), and prints all six interleavings of `"ab"` and `"cd"` to settle it.
+
+**How the five were settled.** (1) Kata 1 is already covered by an existing kata, so its missing defect no longer matters. (2) Kata 7 went in with the "without `replace()`" constraint. (3) Kata 18 is already covered by "The third ruler", which does the honest version: a std-only grouper, and a statement of what it still cannot do. (4) All four algorithm katas joined, each on the page its Rust angle belongs to rather than in a separate group — the regex on searching, the ladder on `HashSet`, interleaving on slices, edit distance on lengths — because each one turned out to have a Rust point under the algorithm: which unit you index by, and what a lookup or a slice borrows. (5) Corrected, as above.
+
 ### The twenty
 
 Adam's levels, kept as he graded them. "Lands on" is a routing hypothesis, same rule as everywhere above.
@@ -453,51 +459,51 @@ Adam's levels, kept as he graded them. "Lands on" is a routing hypothesis, same 
 
 | # | Kata | What it exercises | Lands on |
 |---|---|---|---|
-| 1 | `hello()` returns `"Hello, World!"` | `&str` → `String` | [Making a `String`](14_Strings/making_a_string/README.md) — **needs a real defect first**, see above |
-| 2 | `full_name(first, last)` with a space between | `format!` vs `+`; the `("", "")` case proves the space is unconditional | [Concatenating strings](14_Strings/concatenating_strings/README.md) |
-| 3 | `is_blank(s)` — empty or all whitespace | `trim().is_empty()`, and that `"\t\n"` is whitespace | [`str` methods](14_Strings/str_methods/README.md) |
+| 1 | `hello()` returns `"Hello, World!"` | `&str` → `String` | **Already a kata** — [Let the source pick the spelling](14_Strings/making_a_string/README.md#practice), the original body already passes its test, as finding 1 said, so there was nothing to add |
+| 2 | `full_name(first, last)` with a space between | `format!` vs `+`; the `("", "")` case proves the space is unconditional | **Already a kata** — [Greet two people three ways](14_Strings/concatenating_strings/README.md#practice), the one thing the original adds is `full_name("", "")` giving `" "` |
+| 3 | `is_blank(s)` — empty or all whitespace | `trim().is_empty()`, and that `"\t\n"` is whitespace | **Already a kata** — [Case and whitespace](14_Strings/meet_the_char/README.md#practice), which trims spaces, a tab and newlines; `is_blank` is that `trim` plus `is_empty` |
 
 #### Intermediate
 
 | # | Kata | What it exercises | Lands on |
 |---|---|---|---|
-| 4 | `reverse_string(s)` without `.rev()` | Manual iteration over `chars()`. Worth adding a note that reversing by `char` **breaks combining marks** — the ASCII tests hide it | [Walking a `String`](14_Strings/walking_a_string/README.md) |
-| 5 | `word_count(s)` — `"  multiple   spaces  "` is 2 | The exact `split(' ')` vs `split_whitespace()` split that page is about | [Walking a `String`](14_Strings/walking_a_string/README.md) |
-| 6 | `is_palindrome(s)` ignoring case and punctuation | `filter`, `to_lowercase`, `is_alphanumeric`; the ASCII-vs-Unicode case decision | [Comparing and sorting text](14_Strings/comparing_strings/README.md) |
-| 7 | `replace_all(s, from, to)` | `find` + byte offsets + `push_str` — **once the "without `replace()`" constraint is added** | [Replacing part of a string](14_Strings/replacing_in_a_string/README.md) |
+| 4 | `reverse_string(s)` without `.rev()` | Manual iteration over `chars()`. Worth adding a note that reversing by `char` **breaks combining marks** — the ASCII tests hide it | **Already a kata** — [The third ruler](14_Strings/meet_the_char/README.md#practice), which reverses `café` by `char` and shows the accent landing on the wrong letter — the note this row asked for |
+| 5 | `word_count(s)` — `"  multiple   spaces  "` is 2 | The exact `split(' ')` vs `split_whitespace()` split that page is about | **Already a kata** — [Find it without a regex engine](14_Strings/walking_a_string/README.md#practice), which writes this `word_count` with `split_whitespace()`; "An empty field is data", on the same page, is the `split(' ')` half |
+| 6 | `is_palindrome(s)` ignoring case and punctuation | `filter`, `to_lowercase`, `is_alphanumeric`; the ASCII-vs-Unicode case decision | **Already a kata** — [Find it without a regex engine](14_Strings/walking_a_string/README.md#practice), whose palindrome checker survives punctuation, case and multibyte letters |
+| 7 | `replace_all(s, from, to)` | `find` + byte offsets + `push_str` — **once the "without `replace()`" constraint is added** | **New** — [`replace`, without `replace`](14_Strings/replacing_in_a_string/README.md#practice), with the "without `replace()`" constraint from finding 2, plus the empty pattern the original tests never try |
 
 #### Upper intermediate
 
 | # | Kata | What it exercises | Lands on |
 |---|---|---|---|
-| 8 | `to_camel_case` — snake, kebab, already-camel | Same exercise as [Exercise 6](#the-eight-exercises) of the progression — **merge them, do not write both** | [Building a `String`](14_Strings/building_a_string/README.md) |
-| 9 | `compress_string` — run-length, return original if longer | Building with `push`/`push_str`, and a length comparison that is in **bytes** | [Building a `String`](14_Strings/building_a_string/README.md) |
-| 10 | `are_anagrams(s1, s2)` | Counting chars into a map; `"debit card"` / `"bad credit"` counts the space too | [Walking a `String`](14_Strings/walking_a_string/README.md) |
+| 8 | `to_camel_case` — snake, kebab, already-camel | Same exercise as [Exercise 6](#the-eight-exercises) of the progression — **merge them, do not write both** | **Already a kata** — [Case and whitespace](14_Strings/meet_the_char/README.md#practice), which converts `MyVariableName` both ways; the original adds kebab-case input. So the progression's Exercise 6 is covered too |
+| 9 | `compress_string` — run-length, return original if longer | Building with `push`/`push_str`, and a length comparison that is in **bytes** | **Already a kata** — [Run-length encoding, and the input that breaks it](14_Strings/building_a_string/README.md#practice), the original writes the character before the count (`a2b1c5a3`) and returns the input when compressing makes it longer |
+| 10 | `are_anagrams(s1, s2)` | Counting chars into a map; `"debit card"` / `"bad credit"` counts the space too | **Already a kata** — [Case and whitespace](14_Strings/meet_the_char/README.md#practice), whose anagram checker ignores case and whitespace; `"debit card"` / `"bad credit"` passes either way |
 
 #### Advanced
 
 | # | Kata | What it exercises | Lands on |
 |---|---|---|---|
-| 11 | `longest_common_prefix(&[&str])` | Slices of slices, and the `&[]` empty case | [Searching without splitting](14_Strings/searching_a_string/README.md) |
-| 12 | `permutations(s)` — unique, `""` yields one | Recursion producing `Vec<String>`; dedup | [Building a `String`](14_Strings/building_a_string/README.md) |
-| 13 | `is_match(s, pattern)` — `.` and `*` | DP / recursion — **see finding 4** | undecided |
-| 14 | `word_ladder_length(...)` | BFS — **see finding 4** | undecided |
+| 11 | `longest_common_prefix(&[&str])` | Slices of slices, and the `&[]` empty case | **New** — [The longest common prefix, by letters](14_Strings/searching_a_string/README.md#practice), plus a borrowed `&str` version and the shared byte that is not a shared letter |
+| 12 | `permutations(s)` — unique, `""` yields one | Recursion producing `Vec<String>`; dedup | **New** — [Every distinct permutation, in one buffer](14_Strings/building_a_string/README.md#practice), one `String` grown with `push` and shrunk with `pop` |
+| 13 | `is_match(s, pattern)` — `.` and `*` | DP / recursion — **see finding 4** | **New** — [A regex engine with two operators](14_Strings/searching_a_string/README.md#practice), slice patterns on `&[char]`; the `.` that means half an `é` over bytes |
+| 14 | `word_ladder_length(...)` | BFS — **see finding 4** | **New** — [A word ladder, and the key a lookup hands back](26_Collections/the_hashset/README.md#practice), a `HashSet<&str>` probed from a scratch buffer |
 
 #### Expert
 
 | # | Kata | What it exercises | Lands on |
 |---|---|---|---|
-| 15 | `is_interleave(s1, s2, s3)` | DP — **see finding 4** | undecided |
-| 16 | `longest_palindrome(s) -> &str` | **Returning a slice borrowed from the input** — lifetime elision, and the best kata in the set for this library | [String slices](14_Strings/string_slices/README.md) · [How to learn lifetimes](18_Ownership/how_to_learn_lifetimes/README.md) |
-| 17 | `tokenize(input, &[char])` with quoted tokens | Near-duplicate of [Exercise 5](#the-eight-exercises), the CSV parser — **merge, or make one the multi-delimiter variant of the other** | [Walking a `String`](14_Strings/walking_a_string/README.md) |
-| 18 | `count_characters(s)` | See finding 3 — the goal and the tests disagree | [Four lengths](14_Strings/four_lengths/README.md) |
-| 19 | `justify_text(words, width)` | Padding and width arithmetic; the natural door to the format mini-language's `{:<}` / `{:^}` / `{:width$}` | [The format mini-language](14_Strings/the_format_language/README.md) |
-| 20 | `edit_distance(s1, s2)` | DP — **see finding 4**; note the distance is over `char`s, not bytes | undecided |
+| 15 | `is_interleave(s1, s2, s3)` | DP — **see finding 4** | **New** — [Interleaving, with the slices as the state](14_Strings/string_slices/README.md#practice), **one original assertion was wrong** — see finding 5 |
+| 16 | `longest_palindrome(s) -> &str` | **Returning a slice borrowed from the input** — lifetime elision, and the best kata in the set for this library | **New** — [Return a palindrome you did not copy](18_Ownership/how_to_learn_lifetimes/README.md#practice), elision with one input, then `E0106` with two |
+| 17 | `tokenize(input, &[char])` with quoted tokens | Near-duplicate of [Exercise 5](#the-eight-exercises), the CSV parser — **merge, or make one the multi-delimiter variant of the other** | **New** — [A tokenizer with quotes, and the error it cannot return](14_Strings/parsing_a_string/README.md#practice), also answers the progression's Exercise 5 quoted-field rule |
+| 18 | `count_characters(s)` | See finding 3 — the goal and the tests disagree | **Already a kata** — [The third ruler](14_Strings/meet_the_char/README.md#practice), which writes a std-only grapheme grouper — the honest version of finding 3. The original tests pass with `chars().count()`, the answer that kata shows is wrong |
+| 19 | `justify_text(words, width)` | Padding and width arithmetic; the natural door to the format mini-language's `{:<}` / `{:^}` / `{:width$}` | **New** — [Full justification, and the width that is not bytes](14_Strings/the_format_language/README.md#practice), widths counted in `char`s, checked against `{:<16}` |
+| 20 | `edit_distance(s1, s2)` | DP — **see finding 4**; note the distance is over `char`s, not bytes | **New** — [Edit distance, in the unit you choose](14_Strings/four_lengths/README.md#practice), one generic table, run on `char`s and on bytes |
 
 ### What the three backlogs add up to
 
 - The **vocabulary** list is mostly a [GLOSSARY.md](GLOSSARY.md) sweep — few new pages.
 - The **progression** is mostly an ordering decision — one page, or one table inside [STRINGS.md](STRINGS.md).
-- The **katas** are the real build: after merging the duplicates (8 with Exercise 6, 17 with Exercise 5) and settling the four algorithm katas, roughly **fourteen to eighteen new programs**, each with `#[test]` functions, a `main()`, and a recorded `.out`.
+- The **katas** are the real build: after merging the duplicates (8 with Exercise 6, 17 with Exercise 5) and settling the four algorithm katas, roughly **fourteen to eighteen new programs**, each with `#[test]` functions, a `main()`, and a recorded `.out`. *(It came to ten: the other ten were already katas here — see the result above.)*
 
 Take them in Adam's order. Katas 2–10 are cheap and each one lands on a lesson that already exists, so the early ones cost a program and no prose.

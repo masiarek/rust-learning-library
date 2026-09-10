@@ -1,0 +1,17 @@
+1. Adam's three cases
+   hit -> cog, cog in the list       5
+   hit -> cog, cog missing           0   (0 means no ladder)
+   a -> b                            2
+   The count includes both ends: hit hot dot dog cog is five words.
+
+2. Which &str a lookup hands back
+   the answer points into the list   true
+   the answer points into the probe  false
+   A HashSet<&str> can be searched with any &str, here one built in a
+   scratch buffer, and it answers with the key it stored. So the frontier
+   holds borrows of the caller's words, and no String is made per visit.
+
+3. The assumption the one-byte overwrite makes
+   "żab" is 4 bytes for 3 letters; overwrite byte 0 and from_utf8 is_err = true
+   One byte per letter holds for Adam's words and fails for Polish ones;
+   a ladder over real words would walk a Vec<char> instead.

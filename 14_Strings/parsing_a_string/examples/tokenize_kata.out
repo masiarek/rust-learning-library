@@ -1,0 +1,21 @@
+1. Adam's three cases
+   ["hello", "world", "rust", "lang"]
+   ["hello", "rust lang", "world"]
+   []
+
+2. Three rules the tests leave to you
+   "a,,b"         -> ["a", "b"]
+   "a \"\" b"     -> ["a", "", "b"]
+   "ab\"c d\"e"   -> ["abc de"]
+   Adam's cases pass whichever way these go, so each one is a decision:
+   an empty run vanishes, an empty quoted token stays, and a quote in the
+   middle of a word only switches the delimiter rule off and back on.
+
+3. The failure the return type cannot hold
+   tokenize     -> ["a", "b c"]
+   try_tokenize -> Err("unterminated quote opened at byte 2")
+   A Vec<String> can only say what it found. A missing closing quote is
+   the input being wrong, and only a Result can say that.
+
+4. A delimiter wider than a byte
+   ["αβγ", "δε", "ζ"]

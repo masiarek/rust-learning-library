@@ -1,0 +1,25 @@
+1. Adam's five cases
+   "babad"     -> "bab"
+   "cbbd"      -> "bb"
+   "a"         -> "a"
+   ""          -> ""
+   "racecar"   -> "racecar"
+   "babad" holds both bab and aba, three long each. The comment in the
+   test says either will do; the assert_eq! accepts only bab, so a tie
+   has to keep the first one found: > in the comparison, not >=.
+
+2. The answer is a view into the input, not a copy
+   longest_palindrome("xyracecarzw") = "racecar", starting at byte 2 of the input
+   fn longest_palindrome(s: &str) -> &str needs no lifetime written:
+   one reference goes in, so elision ties the result to it.
+
+3. Two inputs, and the annotation elision cannot supply
+   longer_palindrome("noon", "level") = "level"
+   fn longer_palindrome<'a>(a: &'a str, b: &'a str) -> &'a str
+   Delete the <'a> and rustc stops with E0106: the result could borrow
+   from either argument, and the signature has to say which it may.
+
+4. Characters, so no slice lands inside a letter
+   "été"    -> "été"
+   "kajak"  -> "kajak"
+   "ąbą"    -> "ąbą"

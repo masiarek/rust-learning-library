@@ -1,0 +1,17 @@
+1. Adam's example, 16 wide
+   |This    is    an|
+   |example  of text|
+   |justification.  |
+   The second line has 3 spare spaces for 2 gaps, so the left gap takes
+   the extra one.
+   The last line is exactly what {:<16} produces — the one kind of line
+   the format mini-language can justify on its own.
+
+2. The same algorithm with the width counted in bytes
+   chars  |Łódź  żółw|  10 characters wide
+   chars  |mak ser   |  10 characters wide
+   bytes  |Łódź   |  7 characters wide
+   bytes  |żółw   |  7 characters wide
+   bytes  |mak ser   |  10 characters wide
+   Counted in bytes, Łódź and żółw look 7 wide each, so they no longer
+   share a line, and the padding comes out 3 characters short.

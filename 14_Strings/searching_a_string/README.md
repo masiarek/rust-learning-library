@@ -275,6 +275,291 @@ fn main() {
 
 </details>
 
+**The longest common prefix, by letters.** Write `longest_common_prefix` to pass the five tests below, the empty slice included. Then write a second version that returns a `&str` borrowed from the words instead of a new `String` — it needs one lifetime parameter, and the question is which of the two references in the signature it belongs to. Finally run both on `["café", "cafè"]`: the words share four bytes and only three letters, and `&"café"[..4]` panics.
+
+```rust
+// rustc --edition 2024 --test common_prefix.rs -o t && ./t
+fn longest_common_prefix(strings: &[&str]) -> String {
+    todo!()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_longest_common_prefix() {
+        assert_eq!(longest_common_prefix(&["flower", "flow", "flight"]), "fl");
+        assert_eq!(longest_common_prefix(&["dog", "racecar", "car"]), "");
+        assert_eq!(longest_common_prefix(&["interspecies", "interstellar", "interstate"]), "inters");
+        assert_eq!(longest_common_prefix(&[]), "");
+        assert_eq!(longest_common_prefix(&["single"]), "single");
+    }
+}
+```
+
+<details markdown="1">
+<summary><strong>Solution</strong></summary>
+
+<!-- source:common_prefix_kata -->
+*[`common_prefix_kata.rs`](examples/common_prefix_kata.rs) in full — pasted here by `tools/run_examples.py` from the file CI compiles and runs.*
+
+```rust
+//! Kata solution: the longest common prefix — by characters, since two words
+//! can share a first byte and not a first letter.
+//!
+//!   rustc --edition 2024 common_prefix_kata.rs -o /tmp/cpk && /tmp/cpk
+//!   rustc --edition 2024 --test common_prefix_kata.rs -o /tmp/cpkt && /tmp/cpkt
+
+/// Adam's signature, which hands back an owned `String`.
+fn longest_common_prefix(strings: &[&str]) -> String {
+    borrowed_prefix(strings).to_owned()
+}
+
+/// The same answer without allocating: a slice of the first word. `'a` says
+/// the result borrows from the words themselves — not from the array that
+/// holds them, which may be a temporary.
+fn borrowed_prefix<'a>(strings: &[&'a str]) -> &'a str {
+    let Some((&first, rest)) = strings.split_first() else {
+        return "";
+    };
+    let mut end = first.len();
+    for s in rest {
+        end = first[..end]
+            .char_indices()
+            .zip(s.chars())
+            .take_while(|&((_, a), b)| a == b)
+            .last()
+            .map_or(0, |((i, a), _)| i + a.len_utf8());
+    }
+    &first[..end]
+}
+
+/// The tempting version: count equal leading BYTES.
+fn shared_bytes(a: &str, b: &str) -> usize {
+    a.bytes().zip(b.bytes()).take_while(|(x, y)| x == y).count()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_longest_common_prefix() {
+        assert_eq!(longest_common_prefix(&["flower", "flow", "flight"]), "fl");
+        assert_eq!(longest_common_prefix(&["dog", "racecar", "car"]), "");
+        assert_eq!(longest_common_prefix(&["interspecies", "interstellar", "interstate"]), "inters");
+        assert_eq!(longest_common_prefix(&[]), "");
+        assert_eq!(longest_common_prefix(&["single"]), "single");
+    }
+}
+
+fn main() {
+    println!("1. Adam's five cases");
+    let cases: [(&[&str], &str); 5] = [
+        (&["flower", "flow", "flight"], "fl"),
+        (&["dog", "racecar", "car"], ""),
+        (&["interspecies", "interstellar", "interstate"], "inters"),
+        (&[], ""),
+        (&["single"], "single"),
+    ];
+    for (words, want) in cases {
+        let got = longest_common_prefix(words);
+        assert_eq!(got, want);
+        println!("   {:<47} -> {got:?}", format!("{words:?}"));
+    }
+
+    println!();
+    println!("2. The borrowed version allocates nothing");
+    let words = ["interspecies", "interstellar", "interstate"];
+    let p = borrowed_prefix(&words);
+    println!("   borrowed_prefix -> {p:?}");
+    println!("   points into words[0]: {}", p.as_ptr() == words[0].as_ptr());
+    println!("   One lifetime parameter is what lets a function hand back a view into");
+    println!("   its caller's data instead of a copy of it.");
+
+    println!();
+    println!("3. Bytes are the wrong unit");
+    for (a, b) in [("café", "cafè"), ("é", "è"), ("Łódź", "Łomża")] {
+        let n = shared_bytes(a, b);
+        println!(
+            "   {a:?} / {b:?}: shared bytes {n}, a.get(..{n}) = {:?}, by characters {:?}",
+            a.get(..n),
+            borrowed_prefix(&[a, b])
+        );
+    }
+    println!("   é is C3 A9 and è is C3 A8: the first byte agrees and the letter does");
+    println!("   not. Slicing at that count is the panic `get` turns into None.");
+    println!("   Where the shared bytes happen to end on a boundary, as with Ł, the two");
+    println!("   answers agree, which is why a byte version passes every ASCII test.");
+}
+```
+<!-- /source -->
+
+<!-- output:common_prefix_kata -->
+*Verified output of [`common_prefix_kata.rs`](examples/common_prefix_kata.rs) — regenerated by `tools/run_examples.py`, never hand-typed.*
+
+```text
+1. Adam's five cases
+   ["flower", "flow", "flight"]                    -> "fl"
+   ["dog", "racecar", "car"]                       -> ""
+   ["interspecies", "interstellar", "interstate"]  -> "inters"
+   []                                              -> ""
+   ["single"]                                      -> "single"
+
+2. The borrowed version allocates nothing
+   borrowed_prefix -> "inters"
+   points into words[0]: true
+   One lifetime parameter is what lets a function hand back a view into
+   its caller's data instead of a copy of it.
+
+3. Bytes are the wrong unit
+   "café" / "cafè": shared bytes 4, a.get(..4) = None, by characters "caf"
+   "é" / "è": shared bytes 1, a.get(..1) = None, by characters ""
+   "Łódź" / "Łomża": shared bytes 2, a.get(..2) = Some("Ł"), by characters "Ł"
+   é is C3 A9 and è is C3 A8: the first byte agrees and the letter does
+   not. Slicing at that count is the panic `get` turns into None.
+   Where the shared bytes happen to end on a boundary, as with Ł, the two
+   answers agree, which is why a byte version passes every ASCII test.
+```
+<!-- /output -->
+
+</details>
+
+**A regex engine with two operators.** Write `is_match(s, pattern)` for patterns where `.` matches any one character and `*` means zero or more of the item before it. Slice patterns over `&[char]` make it short — an arm like `[c, '*', rest @ ..]` states the star rule in its own shape. Then run the same matcher over bytes instead of characters and try `"é"` against `"."` and against `".."`: the answers swap, which is the whole case for collecting a `Vec<char>` before you match anything.
+
+```rust
+// rustc --edition 2024 --test tiny_regex.rs -o t && ./t
+fn is_match(s: &str, pattern: &str) -> bool {
+    todo!()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_is_match() {
+        assert!(is_match("aa", "a*"));
+        assert!(is_match("ab", ".*"));
+        assert!(is_match("aab", "c*a*b"));
+        assert!(!is_match("mississippi", "mis*is*p*."));
+        assert!(is_match("", "a*"));
+        assert!(!is_match("", "a"));
+    }
+}
+```
+
+<details markdown="1">
+<summary><strong>Solution</strong></summary>
+
+<!-- source:tiny_regex_kata -->
+*[`tiny_regex_kata.rs`](examples/tiny_regex_kata.rs) in full — pasted here by `tools/run_examples.py` from the file CI compiles and runs.*
+
+```rust
+//! Kata solution: `.` and `*` in a dozen lines, read with slice patterns —
+//! and why `.` has to mean one character rather than one byte.
+//!
+//!   rustc --edition 2024 tiny_regex_kata.rs -o /tmp/trk && /tmp/trk
+//!   rustc --edition 2024 --test tiny_regex_kata.rs -o /tmp/trkt && /tmp/trkt
+
+fn is_match(s: &str, pattern: &str) -> bool {
+    let s: Vec<char> = s.chars().collect();
+    let p: Vec<char> = pattern.chars().collect();
+    here(&s, &p, '.', '*')
+}
+
+/// One rule per arm, chosen by the pattern's first two items. An item
+/// followed by the star may match zero copies (skip both) or one more copy
+/// (consume one input and stay put); anything else must match exactly one.
+/// Generic over the unit, so the same matcher can be run on bytes.
+fn here<T: PartialEq + Copy>(s: &[T], p: &[T], any: T, star: T) -> bool {
+    let one = |c: T| !s.is_empty() && (c == any || c == s[0]);
+    match p {
+        [] => s.is_empty(),
+        [c, st, rest @ ..] if *st == star => here(s, rest, any, star) || (one(*c) && here(&s[1..], p, any, star)),
+        [c, rest @ ..] => one(*c) && here(&s[1..], rest, any, star),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_is_match() {
+        assert!(is_match("aa", "a*"));
+        assert!(is_match("ab", ".*"));
+        assert!(is_match("aab", "c*a*b"));
+        assert!(!is_match("mississippi", "mis*is*p*."));
+        assert!(is_match("", "a*"));
+        assert!(!is_match("", "a"));
+    }
+}
+
+fn main() {
+    println!("1. Adam's six cases");
+    for (s, p, want) in [
+        ("aa", "a*", true),
+        ("ab", ".*", true),
+        ("aab", "c*a*b", true),
+        ("mississippi", "mis*is*p*.", false),
+        ("", "a*", true),
+        ("", "a", false),
+    ] {
+        let got = is_match(s, p);
+        assert_eq!(got, want);
+        println!("   {:<14} {:<13} {got}", format!("{s:?}"), format!("{p:?}"));
+    }
+
+    println!();
+    println!("2. The unit decides what `.` means");
+    println!("   {:<8} {:<9} {:>6} {:>6}", "text", "pattern", "chars", "bytes");
+    for (s, p) in [("é", "."), ("é", ".."), ("日本", ".."), ("日本", "......")] {
+        let chars = is_match(s, p);
+        let bytes = here(s.as_bytes(), p.as_bytes(), b'.', b'*');
+        println!("   {:<8} {:<9} {chars:>6} {bytes:>6}", format!("{s:?}"), format!("{p:?}"));
+    }
+    println!("   Over bytes, `.` is half an é and a third of 日. Collecting a Vec<char>");
+    println!("   once, up front, is what makes the pattern mean what a reader reads.");
+
+    println!();
+    println!("3. What the slice patterns bought");
+    println!("   [c, '*', rest @ ..] names the star case directly. The same logic over");
+    println!("   indices has to check i + 1 < p.len() before it may even look at p[i + 1].");
+}
+```
+<!-- /source -->
+
+<!-- output:tiny_regex_kata -->
+*Verified output of [`tiny_regex_kata.rs`](examples/tiny_regex_kata.rs) — regenerated by `tools/run_examples.py`, never hand-typed.*
+
+```text
+1. Adam's six cases
+   "aa"           "a*"          true
+   "ab"           ".*"          true
+   "aab"          "c*a*b"       true
+   "mississippi"  "mis*is*p*."  false
+   ""             "a*"          true
+   ""             "a"           false
+
+2. The unit decides what `.` means
+   text     pattern    chars  bytes
+   "é"      "."         true  false
+   "é"      ".."       false   true
+   "日本"     ".."        true  false
+   "日本"     "......"   false   true
+   Over bytes, `.` is half an é and a third of 日. Collecting a Vec<char>
+   once, up front, is what makes the pattern mean what a reader reads.
+
+3. What the slice patterns bought
+   [c, '*', rest @ ..] names the star case directly. The same logic over
+   indices has to check i + 1 < p.len() before it may even look at p[i + 1].
+```
+<!-- /output -->
+
+</details>
+
 ## See also
 
 - [STRINGS.md](../../STRINGS.md) — the map: every string lesson, in reading order
