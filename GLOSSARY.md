@@ -322,6 +322,8 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Endianness** — The order the bytes of a multi-byte number are stored in: big-endian puts the most significant first, little-endian the least. A single byte has none. Name it explicitly at any boundary with `to_be_bytes` / `to_le_bytes` rather than letting `to_ne_bytes` bake in this CPU's preference. → [Meet the byte](19_Numbers/meet_the_byte/README.md)
 
+**`escape_ascii`** — Show a byte slice the way Python shows `b'…'`: each printable ASCII byte as itself, `\t` `\n` `\r` `\\` `\'` `\"` by name, every other byte as `\xNN`. Lossless, ASCII-only, and valid inside a `b"…"` literal — where `{:?}` gives a list of numbers and a `&[u8]` has no `{}` at all. → [Printing bytes](19_Numbers/printing_bytes/README.md)
+
 **Fat pointer** — A reference carrying a second word beside the address: `&str` and `&[T]` add a length (16 bytes on a 64-bit target), `&dyn Trait` adds a vtable pointer. It is why `size_of::<&str>()` is not 8. → [Arrays and slices](26_Collections/arrays_and_slices/README.md), [Meet the byte](19_Numbers/meet_the_byte/README.md)
 
 **Shift masking** — With overflow checks off, `a << b` uses `b` modulo the type's bit width, so `1u8 << 8` is `1u8 << 0` — the same expression that panics in a debug build silently returns a wrong answer in release. `checked_shl` is the honest form whenever the shift amount is not a visible literal. → [Meet the byte](19_Numbers/meet_the_byte/README.md)

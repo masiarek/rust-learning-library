@@ -387,6 +387,7 @@ fn main() {
 ## See also
 
 - [Meet the byte](../meet_the_byte/README.md) — why eight bits is the unit in the first place; this page is about how to write one down
+- [Printing bytes](../printing_bytes/README.md) — the view between the numbers and this page's hex string: `escape_ascii`, which prints what Python shows for `b'…'`
 - [What a float actually stores](../what_a_float_stores/README.md) — the other way a number stops being what you typed, and `{:x}` on an `f64`'s bits is how you look at it
 - [What is a record, in memory?](../../16_Structs/representing_a_record/README.md) — the layer above, where those bytes become a container you chose
 - [Six kinds of zero](../../17_Option_and_Result/six_kinds_of_zero/README.md) — the sentinel argument, which is the same mistake as an unpadded fingerprint: meaning the type cannot see

@@ -188,6 +188,7 @@ Same boundary, moved from the traceback to the build.
 - [Raw strings, escapes and the literal prefixes](../raw_strings_and_escapes/README.md) — all twelve literal forms, run
 - [Meet the byte](../../19_Numbers/meet_the_byte/README.md) — what `b'A'` is once it is a `u8`
 - [Writing a number down](../../19_Numbers/writing_a_number_down/README.md) — the Python `b'A'` trap in full
+- [Printing bytes](../../19_Numbers/printing_bytes/README.md) — the way back out: `escape_ascii()` prints a byte string in this literal's own syntax, where `{:?}` gave `[65, 9, 255]`
 - [Six kinds of string](../six_kinds_of_string/README.md) — where `&[u8]` sits among the promises
 - [Match ergonomics](../../30_Pattern_Matching/match_ergonomics/README.md) — the other RFC this library reads line by line
 - [RFC 69 ↗](https://github.com/rust-lang/rfcs/blob/master/text/0069-ascii-literals.md) — two pages; read it, it is short

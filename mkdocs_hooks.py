@@ -536,6 +536,8 @@ NAV_ORDER: dict[str, list[str]] = {
         "writing_a_number_down",
         # ...and how to write one down, which is the last thing before meaning.
         "why_hexadecimal",
+        # ...and how to read a whole run of them without decoding it first.
+        "printing_bytes",
         # ...and what people put in one, once they can write it down.
         "bit_flags",
         # ...and the one type that cannot hold the value you typed.

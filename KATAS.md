@@ -201,6 +201,7 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K181 | [One contract, two spellings — a lifetime in Rust, an attribute in C++](31_C_and_Cpp/lifetime_safety_in_clang/README.md#practice) | [Lifetime safety in Clang](31_C_and_Cpp/lifetime_safety_in_clang/README.md) | 301 |
 | K182 | [Price an order before you run it](18_Ownership/what_a_clone_costs/README.md#practice) | [What a clone costs](18_Ownership/what_a_clone_costs/README.md) | 201 |
 | K183 | [Return a palindrome you did not copy — one reference in so elision works, a tie the test decides, then two references and `E0106`](18_Ownership/how_to_learn_lifetimes/README.md#practice) | [How to learn lifetimes](18_Ownership/how_to_learn_lifetimes/README.md) | 301 |
+| K184 | [Undo `escape_ascii` — read a printed byte string back, and prove it exact over all 65,536 two-byte strings](19_Numbers/printing_bytes/README.md#practice) | [Printing bytes](19_Numbers/printing_bytes/README.md) | 201 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -309,7 +310,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K39 · [Credit a fourth knob honestly](05_Tooling/compile_times/README.md#practice)
 - K55 · [The reformat that changed the program](05_Tooling/formatting/README.md#practice)
 
-**[Numbers and bytes](19_Numbers/README.md)** — 6 katas
+**[Numbers and bytes](19_Numbers/README.md)** — 7 katas
 
 - K41 · [Eight candidates in one byte](19_Numbers/meet_the_byte/README.md#practice)
 - K42 · [Two decisions, one literal](19_Numbers/writing_a_number_down/README.md#practice)
@@ -317,6 +318,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K44 · [A tic-tac-toe game in 18 bits](19_Numbers/bit_flags/README.md#practice)
 - K45 · [The results table that would not sort](19_Numbers/what_a_float_stores/README.md#practice)
 - K91 · [Make the sum land on the number you would have typed](19_Numbers/letting_the_compiler_reorder/README.md#practice)
+- K184 · [Undo `escape_ascii`](19_Numbers/printing_bytes/README.md#practice)
 
 **[Strings](14_Strings/README.md)** — 41 katas
 

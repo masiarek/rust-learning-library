@@ -60,6 +60,7 @@ let s = "a\"b\\c\n\u{e9}";
 - [`str::escape_debug`](../str_escape_debug/README.md) — keeps printable non-ASCII readable
 - [`str::escape_unicode`](../str_escape_unicode/README.md) — escapes ASCII too
 - [`str::is_ascii`](../str_is_ascii/README.md) — the property the output guarantees
+- [Printing bytes](../../../19_Numbers/printing_bytes/README.md) — the byte-slice version, `escape_ascii`: ASCII kept, every other byte as `\xNN`
 
 [`str::escape_default` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.escape_default)
 
