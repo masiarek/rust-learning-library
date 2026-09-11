@@ -17,6 +17,10 @@
 - [`std::string::String` ↗](https://doc.rust-lang.org/std/string/struct.String.html) · [`str` ↗](https://doc.rust-lang.org/std/primitive.str.html) — the method lists. Skim them once end to end; half of what people write by hand is already there.
 - [`std::fmt` ↗](https://doc.rust-lang.org/std/fmt/) — the format mini-language: fill, align, sign, width, precision, and the `$` that makes any of them dynamic. The one std page whose *contents* are a syntax nobody guesses.
 - [Rust by Example — strings ↗](https://doc.rust-lang.org/rust-by-example/std/str.html) — the smallest runnable version of the idea, including the literal escapes and byte strings.
+- [The Book, ch. 4.3 — The slice type ↗](https://doc.rust-lang.org/book/ch04-03-slices.html) — where `&str` first appears, as a slice of a `String`: the view before it is a type of its own.
+- [The Book, ch. 10.3 — Validating references with lifetimes ↗](https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html) — `longest(x, y)`, the example every `E0106` explanation reaches for. Read it after [How to learn lifetimes](../../18_Ownership/how_to_learn_lifetimes/README.md).
+- The source: [`library/alloc/src/string.rs` ↗](https://github.com/rust-lang/rust/blob/master/library/alloc/src/string.rs) for `String`, and [`library/core/src/str/` ↗](https://github.com/rust-lang/rust/tree/master/library/core/src/str) for `str`. Older posts give the paths as `src/liballoc` and `src/libcore`, from before the standard library moved to `library/`.
+- The error index: [`E0106` ↗](https://doc.rust-lang.org/error_codes/E0106.html) and [`E0515` ↗](https://doc.rust-lang.org/error_codes/E0515.html) are what `rustc --explain E0106` and `rustc --explain E0515` print, online. This library's own notes on the errors strings earn are in [ERRORS.md](../../ERRORS.md).
 
 ## Book chapters
 
@@ -72,6 +76,7 @@ Every lesson in the strings arc carries one, and they are ordered to be attempte
 - [Exercism — Rust track ↗](https://exercism.org/tracks/rust) — mentored, and heavy on text problems early on ("Reverse String" is the one that teaches graphemes the hard way).
 - [practice.rs — strings ↗](https://practice.rs/compound-types/string.html) — fill-in-the-blank against a compiler, in the same house style as Rust by Example.
 - [100 Exercises — String slices ↗](https://rust-exercises.com/100-exercises/04_traits/06_str_slice) — the chapter that draws it: stack-and-heap diagrams for `String`, `&String` and `&str` side by side, then `&s[1..]` as two words pointing into somebody else's buffer. The whole course is [in the exercises hub](../../10_Resources/exercises/README.md); this is the one chapter worth reading out of order, and the diagrams are the reason.
+- [Advent of Code ↗](https://adventofcode.com/) — a puzzle a day each December, and every one of them starts by parsing text, so the early days are string practice in disguise.
 
 ## See also
 

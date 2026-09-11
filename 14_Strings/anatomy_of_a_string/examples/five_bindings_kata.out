@@ -1,0 +1,21 @@
+1. Five handles, measured in machine words
+   name  type      words   what the handle holds
+   a     &str          2   the address of the bytes, and their length
+   b     String        3   address, length and capacity of its own buffer
+   c     &String       1   the address of b: a pointer to the pointer
+   d     &str          2   the address of b's bytes, and a length
+   e     &&str         1   the address of a
+
+2. Two buffers behind five names
+   a and e reach the same bytes        true
+   b, c and d reach the same bytes     true
+   a and b hold equal text             true
+   a and b hold it in the same bytes   false
+   b's buffer: capacity 5 for its 5 bytes
+
+3. Where each one lives
+   All five handles are locals, so all five are on the stack. Only two
+   copies of the bytes exist: "hello" in the program's read-only data,
+   which a and e reach, and the copy on the heap that b owns and that c
+   and d reach. Drop b, and any later use of c or d stops compiling;
+   a and e do not notice, because a literal lasts as long as the program.

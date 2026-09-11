@@ -6,15 +6,15 @@
 
 | # | Backlog | What it is | The work in it |
 |---|---|---|---|
-| 1 | [The vocabulary](#the-list) | 198 terms in 15 groups | Mostly a glossary sweep |
-| 2 | [The progression](#second-backlog-the-progression) | 8 steps, 8 exercises, a mental model | One ordering decision, then exercises |
-| 3 | [The twenty katas](#third-backlog-the-twenty-katas) | Graded `hello()` → Levenshtein, as test cases | ~14–18 new programs — the real build |
+| 1 | [The vocabulary](#the-list) | 198 terms in 15 groups | Mostly a glossary sweep — **done 2026-09-10** |
+| 2 | [The progression](#second-backlog-the-progression) | 8 steps, 8 exercises, a mental model | One ordering decision, then exercises — **done 2026-09-10** |
+| 3 | [The twenty katas](#third-backlog-the-twenty-katas) | Graded `hello()` → Levenshtein, as test cases | ~14–18 new programs — the real build — **done 2026-09-10** |
 
 The first is a dictionary, the second a route, the third the practice. They overlap on purpose; where two of them ask for the same page, the later section says so and names the merge.
 
 ## The job, for Thursday 2026-09-10 — backlog 1
 
-**Result — done 2026-09-10.** All 198 are answerable. By where the first link goes: **120** to a lesson, **63** to a page of the method reference, **12** to a stub (the term is on a page, but no example backs that page yet), and **3** to a page of the sibling encodings library, which owns the Unicode theory this one leans on. **65** terms gained a glossary entry. The fifteen crates share one new page, [The string crates](14_Strings/string_crates/README.md), since none of them can run here. Three things the sweep found are worth more than the ticks: the stub for [String parameters worth copying](14_Strings/string_api_design/README.md) claimed `PathBuf` satisfies `impl AsRef<str>`, and it does not (`E0277`; corrected in the same sweep); `std::string::ParseError` is a type alias for `Infallible` that no page mentioned; and `Pin<Box<str>>` compiles and pins nothing, because `str` is `Unpin` — both measured on 1.98.0.
+**Result — done 2026-09-10.** All 198 are answerable. By where the first link goes: **122** to a lesson, **63** to a page of the method reference, **10** to a stub (the term is on a page, but no example backs that page yet — 120 and 12 on the day of the sweep, until *String parameters worth copying* graduated later that day), and **3** to a page of the sibling encodings library, which owns the Unicode theory this one leans on. **65** terms gained a glossary entry. The fifteen crates share one new page, [The string crates](14_Strings/string_crates/README.md), since none of them can run here. Three things the sweep found are worth more than the ticks: the stub for [String parameters worth copying](14_Strings/string_api_design/README.md) claimed `PathBuf` satisfies `impl AsRef<str>`, and it does not (`E0277`; corrected in the same sweep); `std::string::ParseError` is a type alias for `Infallible` that no page mentioned; and `Pin<Box<str>>` compiles and pins nothing, because `str` is `Unpin` — both measured on 1.98.0.
 
 Adam's ask, in his words: *"make sure we have a page for all these terms (even if a stub)."* The list is below, unedited apart from grouping and code formatting.
 
@@ -118,9 +118,9 @@ That order matters because of what a new folder costs. A folder name here is a p
 - [x] `ToString` — [Making a `String`](14_Strings/making_a_string/README.md)
 - [x] `FromStr` — [Parsing out of a string](14_Strings/parsing_a_string/README.md)
 - [x] `Deref<Target=str>` — [`String` vs `&str`](14_Strings/string_vs_str/README.md)
-- [x] `AsRef<str>` — [String parameters worth copying](14_Strings/string_api_design/README.md) *(stub)* · [glossary](GLOSSARY.md)
+- [x] `AsRef<str>` — [String parameters worth copying](14_Strings/string_api_design/README.md) · [glossary](GLOSSARY.md)
 - [x] `Borrow<str>` — [When the UTF-8 invariant broke](14_Strings/when_the_invariant_broke/README.md) · [glossary](GLOSSARY.md)
-- [x] `Into<String>` — [String parameters worth copying](14_Strings/string_api_design/README.md) *(stub)* · [`From` and `Into`](29_Conversion/from_and_into/README.md)
+- [x] `Into<String>` — [String parameters worth copying](14_Strings/string_api_design/README.md) · [`From` and `Into`](29_Conversion/from_and_into/README.md)
 - [x] `From<String>` — [`From` and `Into`](29_Conversion/from_and_into/README.md) · [glossary](GLOSSARY.md)
 - [x] `PartialEq` — [The comparison traits](12_Traits/comparison_traits/README.md) *(stub)* · [Comparing and sorting text](14_Strings/comparing_strings/README.md)
 - [x] `Eq` — [The comparison traits](12_Traits/comparison_traits/README.md) *(stub)*
@@ -305,9 +305,11 @@ That order matters because of what a new folder costs. A folder name here is a p
 
 **One line:** Adam's step-by-step route from ownership to fluent string code, filed 2026-09-08 — a *route* rather than a dictionary, and the half of it this library has least of is the practice.
 
+**Result — done 2026-09-10.** The route is a new section of [STRINGS.md](STRINGS.md), *Starting from nothing* — option (b) below, so no new URL. It opens with the four-line model, lists the steps in prerequisite order, and turns the seven claims into its *What you can say afterwards* column, each against the page that states it. Step 8, the one this backlog says most needs finishing, is done: [String parameters worth copying](14_Strings/string_api_design/README.md) graduated from a stub into a lesson whose every claim is an allocation count, measured by a counting global allocator. Of the eight exercises, four were already answered by existing katas, and four are new katas on the pages their Rust point belongs to; a fifth new kata, on the graduated page, answers step 8's builder. The common-mistakes list is answered item by item, and the resources Adam names are now all on the resources page.
+
 Where [the vocabulary list](#the-list) asks *"is this term answerable?"*, this asks a different question: **can a person walk from nothing to fluent in a fixed order, and write a program at each stop?** The library already has the lessons — [`14_Strings/`](14_Strings/README.md) holds 33 of them and [STRINGS.md](STRINGS.md) maps them by the question each answers. What it has never had is the *order*, stated as a path, with something to write at every step.
 
-**The same audit rule applies as above.** Every "where it should land" below is a **routing hypothesis, not a coverage claim** — it names the page that ought to answer the item so the sweep can confirm or contradict it one page at a time. None of it has been read against the page's actual text yet. Tick a box when the page has been opened and it really does answer.
+**The same audit rule applies as above.** Every "where it should land" below is a **routing hypothesis, not a coverage claim** — it names the page that ought to answer the item so the sweep can confirm or contradict it one page at a time. None of it has been read against the page's actual text yet. Tick a box when the page has been opened and it really does answer. **All of it was read on 2026-09-10** — the states and ticks below are what that reading found.
 
 ### The open question this backlog has to settle first
 
@@ -317,6 +319,8 @@ Where [the vocabulary list](#the-list) asks *"is this term answerable?"*, this a
 - **(b)** a second table *inside* STRINGS.md — "if you are starting from nothing, read them in this order" — and no new URL at all.
 
 **(b) is cheaper and probably right for the route itself**, since a folder name is a permanent URL. But the exercises below are the part that has no home under either option, and they are the part with real work in them. Decide this before minting anything.
+
+**Settled 2026-09-10 — (b).** The route is the *Starting from nothing* section of [STRINGS.md](STRINGS.md). The exercises did not need a route page after all: every one landed as a kata on its topic's page, which is where the house rule puts katas anyway.
 
 ### Foundation first — the four prerequisites
 
@@ -328,7 +332,7 @@ Adam puts these *before* any string page, which the library agrees with: STRINGS
 | Stack vs heap memory | [The anatomy of a `String`](14_Strings/anatomy_of_a_string/README.md) | Three words on the stack, bytes on the heap |
 | References vs values | [Borrowing](18_Ownership/borrowing/README.md) | |
 | `Copy` vs `Clone` vs `Move` | [`Copy` vs `Clone`](16_Structs/copy_vs_clone/README.md) | Why `&str` copies and one `String` field moves a whole struct |
-| Slices (`&[T]`), and `&str` as `&[u8]` + a guarantee | [String slices](14_Strings/string_slices/README.md) · [Arrays and slices](26_Collections/arrays_and_slices/README.md) | The "UTF-8 guarantee" framing is the bridge between the two pages — check it is actually said on one of them |
+| Slices (`&[T]`), and `&str` as `&[u8]` + a guarantee | [String slices](14_Strings/string_slices/README.md) · [Arrays and slices](26_Collections/arrays_and_slices/README.md) | Said on both: [String slices](14_Strings/string_slices/README.md) — *"the only thing `&str` adds is a promise that the bytes are valid UTF-8"* — and the anatomy page's section *A `Vec<u8>` that promises UTF-8* |
 
 ### The seven claims a reader must be able to state
 
@@ -344,46 +348,48 @@ Adam's "core concepts to master", as claims a reader should be able to make unpr
 | 6 | UTF-8 is variable width, 1–4 bytes | [Meet the `char`](14_Strings/meet_the_char/README.md) · [Four lengths](14_Strings/four_lengths/README.md) |
 | 7 | Slicing by byte index panics off a char boundary | [String slices](14_Strings/string_slices/README.md) |
 
+**Verified 2026-09-10.** Each claim was checked against the page it routes to, and all seven now form the *What you can say afterwards* column of the route in [STRINGS.md](STRINGS.md).
+
 ### The eight steps
 
 | Step | Adam's ask | Where it should land | Likely state |
 |---|---|---|---|
-| 1 | Read the official docs — `std::string::String`, `std::str`, `std::primitive::str`, Book ch. 4 and ch. 8 | [Strings: links, books and videos](14_Strings/resources/README.md) | Covered — confirm the Book chapters are named by number |
-| 2 | Draw the memory: `String` on the heap vs `&str` into read-only memory; compare `String::from("hello")` / `"hello"` / `&String::from("hello")` | [The anatomy of a `String`](14_Strings/anatomy_of_a_string/README.md) · [`&'static str`](14_Strings/static_str/README.md) | The picture exists; the **three-way comparison as one exercise** probably does not |
-| 3 | Practise the conversions — `&String`→`&str`, `String`→`&str`, `&str`→`String` four ways, `String`→`&[u8]`, `Vec<u8>`→`String` | [Making a `String`](14_Strings/making_a_string/README.md) · [`String` vs `&str`](14_Strings/string_vs_str/README.md) | Mostly covered; `from_utf8` / `as_bytes` may only live in the method reference |
-| 4 | Write small programs — take `&str` return `String`; take `String` return `&str` (the lifetime trap); `&str` in a struct; build with `push_str` vs `format!` vs `+` | [Building a `String`](14_Strings/building_a_string/README.md) · [Concatenating strings](14_Strings/concatenating_strings/README.md) · [How to learn lifetimes](18_Ownership/how_to_learn_lifetimes/README.md) | **The programs are the gap** — the explanations exist, the write-it-yourself does not |
-| 5 | Edge cases — `"héllo"`, `"日本語"`, `"🦀"`, `.len()` vs `.chars().count()`, the boundary panic, `.get(0..3)`, byte vs char vs grapheme | [Meet the `char`](14_Strings/meet_the_char/README.md) · [Four lengths](14_Strings/four_lengths/README.md) · [Walking a `String`](14_Strings/walking_a_string/README.md) | Best-covered step in the plan |
-| 6 | `Cow<str>` — functions that sometimes borrow and sometimes own; `String::from_utf8_lossy()` | [`Cow`: borrow until somebody writes](18_Ownership/clone_on_write/README.md) | Covered; check `from_utf8_lossy` is the named example |
-| 7 | Study the APIs — every method on `str`, every method on `String`, the pattern-based ones | [`str` methods](14_Strings/str_methods/README.md) (83) · [`String` methods](14_Strings/string_methods/README.md) (42) | Covered, and more thoroughly than the plan asks |
-| 8 | Common patterns — builder, `&str` parameters, `String` returns, `impl Into<String>` / `impl AsRef<str>` | [String parameters worth copying](14_Strings/string_api_design/README.md) | **Still a stub** — this step is the one the plan most directly asks to finish |
+| 1 | Read the official docs — `std::string::String`, `std::str`, `std::primitive::str`, Book ch. 4 and ch. 8 | [Strings: links, books and videos](14_Strings/resources/README.md) | **Covered** — ch. 4.1 and 8.2 were named by number already; ch. 4.3 (slices) and ch. 10.3 (lifetimes) are added |
+| 2 | Draw the memory: `String` on the heap vs `&str` into read-only memory; compare `String::from("hello")` / `"hello"` / `&String::from("hello")` | [The anatomy of a `String`](14_Strings/anatomy_of_a_string/README.md) · [`&'static str`](14_Strings/static_str/README.md) | **Covered** — the three-way picture is now a kata, [Five bindings, two buffers](14_Strings/anatomy_of_a_string/README.md#practice) |
+| 3 | Practise the conversions — `&String`→`&str`, `String`→`&str`, `&str`→`String` four ways, `String`→`&[u8]`, `Vec<u8>`→`String` | [Making a `String`](14_Strings/making_a_string/README.md) · [`String` vs `&str`](14_Strings/string_vs_str/README.md) | **Covered** — `from_utf8` and `as_bytes` live in the method reference, and the route links it |
+| 4 | Write small programs — take `&str` return `String`; take `String` return `&str` (the lifetime trap); `&str` in a struct; build with `push_str` vs `format!` vs `+` | [Building a `String`](14_Strings/building_a_string/README.md) · [Concatenating strings](14_Strings/concatenating_strings/README.md) · [How to learn lifetimes](18_Ownership/how_to_learn_lifetimes/README.md) | **Covered** — by the katas on [`String` vs `&str`](14_Strings/string_vs_str/README.md#practice), [Building a `String`](14_Strings/building_a_string/README.md#practice) and [`&'static str`](14_Strings/static_str/README.md#practice), and by the graduated signature lesson |
+| 5 | Edge cases — `"héllo"`, `"日本語"`, `"🦀"`, `.len()` vs `.chars().count()`, the boundary panic, `.get(0..3)`, byte vs char vs grapheme | [Meet the `char`](14_Strings/meet_the_char/README.md) · [Four lengths](14_Strings/four_lengths/README.md) · [Walking a `String`](14_Strings/walking_a_string/README.md) | **Covered** |
+| 6 | `Cow<str>` — functions that sometimes borrow and sometimes own; `String::from_utf8_lossy()` | [`Cow`: borrow until somebody writes](18_Ownership/clone_on_write/README.md) | **Covered, with one gap closed** — `from_utf8_lossy` was not on the `Cow` page; it is now linked from it and from the route |
+| 7 | Study the APIs — every method on `str`, every method on `String`, the pattern-based ones | [`str` methods](14_Strings/str_methods/README.md) (83) · [`String` methods](14_Strings/string_methods/README.md) (42) | **Covered** |
+| 8 | Common patterns — builder, `&str` parameters, `String` returns, `impl Into<String>` / `impl AsRef<str>` | [String parameters worth copying](14_Strings/string_api_design/README.md) | **Done** — [String parameters worth copying](14_Strings/string_api_design/README.md) graduated: every signature's cost is an allocation count, and its kata is the builder, [A builder that moves, not copies](14_Strings/string_api_design/README.md#practice) |
 
 ### The eight exercises
 
-This is where the plan actually adds work. [KATAS.md](KATAS.md) has 170 katas; a grep for these found **one**.
+This is where the plan actually adds work. [KATAS.md](KATAS.md) had 170 katas when this was filed; a grep for these found **one**.
 
 | # | Exercise | State | Note |
 |---|---|---|---|
-| 1 | Memory — without running, where does each of `a`…`e` live, and what is its size? | **Gap** | The five-binding table (`&str`, `String`, `&String`, `.as_str()`, `&&str`) is a good kata for [anatomy](14_Strings/anatomy_of_a_string/README.md); no crate, no I/O, prints sizes — cheap to write |
-| 2 | Lifetimes — why does `fn longest(a: &str, b: &str) -> &str` not compile, and how is it fixed? | **Gap** | `E0106`. Appears in [GLOSSARY.md](GLOSSARY.md) and [KATAS.md](KATAS.md) but not as this canonical exercise; belongs on [How to learn lifetimes](18_Ownership/how_to_learn_lifetimes/README.md) |
-| 3 | UTF-8 — what does `"🦀"` print for `.len()` and `.chars().count()`, and what happens at `&s[0..1]`? | **Likely covered** | Confirm on [Meet the `char`](14_Strings/meet_the_char/README.md); if it is there, this is a tick, not a task |
-| 4 | Ownership transfer — which of `take_string(s)` / `take_str(&s)` / `take_str(s.as_str())` / `take_string(&s)` compile? | **Gap** | The fourth line is the lesson: `E0308`, and the fix is not `&`. Fits [`String` vs `&str`](14_Strings/string_vs_str/README.md) |
-| 5 | Build a CSV parser — lines from a `&str`, split on commas, **handle quoted fields**, trim, return `Vec<String>` | **Gap — the biggest one** | The quoted-field rule is what makes it a real exercise rather than a `split(',')` demo. Bare `rustc`, no crate needed |
-| 6 | Implement `to_camel_case` — `&str` in, `String` out, handling spaces, underscores and hyphens | **Gap** | Small, self-contained, exercises `char` boundaries and `push` |
-| 7 | Zero-copy logger — store log lines as `&str` into a shared buffer | **Gap, and partly out of scope** | Adam names `bstr` / `memchr`; per the crates rule above, **the crate half cannot be demonstrated here** — the std-only version (lifetimes tying views to one owned buffer) is the runnable part |
-| 8 | Tiny string interner — dedupe into a `Vec<String>`, hand back `&str` handles | **Partly covered** | [K138](KATAS.md) already interns a repeated column via `Rc<str>` on [The third owned form](14_Strings/boxed_str/README.md). Decide: extend K138, or write the `Vec<String>` + handle variant as its own |
+| 1 | Memory — without running, where does each of `a`…`e` live, and what is its size? | **New kata** | [Five bindings, two buffers](14_Strings/anatomy_of_a_string/README.md#practice) — handles in machine words, so the answer holds on any target, and `as_ptr()` for which names share bytes |
+| 2 | Lifetimes — why does `fn longest(a: &str, b: &str) -> &str` not compile, and how is it fixed? | **Already answered** | By [Return a palindrome you did not copy](18_Ownership/how_to_learn_lifetimes/README.md#practice), built in backlog 3 — its two-input `longer_palindrome` is this `longest` — and by *Pivot both ways, then earn `E0106` and `E0515`* on [`String` vs `&str`](14_Strings/string_vs_str/README.md#practice), whose borrowed `User` field is the struct half of the same question |
+| 3 | UTF-8 — what does `"🦀"` print for `.len()` and `.chars().count()`, and what happens at `&s[0..1]`? | **Already answered** | By *Two rulers over one string* on [Walking a `String`](14_Strings/walking_a_string/README.md#practice), which counts `"Hello 🦀!"` both ways, and by the slicing katas on [String slices](14_Strings/string_slices/README.md#practice) |
+| 4 | Ownership transfer — which of `take_string(s)` / `take_str(&s)` / `take_str(s.as_str())` / `take_string(&s)` compile? | **Already answered** | By *One `&str` parameter, three callers — then flip it* on [`String` vs `&str`](14_Strings/string_vs_str/README.md#practice). `take_string(&s)` measured as `E0308` |
+| 5 | Build a CSV parser — lines from a `&str`, split on commas, **handle quoted fields**, trim, return `Vec<String>` | **New kata** | [A CSV reader, and the newline inside the quotes](14_Strings/parsing_a_string/README.md#practice) — beside the tokenizer, with the opposite rule about empty fields |
+| 6 | Implement `to_camel_case` — `&str` in, `String` out, handling spaces, underscores and hyphens | **Already answered** | By *Case and whitespace* on [Meet the `char`](14_Strings/meet_the_char/README.md#practice) — the same finding as backlog 3's kata 8 |
+| 7 | Zero-copy logger — store log lines as `&str` into a shared buffer | **New kata** | [A log that keeps views, not copies](18_Ownership/how_to_learn_lifetimes/README.md#practice) — std only, as planned: 1,009 allocations for a `String` per line against 9 for views, and the self-referential struct's `E0515` and `E0505` |
+| 8 | Tiny string interner — dedupe into a `Vec<String>`, hand back `&str` handles | **New kata** | [An interner that hands out numbers](14_Strings/boxed_str/README.md#practice) — the `&str`-returning version's `E0499`, then a `Symbol(u32)`; the `Rc<str>` kata beside it stays as it was |
 
 ### Common mistakes — Adam's list
 
 Worth keeping as a checklist even where a lesson covers it, because this is the set a reviewer scans for.
 
-- [ ] Returning `&str` that points into a local `String`
-- [ ] Slicing at a non-char boundary
-- [ ] Comparing `String` with `&str` incorrectly
-- [ ] Forgetting `.as_str()` where it is needed
-- [ ] `+` with two `&str` — the left operand must be an owned `String` ([Concatenating strings](14_Strings/concatenating_strings/README.md) is the whole of this one)
-- [ ] Assuming `.len()` counts characters — it counts bytes
-- [ ] Storing `&str` in a struct without a lifetime parameter
-- [ ] Reaching for `String` where `&str` would do — an allocation nobody asked for
+- [x] Returning `&str` that points into a local `String` — answered: the `E0106`-then-`E0515` pair, on [String parameters worth copying](14_Strings/string_api_design/README.md) and in the label kata on [`&'static str`](14_Strings/static_str/README.md#practice)
+- [x] Slicing at a non-char boundary — answered: [String slices](14_Strings/string_slices/README.md#practice)
+- [x] Comparing `String` with `&str` incorrectly — answered: measured on 1.98.0: `s == "a"`, `"a" == s`, `&s == "a"` and `s.as_str() == "a"` all compile; only comparing against a `char` or a `&&str` fails, as `E0277`. See [Comparing and sorting text](14_Strings/comparing_strings/README.md)
+- [x] Forgetting `.as_str()` where it is needed — answered: `match` on a bare `String` is `E0308`; [`String::as_str`](14_Strings/string_methods/string_as_str/README.md) shows the `match` that needs it
+- [x] `+` with two `&str` — the left operand must be an owned `String` ([Concatenating strings](14_Strings/concatenating_strings/README.md) is the whole of this one) — answered, with a kata on that page that earns the `E0369` on purpose
+- [x] Assuming `.len()` counts characters — it counts bytes — answered: [Meet the `char`](14_Strings/meet_the_char/README.md) and [Four lengths](14_Strings/four_lengths/README.md)
+- [x] Storing `&str` in a struct without a lifetime parameter — answered: *Pivot both ways, then earn `E0106` and `E0515`* on [`String` vs `&str`](14_Strings/string_vs_str/README.md#practice), whose borrowed `User` field is `E0106`
+- [x] Reaching for `String` where `&str` would do — an allocation nobody asked for — answered: [String parameters worth copying](14_Strings/string_api_design/README.md), section 2: a `String` parameter makes two of three callers allocate
 
 ### The mental model, as Adam states it
 
@@ -394,7 +400,7 @@ str     =  unsized type, never directly held, only behind reference
 String literal = &'static str
 ```
 
-This is the same "owner and view" pattern [STRINGS.md](STRINGS.md) opens with, said in four lines. If the route page in option (a) gets written, this block is its opening.
+This is the same "owner and view" pattern [STRINGS.md](STRINGS.md) opens with, said in four lines. It now opens the *Starting from nothing* section of [STRINGS.md](STRINGS.md), with one correction: `str` lives behind a *pointer* — `&str`, `Box<str>`, `Rc<str>` — not only behind a reference.
 
 ### Rule of thumb
 
@@ -402,6 +408,8 @@ This is the same "owner and view" pattern [STRINGS.md](STRINGS.md) opens with, s
 - **Function return:** `String` if it is new data, `&str` if it borrows the input (with lifetimes)
 - **Struct field:** `String` — rarely `&str`, and only with a lifetime parameter
 - **Temporary:** `&str` for read-only access
+
+This is now the closing section of [String parameters worth copying](14_Strings/string_api_design/README.md), where the parameter and return lines are backed by measured allocation counts.
 
 ### Resources Adam names
 
@@ -413,6 +421,8 @@ Check these against [Strings: links, books and videos](14_Strings/resources/READ
 - The std source: `library/alloc/src/string.rs`, `library/core/src/str/` (the plan's `src/liballoc/…` paths are pre-2020 names — use the current ones)
 - `rustc --explain` for `E0106`, `E0506`, `E0716` — [ERRORS.md](ERRORS.md) already carries the last two
 - Practice sets: Advent of Code string-heavy days, the Exercism Rust track
+
+**Checked 2026-09-10.** [Strings: links, books and videos](14_Strings/resources/README.md) already had Rust by Example's strings page, *Programming Rust* ch. 17 and the Exercism track. Added: Book ch. 4.3 and 10.3, the `library/alloc/src/string.rs` and `library/core/src/str/` source paths, the online error index for `E0106` and `E0515` (what `rustc --explain` prints), and Advent of Code.
 
 ---
 

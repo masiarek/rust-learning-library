@@ -62,20 +62,48 @@ flowchart LR
 | 8 | [Raw strings, escapes and the literal prefixes](14_Strings/raw_strings_and_escapes/README.md) | 101 → 201 | Every way to write text in source — `r"…"`, `b"…"`, `c"…"`, `\x`, `\u{…}` — and why `"C:\temp\new"` is two bytes shorter than it looks |
 | 9 | [Walking a `String`](14_Strings/walking_a_string/README.md) | 101 → 201 | Three item types and the split family — and why `split(' ')` and `split_whitespace()` disagree about empty fields |
 | 10 | [`&'static str`](14_Strings/static_str/README.md) | 201 | Is it different from `&str`? On a literal, no — and the claim that a `String` can never yield one is false |
-| 11 | [Six kinds of string](14_Strings/six_kinds_of_string/README.md) | 201 | Why `OsString` and `CString` exist, and the one owned/borrowed pattern all six types repeat |
-| 12 | [`str` is unsized](14_Strings/str_is_unsized/README.md) | 201 | Why you never hold a `str`, only a pointer to one — the size that belongs to the value, the fat pointer's second word, and `?Sized` as a relaxation |
-| 13 | [Inside a `Split`](14_Strings/inside_a_split/README.md) | 201 → 301 | Why printing `s.split(":")` with `{:?}` gives a struct full of `crit_pos` and `byteset` instead of `["a", "b", "c"]` — and what every field of it means |
-| 14 | [The third owned form](14_Strings/boxed_str/README.md) | 201 → 301 | `Box<str>`, `Rc<str>`, `Arc<str>`: the capacity word dropped, and the interning move that makes a repeated column stop paying per row |
-| 15 | [Four lengths, and which one the other system means](14_Strings/four_lengths/README.md) | 201 | One string, four counts — and why a name that fits a `VARCHAR(12)` can bounce off an `nvarchar(12)` |
-| 16 | [Searching without splitting](14_Strings/searching_a_string/README.md) | 101 → 201 | Is it there, where is it, does it start like this — and why one trait makes a `char`, a `&str` and a closure the same argument |
-| 17 | [Replacing part of a string](14_Strings/replacing_in_a_string/README.md) | 101 → 201 | `replace` hands back a new `String`; `replace_range` and `retain` are the two that edit in place, and a chain of replaces is not a substitution table |
-| 18 | [`str::as_str`: the method that was stabilized and taken back](14_Strings/str_as_str/README.md) | 201 → 301 | Why `as_str` works on a `String` and is `E0658` on everything else that owns text — and what an inherent method added to `str` or `[T]` does to the crates that already extend them |
-| 19 | [Splitting on nothing](14_Strings/splitting_on_nothing/README.md) | 201 | Why `"abc".split("")` yields `["", "a", "b", "c", ""]` — and why the empty string is the one that splits into two pieces |
-| 20 | [Comparing and sorting text](14_Strings/comparing_strings/README.md) | 201 | What `==` and `sort()` actually compare — and why the answer is reproducible on every machine and still wrong for every reader |
-| 21 | [Parsing out of a string](14_Strings/parsing_a_string/README.md) | 101 → 201 | Text on the way in — what names the type, what the string is allowed to look like, and what the failure will tell you |
-| 22 | [The format mini-language](14_Strings/the_format_language/README.md) | 201 | Text on the way out — the whole grammar, and why a format spec is a request an impl is free to ignore |
-| 23 | [When the UTF-8 invariant broke](14_Strings/when_the_invariant_broke/README.md) | 301 | Has `std`'s own string code ever been wrong about memory — and what did safe code have to do to break it? |
-| 24 | [Wrong, but not unsafe](14_Strings/wrong_but_not_unsafe/README.md) | 201 → 301 | And has it ever simply returned the wrong answer, with nothing unsafe anywhere near it? |
+| 11 | [String parameters worth copying](14_Strings/string_api_design/README.md) | 201 → 301 | Which signature makes the caller pay — `&str`, `impl AsRef<str>`, `impl Into<String>` or a `Cow` return — counted in allocations rather than asserted |
+| 12 | [Six kinds of string](14_Strings/six_kinds_of_string/README.md) | 201 | Why `OsString` and `CString` exist, and the one owned/borrowed pattern all six types repeat |
+| 13 | [`str` is unsized](14_Strings/str_is_unsized/README.md) | 201 | Why you never hold a `str`, only a pointer to one — the size that belongs to the value, the fat pointer's second word, and `?Sized` as a relaxation |
+| 14 | [Inside a `Split`](14_Strings/inside_a_split/README.md) | 201 → 301 | Why printing `s.split(":")` with `{:?}` gives a struct full of `crit_pos` and `byteset` instead of `["a", "b", "c"]` — and what every field of it means |
+| 15 | [The third owned form](14_Strings/boxed_str/README.md) | 201 → 301 | `Box<str>`, `Rc<str>`, `Arc<str>`: the capacity word dropped, and the interning move that makes a repeated column stop paying per row |
+| 16 | [Four lengths, and which one the other system means](14_Strings/four_lengths/README.md) | 201 | One string, four counts — and why a name that fits a `VARCHAR(12)` can bounce off an `nvarchar(12)` |
+| 17 | [Searching without splitting](14_Strings/searching_a_string/README.md) | 101 → 201 | Is it there, where is it, does it start like this — and why one trait makes a `char`, a `&str` and a closure the same argument |
+| 18 | [Replacing part of a string](14_Strings/replacing_in_a_string/README.md) | 101 → 201 | `replace` hands back a new `String`; `replace_range` and `retain` are the two that edit in place, and a chain of replaces is not a substitution table |
+| 19 | [`str::as_str`: the method that was stabilized and taken back](14_Strings/str_as_str/README.md) | 201 → 301 | Why `as_str` works on a `String` and is `E0658` on everything else that owns text — and what an inherent method added to `str` or `[T]` does to the crates that already extend them |
+| 20 | [Splitting on nothing](14_Strings/splitting_on_nothing/README.md) | 201 | Why `"abc".split("")` yields `["", "a", "b", "c", ""]` — and why the empty string is the one that splits into two pieces |
+| 21 | [Comparing and sorting text](14_Strings/comparing_strings/README.md) | 201 | What `==` and `sort()` actually compare — and why the answer is reproducible on every machine and still wrong for every reader |
+| 22 | [Parsing out of a string](14_Strings/parsing_a_string/README.md) | 101 → 201 | Text on the way in — what names the type, what the string is allowed to look like, and what the failure will tell you |
+| 23 | [The format mini-language](14_Strings/the_format_language/README.md) | 201 | Text on the way out — the whole grammar, and why a format spec is a request an impl is free to ignore |
+| 24 | [When the UTF-8 invariant broke](14_Strings/when_the_invariant_broke/README.md) | 301 | Has `std`'s own string code ever been wrong about memory — and what did safe code have to do to break it? |
+| 25 | [Wrong, but not unsafe](14_Strings/wrong_but_not_unsafe/README.md) | 201 → 301 | And has it ever simply returned the wrong answer, with nothing unsafe anywhere near it? |
+
+## Starting from nothing
+
+The table above is ordered by the question you arrive with. If you arrive with none — new to Rust, or new to its text — this is the other order: by what each step needs from the one before. Ownership first, then the two types, then what they cost, then programs.
+
+What the whole route builds, in four lines:
+
+```text
+String   owned, growable, on the heap: a Vec<u8> that promises UTF-8
+&str     borrowed and read-only: points into a String, the binary, or anything holding text
+str      unsized: never held directly, only behind a pointer (&str, Box<str>, Rc<str>)
+"text"   a literal is a &'static str, and its bytes are in the binary
+```
+
+| Step | Read | What you can say afterwards |
+|---|---|---|
+| 0 | [Ownership and moves](18_Ownership/ownership_and_moves/README.md) · [Borrowing](18_Ownership/borrowing/README.md) · [Stack and heap](18_Ownership/stack_and_heap/README.md) · [`Copy` vs `Clone`](16_Structs/copy_vs_clone/README.md) | Who frees a value, and why a `String` moves where a `&str` copies |
+| 1 | [`String` vs `&str`](14_Strings/string_vs_str/README.md) | A parameter takes `&str`, and a `&String` coerces to it for free because `String: Deref<Target = str>` |
+| 2 | [The anatomy of a `String`](14_Strings/anatomy_of_a_string/README.md) · [`&'static str`](14_Strings/static_str/README.md) | A `String` is pointer, length and capacity with its bytes on the heap; a literal's bytes are in the binary |
+| 3 | [String slices](14_Strings/string_slices/README.md) · [`str` is unsized](14_Strings/str_is_unsized/README.md) | A `&str` is a fat pointer — address and length — into bytes someone else owns, and `&s[a..b]` panics off a character boundary |
+| 4 | [Making a `String`](14_Strings/making_a_string/README.md) · [Concatenating strings](14_Strings/concatenating_strings/README.md) · [Building a `String`](14_Strings/building_a_string/README.md) | The ways from `&str` to `String`, and why `+` needs an owned left |
+| 5 | [Meet the `char`](14_Strings/meet_the_char/README.md) · [Four lengths](14_Strings/four_lengths/README.md) | A character is 1 to 4 bytes in UTF-8, so `.len()` counts bytes |
+| 6 | [`Cow`: borrow until somebody writes](18_Ownership/clone_on_write/README.md) · [`String::from_utf8_lossy`](14_Strings/string_methods/string_from_utf8_lossy/README.md) | A function that allocates only sometimes, and std's own example of one |
+| 7 | [`str` methods](14_Strings/str_methods/README.md) · [`String` methods](14_Strings/string_methods/README.md) | The reference, once you know what you are looking for |
+| 8 | [String parameters worth copying](14_Strings/string_api_design/README.md) | Which signature to write — `&str` in, `String` out, a `String` field — with the allocations counted |
+
+Every step but 7, the reference you look things up in, has katas to type; [KATAS.md](KATAS.md) groups them by subject.
 
 ## The lessons strings lean on
 
@@ -99,7 +127,6 @@ Named honestly, because a map that only lists what exists is a map of the wrong 
 
 | The page | Level | What it will answer |
 |---|---|---|
-| [String parameters worth copying](14_Strings/string_api_design/README.md) | 201 → 301 | `impl AsRef<str>`, `Into<String>`, and when a signature should take `impl Display` |
 | [When `String` is too slow](14_Strings/when_string_is_too_slow/README.md) | 301 | `with_capacity` in anger, `smallstr` / `smartstring`, and avoiding a `format!` that a literal would do |
 
 A stub graduates by gaining an `examples/` program, losing its notice, and — if it earned one on the way — a row in [KATAS.md](KATAS.md). If you want one of these next, that is the table to point at.

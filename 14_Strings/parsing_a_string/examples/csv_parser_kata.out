@@ -1,0 +1,33 @@
+1. Quotes: a comma inside them, and a doubled quote for a literal one
+   ["id", "name", "said"]
+   ["1", "Doe, Jane", "She said \"hi\""]
+
+2. An empty field is data
+   ["a", "", "c"]
+   ["", "", ""]
+   Three fields on both lines. The tokenizer kata on this page drops the
+   empty run between two delimiters on purpose; a CSV reader cannot, or
+   every column after a blank one shifts one place to the left.
+
+3. Trim outside the quotes, keep what is inside them
+   ["a", " b ", "c"]
+
+4. The newline inside the quotes
+   the whole input: 3 records from 4 lines
+   ["name", "note"]
+   ["Ada", "first line\nsecond line"]
+   ["Ben", "short"]
+   and one line at a time instead:
+   "name,note"          -> Ok([["name", "note"]])
+   "Ada,\"first line"   -> Err("unterminated quote opened at byte 4")
+   "second line\""      -> Ok([["second line\""]])
+   "Ben,short"          -> Ok([["Ben", "short"]])
+   Splitting on lines first is the bug. It cuts the record at the quoted
+   newline, and neither half means anything on its own.
+
+5. Two failures, and where each one is
+   "a,\"b"    -> Err("unterminated quote opened at byte 2")
+   "\"a\"x,b" -> Err("text after a closing quote at byte 3")
+
+6. Windows line endings
+   [["a", "b"], ["c", "d"]]

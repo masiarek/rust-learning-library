@@ -1,0 +1,18 @@
+1. A String per line
+   1000 lines, 1009 allocations: one per line, and the Vec growing
+
+2. Views into one buffer, with the buffer outside
+   1000 lines, 9 allocations: only the Vec of views growing
+   10 of them are errors
+
+3. The buffer inside, and ranges instead of references
+   1000 lines, 9 allocations: the Vec of ranges growing, no text copied
+   line 0 "ERROR at step 0", line 1 "ok 1", 10 errors
+   load(3) returns a log that owns its text: ["ERROR at step 0", "ok 1", "ok 2"]
+
+4. The design in between does not compile
+   A struct holding the buffer AND views into it needs a lifetime that names
+   the struct itself. Building one from a local String is E0515, since the
+   views point into a local, and E0505, since moving the buffer into the
+   struct moves it while it is borrowed. Ranges are the way out: an offset
+   borrows nothing.

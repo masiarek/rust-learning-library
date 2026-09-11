@@ -249,6 +249,7 @@ rustc --edition 2024 18_Ownership/clone_on_write/examples/clone_on_write.rs -o /
 - [`Rc`: the clone that copies a pointer](../reference_counting/README.md) — the other way out of a copy: several owners instead of a deferred one
 - [The anatomy of a `String`](../../14_Strings/anatomy_of_a_string/README.md) — pointer, length, capacity: the 24 bytes the table above compares against
 - [Six kinds of string](../../14_Strings/six_kinds_of_string/README.md) — `Cow<str>` in its place among the owned/borrowed pairs
+- [`String::from_utf8_lossy`](../../14_Strings/string_methods/string_from_utf8_lossy/README.md) — std's own function returning a `Cow<str>`: `Borrowed` when the bytes were already valid, `Owned` only when something had to be replaced
 - [`Cow` ↗](https://doc.rust-lang.org/std/borrow/enum.Cow.html) · [`ToOwned` ↗](https://doc.rust-lang.org/std/borrow/trait.ToOwned.html)
 
 ## Po polsku

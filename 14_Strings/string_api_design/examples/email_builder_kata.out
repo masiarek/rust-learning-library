@@ -1,0 +1,17 @@
+1. Literals: each field is copied once, because it has to be
+   EmailBuilder::new()        0 allocations   (an empty String owns no buffer)
+   three literal setters      3 allocations
+   to "ada@example.com", subject "Hello", body "See you at ten."
+
+2. Strings the caller is finished with
+   three owned setters        0 allocations   (each String moves in)
+
+3. The same Strings, through &str setters
+   three &str setters         3 allocations   (Strings to give, copied anyway)
+
+4. build(self) against build_again(&self)
+   build_again(&self), once   3 allocations   (every field cloned)
+   build_again(&self), ×10    30 allocations
+   build(self)                0 allocations   (the fields move out)
+   A builder that can build twice pays one copy per field per build.
+   Consume it, unless the caller really does build more than once.

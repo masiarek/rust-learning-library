@@ -615,7 +615,7 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Invisible characters** — Code points that draw nothing — zero-width space, soft hyphen, the joiners, a BOM in mid-string — so two strings can look identical and differ. None of them is whitespace to `char::is_whitespace`, so `trim()` leaves every one of them in place. → [The hard strings ↗](https://masiarek.github.io/encodings-learning-library/14_Resources/hard_strings/index.html)
 
-**`AsRef<str>`** — A cheap reference conversion: `fn f(s: impl AsRef<str>)` accepts `&str`, `String` and `&String` alike, at the cost of one compiled copy of `f` per argument type. `PathBuf` is not on that list — a path is not promised to be UTF-8, so it implements `AsRef<Path>` and `AsRef<OsStr>` instead, and `E0277` says so. → [String parameters worth copying](14_Strings/string_api_design/README.md) *(stub)*
+**`AsRef<str>`** — A cheap reference conversion: `fn f(s: impl AsRef<str>)` accepts `&str`, `String` and `&String` alike, at the cost of one compiled copy of `f` per argument type. `PathBuf` is not on that list — a path is not promised to be UTF-8, so it implements `AsRef<Path>` and `AsRef<OsStr>` instead, and `E0277` says so. → [String parameters worth copying](14_Strings/string_api_design/README.md)
 
 **`Borrow<str>`** — The trait that lets a `HashMap<String, V>` be searched with a `&str`: an owned value promises to hash and compare exactly like its borrowed form. Nothing checks the promise, and `[Borrow<str>]::join` was a CVE because an impl could give a different answer each time it was asked. → [When the UTF-8 invariant broke](14_Strings/when_the_invariant_broke/README.md)
 

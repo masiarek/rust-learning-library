@@ -1,0 +1,19 @@
+1. Intern a column: eight values, three distinct
+   symbols               [0, 1, 0, 2, 1, 0, 2, 0]
+   texts stored          3
+   owners of each text   2 (the map's key and the Vec's entry)
+
+2. Handles compare as integers, and are small
+   symbols[0] == symbols[2], both Ada   true
+   a Symbol                             4 bytes
+   a &str                               2 machine words
+
+3. Resolve when the text is needed, as many at once as you like
+   Ada, Ben, Cara
+   resolve takes &self, so three shared borrows can be alive together.
+
+4. Why intern does not hand out &str
+   fn intern(&mut self, s: &str) -> &str ties the &str it returns to the
+   MUTABLE borrow of the interner. Keep the first result and call intern
+   again, and rustc stops with E0499: two mutable borrows at once.
+   A Symbol borrows nothing, so that question never comes up.

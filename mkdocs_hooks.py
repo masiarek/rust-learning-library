@@ -649,6 +649,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # The lifetime half, once the two types are solid: three spellings of
         # one type, and the claim about String that is not true.
         "static_str",
+        # ...then the signatures to write once both halves are solid: which
+        # one makes the caller pay, counted in allocations.
+        "string_api_design",
         # Closes the arc: the other four string types, and the one
         # owned/borrowed pattern all six repeat.
         "six_kinds_of_string",
@@ -682,7 +685,6 @@ NAV_ORDER: dict[str, list[str]] = {
         # written. Each is a real URL from the day it is a stub. (No counts in
         # this block: every graduation invalidates one, nothing checks them,
         # and between them they went stale at nine, eight, six and five.)
-        "string_api_design",
         "when_string_is_too_slow",
         # ...and the outside world: the crates std leaves room for, then
         # books, essays, the video, and the exercises.

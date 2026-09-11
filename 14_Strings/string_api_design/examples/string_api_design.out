@@ -1,0 +1,41 @@
+1. The default: take &str
+   count_words("one two three")   0 allocations
+   count_words(&owned)            0 allocations   (&String coerced to &str)
+   count_words(&owned[..12])      0 allocations
+
+2. The anti-pattern: take String by value
+   a caller with a literal        1 allocation    (.to_string() first)
+   a caller keeping its String    1 allocation    (.clone() first)
+   a caller finished with its own 0 allocations   (moved in)
+   Only the last caller got it free, and the function never needed to own
+   the text: it reads it and drops it.
+
+3. impl AsRef<str>: every kind of text, one copy of the function per kind
+   &str 0, &String 0, String 0 allocations
+   the three instantiations: &str, &alloc::string::String, alloc::string::String
+   Three types in, three compiled copies of count_words_any out. The cost is
+   code size, paid once per type — never per call.
+   total_words(&strs)      3 words, 0 allocations   (a &[&str])
+   total_words(&strings)   3 words, 0 allocations   (a &[String])
+   The slice is where it earns its keep. A &[&str] parameter would refuse
+   &strings with E0308: a &String coerces to &str, but a slice of one never
+   coerces to a slice of the other. PathBuf is refused outright (E0277): a
+   path is not promised to be UTF-8, so it is AsRef<Path> and AsRef<OsStr>,
+   never AsRef<str>.
+
+4. impl Into<String>: when the function is going to keep the text
+   User::new("Ada")             1 allocation    (the &str is copied once, as it must be)
+   User::new(name)              0 allocations   (the caller's String moves in)
+   User::from_borrowed(&name)   1 allocation    (a String existed, and was copied anyway)
+
+5. Cow<str> as the return type: borrow unless something changed
+   tidy("no tabs here")   -> Borrowed 0 allocation(s)
+   tidy("one\ttab")       -> Owned    1 allocation(s)
+
+6. Returning text: a new String, or a buffer the caller lends you
+   label(n), three calls                 3 allocations   (one String each)
+   label_into(n, &mut buf), three calls  1 allocation    (one buffer, reused: "row 3")
+   The third shape, a &str into a String made inside the function, never
+   compiles. With no input to borrow from it is E0106 first; write 'static
+   as rustc suggests and it becomes E0515, because the String dies at the
+   closing brace and the reference may not outlive it.
