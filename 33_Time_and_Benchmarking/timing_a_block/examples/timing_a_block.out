@@ -1,0 +1,6 @@
+1. The whole API is two calls
+   slept 20ms; took >= 20ms        true
+
+2. Hand the Duration back; let the caller decide what to do with it
+   the value comes back too        500000500000
+   a 20ms sleep, timed through it  took >= 20ms: true

@@ -268,7 +268,7 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **bacon** — A background code checker: it watches the files and re-runs `cargo check`, clippy or the tests into a pane you leave open, with `c` and `t` to switch. No config and no project changes, which makes it the cheapest tool in the toolchain. → [bacon](05_Tooling/bacon/README.md)
 
-**`black_box`** — `std::hint::black_box`, which hides a value from the optimiser so it cannot notice your benchmark's answer is a constant and delete the work. Without it you time an empty loop and conclude the code is infinitely fast. → [cargo-nextest](05_Tooling/nextest/README.md), and used throughout [Compile times](05_Tooling/compile_times/README.md)
+**`black_box`** — `std::hint::black_box`, an identity function the optimizer is asked to treat as opaque, so a benchmark measures the code rather than LLVM's ability to delete it; without it a loop over constants can compile to nothing and time at zero. Best-effort, and it protects a *value*, not the work that produced it: pass only a loop's result through it and the loop can still become a formula. → [`black_box` is a hint](33_Time_and_Benchmarking/black_box_is_a_hint/README.md); used in [Scale the denominator away](09_Advanced/scaled_integers/README.md), [cargo-nextest](05_Tooling/nextest/README.md) and [Compile times](05_Tooling/compile_times/README.md)
 
 **Process-per-test** — nextest's model: each test runs in its own process rather than as a thread in a shared one. A test that *aborts* becomes one reported failure instead of killing the run, and tests cannot leak globals into each other. The cost is that doctests are not supported. → [cargo-nextest](05_Tooling/nextest/README.md)
 
@@ -283,8 +283,6 @@ Short definitions. Every entry links to the page that explains it properly — a
 **`i128`** — A 128-bit signed integer, an ordinary primitive with no crate and no allocation behind it: 16 bytes, `Copy`, two registers. Exact under `+ − ×` up to a ceiling of 39 digits, no more exact under `÷` than an `i64`, and the widest Rust has — there is no `i256` to escape into. → [What `i128` is exact about](09_Advanced/i128_exactness/README.md)
 
 **Overflow checks** — The debug-build panic on integer overflow, absent from release builds, where the same expression wraps instead. The reason arithmetic whose range you have not proved should say which it wants: `checked_*`, `saturating_*`, `wrapping_*` or `overflowing_*`. → [Scale the denominator away](09_Advanced/scaled_integers/README.md)
-
-**`black_box`** — A hint that stops the optimizer reasoning about a value, so a benchmark measures the code rather than LLVM's ability to delete it. Without it a loop over constants can compile to nothing and time at zero. → [Scale the denominator away](09_Advanced/scaled_integers/README.md)
 
 **Closure (under an operation)** — Whether applying an operation to two values of a type always yields a value *of that type*. Integers are closed under `+ − ×` and not under `÷`, which is why a wider integer buys range but never makes division exact. → [What `i128` is exact about](09_Advanced/i128_exactness/README.md)
 
@@ -672,3 +670,9 @@ Short definitions. Every entry links to the page that explains it properly — a
 **`widestring` / `utf16string`** — Owned UTF-16 string types — and UTF-32, in `widestring`'s case — for Windows APIs and other FFI that speak wide strings. `std` stops at conversion, `str::encode_utf16` out and `String::from_utf16` back, and has no UTF-16 string type. `utf16string` has not published a release since 2020. → [`str::encode_utf16`](14_Strings/str_methods/str_encode_utf16/README.md) · [The string crates](14_Strings/string_crates/README.md)
 
 **`cow-utils`** — Copy-on-write versions of the `str` methods that return a new `String` even when nothing needed changing, plus its own stand-in for `Pattern`, because the real one is unstable. → [The string crates](14_Strings/string_crates/README.md) · [Replacing part of a string](14_Strings/replacing_in_a_string/README.md)
+
+**Monotonic clock** — A clock that never goes backwards. `std::time::Instant` reads one — `CLOCK_MONOTONIC` on Linux, `CLOCK_UPTIME_RAW` on macOS — and promises that direction only: its ticks may run fast or slow while NTP steers the clock, and whether a suspended machine counts as elapsed time is unspecified. → [Two clocks](33_Time_and_Benchmarking/two_clocks/README.md)
+
+**`SystemTime`** — The wall clock: a date, readable against `UNIX_EPOCH` (1970-01-01 00:00:00 UTC), and settable by NTP, an administrator or the user. So asking it for a length returns a `Result`, and even `SystemTime - SystemTime` does not compile. → [Two clocks](33_Time_and_Benchmarking/two_clocks/README.md) · [An `Instant` is not a `SystemTime`](33_Time_and_Benchmarking/an_instant_is_not_a_system_time/README.md)
+
+**`Duration`** — `std::time`'s one type for a length of time: whole seconds (`u64`) plus nanoseconds, unsigned, whatever unit it was built from. A subtraction that would go below zero is `None` from `checked_sub`, zero from `saturating_sub`, and a panic from `-` — in a release build too. → [A `Duration` cannot be negative](33_Time_and_Benchmarking/a_duration_cannot_be_negative/README.md)

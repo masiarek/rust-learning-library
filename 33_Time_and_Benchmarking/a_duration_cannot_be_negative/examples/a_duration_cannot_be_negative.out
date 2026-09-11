@@ -1,0 +1,25 @@
+1. One type: whole seconds plus nanoseconds
+   Duration::from_millis(1_999) = 1.999s
+   .as_secs()       = 1          whole seconds: the fraction is dropped
+   .subsec_nanos()  = 999000000  the fraction, on its own
+   .as_secs_f64()   = 1.999      an f64
+   .as_millis()     = 1999       a u128
+   from_secs(2) == from_millis(2_000)   true
+
+2. {:?} picks the unit; there is no Display
+   90s
+   1.5s
+   250µs
+   7ns
+   0ns
+
+3. Why as_millis returns a u128
+   Duration::MAX             = 18446744073709551615.999999999s
+   Duration::MAX.as_millis() = 18446744073709551615999
+   u64::MAX                  = 18446744073709551615
+
+4. Below zero: ask, clamp, or panic
+   one.checked_sub(two)     = None
+   one.saturating_sub(two)  = 0ns
+   one.abs_diff(two)        = 1s
+   one - two                = panicked: overflow when subtracting durations

@@ -259,6 +259,18 @@ NAV_ORDER: dict[str, list[str]] = {
         "safe_buffers",
         "lifetime_safety_in_clang",
     ],
+    # Ordered by dependence, as the section README says: the two clocks, then
+    # what subtracting one from the other does, then the type every
+    # subtraction produces -- and last what all three are for: timing a
+    # block, and keeping the optimizer from deleting what you timed.
+    "33_Time_and_Benchmarking": [
+        "README.md",
+        "two_clocks",
+        "an_instant_is_not_a_system_time",
+        "a_duration_cannot_be_negative",
+        "timing_a_block",
+        "black_box_is_a_hint",
+    ],
     "01_Foundations": [
         "README.md",
     ],
@@ -926,6 +938,12 @@ LABELS = {
     "use_after_free": "Use-after-free",
     "safe_buffers": "Safe Buffers",
     "lifetime_safety_in_clang": "Lifetime safety in Clang",
+    # 33_Time_and_Benchmarking -- clean() would keep the capital B, and three
+    # of the lessons are named for the type or function they are about.
+    "33_Time_and_Benchmarking": "Time and benchmarking",
+    "an_instant_is_not_a_system_time": "An `Instant` is not a `SystemTime`",
+    "a_duration_cannot_be_negative": "A `Duration` cannot be negative",
+    "black_box_is_a_hint": "`black_box` is a hint",
     # 25_Control_Flow -- every one of these is a keyword, and reads as code.
     "if_expressions": "`if` expressions",
     "match_expressions": "`match` expressions",

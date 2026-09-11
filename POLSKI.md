@@ -126,6 +126,9 @@ That is most of the vocabulary this library needs, and it means the table below 
 | [assertion](28_Testing/what_a_test_asserts/README.md) | asercja | |
 | [orphan rule](29_Conversion/from_and_into/README.md) | reguła sieroty | |
 | [capacity](26_Collections/the_vec/README.md) | pojemność | Keep distinct from **długość** (length); they grow independently, and the growth is *zamortyzowany* (amortised). |
+| [monotonic clock](33_Time_and_Benchmarking/two_clocks/README.md) | zegar monotoniczny | What `Instant` reads. `SystemTime` is **czas systemowy**; *wall-clock time* is glossed in English rather than calqued. |
+| [`Duration`](33_Time_and_Benchmarking/a_duration_cannot_be_negative/README.md) | czas trwania | Keep `Duration` in code voice. |
+| [benchmark](33_Time_and_Benchmarking/timing_a_block/README.md) | benchmark | **Not translated** in practice; *test wydajności* also appears. One measurement is **pomiar czasu** (*timing*), not a benchmark. |
 
 ### Words to leave in English
 

@@ -1,0 +1,15 @@
+1. Instant: a stopwatch
+   Instant::now() <= Instant::now()   true
+   1,000 readings, each >= the last   true
+   b - a        is a core::time::Duration
+   a.elapsed()  is a core::time::Duration
+
+2. SystemTime: a calendar
+   now.duration_since(UNIX_EPOCH).is_ok()   true
+   now.duration_since(UNIX_EPOCH) is a
+       core::result::Result<core::time::Duration, std::time::SystemTimeError>
+   now.elapsed() is a
+       core::result::Result<core::time::Duration, std::time::SystemTimeError>
+
+3. The epoch is a fixed point, so a SystemTime can be built from it
+   (UNIX_EPOCH + 86_400 s).duration_since(UNIX_EPOCH) = Ok(86400s)

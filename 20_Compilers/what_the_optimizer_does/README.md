@@ -111,6 +111,7 @@ The talk's subject is the last of those, generalized: if a compiler pass can rew
 - [Compile times](../../05_Tooling/compile_times/README.md) — codegen is where this work happens, and usually where a build's seconds go
 - [LLVM and its IR](../llvm_and_its_ir/README.md) — the language this transformation is actually performed in, before any assembly exists
 - [Static vs dynamic dispatch](../../12_Traits/static_vs_dynamic_dispatch/README.md) — monomorphization, the thing that gives the optimizer a concrete function to work on in the first place
+- [`black_box` is a hint](../../33_Time_and_Benchmarking/black_box_is_a_hint/README.md) — what the function in the example above promises: a value, not the work that produced it, so a summing loop can still become a formula
 
 ## Po polsku
 

@@ -66,6 +66,7 @@ They are independent, so start with whichever bug you have personally shipped. I
 - [`Option` and `Result`](../17_Option_and_Result/README.md) — behind two more
 - [What every C programmer should know about undefined behaviour ↗](https://blog.llvm.org/2011/05/what-every-c-programmer-should-know.html) — the LLVM series, from the optimizer's side
 - [Behaviour considered undefined ↗](https://doc.rust-lang.org/reference/behavior-considered-undefined.html) — the same list for Rust, which is the list `unsafe` makes reachable
+- [Time and benchmarking](../33_Time_and_Benchmarking/README.md) — the library's other chapter written against C++: `std::time` beside `std::chrono`, each page the twin of one in the [C++ learning library ↗](https://masiarek.github.io/cpp-learning-library/)
 
 ## Po polsku
 

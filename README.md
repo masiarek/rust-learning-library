@@ -93,6 +93,7 @@ The sidebar is sorted **alphabetically**, because that is how you find a section
 | 28 | [Unix](11_Unix/README.md) | The shell you run the compiler from — two of its three tools are Rust |
 | 29 | [C and C++](31_C_and_Cpp/README.md) | Nine bugs the compiler refuses to build, and C++'s own two replies — read it any time after Ownership |
 | 30 | [Debugging](32_Debugging/README.md) | The map to what is left over once the compiler has caught the rest — read it the first time something surprises you |
+| 31 | [Time and benchmarking](33_Time_and_Benchmarking/README.md) | Two clocks, a duration that cannot go negative, and the hint that keeps a benchmark honest — the Rust twin of the C++ library's first chapter; read it any time after Compilers |
 
 Nothing enforces this order and no page depends on it; skipping around is fine. It is here because a sidebar can be sorted one way only, and A–Z answers the more common question.
 

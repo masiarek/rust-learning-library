@@ -1,0 +1,9 @@
+1. To the program, black_box is the identity function
+   black_box(55)          = 55
+   black_box(&v) is &v    = true
+   const ANSWER           = 42
+
+2. Where it goes changes the machine code, never the answer
+   result_only(1_000)     = 499500
+   every_iteration(1_000) = 499500
+   same answer            = true

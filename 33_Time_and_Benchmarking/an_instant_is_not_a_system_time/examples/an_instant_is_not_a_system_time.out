@@ -1,0 +1,12 @@
+1. SystemTime: duration_since is a question with two answers
+   b.duration_since(a)   = Ok(60s)
+   a.duration_since(b)   = Err(SystemTimeError(60s))
+   err.duration()        = 60s
+   err, displayed        = second time provided was later than self
+
+2. Instant: `-` compiles, and never goes below zero
+   t1 - t0                        = 2s
+   t0 - t1                        = 0ns
+   t0.duration_since(t1)          = 0ns
+   t0.checked_duration_since(t1)  = None
+   t1.checked_duration_since(t0)  = Some(2s)
