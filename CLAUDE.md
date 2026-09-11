@@ -4,7 +4,7 @@ Standing guidance for Claude working in this repo. Adam's main library as of 202
 
 ## What this is
 
-A **Rust learning library**: ~500 one-idea-per-page lessons across 33 numbered sections, every one backed by a program that actually ran. Public repo `masiarek/rust-learning-library`, published to <https://masiarek.github.io/rust-learning-library/> by MkDocs Material straight from the repo's own Markdown. Toolchain pinned to **1.98.0** in `rust-toolchain.toml` — read that file's comments before touching the pin; bumping it means re-verifying every answer key.
+A **Rust learning library**: ~500 one-idea-per-page lessons in numbered sections, every one backed by a program that actually ran. Public repo `masiarek/rust-learning-library`, published to <https://masiarek.github.io/rust-learning-library/> by MkDocs Material straight from the repo's own Markdown. Toolchain pinned to **1.98.0** in `rust-toolchain.toml` — read that file's comments before touching the pin; bumping it means re-verifying every answer key.
 
 ## The rules live in CONTRIBUTING.md — read it, don't restate it
 

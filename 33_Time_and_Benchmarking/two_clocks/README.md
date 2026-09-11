@@ -38,6 +38,8 @@ Its promise is a direction: *"monotonically nondecreasing"*, each instant *"no l
 
 Nor does it promise anything about sleep: it is *"not specified whether system suspends count as elapsed time or not"*. On this Mac they do not count — `CLOCK_UPTIME_RAW` *"does not increment while the system is asleep"*, per `man clock_gettime` — and on Linux `CLOCK_MONOTONIC` *"does not count time that the system is suspended"* either. An `Instant` taken before you close a laptop and read after you open it has missed the time the lid was shut.
 
+C++ chose the other answer on the same Mac. libc++'s `steady_clock` reads `CLOCK_MONOTONIC_RAW`, which does count sleep — its source says that is why it was picked — and on 2026-09-10, a week after this Mac booted, the two clocks stood 2.35 days apart: 7.206 days against 4.859 ([measured on the C++ side ↗](https://masiarek.github.io/cpp-learning-library/01_Time_and_Benchmarking/three_clocks/index.html#does-sleep-count)). Two monotonic stopwatches, and they disagree about how long the lid was shut.
+
 ## `SystemTime`: a date, and it can be set
 
 `SystemTime` reads the clock that NTP, an administrator or the user can set, and its docs put the consequence first: *"Distinct from the Instant type, this time measurement is not monotonic."* Save a file, save another, and the second can carry the earlier time. So every method that asks it for a length — `duration_since`, `elapsed` — returns a `Result` rather than a `Duration`. [The next page](../an_instant_is_not_a_system_time/README.md) is about that `Result`, and about the subtraction it replaces.
