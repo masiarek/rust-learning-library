@@ -22,6 +22,7 @@
 
 ## See also
 
+- [Makefiles](../makefiles/README.md) — the same job with the graph written by hand, and the timestamp test Cargo turns out to share
 - [Compile times](../../05_Tooling/compile_times/README.md) — the phases inside one invocation, once the build system has decided to make it
 - [Adding a dependency](../../05_Tooling/cargo_dependencies/README.md) — where the graph's nodes come from, and what a version range resolves to
 - [A tree of practice projects](../../05_Tooling/practice_workspace/README.md) — one workspace, many crates, and what is shared between them

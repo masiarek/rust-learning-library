@@ -323,6 +323,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...and then the front end being wrong about its own rules, which is
         # a claim about the first box rather than anything after it.
         "when_the_type_checker_is_wrong",
+        # ...and then the program that runs every stage above and decides
+        # which it can skip, with the graph written by hand.
+        "makefiles",
         # The four stubs, in the order the section README lists them — so the
         # sidebar and that page cannot disagree about what comes next.
         "targets_and_triples",

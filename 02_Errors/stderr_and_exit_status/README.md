@@ -59,7 +59,7 @@ What changed is that the warning is now indistinguishable from data. A caller co
 
 ## The number a script reads
 
-A person reads your message. A shell script, a `Makefile` and a CI step read one byte: the exit status. Zero is success, non-zero is failure, and that is nearly the whole convention — so a program that prints `error: no such file` and exits 0 has reported success to everything except a human.
+A person reads your message. A shell script, a [`Makefile`](../../20_Compilers/makefiles/README.md) and a CI step read one byte: the exit status. Zero is success, non-zero is failure, and that is nearly the whole convention — so a program that prints `error: no such file` and exits 0 has reported success to everything except a human.
 
 | What `main` does | Status | What reaches stderr |
 |---|---|---|
