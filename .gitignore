@@ -6,6 +6,18 @@ target/
 **/*.rs.bk
 *.pdb
 
+# The Cargo manifest an IDE needs before it will read this library's Rust, and
+# the config beside it, both written per machine by tools/write_cargo_toml.py.
+# The examples are compiled by bare rustc (tools/run_examples.py), so none of
+# this is the build; what Cargo builds from it lands in the target/ above.
+/Cargo.toml
+/Cargo.lock
+/.cargo
+
+# JetBrains IDEs (RustRover / PyCharm) — per-machine project config, and where
+# the manifest above is remembered once it has been attached.
+.idea/
+
 # Compiled example binaries (the .rs source and its .out answer key are what we keep).
 /tmp_examples/
 

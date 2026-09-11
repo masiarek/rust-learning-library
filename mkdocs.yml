@@ -34,9 +34,16 @@ use_directory_urls: false
 # The leading slash anchors the pattern to the repo root. Without it, .gitignore
 # semantics would match README.md at ANY depth and silently delete every folder's
 # section landing page from the site.
+#
+# The Cargo entries are the per-machine manifest tools/write_cargo_toml.py writes
+# for an IDE, and what Cargo builds from it. docs_dir is the repo root, so
+# without target/ here a local build copies every built binary into site/.
 exclude_docs: |
   /README.md
   __pycache__/
+  /Cargo.toml
+  /Cargo.lock
+  /target/
 
 # Built and linkable, but kept out of the sidebar. Two kinds of page qualify.
 #

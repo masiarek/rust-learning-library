@@ -133,8 +133,11 @@ python3 tools/run_examples.py
 | Check without writing (what CI runs) | `python3 tools/run_examples.py --check` |
 | Preview the site locally | `uv run --group docs mkdocs serve` |
 | Run one example by hand | `rustc --edition 2024 path/to/example.rs -o /tmp/x && /tmp/x` |
+| Give an IDE a `Cargo.toml` to read | `python3 tools/write_cargo_toml.py` |
 
 Only `rustc` and Python 3.11+ are needed for the examples; `uv` is needed only to preview the site.
+
+That last row is for reading the library rather than running it. Every example is compiled on its own by bare `rustc`, so the repo carries no `Cargo.toml` — and without one RustRover opens every `.rs` file under *"Project not associated with a Cargo.toml file"*: no inferred types, no go-to-definition, no Run button. [`tools/write_cargo_toml.py`](tools/write_cargo_toml.py) writes a gitignored manifest for your machine listing every `.rs` file in the checkout, scratch files included, as a binary; attach it once in RustRover, or point rust-analyzer at it from VS Code or Zed.
 
 ## Adding a lesson
 
