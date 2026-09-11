@@ -422,6 +422,8 @@ The filesystem knew better. In one of six such trials `stat` put `greet.o` at `�
 - [The linker](../the_linker/README.md) — the last recipe in every Makefile on this page, and the dialect its errors arrive in
 - [Running a scratch program](../../15_First_Programs/rustc_without_cargo/README.md) — `rustc` with no build system at all
 - [Standard error, and exit status](../../02_Errors/stderr_and_exit_status/README.md) — the byte `make` reads after every command
+- [Makefiles, in the C library ↗](https://masiarek.github.io/c-learning-library/01_Building/makefiles/index.html) — the same lesson where it lives, with every run checked in CI under GCC on Linux and clang on macOS
+- [Reading a real Makefile ↗](https://masiarek.github.io/c-learning-library/01_Building/reading_a_real_makefile/index.html) — the 31-line Makefile from Matt Godbolt's C++Now 2026 keynote repository, read line by line: it writes its own rules with `define`, `$(call)` and `$(eval)`
 - [The GNU `make` manual ↗](https://www.gnu.org/software/make/manual/make.html) — in particular [phony targets ↗](https://www.gnu.org/software/make/manual/html_node/Phony-Targets.html), [automatic variables ↗](https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html), [the built-in rules ↗](https://www.gnu.org/software/make/manual/html_node/Catalogue-of-Rules.html), [the variables they read ↗](https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html), and [generating prerequisites automatically ↗](https://www.gnu.org/software/make/manual/html_node/Automatic-Prerequisites.html), the manual's own section on the header problem
 
 ---
