@@ -34,7 +34,7 @@ clean:
 	rm -f hello hello.o greet.o
 ```
 
-All four files are beside this page — [`Makefile`](demo/Makefile), [`hello.c`](demo/hello.c), [`greet.c`](demo/greet.c), [`greet.h`](demo/greet.h) — and `make` in that folder reproduces the next section's runs. Take the Makefile from there rather than copying it off this page; [the TAB](#the-tab) is why.
+All four files are beside this page — [`Makefile`](demo/Makefile), [`hello.c`](demo/hello.c), [`greet.c`](demo/greet.c), [`greet.h`](demo/greet.h) — and `make` in that folder reproduces the next section's runs. The Makefile above is that file byte for byte, [TABs](#the-tab) included.
 
 | In the file | Called | What `make` does with it |
 |---|---|---|
@@ -132,7 +132,7 @@ hello: hello.o greet.o$
 ^I$(CC) -o hello hello.o greet.o$
 ```
 
-**Copying a Makefile off a web page is an easy way to lose the TAB.** This site is built by Python-Markdown 3.10.3, which expands every TAB in a page to spaces before it renders a code block — so every Makefile on this page arrives on the site with four spaces where its TAB was, and a copy of it fails with exactly the message above. GitHub's renderer keeps the TAB. The files in [`demo/`](demo/Makefile) are the real bytes.
+**Copying a Makefile off a web page is an easy way to lose the TAB.** Python-Markdown 3.10.3, which builds this site, expands every TAB in a page to spaces before it renders a code block, so on a site built with its defaults a Makefile arrives with four spaces where each TAB was, and a copy of it fails with exactly the message above. This site turns on SuperFences' [`preserve_tabs` ↗](https://facelessuser.github.io/pymdown-extensions/extensions/superfences/#preserve-tabs), which keeps the TABs inside a code block, so every recipe line on this page reaches your browser starting with its `0x09`, as it does on GitHub.
 
 Since GNU Make 3.82 (2010) a Makefile can choose another prefix with `.RECIPEPREFIX = >`, and 4.4.1 honours it; 3.81 ignores the assignment and stops at the first `>` with `missing separator`.
 
@@ -434,6 +434,6 @@ Plik `Makefile` to lista **reguł** (*rules*): *ten plik powstaje z tamtych plik
 
 Rozwiązanie jest takie samo w C i w Ruście — niech graf zależności wypisze **kompilator**, bo to on wie, co naprawdę otworzył. Flagi `-MMD -MP` każą `cc` zapisać obok każdego pliku obiektowego plik `.d` w składni Makefile'a; `rustc` robi to zawsze (`--emit=dep-info`), a `cargo` czyta ten plik i przebudowuje crate, gdy któryś z wymienionych plików — także wczytany przez `include_str!` — ma nowszy znacznik czasu. Dlatego projekt w Ruście nie potrzebuje Makefile'a.
 
-Dwie pułapki widać dopiero w terminalu. Linia polecenia musi zaczynać się **tabulatorem** (bajt `0x09`), a nie spacjami — inaczej `missing separator`; `cat -et Makefile` pokazuje tabulator jako `^I`, a skopiowanie Makefile'a ze strony internetowej potrafi go po cichu zamienić na spacje (ta witryna też to robi, więc prawdziwe pliki leżą w katalogu `demo/`). Druga dotyczy macOS: systemowy `/usr/bin/make` to GNU Make 3.81 z 2006 roku, który porównuje czas z dokładnością do **sekundy** — zmiana w tej samej sekundzie co budowanie jest dla niego niewidoczna. Aktualną wersję Homebrew instaluje jako `gmake`.
+Dwie pułapki widać dopiero w terminalu. Linia polecenia musi zaczynać się **tabulatorem** (bajt `0x09`), a nie spacjami — inaczej `missing separator`; `cat -et Makefile` pokazuje tabulator jako `^I`, a skopiowanie Makefile'a ze strony internetowej potrafi go po cichu zamienić na spacje (Python-Markdown, którym zbudowano tę witrynę, domyślnie zamienia każdy tabulator na spacje; tutaj opcja `preserve_tabs` zachowuje tabulatory w blokach kodu, a te same pliki leżą w katalogu `demo/`). Druga dotyczy macOS: systemowy `/usr/bin/make` to GNU Make 3.81 z 2006 roku, który porównuje czas z dokładnością do **sekundy** — zmiana w tej samej sekundzie co budowanie jest dla niego niewidoczna. Aktualną wersję Homebrew instaluje jako `gmake`.
 
 **Szukaj po polsku:** plik Makefile · reguły make · zależności od plików nagłówkowych · `make missing separator` · `gcc -MMD -MP` · `make .PHONY`
