@@ -134,7 +134,7 @@ gone.txt     could not read the tally sheet <- no such file or directory
 
 ## Which is the point: the caller can decide
 
-```rust title="Assuming the `TallyError` and `tally` from above"
+```rust title="Assuming the TallyError and tally from above"
 fn recover(name: &str) -> String {
     match tally(name) {
         Ok(n) => format!("counted {n}"),

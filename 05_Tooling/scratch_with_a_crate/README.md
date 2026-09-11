@@ -67,7 +67,7 @@ Two and a half seconds, and six crates nobody typed. `rand` is a small crate tha
 
 Compile that same three-line program as a loose file and the compiler stops on the second line:
 
-```text title="Real output — rustc 1.97.1, `rustc --edition 2024 secret.rs -o secret`"
+```text title="Real output — rustc 1.97.1, rustc --edition 2024 secret.rs -o secret"
 error[E0433]: cannot find module or crate `rand` in this scope
  --> secret.rs:2:18
   |
@@ -175,7 +175,7 @@ mod tests {
 }
 ```
 
-```text title="Real output — `cargo test`"
+```text title="Real output — cargo test"
 running 2 tests
 test tests::clamps_high ... ok
 test tests::clamps_low ... ok

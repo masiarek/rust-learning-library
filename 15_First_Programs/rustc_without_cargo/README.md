@@ -267,7 +267,7 @@ The tests below did not run, and were not even compiled:
 
 The other two builds, run by hand. `--test` replaces your entry point with the harness `cargo test` uses:
 
-```text title="Real output of `rustc --edition 2024 --test rustc_without_cargo_kata.rs -o t && ./t`"
+```text title="Real output of rustc --edition 2024 --test rustc_without_cargo_kata.rs -o t && ./t"
 
 running 3 tests
 test tests::empty_has_no_mean ... ok

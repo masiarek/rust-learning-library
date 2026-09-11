@@ -100,7 +100,7 @@ thing an editor tells you and a printout of the source does not.
 
 Change one assertion to the type you *expected* and the compiler explains the disagreement:
 
-```text title="rustc, with line 30 changed to `let _: i32 = votes;`"
+```text title="rustc, with line 30 changed to let _: i32 = votes;"
 error[E0308]: mismatched types
   --> inlay_hint_check.rs:30:18
    |

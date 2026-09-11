@@ -80,7 +80,7 @@ rust-practice/
 
 Re-running is safe, which is what makes it usable on a tree that already exists:
 
-```text title="Real output — a second `init` on the same directory"
+```text title="Real output — a second init on the same directory"
 0 written, 15 kept.
 ```
 
@@ -100,12 +100,12 @@ use std::collections::HashMap;
 use anyhow::Result;
 ```
 
-```text title="Real output — `cargo fmt --all` on the nightly tree"
+```text title="Real output — cargo fmt --all on the nightly tree"
 use std::{collections::HashMap, fmt::Debug};
 use anyhow::Result;
 ```
 
-```text title="Real output — `cargo fmt --all` on the same files, with the channel set to stable"
+```text title="Real output — cargo fmt --all on the same files, with the channel set to stable"
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.

@@ -21,7 +21,7 @@ struct Person {
 
 Leave a field out of the initializer and it does not compile. Supply the wrong shape and the compiler tells you exactly what to write:
 
-```text title="Abridged — real rustc output for `age: 57`"
+```text title="Abridged — real rustc output for age: 57"
 error[E0308]: mismatched types
 7 |     let p = Person { first: "Ada".to_string(), age: 57 };
   |                                                     ^^ expected `Option<u8>`, found integer

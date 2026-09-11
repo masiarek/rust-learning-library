@@ -119,7 +119,7 @@ Chars(['a', ':', 'b', ':', 'c'])
 
 Discarding an iterator is normally a lint:
 
-```text title="Abridged — real rustc output, without the `#[warn]` note"
+```text title="Abridged — real rustc output, without the #[warn] note"
 warning: unused `Chars` that must be used
  --> discarded.rs:3:5
   |

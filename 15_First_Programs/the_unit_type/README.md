@@ -43,7 +43,7 @@ It is the [empty tuple](../../26_Collections/tuples/README.md), which is why it 
 
 With one value in existence, any two instances are the same one, so `() == ()` is not a comparison — it is a constant. Compile `fn unit_eq(a: (), b: ()) -> bool { a == b }` with `-O` and ask for the assembly:
 
-```text title="Abridged — real `rustc -O --emit asm` output, x86-64"
+```text title="Abridged — real rustc -O --emit asm output, x86-64"
 _unit_eq:
 	movb	$1, %al          ; load the constant 1, return
 	retq
