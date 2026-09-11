@@ -217,7 +217,7 @@ fn main() {
         calls.set(calls.get() + 1);
         *s
     };
-    let mut report = |label: &str, answer: String| {
+    let report = |label: &str, answer: String| {
         println!("   {label:<44} {:<18} calls: {}", answer, calls.get());
         calls.set(0);
     };

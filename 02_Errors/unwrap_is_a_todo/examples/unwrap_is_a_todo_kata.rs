@@ -10,6 +10,7 @@
 use std::num::ParseIntError;
 
 /// What a bad config line can be, named rather than panicked.
+#[allow(dead_code)] // the fields are read only by {:?}, which dead-code analysis ignores
 #[derive(Debug)]
 enum ConfigError {
     NoEquals,
