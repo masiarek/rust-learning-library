@@ -43,10 +43,9 @@ fn main() {
         .collect::<Vec<_>>()
         .join(" ");
     println!("  the same three as text : {as_text}");
-    println!(
-        "  str::from_utf8(&cells) : {:?}",
-        std::str::from_utf8(&cells).map_err(|e| e.to_string())
-    );
+    #[allow(invalid_from_utf8)] // rustc can tell these bytes are not UTF-8 too; the Err is the point
+    let checked = std::str::from_utf8(&cells);
+    println!("  str::from_utf8(&cells) : {:?}", checked.map_err(|e| e.to_string()));
 
     rule("you cannot fetch one bit -- you fetch the byte and mask");
     let b: u8 = 0b0101_1001;
