@@ -41,12 +41,20 @@ sees a section, `dirname_to_title()` has already turned `llvm_and_its_ir` into
 "Llvm and its ir", so a `LABELS` map keyed by folder name — as this one always
 was — matched nothing at all, and `PREFIX`, which looks for `01_`, was being
 handed `01 `.
+
+One check rides along at the bottom of the file, unrelated to the sidebar:
+every TAB inside a fence has to reach the page's HTML. The comment block above
+`on_page_content` says why.
 """
 
 from __future__ import annotations
 
+import logging
 import pathlib
 import re
+
+# A child of the "mkdocs" logger, so `mkdocs build --strict` counts its warnings.
+log = logging.getLogger("mkdocs.plugins.mkdocs_hooks")
 
 # Words a sentence-caser gets wrong: acronyms, and the identifiers that read
 # better as code. Keyed by the lowercased word, applied at any position.
@@ -1338,3 +1346,61 @@ def on_nav(nav, config, files):
             _order(item.children, _folder_of(item))
     _relink(nav)
     return nav
+
+
+# ---------------------------------------------------------------------------
+# Fenced TABs. Python-Markdown expands every TAB in a page to spaces --
+# `expandtabs(4)`, in its NormalizeWhitespace preprocessor -- before any fence
+# is parsed, so until 2026-09-10 no page on this site carried a TAB byte. The
+# Makefile on 20_Compilers/makefiles arrived with four spaces where each recipe
+# TAB had been, and a copy of it failed with `missing separator`; GitHub
+# rendered the same Markdown with the TABs intact.
+#
+# The fix is one line of mkdocs.yml: `preserve_tabs: true` on
+# pymdownx.superfences, which lifts fences out ahead of that pass. Upstream
+# calls the option experimental, and losing it would break nothing a build
+# reports, so this is the check: a page whose fences hold N TABs in its
+# Markdown must hold at least N in its HTML, or the build warns and `--strict`
+# fails.
+#
+# Only closed fences at the left margin are counted, which is where every
+# fenced TAB in the library sits. The option also keeps the TABs in a fence
+# nested in a list or a blockquote; not counting those means they can make the
+# check pass but never fail. "At least N" rather than N because the homepage
+# inlines README.md through pymdownx.snippets, and an inlined fence's TABs are
+# in the HTML without being in `page.markdown`.
+# ---------------------------------------------------------------------------
+
+FENCE_OPEN = re.compile(r"`{3,}|~{3,}")
+
+
+def _fenced_tabs(markdown: str) -> int:
+    """TABs inside the closed fences that start at the left margin."""
+    total = pending = 0
+    fence = None
+    for line in markdown.split("\n"):
+        if fence is None:
+            m = FENCE_OPEN.match(line)
+            if m:
+                fence, pending = m.group(), 0
+        elif re.fullmatch(rf"{fence[0]}{{{len(fence)},}}\s*", line):
+            total += pending
+            fence = None
+        else:
+            pending += line.count("\t")
+    return total
+
+
+def on_page_content(html, page, config, files):
+    """Warn when a page's HTML holds fewer TABs than its fences did."""
+    want = _fenced_tabs(page.markdown)
+    got = html.count("\t")
+    if got < want:
+        log.warning(
+            "Fenced TABs lost: %s has %d inside its fences and %d in its "
+            "HTML. Is `preserve_tabs: true` still set on pymdownx.superfences?",
+            page.file.src_uri,
+            want,
+            got,
+        )
+    return html
