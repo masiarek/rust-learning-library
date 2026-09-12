@@ -610,6 +610,16 @@ NAV_ORDER: dict[str, list[str]] = {
         "let_else",
         "binding_at",
     ],
+    "05_Tooling/create_rust_proj": [
+        "README.md",
+        "scratch_sh",
+        "scratch_py",
+        "shell_function",
+        "cargo_temp",
+        "single_file_scripts",
+        "evcxr_repl",
+        "open_in_the_ide",
+    ],
     "26_Collections/vec_methods": ["README.md"],
     "26_Collections/slice_methods": ["README.md"],
     "14_Strings/str_methods": ["README.md"],
@@ -774,6 +784,8 @@ NAV_ORDER: dict[str, list[str]] = {
         # small projects so the config above is written once rather than
         # copied per folder.
         "scratch_with_a_crate",
+        # ...and the six ways to make that throwaway disposable, script and IDE included.
+        "create_rust_proj",
         "cargo_dependencies",
         # ...and the file that range resolves into, the case where two
         # requirements cannot share one entry in it, and the case where the
@@ -1000,6 +1012,14 @@ LABELS = {
     "editors": "Choosing an editor",
     "nightly": "Nightly by default",
     "scratch_with_a_crate": "A throwaway that needs a crate",
+    "create_rust_proj": "A disposable Rust workspace",
+    "scratch_sh": "scratch.sh",
+    "scratch_py": "scratch.py",
+    "shell_function": "A shell function",
+    "cargo_temp": "cargo-temp",
+    "single_file_scripts": "Single-file scripts",
+    "evcxr_repl": "evcxr, the REPL",
+    "open_in_the_ide": "Opening it in the IDE",
     "cargo_dependencies": "Adding a dependency",
     "cargo_lock": "`Cargo.lock`",
     "two_versions_of_one_crate": "Two versions of one crate",

@@ -8,6 +8,7 @@ These pages are not about making your program better. They are about the loop yo
 
 | Lesson | Level | What it teaches |
 |---|---|---|
+| [A disposable Rust workspace, six ways](create_rust_proj/README.md) | 101 → 201 | The workflow — make, settle, stock, prove, open, discard — as a shell script, a Python script, a shell function, `cargo-temp`, a one-file script and a REPL, each measured; plus why `rustrover "$dir"` opens nothing on this Mac and `open -a RustRover` does |
 | [A throwaway that needs a crate](scratch_with_a_crate/README.md) | 101 | `cargo new` + `cargo add` + `cargo run` — what *"you might be missing a crate named `rand`"* really means, and the folder, manifest and test runner the three commands write for you |
 | [A tree of practice projects](practice_workspace/README.md) | 201 | Forty exercise folders want the same four config files — a workspace shares them from the root, and `cargo new` writes the opt-in for you, so there is no script to maintain |
 | [Adding a dependency](cargo_dependencies/README.md) | 101 → 201 | `search`, `info`, `add` — and the fact that `rayon = "1.12.0"` is a *range*, not the version you got |
