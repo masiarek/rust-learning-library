@@ -35,7 +35,18 @@ The application /Volumes/T5/Applications/RustRover.app/Contents/MacOS/rustrover 
 2026-09-11 21:06:59,268 INFO - #c.i.i.i.ProjectUtil - Opening existing project with .idea at /private/var/folders/bc/gzwjtz8d6mx3l2f9yyf_p8yw0000gn/T/rust-scratch.cnwyCD
 ```
 
-It opens the folder as a project, whether or not a `.idea/` is there — that run had one, seeded by hand to test the next paragraph. What the log does *not* say is whether the IDE attached the `Cargo.toml` it found at the root: RustRover logs nothing about Cargo on open (the same silence [the encodings library met ↗](https://github.com/masiarek/encodings-learning-library) when it wrote its manifest for the IDE), and the only evidence is the `CargoProjects` component the IDE writes into `.idea/workspace.xml` when it next saves. Ten minutes after the launch that file was still the six lines the script had written, so the attach question is open from the command line; if the IDE shows *Project not associated with a Cargo.toml file*, the fix is the banner's own **Attach Cargo.toml** button, once.
+It opens the folder as a project, whether or not a `.idea/` is there — that run had one, seeded by hand to test the next paragraph. The log says nothing about Cargo at open time; the attach shows up later, when the IDE syncs and then saves its workspace file:
+
+```text title="Real output — idea.log, eleven minutes later, and the workspace.xml the IDE then wrote"
+2026-09-11 21:18:09,581 INFO - #org.rust.cargo.project.model.impl.CargoSyncTask - CargoSyncTask started
+2026-09-11 21:18:10,245 INFO - org.rust.openapiext.CommandLineExt - Executing `/usr/local/opt/rustup/bin/rustup show active-toolchain` in working directory `/private/var/folders/bc/…/rust-scratch.cnwyCD`
+2026-09-11 21:18:10,649 INFO - org.rust.openapiext.CommandLineExt - Executing `/usr/local/opt/rustup/bin/cargo metadata --verbose --format-version 1 --all-features …
+
+  <component name="CargoProjects">
+    <cargoProject FILE="$PROJECT_DIR$/Cargo.toml">
+```
+
+So the `Cargo.toml` at the root was attached — `.idea/workspace.xml` went from the six seeded lines to 77, with a `CargoProjects` component naming it, and a `modules.xml` and `.iml` beside it. What the log cannot say is whether that sync was the IDE's own doing or a click on the banner's **Attach Cargo.toml** button in the eleven-minute gap; either way it is once per project, and the folder from `open -a` ends up a real Cargo project.
 
 **The toolchain is a per-project IDE setting, not a file Cargo reads.** A new project can open under *No Rust toolchain specified* even though `cargo` is on `PATH`, because RustRover keeps the toolchain path in `.idea/workspace.xml` and nothing auto-detects Homebrew's rustup shims. The value it wants is `/usr/local/opt/rustup/bin` — [RustRover setup](../../rustrover_setup/README.md) has the whole story. That is the component the test above seeded:
 
@@ -47,7 +58,7 @@ It opens the folder as a project, whether or not a `.idea/` is there — that ru
 </project>
 ```
 
-RustRover left it in place, but whether it *read* it before showing the banner is not in the log either. Until that is measured with the window in view, treat *Toolchain location* as a once-per-project click and the XML as a harmless head start.
+It was read: the sync above ran `rustup` and `cargo` from exactly that path, `/usr/local/opt/rustup/bin/`, and the component survived the IDE's rewrite of the file. So a scratch script can seed the toolchain and skip the *Toolchain location* dialog — which is what [`scratch.sh --rustrover`](../scratch_sh/README.md) does not yet do, and [`rust_scaffold.py`](../../scaffolding/README.md) could.
 
 ## See also
 
