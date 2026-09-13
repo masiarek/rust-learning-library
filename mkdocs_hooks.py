@@ -573,6 +573,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "bit_flags",
         # ...and the one type that cannot hold the value you typed.
         "what_a_float_stores",
+        # ...and the four ways to make one whole again, none of which makes it an
+        # integer — plus the three places std decides a .5, which disagree.
+        "rounding_a_float",
         # Closes the numbers arc on what follows from that: the order of a float
         # sum is part of its answer, so the compiler may not choose it for you —
         # unless you say so. Hands off to the 09_Advanced exactness cluster.

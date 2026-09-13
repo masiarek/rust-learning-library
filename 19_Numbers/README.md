@@ -2,7 +2,7 @@
 
 **One line:** The unit everything else is measured in — what a byte is, how to write one down, what people pack into one, and the one number type that cannot represent the value you typed.
 
-This section is where `.len()` finally means something. A byte is the thing `size_of` counts, hexadecimal is how you read one without counting bits, a flag is a one-bit field, and `f64` is the type Rust withholds `Eq` and `Ord` from — for a reason the last two pages measure rather than assert.
+This section is where `.len()` finally means something. A byte is the thing `size_of` counts, hexadecimal is how you read one without counting bits, a flag is a one-bit field, and `f64` is the type Rust withholds `Eq` and `Ord` from — for a reason the float pages measure rather than assert.
 
 | Lesson | Level | What it teaches |
 |---|---|---|
@@ -12,6 +12,7 @@ This section is where `.len()` finally means something. A byte is the thing `siz
 | [Printing bytes](printing_bytes/README.md) | 101 → 201 | A byte slice has no `{}`, and `{:?}` prints numbers — `escape_ascii()` prints what Python's `b'…'` shows, keeps every byte, and is valid source for the same bytes; plus the hand-rolled loop that escapes the letters too |
 | [Bit flags](bit_flags/README.md) | 201 | Several values in one integer: a flag is a one-bit field and a header field is an n-bit flag — plus the zero-valued flag `&` cannot test, and the missing mask only a middle field punishes |
 | [What a float actually stores](what_a_float_stores/README.md) | 201 | The one division that ends exactness — why `0.1` is not 0.1, why the error goes both ways, and why Rust withholds `Eq` and `Ord` from `f64` |
+| [Making a float whole](rounding_a_float/README.md) | 101 → 201 | `floor`, `ceil`, `trunc` and `round` pick four different whole numbers once a value is negative or ends in .5, and every one hands back an `f64` — so `9.0` prints as `9`, `-0.4` rounds to `-0`, and the three places std decides a tie (`round`, `round_ties_even`, `{:.N}`) can disagree on the same value |
 | [Letting the compiler reorder a float sum](letting_the_compiler_reorder/README.md) | 201 → 301 | Why `a + b + c` is pinned to one grouping, what that costs a hot loop, and the five `algebraic_*` methods Rust 1.98 added to lift the ban one operation at a time |
 
 ## Related sections

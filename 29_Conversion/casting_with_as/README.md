@@ -35,7 +35,7 @@ The non-numeric casts are the safe ones: `'A' as u32` cannot lose anything (a `c
 | widening, cannot fail | `u64::from(n)` | there is a [`From`](../from_and_into/README.md) impl, and it breaks if the type changes |
 | narrowing, might fail | `u8::try_from(n)?` | [`TryFrom`](../tryfrom_and_tryinto/README.md) reports what `as` swallows |
 | truncation is intended | `n as u8` | with a comment saying so |
-| float → int, rounded | `n.round() as i64` | say which rounding before you cast |
+| float → int, rounded | `n.round() as i64` | [say which rounding](../../19_Numbers/rounding_a_float/README.md) before you cast |
 
 The rule of thumb: **if you cannot say out loud what `as` does to the out-of-range case, you wanted `try_from`.**
 

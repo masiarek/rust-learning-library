@@ -306,6 +306,8 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **`f64::EPSILON`** — The gap between 1.0 and the next representable float (about 2.2e-16). Not a general-purpose comparison tolerance: it is far too small for large magnitudes and needlessly generous for tiny ones, so pick a tolerance from the problem instead. → [What a float actually stores](19_Numbers/what_a_float_stores/README.md)
 
+**Ties to even** — The rule for a value exactly halfway between two neighbours: go to the one whose last digit is even, so 2.5 → 2 and 3.5 → 4. It is what IEEE 754 uses when it stores a float, what `round_ties_even` and `{:.N}` formatting use, and what Python's `round()` does — and it is *not* what `f64::round` does, which sends a tie away from zero. → [Making a float whole](19_Numbers/rounding_a_float/README.md)
+
 **Reassociation** — Regrouping a chain of `+` or `*` — `(a+b)+(c+d)` where you wrote `((a+b)+c)+d`. Valid on real numbers and not on floats, where each grouping rounds differently, so the compiler is forbidden from doing it to your arithmetic. It is also what unlocks vectorizing a sum, which is why there is an opt-in. → [Letting the compiler reorder a float sum](19_Numbers/letting_the_compiler_reorder/README.md)
 
 **Algebraic float methods** — `algebraic_add`, `_sub`, `_mul`, `_div`, `_rem` on `f32`/`f64`, stable since Rust 1.98: the same arithmetic, marked as safe to reassociate. Permission rather than instruction — an unoptimized build reorders nothing — and the return is always a real float, never undefined behavior. What you give up is knowing which of the legal answers you got. → [Letting the compiler reorder a float sum](19_Numbers/letting_the_compiler_reorder/README.md)
