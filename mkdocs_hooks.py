@@ -496,10 +496,10 @@ NAV_ORDER: dict[str, list[str]] = {
         # `b`. Directly after `borrowing`, because it is the half that
         # produces E0505/E0506, where the owner is refused its own binding.
         "borrowed_state",
-        # ...and the scaffold most people are told to use while it lands.
         # ...and the borrow that a call site inserts instead of moving, which
         # needs both halves of the rule above already in hand.
         "reborrowing",
+        # ...and the scaffold most people are told to use while it lands.
         "how_to_learn_lifetimes",
         # ...and immediately the page that scaffold hands off to when it comes
         # down, since it is the one thing "clone everything" defers.
