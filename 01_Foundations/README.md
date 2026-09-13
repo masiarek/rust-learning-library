@@ -6,15 +6,15 @@ This folder used to hold all of them: sixty-odd lessons in one flat run, sorted 
 
 Read them in this order. Each section assumes the ones above it and nothing else.
 
-| Section | Lessons | What it covers |
-|---|---|---|
-| [First programs](../15_First_Programs/README.md) | 12 | Running a `.rs` file at all, reading what the compiler says back, the braces every later page uses without explaining, and getting a program to print — then `let`, the built-in types, and who decides which one you got |
-| [Control flow](../25_Control_Flow/README.md) | 8 | `if`, `match` and the three loops — all of them expressions, so all of them have values. Stubs for now |
-| [Structs](../16_Structs/README.md) | 8 | A type of your own: fields here, behaviour in a separate `impl` block, no constructor, and the eight errors one produces |
-| [`Option` and `Result`](../17_Option_and_Result/README.md) | 24 | No null and no exceptions — two ordinary enums, and the dozen small methods between `match` and `.unwrap()` |
-| [Ownership](../18_Ownership/README.md) | 15 | One owner per value, what a move actually transfers, borrowing, and the three questions the word "scope" collapses into one |
-| [Strings](../14_Strings/README.md) | 20 | Text is an owner and a view — and the bytes underneath are why `len()` is not a character count; nine of the twenty are still outlines |
-| [Numbers and bytes](../19_Numbers/README.md) | 5 | The unit everything else is measured in, how to write one down, and the type that cannot hold the value you typed |
+| Section | What it covers |
+|---|---|
+| [First programs](../15_First_Programs/README.md) | Running a `.rs` file at all, reading what the compiler says back, the braces every later page uses without explaining, and getting a program to print — then `let`, the built-in types, and who decides which one you got |
+| [Control flow](../25_Control_Flow/README.md) | `if`, `match` and the three loops — all of them expressions, so all of them have values. Stubs for now |
+| [Structs](../16_Structs/README.md) | A type of your own: fields here, behaviour in a separate `impl` block, no constructor, and the eight errors one produces |
+| [`Option` and `Result`](../17_Option_and_Result/README.md) | No null and no exceptions — two ordinary enums, and the dozen small methods between `match` and `.unwrap()` |
+| [Ownership](../18_Ownership/README.md) | One owner per value, what a move actually transfers, borrowing, and the three questions the word "scope" collapses into one |
+| [Strings](../14_Strings/README.md) | Text is an owner and a view — and the bytes underneath are why `len()` is not a character count |
+| [Numbers and bytes](../19_Numbers/README.md) | The unit everything else is measured in, how to write one down, and the type that cannot hold the value you typed |
 
 Four of those topics are big enough to have a reading map of their own, which crosses section boundaries where the lessons do: [OPTION.md](../OPTION.md), [SHADOWING.md](../SHADOWING.md), [STRUCTS.md](../STRUCTS.md), [STRINGS.md](../STRINGS.md).
 
