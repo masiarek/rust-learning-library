@@ -1,0 +1,22 @@
+1. Two files, one word, two encodings
+   utf8.txt    7 bytes -> "Łódź" via utf-8
+   latin2.txt  4 bytes -> "Łódź" via latin-2
+   from_utf8_lossy on the Latin-2 bytes would have replaced 3 of 4;
+   the table replaced 0, because it knows what the bytes meant.
+
+2. A high byte the table does not know is still reported, not invented
+   "Lód�" via latin-2, 1 byte replaced
+
+3. The mistake worth making first: matching on is_err() instead of the kind
+   read_text(missing)  Err(NotFound)
+   With is_err() the missing file would have gone down the Latin-2 branch,
+   fs::read would have failed a second time, and the caller would see an
+   error about decoding a file that was never there.
+
+4. The signal is a heuristic, and here is the file that fools it
+   C3 B3 read as "ó" via utf-8
+   In Latin-2 that is Ă then ł -- the table, which knows only Polish letters,
+   gives "�ł" -- and in UTF-8 it is one letter. The UTF-8 reading wins
+   because it is tried first and it succeeds.
+   Nothing in the bytes says which was meant. A file format that names its
+   encoding -- or a caller that does -- is the fix; guessing is not.

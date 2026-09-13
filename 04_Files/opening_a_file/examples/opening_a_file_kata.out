@@ -1,0 +1,20 @@
+1. The mistake worth making first: append without create
+   Err(NotFound) -- append means "at the end", not "make it"
+
+2. record: three calls, three lines, nothing lost
+   started
+   step 1 done
+   finished
+   3 lines
+
+3. The same three calls through File::create instead
+   "finished\n" -- 1 line: each open emptied the file first
+
+4. claim: created once, refused once, created again after release
+   first claim    Ok(true)
+   second claim   Ok(false)
+   after remove   Ok(true)
+   A missing parent directory is a different answer, an Err rather than a false:
+   no such dir    Err(NotFound)
+   Matching on the kind keeps "somebody else has it" apart from "the lock
+   cannot be taken at all". A bare .is_err() folds the two together.
