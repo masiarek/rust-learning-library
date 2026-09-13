@@ -1,0 +1,25 @@
+1. ON THE TIES, BOTH VERSIONS AGREE
+        x  naive  by hand  round  ties_even
+      0.5      1        1      1          0
+      1.5      2        2      2          2
+      2.5      3        3      3          2
+     -0.5      0        0     -1         -0
+     -1.5     -1       -1     -2         -2
+     -2.5     -2       -2     -3         -2
+   -2.5 -> -2 is the schoolbook answer. round says -3; ties_even says -2, by a different rule.
+
+2. THE FIRST INPUT THAT BREAKS THE ONE-LINER
+   x          = 0.49999999999999994   (the largest f64 below one half)
+   x + 0.5    = 1.0   the exact sum has no f64, and the nearest one is 1.0
+   naive(x)   = 1   wrong: x is below the half and must round down
+   by hand(x) = 0   fract is 0.49999999999999994, not 0.5, so std's round decides
+
+3. THE SECOND: A NUMBER THAT WAS ALREADY WHOLE
+   x          = 4503599627370497   (2^52 + 1; floats this big are 1 apart)
+   x + 0.5    = 4503599627370498   the .5 cannot exist, and the tie went to even — UP
+   naive(x)   = 4503599627370498   a whole number moved by one
+   by hand(x) = 4503599627370497   fract is 0, round returns x unchanged
+
+4. WHY THE FIX HOLDS
+   none of floor, ceil, trunc, round or fract ever adds to x; each reads it.
+   the one-liner performs an addition first, and an addition can round.
