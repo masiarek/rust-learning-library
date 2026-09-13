@@ -465,6 +465,10 @@ NAV_ORDER: dict[str, list[str]] = {
         "README.md",
         # Opens the ownership arc — the next thread after the Option run.
         "ownership_and_moves",
+        # ...and the first thing a reader tries after it: the same `let b = a;`
+        # on a string literal, which does not move, and the rule that sorts
+        # every other type into copy or move.
+        "copy_or_move",
         # ...and the trait that is not there, which is why the default needed
         # naming in the first place.
         "no_move_trait",

@@ -207,6 +207,7 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K187 | [Return a palindrome you did not copy — one reference in so elision works, a tie the test decides, then two references and `E0106`](18_Ownership/how_to_learn_lifetimes/README.md#practice) | [How to learn lifetimes](18_Ownership/how_to_learn_lifetimes/README.md) | 301 |
 | K188 | [A log that keeps views, not copies — a `String` per line against views into one buffer, the struct that earns `E0515` and `E0505`, and the ranges that fix it](18_Ownership/how_to_learn_lifetimes/README.md#practice) | [How to learn lifetimes](18_Ownership/how_to_learn_lifetimes/README.md) | 301 |
 | K189 | [Undo `escape_ascii` — read a printed byte string back, and prove it exact over all 65,536 two-byte strings](19_Numbers/printing_bytes/README.md#practice) | [Printing bytes](19_Numbers/printing_bytes/README.md) | 201 |
+| K190 | [Predict, then ask the compiler — six values through `let b = a;`, one of them a `Range` that holds two `i32`s and still moves](18_Ownership/copy_or_move/README.md#practice) | [Copy or move?](18_Ownership/copy_or_move/README.md) | 101 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -260,7 +261,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K56 · [The hour that changed its ad](17_Option_and_Result/one_arm_many_values/README.md#practice)
 - K57 · [Three ways to make `Some(None)` compile](17_Option_and_Result/some_is_a_constructor/README.md#practice)
 
-**[Ownership](18_Ownership/README.md)** — 18 katas
+**[Ownership](18_Ownership/README.md)** — 19 katas
 
 - K12 · [Follow the responsibility](18_Ownership/ownership_and_moves/README.md#practice)
 - K13 · [Many readers, or one writer](18_Ownership/borrowing/README.md#practice)
@@ -280,6 +281,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K186 · [Price an order before you run it](18_Ownership/what_a_clone_costs/README.md#practice)
 - K187 · [Return a palindrome you did not copy](18_Ownership/how_to_learn_lifetimes/README.md#practice)
 - K188 · [A log that keeps views, not copies](18_Ownership/how_to_learn_lifetimes/README.md#practice)
+- K190 · [Predict, then ask the compiler](18_Ownership/copy_or_move/README.md#practice)
 
 **[Errors](02_Errors/README.md)** — 1 kata
 

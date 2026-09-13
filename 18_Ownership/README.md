@@ -11,6 +11,7 @@ The back half is names rather than values. Shadowing, scope, and lifetimes are t
 | Lesson | Level | What it teaches |
 |---|---|---|
 | [Ownership and moves](ownership_and_moves/README.md) | 101 | A move transfers *responsibility*, not bytes — the three rules, made visible by a value that announces its own death |
+| [Copy or move?](copy_or_move/README.md) | 101 | One program with the value swapped: `"hi"` copies because it is a `&str`, `String::from("hi")` moves, and `&mut` moves although it owns nothing — the column printed by asking the compiler, not a list |
 | [There is no `Move` trait](no_move_trait/README.md) | 201 | Moving is the default, so there is no trait to implement — `Copy` is the opt-out that stops it, and the compiler says so as an absence: *"does not implement the `Copy` trait"* |
 | [What an address shows](what_an_address_shows/README.md) | 201 | `&x` addresses the three-word header, not the text — so a move changes the number without relocating a byte, and a `Copy` does the same thing while nothing moves at all |
 | [Stack and heap](stack_and_heap/README.md) | 101 → 201 | No keyword puts a value on the heap — the *type* does, and `size_of` shows it: a `String` is 24 bytes on the stack whether it holds 5 characters or 5,000. One table prices move, `Copy`, `clone` and `Arc::clone` against the heap side |

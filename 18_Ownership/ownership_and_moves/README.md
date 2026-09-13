@@ -65,7 +65,7 @@ let b = a;
 println!("{a} {b}");        // fine — both usable
 ```
 
-`i32` is `Copy`: duplicating it means copying its bytes and nothing else. Integers, `bool`, `char`, `f64`, shared references `&T`, and tuples/arrays of `Copy` things all behave this way.
+`i32` is `Copy`: duplicating it means copying its bytes and nothing else. Integers, `bool`, `char`, `f64`, shared references `&T`, and tuples/arrays of `Copy` things all behave this way. [Copy or move?](../copy_or_move/README.md) runs one program over each of them, and over the types that move instead.
 
 A `String` cannot. It owns a heap buffer, so a bytewise duplicate would leave **two owners of one allocation** — and rule 3 would then run two frees on it. That is the bug (a *double free*) that moves exist to make unrepresentable. So the rule is not "big things move, small things copy"; it is **"if duplicating the bytes would duplicate an obligation, it moves."**
 
