@@ -19,7 +19,7 @@ The five originals are documented in the encodings library, one measured page ea
 | [fasthex ↗](https://github.com/CallMeAlphabet/fasthex) | speed on large files, `xxd`-style output | Rust | Apache-2.0 | 13 | `cargo install fasthex` |
 | [hextazy ↗](https://github.com/0xfalafel/hextazy) | a terminal *editor*, not a viewer: change the bytes in place | Rust | MIT | 70 | `cargo install hextazy` |
 | [turbohex ↗](https://github.com/nmbr7/turbohex) | a TUI viewer with WASM decoder plugins | Rust | MIT | 2 | build from source |
-| [ImHex ↗](https://github.com/WerWolv/ImHex) | a GUI editor for reverse engineers: a pattern language that parses a format and colours its fields | C++ | GPL-2.0 | 54,789 | `brew install --cask imhex` |
+| [ImHex ↗](https://github.com/WerWolv/ImHex) | a GUI editor for reverse engineers: a pattern language that parses a format and colours its fields | C++ | GPL-2.0 | 54,789 | a download from the releases page — Homebrew disabled the `imhex` cask on 2026-09-01 because it fails the Gatekeeper check |
 | [010 Editor ↗](https://www.sweetscape.com/010editor/) | the commercial GUI editor: *binary templates*, a scripting engine, a licence fee | — | commercial | — | `brew install --cask 010-editor` installs the trial |
 | HxD | the Windows freeware editor | — | freeware | — | Windows only |
 
@@ -74,13 +74,13 @@ brew install hevi enca radare2 binwalk
 cargo install fasthex wiza hextazy
 ```
 
-The GUI editors and the decompiler:
+The GUI decompilers; Ghidra brings `openjdk@21` with it:
 
 ```bash
-brew install --cask imhex binary-ninja-free && brew install ghidra
+brew install --cask binary-ninja-free && brew install ghidra
 ```
 
-`hexyl`, `uni`, `xxd`, `hexdump`, `od`, `file` and `strings` are already on this machine. 010 Editor is a paid product with a trial cask; IDA Free and Detect It Easy are downloads from their vendors' pages; hexxy needs a Go toolchain and tinyxxd, turbohex and zmime a compiler for their language.
+`hexyl`, `uni`, `xxd`, `hexdump`, `od`, `file` and `strings` are already on this machine. 010 Editor is a paid product with a trial cask; ImHex, IDA Free and Detect It Easy are downloads from their vendors' pages — the ImHex cask was tried here on 2026-09-13 and refused as disabled; hexxy needs a Go toolchain and tinyxxd, turbohex and zmime a compiler for their language.
 
 ## See also
 
