@@ -1,0 +1,23 @@
+THE SUM, OVER FOUR THINGS THAT ARRIVE ON A REAL STDIN
+   plain    : "3\n4\n5\n"
+      sum 12  from 3 numbers
+   messy    : "3\n4\n\nfive\n 5 \n6"
+      sum 18  from 4 numbers
+      line 4: "five" is not a number, skipped
+   windows  : "1\r\n2\r\n"
+      sum 3  from 2 numbers
+   nothing  : ""
+      sum 0  from 0 numbers
+
+THE LOOP THAT LOOKS RIGHT AND NEVER ENDS
+   while let Ok(_) = input.read_line(&mut line) { ... }
+   Ok(0) is a success, so this condition is true at the end of the input,
+   and at the end of the input, and at the end of the input. Bounded to five
+   turns here so the page can show it:
+      turn 1: Ok(2)   buffer "7\n"
+      turn 2: Ok(0)   buffer "7\n"
+      turn 3: Ok(0)   buffer "7\n"
+      turn 4: Ok(0)   buffer "7\n"
+      turn 5: Ok(0)   buffer "7\n"
+      ...still Ok(0), still looping. The guard is `n == 0`, and it is yours to write.
+   And without clear() the buffer kept the 7: read_line appends, even nothing.

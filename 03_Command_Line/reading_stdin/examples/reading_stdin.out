@@ -1,0 +1,52 @@
+1. ONE CALL: read_line APPENDS, KEEPS THE NEWLINE, RETURNS THE COUNT
+   returned Ok(3)   buffer "42\n"
+   Three bytes: '4', '2' and the newline. read_line does not strip it.
+
+2. TRIM, THEN PARSE — AND WHAT parse SAYS IF YOU FORGET TO TRIM
+   "42\n".parse()        -> Err: invalid digit found in string
+   "42".parse()   -> Ok(42)
+   The newline is an invalid digit. trim() takes it, and any spaces, off first.
+
+3. A SECOND CALL WITHOUT clear(): THE BUFFER GROWS
+   returned Ok(10)  buffer "42\n  seven \r\n"
+   Both lines are in there. read_line appends to what you hand it; it never
+   overwrites. A loop that forgets clear() reads every line into one String.
+
+4. A LAST LINE WITH NO NEWLINE STILL COMES BACK; THEN Ok(0) IS THE END
+   returned Ok(21)  buffer "last line, no newline"
+   returned Ok(0)   buffer ""
+   returned Ok(0)   buffer ""   (and again: still nothing)
+   Zero bytes is not an error. It is the only signal that the input is over —
+   Ctrl-D on Unix, Ctrl-Z Enter on Windows, or the end of whatever was piped in.
+
+5. THE \r\n LINE: trim_end() KEEPS THE INDENT, trim() DOES NOT
+   line            "  seven \r\n"
+   line.trim_end() "  seven"   the line ending is gone, the two leading spaces stay
+   line.trim()     "seven"   both ends
+   lines() would have handed you "  seven " — it strips \n and \r\n for you.
+
+6. THE LOOP: ASK UNTIL IT IS A NUMBER, OR UNTIL THERE IS NOTHING LEFT
+   typed: abc, a blank line, then 17
+      "abc" is not a number (invalid digit found in string), asking again
+      "" is not a number (cannot parse integer from empty string), asking again
+      -> Some(17)
+   typed: only a wrong answer
+      "forty-two" is not a number (invalid digit found in string), asking again
+      -> None: the input ended first
+   typed: nothing at all
+      -> None: the input ended first
+
+7. THE ONE FAILURE YOU WILL ACTUALLY MEET: BYTES THAT ARE NOT UTF-8
+   Err: kind InvalidData, stream did not contain valid UTF-8
+   buffer after the error: ""   (nothing was appended)
+   the next call reads on: Ok(5) "next\n"
+   read_line promises a String, and a String promises UTF-8, so one byte that
+   is not UTF-8 is refused whole. A file saved by Windows in code page 1250 does
+   this on its first accented letter. To read bytes you did not promise anything
+   about, ask for bytes: read_until(b'\n', &mut Vec<u8>).
+
+8. WHY EVERY READER ON THIS PAGE IS `impl BufRead`
+   ask_number never named stdin. It takes any BufRead, so this program could feed
+   it a Cursor over a string and record what it printed — and your program feeds
+   it io::stdin().lock(). Same function, same body, one line different at the
+   call site. That is the whole of testing an input routine without a keyboard.
