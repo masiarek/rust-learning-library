@@ -1,0 +1,22 @@
+  let a = …;                 type             let b = a;
+  Some(5)                    Option<i32>      copy
+  Some(String::from("hi"))   Option<String>   move
+  &[1, 2, 3][..]             &[i32]           copy
+  1..3                       Range<i32>       move
+  Rc::new(5)                 Rc<i32>          move
+  Ordering::Less             Ordering         copy
+
+Option<T> copies exactly when T does: the enum adds a tag, not an owner.
+&[i32] is a shared reference, so it copies like every &T.
+Rc<i32> moves: it has a Drop that lowers the count, and a type with a
+destructor can never be Copy. A second handle comes from Rc::clone.
+
+Range<i32> is the surprise: two i32s, and it still moves, because it is
+an Iterator itself. If it were Copy, it.take(2) would take a silent copy,
+and `it` would not advance. Written out with clone(), that looks like this:
+  it.by_ref().take(2): first = [1, 2], rest = [3, 4, 5]
+  it.clone().take(2):  first = [1, 2], rest = [1, 2, 3, 4, 5]
+
+RFC 3550 records that Copy was removed from every iterator in 2015. Its
+core::range::Range is Copy because it is only IntoIterator, but on 1.98
+it is nightly-only, and 1..3 still builds std::ops::Range.

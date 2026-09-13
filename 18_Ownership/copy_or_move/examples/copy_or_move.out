@@ -1,0 +1,32 @@
+
+──── The program that was expected to fail
+  a = "hi", b = "hi"   both still usable
+  "hi" is a &str: a string, but not a String.
+
+──── Swap the value, keep the program
+  let a = …;                 type             let b = a;
+  "hi"                       &str             copy
+  5                          i32              copy
+  3.5                        f64              copy
+  'x'                        char             copy
+  true                       bool             copy
+  (1, "hi")                  (i32, &str)      copy
+  [1, 2, 3]                  [i32; 3]         copy
+  &owned                     &String          copy
+  String::from("hi")         String           move
+  vec![1, 2]                 Vec<i32>         move
+  Box::new(5)                Box<i32>         move
+  &mut n                     &mut i32         move
+  (1, String::from("hi"))    (i32, String)    move
+
+──── A move is refused at the next use, not at the let
+  b = "hi"   only b is left
+
+──── Two ways to keep both names when the type moves
+  let b = &a;          a = "hi", b = "hi"
+  let c = a.clone();   a = "hi", c = "hi"
+
+──── The probe cannot see through a generic
+  i32 at the call site:        copy
+  i32 inside fn f<T>(x: T):    move
+  Inside f nothing says T: Copy, so the fallback answers.
