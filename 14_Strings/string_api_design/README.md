@@ -74,7 +74,7 @@ The third shape, returning a `&str` into a `String` made inside the function, ne
 
 - **C++** — `&str` is `std::string_view`, and `impl Into<String>` is the sink-parameter idiom: take `std::string` by value and `std::move` it into the member. Rust makes the move the default and the copy explicit, so the idiom cannot quietly turn into a copy the way a forgotten `std::move` does.
 - **Python** — every `str` argument is a reference to an immutable object, so there is no signature to choose and no cost to see. Rust puts the cost in the signature, which is the only reason this page exists.
-- **ABAP** — an `IMPORTING` parameter is passed by reference unless you write `VALUE( )`, which copies. `&str` is the by-reference default; taking a `String` by value is `VALUE( )` on every call.
+- **ABAP** — a method's `IMPORTING` parameter is passed by reference unless you write `VALUE( )`, which copies, and one passed by reference cannot be changed in the method ([`METHODS` parameters ↗](https://help.sap.com/doc/abapdocu_758_index_htm/7.58/en-US/abapmethods_parameters.htm)). `&str` is that read-only by-reference default; taking a `String` by value is `VALUE( )` on every call, except that Rust moves the caller's `String` in rather than copying it, so a caller that wants to keep its own has to clone.
 
 ## Practice
 

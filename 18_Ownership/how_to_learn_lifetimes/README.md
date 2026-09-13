@@ -101,7 +101,7 @@ A grep for that comment later is the graduation exercise.
 ## If you are coming from another language
 
 - **Python** — you have been "cloning everything" the whole time; Python just did not charge you for it, because every name is a reference and the garbage collector settled the argument. Rust's version is explicit and the visible `.clone()` is the price of the compiler being able to check the alternative.
-- **ABAP** — `CHANGING` versus `VALUE` parameters is exactly amendment 2. Pass by value and your changes stay local; `CHANGING` writes back. Rust makes the same distinction with `&mut`, and enforces it rather than trusting the signature.
+- **ABAP** — writing to an input parameter passed by value is exactly amendment 2: `USING VALUE(p)` on a `FORM` and `IMPORTING VALUE(p)` on a method are local copies, so the change stays local and the caller's variable keeps its value. `CHANGING` writes back, and `VALUE( )` does not stop it: a `CHANGING VALUE(p)` copy is assigned back to the caller's variable when the subroutine ends normally, though not when a message or an exception ends it ([`FORM` ↗](https://help.sap.com/doc/abapdocu_758_index_htm/7.58/en-US/abapform.htm)). Rust makes the same distinction with `&mut`, and enforces it rather than trusting the signature.
 
 ## Practice
 
