@@ -166,7 +166,7 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Ownership** — The rule that every value has exactly one owner, and is dropped when that owner goes out of scope. What makes "freed exactly once" true by construction rather than by discipline. → [Ownership and moves](18_Ownership/ownership_and_moves/README.md)
 
-**Move** — Transferring ownership. The bytes do not travel; what changes is who owes the free, and therefore when it happens. The source variable becomes unusable by name. → [Ownership and moves](18_Ownership/ownership_and_moves/README.md)
+**Move** — Transferring ownership. The value's own bytes are copied into the new slot — for a `String`, the pointer, length and capacity — while the heap buffer they point at is neither copied nor relocated; what changes is who owes the free, and therefore when it happens. The source variable becomes unusable by name. → [Ownership and moves](18_Ownership/ownership_and_moves/README.md), [What an address shows](18_Ownership/what_an_address_shows/README.md)
 
 **`Drop`** — The code that runs when a value's owner goes out of scope. Implementing it is the easiest way to *watch* ownership, since the value announces its own death. It cannot return anything, cannot fail, and is not guaranteed to run — leaking is safe. → [`Drop`, and what RAII buys](12_Traits/drop_and_raii/README.md), [Ownership and moves](18_Ownership/ownership_and_moves/README.md)
 
