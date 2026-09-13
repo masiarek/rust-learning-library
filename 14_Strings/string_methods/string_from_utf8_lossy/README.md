@@ -75,6 +75,7 @@ owned    "h�i" -- something was replaced
 - [`String::from_utf8`](../string_from_utf8/README.md) — failing instead of substituting
 - [`String::from_utf16_lossy`](../string_from_utf16_lossy/README.md) — the same idea for UTF-16
 - [`str::from_utf8`](../../str_methods/str_from_utf8/README.md) — the borrowing, checked version
+- [Decode at the edges ↗](https://masiarek.github.io/perl-learning-library/02_Unicode_Text/decode_at_the_edges/index.html) — Perl's `Encode::decode`, lossy by default in the same way, and the flag that makes it fail instead
 
 [`String::from_utf8_lossy` in the standard library ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf8_lossy)
 

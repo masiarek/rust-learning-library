@@ -256,6 +256,7 @@ what std's own sigma tests looked like before 2024:
 - [Comparing and sorting text](../comparing_strings/README.md) — the other place where "the same string" is a question, not a fact
 - [Meet the `char`](../meet_the_char/README.md) — why a `char` method cannot answer a contextual question at all
 - [Confusables and scripts ↗](https://masiarek.github.io/encodings-learning-library/02_Characters/confusables_and_scripts/index.html) — Greek letters as an attack rather than a casing problem
+- [`fc` is how to compare without case ↗](https://masiarek.github.io/perl-learning-library/02_Unicode_Text/fc_for_caseless_comparison/index.html) — Perl's `lc`, which has no final-sigma rule at all, and the `fc` that makes `σας` equal `ΣΑΣ` anyway
 
 ## Po polsku
 

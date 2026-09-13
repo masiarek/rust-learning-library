@@ -411,6 +411,7 @@ fn main() {
 - [Walking a `String`](../walking_a_string/README.md) — `chars()`, `char_indices()` and the split family
 - [Comparing and sorting text](../comparing_strings/README.md) — the other place byte order is not human order
 - [Counting characters ↗](https://masiarek.github.io/python-learning-library/01_Text_and_Bytes/counting_characters/index.html) — the same four counts from Python, where `len()` names the second column instead of the first
+- [`length` counts code points ↗](https://masiarek.github.io/perl-learning-library/02_Unicode_Text/length_counts_code_points/index.html) — the same rulers from Perl, where `length` names the second column and `/\X/g` the fourth
 
 ## Po polsku
 

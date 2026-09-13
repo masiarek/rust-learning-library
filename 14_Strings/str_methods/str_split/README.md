@@ -87,6 +87,7 @@ columns: 3 kept, 2 after filtering
 - [`str::split_once`](../str_split_once/README.md) — exactly two pieces, or nothing
 - [`str::matches`](../str_matches/README.md) — the matches instead of the gaps
 - [Splitting on nothing](../../splitting_on_nothing/README.md) — the empty pattern: five pieces from three characters, and why it is char boundaries rather than byte offsets
+- [`split` has sharp edges ↗](https://masiarek.github.io/perl-learning-library/03_Regex/split_has_sharp_edges/index.html) — Perl's `split`, which drops trailing empty pieces unless told not to
 
 [`str::split` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split)
 

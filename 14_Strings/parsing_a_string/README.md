@@ -752,6 +752,7 @@ fn main() {
 - [`str::parse`](../str_methods/str_parse/README.md) — the method in reference form
 - [Strings: links, books and videos](../resources/README.md)
 - [Parsing a number from text ↗](https://masiarek.github.io/c-learning-library/03_Strings/parsing_a_number_from_text/index.html) — the same job in C, where `atoi` cannot report failure and `strtol` can, beside `str::parse`'s `Result`
+- [Numbers from text ↗](https://masiarek.github.io/perl-learning-library/04_Records_and_Fields/numbers_from_text/index.html) — Perl, where `"42abc" + 0` is 42 and a warning rather than an `Err`
 
 ## Po polsku
 

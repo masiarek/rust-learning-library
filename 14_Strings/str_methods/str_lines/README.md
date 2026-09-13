@@ -102,6 +102,7 @@ blank line is_empty()? split false / lines true
 - [`str::lines_any`](../str_lines_any/README.md) — the deprecated older spelling
 - [Splitting on nothing](../../splitting_on_nothing/README.md) — the n+1 rule that gives the empty string one piece here and none to `lines()`
 - [RFC 1212 — how `lines()` learned about `\r\n`](../../rfc_1212_line_endings/README.md) — why it behaves this way, and the trailing `\r` this page's rules imply
+- [`chomp` leaves the `\r` ↗](https://masiarek.github.io/perl-learning-library/04_Records_and_Fields/chomp_leaves_the_cr/index.html) — Perl's `chomp`, which keeps the `\r` that `lines()` drops
 
 [`str::lines` in the standard library ↗](https://doc.rust-lang.org/std/primitive.str.html#method.lines)
 
