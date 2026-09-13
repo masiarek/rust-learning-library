@@ -74,6 +74,12 @@ Every page in the set ends in a `## Practice` exercise with a solution CI compil
 
 [GLOSSARY.md](GLOSSARY.md) defines the vocabulary these pages use — shadowing, pattern binding, drop order, `Copy`, dangling reference, `clippy::shadow_unrelated` — and every entry links to the page that explains it properly.
 
+## Sources
+
+| Book | Where shadowing lives | What it covers |
+|---|---|---|
+| **Learn Rust in a Month of Lunches** — David MacLeod | §1.11 *Shadowing* (pp. 25–27); §2.6 *Shadowing again* (p. 38) | Shadowing as blocking a name rather than destroying a value — a second student called Brian who sits in front of the first. §1.11 shows the same-scope type change, the inner-block shadow that ends at the brace, a chain of `let x` inside a block expression, and `let mut x = x as f32`; §2.6 reads the hidden `String` through a reference taken before the shadow, which is [A shadow does not drop](18_Ownership/shadowing_does_not_drop/README.md) in five lines. Six of its seven listings print what the book says on rustc 1.98. The seventh, on p. 27, lacks the `;` after `let x = 9` and does not compile as printed; and a §2.6 callout calls `country = 8` an `i8`, where its own prose and the compiler say `i32`. |
+
 ## Po polsku
 
 Przesłanianie (*shadowing*) to napisanie `let x`, gdy `x` już istnieje: powstaje **druga zmienna** nosząca imię pierwszej. Ta strona jest mapą pięciu lekcji, odpowiadających na pięć różnych pytań — czym to jest, czym różni się od `mut`, co dzieje się z zasłoniętą wartością, czy wypada tak zrobić w danym miejscu i co by cię złapało, gdybyś się pomylił.
