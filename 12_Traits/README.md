@@ -9,6 +9,7 @@ The section starts from the declaration and works outward — what goes in a tra
 | Lesson | Level | What it teaches |
 |---|---|---|
 | [What a trait is](what_a_trait_is/README.md) | 101 → 201 | The declaration itself: abstract methods, default bodies, associated constants, and `Self` — plus why it is neither a base class nor quite an interface |
+| [When the `impl` does not match the trait](matching_the_trait/README.md) | 201 | The trait owns the signature and the impl owns the body: what an impl may change (a parameter's name, `mut`, a looser bound), the code for each thing it may not — `E0046`, `E0407`, `E0053`, `E0050`, `E0185`/`E0186`, `E0276`, `E0449` — and the `E0053` `help:` line that fixes the arrow and leaves the body broken |
 | [A trait must be in scope](trait_in_scope/README.md) | 201 | The `use` that makes the methods appear, `E0599` when it is missing, and the three spellings of one call — including the fully-qualified form that is the *only* way past an inherent method of the same name |
 | [Method resolution](method_resolution/README.md) | 201 | How `x.f()` is actually found: deref to build a candidate list, then `U` / `&U` / `&mut U` at each rung — and the inherent method on a `Deref` wrapper that silently shadows the target's |
 | ["No method named …"](no_method_named/README.md) | 201 | The other three things `E0599` means: the method nobody wrote, the trait nobody implemented, and the blanket impl whose bound your type misses — told apart by the `help:` line, which is absent in the first case and names the wrong trait in the last |
@@ -32,7 +33,7 @@ Three trait pages live outside this folder, because they are met long before any
 
 ## Not yet written
 
-The topics below are the rest of the map, in rough order of when you need them. They are listed here rather than as empty pages so the gaps are visible without pretending to be lessons: **associated types** and how they differ from generic parameters, the **orphan rule** and coherence, **blanket impls**, **negative impls**, **trait aliases**, and **async traits**.
+The topics below are the rest of the map, in rough order of when you need them. They are listed here rather than as empty pages so the gaps are visible without pretending to be lessons: **associated types** and how they differ from generic parameters, the **orphan rule** and coherence in full (the everyday half — which impls you may write, and one blanket impl — is on [Extension traits](extension_traits/README.md) and [`From` and `Into`](../29_Conversion/from_and_into/README.md)), **blanket impls** beyond that one, **negative impls**, **trait aliases**, and **async traits**.
 
 ## Po polsku
 

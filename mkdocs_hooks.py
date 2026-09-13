@@ -134,6 +134,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # The declaration, then how a call reaches it, then what happens when a
         # function has to hand one back.
         "what_a_trait_is",
+        # ...and the impl written against it: the signature is the trait's, and
+        # every way of copying it wrong has an error code of its own.
+        "matching_the_trait",
         "trait_in_scope",
         # ...and the search that "in scope" is a precondition for: the deref
         # ladder the dot walks, and the inherent method that ends it early.

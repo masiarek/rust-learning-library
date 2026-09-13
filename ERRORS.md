@@ -34,6 +34,9 @@ Notice what four of those six have in common: **one code, several causes.** That
 | [E0015 ↗](https://doc.rust-lang.org/error_codes/E0015.html) | [`const` and `static`](27_Modules/const_and_static/README.md) | — |
 | [E0038 ↗](https://doc.rust-lang.org/error_codes/E0038.html) | [Static vs dynamic dispatch](12_Traits/static_vs_dynamic_dispatch/README.md) | 1 other page |
 | [E0040 ↗](https://doc.rust-lang.org/error_codes/E0040.html) | [`Drop`, and what RAII buys](12_Traits/drop_and_raii/README.md) | 1 other page |
+| [E0046 ↗](https://doc.rust-lang.org/error_codes/E0046.html) | [When the `impl` does not match the trait](12_Traits/matching_the_trait/README.md) | — |
+| [E0050 ↗](https://doc.rust-lang.org/error_codes/E0050.html) | [When the `impl` does not match the trait](12_Traits/matching_the_trait/README.md) | — |
+| [E0053 ↗](https://doc.rust-lang.org/error_codes/E0053.html) | [When the `impl` does not match the trait](12_Traits/matching_the_trait/README.md) | — |
 | [E0063 ↗](https://doc.rust-lang.org/error_codes/E0063.html) | [When a struct refuses](16_Structs/when_a_struct_refuses/README.md) | — |
 | [E0072 ↗](https://doc.rust-lang.org/error_codes/E0072.html) | [`Box`](26_Collections/the_box/README.md) | **3** other pages |
 | [E0106 ↗](https://doc.rust-lang.org/error_codes/E0106.html) | [Lifetime annotations](18_Ownership/lifetime_annotations/README.md) | **6** other pages |
@@ -41,9 +44,12 @@ Notice what four of those six have in common: **one code, several causes.** That
 | [E0119 ↗](https://doc.rust-lang.org/error_codes/E0119.html) | [When a struct refuses](16_Structs/when_a_struct_refuses/README.md) | **2** other pages |
 | [E0133 ↗](https://doc.rust-lang.org/error_codes/E0133.html) | [What `unsafe` turns off](09_Advanced/what_unsafe_turns_off/README.md) | — |
 | [E0184 ↗](https://doc.rust-lang.org/error_codes/E0184.html) | [`Copy` vs `Clone`](16_Structs/copy_vs_clone/README.md) | 1 other page |
+| [E0185 ↗](https://doc.rust-lang.org/error_codes/E0185.html) | [When the `impl` does not match the trait](12_Traits/matching_the_trait/README.md) | — |
+| [E0186 ↗](https://doc.rust-lang.org/error_codes/E0186.html) | [When the `impl` does not match the trait](12_Traits/matching_the_trait/README.md) | — |
 | [E0204 ↗](https://doc.rust-lang.org/error_codes/E0204.html) | [`Copy` vs `Clone`](16_Structs/copy_vs_clone/README.md) | — |
 | [E0214 ↗](https://doc.rust-lang.org/error_codes/E0214.html) | [A type is not a constructor](16_Structs/a_type_is_not_a_constructor/README.md) | — |
 | [E0252 ↗](https://doc.rust-lang.org/error_codes/E0252.html) | [Bringing names in with `use`](27_Modules/the_use_declaration/README.md) | — |
+| [E0276 ↗](https://doc.rust-lang.org/error_codes/E0276.html) | [When the `impl` does not match the trait](12_Traits/matching_the_trait/README.md) | — |
 | [E0277 ↗](https://doc.rust-lang.org/error_codes/E0277.html) | [When a struct refuses](16_Structs/when_a_struct_refuses/README.md) | **37** other pages |
 | [E0282 ↗](https://doc.rust-lang.org/error_codes/E0282.html) | [Type inference](15_First_Programs/type_inference/README.md) | **13** other pages |
 | [E0284 ↗](https://doc.rust-lang.org/error_codes/E0284.html) | [What a type annotation does](15_First_Programs/what_an_annotation_does/README.md) | 1 other page |
@@ -56,6 +62,7 @@ Notice what four of those six have in common: **one code, several causes.** That
 | [E0382 ↗](https://doc.rust-lang.org/error_codes/E0382.html) | [`Copy` vs `Clone`](16_Structs/copy_vs_clone/README.md) | **29** other pages |
 | [E0384 ↗](https://doc.rust-lang.org/error_codes/E0384.html) | [Variables](15_First_Programs/variables/README.md) | **2** other pages |
 | [E0392 ↗](https://doc.rust-lang.org/error_codes/E0392.html) | [Phantom types](12_Traits/phantom_types/README.md) | **3** other pages |
+| [E0407 ↗](https://doc.rust-lang.org/error_codes/E0407.html) | [When the `impl` does not match the trait](12_Traits/matching_the_trait/README.md) | — |
 | [E0408 ↗](https://doc.rust-lang.org/error_codes/E0408.html) | [One arm, many values](17_Option_and_Result/one_arm_many_values/README.md) | — |
 | [E0423 ↗](https://doc.rust-lang.org/error_codes/E0423.html) | [A type is not a constructor](16_Structs/a_type_is_not_a_constructor/README.md) | **2** other pages |
 | [E0425 ↗](https://doc.rust-lang.org/error_codes/E0425.html) | [A block is an expression](15_First_Programs/a_block_is_an_expression/README.md) | **4** other pages |
@@ -63,6 +70,7 @@ Notice what four of those six have in common: **one code, several causes.** That
 | [E0433 ↗](https://doc.rust-lang.org/error_codes/E0433.html) | [A throwaway that needs a crate: three commands, and the message that means you skipped them](05_Tooling/scratch_with_a_crate/README.md) | — |
 | [E0434 ↗](https://doc.rust-lang.org/error_codes/E0434.html) | [What a closure is](23_Closures/what_a_closure_is/README.md) | — |
 | [E0435 ↗](https://doc.rust-lang.org/error_codes/E0435.html) | [What a compiler does before your program runs](20_Compilers/what_a_compiler_does/README.md) | — |
+| [E0449 ↗](https://doc.rust-lang.org/error_codes/E0449.html) | [When the `impl` does not match the trait](12_Traits/matching_the_trait/README.md) | — |
 | [E0451 ↗](https://doc.rust-lang.org/error_codes/E0451.html) | [Modules and visibility](27_Modules/modules_and_visibility/README.md) | — |
 | [E0499 ↗](https://doc.rust-lang.org/error_codes/E0499.html) | [What `unsafe` turns off](09_Advanced/what_unsafe_turns_off/README.md) | **5** other pages |
 | [E0502 ↗](https://doc.rust-lang.org/error_codes/E0502.html) | [Borrowing: `&T`, `&mut T`, and where a borrow ends](18_Ownership/borrowing/README.md) | **17** other pages |
@@ -105,7 +113,7 @@ The table above names one lesson per code, chosen as the page that treats it at 
 
 ## How this page is kept honest
 
-Every row was derived from the library rather than written from memory: the owning lesson for each code is the page that mentions it most, and the "also appears on" count is the number of other pages carrying it. All 65 code links were checked live. If a code moves to a better home, the count moves with it — so re-derive this table rather than editing a row by hand.
+Every row was derived from the library rather than written from memory: the owning lesson for each code is the page that mentions it most, and the "also appears on" count is the number of other pages carrying it. All 74 code links were checked live. If a code moves to a better home, the count moves with it — so re-derive this table rather than editing a row by hand.
 
 ## Sources
 

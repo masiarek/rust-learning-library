@@ -208,6 +208,7 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K188 | [A log that keeps views, not copies — a `String` per line against views into one buffer, the struct that earns `E0515` and `E0505`, and the ranges that fix it](18_Ownership/how_to_learn_lifetimes/README.md#practice) | [How to learn lifetimes](18_Ownership/how_to_learn_lifetimes/README.md) | 301 |
 | K189 | [Undo `escape_ascii` — read a printed byte string back, and prove it exact over all 65,536 two-byte strings](19_Numbers/printing_bytes/README.md#practice) | [Printing bytes](19_Numbers/printing_bytes/README.md) | 201 |
 | K190 | [Predict, then ask the compiler — six values through `let b = a;`, one of them a `Range` that holds two `i32`s and still moves](18_Ownership/copy_or_move/README.md#practice) | [Copy or move?](18_Ownership/copy_or_move/README.md) | 101 |
+| K191 | [Four impls that disagree with their trait — one compile, four error codes, and a `help:` line that fixes the arrow but not the body](12_Traits/matching_the_trait/README.md#practice) | [When the `impl` does not match the trait](12_Traits/matching_the_trait/README.md) | 201 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -384,7 +385,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K167 · [Four shapes one way and four fields the other -- which one makes a circle with a width impossible](13_Enums/variants_that_carry_data/README.md#practice)
 - K168 · [Sixteen cells the compiler counted for you, and the wildcard that would throw them away](13_Enums/an_enum_as_a_state_machine/README.md#practice)
 
-**[Traits](12_Traits/README.md)** — 6 katas
+**[Traits](12_Traits/README.md)** — 7 katas
 
 - K95 · [Predict the owned twin before you run it](12_Traits/to_owned/README.md#practice)
 - K97 · [Four loops that all look like reuse](12_Traits/clone_into/README.md#practice)
@@ -392,6 +393,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K135 · [Three drop orders, and the guard released one line early](12_Traits/drop_and_raii/README.md#practice)
 - K140 · [Three calls, three causes](12_Traits/no_method_named/README.md#practice)
 - K149 · [Give every slice a `.middle()`, then find out why your `.first()` never runs](12_Traits/extension_traits/README.md#practice)
+- K191 · [Four impls that disagree with their trait](12_Traits/matching_the_trait/README.md#practice)
 
 **[Generics](22_Generics/README.md)** — 2 katas
 
