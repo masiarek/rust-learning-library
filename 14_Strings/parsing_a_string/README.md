@@ -751,6 +751,7 @@ fn main() {
 - [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md) — the argument against `expect` in anything shipped
 - [`str::parse`](../str_methods/str_parse/README.md) — the method in reference form
 - [Strings: links, books and videos](../resources/README.md)
+- [Parsing a number from text ↗](https://masiarek.github.io/c-learning-library/03_Strings/parsing_a_number_from_text/index.html) — the same job in C, where `atoi` cannot report failure and `strtol` can, beside `str::parse`'s `Result`
 
 ## Po polsku
 

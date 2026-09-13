@@ -239,6 +239,7 @@ WHAT C HAS INSTEAD
 - [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md) — what `scores[3]` actually does, and when that is the right choice
 - [Signed overflow](../signed_overflow/README.md) — the other run-time check, and the one whose default changes with the build profile
 - [The bugs Rust is a reply to](../README.md) — the other eight
+- [The functions that do not check ↗](https://masiarek.github.io/c-learning-library/03_Strings/the_functions_that_do_not_check/index.html) — the C library's view of this exact family: `strcpy` and friends, and the `strncpy`/`snprintf`/`strlcpy`/`fgets` written to replace them
 
 ## Po polsku
 

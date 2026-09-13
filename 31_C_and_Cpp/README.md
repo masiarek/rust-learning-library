@@ -67,6 +67,8 @@ They are independent, so start with whichever bug you have personally shipped. I
 - [What every C programmer should know about undefined behaviour ↗](https://blog.llvm.org/2011/05/what-every-c-programmer-should-know.html) — the LLVM series, from the optimizer's side
 - [Behaviour considered undefined ↗](https://doc.rust-lang.org/reference/behavior-considered-undefined.html) — the same list for Rust, which is the list `unsafe` makes reachable
 - [Time and benchmarking](../33_Time_and_Benchmarking/README.md) — the library's other chapter written against C++: `std::time` beside `std::chrono`, each page the twin of one in the [C++ learning library ↗](https://masiarek.github.io/cpp-learning-library/)
+- [C learning library ↗](https://masiarek.github.io/c-learning-library/) — the sibling written from C's side: how a C program is built, decompiled and debugged, and a [Strings chapter ↗](https://masiarek.github.io/c-learning-library/03_Strings/index.html) on the functions that do not check a length, which is where several of the nine bugs start
+- [The C string, run and measured ↗](https://masiarek.github.io/c-learning-library/03_Strings/index.html) — the sibling C library's Strings chapter, where these same functions are runnable programs rather than bugs to avoid: the NUL terminator, the calls with no length, and the format string that is a program
 
 ## Po polsku
 

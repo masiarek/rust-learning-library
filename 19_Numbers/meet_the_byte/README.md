@@ -419,6 +419,7 @@ The ninth candidate is the point. A debug build panics with `attempt to shift le
 - [Making a `bytes` object ↗](https://masiarek.github.io/python-learning-library/01_Text_and_Bytes/making_a_bytes_object/index.html) — the same range, enforced at a different moment. Python has no `u8` to hang it on, so `bytes([256])` cannot fail to compile; it raises `ValueError` at run time instead. And the escape hatch this page's `as` provides — `300 as u8` is 44, silently — has no counterpart there: nothing in Python truncates a byte for you
 - [Packing a record ↗](https://masiarek.github.io/encodings-learning-library/07_Real_Data/packing_a_record/index.html) — where `to_be_bytes` and `to_le_bytes` are actually spent: one binary record written in Rust, Python and C, and why Python's `struct` format string can leave the byte order out while Rust cannot. It is also the clearest case for `size_of` *not* being a wire size — the encodings library's page shows a `#[repr(C)]` struct that is larger than the record it is meant to describe
 - Julia Evans, *How Integers and Floats Work* ([wizardzines.com ↗](https://wizardzines.com/)) — the zine this page follows; its "meet the byte" and "8 bytes, many meanings" pages are the source of the `b"computer"` decode, whose integer rows the example above reproduces exactly
+- [Byte order on the wire ↗](https://masiarek.github.io/c-learning-library/05_Bytes_on_the_Wire/byte_order_on_the_wire/index.html) — where `to_be_bytes`'s C twin lives: the same fixed order, built by hand with shifts and `htonl`
 
 ## Po polsku
 

@@ -207,6 +207,7 @@ rustc --edition 2024 14_Strings/six_kinds_of_string/examples/six_kinds_of_string
 - [Meet the `char`](../meet_the_char/README.md) — what the UTF-8 promise buys
 - [`Path` and `PathBuf`](../../04_Files/path_and_pathbuf/README.md) — the honorary pair, in full (a stub for now)
 - [std docs — `std::ffi` ↗](https://doc.rust-lang.org/std/ffi/index.html), where `OsString` and `CString` live and the encodings are spelled out
+- [A string is bytes up to a NUL ↗](https://masiarek.github.io/c-learning-library/03_Strings/a_string_is_bytes_up_to_a_nul/index.html) — what `CString` and `CStr` mirror: the terminator, and why an interior NUL is refused at the boundary
 
 ## Po polsku
 
