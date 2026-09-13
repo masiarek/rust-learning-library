@@ -1051,14 +1051,21 @@ LABELS = {
     "http_with_reqwest": "An HTTP request",
     # 09_Advanced
     "one_account_one_review": "One account, one review",
+    # clean() cannot capitalise a one-letter language name, a keyword reads as
+    # code, and the page's H1 generalised Mutex to any lock.
+    "calling_c": "Calling C",
+    "what_unsafe_turns_off": "What `unsafe` turns off",
+    "mutex_poisoning": "Lock poisoning",
     # 10_Resources — a topic page on the shelf, named for the shelf so it is not
     # mistaken for the Structs section.
     "structs": "Structs: the shelf",
     # 12_Traits
     "trait_in_scope": "A trait must be in scope",
+    "clone_into": "`clone_into`",
     "to_owned": "`ToOwned`",
     # 14_Strings
     "string_vs_str": "`String` vs `&str`",
+    "inside_a_split": "Inside a `Split`",
     "anatomy_of_a_string": "The anatomy of a `String`",
     "making_a_string": "Making a `String`",
     "building_a_string": "Building a `String`",
@@ -1085,6 +1092,7 @@ LABELS = {
     "vec_methods": "`Vec` methods",
     "slice_methods": "`slice` methods",
     # 15_First_Programs
+    "meet_the_bool": "Meet the `bool`",
     "rustc_without_cargo": "Running a scratch program",
     "what_an_annotation_does": "What a type annotation does",
     "debug_vs_display": "`Debug` and `Display`",
@@ -1109,6 +1117,8 @@ LABELS = {
     "option_as_collection": "`Option` as a collection",
     "shadowing_and_unwrap": "Shadowing and `unwrap`",
     "wrong_guard": "Zero wins is not zero games",
+    # A comma a folder name cannot hold.
+    "one_arm_many_values": "One arm, many values",
     # 18_Ownership
     "no_move_trait": "There is no `Move` trait",
     "shadowing_does_not_drop": "A shadow does not drop",
