@@ -21,6 +21,7 @@
 ## See also
 
 - [The `Result` you are reading is probably an alias](../../17_Option_and_Result/result_aliases/README.md) — `io::Result<T>` expanded, and how to find out what `E` really is
+- [Reading a line from standard input](../../03_Command_Line/reading_stdin/README.md) — the 101 page: `read_line`'s `Ok(n)`, the `InvalidData` it returns on a Latin-2 byte, and the buffer it leaves untouched
 - [Endless iteration](../endless_iteration/README.md) — the other half of the same loop: how it ends, and how it fails to
 - [Keep going, or stop](../keep_going_or_stop/README.md) — what to do with the bad row once you have stopped throwing it away
 

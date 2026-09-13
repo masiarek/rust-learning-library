@@ -26,6 +26,7 @@ Both bugs pass every test you would think to write, because a test with three li
 ## See also
 
 - [Readers are fallible](../readers_are_fallible/README.md) — the `Result` this loop is failing to look at
+- [Reading a line from standard input](../../03_Command_Line/reading_stdin/README.md) — the loop written correctly, and a kata that bounds the wrong one to five turns and prints what each returns
 - [`while let`](../../17_Option_and_Result/while_let/README.md) — the loop whose exit condition is a pattern, and the one bug it can have: a body that never makes progress
 
 ## Po polsku

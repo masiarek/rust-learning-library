@@ -21,6 +21,7 @@ Reuse is presented as the fast option, and it is — but the borrow it needs (`&
 ## See also
 
 - [Readers are fallible](../../02_Errors/readers_are_fallible/README.md) — every line in all three shapes arrives inside a `Result`
+- [Reading a line from standard input](../../03_Command_Line/reading_stdin/README.md) — the `read_line` shape on stdin, with the `clear()` and the trailing newline shown
 - [Endless iteration](../../02_Errors/endless_iteration/README.md) — the two loops this page's third shape can turn into
 - [Borrowing](../../18_Ownership/borrowing/README.md) — why the reused buffer has to be handed over and handed back
 

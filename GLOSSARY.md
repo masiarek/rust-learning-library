@@ -682,3 +682,19 @@ Short definitions. Every entry links to the page that explains it properly — a
 **`SystemTime`** — The wall clock: a date, readable against `UNIX_EPOCH` (1970-01-01 00:00:00 UTC), and settable by NTP, an administrator or the user. So asking it for a length returns a `Result`, and even `SystemTime - SystemTime` does not compile. → [Two clocks](33_Time_and_Benchmarking/two_clocks/README.md) · [An `Instant` is not a `SystemTime`](33_Time_and_Benchmarking/an_instant_is_not_a_system_time/README.md)
 
 **`Duration`** — `std::time`'s one type for a length of time: whole seconds (`u64`) plus nanoseconds, unsigned, whatever unit it was built from. A subtraction that would go below zero is `None` from `checked_sub`, zero from `saturating_sub`, and a panic from `-` — in a release build too. → [A `Duration` cannot be negative](33_Time_and_Benchmarking/a_duration_cannot_be_negative/README.md)
+
+**Standard input (stdin)** — File descriptor 0: the one input stream every program starts with, fed by a keyboard, a pipe, a redirect or a here-document, and indistinguishable from inside. `read_line` appends one line to a `String` and returns how many bytes came, where `Ok(0)` — a success — is the only signal that the input is over. → [Reading a line from standard input](03_Command_Line/reading_stdin/README.md), and the shell side → [Feeding stdin](11_Unix/feeding_stdin/README.md)
+
+**Magic number** — Bytes at a known offset that identify a file format regardless of its name: `89 50 4e 47` at offset 0 is PNG, `ustar` at 257 is tar. What `file` reads and the extension does not; a table of them is the heart of every type detector. → [Writing a file inspector](03_Command_Line/writing_a_file_inspector/README.md#terms)
+
+**Polyglot file** — One file valid in two formats at once — a ZIP that is also a JAR, a GIF that is also JavaScript — so a signature table's *order* is part of its answer. → [Writing a file inspector](03_Command_Line/writing_a_file_inspector/README.md#terms)
+
+**Hex viewer, hex editor** — A viewer prints the bytes (`xxd`, `hexyl`); an editor writes them back (`xxd -r`, ImHex). The distinction is `Read` against `Write`, and the column you are most tempted to edit in a dump is the one `xxd -r` discards. → [Byte tools](11_Unix/byte_tools/README.md)
+
+**Disassembler, decompiler** — A disassembler turns machine code into assembly, one instruction per line; a decompiler guesses the C that produced it. Both begin where a hex dump ends. → [Byte tools](11_Unix/byte_tools/README.md#reverse-engineering)
+
+**Firmware image** — A file that is a whole device's flash, end to end: boot loader, kernel, filesystem, padding. `binwalk` finds the boundaries by scanning for magic numbers. → [Byte tools](11_Unix/byte_tools/README.md#reverse-engineering)
+
+**Homoglyph** — Two characters that look alike and are not — Cyrillic `а` (U+0430) against Latin `a` (U+0061). Invisible in a dump's text column, obvious in its hex. → [Writing a file inspector](03_Command_Line/writing_a_file_inspector/README.md#terms)
+
+**BiDi override** — A Unicode control (U+202E and its family) that reverses the displayed order of what follows, so source code can *read* differently from how it *runs*. A dump shows it as `e2 80 ae`. → [Writing a file inspector](03_Command_Line/writing_a_file_inspector/README.md#terms)

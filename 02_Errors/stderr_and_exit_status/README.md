@@ -153,6 +153,7 @@ Delete the `flush` and the run prints nothing at all while still exiting 0 — m
 ## See also
 
 - [`main` can return a `Result`](../main_returns_result/README.md) — the shortest path to a non-zero status, and the `Debug` form it prints on the way
+- [Broken pipe](../broken_pipe/README.md) — the third thing on the output side: `| head` closes stdout, and `println!` panics
 - [Testing a command](../../03_Command_Line/testing_a_command/README.md) — asserting the status and the stream from an integration test
 - [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md) — where the 101 comes from, and what is left half-done underneath it
 - [`unwrap` is a TODO you forgot to remove](../unwrap_is_a_todo/README.md) — the most common way a program exits 101 by accident

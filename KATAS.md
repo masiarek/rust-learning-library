@@ -212,6 +212,7 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K192 | [Half up, by hand — the one-liner everyone writes first, the two inputs that break it, and the version that reads `x` instead of adding to it](19_Numbers/rounding_a_float/README.md#practice) | [Making a float whole](19_Numbers/rounding_a_float/README.md) | 201 |
 | K193 | [A log that is never truncated, and a lock that is claimed once — `append` needs `create`, and `create_new` matched on `AlreadyExists` rather than on `is_err()`](04_Files/opening_a_file/README.md#practice) | [Opening a file](04_Files/opening_a_file/README.md) | 201 |
 | K194 | [Read a Latin-2 file properly — `InvalidData` as the signal, an eighteen-letter table as the decoder, and the two bytes that pass as UTF-8 by accident](04_Files/a_file_is_bytes/README.md#practice) | [A file is bytes; a `String` is a promise](04_Files/a_file_is_bytes/README.md) | 201 |
+| K195 | [Sum what you are given — blank lines, spaces, a bad line, `\r\n`, a last line with no newline, and the `while let Ok(_)` loop that never ends](03_Command_Line/reading_stdin/README.md#practice) | [Reading a line from standard input](03_Command_Line/reading_stdin/README.md) | 101 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -480,6 +481,10 @@ The table above is the order to attempt them in. This is the same katas grouped 
 
 - K193 · [A log that is never truncated, and a lock that is claimed once](04_Files/opening_a_file/README.md#practice)
 - K194 · [Read a Latin-2 file properly](04_Files/a_file_is_bytes/README.md#practice)
+
+**[Command line](03_Command_Line/README.md)** — 1 kata
+
+- K195 · [Sum what you are given](03_Command_Line/reading_stdin/README.md#practice)
 
 <!-- by-subject:end -->
 

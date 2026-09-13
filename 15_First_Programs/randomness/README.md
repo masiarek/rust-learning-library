@@ -330,6 +330,7 @@ fn main() {
 - [A throwaway that needs a crate](../../05_Tooling/scratch_with_a_crate/README.md) — the error *before* the ones on this page: `rand::…` in a loose `.rs` file, and the three commands that give it a project to live in
 - [Adding a dependency](../../05_Tooling/cargo_dependencies/README.md) — why `rand = "0.10"` is a range, and how to see what resolved
 - [`expect`](../../17_Option_and_Result/expect/README.md) — the `.expect("Failed to read line")` on the guessing game's second half
+- [Reading a line from standard input](../../03_Command_Line/reading_stdin/README.md) — the `read_line` on that same line: what it appends, why the `trim()`, and what `Ok(0)` means
 - [What a struct is](../../16_Structs/what_a_struct_is/README.md) — the generator above is one, with its state as the only field
 
 ## Po polsku

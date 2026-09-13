@@ -24,6 +24,8 @@ A `BufWriter` flushes on drop and **discards the error if that flush fails** —
 ## See also
 
 - [Readers are fallible](../../02_Errors/readers_are_fallible/README.md) — the `io::Error` half, and the loop that keeps going
+- [Reading a line from standard input](../../03_Command_Line/reading_stdin/README.md) — a function that takes `impl BufRead`, fed a `Cursor` by the harness and `stdin().lock()` by you: this page's opening move, already made
+- [Writing a file inspector](../../03_Command_Line/writing_a_file_inspector/README.md) — the tool whose tests are `&[u8]` in and `Vec<u8>` out
 - [Reading lines efficiently](../../04_Files/reading_lines_efficiently/README.md) — `BufRead::lines` and what it allocates
 - [Opening a file](../../04_Files/opening_a_file/README.md) — the `File` these traits abstract over
 - [Standard error, and exit status](../../02_Errors/stderr_and_exit_status/README.md) — the two writers a program has by default

@@ -309,6 +309,8 @@ fn main() -> io::Result<()> {
 ## See also
 
 - [Opening a file](../opening_a_file/README.md) — the doors this page writes through, and the `create` that empties a file at open
+- [Reading bytes](../../03_Command_Line/reading_bytes/README.md) — the same promise on standard input, and the short read a pipe adds
+- [Seven kinds of file](../seven_kinds_of_file/README.md) — what a path can name besides a regular file, and the open that succeeds on a directory
 - [Six kinds of string](../../14_Strings/six_kinds_of_string/README.md) — the three promises, and why widening is free and narrowing is where the check lives
 - [`String` vs `&str`](../../14_Strings/string_vs_str/README.md) — what the two text types promise in the first place
 - [Raw strings, escapes and the literal prefixes](../../14_Strings/raw_strings_and_escapes/README.md) — `b"…"`, the byte string that drops the UTF-8 promise in source

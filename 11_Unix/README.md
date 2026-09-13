@@ -10,6 +10,8 @@ Nothing in this section is Rust. It is here because two of the three tools on th
 |---|---|---|
 | [Fuzzy finding with fzf](fuzzy_finding/README.md) | 101 → 201 | Three key bindings that replace typing a path with picking one — plus the shell integration `brew install` does not do for you, and the macOS key that silently breaks the third binding |
 | [What the Rust rewrites bought](search_tools_in_rust/README.md) | 201 | `rg` answers in 0.02 s where `grep -r` takes 1.96 s on this repo — measured, then decomposed into the three separate things that gap is made of, only one of which is Rust |
+| [Feeding stdin](feeding_stdin/README.md) | 201 | The five ways bytes reach fd 0, `printf` for making them on purpose, `cat -vet` and `xxd` for seeing them first, the filters on the way in, and `echo -n` — every command measured here |
+| [Byte tools](byte_tools/README.md) | 201 | `xxd`, `hexdump`, `od`, `strings`, `file`, and the four shelves of tools that replace them — three dumps and two type detectors in Rust — with what each is written in, its licence, and the line that installs it |
 
 ## Planned
 

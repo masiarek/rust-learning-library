@@ -747,6 +747,8 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...then failures that reach a person.
         "main_returns_result",
         "stderr_and_exit_status",
+        # ...and the failure on the output side that every pipeline tool meets first.
+        "broken_pipe",
         "keep_going_or_stop",
         # ...and last, the type they travel in, which is the deepest question.
         # ...but first: why there is an unwrap there at all, which is almost
@@ -766,8 +768,18 @@ NAV_ORDER: dict[str, list[str]] = {
         # The struct the flags land in, once there is more than one.
         "the_default_trait",
         "arguments_and_environment",
-        # Last, because it needs all of the above to have something to assert on.
+        # The third input, after arguments and environment: standard input,
+        # from the first read_line to bytes, then the two interactive rungs.
+        "reading_stdin",
+        "a_file_or_stdin",
+        "reading_bytes",
+        "raw_mode_and_passwords",
+        "reading_without_blocking",
+        # Then, because it needs all of the above to have something to assert on.
         "testing_a_command",
+        # Last: not a lesson but a brief, the questions the whole section
+        # equips you to answer before writing a tool.
+        "writing_a_file_inspector",
     ],
     "04_Files": [
         "README.md",
@@ -778,6 +790,8 @@ NAV_ORDER: dict[str, list[str]] = {
         "path_and_pathbuf",
         "reading_lines_efficiently",
         "missing_is_not_empty",
+        # ...and what else a path can name, before a test needs a real one.
+        "seven_kinds_of_file",
         "temp_dirs_in_tests",
     ],
     "05_Tooling": [
@@ -871,6 +885,10 @@ NAV_ORDER: dict[str, list[str]] = {
         "fuzzy_finding",
         # ...then why the list it is reading was cheap to produce.
         "search_tools_in_rust",
+        # ...then the shell side of a program's input, and the shelf of tools
+        # a file inspector imitates.
+        "feeding_stdin",
+        "byte_tools",
     ],
     "09_Advanced": [
         "README.md",
