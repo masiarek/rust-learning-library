@@ -118,6 +118,7 @@ Strings are the worked example half the library's ownership pages already use, s
 | [Meet the byte](19_Numbers/meet_the_byte/README.md) | 101 → 201 | The unit `len` counts in — this map's encoding arc is what those bytes *mean* |
 | [What is a record, in memory?](16_Structs/representing_a_record/README.md) | 201 | `String` fields chosen inside a real struct design |
 | [`Path` and `PathBuf`](04_Files/path_and_pathbuf/README.md) | 201 | The family's honorary pair, in full — a **stub** for now |
+| [A file is bytes; a `String` is a promise](04_Files/a_file_is_bytes/README.md) | 201 | Where the promise is dropped and where it is checked — `write_all` takes `&[u8]`, `read_to_string` refuses non-UTF-8 with `InvalidData` and leaves your `String` untouched, and `include_str!` runs the same check at compile time |
 | [`Cow`: borrow until somebody writes](18_Ownership/clone_on_write/README.md) | 201 | The maybe-owned string: borrow when the text needs no change, allocate only on the write |
 | [The global allocator](09_Advanced/the_global_allocator/README.md) | 301 | Where the bytes on the heap come from — and how to count a `String`'s allocations instead of inferring them from `capacity()` |
 

@@ -54,7 +54,7 @@ Read what it recorded before committing. `--update` accepts whatever the program
 
 ## Stubs
 
-A **stub** is a lesson page with no example behind it yet: an H1, a `**Level:**`, a `**One line:**`, and the questions the finished page has to answer. It exists so that an arc has a shape and a permanent URL before the prose does — [`02_Errors/`](02_Errors/README.md), [`03_Command_Line/`](03_Command_Line/README.md), [`04_Files/`](04_Files/README.md), [`06_Data/`](06_Data/README.md) and [`07_Clients/`](07_Clients/README.md) are stubs throughout.
+A **stub** is a lesson page with no example behind it yet: an H1, a `**Level:**`, a `**One line:**`, and the questions the finished page has to answer. It exists so that an arc has a shape and a permanent URL before the prose does — [`02_Errors/`](02_Errors/README.md), [`03_Command_Line/`](03_Command_Line/README.md), [`06_Data/`](06_Data/README.md) and [`07_Clients/`](07_Clients/README.md) are stubs throughout, and [`04_Files/`](04_Files/README.md) mostly.
 
 Every stub carries the same notice directly under its `**Level:**` line, so nobody mistakes an outline for a checked page:
 

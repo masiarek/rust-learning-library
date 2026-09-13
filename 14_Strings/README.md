@@ -61,6 +61,7 @@ Strings are the worked example half the ownership pages already use, so the deep
 - [How to learn lifetimes](../18_Ownership/how_to_learn_lifetimes/README.md) — why "own `String`, clone when stuck" is legitimate advice
 - [Meet the byte](../19_Numbers/meet_the_byte/README.md) — the unit `len` counts in
 - [`Path` and `PathBuf`](../04_Files/path_and_pathbuf/README.md) — the family's honorary pair, a **stub** for now
+- [A file is bytes; a `String` is a promise](../04_Files/a_file_is_bytes/README.md) — the seam: a `File` moves bytes, a `&str` widens to them for free, and the UTF-8 promise is checked once on the way back in
 
 [STRINGS.md](../STRINGS.md) is the full map: the same lessons with the question each one answers, plus the topics that are still outlines rather than lessons.
 

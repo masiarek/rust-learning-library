@@ -210,6 +210,8 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K190 | [Predict, then ask the compiler — six values through `let b = a;`, one of them a `Range` that holds two `i32`s and still moves](18_Ownership/copy_or_move/README.md#practice) | [Copy or move?](18_Ownership/copy_or_move/README.md) | 101 |
 | K191 | [Four impls that disagree with their trait — one compile, four error codes, and a `help:` line that fixes the arrow but not the body](12_Traits/matching_the_trait/README.md#practice) | [When the `impl` does not match the trait](12_Traits/matching_the_trait/README.md) | 201 |
 | K192 | [Half up, by hand — the one-liner everyone writes first, the two inputs that break it, and the version that reads `x` instead of adding to it](19_Numbers/rounding_a_float/README.md#practice) | [Making a float whole](19_Numbers/rounding_a_float/README.md) | 201 |
+| K193 | [A log that is never truncated, and a lock that is claimed once — `append` needs `create`, and `create_new` matched on `AlreadyExists` rather than on `is_err()`](04_Files/opening_a_file/README.md#practice) | [Opening a file](04_Files/opening_a_file/README.md) | 201 |
+| K194 | [Read a Latin-2 file properly — `InvalidData` as the signal, an eighteen-letter table as the decoder, and the two bytes that pass as UTF-8 by accident](04_Files/a_file_is_bytes/README.md#practice) | [A file is bytes; a `String` is a promise](04_Files/a_file_is_bytes/README.md) | 201 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -473,6 +475,11 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K183 · [The early return that cannot hold the lock, and the one-character way to drop it too soon](31_C_and_Cpp/forgotten_unlock/README.md#practice)
 - K184 · [Spanify Clang's own example](31_C_and_Cpp/safe_buffers/README.md#practice)
 - K185 · [One contract, two spellings](31_C_and_Cpp/lifetime_safety_in_clang/README.md#practice)
+
+**[Files](04_Files/README.md)** — 2 katas
+
+- K193 · [A log that is never truncated, and a lock that is claimed once](04_Files/opening_a_file/README.md#practice)
+- K194 · [Read a Latin-2 file properly](04_Files/a_file_is_bytes/README.md#practice)
 
 <!-- by-subject:end -->
 

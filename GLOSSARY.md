@@ -583,6 +583,10 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **`Path` / `PathBuf`** — A filesystem path, borrowed and owned — the `&str` / `String` pattern again, over `OsStr` rather than `str`, because a filename is not promised to be UTF-8. `as_os_str` goes down to that layer; `to_str` and `to_string_lossy` come back up. → [`Path` and `PathBuf`](04_Files/path_and_pathbuf/README.md) *(stub)* · [Six kinds of string](14_Strings/six_kinds_of_string/README.md)
 
+**`OpenOptions`** — The builder behind every way of opening a file: six `bool` setters — `read`, `write`, `append`, `truncate`, `create`, `create_new` — of which `File::open` sets one and `File::create` sets three, the third being the truncation that empties an existing file *at open*. `append` does not imply `create`. → [Opening a file](04_Files/opening_a_file/README.md)
+
+**`include_str!` / `include_bytes!`** — Read a file while the compiler runs and embed it in the binary, as a `&'static str` or a `&'static [u8; N]`. No file is opened at run time, so there is no `Result`; a missing or non-UTF-8 file is a build error instead, and the binary grows by the file's size. → [A file is bytes; a `String` is a promise](04_Files/a_file_is_bytes/README.md)
+
 **UTF-16** — Unicode in 16-bit code units: one unit for most characters, a surrogate pair of two for anything above U+FFFF. It is what Windows filenames, Java, C#, JavaScript's `.length` and SQL Server's `nvarchar` count in, so a length from any of them can disagree with every count Rust gives you. → [Four lengths, and which one the other system means](14_Strings/four_lengths/README.md)
 
 **UTF-32** — The fixed-width encoding: every scalar value in one 32-bit unit. Rust has no UTF-32 string type, but a `char` *value* is exactly that unit — 21 bits of Unicode rounded up to a width a machine can address. → [Why a `char` is 32 bits wide](14_Strings/why_char_is_32_bits/README.md)

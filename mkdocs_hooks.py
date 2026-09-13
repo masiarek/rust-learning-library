@@ -772,6 +772,9 @@ NAV_ORDER: dict[str, list[str]] = {
     "04_Files": [
         "README.md",
         "opening_a_file",
+        # The seam between this section and Strings: a File moves bytes, a
+        # String promises UTF-8, and the check happens on the way in.
+        "a_file_is_bytes",
         "path_and_pathbuf",
         "reading_lines_efficiently",
         "missing_is_not_empty",
