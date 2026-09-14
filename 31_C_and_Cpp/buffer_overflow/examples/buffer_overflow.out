@@ -1,0 +1,4 @@
+byte-by-byte copy of 28 bytes into [u8; 8]: panicked at the 9th write, buffer's end intact
+buf.copy_from_slice(28 bytes into 8): panicked, nothing written
+copied 8 of 28 bytes: "Grace Br"
+Vec::extend_from_slice: len 28, holds "Grace Brewster Murray Hopper"

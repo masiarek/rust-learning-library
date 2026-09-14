@@ -259,6 +259,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "data_races",
         "iterator_invalidation",
         "buffer_overruns",
+        "buffer_overflow",
         "signed_overflow",
         "safe_buffers",
         "lifetime_safety_in_clang",
@@ -981,6 +982,7 @@ LABELS = {
     "double_free": "Double-free",
     "use_after_free": "Use-after-free",
     "safe_buffers": "Safe Buffers",
+    "buffer_overflow": "Buffer overflow",
     "lifetime_safety_in_clang": "Lifetime safety in Clang",
     # 33_Time_and_Benchmarking -- clean() would keep the capital B, and three
     # of the lessons are named for the type or function they are about.

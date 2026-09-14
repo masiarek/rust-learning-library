@@ -235,6 +235,7 @@ WHAT C HAS INSTEAD
 
 ## See also
 
+- [Buffer overflow](../buffer_overflow/README.md) — the write cousin: the same missing length, writing past the end instead of reading, a smashed frame instead of a wrong number
 - [Partial functions](../../17_Option_and_Result/partial_functions/README.md) — `get` as the total version of a function that has no answer for some inputs
 - [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md) — what `scores[3]` actually does, and when that is the right choice
 - [Signed overflow](../signed_overflow/README.md) — the other run-time check, and the one whose default changes with the build profile

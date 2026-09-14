@@ -1,0 +1,24 @@
+THE C SHAPE
+  char buf[4]; strcpy(buf, "lambda");
+  Six bytes plus a NUL written into four. The write runs off the
+  end into whatever follows buf -- a saved register, the canary,
+  the return address. Nothing in the language stops it; what you
+  see is decided by what the compiler bolted on (a stack canary, a
+  FORTIFY _chk call) or, with those off, by luck.
+
+1. THE RUNTIME INDEX -- a bounds check on every write
+  buf[i] = byte for i in 0..6  ->  panic at i == 4, nothing past the end is written
+
+2. THE BULK COPY -- lengths must match, so it cannot even start
+  buf.copy_from_slice(6 bytes)  ->  panic, buffer untouched
+
+3. THE ONE THE COMPILER CATCHES OUTRIGHT
+  buf[4] = 0;  with buf: [u8; 4]
+  A constant index into a fixed-size array: rustc rejects it at
+  compile time -- "this operation will panic at runtime", lint
+  unconditional_panic. No run needed; the length is in the type.
+
+4. THE CHECKED WRITE -- copy what fits, and know how much
+  copied 4 of 6: "lamb"
+  The bound C asks you to remember is the only thing the API lets
+  you express -- the length is not optional here.

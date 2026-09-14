@@ -22,6 +22,8 @@
 
 Chromium's security team puts numbers on why this matters: around 70% of their high-severity security bugs are memory-unsafety problems, and half of *those* are use-after-free — [measured across 912 high or critical bugs since 2015 ↗](https://www.chromium.org/Home/chromium-security/memory-safety/).
 
+The spatial bug has two halves, and the table above shows the quieter one. [Buffer overruns](buffer_overruns/README.md) is the *read* past the end — a wrong number, no crash. Its write cousin, [Buffer overflow](buffer_overflow/README.md), is the one the phrase *smashing the stack* is about: the same absent length, writing instead of reading, and the stack canary and `__strcpy_chk` a build inserts to turn a silent overwrite into a loud abort.
+
 ## What C++ is doing about it
 
 The nine pages show what C and C++ allow. The next two show C++'s own replies — the plan Yitzhak Mandelbaum laid out for Google at C++Now 2026 in [*A Path to Practically Safe C++* ↗](https://www.youtube.com/watch?v=fi6csDXvve0) — each measured on Clang 21 and 23, beside the Rust it resembles.
