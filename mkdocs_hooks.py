@@ -375,6 +375,10 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...and what the compiler says back about it. Third because everyone
         # meets `unused variable` on day one; its Drop half pays off much later.
         "what_a_warning_is_asking",
+        # ...and the first error whose line number is not the line to fix:
+        # one bracket too many, reported at a `}` further down, and hiding
+        # every other error in the file until it is gone.
+        "where_a_bracket_error_points",
         # ...and then the two pieces of punctuation every page below is
         # already using without explaining: the braces that hold a program
         # together, and the braces that print.

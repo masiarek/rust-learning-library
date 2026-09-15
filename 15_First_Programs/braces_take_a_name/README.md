@@ -97,6 +97,8 @@ println!(s);
 
 The braces are read when your program is **compiled**. A string assembled at run time arrives long after the only thing that could have read them has finished. Runtime templating in Rust is a library job, not a macro one.
 
+If this error only appeared after you fixed a bracket, it was there all along: [a bracket error hides every other error in the file](../where_a_bracket_error_points/README.md#one-bracket-hides-every-other-error).
+
 ## It reads whatever the name means at that point
 
 The capture is a name lookup, so anything that changes what a name means changes what the braces find — including a shadow:
