@@ -3,6 +3,8 @@ site/
 
 # Rust build output.
 target/
+# ...and the lockfile Cargo writes when you build a template project in place.
+/34_Templates/*/template/Cargo.lock
 **/*.rs.bk
 *.pdb
 

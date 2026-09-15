@@ -1,0 +1,75 @@
+# Production template: strict.
+#
+# Denies what has one right answer, using stable lint groups only. Every `deny` fails
+# `cargo clippy`, so `cargo ci` (.cargo/config.toml) cannot pass with a panic path, a
+# silent `as` cast or an unexplained `#[allow]` in it. No `nursery`: those lints are
+# still in development, and at `deny` a toolchain bump could fail code that did not change.
+#
+# Change `name` to your project's folder name; everything else can stay.
+
+[package]
+name = "app"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.98"
+publish = false                                   # a published crate also needs license, description, repository
+
+[dependencies]
+anyhow = "1"                                      # errors in a binary: `?` with context
+thiserror = "2"                                   # errors in a library: a typed enum, derived
+clap = { version = "4", features = ["derive"] }   # command-line arguments
+rand = "0.10"                                     # random numbers
+regex = "1"                                       # regular expressions
+serde = { version = "1", features = ["derive"] }  # #[derive(Serialize, Deserialize)]
+serde_json = "1"                                  # ...to and from JSON
+
+[profile.release]
+lto = "thin"                                      # optimise across crate boundaries at link time
+codegen-units = 1                                 # one unit per crate: slower to build, more room to optimise
+overflow-checks = true                            # integer overflow panics in release too, instead of wrapping
+
+[lints.rust]
+unsafe_code = "forbid"                            # `forbid`: no #[allow] can switch it back on
+unused_must_use = "deny"
+rust_2018_idioms = { level = "deny", priority = -1 }
+trivial_casts = "deny"
+trivial_numeric_casts = "deny"
+unused_qualifications = "deny"
+let_underscore_drop = "deny"
+redundant_lifetimes = "deny"
+unused_lifetimes = "deny"
+missing_debug_implementations = "deny"
+
+[lints.clippy]
+# Clippy's default groups and the idiom group, as errors.
+all = { level = "deny", priority = -1 }
+pedantic = { level = "deny", priority = -1 }
+# No panics outside tests (clippy.toml carves tests out).
+unwrap_used = "deny"
+expect_used = "deny"
+indexing_slicing = "deny"
+string_slice = "deny"
+panic = "deny"
+panic_in_result_fn = "deny"
+todo = "deny"
+unimplemented = "deny"
+unreachable = "deny"
+exit = "deny"
+dbg_macro = "deny"
+# Conversions that say what they do.
+as_conversions = "deny"
+lossy_float_literal = "deny"
+# Names, patterns and attributes.
+shadow_unrelated = "deny"
+wildcard_enum_match_arm = "deny"
+rest_pat_in_fully_bound_structs = "deny"
+allow_attributes_without_reason = "deny"
+# Errors, pointers and memory.
+map_err_ignore = "deny"
+unused_result_ok = "deny"
+clone_on_ref_ptr = "deny"
+rc_buffer = "deny"
+mem_forget = "deny"
+# For a library crate, add:
+#   missing_docs = "deny"        (under [lints.rust]) every public item documented
+#   clippy::missing_errors_doc   already denied by pedantic: say when a function returns Err

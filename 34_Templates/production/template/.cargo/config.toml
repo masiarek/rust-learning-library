@@ -1,0 +1,6 @@
+# Cargo settings for this project only.
+
+[alias]
+# `cargo ci`: what a pull request has to pass. Cargo.toml already denies the policy;
+# this adds every remaining warning, tests and examples included.
+ci = ["clippy", "--all-targets", "--", "-D", "warnings"]

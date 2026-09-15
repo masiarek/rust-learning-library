@@ -32,6 +32,15 @@ python3 tools/run_examples.py
 
 It compiles every `examples/*.rs`, runs it, compares against the sibling `.out`, and rewrites every block. Inside the markers is generated; outside is yours. CI runs `--check`, which writes nothing and fails if the code, the answer key, and the page have drifted apart.
 
+**A file that is not an example gets the same treatment with `file:`**, named by its path from the page:
+
+```markdown
+<!-- file:template/Cargo.toml -->
+<!-- /file -->
+```
+
+The tool pastes the file between the markers, in a fence titled with that path — so a page that shows a configuration template *is* the template, and `--check` fails the moment the two differ. The [training](34_Templates/training/README.md) and [production](34_Templates/production/README.md) templates are shown this way. A `--only` run leaves `file:` blocks alone, like every block outside its selection.
+
 For a brand-new example, record the key first — and **scope it to your own stem**:
 
 ```bash

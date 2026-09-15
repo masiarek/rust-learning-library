@@ -1,0 +1,6 @@
+# The compiler this project builds with. rustup reads this file and installs the
+# version if it is missing. Bump it on purpose, in a commit of its own.
+
+[toolchain]
+channel = "1.98.0"
+components = ["clippy", "rustfmt", "rust-analyzer"]

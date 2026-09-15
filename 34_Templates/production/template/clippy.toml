@@ -1,0 +1,10 @@
+# Clippy's own settings. Lint LEVELS live in Cargo.toml; this file holds carve-outs
+# and thresholds. The MSRV comes from `rust-version` in Cargo.toml.
+
+# Inside #[test] and #[cfg(test)], unwrap, expect, panic, indexing and dbg! are how a
+# test says "this must hold", so the lints about them stay quiet there. Nowhere else.
+allow-unwrap-in-tests = true
+allow-expect-in-tests = true
+allow-panic-in-tests = true
+allow-indexing-slicing-in-tests = true
+allow-dbg-in-tests = true

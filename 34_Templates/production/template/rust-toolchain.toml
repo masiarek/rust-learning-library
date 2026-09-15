@@ -1,0 +1,7 @@
+# The compiler this project builds with. rustup reads this file and installs the
+# version if it is missing. Bump it on purpose, in a commit of its own, and let
+# `cargo ci` tell you what the new clippy thinks before anything else merges.
+
+[toolchain]
+channel = "1.98.0"
+components = ["clippy", "rustfmt", "rust-analyzer"]

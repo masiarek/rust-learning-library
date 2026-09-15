@@ -1,0 +1,90 @@
+# Training template: relaxed, and pedantic on purpose.
+#
+# Everything educational is at `warn`, so `cargo run` never stops for style while
+# `cargo clippy` -- or RustRover, with Clippy as its linter -- names the idiomatic
+# version of each line. The four lints about unused names are off: a practice file
+# binds names only to show a form. `cargo strict` (.cargo/config.toml) runs the
+# same lints with every warning an error.
+#
+# Change `name` to your project's folder name; everything else can stay.
+
+[package]
+name = "practice"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.98"
+publish = false
+
+[dependencies]
+anyhow = "1"                                     # `?` on any error in main, with context
+rand = "0.10"                                    # random numbers
+regex = "1"                                      # regular expressions
+serde = { version = "1", features = ["derive"] } # #[derive(Serialize, Deserialize)]
+serde_json = "1"                                 # ...to and from JSON
+
+# Your own code stays unoptimised and debuggable; dependencies are built
+# optimised, once, so a regex or a random number costs what it will in release.
+[profile.dev.package."*"]
+opt-level = 2
+
+[lints.rust]
+# Practice-file noise: a name bound only to show a form is not a mistake.
+unused_variables = "allow"
+unused_imports = "allow"
+unused_mut = "allow"
+dead_code = "allow"
+# Idioms rustc knows and does not warn about by default.
+rust_2018_idioms = { level = "warn", priority = -1 }
+unsafe_code = "warn"
+trivial_casts = "warn"
+trivial_numeric_casts = "warn"
+unused_qualifications = "warn"
+let_underscore_drop = "warn"
+unit_bindings = "warn"
+redundant_lifetimes = "warn"
+unused_lifetimes = "warn"
+
+[lints.clippy]
+# The two teaching groups: the idiom std expects, and the lints still in development.
+pedantic = { level = "warn", priority = -1 }
+nursery = { level = "warn", priority = -1 }
+# Panics. Each one points at the API that returns an Option or a Result instead.
+unwrap_used = "warn"
+expect_used = "warn"
+indexing_slicing = "warn"
+string_slice = "warn"
+panic = "warn"
+panic_in_result_fn = "warn"
+todo = "warn"
+unimplemented = "warn"
+unreachable = "warn"
+exit = "warn"
+# Conversions and arithmetic that say what they do.
+as_conversions = "warn"
+integer_division = "warn"
+lossy_float_literal = "warn"
+# Names, patterns and attributes.
+shadow_unrelated = "warn"
+wildcard_enum_match_arm = "warn"
+rest_pat_in_fully_bound_structs = "warn"
+ref_patterns = "warn"
+allow_attributes_without_reason = "warn"
+# Smaller idioms, each with a one-line fix.
+if_then_some_else_none = "warn"
+iter_over_hash_type = "warn"
+verbose_file_reads = "warn"
+try_err = "warn"
+empty_structs_with_brackets = "warn"
+unnecessary_self_imports = "warn"
+string_lit_chars_any = "warn"
+undocumented_unsafe_blocks = "warn"
+map_err_ignore = "warn"
+clone_on_ref_ptr = "warn"
+rc_buffer = "warn"
+mem_forget = "warn"
+dbg_macro = "warn"
+# Measured and left out:
+#   min_ident_chars          `i`, `x` and `n` are fine names
+#   arithmetic_side_effects  rejects `n + 1`, and changes how everything reads
+#   shadow_reuse             rejects `let line = line.trim();`, which is idiomatic
+#   let_underscore_must_use  rejects `let _ =`, the fix rustc's own message suggests

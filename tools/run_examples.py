@@ -47,13 +47,16 @@ EDITION = "2024"
 
 # <!-- output:stem -->  ...generated...  <!-- /output -->
 # <!-- source:stem -->  ...generated...  <!-- /source -->
+# <!-- file:path -->    ...generated...  <!-- /file -->
 #
-# Two kinds, one mechanism. `output` pastes what the program printed; `source`
+# Three kinds, one mechanism. `output` pastes what the program printed; `source`
 # pastes the program itself. The second exists for kata solutions: a solution
 # hand-copied into a fence is a solution that can quietly stop compiling, which
-# is the one thing a practice page must never do.
+# is the one thing a practice page must never do. `file` pastes any other file --
+# a TOML template, a script -- named by its path relative to the page, so a page
+# that shows a template cannot drift from the template a tool reads.
 BLOCK = re.compile(
-    r"(?P<open><!--\s*(?P<kind>output|source):(?P<stem>[A-Za-z0-9_\-]+)\s*-->)"
+    r"(?P<open><!--\s*(?P<kind>output|source|file):(?P<stem>[A-Za-z0-9_\-./]+)\s*-->)"
     r"(?P<body>.*?)"
     r"(?P<close><!--\s*/(?P=kind)\s*-->)",
     re.DOTALL,
@@ -132,6 +135,15 @@ def run_example(src: Path, workdir: Path) -> str:
 def rendered_block(kind: str, src: Path, output: str, page: Path) -> str:
     """The generated body that goes between the markers on `page`."""
     href = os.path.relpath(src, page.parent)
+    if kind == "file":
+        body = src.read_text(encoding="utf-8").strip("\n")
+        lang = {".toml": "toml", ".py": "python", ".sh": "bash", ".rs": "rust"}.get(src.suffix, "text")
+        # A fence longer than any backtick run inside, so the file cannot close it.
+        fence = "`" * max(3, 1 + max((len(r) for r in re.findall(r"`+", body)), default=0))
+        # Titled with the path rather than linked: a site serves a .toml as a
+        # download, and a dotfile such as .cargo/config.toml is not published at all.
+        title = os.path.relpath(src, page.parent)
+        return f"\n{fence}{lang} title=\"{title}\"\n{body}\n{fence}\n"
     if kind == "source":
         body = src.read_text(encoding="utf-8").strip("\n")
         return (
@@ -174,7 +186,7 @@ def fill_pages(
         if page.suffix != ".md":
             continue
         text = page.read_text(encoding="utf-8")
-        if "<!-- output:" not in text and "<!-- source:" not in text:
+        if "<!-- output:" not in text and "<!-- source:" not in text and "<!-- file:" not in text:
             continue
         skip = fenced_spans(text)
 
@@ -187,6 +199,15 @@ def fill_pages(
             kind = m.group("kind")
             if only is not None and stem not in only:
                 return m.group(0)
+            if kind == "file":
+                target = (page.parent / stem).resolve()
+                if REPO not in target.parents or not target.is_file():
+                    problems.append(
+                        f"{page.relative_to(REPO)}: asks for file block {stem!r}, "
+                        "but no file inside the repo has that path from this page"
+                    )
+                    return m.group(0)
+                return m.group("open") + rendered_block(kind, target, "", page) + m.group("close")
             # A source block only needs the file; an output block needs the run.
             known = sources if kind == "source" else outputs
             if stem not in known:

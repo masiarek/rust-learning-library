@@ -276,6 +276,13 @@ NAV_ORDER: dict[str, list[str]] = {
         "timing_a_block",
         "black_box_is_a_hint",
     ],
+    "34_Templates": [
+        "README.md",
+        "training",
+        "production",
+        "clippy",
+        "automation",
+    ],
     "01_Foundations": [
         "README.md",
     ],

@@ -1,0 +1,8 @@
+# Cargo settings for this project only.
+
+[alias]
+# `cargo strict`: the lints in Cargo.toml with every warning an error, and the four
+# unused-name lints back on. Relaxed while you write, strict before you call it done.
+# The flags are inline because a file path here is resolved from the directory
+# cargo runs in, so `--config some-file.toml` would break in src/.
+strict = ["clippy", "--all-targets", "--config", "build.rustflags = ['-W', 'unused', '-D', 'warnings']"]
