@@ -78,6 +78,10 @@ SCOPE = (
     # assertion — a blanket impl bounded only by `Sized` really does put
     # `.progress()` on the unit type, and the fence is the proof.
     "12_Traits/extension_traits",
+    # A fourth, for the reason the first two were added: the page is about
+    # files rustc refuses over one bracket. Its whole program with three
+    # mistakes is `compile_fail`, and the working answer above it must compile.
+    "15_First_Programs/where_a_bracket_error_points",
 )
 
 SKIP_DIRS = {".git", "site", ".venv", "target", "__pycache__", ".github"}

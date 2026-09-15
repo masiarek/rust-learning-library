@@ -1,0 +1,37 @@
+
+──── extra_paren.rs
+  error: unexpected closing delimiter: `}`
+  --> 4:1
+    `{` at 1:11  the nearest open delimiter
+    `)` at 2:30  missing open `(` for this delimiter
+    `}` at 4:1   unexpected closing delimiter
+
+──── far_away.rs
+  error: unexpected closing delimiter: `}`
+  --> 12:1
+    `{` at 1:42  the nearest open delimiter
+    `)` at 3:60  missing open `(` for this delimiter
+    `}` at 12:1  unexpected closing delimiter
+
+──── missing_paren.rs
+  error: mismatched closing delimiter: `}`
+  --> 2:21
+    `{` at 1:11  closing delimiter possibly meant for this
+    `(` at 2:21  unclosed delimiter
+    `}` at 4:1   mismatched closing delimiter
+
+──── wrong_kind.rs
+  error: mismatched closing delimiter: `)`
+  --> 2:17
+    `[` at 2:17  unclosed delimiter
+    `)` at 2:25  mismatched closing delimiter
+
+──── missing_brace.rs
+  error: this file contains an unclosed delimiter
+  --> end of file
+    `{` at 1:11  unclosed delimiter
+
+──── extra_paren.rs with the ) the label points at deleted
+  every bracket has its partner
+  This check has nothing left to say, so rustc goes on to the
+  next mistake in the file: `println!(s)` on line 3.
