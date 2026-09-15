@@ -1,0 +1,25 @@
+
+──── The two spellings from the question
+  foo foo
+  foo foo
+  a == b: true
+
+──── Every formatting macro borrows: t is used again after each one
+  println!   ticket #7
+  print!     ticket #7
+  format!    ticket #7
+  write!     ticket #7
+  assert!    passed, so its message was never formatted
+  panic!     compiled, in a branch that did not run
+  assert_eq! passed, and a and b are still here: foo foo
+  no drop line yet: t still owns ticket #7
+
+──── A function that takes it by value: the move
+  take() owns ticket #7 now
+  ~ ticket #7 dropped
+  back in main; t was moved, so this line cannot name it
+
+──── An argument that consumes: the move happens before println! runs
+  ~ ticket #8 dropped
+  ticket #8, labelled
+  the drop line came first: label(u) returned before the print began
