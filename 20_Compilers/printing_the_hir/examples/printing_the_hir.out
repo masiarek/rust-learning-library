@@ -1,0 +1,13 @@
+
+──── for, as written and as the HIR prints it
+  end = 0   sum = 0   sum_desugared = 0   same: true
+  end = 3   sum = 3   sum_desugared = 3   same: true
+  end = 5   sum = 10  sum_desugared = 10  same: true
+
+──── ?, as written and as a match
+  "21"  Ok(42)
+        Ok(42)   same: true
+  "x"   Err(ParseIntError { kind: InvalidDigit })
+        Err(ParseIntError { kind: InvalidDigit })   same: true
+  ""    Err(ParseIntError { kind: Empty })
+        Err(ParseIntError { kind: Empty })   same: true
