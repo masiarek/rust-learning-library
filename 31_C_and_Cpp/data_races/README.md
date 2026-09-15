@@ -304,6 +304,8 @@ WHAT MAKES THIS CHECKABLE AT ALL
 - [Marker traits](../../12_Traits/marker_traits/README.md) — `Send` and `Sync`, and what the compiler does with them
 - [Forgotten unlock](../forgotten_unlock/README.md) — the guard, and the deadlocks it does not prevent
 - [The bugs Rust is a reply to](../README.md) — the other eight
+- [A mutex guards a counter ↗](https://masiarek.github.io/go-learning-library/04_Sync/a_mutex_guards_a_counter/index.html) and [The race detector ↗](https://masiarek.github.io/go-learning-library/07_Testing_Concurrent_Code/the_race_detector/index.html) — the same lost increments in Go, and `-race`, which is built on ThreadSanitizer
+- [Data race ↗](https://masiarek.github.io/concurrency-learning-library/11_Concepts/hazards/data_race/index.html) — the concept page, with each language's answer
 
 ## Po polsku
 

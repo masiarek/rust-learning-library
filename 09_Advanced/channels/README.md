@@ -315,6 +315,8 @@ fn main() {
 - [Lock poisoning](../mutex_poisoning/README.md) — the failure mode a channel does not have
 - [Ownership and moves](../../18_Ownership/ownership_and_moves/README.md) — what `send` is actually doing
 - [Iterators are lazy](../../24_Iterators/iterators_are_lazy/README.md) — `rx.iter()` is one, and it blocks
+- [An unbuffered send waits for a receiver ↗](https://masiarek.github.io/go-learning-library/02_Channels/an_unbuffered_send_waits_for_a_receiver/index.html) and [Closing a channel ends a range ↗](https://masiarek.github.io/go-learning-library/02_Channels/closing_a_channel_ends_a_range/index.html) — the Go channels this API descends from: a send that is also a handshake, and a close you write yourself
+- [Channel ↗](https://masiarek.github.io/concurrency-learning-library/11_Concepts/communication/channel/index.html) — the construct in each language, with its relatives: select, backpressure, pipelines
 
 ## Sources
 

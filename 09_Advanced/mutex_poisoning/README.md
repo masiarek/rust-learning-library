@@ -286,6 +286,8 @@ rustc --edition 2024 09_Advanced/mutex_poisoning/examples/mutex_poisoning.rs -o 
 - [`Option` vs `Result`](../../17_Option_and_Result/option_vs_result/README.md) — why `lock()` returns a `Result` rather than an `Option`: the caller can absolutely ask *why not?*
 - [`std::sync::Mutex::lock` ↗](https://doc.rust-lang.org/std/sync/struct.Mutex.html#method.lock) · [`PoisonError` ↗](https://doc.rust-lang.org/std/sync/struct.PoisonError.html) · [`clear_poison` ↗](https://doc.rust-lang.org/std/sync/struct.Mutex.html#method.clear_poison)
 - [The Rust Book, ch. 16.3 — Shared-State Concurrency ↗](https://doc.rust-lang.org/book/ch16-03-shared-state.html)
+- [A mutex guards a counter ↗](https://masiarek.github.io/go-learning-library/04_Sync/a_mutex_guards_a_counter/index.html) — Go's `sync.Mutex` has no poisoning: after a recovered panic under `defer mu.Unlock()` the lock is simply released
+- [Lock poisoning ↗](https://masiarek.github.io/concurrency-learning-library/11_Concepts/synchronization/lock_poisoning/index.html) — the concept page, and which other languages have anything like it
 
 ## Po polsku
 

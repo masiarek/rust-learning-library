@@ -279,6 +279,9 @@ fn main() {
 - [Lock poisoning](../mutex_poisoning/README.md) — what happens to a `Mutex` when one of these threads panics
 - [The `move` keyword](../../23_Closures/the_move_keyword/README.md) — what it moves, and what it does not
 - [Marker traits](../../12_Traits/marker_traits/README.md) — `Send` and `Sync`, the two auto traits deciding what may cross
+- [Who waits when main returns? ↗](https://masiarek.github.io/concurrency-learning-library/01_Threads/who_waits_when_main_returns/index.html) — the last paragraph of *A panicking thread* above, measured in Rust, Go, C, C++, Java and Python: which of them waits, and why a spawned thread's output can stop in the middle of a line
+- [Getting a result back ↗](https://masiarek.github.io/concurrency-learning-library/01_Threads/getting_a_result_back/index.html) — `join`'s `Result` beside C's `void *`, Go's channels, and the futures of C++, Java and Python
+- [A goroutine has no handle ↗](https://masiarek.github.io/go-learning-library/01_Goroutines/a_goroutine_has_no_handle/index.html) — Go's `spawn` with no `JoinHandle`, and what Go programs do instead
 
 ## Sources
 

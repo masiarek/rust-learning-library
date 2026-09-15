@@ -158,6 +158,7 @@ Delete the `flush` and the run prints nothing at all while still exiting 0 — m
 - [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md) — where the 101 comes from, and what is left half-done underneath it
 - [`unwrap` is a TODO you forgot to remove](../unwrap_is_a_todo/README.md) — the most common way a program exits 101 by accident
 - [Spawning a thread](../../09_Advanced/spawning_a_thread/README.md) — a panicked thread does *not* set the process status; only the main thread's does
+- [Who waits when main returns? ↗](https://masiarek.github.io/concurrency-learning-library/01_Threads/who_waits_when_main_returns/index.html) — what the runtime's stdout cleanup at exit does to a line another thread is still in the middle of writing
 
 ## Po polsku
 
