@@ -59,6 +59,7 @@ The convention is not arbitrary — nightly identifies *itself* by date. `rustup
 - [rustup](../rustup/README.md) — the five-rung precedence this page is about rung 5 of
 - [Pinning the toolchain](../pinning_the_toolchain/README.md) — the rung to use instead
 - [Strict clippy lints](../strict_lints/README.md) — the other configuration decision from the same talk
+- [Printing the HIR](../../20_Compilers/printing_the_hir/README.md) — one `-Z` flag on the stable compiler through `RUSTC_BOOTSTRAP=1`, for one command, with no default changed
 
 ---
 

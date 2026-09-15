@@ -63,6 +63,7 @@ FIXUPS = {
     "api": "API",
     "cli": "CLI",
     "ffi": "FFI",
+    "hir": "HIR",
     "http": "HTTP",
     "io": "I/O",
     "json": "JSON",
@@ -347,6 +348,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # assumes it; then the middle stage, then the machinery it runs
         # on, then the stage that is nobody's compiler.
         "what_a_compiler_does",
+        # ...and the first stage of the front end made visible: what rustc
+        # turned the source into before checking it, ahead of the middle.
+        "printing_the_hir",
         "what_the_optimizer_does",
         "llvm_and_its_ir",
         "the_linker",

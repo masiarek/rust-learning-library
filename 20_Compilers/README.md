@@ -39,6 +39,7 @@ Two consequences worth carrying:
 | Lesson | Level | What it teaches |
 |---|---|---|
 | [What a compiler does before your program runs](what_a_compiler_does/README.md) | 101 | The compile-time/run-time line, made visible: a loop that runs during the build, an array length that proves it, and the two errors that live either side of the boundary |
+| [Printing the HIR](printing_the_hir/README.md) | 201 | `RUSTC_BOOTSTRAP=1 rustc --edition 2024 -Zunpretty=hir main.rs`, word by word: your program after macro expansion and desugaring — `for` as `loop` and `match`, `?` as an early `return` — plus the three traps: the 2015 default, a printout that is not Rust, and a variable that unlocks every `#![feature]` |
 | [What the optimizer does](what_the_optimizer_does/README.md) | 201 | Ten numbers summed in a loop compile to `mov eax, 55` — the same experiment the talk runs in C++, run in Rust, with both ends of the assembly quoted |
 | [LLVM: the part of rustc that is not Rust](llvm_and_its_ir/README.md) | 201 | What the name actually refers to — a suite, a library, an IR and a pipeline — plus Clang, LLD and LLDB, real IR for a small function, and the control-flow graph read straight off it |
 | [The linker: the stage that is not rustc](the_linker/README.md) | 201 | Two functions this crate never defines, called anyway — what an object file leaves blank, who fills it in, and why the error text is in a different dialect from every other error you have seen |

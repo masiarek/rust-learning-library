@@ -25,6 +25,7 @@ A macro is not a function, so the usual intuitions about evaluation do not hold:
 - [What `dbg!` does](../../15_First_Programs/what_dbg_does/README.md) — the macro that reads its own source text, and the five things it does that `println!` does not
 - [`Debug` and `Display`](../../15_First_Programs/debug_vs_display/README.md) — the traits the printing macros call, and why only one can be derived
 - [`unwrap` is a TODO](../../02_Errors/unwrap_is_a_todo/README.md) — `todo!` and `unimplemented!` as the honest placeholders
+- [Printing the HIR](../../20_Compilers/printing_the_hir/README.md) — what a `println!` actually became, printed by rustc itself
 - [Comprehensive Rust: Macros ↗](https://google.github.io/comprehensive-rust/control-flow-basics/macros.html)
 
 ## Po polsku

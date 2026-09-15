@@ -22,7 +22,7 @@ fn main() {
 
 ## What it turns into
 
-rustc will print that code. `-Zunpretty` is a nightly flag, and `RUSTC_BOOTSTRAP=1` makes the stable compiler accept it — fine for looking, not for building:
+rustc will print that code — [Printing the HIR](../../20_Compilers/printing_the_hir/README.md) takes the command apart. `-Zunpretty` is a nightly flag, and `RUSTC_BOOTSTRAP=1` makes the stable compiler accept it — fine for looking, not for building:
 
 ```bash
 RUSTC_BOOTSTRAP=1 rustc --edition 2024 -Zunpretty=hir main.rs
