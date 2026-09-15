@@ -62,14 +62,15 @@ Notice what four of those six have in common: **one code, several causes.** That
 | [E0382 ↗](https://doc.rust-lang.org/error_codes/E0382.html) | [`Copy` vs `Clone`](16_Structs/copy_vs_clone/README.md) | **29** other pages |
 | [E0384 ↗](https://doc.rust-lang.org/error_codes/E0384.html) | [Variables](15_First_Programs/variables/README.md) | **2** other pages |
 | [E0392 ↗](https://doc.rust-lang.org/error_codes/E0392.html) | [Phantom types](12_Traits/phantom_types/README.md) | **3** other pages |
+| [E0401 ↗](https://doc.rust-lang.org/error_codes/E0401.html) | [`const` and `static`](27_Modules/const_and_static/README.md) | — |
 | [E0407 ↗](https://doc.rust-lang.org/error_codes/E0407.html) | [When the `impl` does not match the trait](12_Traits/matching_the_trait/README.md) | — |
 | [E0408 ↗](https://doc.rust-lang.org/error_codes/E0408.html) | [One arm, many values](17_Option_and_Result/one_arm_many_values/README.md) | — |
 | [E0423 ↗](https://doc.rust-lang.org/error_codes/E0423.html) | [A type is not a constructor](16_Structs/a_type_is_not_a_constructor/README.md) | **2** other pages |
-| [E0425 ↗](https://doc.rust-lang.org/error_codes/E0425.html) | [A block is an expression](15_First_Programs/a_block_is_an_expression/README.md) | **4** other pages |
+| [E0425 ↗](https://doc.rust-lang.org/error_codes/E0425.html) | [A block is an expression](15_First_Programs/a_block_is_an_expression/README.md) | **5** other pages |
 | [E0428 ↗](https://doc.rust-lang.org/error_codes/E0428.html) | [One module per file](27_Modules/one_module_per_file/README.md) | — |
 | [E0433 ↗](https://doc.rust-lang.org/error_codes/E0433.html) | [A throwaway that needs a crate: three commands, and the message that means you skipped them](05_Tooling/scratch_with_a_crate/README.md) | — |
 | [E0434 ↗](https://doc.rust-lang.org/error_codes/E0434.html) | [What a closure is](23_Closures/what_a_closure_is/README.md) | — |
-| [E0435 ↗](https://doc.rust-lang.org/error_codes/E0435.html) | [What a compiler does before your program runs](20_Compilers/what_a_compiler_does/README.md) | — |
+| [E0435 ↗](https://doc.rust-lang.org/error_codes/E0435.html) | [What a compiler does before your program runs](20_Compilers/what_a_compiler_does/README.md) | **3** other pages |
 | [E0449 ↗](https://doc.rust-lang.org/error_codes/E0449.html) | [When the `impl` does not match the trait](12_Traits/matching_the_trait/README.md) | — |
 | [E0451 ↗](https://doc.rust-lang.org/error_codes/E0451.html) | [Modules and visibility](27_Modules/modules_and_visibility/README.md) | — |
 | [E0499 ↗](https://doc.rust-lang.org/error_codes/E0499.html) | [What `unsafe` turns off](09_Advanced/what_unsafe_turns_off/README.md) | **5** other pages |
@@ -113,7 +114,7 @@ The table above names one lesson per code, chosen as the page that treats it at 
 
 ## How this page is kept honest
 
-Every row was derived from the library rather than written from memory: the owning lesson for each code is the page that mentions it most, and the "also appears on" count is the number of other pages carrying it. All 74 code links were checked live. If a code moves to a better home, the count moves with it — so re-derive this table rather than editing a row by hand.
+Every row was derived from the library rather than written from memory: the owning lesson for each code is the page that mentions it most, and the "also appears on" count is the number of other pages carrying it. All 75 code links were checked live. If a code moves to a better home, the count moves with it — so re-derive this table rather than editing a row by hand.
 
 ## Sources
 

@@ -1,0 +1,21 @@
+1. A named const and the literal it names
+   named()   = "hello"
+   literal() = "hello"
+   Same value and the same machine code: the const is pasted in where
+   it is named. Both allocate a String in to_string(); the name makes
+   nothing cheaper at run time.
+
+2. In scope for the whole block, above its own line too
+   used_above_its_line() = "hello"
+   A `let` is in scope from its own line down. A `const` in a block is
+   an item, and an item's name covers the block it is declared in.
+
+3. Not in scope outside that block
+   sibling_blocks() = (10, 20)
+   Two LIMITs in sibling blocks do not collide, and named()'s GREETING
+   is not in scope in main: naming it there is E0425.
+
+4. It cannot see the function it sits in
+   a `let` binding above it     -> E0435, use `let` instead
+   the function's own type T    -> E0401, use `const { }` instead
+   width::<u32>() = 4, from `const { size_of::<T>() }`
