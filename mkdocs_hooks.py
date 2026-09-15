@@ -167,8 +167,13 @@ NAV_ORDER: dict[str, list[str]] = {
         # Three std traits in depth: the one that runs at a place you can point
         # to in the source, and the two whose names confuse next to `clone`.
         "drop_and_raii",
+        # ...the way in for a reader the trait has not clicked for yet: the
+        # five ideas under ToOwned, in the order they unlock.
+        "how_to_learn_to_owned",
         "to_owned",
         "clone_into",
+        # ...and writing one for a type of your own, which needs both above.
+        "implementing_to_owned",
         # ...and the pair that stands between the program and every byte source
         # there is, which is what makes an I/O function testable at all.
         "read_and_write",
@@ -1115,6 +1120,8 @@ LABELS = {
     "trait_in_scope": "A trait must be in scope",
     "clone_into": "`clone_into`",
     "to_owned": "`ToOwned`",
+    "how_to_learn_to_owned": "How to learn `ToOwned`",
+    "implementing_to_owned": "Implementing `ToOwned`",
     # 14_Strings
     "string_vs_str": "`String` vs `&str`",
     "inside_a_split": "Inside a `Split`",

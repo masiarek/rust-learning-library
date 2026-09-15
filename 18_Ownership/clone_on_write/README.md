@@ -244,6 +244,7 @@ rustc --edition 2024 18_Ownership/clone_on_write/examples/clone_on_write.rs -o /
 
 - [`ToOwned`](../../12_Traits/to_owned/README.md) — the trait that supplies the owned arm, and the reason `Cow` needs it rather than `Clone`
 - [`clone_into`](../../12_Traits/clone_into/README.md) — the method `Cow::clone_from` calls, and the reason it was stabilized at all
+- [Implementing `ToOwned` for your own type](../../12_Traits/implementing_to_owned/README.md) — a `Cow` over a type of your own, and the unsized wrapper it takes
 - [Ownership and moves](../ownership_and_moves/README.md) — the one-owner rule this type bends without breaking
 - [Borrowing](../borrowing/README.md) — where the `'a` on the borrowed arm comes from
 - [`Rc`: the clone that copies a pointer](../reference_counting/README.md) — the other way out of a copy: several owners instead of a deferred one
