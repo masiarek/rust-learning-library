@@ -484,6 +484,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # on a string literal, which does not move, and the rule that sorts
         # every other type into copy or move.
         "copy_or_move",
+        # ...and the question those moving rows raise next: why printing a
+        # String twice is not a move, since println! is handed &s.
+        "printing_borrows",
         # ...and the trait that is not there, which is why the default needed
         # naming in the first place.
         "no_move_trait",

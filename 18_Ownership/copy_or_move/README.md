@@ -54,7 +54,7 @@ The names do not help. Both are "strings", both print the same, and both compare
 
 ## Where the error lands
 
-The `let b = a;` line compiles in every row. For a move, the refusal comes at the first *use* of `a` afterwards — here the `println!`, which borrows `a`, hence *borrow of* moved value:
+The `let b = a;` line compiles in every row. For a move, the refusal comes at the first *use* of `a` afterwards — here the `println!`, which [borrows `a`](../printing_borrows/README.md), hence *borrow of* moved value:
 
 ```rust
 fn main() {
