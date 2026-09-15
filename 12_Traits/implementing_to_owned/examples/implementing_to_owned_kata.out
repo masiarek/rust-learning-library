@@ -1,0 +1,13 @@
+1. TryFrom is the checked door
+   [-2, 0, 5, 9] -> Ok, contains(&5) = true
+   [1, 4, 3, 8] -> Err, order breaks at index 2
+
+2. ToOwned and Borrow, round trip
+   s.to_owned().borrow() = [1, 2, 3]
+
+3. Cow over Sorted<i32>
+   ensure_zero([-1, 0, 4]) -> Borrowed [-1, 0, 4]
+   ensure_zero([-1, 4]) -> Owned    [-1, 0, 4]
+
+4. Skip the check and the damage is a wrong answer, not undefined behaviour
+   [3, 2, 1].contains(&3) = false   (3 is right there)

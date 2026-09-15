@@ -1,0 +1,25 @@
+1. The only public way to an &AsciiStr is through the check
+   "Ada"  -> Ok  AsciiStr { text: "Ada" }
+   "café" -> Err, first non-ASCII byte at index 3
+   size_of::<&AsciiStr>() == size_of::<&str>(): true   (address + length)
+
+2. to_owned buys the owned twin; borrow lends it back without copying
+   ada.to_owned()   -> AsciiString { text: "Ada" }
+   owned.borrow()   -> AsciiStr { text: "Ada" }, pointing into owned's own buffer: true
+
+3. Borrow buys lookups by the borrowed form
+   seats: HashMap<AsciiString, u32>, key: &AsciiStr
+   seats.get(key) = Some(3)
+
+4. ToOwned buys Cow
+   shout("HELLO") -> Cow::Borrowed("HELLO")   nothing allocated
+   shout("hello") -> Cow::Owned("HELLO")      one new AsciiString
+   a Cow<AsciiStr> derefs to &AsciiStr either way: "ADA"
+
+5. The question's DataRef: an inherent method instead of the trait
+   r.to_owned()          -> DataOwned { text: "x" }   inherent, found first
+   ToOwned::to_owned(&r) -> DataRef   { text: "x" }   the blanket impl, still there
+
+6. A GAT lends a struct of references by value: two fields, no cast
+   name.lend() -> NameRef { first: "Ada", last: "Lovelace" }
+   both fields point into name's own buffers: true
