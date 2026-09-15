@@ -31,6 +31,7 @@ These pages are not about making your program better. They are about the loop yo
 | [Two versions of one crate](two_versions_of_one_crate/README.md) | 201 | `rand = "0.8"` and `rand = "0.9"` are as far apart as `1` and `2`, so Cargo links both — silently — until a `StdRng` is *a different* `StdRng`; `cargo tree -d` is the check |
 | [Vendoring, and the `[patch]` table](vendoring_and_patch/README.md) | 201 | `cargo vendor` copies the sources in, and "read-only" then means two things: an incremental build ignores your edit, a clean build refuses it by checksum — `[patch.crates-io]` is the sanctioned door |
 | [What MCP is](what_mcp_is/README.md) | 201 | JSON-RPC on a pipe — a whole MCP server in dependency-free Rust, the `println!` that corrupts one, and what *Always allow (`rustrover:*`)* actually grants |
+| [Zed setup](zed_setup/README.md) | 101 → 201 | Ctrl+R saves and runs the Rust file in front of you — and the three defaults in its way: a file is not a project, no `Cargo.toml` means no `rust-analyzer`, and a task runs what is on disk rather than what you see |
 
 The one tooling page that is a *prerequisite* rather than a refinement lives in Foundations instead: [running a scratch program](../15_First_Programs/rustc_without_cargo/README.md), which is how you run anything in this library at all.
 

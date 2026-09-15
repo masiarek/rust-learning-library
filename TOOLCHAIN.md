@@ -52,9 +52,10 @@ Start wherever your question is; each page stands alone.
 | 17 | [RustRover setup](05_Tooling/rustrover_setup/README.md) | How do I wire the IDE to everything above? |
 | 18 | [RustRover Code Vision](05_Tooling/rustrover_code_vision/README.md) | What is the grey `1 usage` line above every declaration, and which toggle hides it? |
 | 19 | [Neovim with LazyVim](05_Tooling/neovim_setup/README.md) | …or the other window, and the two ways it silently does nothing |
-| 20 | [Scaffolding a practice tree](05_Tooling/scaffolding/README.md) | I keep writing the same seven config files — what should a script write, and what must it not? |
-| 21 | [Compile times](05_Tooling/compile_times/README.md) | Where do the seconds go, and which knob reaches them? |
-| 22 | [devenv](05_Tooling/devenv/README.md) | Should I declare the *whole* environment, and what does Nix cost? |
+| 20 | [Zed setup](05_Tooling/zed_setup/README.md) | …or Zed, where one key should save and run the file in front of me |
+| 21 | [Scaffolding a practice tree](05_Tooling/scaffolding/README.md) | I keep writing the same seven config files — what should a script write, and what must it not? |
+| 22 | [Compile times](05_Tooling/compile_times/README.md) | Where do the seconds go, and which knob reaches them? |
+| 23 | [devenv](05_Tooling/devenv/README.md) | Should I declare the *whole* environment, and what does Nix cost? |
 
 ## Or, by the problem you actually have
 
@@ -75,7 +76,8 @@ Start wherever your question is; each page stands alone.
 | "I make a lot of tiny projects and copy the same config" | [A tree of practice projects](05_Tooling/practice_workspace/README.md) |
 | "I want the compiler to just tell me, without me asking" | [bacon](05_Tooling/bacon/README.md) |
 | "I broke it an hour ago and cannot get back" | [Commit on green](05_Tooling/commit_on_green/README.md) |
-| "my editor shows no types and I cannot see why" | [Neovim with LazyVim](05_Tooling/neovim_setup/README.md) — two independent silent failures — or [Choosing an editor](05_Tooling/editors/README.md) for the shim trap |
+| "my editor shows no types and I cannot see why" | [Neovim with LazyVim](05_Tooling/neovim_setup/README.md) — two independent silent failures — or [Choosing an editor](05_Tooling/editors/README.md) for the shim trap — or, in Zed, [Zed setup](05_Tooling/zed_setup/README.md) for a folder with no `Cargo.toml` |
+| "my editor runs the code I had before my last edit" | [Zed setup](05_Tooling/zed_setup/README.md) — a task runs what is saved, and autosave comes too late for the run button |
 | "my tests are slow, or one of them takes the run down" | [cargo-nextest](05_Tooling/nextest/README.md) |
 | "which pin actually applies?" | [rustup](05_Tooling/rustup/README.md) — the five-rung precedence table |
 | "my editor is asking whether to allow MCP" | [What MCP is](05_Tooling/what_mcp_is/README.md) — what the two halves of `rustrover:read_file` are, and the difference between the two *Always allow* buttons |

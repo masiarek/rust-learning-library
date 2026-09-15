@@ -1,0 +1,10 @@
+[
+  {
+    "label": "save and run this Rust file",
+    "command": "bash \"$HOME/.config/zed/run-rust-file.sh\" \"$ZED_FILE\"",
+    "save": "all",
+    "reveal": "always",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false
+  }
+]

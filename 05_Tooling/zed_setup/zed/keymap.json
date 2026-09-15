@@ -1,0 +1,10 @@
+// Zed keymap. See https://zed.dev/docs/key-bindings
+[
+  {
+    // Only in a code editor, so ctrl-r in the terminal stays fish's history search.
+    "context": "Editor && mode == full",
+    "bindings": {
+      "ctrl-r": ["task::Spawn", { "task_name": "save and run this Rust file" }]
+    }
+  }
+]

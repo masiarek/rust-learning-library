@@ -1,0 +1,14 @@
+[
+  {
+    "label": "cargo run this src/bin file (saves first)",
+    "command": "cargo run --bin \"$ZED_STEM\"",
+    "cwd": "$ZED_WORKTREE_ROOT",
+    "save": "all",
+    "tags": [
+      "rust-main"
+    ],
+    "reveal": "always",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false
+  }
+]

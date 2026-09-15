@@ -840,6 +840,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "rustrover_setup",
         "rustrover_code_vision",
         "neovim_setup",
+        "zed_setup",
         # ...and the protocol that wires an agent into the window just
         # configured, which is also a small Rust program in its own right.
         "what_mcp_is",

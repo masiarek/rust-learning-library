@@ -176,7 +176,7 @@ A newer editor written in Rust by Zed Industries, GPU-accelerated, open source, 
 **Pros**
 
 - **Fast, and not in a marketing sense** — cold start and large-file scrolling are the things it was built for, and it shows.
-- **Nothing to configure to get Rust.** Open a Cargo project and the hints are on.
+- **Nothing to configure to get Rust.** Open a Cargo project and the hints are on. A loose file, or a folder of them, is another matter — [Zed setup](../zed_setup/README.md) has the three defaults in the way, and a key that saves and runs.
 - **A built-in debugger.** Its DAP support covers Rust binaries and tests out of the box.
 - **A single JSON settings file** you can read end to end, and version alongside your dotfiles.
 
