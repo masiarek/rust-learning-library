@@ -137,4 +137,20 @@ fn main() {
     println!("   Cow::Borrowed.to_owned()   -> {}", variant(&same));
     println!("   Cow::Borrowed.into_owned() -> {:?}, a String", borrowed.into_owned());
     println!("   to_owned clones the Cow. into_owned is what makes it owned.");
+
+    println!();
+    println!("9. A reference is Clone even when what it points at is not");
+    // `Ticket` is not Clone, so the blanket impl gives `Ticket` no `to_owned`.
+    // It does give `&Ticket` one — every shared reference is Copy, so Clone —
+    // with `Owned = &Ticket`, and the call copies the pointer. No lint fires on
+    // this line: `noop_method_call` covers clone, deref and borrow, not to_owned.
+    struct Ticket {
+        seat: u32,
+    }
+    let ticket = Ticket { seat: 12 };
+    let r = &ticket;
+    let copy = r.to_owned();
+    println!("   r.to_owned() is the same address as r: {}", std::ptr::eq(r, copy));
+    println!("   so `let t: Ticket = r.to_owned();` is E0308: expected `Ticket`, found `&Ticket`");
+    println!("   #[derive(Clone)] on Ticket is the fix, and no message says so. seat {}", copy.seat);
 }

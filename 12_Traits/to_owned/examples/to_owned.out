@@ -42,3 +42,8 @@
    Cow::Borrowed.to_owned()   -> Cow::Borrowed — STILL borrowed
    Cow::Borrowed.into_owned() -> "ballot", a String
    to_owned clones the Cow. into_owned is what makes it owned.
+
+9. A reference is Clone even when what it points at is not
+   r.to_owned() is the same address as r: true
+   so `let t: Ticket = r.to_owned();` is E0308: expected `Ticket`, found `&Ticket`
+   #[derive(Clone)] on Ticket is the fix, and no message says so. seat 12

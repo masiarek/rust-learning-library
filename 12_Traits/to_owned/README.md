@@ -98,6 +98,34 @@ A `Cow` is caught by the same mechanism and lands somewhere worse: `cow.to_owned
 
 Clippy has both cases, and how loudly it says so tracks how wrong the result is. The `Cow` one is [`suspicious_to_owned` ↗](https://rust-lang.github.io/rust-clippy/master/index.html#suspicious_to_owned), **warn-by-default** — *"this `to_owned` call clones the `Cow<'_, str>` itself and does not cause its contents to become owned"*, offering `into_owned()` or `clone()` depending on which you meant. The `Rc` one is [`implicit_clone` ↗](https://rust-lang.github.io/rust-clippy/master/index.html#implicit_clone), pedantic and therefore silent unless you asked for it — *"implicitly cloning a `Rc` by calling `to_owned` on its dereferenced type"*, suggesting `r.clone()`. The split is fair: on the `Cow` you did not get what the name implies, while on the `Rc` you got exactly the right value under a misleading spelling.
 
+### A reference is `Clone` even when its pointee is not
+
+The blanket impl reaches one more receiver, and this one fails without explaining itself:
+
+```rust
+struct Foo;
+
+fn main() {
+    let a = &Foo;
+    // let b: Foo = a.to_owned();   // E0308, below
+    let b = a.to_owned();           // compiles: b is a &Foo
+}
+```
+
+```text title="rustc 1.98.0 on e0308.rs — the snippet with line 5 uncommented and line 6 removed"
+error[E0308]: mismatched types
+ --> e0308.rs:5:18
+  |
+5 |     let b: Foo = a.to_owned();
+  |            ---   ^^^^^^^^^^^^ expected `Foo`, found `&Foo`
+  |            |
+  |            expected due to this
+```
+
+`Foo` is not `Clone`, so `impl<T: Clone> ToOwned for T` does not reach `Foo`. It does reach `&Foo`: every shared reference is `Copy`, therefore `Clone`, therefore `ToOwned` with `Owned = &Foo`. Lookup tries the receiver `&Foo` against `Foo`'s methods first, finds no `to_owned` there, then autorefs and finds the reference's own — the same fall-through as `.clone()` on a `&str` above, one trait further out. Leave the annotation off and nothing complains at all: section 9 of the run below calls `.to_owned()` on a reference to a non-`Clone` type and gets back the same address.
+
+`#[derive(Clone)]` on `Foo` is the whole fix, and nothing on 1.98.0 points you to it. The error names the mismatch, not the cause. The `noop_method_call` lint that catches `.clone()` on a `&str` covers exactly the three methods core tags for it — `clone`, `deref` and `borrow` — so `to_owned` is not one of them, and clippy with every lint group enabled is silent too. A lint for this was proposed in [rust-lang/rust#78187 ↗](https://github.com/rust-lang/rust/issues/78187) in October 2020 and is still open; its author's own follow-up names the obstacle — `a.method()` on a `&Foo` can mean a method of `Foo` or one of `&Foo`, and a warning that fires *because* a type lacks `Clone` could confuse more readers than the error does.
+
 ## Can you implement it yourself?
 
 Almost never, and the two refusals are worth meeting because between them they explain the shape of the whole trait.
@@ -128,7 +156,7 @@ Which is why every impl in the standard library is on an **unsized referent** ra
 
 What *does* compile is a `Sized` type that is not `Clone`, with `type Owned = Self` — the run below has one. The blanket `impl<T: ?Sized> Borrow<T> for T` satisfies the bound and nothing conflicts. It also buys nothing: it is `Clone` under a different name, and adding `#[derive(Clone)]` later turns it into the `E0119` above. If you want a `.to_owned()` method on your own type, write an inherent one and skip the trait.
 
-The genuinely blocked case is a validated wrapper — an "ASCII-only string" newtype you want to use with [`Cow`](../../18_Ownership/clone_on_write/README.md). Doing it properly needs a `#[repr(transparent)]` wrapper around `str` and an `unsafe` pointer cast in `borrow`, because `Borrow`/`ToOwned` predate GATs and there is no safe way to make a `&MyNewtype` out of a `&str`. That limitation is still open: an [`IntoOwned` pre-RFC ↗](https://internals.rust-lang.org/t/pre-rfc-intoowned-trait-that-harmonizes-cow-and-toowned/23609) from late 2025 is one attempt at harmonizing the pair, and had not converged on a signature that survives the existing blanket impls.
+The genuinely blocked case is a validated wrapper — an "ASCII-only string" newtype you want to use with [`Cow`](../../18_Ownership/clone_on_write/README.md). Doing it properly needs a `#[repr(transparent)]` wrapper around `str` and an `unsafe` pointer cast in `borrow` — built, checked and run on [Implementing `ToOwned` for your own type](../implementing_to_owned/README.md) — because `Borrow`/`ToOwned` predate GATs and there is no safe way to make a `&MyNewtype` out of a `&str`. That limitation is still open: an [`IntoOwned` pre-RFC ↗](https://internals.rust-lang.org/t/pre-rfc-intoowned-trait-that-harmonizes-cow-and-toowned/23609) from late 2025 is one attempt at harmonizing the pair, and had not converged on a signature that survives the existing blanket impls.
 
 ## The trap in generic code
 
@@ -198,6 +226,11 @@ let s: String = bar("hi");     // "hi"
    Cow::Borrowed.to_owned()   -> Cow::Borrowed — STILL borrowed
    Cow::Borrowed.into_owned() -> "ballot", a String
    to_owned clones the Cow. into_owned is what makes it owned.
+
+9. A reference is Clone even when what it points at is not
+   r.to_owned() is the same address as r: true
+   so `let t: Ticket = r.to_owned();` is E0308: expected `Ticket`, found `&Ticket`
+   #[derive(Clone)] on Ticket is the fix, and no message says so. seat 12
 ```
 <!-- /output -->
 
@@ -307,7 +340,9 @@ fn main() {
 
 ## See also
 
+- [How to learn `ToOwned`](../how_to_learn_to_owned/README.md) — if this page did not click: the five ideas underneath it, in order, with a checkpoint for each
 - [`clone_into`](../clone_into/README.md) — the other half of this trait: filling a buffer you already own, and what that is worth measured in allocations
+- [Implementing `ToOwned` for your own type](../implementing_to_owned/README.md) — the unsized wrapper this page says the trait needs, built and run
 - [Making a `String`](../../14_Strings/making_a_string/README.md) — the five spellings that produce a `String`, and which to prefer; this page is the trait *behind* one of them
 - [Concatenating strings](../../14_Strings/concatenating_strings/README.md) — where `s1.to_owned() + s2` comes from: `+` needs an owned left operand
 - [`String` vs `&str`](../../14_Strings/string_vs_str/README.md) — the owned/borrowed pair this trait converts between
@@ -330,10 +365,11 @@ Powód istnienia tej cechy (*trait*) mieści się w jednym zdaniu: `Clone` wymag
 
 Rada, którą znajdziesz w niemal każdym omówieniu — także w polskich wpisach, bo wszystkie są potomkami jednego wątku z 2015 roku — brzmi: „na literale używaj `to_owned()`, bo `to_string()` idzie przez `Display` i alokuje dwa razy”. **To przestało być prawdą w kwietniu 2016**, gdy `ToString` zostało wyspecjalizowane dla `str` (wydanie 1.9). Pomiary przytoczone wyżej kładą wszystkie zapisy w przedziale 56–61 ns, razem z `format!("literał")`. Przy okazji morał ogólniejszy, przydatny przy każdym benchmarku znalezionym w sieci: **sprawdź, czy autor mierzył z optymalizacją** — najczęściej linkowany pomiar tej kwestii ma w swoim własnym wydruku `target/debug`. Argument, który to przeżył, dotyczy czytelności, a nie szybkości: „skonwertuj łańcuch na łańcuch” niczego nie nazywa, a `to_owned()` nazywa to, co faktycznie się zmienia — właściciela.
 
-Zostają dwie pułapki, które zastawia implementacja zbiorcza `impl<T: Clone> ToOwned for T`:
+Zostają trzy pułapki, które zastawia implementacja zbiorcza `impl<T: Clone> ToOwned for T`:
 
 - Na `Rc` i `Arc` `.to_owned()` klonuje **wskaźnik**, a nie dane: licznik referencji rośnie, bufor zostaje ten sam. Prawdziwą kopię robi `(*shared).clone()`. Clippy widzi to jako `implicit_clone`, ale to lint pedantyczny, więc domyślnie milczy.
 - Na `Cow` `.to_owned()` zwraca kolejny `Cow` w **tym samym wariancie**, więc `Cow::Borrowed` po tej operacji nadal jest pożyczony. Metodą, która naprawdę przejmuje na własność, jest `into_owned()`. Tutaj Clippy ostrzega domyślnie (`suspicious_to_owned`) — i słusznie, bo to przypadek, w którym nazwa obiecuje coś, czego się nie dostaje.
+- Na referencji do typu, który **nie** jest `Clone`, `.to_owned()` zwraca **kopię referencji**: `&Foo` jest `Copy`, więc implementacja zbiorcza obejmuje `&Foo`, choć nie obejmuje `Foo`. Z adnotacją typu kończy się to błędem `E0308` (*expected `Foo`, found `&Foo`*), bez niej — ciszą. Naprawą jest `#[derive(Clone)]` na `Foo`, ale żaden komunikat o tym nie wspomina: lint `noop_method_call` obejmuje tylko `clone`, `deref` i `borrow`, a propozycja osobnego lintu (rust-lang/rust#78187) czeka od 2020 roku.
 
 Własnej implementacji `ToOwned` w praktyce się nie pisze: implementacja zbiorcza zajmuje już każdy typ, który jest `Clone` (próba kończy się na `E0119`), a wszystkie implementacje z biblioteki standardowej siedzą na typach **bez znanego rozmiaru** — `str`, `[T]`, `Path`, `OsStr`, `CStr` — bo dokładnie dla nich ta cecha powstała. I reguła nazewnicza na koniec, bo łatwo się o nią potknąć: przedrostek `to_` **nie** pochłania `self` (`to_owned(&self)` tylko pożycza), a `into_` — pochłania.
 
