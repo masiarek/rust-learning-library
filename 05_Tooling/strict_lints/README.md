@@ -119,6 +119,7 @@ That is the two groups without the panic policy — the "teach you Rust" half on
 ## See also
 
 - [Scaffolding a practice tree](../scaffolding/README.md) — the one lint decision that runs the other way: the four `unused` lints a throwaway tree turns off, and the one in that group it must not
+- [Automation: a training and a production lint profile](../../34_Templates/automation/README.md) — this panic set, minus `arithmetic_side_effects`, inside a training profile with the unused lints allowed, and `cargo prod` for everything else
 - [Formatting](../formatting/README.md) — the other half of "the tool decides, not the reviewer"
 - [`expect`](../../17_Option_and_Result/expect/README.md) — the position this configuration overrules, and why
 - [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md) — what the panic set is actually buying you

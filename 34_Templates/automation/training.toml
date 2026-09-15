@@ -1,0 +1,75 @@
+# Training lint profile. Append to Cargo.toml -- `lint_profiles.py apply` does it.
+#
+# Strict, and meant to teach: almost every lint below fires on a line that has a
+# better way to be written, and the message says what it is. The exceptions are
+# the four unused-binding lints, which are noise in a practice file, and the
+# three lints named at the bottom, left out on purpose.
+#
+# Where each half shows up: [lints.rust] in every `cargo run` and RustRover Run;
+# [lints.clippy] only in `cargo clippy`, or in RustRover once Settings > Rust >
+# External Linters is set to Clippy. A clippy `deny` never stops a program running.
+#
+# Production is `cargo prod` / `cargo prod-clippy` from production.toml: this
+# block, with the unused lints back on and every warning an error.
+#
+# `priority = -1` on a GROUP is load-bearing: the group applies first, so a
+# single lint below can override one of its members.
+
+[lints.rust]
+# Practice-file noise: a name bound only to show a form is not a mistake.
+unused_variables = "allow"
+unused_imports = "allow"
+unused_mut = "allow"
+dead_code = "allow"
+# ...but an ignored Result is a dropped error, not noise.
+unused_must_use = "deny"
+# An unsafe block is a lesson of its own: allow it there, with a reason.
+unsafe_code = "deny"
+# Formatter<'_>, not a lifetime hidden in a path; dyn Trait, not a bare trait.
+rust_2018_idioms = { level = "deny", priority = -1 }
+trivial_casts = "deny"
+trivial_numeric_casts = "deny"
+unused_qualifications = "deny"
+let_underscore_drop = "deny"
+unit_bindings = "deny"
+redundant_lifetimes = "deny"
+unused_lifetimes = "deny"
+
+[lints.clippy]
+# The two teaching groups: the idiom std expects, and the lints still in development.
+pedantic = { level = "deny", priority = -1 }
+nursery = { level = "deny", priority = -1 }
+# A suggestion whose fix changes nothing a program does: shown, not refused.
+missing_const_for_fn = "warn"
+# No panics. Each one points at the API that returns an Option or a Result instead.
+unwrap_used = "deny"
+expect_used = "deny"
+indexing_slicing = "deny"
+string_slice = "deny"
+panic = "deny"
+panic_in_result_fn = "deny"
+todo = "deny"
+unimplemented = "deny"
+unreachable = "deny"
+exit = "deny"
+# Say what a conversion does: From and TryFrom, not `as`.
+as_conversions = "deny"
+# 7 / 2 is 3. Write that on purpose, or reach for f64 or div_euclid.
+integer_division = "deny"
+lossy_float_literal = "deny"
+# One meaning per name per scope. `let line = line.trim();` is still fine.
+shadow_unrelated = "deny"
+# Name every variant, so adding one is a compile error rather than a silent `_`.
+wildcard_enum_match_arm = "deny"
+# Every #[allow] says why, and every unsafe block says why it is sound.
+allow_attributes_without_reason = "deny"
+undocumented_unsafe_blocks = "deny"
+map_err_ignore = "deny"
+clone_on_ref_ptr = "deny"
+rc_buffer = "deny"
+mem_forget = "deny"
+dbg_macro = "deny"
+# Left out on purpose -- each measured against the library's 627 lesson programs:
+#   min_ident_chars          fires in 512 of them; `i`, `x` and `n` are fine names
+#   arithmetic_side_effects  fires in 257; it rejects `n + 1` and changes how everything reads
+#   let_underscore_must_use  forbids `let _ =`, the fix rustc's own message suggests
