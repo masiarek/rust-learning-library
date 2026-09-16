@@ -23,7 +23,7 @@ Each surprise below is one missing idea, not a mystery about `ToOwned`. Start at
 
 ## The steps
 
-Each step names what to learn, a checkpoint, and the page that teaches it. **Predict the checkpoint before you look** — the answers are the verified output at the bottom, from a program CI runs. A wrong prediction means stay on that step: the next one assumes it.
+Each step names what to learn, a checkpoint, the page that teaches it, and the official documentation for the same idea. **Predict the checkpoint before you look** — the answers are the verified output at the bottom, from a program CI runs. A wrong prediction means stay on that step: the next one assumes it.
 
 ### 1. Some types have no size
 
@@ -33,6 +33,8 @@ Each step names what to learn, a checkpoint, and the page that teaches it. **Pre
 
 **Read:** [`str` is unsized](../../14_Strings/str_is_unsized/README.md)
 
+**Docs:** [`Sized` ↗](https://doc.rust-lang.org/std/marker/trait.Sized.html) · [Dynamically sized types ↗](https://doc.rust-lang.org/reference/dynamically-sized-types.html), in the Reference
+
 ### 2. Owned and borrowed are two different types
 
 `String` and `str`. `Vec<T>` and `[T]`. `PathBuf` and `Path`. The borrowed half is the type **behind** the `&`, not the `&` itself — which is how the owned twin of `str` gets to be a different type, `String`.
@@ -40,6 +42,8 @@ Each step names what to learn, a checkpoint, and the page that teaches it. **Pre
 **Checkpoint.** For `s: String` and `v: Vec<i32>`, what types are `*s` and `*v`?
 
 **Read:** [`String` vs `&str`](../../14_Strings/string_vs_str/README.md)
+
+**Docs:** [`str` ↗](https://doc.rust-lang.org/std/primitive.str.html) · [`String`'s methods from `Deref<Target = str>` ↗](https://doc.rust-lang.org/std/string/struct.String.html#deref-methods-str), the list that shows `*s` is a `str`
 
 ### 3. `Clone` hands back `Self` — and every `&T` is `Clone`
 
@@ -49,6 +53,8 @@ Each step names what to learn, a checkpoint, and the page that teaches it. **Pre
 
 **Read:** [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md), and its section on `&T` being `Copy`
 
+**Docs:** [`Clone` ↗](https://doc.rust-lang.org/std/clone/trait.Clone.html) · [the reference primitive ↗](https://doc.rust-lang.org/std/primitive.reference.html), whose *Trait implementations* section lists `Copy` and `Clone` for every `&T` and warns that `Clone` there does not defer to `T`'s
+
 ### 4. The dot takes the first receiver that fits
 
 `x.clone()` is a search: methods on `x`'s type first, then on `&x`, then dereference and repeat — and the first match wins. On a `&String`, `String::clone` fits first. On a `&str`, `str` has no `clone`, so the search falls through to the reference's own.
@@ -56,6 +62,8 @@ Each step names what to learn, a checkpoint, and the page that teaches it. **Pre
 **Checkpoint.** What types are `name.clone()` for `name: &str`, `r.clone()` for `r: &String`, and `Clone::clone(&r)`?
 
 **Read:** [Method resolution](../method_resolution/README.md)
+
+**Docs:** [Method call expressions ↗](https://doc.rust-lang.org/reference/expressions/method-call-expr.html), in the Reference: the candidate list, in order
 
 ### 5. One blanket impl covers every `Clone` type — references included
 
@@ -65,13 +73,17 @@ Each step names what to learn, a checkpoint, and the page that teaches it. **Pre
 
 **Read:** [Extension traits](../extension_traits/README.md) for one impl reaching every type that fits, then the [`ToOwned`](../to_owned/README.md) section on a reference being `Clone` when its pointee is not
 
+**Docs:** [`ToOwned`'s implementors ↗](https://doc.rust-lang.org/std/borrow/trait.ToOwned.html#implementors), where the blanket row is `impl<T> ToOwned for T where T: Clone` · [Generic implementations ↗](https://doc.rust-lang.org/reference/items/implementations.html#generic-implementations), in the Reference
+
 ### 6. `ToOwned` is `Clone` with a separate owned type
 
 Now the trait is small. `type Owned` is what lets `str`'s answer be `String`. For every `Clone` type it is the blanket impl from step 5; the impls std writes by hand are all on the unsized types from step 1.
 
 **Checkpoint.** What does each of `"hi"`, `[1_i32, 2][..]` and `Path::new("notes.txt")` turn into with `.to_owned()`?
 
-**Read:** [`ToOwned`](../to_owned/README.md), its first three sections
+**Read:** [`ToOwned`](../to_owned/README.md), its first three sections, then [Reading the `ToOwned` docs](../reading_the_to_owned_docs/README.md) — the std page block by block, every claim on it run
+
+**Docs:** [`ToOwned` ↗](https://doc.rust-lang.org/std/borrow/trait.ToOwned.html) · [Associated types ↗](https://doc.rust-lang.org/reference/items/associated-items.html#associated-types), in the Reference
 
 ### 7. The traps are steps 4 and 5 together
 
@@ -81,13 +93,17 @@ Now the trait is small. `type Owned` is what lets `str`'s answer be `String`. Fo
 
 **Read:** the [`ToOwned`](../to_owned/README.md) section on the trap the blanket impl sets, and [`Rc`: the clone that copies a pointer](../../18_Ownership/reference_counting/README.md)
 
+**Docs:** [`Rc` ↗](https://doc.rust-lang.org/std/rc/struct.Rc.html) · [`Cow::into_owned` ↗](https://doc.rust-lang.org/std/borrow/enum.Cow.html#method.into_owned), the method you wanted instead · [clippy's `suspicious_to_owned` ↗](https://rust-lang.github.io/rust-clippy/master/index.html#suspicious_to_owned)
+
 ### 8. `Borrow` is the way back
 
 `type Owned: Borrow<Self>` promises that an owned value can lend out its borrowed form — `String: Borrow<str>`. That is what lets `HashMap<String, _>::get` take a `&str`, and what lets a `Cow` hand you a `&str` from either arm.
 
 **Checkpoint.** Does `seats.get("Ada")` compile on a `HashMap<String, u32>`, and what does it return?
 
-**Read:** [`Cow`: borrow until somebody writes](../../18_Ownership/clone_on_write/README.md)
+**Read:** [`Borrow`: look up an owned key with a borrowed one](../borrow_trait/README.md), then [`Cow`: borrow until somebody writes](../../18_Ownership/clone_on_write/README.md)
+
+**Docs:** [`Borrow` ↗](https://doc.rust-lang.org/std/borrow/trait.Borrow.html), whose description is the `HashMap` case in full · [`HashMap::get` ↗](https://doc.rust-lang.org/std/collections/struct.HashMap.html#method.get)
 
 ### 9. `clone_into` refills instead of allocating
 
@@ -97,6 +113,8 @@ The provided method writes into an owned value you already have. It saves someth
 
 **Read:** [`clone_into`](../clone_into/README.md)
 
+**Docs:** [`ToOwned::clone_into` ↗](https://doc.rust-lang.org/std/borrow/trait.ToOwned.html#method.clone_into) · [`Clone::clone_from` ↗](https://doc.rust-lang.org/std/clone/trait.Clone.html#method.clone_from), the method it generalizes
+
 ### 10. Implementing it: on the referent, or not at all
 
 A type that is `Clone` cannot have an impl of its own (`E0119`). A struct holding references cannot be lent out of an owned struct, because `borrow` must return a `&`. The trait fits an unsized wrapper around one buffer; for everything else, write an inherent method.
@@ -104,6 +122,28 @@ A type that is `Clone` cannot have an impl of its own (`E0119`). A struct holdin
 **Checkpoint.** `NameRef<'a>` derives `Clone` and has an inherent `fn to_owned(&self) -> Name`. What do `view.to_owned()` and `ToOwned::to_owned(&view)` return?
 
 **Read:** [Implementing `ToOwned` for your own type](../implementing_to_owned/README.md)
+
+**Docs:** [`E0119` ↗](https://doc.rust-lang.org/error_codes/E0119.html) · [Trait implementation coherence ↗](https://doc.rust-lang.org/reference/items/implementations.html#trait-implementation-coherence) · [The transparent representation ↗](https://doc.rust-lang.org/reference/type-layout.html#the-transparent-representation), which the unsized wrapper relies on
+
+## Katas along the path
+
+The steps say what to understand; these make you write it. Each lives on the page its step reads, in the order the steps unlock them.
+
+| After step | Kata | On |
+|---|---|---|
+| 1 | [Measure both halves of a reference](../../14_Strings/str_is_unsized/README.md#practice) — `&str`, `&[i32]`, `&dyn Display` and `&i32`, and the `?Sized` that takes all four | [`str` is unsized](../../14_Strings/str_is_unsized/README.md) |
+| 2 | [One `&str` parameter, three callers](../../14_Strings/string_vs_str/README.md#practice) — then flip it to `String` and count what each call site pays | [`String` vs `&str`](../../14_Strings/string_vs_str/README.md) |
+| 3 | [One `E0382`, three fixes](../../16_Structs/copy_vs_clone/README.md#practice) — and what each costs the caller | [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) |
+| 5 | [Give every slice a `.middle()`](../extension_traits/README.md#practice) — one trait, two methods, and only one of them reachable through a dot | [Extension traits](../extension_traits/README.md) |
+| 6 | [Predict the owned twin before you run it](../to_owned/README.md#practice) — six receivers, and the two everybody gets wrong | [`ToOwned`](../to_owned/README.md) |
+| 7 | [Predict the count four times](../../18_Ownership/reference_counting/README.md#practice) — one roster shared by three tallies, and the edge that leaks | [`Rc`](../../18_Ownership/reference_counting/README.md) |
+| 7 | [Freeze a candidate column three ways](../../14_Strings/boxed_str/README.md#practice) — ending on the `.to_owned()` that clones a pointer instead of the text | [The third owned form](../../14_Strings/boxed_str/README.md) |
+| 8 | [One lookup for every kind of key](../borrow_trait/README.md#practice) — three maps searched by their borrowed forms, zero allocations counted | [`Borrow`](../borrow_trait/README.md) |
+| 8 | [Pay only when you have to](../../18_Ownership/clone_on_write/README.md#practice) — a `Cow` that copies only the rows it changes | [`Cow`](../../18_Ownership/clone_on_write/README.md) |
+| 9 | [Four loops that all look like reuse](../clone_into/README.md#practice) — predict the allocations, then count them | [`clone_into`](../clone_into/README.md) |
+| 10 | [A slice that promises its order](../implementing_to_owned/README.md#practice) — `Sorted<T>` with `Borrow`, `ToOwned` and a `Cow` | [Implementing `ToOwned`](../implementing_to_owned/README.md) |
+
+Step 4 has no kata of its own; step 5's exercises the same lookup order. The full sequence, with every other kata in the library, is [KATAS.md](../../KATAS.md).
 
 ## Four tests for anything else you read
 
@@ -176,6 +216,8 @@ Step 10. NameRef derives Clone and has an inherent to_owned. What comes back?
 - [How to learn lifetimes](../../18_Ownership/how_to_learn_lifetimes/README.md) — the same kind of page, for the other wall
 - [`ToOwned`](../to_owned/README.md) — the trait page steps 5 to 7 keep returning to
 - [Implementing `ToOwned` for your own type](../implementing_to_owned/README.md) — step 10 in full
+- [`Borrow`: look up an owned key with a borrowed one](../borrow_trait/README.md) — step 8 in full, and the promise nothing checks
+- [Reading the `ToOwned` docs](../reading_the_to_owned_docs/README.md) — the std page for the trait, block by block, with every claim on it run
 
 ## Po polsku
 
@@ -183,6 +225,6 @@ Jeśli `ToOwned` wciąż się „nie klei”, to prawie na pewno nie z powodu sa
 
 Najważniejsze są kroki 3–5 razem. Każda referencja współdzielona `&T` jest `Copy`, więc i `Clone`, więc — przez `impl<T: Clone> ToOwned for T` — ma `to_owned()`. Kiedy `Foo` nie jest `Clone`, `(&foo).to_owned()` nie znajduje niczego na `Foo` i spada na implementację dla `&Foo`: dostajesz **kopię wskaźnika**, a z adnotacją typu — `E0308` bez słowa o `Clone`. Na `&String` jest odwrotnie: `String::clone` pasuje pierwsze, więc dostajesz nowy `String`. Te same znaki, dwa wyniki, a rozstrzyga kolejność wyszukiwania.
 
-Każdy krok ma punkt kontrolny: najpierw przewidź wynik, potem porównaj go ze zweryfikowanym wydrukiem na dole strony. Błędna przepowiednia znaczy „zostań na tym kroku” — następny zakłada, że poprzedni już siedzi.
+Każdy krok ma punkt kontrolny: najpierw przewidź wynik, potem porównaj go ze zweryfikowanym wydrukiem na dole strony. Błędna przepowiednia znaczy „zostań na tym kroku” — następny zakłada, że poprzedni już siedzi. Przy każdym kroku jest też link do oficjalnej dokumentacji (**Docs**), a tabela *Katas along the path* podaje ćwiczenia w tej samej kolejności co kroki.
 
 **Szukaj po polsku:** typy bez znanego rozmiaru · implementacja zbiorcza · `rust to_owned vs clone` · `rust autoref method resolution` · `rust clone on reference returns reference`

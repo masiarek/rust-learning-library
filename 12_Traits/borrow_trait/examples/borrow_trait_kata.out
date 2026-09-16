@@ -1,0 +1,9 @@
+1. One function, three kinds of key
+   String  keys, &str  lookup: 3
+   PathBuf keys, &Path lookup: 7
+   Vec<u8> keys, &[u8] lookup: 12
+   a missing key:              0
+   heap allocations across the four calls: 0
+
+2. The call that does not compile
+   count_for(&by_name, b"Ada".as_slice()) is E0277: String is not Borrow<[u8]>

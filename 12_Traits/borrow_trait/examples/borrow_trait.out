@@ -1,0 +1,27 @@
+1. A String key, looked up with a &str
+   seats.get("Ada")                = Some(3)
+   seats.get(&String::from("Ada")) = Some(3)   (T: Borrow<T> covers the owned form too)
+   seats.get("ada")                = None   (str equality, so case counts)
+
+2. Every owned/borrowed pair works the same way
+   HashMap<PathBuf, _>.get(Path::new("notes.txt")) = Some(7)
+   HashSet<Vec<u8>>.contains(b"GET".as_slice())    = true
+   BTreeMap<Box<str>, _>.get("Ada")                = Some(3)
+   HashMap<&str, _>.get("Ada")                     = Some(3)   (&T: Borrow<T>)
+
+3. The promise: the borrowed form hashes like the owned one
+   hash(String "Ada") == hash(&str "Ada")   : true
+   hash(&str "Ada")   == hash(&[u8] b"Ada") : false
+   so String is AsRef<[u8]> ([65, 100, 97]) but not Borrow<[u8]>
+
+4. A key that breaks the promise compiles anyway
+   hash(CaseInsensitive("Ada")) == hash("Ada") : false
+   inserted "apple", "Banana", "cherry"
+   stock.get(&CaseInsensitive("BANANA")) = Some(2)
+   stock.get("cherry")                   = Some(3)
+   stock.get("Banana")                   = None   <- the exact key inserted
+   str orders "Banana" before "apple"; the map stored it after, and the search stopped at the first key.
+
+5. The trap: with Borrow in scope, .borrow() on an Rc<RefCell<_>>
+   (*scores).borrow()        sums to 6
+   RefCell::borrow(&scores)  sums to 6

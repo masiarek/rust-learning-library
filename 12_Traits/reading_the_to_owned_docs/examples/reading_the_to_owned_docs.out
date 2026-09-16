@@ -1,0 +1,27 @@
+1. The header: std::borrow, and no `use` line needed
+   "Ada".to_owned() = "Ada", with ToOwned never imported: it is in the prelude
+
+2. Required associated type: `type Owned: Borrow<Self>`
+   <str  as ToOwned>::Owned = alloc::string::String   <- a different type
+   <u8   as ToOwned>::Owned = u8                      <- the blanket impl: Self
+   <&str as ToOwned>::Owned = &str                    <- a reference is Clone, so also Self
+
+3. Required method: the page's own example, run
+   ss = "a", vv = [1, 2]
+
+4. Provided method: the page's own example, run
+   s = "hello", v = [1, 2]
+   an impl that wrote only to_owned: clone_into called to_owned 1 time, back.seat = 1
+
+5. Dyn compatibility: Borrow is, ToOwned is not
+   &dyn Borrow<str> lends "Ada"
+   &dyn Borrow<str> lends "Ben"
+   &dyn ToOwned<Owned = String> is E0038
+
+6. Implementors: each stable impl, called
+   str            "notes".to_owned()        -> alloc::string::String
+   [T] (T: Clone) [1, 2][..].to_owned()     -> alloc::vec::Vec<i32>
+   Path           Path::new(..).to_owned()  -> std::path::PathBuf
+   OsStr          OsStr::new(..).to_owned() -> std::ffi::os_str::OsString
+   CStr           c"notes".to_owned()       -> alloc::ffi::c_str::CString
+   T (T: Clone)   42_u8.to_owned()          -> u8
