@@ -171,7 +171,11 @@ NAV_ORDER: dict[str, list[str]] = {
         # five ideas under ToOwned, in the order they unlock.
         "how_to_learn_to_owned",
         "to_owned",
+        # ...the std docs page for it, read block by block...
+        "reading_the_to_owned_docs",
         "clone_into",
+        # ...the trait in `type Owned`'s bound, and the promise it makes...
+        "borrow_trait",
         # ...and writing one for a type of your own, which needs both above.
         "implementing_to_owned",
         # ...and the pair that stands between the program and every byte source
@@ -1125,6 +1129,8 @@ LABELS = {
     "to_owned": "`ToOwned`",
     "how_to_learn_to_owned": "How to learn `ToOwned`",
     "implementing_to_owned": "Implementing `ToOwned`",
+    "reading_the_to_owned_docs": "Reading the `ToOwned` docs",
+    "borrow_trait": "`Borrow`",
     # 14_Strings
     "string_vs_str": "`String` vs `&str`",
     "inside_a_split": "Inside a `Split`",

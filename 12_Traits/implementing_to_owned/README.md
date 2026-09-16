@@ -369,6 +369,7 @@ fn main() {
 - [`ToOwned`](../to_owned/README.md) — the trait, the blanket impl, and the two refusals this page starts from
 - [`clone_into`](../clone_into/README.md) — the provided method, which an impl like this one inherits as a plain `*target = self.to_owned()`
 - [`Cow`: borrow until somebody writes](../../18_Ownership/clone_on_write/README.md) — the type `ToOwned` exists to serve
+- [`Borrow`: look up an owned key with a borrowed one](../borrow_trait/README.md) — the promise `AsciiString: Borrow<AsciiStr>` has to keep, and a key that breaks it
 - [`str` is unsized](../../14_Strings/str_is_unsized/README.md) — why `AsciiStr` has no size and `&AsciiStr` is two words
 - [Method resolution](../method_resolution/README.md) — why the inherent `to_owned` wins at the call site
 - [What an invariant is](../../09_Advanced/what_an_invariant_is/README.md) — the one door, and a wrong value against undefined behaviour
