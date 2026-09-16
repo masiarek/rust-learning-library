@@ -446,6 +446,7 @@ fn main() {
 - [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) — `clone_from` is the method this page's pair generalizes
 - [A name is not a place](../../18_Ownership/a_name_is_not_a_place/README.md) — why rebinding a `mut` name does not reuse the buffer behind it
 - [When `String` is too slow](../../14_Strings/when_string_is_too_slow/README.md) — the other allocation-shaped answers, including not owning the data
+- [Step 9 of the `ToOwned` path](../how_to_learn_to_owned/clone_into_refills/README.md) — this page's idea as one checkpoint
 
 ## Sources
 

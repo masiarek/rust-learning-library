@@ -1,0 +1,16 @@
+Checkpoint. For s: String and v: Vec<i32>, what types are *s and *v?
+   *s : str
+   *v : [i32]
+
+Each owned type names its borrowed half as Deref::Target
+   String   -> str
+   Vec<i32> -> [i32]
+   PathBuf  -> std::path::Path
+
+Lending the borrowed half copies nothing: same bytes, shorter handle
+   &s as &str   = "Ada", same bytes as s: true
+   &v as &[i32] = [1, 2, 3], same bytes as v: true
+   &p as &Path  = "notes.txt"
+
+Going the other way has to build a new owner
+   bs.to_owned() = "Ada", same bytes as s: false

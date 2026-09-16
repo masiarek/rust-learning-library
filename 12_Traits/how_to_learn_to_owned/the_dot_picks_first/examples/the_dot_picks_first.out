@@ -1,0 +1,9 @@
+Checkpoint. What type does each clone return?
+   name.clone()      name: &str    -> &str
+   r.clone()         r: &String    -> alloc::string::String
+   Clone::clone(&r)                -> &alloc::string::String
+
+The same search, for to_owned
+   t.to_owned()      t: &str       -> alloc::string::String
+   m.to_owned()      m: &mut str   -> alloc::string::String
+   tt.to_owned()     tt: &&str     -> &str

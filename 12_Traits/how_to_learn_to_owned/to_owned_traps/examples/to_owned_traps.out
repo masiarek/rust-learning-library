@@ -1,0 +1,7 @@
+Checkpoint. Strong count after Rc::to_owned? Variant after Cow::to_owned?
+   Rc::strong_count = 2, same allocation: true
+   Cow::Borrowed(..).to_owned() -> Cow::Borrowed
+
+What was meant: name the inner type, or ask the Cow for its owned form
+   (*shared).to_owned() -> alloc::string::String, same bytes as the Rc's: false
+   cow.into_owned()     -> alloc::string::String "ballot"

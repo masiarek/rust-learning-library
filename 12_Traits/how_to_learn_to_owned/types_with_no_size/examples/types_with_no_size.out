@@ -1,0 +1,16 @@
+Checkpoint. Is a &str the same size as a &String?
+   &String : 1 word    an address
+   &str    : 2 words   an address and a length
+
+Every pointer to an unsized type carries the length beside the address
+   &[i32]   : 2 words
+   &Path    : 2 words
+   Box<str> : 2 words
+   &i32     : 1 word    (i32 is Sized: nothing to carry)
+
+The owned twin is Sized: a fixed-size handle to text on the heap
+   String   : 3 words   address, capacity, length
+   Vec<i32> : 3 words
+
+The length lives in the pointer, so two &str can share one start
+   "hello".len() = 5, "he".len() = 2, same first byte: true

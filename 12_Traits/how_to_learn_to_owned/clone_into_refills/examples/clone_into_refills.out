@@ -1,0 +1,11 @@
+Checkpoint. buf was made by String::with_capacity(64). Does clone_into change its capacity?
+   capacity unchanged: true, same buffer: true, buf = "reuse me"
+
+Into an empty String there is no room, so it allocates like to_owned would
+   capacity before: 0
+   capacity after holds the text: true
+
+A loop that refills one buffer, instead of making a String per row
+   Ada      same buffer: true
+   Grace    same buffer: true
+   Barbara  same buffer: true

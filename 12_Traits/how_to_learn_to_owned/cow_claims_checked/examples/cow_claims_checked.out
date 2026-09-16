@@ -1,0 +1,28 @@
+1. "to_mut() gives you a &mut str"
+   to_mut() returns &mut alloc::string::String: the Owned type, not B
+
+2. "calling replace or to_uppercase on a borrowed Cow clones it into Owned"
+   replace returned alloc::string::String, and the Cow is still Borrowed
+
+3. "as_ref() returns a Cow"
+   as_ref() returns &str
+
+4. "Owned means the data was cloned"
+   String.into() -> Owned, nothing cloned; &'static str.into() -> Borrowed
+
+5. "?Sized means B has to be unsized" / "Cow has a size cost"
+   Cow<i32> compiles: Borrowed 42
+   in words: Cow<str> 3, String 3, &str 2; Cow<i32> 2, &i32 1
+
+6. "+= on a Cow<str> appends without allocating"
+   before: Borrowed, after +=: Owned "jimb, Esq."
+
+7. "a capitalize that returns Cow only allocates when it has to"
+   ada     common: Owned    "Ada"     fixed: Owned    "Ada"
+   Ada     common: Owned    "Ada"     fixed: Borrowed "Ada"
+   élan    common: Borrowed "élan"    fixed: Owned    "Élan"
+           common: Borrowed ""        fixed: Borrowed ""
+
+8. Rc::make_mut is clone-on-write too: it copies only when the value is shared
+   shared: now separate allocations: true, "roster!" and "roster"
+   alone:  same allocation, nothing copied: true

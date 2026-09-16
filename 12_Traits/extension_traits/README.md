@@ -227,6 +227,7 @@ The give-away is the TYPE, not a warning:
 - [A score is not a number](../../16_Structs/newtype_score/README.md) — the other answer `E0116` suggests, for when you want to *restrict* a foreign type rather than extend it
 - [Phantom types](../phantom_types/README.md) — where the progress bar goes next: a second type parameter, so `with_delims()` exists only once there is a bar
 - [Traits: links and videos](../resources/README.md) — Will Crichton's Strange Loop talk, which live-codes the `.progress()` example this page borrows
+- [Step 6 of the `ToOwned` path](../how_to_learn_to_owned/the_blanket_to_owned/README.md) — `impl<T: Clone> ToOwned for T`, the blanket impl that reaches every reference
 
 ## Po polsku
 

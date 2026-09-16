@@ -1,0 +1,13 @@
+Clone: &T -> T, always the same type
+   s.clone()             &String -> alloc::string::String    new buffer: true
+   n.clone()             &i32    -> i32                      no heap to copy
+
+ToOwned: &B -> B::Owned, the same type or another one
+   literal.to_owned()    &str    -> alloc::string::String    new buffer: true
+   n.to_owned()          &i32    -> i32                      no heap to copy
+   rc.to_owned()         &Rc     -> Rc<String>, the same one text copied: false, strong count: 2
+
+From / Into: T -> U, and the T is gone afterwards
+   String::from(literal) &str    -> alloc::string::String    new buffer: true
+   Vec::from(text)       String  -> alloc::vec::Vec<u8>      new buffer: false
+   again.into()          String  -> alloc::rc::Rc<str>       new buffer: true   (the counts need room)

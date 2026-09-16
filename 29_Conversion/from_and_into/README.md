@@ -307,6 +307,7 @@ fn main() {
 - [`main` can return a `Result`](../../02_Errors/main_returns_result/README.md) — where `?` and its `From` conversion end up
 - [`ToOwned`](../../12_Traits/to_owned/README.md) — `Clone` for types whose owned twin is a different type, and the fourth conversion trait
 - [What a trait is](../../12_Traits/what_a_trait_is/README.md) — if the word *blanket impl* above was new
+- [`Clone`, `ToOwned` or `From`?](../../12_Traits/how_to_learn_to_owned/clone_to_owned_or_from/README.md) — the three traits side by side, and which ones touch the heap
 
 ## Sources
 

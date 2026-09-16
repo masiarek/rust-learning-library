@@ -294,6 +294,7 @@ fn main() {
 - [Marker traits](../../12_Traits/marker_traits/README.md) · [Static vs dynamic dispatch](../../12_Traits/static_vs_dynamic_dispatch/README.md) — `Sized` itself, and the other everyday unsized type
 - [Stack and heap](../../18_Ownership/stack_and_heap/README.md) — why a local needs a known size in the first place
 - [`Sized` ↗](https://doc.rust-lang.org/std/marker/trait.Sized.html) · [`?Sized` in the Book ↗](https://doc.rust-lang.org/book/ch20-04-advanced-types.html#dynamically-sized-types-and-the-sized-trait) · [Exotically sized types ↗](https://doc.rust-lang.org/nomicon/exotic-sizes.html)
+- [Step 2 of the `ToOwned` path](../../12_Traits/how_to_learn_to_owned/types_with_no_size/README.md) — why having no size is the reason `ToOwned` exists at all
 
 ## Po polsku
 

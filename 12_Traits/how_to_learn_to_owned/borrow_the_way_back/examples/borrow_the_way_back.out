@@ -1,0 +1,22 @@
+Checkpoint. Does seats.get("Ada") compile on a HashMap<String, u32>?
+   yes, because String: Borrow<str> -> Some(3)
+
+There and back: to_owned goes out, borrow comes home
+   "Ada"     -> String  -> &str   "Ada"
+   [3, 1]    -> Vec     -> &[i32] [3, 1]
+   notes.txt -> PathBuf -> &Path  "notes.txt"
+
+A Cow<str> lends a &str from either arm
+   Cow::Borrowed -> "ballot", Cow::Owned -> "ballot"
+
+std hands you a Cow when it may have to repair the text
+   CStr::to_string_lossy("thanksfish")  -> Cow::Borrowed, "thanksfish"
+   CStr::to_string_lossy(b"caf\xe9")    -> Cow::Owned, "caf�"
+   String::from_utf8_lossy(valid UTF-8) -> Cow::Borrowed, "café"
+
+The write: to_mut calls to_owned only while the Cow is still Borrowed
+   before to_mut: Cow::Borrowed, points at the literal: true
+   after to_mut:  Cow::Owned, new buffer: true, capacity == length: true
+   to_mut again:  Cow::Owned, same buffer, nothing copied: true
+   push('!'): no spare capacity, so the String had to reallocate: true
+   the literal is untouched: "Hello World", the Cow reads "Hello World!"

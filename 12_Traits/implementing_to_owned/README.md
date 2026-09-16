@@ -374,6 +374,7 @@ fn main() {
 - [Method resolution](../method_resolution/README.md) — why the inherent `to_owned` wins at the call site
 - [What an invariant is](../../09_Advanced/what_an_invariant_is/README.md) — the one door, and a wrong value against undefined behaviour
 - [What `unsafe` turns off](../../09_Advanced/what_unsafe_turns_off/README.md) — what the block around the cast switches off, and what it leaves on
+- [Step 10 of the `ToOwned` path](../how_to_learn_to_owned/implementing_it_or_not/README.md) — `E0119`, the view struct `Borrow` cannot serve, and the inherent method
 
 ## Sources
 

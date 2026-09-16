@@ -403,6 +403,7 @@ The rule to carry away:
 - [`Rc`: the clone that copies a pointer](../../18_Ownership/reference_counting/README.md) — the clone that duplicates a pointer and a count, not the data; and [`Arc`](../../18_Ownership/sharing_across_threads/README.md) for the same thing across threads
 - [`Cow`: borrow until somebody writes](../../18_Ownership/clone_on_write/README.md) — the clone deferred until a write actually needs one
 - [The `move` keyword](../../23_Closures/the_move_keyword/README.md) — the `move` closure that copies instead of moving, because what it captured was `Copy`: it compiles, runs, and changes nothing outside itself
+- [Step 4 of the `ToOwned` path](../../12_Traits/how_to_learn_to_owned/clone_returns_self/README.md) — `Clone` returning `Self`, and every `&T` being `Clone`, as the ground `ToOwned` stands on
 
 ## Sources
 

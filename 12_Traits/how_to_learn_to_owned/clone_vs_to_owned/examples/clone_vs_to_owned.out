@@ -1,0 +1,21 @@
+Clone: the copy is the type you started with
+   Clone::clone(&name)   name: String   -> alloc::string::String
+   Clone::clone(&votes)  votes: Vec<i32> -> alloc::vec::Vec<i32>
+
+Checkpoint. What does each .to_owned() turn into?
+   "hi".to_owned()                   -> alloc::string::String
+   [1_i32, 2][..].to_owned()         -> alloc::vec::Vec<i32>
+   Path::new("notes.txt").to_owned() -> std::path::PathBuf
+
+Which type carries the impl: the one behind the &
+   <str as ToOwned>::Owned   = alloc::string::String
+   <[i32] as ToOwned>::Owned = alloc::vec::Vec<i32>
+   <Path as ToOwned>::Owned  = std::path::PathBuf
+   <OsStr as ToOwned>::Owned = std::ffi::os_str::OsString
+   <CStr as ToOwned>::Owned  = alloc::ffi::c_str::CString
+   <&str as ToOwned>::Owned  = &str   (the reference has an impl too)
+
+So one &str gives two answers, depending on which Self the call lands on
+   <str as ToOwned>::to_owned(s)   Self = str  -> alloc::string::String
+   s.to_owned()                    Self = str  -> alloc::string::String
+   ToOwned::to_owned(&s)           Self = &str -> &str

@@ -1,0 +1,8 @@
+Clone::clone takes &Self and gives back Self
+   Clone::clone(&s)  s: String -> alloc::string::String, new buffer: true
+
+Checkpoint. Ticket is not Clone. After `let b = a;` is `a` still usable?
+   yes: a.seat = 12, b.seat = 12   (&Ticket is Copy, so `let b = a` copied it)
+
+And Clone on the reference hands back the reference
+   Clone::clone(&a)  a: &Ticket -> &Ticket, same address as a: true

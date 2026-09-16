@@ -1,0 +1,6 @@
+Checkpoint. NameRef derives Clone and has an inherent to_owned. What comes back?
+   view.to_owned()          -> Name    { first: "Ada" }   the inherent method
+   ToOwned::to_owned(&view) -> NameRef { first: "Ada" }   the blanket impl
+
+Only the inherent method's result outlives the text it was made from
+   kept.first = "Grace", its own buffer

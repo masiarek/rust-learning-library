@@ -457,6 +457,7 @@ rustc --edition 2024 14_Strings/string_vs_str/examples/string_vs_str.rs -o /tmp/
 - [100 Exercises — String slices ↗](https://rust-exercises.com/100-exercises/04_traits/06_str_slice) — the same distinction drawn rather than described: three memory diagrams, `String` then `&String` then `&str`, with a test to make pass at the end
 - [The Rust Book, ch. 4.1 — The `String` Type ↗](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#the-string-type) · [ch. 8.2 — Storing UTF-8 Encoded Text ↗](https://doc.rust-lang.org/book/ch08-02-strings.html)
 - [Easy Rust, ch. 14 — Strings ↗](https://dhghomon.github.io/easy_rust/Chapter_14.html) — the gentlest second telling
+- [Step 3 of the `ToOwned` path](../../12_Traits/how_to_learn_to_owned/owned_and_borrowed_types/README.md) — the owned/borrowed pair as the thing `type Owned` names
 
 ## Po polsku
 
