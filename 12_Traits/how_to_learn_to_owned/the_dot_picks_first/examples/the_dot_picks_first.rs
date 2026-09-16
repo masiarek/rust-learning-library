@@ -36,4 +36,20 @@ fn main() {
     println!("   m.to_owned()      m: &mut str   -> {}", type_name_of_val(&m.to_owned()));
     let tt: &&str = &t;
     println!("   tt.to_owned()     tt: &&str     -> {}", type_name_of_val(&tt.to_owned()));
+
+    println!();
+    println!("Where the search goes past the first entry, and where it does not");
+    let data = String::from("data");
+    let r1: &String = &data;
+    let r2: &&String = &r1;
+    // rustc warns on this one too (`suspicious_double_ref_op`): it copies the
+    // inner reference, not the String. Silenced for the same reason as above.
+    #[allow(suspicious_double_ref_op)]
+    let inner = r2.clone();
+    println!("   r2.clone()        r2: &&String    -> {}   the inner reference, copied", type_name_of_val(&inner));
+    println!("   Clone::clone(*r2)                 -> {}", type_name_of_val(&Clone::clone(*r2)));
+    let mut scratch = String::from("data");
+    let mu: &mut String = &mut scratch;
+    println!("   mu.clone()        mu: &mut String -> {}   &mut is not Clone: deref, then &", type_name_of_val(&mu.clone()));
+    println!("   r2.capacity()     r2: &&String    -> {}           capacity takes &String: one deref", type_name_of_val(&r2.capacity()));
 }

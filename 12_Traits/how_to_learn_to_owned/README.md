@@ -14,21 +14,22 @@ Each surprise below is one missing idea, not a mystery about `ToOwned`. Start at
 
 | If this surprised you | Start at step |
 |---|---|
-| `ToOwned` exists at all, when `Clone` already does | [1](clone_vs_to_owned/README.md) |
-| `"hi".to_owned()` is a `String`, but `ToOwned::to_owned(&s)` on a `&str` is a `&str` | [1](clone_vs_to_owned/README.md) |
+| `ToOwned` exists at all, when `Clone` already does | [1](clone_vs_to_owned/README.md#two-signatures) |
+| `"hi".to_owned()` is a `String`, but `ToOwned::to_owned(&s)` on a `&str` is a `&str` | [1](clone_vs_to_owned/README.md#the-impl-is-on-the-type-behind-the) |
 | `size_of::<&str>()` is not the size of a pointer | [2](types_with_no_size/README.md) |
 | `name.clone()` on a `&str` gave back a `&str` | [4](clone_returns_self/README.md) |
-| `r.clone()` on a `&String` gave a `String`, not a reference | [5](the_dot_picks_first/README.md) |
+| `r.clone()` on a `&String` gave a `String`, not a reference | [5](the_dot_picks_first/README.md#walk-it-for-clone) |
+| `.clone()` on a `&&String` gave a `&String`, but on a `&mut String` a `String` | [5](the_dot_picks_first/README.md#where-clone-goes-further-and-where-it-never-does) |
 | someone said `.to_owned()` on a `&str` works "by autoderef" | [5](the_dot_picks_first/README.md) |
 | `Clone::clone(&r)` gave a `&String`, but `Clone::clone(r)` and `r.clone()` gave a `String` | [5](the_dot_picks_first/README.md#name-the-trait-and-the-you-pass-decides) |
 | `a.to_owned()` on a `&Foo` gave a `&Foo`, or `E0308` said *expected `Foo`, found `&Foo`* | [6](the_blanket_to_owned/README.md) |
 | `42_i32.to_owned()` compiles, and is `42` | [6](the_blanket_to_owned/README.md) |
-| `.to_owned()` on an `Rc` did not copy the string | [7](to_owned_traps/README.md) |
-| `.to_owned()` on a `Cow::Borrowed` is still borrowed | [7](to_owned_traps/README.md) |
+| `.to_owned()` on an `Rc` did not copy the string | [7](to_owned_traps/README.md#rc-the-outer-type-is-the-first-candidate) |
+| `.to_owned()` on a `Cow::Borrowed` is still borrowed | [7](to_owned_traps/README.md#cow-to_owned-is-not-into_owned) |
 | `HashMap<String, _>::get` accepts a `&str` | [8](borrow_the_way_back/README.md) |
 | a `Cow` diagram showed `to_mut()` and `push` as one step | [8](borrow_the_way_back/README.md) |
 | an article said `Cow` has `into_borrowed`, or that `to_mut()` gives a `&mut str` | [the `Cow` claims, run](cow_claims_checked/README.md) |
-| `clone_into` into a new `String` saved nothing | [9](clone_into_refills/README.md) |
+| `clone_into` into a `String::new()` saved nothing, but into an empty `String::with_capacity(64)` it did | [9](clone_into_refills/README.md) |
 | `impl ToOwned for MyType` is `E0119` | [10](implementing_it_or_not/README.md) |
 | you cannot write `Borrow` for your view struct | [10](implementing_it_or_not/README.md) |
 | you are not sure whether to write `clone`, `to_owned`, `to_string` or `into` | [after the steps](clone_to_owned_or_from/README.md) |
@@ -79,6 +80,7 @@ The steps say what to understand; these make you write it. Each lives on the pag
 
 | After step | Kata | On |
 |---|---|---|
+| 1 | [Write the function that hands back the owned twin](clone_vs_to_owned/README.md#practice) — one generic line, six arguments, and the `?Sized` that lets `str` in | [Step 1](clone_vs_to_owned/README.md) |
 | 2 | [Measure both halves of a reference](../../14_Strings/str_is_unsized/README.md#practice) — `&str`, `&[i32]`, `&dyn Display` and `&i32`, and the `?Sized` that takes all four | [`str` is unsized](../../14_Strings/str_is_unsized/README.md) |
 | 3 | [One `&str` parameter, three callers](../../14_Strings/string_vs_str/README.md#practice) — then flip it to `String` and count what each call site pays | [`String` vs `&str`](../../14_Strings/string_vs_str/README.md) |
 | 4 | [One `E0382`, three fixes](../../16_Structs/copy_vs_clone/README.md#practice) — and what each costs the caller | [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) |
@@ -91,25 +93,25 @@ The steps say what to understand; these make you write it. Each lives on the pag
 | 9 | [Four loops that all look like reuse](../clone_into/README.md#practice) — predict the allocations, then count them | [`clone_into`](../clone_into/README.md) |
 | 10 | [A slice that promises its order](../implementing_to_owned/README.md#practice) — `Sorted<T>` with `Borrow`, `ToOwned` and a `Cow` | [Implementing `ToOwned`](../implementing_to_owned/README.md) |
 
-Steps 1 and 5 have no kata of their own: step 1's checkpoint is the exercise, and step 6's katas exercise the same lookup order as step 5. The full sequence, with every other kata in the library, is [KATAS.md](../../KATAS.md).
+Step 5 has no kata of its own; step 6's katas exercise the same lookup order. The full sequence, with every other kata in the library, is [KATAS.md](../../KATAS.md).
 
 ## Tests for anything else you read
 
 Most explanations of `ToOwned` get the trait right and one step underneath it wrong. The tell for each:
 
-- **"`&str` implements `ToOwned` to produce a `String`."** `str` does. `&str`'s own impl, from the blanket, produces a `&str` — [step 1](clone_vs_to_owned/README.md).
-- **"`.to_owned()` works on a `&str` through autoderef."** No dereference happens: `str`'s `to_owned(&self)` already takes a `&str`. Had one been needed, the call would have returned a `&str` — [step 5](the_dot_picks_first/README.md).
+- **"`&str` implements `ToOwned` to produce a `String`."** `str` does, with a hand-written impl. There is no hand-written `impl ToOwned for &str`: the blanket `impl<T: Clone> ToOwned for T` covers `&str` because `&str` is `Clone`, and that impl produces a `&str` — [step 1](clone_vs_to_owned/README.md#the-impl-is-on-the-type-behind-the).
+- **"`.to_owned()` works on a `&str` through autoderef"** — or through autoref. Neither happens: `str`'s `to_owned(&self)` already takes a `&str`, so the receiver is passed as it is. Had a `&` been added or removed, the call would have returned a `&str` — [step 5](the_dot_picks_first/README.md#walk-it-for-to_owned-and-see-where-a-deref-happens).
 - **"On a reference, `clone()` just copies the pointer."** True only when the pointee is not `Clone` — [step 5](the_dot_picks_first/README.md). On a `&String` it allocates a new `String`.
 - **"`ToOwned` almost always allocates on the heap."** `42_i32.to_owned()` touches no heap, and `.to_owned()` on an `Rc` bumps a count. It allocates when the impl it lands on does — [step 7](to_owned_traps/README.md) and [after the steps](clone_to_owned_or_from/README.md).
-- **"After `to_mut()`, writing to a `Cow` never copies."** `to_mut()` copies at most once, but the fresh `String` has no spare capacity, so the first `push` reallocates — [step 8](borrow_the_way_back/README.md).
+- **"After `to_mut()`, writing to a `Cow` never allocates."** The clone happens at most once, on the first `to_mut()`. Growth is a separate cost: the fresh `String` has no spare capacity, so the first `push` reallocates, as it would for any `String` — [step 8](borrow_the_way_back/README.md#checkpoint).
 - **"To implement `ToOwned` for your struct, write `type Owned = Self`."** It compiles only while the struct is not `Clone`, is `Clone` under another name, and becomes `E0119` the day someone adds `#[derive(Clone)]` — [step 10](implementing_it_or_not/README.md).
-- **"`clone_into` is another way to get owned data."** It is the way to *refill* owned data; into an empty `String` it saves nothing — [step 9](clone_into_refills/README.md).
+- **"`clone_into` is another way to get owned data."** It is the way to *refill* owned data. Into a `String` with no capacity it saves nothing; into one with enough capacity it reuses the buffer, even at length zero — [step 9](clone_into_refills/README.md).
 - **"Prefer `to_owned()` to `to_string()`, because it is faster."** Not since Rust 1.9; the [`ToOwned`](../to_owned/README.md#for-everything-else-they-are-the-same-call) page has the measurements. The argument that survives is that `to_owned` names what changes — the owner.
 
 ## If you are coming from another language
 
-- **C++** — steps 2 and 3 are `std::string` and `std::string_view`, except that Rust also names the thing the view points at. Step 4 is a copy constructor you have to call by name. Steps 5 and 6 are where C++ intuition misleads: copying `*p` and copying `p` are spelled differently there, while in Rust `r.clone()` can mean either, and lookup decides.
-- **Python** — none of this exists, because every name is already a shared reference and `copy.copy` is the one duplicate. Step 4 is the nearest thing to new: in Rust, being copyable is a trait a type may decline to implement.
+- **C++** — steps 2 and 3 are `std::string` and `std::string_view`, except that Rust also names the thing the view points at. Step 4 is a copy constructor you have to call by name. Steps 5 and 6 are where C++ intuition misleads, and not because of spelling: in C++, copying the pointer (`auto q = p;`) and copying the pointee (`auto s = *p;`) look different, while Rust's `r.clone()` is one spelling that the method search resolves to either, with nothing at the call site to say which.
+- **Python** — the trap has a Python twin. `b = a` gives the same list a second name, while `b = a[:]` or `copy.copy(a)` gives a new list, and the spelling tells you which you got. Rust's `r.clone()` can be either, with the same spelling: on a `&String` it is `a[:]`, a new `String`; on a `&str` it is `b = a`, the same text under a second reference ([step 5](the_dot_picks_first/README.md#walk-it-for-clone)). What has no Python twin is [step 4](clone_returns_self/README.md): being copyable at all is a trait a type may decline to implement.
 
 ## See also
 

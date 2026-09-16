@@ -1,0 +1,10 @@
+One function, six arguments: the type of the argument picks B
+   owner(text)                 B = str   -> alloc::string::String
+   owner(&text)                B = &str  -> &str
+   owner(&[1, 2][..])          B = [i32] -> alloc::vec::Vec<i32>
+   owner(Path::new("a.txt"))   B = Path  -> std::path::PathBuf
+   owner(OsStr::new("a.txt"))  B = OsStr -> std::ffi::os_str::OsString
+   owner(&7)                   B = i32   -> i32
+
+The one that surprises: an extra & changes B, and so the answer
+   owner(&text) is the same &str, same address: true

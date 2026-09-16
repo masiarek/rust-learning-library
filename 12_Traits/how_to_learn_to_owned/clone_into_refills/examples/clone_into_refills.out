@@ -5,6 +5,13 @@ Into an empty String there is no room, so it allocates like to_owned would
    capacity before: 0
    capacity after holds the text: true
 
+Length zero is not the test; capacity is
+   with_capacity(4), 8 bytes in: capacity had to grow: true
+
+Every Clone type gets the reuse too: the blanket impl forwards to clone_from
+   String::clone_into  -> same buffer: true
+   Vec<i32>::clone_into -> same buffer: true, [3, 1, 2]
+
 A loop that refills one buffer, instead of making a String per row
    Ada      same buffer: true
    Grace    same buffer: true

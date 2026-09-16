@@ -22,6 +22,26 @@ fn main() {
     println!("   capacity after holds the text: {}", empty.capacity() >= "reuse me".len());
 
     println!();
+    println!("Length zero is not the test; capacity is");
+    let mut small = String::with_capacity(4);
+    let small_capacity = small.capacity();
+    "reuse me".clone_into(&mut small);
+    println!("   with_capacity(4), 8 bytes in: capacity had to grow: {}", small.capacity() > small_capacity);
+
+    println!();
+    println!("Every Clone type gets the reuse too: the blanket impl forwards to clone_from");
+    let source = String::from("reuse me");
+    let mut owned_buf = String::with_capacity(64);
+    let owned_start = owned_buf.as_ptr();
+    source.clone_into(&mut owned_buf);
+    println!("   String::clone_into  -> same buffer: {}", owned_buf.as_ptr() == owned_start);
+    let votes = vec![3, 1, 2];
+    let mut vote_buf: Vec<i32> = Vec::with_capacity(16);
+    let vote_start = vote_buf.as_ptr();
+    votes.clone_into(&mut vote_buf);
+    println!("   Vec<i32>::clone_into -> same buffer: {}, {vote_buf:?}", vote_buf.as_ptr() == vote_start);
+
+    println!();
     println!("A loop that refills one buffer, instead of making a String per row");
     let rows = ["Ada", "Grace", "Barbara"];
     let mut line = String::with_capacity(16);

@@ -47,6 +47,12 @@ where
 - **`ToOwned` does not promise a heap.** `Owned` is a `String` for `B = str`, but for a sized `Clone` type it is the type itself. The heap comes from `String`, not from the trait.
 - **Nor does a `Cow` have a separate tag field.** `Cow<str>` is three words, the size of a `String`: [the tag is free](../../../18_Ownership/clone_on_write/README.md#the-tag-is-free).
 
+## Why `Borrow`, and not `AsRef`
+
+Mechanically, a `Cow` only needs *some* way to turn a `&String` into a `&str`, and `AsRef<str>` would do that. What rules `AsRef` out is the blanket impl from [step 6](../the_blanket_to_owned/README.md). It sets `type Owned = T` for every `Clone` type, so the bound has to hold for `T: Borrow<T>` — every type lending itself. `Borrow` has exactly that impl, `impl<T: ?Sized> Borrow<T> for T`. `AsRef` does not, and its docs say why: a reflexive impl would overlap with the one that lets `AsRef` see through references. So `i32: AsRef<i32>` is `E0277` (rustc 1.98.0), and with `type Owned: AsRef<Self>` the blanket impl could not exist.
+
+The `Hash`/`Eq`/`Ord` agreement that `Borrow` documents is a different matter. The compiler checks none of it, and `ToOwned` and `Cow` work without it. `HashMap` and `BTreeMap` are what depend on it, which is where [the `Borrow` page breaks it on purpose](../../borrow_trait/README.md#the-trap-an-impl-that-breaks-the-promise-compiles).
+
 ## Checkpoint
 
 **Predict before you open the answer.** Does `seats.get("Ada")` compile on a `HashMap<String, u32>`, and what does it return? Then: after `to_mut()` on a `Cow::Borrowed("Hello World")`, is the buffer new — and does a second `to_mut()` copy again?
@@ -85,7 +91,7 @@ The write: to_mut calls to_owned only while the Cow is still Borrowed
 
 </details>
 
-The `push('!')` line is the one a diagram usually gets wrong. `to_mut()` copied nothing the second time, but a freshly owned `String` has no spare capacity, so the first write that grows it reallocates — which may move it.
+The `push('!')` line is the one a diagram usually gets wrong, and it is not a second clone. Clone-on-write clones **at most once**: the first `to_mut()` on a `Borrowed` `Cow`, and the second `to_mut()` copied nothing. Growing is a different cost with a different cause. A `String` fresh from `to_owned` has no spare capacity, so the first `push` must reallocate — which may move the bytes — exactly as it would for any `String`, `Cow` or no `Cow`.
 
 ## What this step sets up
 

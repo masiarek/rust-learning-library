@@ -14,3 +14,9 @@ The same search, for to_owned
    t.to_owned()      t: &str       -> alloc::string::String
    m.to_owned()      m: &mut str   -> alloc::string::String
    tt.to_owned()     tt: &&str     -> &str
+
+Where the search goes past the first entry, and where it does not
+   r2.clone()        r2: &&String    -> &alloc::string::String   the inner reference, copied
+   Clone::clone(*r2)                 -> alloc::string::String
+   mu.clone()        mu: &mut String -> alloc::string::String   &mut is not Clone: deref, then &
+   r2.capacity()     r2: &&String    -> usize           capacity takes &String: one deref

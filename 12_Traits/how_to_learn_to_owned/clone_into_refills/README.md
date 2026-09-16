@@ -13,14 +13,20 @@ fn to_owned(&self) -> Self::Owned;                      // a new owner, every ca
 fn clone_into(&self, target: &mut Self::Owned) { ... }  // reuse the one you have
 ```
 
-The provided body is `*target = self.to_owned();` — it builds a new owner and drops the old one, so by itself it saves nothing. The saving comes from impls that override it: `str` and `[T]` copy into the target's existing buffer, and only grow it when the new contents do not fit.
+The provided body is `*target = self.to_owned();` — it builds a new owner and drops the old one, so by itself it saves nothing. The saving comes from the impls that override it, and there are three:
+
+- `str` and `[T]`, which copy into the target's existing buffer and only grow it when the new contents do not fit;
+- **the blanket impl from [step 6](../the_blanket_to_owned/README.md)**, which overrides it with `target.clone_from(self)`. So every `Clone` type gets whatever its `clone_from` does — and `String`'s and `Vec`'s reuse the buffer.
+
+That is also why a `String` can have an efficient `clone_into` without an `impl ToOwned for String` of its own, which would be `E0119`: the efficient part lives in `impl Clone for String`, and the blanket impl calls it.
 
 It is the `ToOwned` twin of `Clone::clone_from` from [step 4](../clone_returns_self/README.md), and it exists for the same reason: in a loop, the allocation is the expensive part, and the buffer from the last iteration is already sitting there.
 
 ## When it pays, and when it does not
 
 - **A buffer with room** — same address, same capacity, no allocation. The checkpoint.
-- **An empty `String`** — capacity 0, so the first call allocates, exactly like `to_owned`.
+- **A `String` with no capacity** — `String::new()`, so the first call allocates, exactly like `to_owned`. *Empty* is not the test: the checkpoint's buffer has length 0 and still reuses, because it has capacity.
+- **A buffer that is too small** — `with_capacity(4)` receiving eight bytes has to grow, which is an allocation.
 - **A loop over rows** — one buffer for all of them, as long as it is big enough for the longest.
 - **A target you are about to move away** — nothing is left to reuse next time; [the `clone_into` page](../../clone_into/README.md#three-ways-it-does-not-pay) counts this and two more.
 
@@ -41,6 +47,13 @@ Checkpoint. buf was made by String::with_capacity(64). Does clone_into change it
 Into an empty String there is no room, so it allocates like to_owned would
    capacity before: 0
    capacity after holds the text: true
+
+Length zero is not the test; capacity is
+   with_capacity(4), 8 bytes in: capacity had to grow: true
+
+Every Clone type gets the reuse too: the blanket impl forwards to clone_from
+   String::clone_into  -> same buffer: true
+   Vec<i32>::clone_into -> same buffer: true, [3, 1, 2]
 
 A loop that refills one buffer, instead of making a String per row
    Ada      same buffer: true

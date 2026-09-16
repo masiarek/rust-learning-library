@@ -17,11 +17,17 @@ The `String` inside is never considered, because the search stopped a rung above
 
 **What was meant** is a call whose first candidate is the `String`: `(*shared).to_owned()`, `String::clone(&shared)`, or `shared.as_str().to_owned()`.
 
+The reverse habit exists for the same reason. When you *do* want the pointer, the `std::rc` docs recommend writing `Rc::clone(&shared)` rather than `shared.clone()`: both compile to the same call, but only the first tells a reader, at the call site, that no text is being copied.
+
 ## `Cow`: `.to_owned()` is not `.into_owned()`
 
 `Cow<'_, str>` is `Clone` too. So `cow.to_owned()` clones the `Cow` — a `Borrowed` stays `Borrowed`, still tied to the original borrow's lifetime, and nothing about it is more owned than before.
 
 **What was meant** is `cow.into_owned()`, which returns the `String`: allocating if the `Cow` was `Borrowed`, and just unwrapping it if it was already `Owned`. Clippy's `suspicious_to_owned` exists for this one call.
+
+## Why `Cow` is `Clone` at all
+
+Taking `Clone` away from `Cow` would remove this trap, and a great deal more with it. A struct that holds a `Cow` — a token borrowing from its source line, a config value, a parsed record — can only `#[derive(Clone)]` if every field is `Clone`. And cloning a `Cow` does the right thing for a value: a `Borrowed` one copies the reference, an `Owned` one copies the text. The checkpoint's last lines run both. The trap is not `Cow`'s `Clone` but the blanket impl turning it into a `to_owned`, which is why the fix is a lint, not a missing impl.
 
 ## The shape to recognise
 
@@ -45,6 +51,10 @@ Checkpoint. Strong count after Rc::to_owned? Variant after Cow::to_owned?
 What was meant: name the inner type, or ask the Cow for its owned form
    (*shared).to_owned() -> alloc::string::String, same bytes as the Rc's: false
    cow.into_owned()     -> alloc::string::String "ballot"
+
+Why Cow is Clone at all: so that what holds one can derive Clone
+   Borrowed token cloned: same bytes as the line: true
+   Owned token cloned:    same bytes as before:   false
 ```
 <!-- /output -->
 

@@ -8,6 +8,12 @@ use std::any::type_name_of_val;
 use std::borrow::Cow;
 use std::rc::Rc;
 
+/// A token that borrows from its source line when it can.
+#[derive(Clone)]
+struct Token<'a> {
+    text: Cow<'a, str>,
+}
+
 fn variant(cow: &Cow<'_, str>) -> &'static str {
     match cow {
         Cow::Borrowed(_) => "Cow::Borrowed",
@@ -37,4 +43,13 @@ fn main() {
     );
     let owned: String = cow.into_owned();
     println!("   cow.into_owned()     -> {} {owned:?}", type_name_of_val(&owned));
+
+    println!();
+    println!("Why Cow is Clone at all: so that what holds one can derive Clone");
+    let line = String::from("let total = 3;");
+    let borrowed = Token { text: Cow::Borrowed(&line[4..9]) };
+    let owned_token = Token { text: Cow::Owned(String::from("total")) };
+    let (b2, o2) = (borrowed.clone(), owned_token.clone());
+    println!("   Borrowed token cloned: same bytes as the line: {}", b2.text.as_ptr() == borrowed.text.as_ptr());
+    println!("   Owned token cloned:    same bytes as before:   {}", o2.text.as_ptr() == owned_token.text.as_ptr());
 }

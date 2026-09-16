@@ -20,13 +20,15 @@ Two consequences, and this path needs both:
 - **The copy is always the same type.** `Clone` cannot turn a `&str` into a `String`, because nothing in the signature names a second type. That is the job `type Owned` does in [step 1](../clone_vs_to_owned/README.md).
 - **`Self` must be `Sized`.** `str` has no size ([step 2](../types_with_no_size/README.md)), so there is no `impl Clone for str` and never can be.
 
+That `Sized` is written into the declaration as a **supertrait** — it is not merely implied by the `-> Self`. So a type with no size is refused at the impl line itself, before any method is looked at: `struct MyStr(str); impl Clone for MyStr { … }` is `E0277`, *"the size for values of type `str` cannot be known at compilation time"* (rustc 1.98.0), pointing at `Clone`. The supertrait is also what makes `Clone` impossible to use as `dyn Clone`.
+
 ## `&T` is `Copy` for every `T`
 
-std carries `impl<T: ?Sized> Clone for &T` and `impl<T: ?Sized> Copy for &T`. A shared reference is an address (and, for unsized `T`, a length), and duplicating one is always safe — both copies only read. So:
+std carries `impl<T: ?Sized> Clone for &T` and `impl<T: ?Sized> Copy for &T` — one impl each, for references specifically. There is no `impl<T: Copy> Clone for T` anywhere in std; it runs the other way, `Copy: Clone`, so every `Copy` type writes (or derives) its `Clone` too. A shared reference is an address (and, for unsized `T`, a length), and duplicating one is always safe — both copies only read. So:
 
 - `&Ticket` is `Copy` even though `Ticket` is not `Clone`, and `let b = a;` copies the reference instead of moving it.
 - `&str` is `Clone`. Cloning a `&str` copies the reference and hands back a `&str` — rustc warns about exactly that call, `noop_method_call`.
-- `&mut T` is **not** `Copy`: two live `&mut` to the same value is the one thing the borrow checker exists to prevent.
+- `&mut T` is **not** `Copy`, and not `Clone` either — std spells that out with `impl<T: ?Sized> !Clone for &mut T`. Two live `&mut` to the same value is the one thing the borrow checker exists to prevent. [Step 5](../the_dot_picks_first/README.md#where-clone-goes-further-and-where-it-never-does) shows what that does to `.clone()` on a `&mut String`.
 
 Hold on to the second bullet. Every type in Rust now has a `Clone` impl within one `&` of it, and [steps 5 and 6](../the_dot_picks_first/README.md) are what that does to a method call.
 

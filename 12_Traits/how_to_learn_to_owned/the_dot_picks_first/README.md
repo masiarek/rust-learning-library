@@ -35,9 +35,15 @@ That long form is **fully qualified syntax**, the name The Book uses. Older text
 
 ## Walk it for `.to_owned()` — and see where a deref happens
 
-- **`t: &str`.** First entry, `&str`. `str`'s `to_owned(&self)` has receiver type `&str` — match, a `String`. **No dereference happened.** And if one had been needed, the search would have reached `&&str` first, where `&str`'s own `to_owned` (from the blanket impl, [step 6](../the_blanket_to_owned/README.md)) was waiting, and handed back a `&str`. Getting a `String` is the proof that the first entry matched.
+- **`t: &str`.** First entry, `&str`. `str`'s `to_owned(&self)` has receiver type `&str` — match, a `String`. **No dereference happened.** And if one had been needed, the search would have reached `&&str` first, where `&str`'s own `to_owned` (from the blanket impl, [step 6](../the_blanket_to_owned/README.md)) was waiting, and handed back a `&str`. Getting a `String` is the proof that the first entry matched. **Nor was a reference added**: there was no autoref either. The `&str` went in exactly as it was — `s.to_owned()` is `<str as ToOwned>::to_owned(s)`, with `s` itself as the argument, which [step 1's output](../clone_vs_to_owned/README.md#checkpoint) runs both ways.
 - **`m: &mut str`.** Nothing fits `&mut str`, `&&mut str` or `&mut &mut str` — a `&mut str` is not `Clone`. Dereference to `str`: nothing by value; then `&str`: `str`'s `to_owned` — match, a `String`. **This** is a call where autoderef does the work.
 - **`tt: &&str`.** First entry, `&&str`: `&str`'s own `to_owned` — match, a `&str`. The search stops two rungs before it could reach `str`.
+
+## Where `.clone()` goes further — and where it never does
+
+- **`r2: &&String`.** First entry, `&&String`. `&String` is `Clone`, and its `clone` takes exactly a `&&String` — match, a `&String`. However many `&`s you stack, `.clone()` peels one and stops, because a shared reference is always `Clone`. rustc warns about it, `suspicious_double_ref_op`; `Clone::clone(*r2)` is the spelling that reaches the `String`.
+- **`mu: &mut String`.** A `&mut` is **not** `Clone` — std says so with a negative impl, `impl !Clone for &mut T` — so nothing fits `&mut String`, `&&mut String` or `&mut &mut String`. Dereference to `String`: nothing by value; then `&String`: `String::clone` — match, a new `String`. On a `&mut`, `.clone()` does reach the value, one deref and one autoref later.
+- **`r2.capacity()`.** Nothing named `capacity` takes a `&&String`, a `&&&String` or a `&mut &&String`. Dereference once to `&String`: `String::capacity(&self)` takes exactly that — match. This is what autoderef is *for*: a method the outer type does not have. `.clone()` rarely gets there on a shared reference, because the reference always has a `clone` of its own.
 
 ## Checkpoint
 
@@ -66,6 +72,12 @@ The same search, for to_owned
    t.to_owned()      t: &str       -> alloc::string::String
    m.to_owned()      m: &mut str   -> alloc::string::String
    tt.to_owned()     tt: &&str     -> &str
+
+Where the search goes past the first entry, and where it does not
+   r2.clone()        r2: &&String    -> &alloc::string::String   the inner reference, copied
+   Clone::clone(*r2)                 -> alloc::string::String
+   mu.clone()        mu: &mut String -> alloc::string::String   &mut is not Clone: deref, then &
+   r2.capacity()     r2: &&String    -> usize           capacity takes &String: one deref
 ```
 <!-- /output -->
 

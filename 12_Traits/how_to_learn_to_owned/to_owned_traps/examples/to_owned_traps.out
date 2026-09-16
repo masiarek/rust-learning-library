@@ -5,3 +5,7 @@ Checkpoint. Strong count after Rc::to_owned? Variant after Cow::to_owned?
 What was meant: name the inner type, or ask the Cow for its owned form
    (*shared).to_owned() -> alloc::string::String, same bytes as the Rc's: false
    cow.into_owned()     -> alloc::string::String "ballot"
+
+Why Cow is Clone at all: so that what holds one can derive Clone
+   Borrowed token cloned: same bytes as the line: true
+   Owned token cloned:    same bytes as before:   false

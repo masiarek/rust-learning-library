@@ -34,6 +34,10 @@ You get the same address back. Annotate the result as `let t: Ticket = a.to_owne
 
 The blanket impl already covers every `Clone` type, so `impl ToOwned for MyType` on a `Clone` type is a second, conflicting impl: `E0119`. Coherence allows one impl per type per trait. [Step 10](../implementing_it_or_not/README.md) is what to do instead.
 
+**Two impls reachable from one call are not a collision.** `str` has its hand-written impl and `&str` gets one from the blanket, but coherence only forbids two impls for the *same* `Self`, and `str` and `&str` are as different as `i32` and `&i32`. Both exist, and which one a call lands on is decided later, by [step 5's search](../the_dot_picks_first/README.md#walk-it-for-to_owned-and-see-where-a-deref-happens).
+
+**Nor would specialization let you override it.** On nightly, with `#![feature(specialization)]`, `impl ToOwned for Mine` on a `Clone` type is still refused, now as `E0520`: *"`Owned` specializes an item from a parent `impl`, but that item is not marked `default`"* (rustc 1.100.0-nightly, 2026-08-27). The blanket impl's items are final on purpose, and generic code leans on it: `fn f<T: Clone>(x: &T) -> T { x.to_owned() }` compiles only because `Owned = T` is guaranteed. Copy the trait, mark the blanket's `type Owned = T` as `default`, and that same function is `E0308` — once the owned type *could* be something else, no generic caller may assume it is `T`.
+
 ## Checkpoint
 
 **Predict before you open the answer.** What is `42_i32.to_owned()`? And for a `Ticket` that is not `Clone`, is `(&ticket).to_owned()` a new ticket or the same address?
