@@ -4,7 +4,7 @@
 
 **One line:** Around seventy Rust books are named below, roughly a dozen are worth anyone's time, and which dozen depends entirely on what you already know — so every entry carries a verdict and the reason for it.
 
-**Publication facts checked 2026-08-29** against the publisher's own page, and every link on this page answered on the same date. Two publishers refuse automated requests: Packt's pages were confirmed in a browser instead, and O'Reilly's storefront could not be reached from here at all — so its two print-only titles link their **official code repository**, which resolves, states the edition, and is the more useful link for a programmer anyway. What was *not* checked, and cannot be, is the verdict — see the next section, which says exactly what a verdict here is worth.
+**Publication facts checked 2026-08-29** against the publisher's own page, and every link on this page answered on the same date. Two publishers refuse automated requests: Packt's pages were confirmed in a browser instead, and O'Reilly's storefront could not be reached from here at all — so its two print-only titles link their **official code repository**, which resolves, states the edition, and is the more useful link for a programmer anyway. The one exception is the *Programming Rust* 3rd edition, read from O'Reilly's own record in a browser on 2026-09-16. What was *not* checked, and cannot be, is the verdict — see the next section, which says exactly what a verdict here is worth.
 
 ## How to read a verdict
 
@@ -167,13 +167,13 @@ Nothing below is required. The free shelf above covers first book, ownership, li
 | Book | Facts | Verdict |
 |---|---|---|
 | [**Rust for Rustaceans** ↗](https://nostarch.com/rust-rustaceans) | Jon Gjengset · No Starch · Nov 2021 · 280 pp · $49.99 | **Read it** — the standard second book |
-| **Programming Rust** — [official code ↗](https://github.com/ProgrammingRust/examples) | Blandy, Orendorff & Tindall · O'Reilly · 2nd ed 2021, ISBN 9781492052593 · 3rd ed announced for late 2026 | **Read it** if you come from C or C++ |
+| **Programming Rust** — [official code ↗](https://github.com/ProgrammingRust/examples) | Blandy, Orendorff & Tindall · O'Reilly · 2nd ed 2021, ISBN 9781492052593 · 3rd ed 6 Oct 2026, 748 pp, ISBN 9781098176235 | **Read it** if you come from C or C++ |
 | [**Zero To Production In Rust** ↗](https://www.zero2prod.com/) | Luca Palmieri · self-published · continuously revised · £35 ebook | **Read it for** production practice |
 | [**Rust Atomics and Locks** ↗](https://marabos.nl/atomics/) | Mara Bos · O'Reilly · Jan 2023 · 250 pp · **free online** | **Read it** — and you need not pay |
 
 **Rust for Rustaceans** is the book people mean by "the second Rust book", and it deserves the position: type layout, trait coherence, object safety, `Pin` and `Waker` from underneath async/await, `no_std`, macros, FFI, API design. It is also the book most often described as hard to follow, and that criticism is fair rather than a failure of the reader — it is 280 pages carrying what another author would spend 600 on, with no worked-example scaffolding. Read it slowly, after a year of writing Rust, with an editor open. Still the 2021 first edition as of this check; nothing in the core material has gone wrong, but the async ecosystem around it has moved.
 
-**Programming Rust** is the most complete systems treatment in print: what a value *is* in memory, what a move compiles to, how trait objects are laid out. It is not a first book and does not try to be. Note the edition carefully — the 2nd edition (2021) is what is on shelves now, and the 3rd, fully updated for the 2024 edition, is announced for late 2026. If you are about to buy, that is a reason to wait.
+**Programming Rust** is the most complete systems treatment in print: what a value *is* in memory, what a move compiles to, how trait objects are laid out. It is not a first book and does not try to be. Note the edition carefully — the 2nd edition (2021) is what is on shelves now, and the 3rd, fully updated for the 2024 edition, is listed by O'Reilly for 6 October 2026. If you are about to buy, that is a reason to wait.
 
 **Zero To Production In Rust** is not really a Rust book; it is a book about shipping software, written in Rust. Testing strategy, telemetry, CI, database migrations, deployment, and how to keep a codebase honest as it grows — material almost nobody else writes down. The recurring criticism is fair too: it is built on `actix-web`, and the centre of gravity in the ecosystem has moved to `axum`. The *practices* transfer entirely; the framework chapters are a translation exercise. Buy it for the discipline, not the router.
 

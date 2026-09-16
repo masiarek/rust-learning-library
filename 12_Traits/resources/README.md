@@ -10,8 +10,8 @@
 
 - [The Reference — Items: traits ↗](https://doc.rust-lang.org/reference/items/traits.html) — the normative definition. Terse, and the only one of these that is *binding*: when two explanations disagree, this is the one that is right.
 - [The Book, ch. 10 — Traits: defining shared behaviour ↗](https://doc.rust-lang.org/book/ch10-02-traits.html) — declaration, `impl … for`, default method bodies, trait bounds, `where`.
-- [The Book, ch. 17 — Trait objects ↗](https://doc.rust-lang.org/book/ch17-02-trait-objects.html) — `dyn`, the vtable, and dynamic dispatch.
-- [The Book, ch. 19 — the newtype pattern for external traits on external types ↗](https://doc.rust-lang.org/book/ch19-03-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types) — the sanctioned way round the orphan rule.
+- [The Book, ch. 18 — Trait objects ↗](https://doc.rust-lang.org/book/ch18-02-trait-objects.html) — `dyn`, the vtable, and dynamic dispatch.
+- [The Book, ch. 20 — implementing external traits with the newtype pattern ↗](https://doc.rust-lang.org/book/ch20-02-advanced-traits.html#implementing-external-traits-with-the-newtype-pattern) — the sanctioned way round the orphan rule.
 - [Rust by Example — traits ↗](https://doc.rust-lang.org/rust-by-example/trait.html) — the smallest runnable version of the idea.
 - [`std` keyword docs — `dyn` ↗](https://doc.rust-lang.org/std/keyword.dyn.html) — the two pointers a `dyn Trait` reference carries, the object-safety requirement, and the edition differences (before 2021 the keyword could be omitted; in 2015 a leading `::` was parsed as part of the path).
 - [Edition guide — `dyn Trait` for trait objects ↗](https://doc.rust-lang.org/edition-guide/rust-2018/new-keywords.html#dyn-trait-for-trait-objects) — why the keyword exists at all: bare `Trait` as a type was ambiguous, and 2018 made the dynamic case say so.
