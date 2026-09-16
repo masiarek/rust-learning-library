@@ -10,16 +10,16 @@ Each surprise below is one missing idea, not a mystery about `ToOwned`. Start at
 
 | If this surprised you | Start at step |
 |---|---|
-| `ToOwned` exists at all, when `Clone` already does | 1 |
-| `name.clone()` on a `&str` gave back a `&str` | 3 |
-| `r.clone()` on a `&String` gave a `String`, not a reference | 4 |
-| `a.to_owned()` on a `&Foo` gave a `&Foo`, or `E0308` said *expected `Foo`, found `&Foo`* | 5 |
-| `42_i32.to_owned()` compiles, and is `42` | 5 |
-| `.to_owned()` on an `Rc` did not copy the string | 7 |
-| `.to_owned()` on a `Cow::Borrowed` is still borrowed | 7 |
-| `HashMap<String, _>::get` accepts a `&str` | 8 |
-| `impl ToOwned for MyType` is `E0119` | 10 |
-| you cannot write `Borrow` for your view struct | 10 |
+| `ToOwned` exists at all, when `Clone` already does | [1](#1-some-types-have-no-size) |
+| `name.clone()` on a `&str` gave back a `&str` | [3](#3-clone-hands-back-self-and-every-t-is-clone) |
+| `r.clone()` on a `&String` gave a `String`, not a reference | [4](#4-the-dot-takes-the-first-receiver-that-fits) |
+| `a.to_owned()` on a `&Foo` gave a `&Foo`, or `E0308` said *expected `Foo`, found `&Foo`* | [5](#5-one-blanket-impl-covers-every-clone-type-references-included) |
+| `42_i32.to_owned()` compiles, and is `42` | [5](#5-one-blanket-impl-covers-every-clone-type-references-included) |
+| `.to_owned()` on an `Rc` did not copy the string | [7](#7-the-traps-are-steps-4-and-5-together) |
+| `.to_owned()` on a `Cow::Borrowed` is still borrowed | [7](#7-the-traps-are-steps-4-and-5-together) |
+| `HashMap<String, _>::get` accepts a `&str` | [8](#8-borrow-is-the-way-back) |
+| `impl ToOwned for MyType` is `E0119` | [10](#10-implementing-it-on-the-referent-or-not-at-all) |
+| you cannot write `Borrow` for your view struct | [10](#10-implementing-it-on-the-referent-or-not-at-all) |
 
 ## The steps
 
