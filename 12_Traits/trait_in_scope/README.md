@@ -34,6 +34,8 @@ Shout::shout(&dog)             // through the trait
 
 The dot is sugar. `Shout::shout(&dog)` is what it desugars to, and the third form is the same again with the ambiguity removed by hand — which matters exactly when there is ambiguity to remove.
 
+One difference between the first two is worth knowing before it bites. The dot *searches*, so it tries `Dog` before `&Dog`. The trait-named form does not search: `Self` is read straight off the argument's type, so the `&` you write picks the impl. For a `r: &String`, `Clone::clone(r)` is a `String` and `Clone::clone(&r)` is a `&String`, while `r.clone()` is a `String`. [Step 5 of the `ToOwned` path](../how_to_learn_to_owned/the_dot_picks_first/README.md#name-the-trait-and-the-you-pass-decides) runs all of them, together with the fully qualified forms.
+
 ## The case that forces the long spelling
 
 A type may have an **inherent** method and a **trait** method with the same name. Both are legal, and they are different functions. The dot always picks the inherent one:

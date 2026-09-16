@@ -20,6 +20,7 @@ Each surprise below is one missing idea, not a mystery about `ToOwned`. Start at
 | `name.clone()` on a `&str` gave back a `&str` | [4](clone_returns_self/README.md) |
 | `r.clone()` on a `&String` gave a `String`, not a reference | [5](the_dot_picks_first/README.md) |
 | someone said `.to_owned()` on a `&str` works "by autoderef" | [5](the_dot_picks_first/README.md) |
+| `Clone::clone(&r)` gave a `&String`, but `Clone::clone(r)` and `r.clone()` gave a `String` | [5](the_dot_picks_first/README.md#name-the-trait-and-the-you-pass-decides) |
 | `a.to_owned()` on a `&Foo` gave a `&Foo`, or `E0308` said *expected `Foo`, found `&Foo`* | [6](the_blanket_to_owned/README.md) |
 | `42_i32.to_owned()` compiles, and is `42` | [6](the_blanket_to_owned/README.md) |
 | `.to_owned()` on an `Rc` did not copy the string | [7](to_owned_traps/README.md) |

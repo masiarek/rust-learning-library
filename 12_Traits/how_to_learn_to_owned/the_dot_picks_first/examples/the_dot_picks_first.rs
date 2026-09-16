@@ -20,6 +20,14 @@ fn main() {
     println!("   Clone::clone(&r)                -> {}", type_name_of_val(&Clone::clone(&r)));
 
     println!();
+    println!("Name only the trait, and the argument's type decides Self");
+    println!("   Clone::clone(r)     r: &String    Self = String  -> {}", type_name_of_val(&Clone::clone(r)));
+    println!("   Clone::clone(&r)    &r: &&String  Self = &String -> {}", type_name_of_val(&Clone::clone(&r)));
+    println!("Name the type too, and the argument is coerced to fit it");
+    println!("   <String as Clone>::clone(&r)      Self = String  -> {}", type_name_of_val(&<String as Clone>::clone(&r)));
+    println!("   <&String as Clone>::clone(&r)     Self = &String -> {}", type_name_of_val(&<&String as Clone>::clone(&r)));
+
+    println!();
     println!("The same search, for to_owned");
     let t: &str = "hi";
     let mut owner = String::from("hi");

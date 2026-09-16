@@ -3,6 +3,13 @@ Checkpoint. What type does each clone return?
    r.clone()         r: &String    -> alloc::string::String
    Clone::clone(&r)                -> &alloc::string::String
 
+Name only the trait, and the argument's type decides Self
+   Clone::clone(r)     r: &String    Self = String  -> alloc::string::String
+   Clone::clone(&r)    &r: &&String  Self = &String -> &alloc::string::String
+Name the type too, and the argument is coerced to fit it
+   <String as Clone>::clone(&r)      Self = String  -> alloc::string::String
+   <&String as Clone>::clone(&r)     Self = &String -> &alloc::string::String
+
 The same search, for to_owned
    t.to_owned()      t: &str       -> alloc::string::String
    m.to_owned()      m: &mut str   -> alloc::string::String

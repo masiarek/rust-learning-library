@@ -20,6 +20,19 @@ For `r: &String` the list is:
 - **`name: &str`.** First entry, `&str`. A `clone` with receiver type `&str` would have to be `str`'s, and `str` is not `Clone` ([step 4](../clone_returns_self/README.md)). Second entry, `&&str`: the reference's own `clone` — match. Result: a `&str`.
 - **`Clone::clone(&r)`.** No search at all. The argument is a `&&String`, which fixes `Self = &String`, so the result is a `&String`. Writing the trait's name is how you choose the impl yourself — [A trait must be in scope](../../trait_in_scope/README.md#three-ways-to-spell-the-same-call) has the three spellings.
 
+## Name the trait, and the `&` you pass decides
+
+`Clone::clone(x)` is `fn clone(&self) -> Self` called as a plain function. Its one argument has to be a `&Self`, and with only the trait named, the compiler reads `Self` straight off the argument's type:
+
+- **`Clone::clone(r)`** — `r` is a `&String`, so `Self = String`, and you get a new `String`: the same function `r.clone()` found.
+- **`Clone::clone(&r)`** — `&r` is a `&&String`, so `Self = &String`, and you get the reference, copied.
+
+So naming the trait did not pick the reference's impl. It switched the dot's search off, and then the `&` you wrote picked it.
+
+Name the type as well — `<String as Clone>::clone(…)` — and `Self` is no longer read off the argument; it is fixed. The argument then becomes an ordinary function argument that may be coerced to fit, so `<String as Clone>::clone(&r)` still hands back a `String`, the `&&String` shortened to a `&String` by deref coercion. Coercion only ever removes a `&`, though: `<&String as Clone>::clone(r)` is `E0308`, *expected `&&String`, found `&String`* (rustc 1.98.0).
+
+That long form is **fully qualified syntax**, the name The Book uses. Older texts call all of these calls *UFCS*, universal function call syntax, after [RFC 132 ↗](https://rust-lang.github.io/rfcs/0132-ufcs.html). [A trait must be in scope](../../trait_in_scope/README.md#three-ways-to-spell-the-same-call) has the three spellings side by side, and [the case where only the long one works](../../trait_in_scope/README.md#the-case-that-forces-the-long-spelling).
+
 ## Walk it for `.to_owned()` — and see where a deref happens
 
 - **`t: &str`.** First entry, `&str`. `str`'s `to_owned(&self)` has receiver type `&str` — match, a `String`. **No dereference happened.** And if one had been needed, the search would have reached `&&str` first, where `&str`'s own `to_owned` (from the blanket impl, [step 6](../the_blanket_to_owned/README.md)) was waiting, and handed back a `&str`. Getting a `String` is the proof that the first entry matched.
@@ -28,7 +41,7 @@ For `r: &String` the list is:
 
 ## Checkpoint
 
-**Predict before you open the answer.** What types are `name.clone()` for `name: &str`, `r.clone()` for `r: &String`, and `Clone::clone(&r)`? Then the three `to_owned` calls from the section above.
+**Predict before you open the answer.** What types are `name.clone()` for `name: &str`, `r.clone()` for `r: &String`, and `Clone::clone(&r)`? Then `Clone::clone(r)` without the `&`, the two fully qualified calls, and the three `to_owned` calls from the sections above.
 
 <details markdown="1">
 <summary><strong>The answer</strong></summary>
@@ -41,6 +54,13 @@ Checkpoint. What type does each clone return?
    name.clone()      name: &str    -> &str
    r.clone()         r: &String    -> alloc::string::String
    Clone::clone(&r)                -> &alloc::string::String
+
+Name only the trait, and the argument's type decides Self
+   Clone::clone(r)     r: &String    Self = String  -> alloc::string::String
+   Clone::clone(&r)    &r: &&String  Self = &String -> &alloc::string::String
+Name the type too, and the argument is coerced to fit it
+   <String as Clone>::clone(&r)      Self = String  -> alloc::string::String
+   <&String as Clone>::clone(&r)     Self = &String -> &alloc::string::String
 
 The same search, for to_owned
    t.to_owned()      t: &str       -> alloc::string::String
@@ -79,7 +99,7 @@ The same search, for to_owned
 
 `x.metoda()` to wyszukiwanie. Kompilator bierze typ odbiorcy, potem kolejne typy po dereferencji, a po każdym typie `U` wstawia `&U` i `&mut U`. Idzie po tej liście i zatrzymuje się na pierwszej metodzie, której typ odbiorcy (`self`) pasuje **dokładnie**.
 
-Dla `t: &str` pierwszy kandydat to `&str`, a `to_owned(&self)` z implementacji dla `str` ma odbiorcę `&str` — pasuje od razu, wynik to `String`, **bez żadnej dereferencji**. Gdyby dereferencja była potrzebna, wyszukiwanie trafiłoby wcześniej na `&&str` i zwróciło `&str`. Autodereferencja naprawdę pracuje np. dla `m: &mut str`. Wywołanie `Clone::clone(&r)` z nazwą cechy pomija wyszukiwanie w ogóle.
+Dla `t: &str` pierwszy kandydat to `&str`, a `to_owned(&self)` z implementacji dla `str` ma odbiorcę `&str` — pasuje od razu, wynik to `String`, **bez żadnej dereferencji**. Gdyby dereferencja była potrzebna, wyszukiwanie trafiłoby wcześniej na `&&str` i zwróciło `&str`. Autodereferencja naprawdę pracuje np. dla `m: &mut str`. Wywołanie z nazwą cechy pomija wyszukiwanie w ogóle — i wtedy o `Self` decyduje typ argumentu: `Clone::clone(r)` daje `String`, a `Clone::clone(&r)` daje `&String`, bo to `&` wybrało implementację dla referencji. Pełna składnia `<String as Clone>::clone(&r)` ustala `Self` z góry, a argument zostaje dopasowany przez *deref coercion*.
 
 **Szukaj po polsku:** wyszukiwanie metod w Ruscie · `rust method resolution autoref autoderef` · `rust clone on &str returns &str`
 
