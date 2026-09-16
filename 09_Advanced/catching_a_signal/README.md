@@ -143,7 +143,7 @@ Section 4 is the pattern worth taking away: four rounds of a loop, a SIGINT rais
 
 ## Three signals this cannot catch, and one it must not
 
-`SIGKILL` and `SIGSTOP` cannot be caught, blocked or ignored by any process in any language; `signal()` refuses them. That is deliberate — it is what guarantees an administrator can always end a process, however badly it is behaving. The Rust-specific one is `SIGSEGV`: a handler for it can run, but the state it runs in is one the language has no rules for, and returning from it resumes the instruction that faulted.
+`SIGKILL` and `SIGSTOP` cannot be caught, blocked or ignored by any process in any language; `signal()` refuses them, and [so does every shell ↗](https://masiarek.github.io/linux-learning-library/11_Signals/signals_you_cannot_catch/index.html) — which accepts `trap … KILL` and then quietly never runs it. That is deliberate — it is what guarantees an administrator can always end a process, however badly it is behaving. The Rust-specific one is `SIGSEGV`: a handler for it can run, but the state it runs in is one the language has no rules for, and returning from it resumes the instruction that faulted.
 
 ## If you are coming from another language
 
@@ -162,6 +162,7 @@ Section 4 is the pattern worth taking away: four rounds of a loop, a SIGINT rais
 - [`RwLock` and atomics](../rwlock_and_atomics/README.md) — what `Ordering::SeqCst` is choosing, and when a weaker one is honest.
 - [Lock poisoning](../mutex_poisoning/README.md) — the lock the handler above must not touch.
 - [Ctrl-C is a signal ↗](https://masiarek.github.io/python-learning-library/02_Projects_and_Environments/ctrl_c_is_a_signal/index.html) — the same program in Python, where the default handler is the whole lesson.
+- [The signals you cannot catch ↗](https://masiarek.github.io/linux-learning-library/11_Signals/signals_you_cannot_catch/index.html) — the same three rules from the shell's side: `trap`, exit status 128 + N, and the third way a handler silently never runs.
 - [Signals ↗](https://masiarek.github.io/concurrency-learning-library/11_Concepts/communication/signals/index.html) — signals as inter-process communication, and which thread receives one.
 - [`signal(2)` ↗](https://man7.org/linux/man-pages/man2/signal.2.html) and [`signal-safety(7)` ↗](https://man7.org/linux/man-pages/man7/signal-safety.7.html) — the second is the async-signal-safe list itself, and it is shorter than most people expect.
 
