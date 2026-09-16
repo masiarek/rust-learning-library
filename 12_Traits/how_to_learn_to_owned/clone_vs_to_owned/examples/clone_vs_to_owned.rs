@@ -1,6 +1,6 @@
 //! Step 1 of the `ToOwned` path: `Clone` hands back the type you started
-//! with, `ToOwned` may hand back a different one — and the impl sits on the
-//! type behind the `&`, never on the `&` itself.
+//! with, `ToOwned` may hand back a different one — and the impls std writes by
+//! hand sit on the type behind the `&`: `str`, not `&str`.
 //!
 //!   rustc --edition 2024 clone_vs_to_owned.rs -o /tmp/cvto && /tmp/cvto
 
@@ -37,12 +37,4 @@ fn main() {
     println!("   <Path as ToOwned>::Owned  = {}", owned_of::<Path>());
     println!("   <OsStr as ToOwned>::Owned = {}", owned_of::<OsStr>());
     println!("   <CStr as ToOwned>::Owned  = {}", owned_of::<CStr>());
-    println!("   <&str as ToOwned>::Owned  = {}   (the reference has an impl too)", owned_of::<&str>());
-
-    println!();
-    println!("So one &str gives two answers, depending on which Self the call lands on");
-    let s: &str = "hi";
-    println!("   <str as ToOwned>::to_owned(s)   Self = str  -> {}", type_of(&<str as ToOwned>::to_owned(s)));
-    println!("   s.to_owned()                    Self = str  -> {}", type_of(&s.to_owned()));
-    println!("   ToOwned::to_owned(&s)           Self = &str -> {}", type_of(&ToOwned::to_owned(&s)));
 }

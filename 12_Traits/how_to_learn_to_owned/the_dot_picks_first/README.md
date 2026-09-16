@@ -35,7 +35,7 @@ That long form is **fully qualified syntax**, the name The Book uses. Older text
 
 ## Walk it for `.to_owned()` — and see where a deref happens
 
-- **`t: &str`.** First entry, `&str`. `str`'s `to_owned(&self)` has receiver type `&str` — match, a `String`. **No dereference happened.** And if one had been needed, the search would have reached `&&str` first, where `&str`'s own `to_owned` (from the blanket impl, [step 6](../the_blanket_to_owned/README.md)) was waiting, and handed back a `&str`. Getting a `String` is the proof that the first entry matched. **Nor was a reference added**: there was no autoref either. The `&str` went in exactly as it was — `s.to_owned()` is `<str as ToOwned>::to_owned(s)`, with `s` itself as the argument, which [step 1's output](../clone_vs_to_owned/README.md#checkpoint) runs both ways.
+- **`t: &str`.** First entry, `&str`. `str`'s `to_owned(&self)` has receiver type `&str` — match, a `String`. **No dereference happened.** And if one had been needed, the search would have reached `&&str` first, where `&str`'s own `to_owned` (from the blanket impl, [step 6](../the_blanket_to_owned/README.md)) was waiting, and handed back a `&str`. Getting a `String` is the proof that the first entry matched. **Nor was a reference added**: there was no autoref either. The `&str` went in exactly as it was — `s.to_owned()` is `<str as ToOwned>::to_owned(s)`, with `s` itself as the argument, which [step 6's output](../the_blanket_to_owned/README.md#one-str-two-impls) runs both ways.
 - **`m: &mut str`.** Nothing fits `&mut str`, `&&mut str` or `&mut &mut str` — a `&mut str` is not `Clone`. Dereference to `str`: nothing by value; then `&str`: `str`'s `to_owned` — match, a `String`. **This** is a call where autoderef does the work.
 - **`tt: &&str`.** First entry, `&&str`: `&str`'s own `to_owned` — match, a `&str`. The search stops two rungs before it could reach `str`.
 
@@ -86,7 +86,7 @@ Where the search goes past the first entry, and where it does not
 ## What this step sets up
 
 - [Step 6](../the_blanket_to_owned/README.md): the blanket impl puts a `to_owned` on every `&T`, which is one more candidate for this search to find first.
-- [Step 7](../to_owned_traps/README.md): on an `Rc<String>` or a `Cow`, the outer type is the first entry, and it is `Clone`.
+- [Step 8](../to_owned_traps/README.md): on an `Rc<String>` or a `Cow`, the outer type is the first entry, and it is `Clone`.
 - [Step 10](../implementing_it_or_not/README.md): at the same entry an inherent method beats a trait method, which is how a `to_owned` of your own wins.
 
 ## Go deeper

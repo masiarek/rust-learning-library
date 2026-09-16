@@ -1,6 +1,6 @@
-# Step 8: `Borrow` is the way back
+# Step 7: `Borrow` is the way back
 
-[How to learn `ToOwned`](../README.md) › **Step 8 of 10** · back: [Step 7 — The traps are steps 5 and 6 together](../to_owned_traps/README.md) · next: [Step 9 — `clone_into` refills instead of allocating](../clone_into_refills/README.md)
+[How to learn `ToOwned`](../README.md) › **Step 7 of 10** · back: [Step 6 — One blanket impl covers every `Clone` type](../the_blanket_to_owned/README.md) · next: [Step 8 — The traps are steps 5 and 6 together](../to_owned_traps/README.md)
 
 **Level:** 201 · a step on a learning path
 
@@ -95,6 +95,7 @@ The `push('!')` line is the one a diagram usually gets wrong, and it is not a se
 
 ## What this step sets up
 
+- [Step 8](../to_owned_traps/README.md): the traps — `.to_owned()` on this `Cow` is not `into_owned()`, and on an `Rc` it copies no text.
 - [Step 9](../clone_into_refills/README.md): `clone_into(&self, target: &mut Self::Owned)` writes into the owned half instead of building a new one.
 - [Step 10](../implementing_it_or_not/README.md): implementing `ToOwned` for your own type means implementing `Borrow` for its owned twin, and the reason a view struct cannot do it.
 
@@ -128,4 +129,4 @@ The `push('!')` line is the one a diagram usually gets wrong, and it is not a se
 
 ---
 
-[How to learn `ToOwned`](../README.md) › **Step 8 of 10** · back: [Step 7](../to_owned_traps/README.md) · next: [Step 9 — `clone_into` refills instead of allocating](../clone_into_refills/README.md)
+[How to learn `ToOwned`](../README.md) › **Step 7 of 10** · back: [Step 6](../the_blanket_to_owned/README.md) · next: [Step 8 — The traps are steps 5 and 6 together](../to_owned_traps/README.md)

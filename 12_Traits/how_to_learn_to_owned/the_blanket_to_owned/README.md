@@ -1,6 +1,6 @@
 # Step 6: One blanket impl covers every `Clone` type — references included
 
-[How to learn `ToOwned`](../README.md) › **Step 6 of 10** · back: [Step 5 — The dot takes the first receiver that fits](../the_dot_picks_first/README.md) · next: [Step 7 — The traps are steps 5 and 6 together](../to_owned_traps/README.md)
+[How to learn `ToOwned`](../README.md) › **Step 6 of 10** · back: [Step 5 — The dot takes the first receiver that fits](../the_dot_picks_first/README.md) · next: [Step 7 — `Borrow` is the way back](../borrow_the_way_back/README.md)
 
 **Level:** 201 · a step on a learning path
 
@@ -30,17 +30,25 @@ Take `a: &Ticket`, where `Ticket` is **not** `Clone`, and call `a.to_owned()`:
 
 You get the same address back. Annotate the result as `let t: Ticket = a.to_owned();` and the compiler says `E0308`, *expected `Ticket`, found `&Ticket`*, with not a word about `Clone`. Add `#[derive(Clone)]` and step 1 matches instead: a new value, at a new address. The checkpoint shows both.
 
+## One `&str`, two impls
+
+`&str` is `Clone` ([step 4](../clone_returns_self/README.md#t-is-copy-for-every-t)), so this blanket impl covers it too, with `Owned = &str`. There is no hand-written `impl ToOwned for &str` — this is the only one — but it means a `&str` can reach two `ToOwned` impls: `str`'s, written by hand, and `&str`'s, from the blanket. Which one a call lands on depends on how the call is spelled:
+
+- **`s.to_owned()`** reaches `str`'s impl and gives a `String`. [Step 5's search](../the_dot_picks_first/README.md#walk-it-for-to_owned-and-see-where-a-deref-happens) matches it at the first candidate, because its receiver type is `&str` — exactly the type of `s`, with nothing added or removed.
+- **`<str as ToOwned>::to_owned(s)`** names `Self = str` outright, and gives the same `String`.
+- **`ToOwned::to_owned(&s)`** passes a `&&str`, which makes `Self = &str`, and gives back a `&str`.
+
+**The two impls are not a collision.** Coherence forbids two impls for the *same* `Self`, and `str` and `&str` are as different as `i32` and `&i32`. Both exist; the call decides.
+
 ## Why it also blocks your own impl
 
 The blanket impl already covers every `Clone` type, so `impl ToOwned for MyType` on a `Clone` type is a second, conflicting impl: `E0119`. Coherence allows one impl per type per trait. [Step 10](../implementing_it_or_not/README.md) is what to do instead.
-
-**Two impls reachable from one call are not a collision.** `str` has its hand-written impl and `&str` gets one from the blanket, but coherence only forbids two impls for the *same* `Self`, and `str` and `&str` are as different as `i32` and `&i32`. Both exist, and which one a call lands on is decided later, by [step 5's search](../the_dot_picks_first/README.md#walk-it-for-to_owned-and-see-where-a-deref-happens).
 
 **Nor would specialization let you override it.** On nightly, with `#![feature(specialization)]`, `impl ToOwned for Mine` on a `Clone` type is still refused, now as `E0520`: *"`Owned` specializes an item from a parent `impl`, but that item is not marked `default`"* (rustc 1.100.0-nightly, 2026-08-27). The blanket impl's items are final on purpose, and generic code leans on it: `fn f<T: Clone>(x: &T) -> T { x.to_owned() }` compiles only because `Owned = T` is guaranteed. Copy the trait, mark the blanket's `type Owned = T` as `default`, and that same function is `E0308` — once the owned type *could* be something else, no generic caller may assume it is `T`.
 
 ## Checkpoint
 
-**Predict before you open the answer.** What is `42_i32.to_owned()`? And for a `Ticket` that is not `Clone`, is `(&ticket).to_owned()` a new ticket or the same address?
+**Predict before you open the answer.** What is `42_i32.to_owned()`? For a `Ticket` that is not `Clone`, is `(&ticket).to_owned()` a new ticket or the same address? And for `s: &str`, what do `s.to_owned()` and `ToOwned::to_owned(&s)` return?
 
 <details markdown="1">
 <summary><strong>The answer</strong></summary>
@@ -60,6 +68,13 @@ Checkpoint. What is 42_i32.to_owned()? Is (&ticket).to_owned() a new ticket?
 
 Derive Clone, and the same call on the same kind of reference copies the value
    b.to_owned() is the same address as b: false   (it is a Seat, seat 12)
+
+One &str, two impls: the spelling of the call picks one
+   <str as ToOwned>::Owned        = alloc::string::String
+   <&str as ToOwned>::Owned       = &str   (the blanket impl: &str is Clone)
+   s.to_owned()                   Self = str  -> alloc::string::String
+   <str as ToOwned>::to_owned(s)  Self = str  -> alloc::string::String
+   ToOwned::to_owned(&s)          Self = &str -> &str
 ```
 <!-- /output -->
 
@@ -67,7 +82,8 @@ Derive Clone, and the same call on the same kind of reference copies the value
 
 ## What this step sets up
 
-- [Step 7](../to_owned_traps/README.md): `Rc` and `Cow` are `Clone`, so the blanket impl is what `.to_owned()` reaches on them.
+- [Step 7](../borrow_the_way_back/README.md): the bound on `type Owned`, and the `Cow` built on it.
+- [Step 8](../to_owned_traps/README.md): `Rc` and `Cow` are `Clone`, so the blanket impl is what `.to_owned()` reaches on them.
 - [Step 10](../implementing_it_or_not/README.md): `E0119`, and the inherent method that sidesteps it.
 - [After the steps](../clone_to_owned_or_from/README.md): `42_i32.to_owned()` touches no heap — one reason *"`ToOwned` allocates"* is not a rule.
 
@@ -99,4 +115,4 @@ Tu spotykają się kroki 4 i 5. Każde `&T` jest `Clone`, więc dla `a: &Ticket`
 
 ---
 
-[How to learn `ToOwned`](../README.md) › **Step 6 of 10** · back: [Step 5](../the_dot_picks_first/README.md) · next: [Step 7 — The traps are steps 5 and 6 together](../to_owned_traps/README.md)
+[How to learn `ToOwned`](../README.md) › **Step 6 of 10** · back: [Step 5](../the_dot_picks_first/README.md) · next: [Step 7 — `Borrow` is the way back](../borrow_the_way_back/README.md)

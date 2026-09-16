@@ -15,6 +15,11 @@ Every entry was checked on 2026-09-16. Free material links to the page itself. A
 - **[The Rust Programming Language, ch. 20.3 — Dynamically Sized Types and the `Sized` Trait ↗](https://doc.rust-lang.org/book/ch20-03-advanced-types.html#dynamically-sized-types-and-the-sized-trait)** — step 2, from the book everyone has.
 - **[The Reference — method call expressions ↗](https://doc.rust-lang.org/reference/expressions/method-call-expr.html#r-expr.method.candidate-receivers)** — step 5's candidate list, in the only text that is binding.
 
+## Before step 1
+
+- **[The Rust Programming Language, ch. 4.1 — What Is Ownership? ↗](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html)** — the layer under the whole path. [*Memory and Allocation* ↗](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#memory-and-allocation) draws a `String` as a pointer, a length and a capacity with the bytes on the heap, and says a literal's text is "hardcoded directly into the final executable", which is where a `Cow::Borrowed` of a literal points. [*Variables and Data Interacting with Clone* ↗](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#variables-and-data-interacting-with-clone) is step 4's starting point, and its rule that Rust "will never automatically create 'deep' copies" is why every copy on this path is a call you can see. One simplification to carry forward carefully: [*Stack-Only Data: Copy* ↗](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#stack-only-data-copy) introduces `Copy` for "types that are stored on the stack", but a `Copy` value inside a `Vec` lives on the heap and is still `Copy` — [`Copy` vs `Clone`](../../../16_Structs/copy_vs_clone/README.md) says what the trait actually promises.
+- The library's [Ownership](../../../18_Ownership/README.md) section — especially [Stack and heap](../../../18_Ownership/stack_and_heap/README.md) and [Ownership and moves](../../../18_Ownership/ownership_and_moves/README.md).
+
 ## By step
 
 ### [1. `ToOwned` is `Clone` with a separate owned type](../clone_vs_to_owned/README.md)
@@ -72,7 +77,15 @@ Every entry was checked on 2026-09-16. Free material links to the page itself. A
 - [users.rust-lang.org — *ToOwned if and only if a value is a reference* (2023) ↗](https://users.rust-lang.org/t/toowned-if-and-only-if-a-value-is-a-reference/97697) — no bound can say "`T` is not a reference", so the answer is a trait with one impl for `&T where T: ToOwned` and one per owned type. Two things to take from it: `.into_iter().map(ToOwned::to_owned).collect()` is how a `Vec<&str>` becomes a `Vec<String>`, and the posted impl needs `T: ToOwned + ?Sized` to reach `&str` at all — without the `?Sized`, `"text".into_js_value()` is `E0599` on rustc 1.98.0.
 - *Rust for Rustaceans*, ch. 2 → "Coherence and the Orphan Rule" (p. 28)
 
-### [7. The traps are steps 5 and 6 together](../to_owned_traps/README.md)
+### [7. `Borrow` is the way back](../borrow_the_way_back/README.md)
+
+- [`Borrow` ↗](https://doc.rust-lang.org/std/borrow/trait.Borrow.html) — the `HashMap` walkthrough, and why `Eq`, `Ord` and `Hash` must agree
+- [`AsRef` — relation to `Borrow` ↗](https://doc.rust-lang.org/std/convert/trait.AsRef.html#relation-to-borrow)
+- [Effective Rust, Item 8 — more pointer traits ↗](https://effective-rust.com/references.html#more-pointer-traits) — `Borrow`, `ToOwned` and `Cow` together
+- [users.rust-lang.org — *Understanding Borrow and ToOwned* (2022) ↗](https://users.rust-lang.org/t/understanding-borrow-and-toowned/75951)
+- *Programming Rust*, 2nd ed., ch. 13 → "AsRef and AsMut", "Borrow and BorrowMut", "Borrow and ToOwned at Work: The Humble Cow"
+
+### [8. The traps are steps 5 and 6 together](../to_owned_traps/README.md)
 
 - [TRPL ch. 15.4 — cloning to increase the reference count ↗](https://doc.rust-lang.org/book/ch15-04-rc.html#cloning-to-increase-the-reference-count) — "doesn't make a deep copy"
 - [`std::rc` — cloning references ↗](https://doc.rust-lang.org/std/rc/index.html#cloning-references)
@@ -80,14 +93,6 @@ Every entry was checked on 2026-09-16. Free material links to the page itself. A
 - Video: [Crust of Rust — Smart Pointers and Interior Mutability ↗](https://www.youtube.com/watch?v=8O0Nt9qY_vo) (2020) — *Rc* at 1:06:27, *Copy-on-Write (Cow)* at 1:54:20
 - *Programming Rust*, 2nd ed., ch. 4 → "Rc and Arc: Shared Ownership"
 - *Rust in Action*, ch. 6 → §6.2.2 "Rust's pointer ecosystem", Figure 6.4 (p. 186) — the card game that gives `Rc<T>`, `Cow<T>` and the rest one card each
-
-### [8. `Borrow` is the way back](../borrow_the_way_back/README.md)
-
-- [`Borrow` ↗](https://doc.rust-lang.org/std/borrow/trait.Borrow.html) — the `HashMap` walkthrough, and why `Eq`, `Ord` and `Hash` must agree
-- [`AsRef` — relation to `Borrow` ↗](https://doc.rust-lang.org/std/convert/trait.AsRef.html#relation-to-borrow)
-- [Effective Rust, Item 8 — more pointer traits ↗](https://effective-rust.com/references.html#more-pointer-traits) — `Borrow`, `ToOwned` and `Cow` together
-- [users.rust-lang.org — *Understanding Borrow and ToOwned* (2022) ↗](https://users.rust-lang.org/t/understanding-borrow-and-toowned/75951)
-- *Programming Rust*, 2nd ed., ch. 13 → "AsRef and AsMut", "Borrow and BorrowMut", "Borrow and ToOwned at Work: The Humble Cow"
 
 ### [9. `clone_into` refills instead of allocating](../clone_into_refills/README.md)
 
@@ -115,7 +120,7 @@ Every entry was checked on 2026-09-16. Free material links to the page itself. A
 
 ## `Cow`, specifically
 
-The path meets `Cow` in [steps 7](../to_owned_traps/README.md) and [8](../borrow_the_way_back/README.md); [What `Cow` explanations get wrong](../cow_claims_checked/README.md) runs the claims the sources below repeat.
+The path meets `Cow` in [steps 7](../borrow_the_way_back/README.md) and [8](../to_owned_traps/README.md); [What `Cow` explanations get wrong](../cow_claims_checked/README.md) runs the claims the sources below repeat.
 
 - ***Programming Rust*, 2nd ed., ch. 13 → "Borrow and ToOwned at Work: The Humble Cow" (p. 323), and ch. 17 → "Putting Off Allocation"** — the best book treatment: an error-describing function that returns `"…".into()` from most arms and a formatted `String` from one, `into_owned` for the caller who must keep it, `to_mut` and `+=` on a `get_name()` result. One sentence to correct as you read: `to_mut` returns `&mut <B as ToOwned>::Owned` — a `&mut String` — not the `&mut B` the text says.
 - [Pascal Hertleif, *The Secret Life of Cows* (2018) ↗](https://deterministic.space/secret-life-of-cows.html) — the standard essay

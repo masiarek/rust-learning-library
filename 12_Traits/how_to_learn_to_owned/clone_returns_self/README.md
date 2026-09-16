@@ -60,7 +60,7 @@ And Clone on the reference hands back the reference
 
 - [Step 5](../the_dot_picks_first/README.md): `String: Clone` and `&String: Clone` both exist, so `r.clone()` on a `&String` has two candidates — and lookup picks one.
 - [Step 6](../the_blanket_to_owned/README.md): the blanket `impl<T: Clone> ToOwned for T` reaches every `&T` too, which is how `(&ticket).to_owned()` compiles and hands back the pointer.
-- [Step 7](../to_owned_traps/README.md): `Rc<T>` is `Clone` by bumping a count, so `.to_owned()` on it copies nothing.
+- [Step 8](../to_owned_traps/README.md): `Rc<T>` is `Clone` by bumping a count, so `.to_owned()` on it copies nothing.
 - [Step 9](../clone_into_refills/README.md): `clone_from` is the `Clone` half of the refill idea that `clone_into` generalizes.
 
 ## Go deeper
@@ -75,7 +75,7 @@ And Clone on the reference hands back the reference
 - [Stack and heap — what each duplication does to the heap side](../../../18_Ownership/stack_and_heap/README.md#what-each-duplication-does-to-the-heap-side)
 - [Reborrowing](../../../18_Ownership/reborrowing/README.md), what happens to a `&mut` instead of a copy
 
-**Docs:** [`Clone` ↗](https://doc.rust-lang.org/std/clone/trait.Clone.html) · [the reference primitive ↗](https://doc.rust-lang.org/std/primitive.reference.html), whose *Trait implementations* section lists `Copy` and `Clone` for every `&T` and warns that `Clone` there does not defer to `T`'s
+**Docs:** The Book, [ch. 4.1 — Variables and Data Interacting with Clone ↗](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#variables-and-data-interacting-with-clone) and [Stack-Only Data: Copy ↗](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#stack-only-data-copy) · [`Clone` ↗](https://doc.rust-lang.org/std/clone/trait.Clone.html) · [the reference primitive ↗](https://doc.rust-lang.org/std/primitive.reference.html), whose *Trait implementations* section lists `Copy` and `Clone` for every `&T` and warns that `Clone` there does not defer to `T`'s
 
 **Words:** *`Clone`* and *`Copy`* in the [glossary](../../../GLOSSARY.md).
 

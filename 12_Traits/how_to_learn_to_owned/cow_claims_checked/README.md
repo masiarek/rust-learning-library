@@ -1,6 +1,6 @@
 # What `Cow` explanations get wrong, run
 
-[How to learn `ToOwned`](../README.md) › **Beside the steps** · read after: [Step 8 — `Borrow` is the way back](../borrow_the_way_back/README.md)
+[How to learn `ToOwned`](../README.md) › **Beside the steps** · read after: [Step 7 — `Borrow` is the way back](../borrow_the_way_back/README.md)
 
 **Level:** 201 · a companion to the path
 
@@ -65,7 +65,7 @@ Everything below follows from four facts in those six lines. `Borrowed` holds a 
 
 Reading them in order:
 
-1. **`to_mut()` returns `&mut <B as ToOwned>::Owned`** — a `&mut String` for a `Cow<str>`, which is why you can `push_str` through it. Explanations that say `&mut B` or `&mut str` describe a method you could not push into. [Step 8](../borrow_the_way_back/README.md) runs it twice.
+1. **`to_mut()` returns `&mut <B as ToOwned>::Owned`** — a `&mut String` for a `Cow<str>`, which is why you can `push_str` through it. Explanations that say `&mut B` or `&mut str` describe a method you could not push into. [Step 7](../borrow_the_way_back/README.md) runs it twice.
 2. **Methods reached through `Deref` never touch the `Cow`.** `replace` and `to_uppercase` are `str`'s methods; they borrow the text and return a new `String`, and the `Cow` stays `Borrowed`. What changes the variant is a call on the `Cow` itself: `to_mut()`, or an operator it implements, such as the `+=` in claim 6. `into_owned()` does not change it — it consumes the `Cow` and hands back the `String`.
 3. **`as_ref()` is `AsRef<str>`, and returns a `&str`**, the same thing `&*cow` gives you.
 4. **`Owned` means owned, not cloned.** A `String` handed to `.into()` becomes `Owned` without a copy; a `&'static str` becomes `Borrowed`. That pair is how the usual error-message function returns `"out of memory".into()` from most arms and `format!(…).into()` from the one that needs data.
@@ -81,7 +81,7 @@ Almost every example online writes `fn f(input: &str) -> Cow<str>`. On rustc 1.9
 ## Where this leaves you
 
 - The `Cow` page itself: [`Cow`: borrow until somebody writes](../../../18_Ownership/clone_on_write/README.md) — [you do not have to match on it](../../../18_Ownership/clone_on_write/README.md#you-do-not-have-to-match-on-it), [`to_mut()` is the write](../../../18_Ownership/clone_on_write/README.md#to_mut-is-the-write), [when not to reach for it](../../../18_Ownership/clone_on_write/README.md#when-not-to-reach-for-it).
-- The traps with `.to_owned()` on a `Cow`: [step 7](../to_owned_traps/README.md).
+- The traps with `.to_owned()` on a `Cow`: [step 8](../to_owned_traps/README.md).
 - A std function that hands you a `Cow`: [`String::from_utf8_lossy`](../../../14_Strings/string_methods/string_from_utf8_lossy/README.md).
 - Why `"élan"` broke claim 7: [Walking a string](../../../14_Strings/walking_a_string/README.md) and [Four lengths](../../../14_Strings/four_lengths/README.md).
 - The elided lifetime in the warning: [Lifetime annotations](../../../18_Ownership/lifetime_annotations/README.md).
@@ -99,4 +99,4 @@ Sprawdzone na rustc 1.98.0: metody `into_borrowed` nie ma (`E0599`); `Cow<dyn Di
 
 ---
 
-[How to learn `ToOwned`](../README.md) › **Beside the steps** · back to [Step 8](../borrow_the_way_back/README.md) · [After the steps — `Clone`, `ToOwned` or `From`?](../clone_to_owned_or_from/README.md)
+[How to learn `ToOwned`](../README.md) › **Beside the steps** · back to [Step 7](../borrow_the_way_back/README.md) · [After the steps — `Clone`, `ToOwned` or `From`?](../clone_to_owned_or_from/README.md)

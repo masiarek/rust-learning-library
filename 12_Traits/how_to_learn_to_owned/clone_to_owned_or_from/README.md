@@ -29,7 +29,7 @@ pub trait From<T>: Sized {
 | **gives** | `Self`, always | `Self::Owned`: `Self` for every `Clone` type ([step 6](../the_blanket_to_owned/README.md)), another type for `str`, `[T]`, `Path` … ([step 1](../clone_vs_to_owned/README.md)) | `Self`, usually another type |
 | **may `Self` be unsized?** | no — `Clone: Sized` ([step 4](../clone_returns_self/README.md)) | yes ([step 2](../types_with_no_size/README.md)) | no — `From<T>: Sized` |
 | **you implement it by** | `#[derive(Clone)]` | almost never ([step 10](../implementing_it_or_not/README.md)) | writing `From`, never `Into` |
-| **the promise** | same type, independent value | the owned form can lend the borrowed one back ([step 8](../borrow_the_way_back/README.md)) | a conversion that cannot fail — `TryFrom` when it can |
+| **the promise** | same type, independent value | the owned form can lend the borrowed one back ([step 7](../borrow_the_way_back/README.md)) | a conversion that cannot fail — `TryFrom` when it can |
 
 ## What each call does to the heap, measured
 
@@ -56,7 +56,7 @@ From / Into: T -> U, and the T is gone afterwards
 Reading it row by row:
 
 - **`Clone`** copied the `String`'s bytes into a new buffer, and had no heap to copy for an `i32`. The cost is whatever the type's `clone` does — [What a clone costs](../../../18_Ownership/what_a_clone_costs/README.md) adds it up field by field.
-- **`ToOwned`** allocated for the `&str`, copied an `i32` with no heap involved, and on an `Rc` copied **no** text at all — it bumped the count ([step 7](../to_owned_traps/README.md)). So *"`ToOwned` almost always allocates"* is the wrong rule. It allocates exactly when the impl it lands on does: `str`'s does, the blanket impl's does whatever `clone` does.
+- **`ToOwned`** allocated for the `&str`, copied an `i32` with no heap involved, and on an `Rc` copied **no** text at all — it bumped the count ([step 8](../to_owned_traps/README.md)). So *"`ToOwned` almost always allocates"* is the wrong rule. It allocates exactly when the impl it lands on does: `str`'s does, the blanket impl's does whatever `clone` does.
 - **`From`** allocated for `String::from(&str)` — a borrowed source cannot be moved, so the bytes are copied. `Vec::from(String)` reused the `String`'s buffer — same address. And `Rc<str>::from(String)` *consumed* its `String` and still allocated, because an `Rc` keeps its counts in front of the data. So *"`From` is a zero-cost move"* is true of some impls, not of the trait.
 
 ## Which one to write

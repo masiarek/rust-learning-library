@@ -285,7 +285,7 @@ fn main() {
 ## See also
 
 - [`ToOwned`](../to_owned/README.md) — the trait whose `type Owned` is bound by this one
-- [How to learn `ToOwned`](../how_to_learn_to_owned/README.md) — [step 8 of the path](../how_to_learn_to_owned/borrow_the_way_back/README.md) sends you here, after running a `Cow`'s read and write
+- [How to learn `ToOwned`](../how_to_learn_to_owned/README.md) — [step 7 of the path](../how_to_learn_to_owned/borrow_the_way_back/README.md) sends you here, after running a `Cow`'s read and write
 - [Reading the `ToOwned` docs](../reading_the_to_owned_docs/README.md) — `Borrow` is dyn compatible and `ToOwned` is not, run side by side
 - [`Cow`: borrow until somebody writes](../../18_Ownership/clone_on_write/README.md) — the type that needs both traits
 - [`str::as_str`](../../14_Strings/str_as_str/README.md) — `AsRef`, the looser trait, and why it is not reflexive

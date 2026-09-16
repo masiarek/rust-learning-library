@@ -1,6 +1,6 @@
-# Step 7: The traps are steps 5 and 6 together
+# Step 8: The traps are steps 5 and 6 together
 
-[How to learn `ToOwned`](../README.md) › **Step 7 of 10** · back: [Step 6 — One blanket impl covers every `Clone` type](../the_blanket_to_owned/README.md) · next: [Step 8 — `Borrow` is the way back](../borrow_the_way_back/README.md)
+[How to learn `ToOwned`](../README.md) › **Step 8 of 10** · back: [Step 7 — `Borrow` is the way back](../borrow_the_way_back/README.md) · next: [Step 9 — `clone_into` refills instead of allocating](../clone_into_refills/README.md)
 
 **Level:** 201 · a step on a learning path
 
@@ -21,7 +21,7 @@ The reverse habit exists for the same reason. When you *do* want the pointer, th
 
 ## `Cow`: `.to_owned()` is not `.into_owned()`
 
-`Cow<'_, str>` is `Clone` too. So `cow.to_owned()` clones the `Cow` — a `Borrowed` stays `Borrowed`, still tied to the original borrow's lifetime, and nothing about it is more owned than before.
+`Cow<'_, str>` — the type [step 7](../borrow_the_way_back/README.md#cow-is-built-on-the-pair) took apart — is `Clone` too. So `cow.to_owned()` clones the `Cow` — a `Borrowed` stays `Borrowed`, still tied to the original borrow's lifetime, and nothing about it is more owned than before.
 
 **What was meant** is `cow.into_owned()`, which returns the `String`: allocating if the `Cow` was `Borrowed`, and just unwrapping it if it was already `Owned`. Clippy's `suspicious_to_owned` exists for this one call.
 
@@ -62,7 +62,7 @@ Why Cow is Clone at all: so that what holds one can derive Clone
 
 ## What this step sets up
 
-- [Step 8](../borrow_the_way_back/README.md): what a `Cow` is built from — `ToOwned` for the write, `Borrow` for the read.
+- [Step 9](../clone_into_refills/README.md): when a copy *is* what you want, how to make it without a new allocation.
 - [After the steps](../clone_to_owned_or_from/README.md): both traps copy no text, which is why *"`ToOwned` almost always allocates"* is the wrong mental model.
 
 ## Go deeper
@@ -93,4 +93,4 @@ Tak samo `Cow`: `cow.to_owned()` klonuje samego `Cow`, a `Borrowed` zostaje `Bor
 
 ---
 
-[How to learn `ToOwned`](../README.md) › **Step 7 of 10** · back: [Step 6](../the_blanket_to_owned/README.md) · next: [Step 8 — `Borrow` is the way back](../borrow_the_way_back/README.md)
+[How to learn `ToOwned`](../README.md) › **Step 8 of 10** · back: [Step 7](../borrow_the_way_back/README.md) · next: [Step 9 — `clone_into` refills instead of allocating](../clone_into_refills/README.md)

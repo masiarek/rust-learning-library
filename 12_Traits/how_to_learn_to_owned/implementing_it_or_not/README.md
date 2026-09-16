@@ -2,7 +2,7 @@
 
 [How to learn `ToOwned`](../README.md) › **Step 10 of 10** · back: [Step 9 — `clone_into` refills instead of allocating](../clone_into_refills/README.md) · next: [After the steps — `Clone`, `ToOwned` or `From`?](../clone_to_owned_or_from/README.md)
 
-**Level:** 201 → 301 · a step on a learning path
+**Level:** 201 → 301 · an optional last step: most code never implements `ToOwned`
 
 **One line:** A type that is `Clone` cannot have an impl of its own (`E0119`). A struct holding references cannot be lent out of an owned struct, because `borrow` must return a `&`. The trait fits an unsized wrapper around one buffer; for everything else, write an inherent method.
 
@@ -12,7 +12,7 @@ If `MyType` is `Clone`, the blanket impl from [step 6](../the_blanket_to_owned/R
 
 ## Why a view struct cannot be the borrowed half
 
-Say you have `NameRef<'a> { first: &'a str }` and an owned `Name { first: String }`, and want `NameRef: ToOwned<Owned = Name>`. [Step 8](../borrow_the_way_back/README.md)'s bound then demands `Name: Borrow<NameRef<'a>>`:
+Say you have `NameRef<'a> { first: &'a str }` and an owned `Name { first: String }`, and want `NameRef: ToOwned<Owned = Name>`. [Step 7](../borrow_the_way_back/README.md)'s bound then demands `Name: Borrow<NameRef<'a>>`:
 
 ```rust
 fn borrow(&self) -> &NameRef<'a>

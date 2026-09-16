@@ -13,9 +13,3 @@ Which type carries the impl: the one behind the &
    <Path as ToOwned>::Owned  = std::path::PathBuf
    <OsStr as ToOwned>::Owned = std::ffi::os_str::OsString
    <CStr as ToOwned>::Owned  = alloc::ffi::c_str::CString
-   <&str as ToOwned>::Owned  = &str   (the reference has an impl too)
-
-So one &str gives two answers, depending on which Self the call lands on
-   <str as ToOwned>::to_owned(s)   Self = str  -> alloc::string::String
-   s.to_owned()                    Self = str  -> alloc::string::String
-   ToOwned::to_owned(&s)           Self = &str -> &str

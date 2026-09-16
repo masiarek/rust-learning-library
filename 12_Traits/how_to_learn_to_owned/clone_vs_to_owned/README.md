@@ -27,7 +27,7 @@ pub trait ToOwned {
 ```
 
 - `type Owned` is the one new idea: an **associated type**, a type the impl names. It is what lets `str`'s answer be `String`. How associated items work in general is on [What a trait is](../../what_a_trait_is/README.md#three-kinds-of-item-can-go-in-a-trait).
-- `Borrow<Self>` is the way back from the owned type to the borrowed one — [step 8](../borrow_the_way_back/README.md).
+- `Borrow<Self>` is the way back from the owned type to the borrowed one — [step 7](../borrow_the_way_back/README.md).
 - `clone_into` is a provided method that refills an owned value you already have — [step 9](../clone_into_refills/README.md).
 - And notice what is *not* there. [`Clone` is declared `Clone: Sized`](../clone_returns_self/README.md); `ToOwned` is not, so its `Self` may be a type with no size, such as `str`. [Step 2](../types_with_no_size/README.md) is why that matters.
 
@@ -44,16 +44,11 @@ pub trait ToOwned {
 
 Read the first row slowly, because it is the one most explanations blur: **`Self` is `str`, so `&self` is `&str`, and the result is a `String`.** A `&str` is the *argument*, not the implementing type.
 
-The last row matters too. `&str` is itself `Clone` — every shared reference is, [step 4](../clone_returns_self/README.md) — so `&str` has a `ToOwned` impl of its own, from the blanket, and its `Owned` is `&str`. Both impls exist. Which one a call reaches depends on how you spell the call:
-
-- `s.to_owned()` with `s: &str` reaches `str`'s impl and gives a `String`. No dereference is involved: the method's receiver type is `&str`, which is exactly the type of `s`, so the very first place the dot looks already fits. [Step 5](../the_dot_picks_first/README.md) walks that search, including why a deref would have given the *other* answer.
-- `ToOwned::to_owned(&s)` passes a `&&str`, which fixes `Self = &str` and gives back a `&str`.
-
-Two descriptions you will meet get this wrong, and both are worth unlearning now: *"`&str` implements `ToOwned` to produce a `String`"* (it is `str` that does), and *"`.to_owned()` on a `&str` works through autoderef"* (it needs none).
+One sentence you will meet gets this wrong: *"`&str` implements `ToOwned` to produce a `String`"*. It is `str` that does. Whether `&str` has a `ToOwned` of its own — it does, and it is not the one you want — is [step 6](../the_blanket_to_owned/README.md#one-str-two-impls)'s surprise, once steps 4 and 5 have put the pieces in place.
 
 ## Checkpoint
 
-**Predict before you open the answer.** What does each of `"hi".to_owned()`, `[1_i32, 2][..].to_owned()` and `Path::new("notes.txt").to_owned()` turn into? And for `s: &str`, what does `ToOwned::to_owned(&s)` return?
+**Predict before you open the answer.** What does each of `"hi".to_owned()`, `[1_i32, 2][..].to_owned()` and `Path::new("notes.txt").to_owned()` turn into — and which type's impl produced each one?
 
 <details markdown="1">
 <summary><strong>The answer</strong></summary>
@@ -77,18 +72,10 @@ Which type carries the impl: the one behind the &
    <Path as ToOwned>::Owned  = std::path::PathBuf
    <OsStr as ToOwned>::Owned = std::ffi::os_str::OsString
    <CStr as ToOwned>::Owned  = alloc::ffi::c_str::CString
-   <&str as ToOwned>::Owned  = &str   (the reference has an impl too)
-
-So one &str gives two answers, depending on which Self the call lands on
-   <str as ToOwned>::to_owned(s)   Self = str  -> alloc::string::String
-   s.to_owned()                    Self = str  -> alloc::string::String
-   ToOwned::to_owned(&s)           Self = &str -> &str
 ```
 <!-- /output -->
 
 </details>
-
-If the last line surprised you, you are in good company, and steps 4 to 6 are exactly the explanation.
 
 ## The questions this step leaves open
 
@@ -96,7 +83,7 @@ Each is the next step's job, so it is fine that they are still open:
 
 - Why can `str` not simply be `Clone`? → [Step 2: some types have no size](../types_with_no_size/README.md), then [step 4: `Clone` hands back `Self`](../clone_returns_self/README.md)
 - Why is the owned twin a different type at all? → [Step 3: owned and borrowed are two different types](../owned_and_borrowed_types/README.md)
-- Why does `s.to_owned()` land on `str`'s impl and not on `&str`'s? → [Step 5: the dot takes the first receiver that fits](../the_dot_picks_first/README.md)
+- Does `&str` have a `ToOwned` impl too — and if so, why does `"hi".to_owned()` still give a `String`? → [Step 5: the dot takes the first receiver that fits](../the_dot_picks_first/README.md), then [step 6: one `&str`, two impls](../the_blanket_to_owned/README.md#one-str-two-impls)
 - Where does `42_i32.to_owned()` come from, when nobody wrote an impl for `i32`? → [Step 6: one blanket impl](../the_blanket_to_owned/README.md)
 - So when do I write `clone`, `to_owned` or `From`? → [After the steps: `Clone`, `ToOwned` or `From`?](../clone_to_owned_or_from/README.md)
 
@@ -180,7 +167,7 @@ Without `?Sized`, four calls fail with `E0277`, *"the size for values of type `s
 
 `Clone` robi z `&T` kolejne `T` — ten sam typ. `ToOwned` robi z `&B` wartość typu `B::Owned`, który może być innym typem: z `&str` powstaje `String`. Najważniejszy szczegół tego kroku: implementacja jest na `str`, czyli na typie **za** referencją, a nie na `&str`. Skoro `Self` to `str`, to `&self` to `&str` — i dlatego `s.to_owned()` daje `String`, bez żadnej dereferencji.
 
-`&str` też ma swoją implementację `ToOwned` (z implementacji zbiorczej, bo każda referencja współdzielona jest `Clone`), a jej `Owned` to `&str`. Stąd `ToOwned::to_owned(&s)` zwraca `&str`. Dwa często powtarzane zdania są więc błędne: „`&str` implementuje `ToOwned`, dając `String`” oraz „`.to_owned()` na `&str` działa dzięki autodereferencji”. Kroki 4–6 wyjaśniają dokładnie dlaczego.
+Często powtarzane zdanie „`&str` implementuje `ToOwned`, dając `String`” jest więc błędne — robi to `str`. Czy `&str` ma własną implementację `ToOwned`? Ma, i nie jest to ta, której szukasz; to temat kroku 6, gdy kroki 4 i 5 będą już za tobą.
 
 **Szukaj po polsku:** typ powiązany w Ruscie · `rust ToOwned vs Clone` · `rust impl ToOwned for str`
 

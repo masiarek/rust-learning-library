@@ -363,7 +363,7 @@ Part 3 — the back edge, and whether Drop runs.
 - [`ToOwned`](../../12_Traits/to_owned/README.md) — where the same misreading bites hardest
 - [The global allocator](../../09_Advanced/the_global_allocator/README.md) — the counting allocator section 2 measures with
 - [`Rc` ↗](https://doc.rust-lang.org/std/rc/struct.Rc.html) · [`Weak` ↗](https://doc.rust-lang.org/std/rc/struct.Weak.html) · [`RefCell` ↗](https://doc.rust-lang.org/std/cell/struct.RefCell.html)
-- [Step 7 of the `ToOwned` path](../../12_Traits/how_to_learn_to_owned/to_owned_traps/README.md) — `.to_owned()` on an `Rc` or a `Cow` copies the wrapper, not the text
+- [Step 8 of the `ToOwned` path](../../12_Traits/how_to_learn_to_owned/to_owned_traps/README.md) — `.to_owned()` on an `Rc` or a `Cow` copies the wrapper, not the text
 
 ## Po polsku
 

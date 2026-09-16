@@ -1,6 +1,6 @@
 # Step 9: `clone_into` refills instead of allocating
 
-[How to learn `ToOwned`](../README.md) › **Step 9 of 10** · back: [Step 8 — `Borrow` is the way back](../borrow_the_way_back/README.md) · next: [Step 10 — Implementing it: on the referent, or not at all](../implementing_it_or_not/README.md)
+[How to learn `ToOwned`](../README.md) › **Step 9 of 10** · back: [Step 8 — The traps are steps 5 and 6 together](../to_owned_traps/README.md) · next: [Step 10 — Implementing it: on the referent, or not at all](../implementing_it_or_not/README.md)
 
 **Level:** 201 · a step on a learning path
 
@@ -94,4 +94,4 @@ Domyślna implementacja to po prostu `*target = self.to_owned();`, więc sama ni
 
 ---
 
-[How to learn `ToOwned`](../README.md) › **Step 9 of 10** · back: [Step 8](../borrow_the_way_back/README.md) · next: [Step 10 — Implementing it: on the referent, or not at all](../implementing_it_or_not/README.md)
+[How to learn `ToOwned`](../README.md) › **Step 9 of 10** · back: [Step 8](../to_owned_traps/README.md) · next: [Step 10 — Implementing it: on the referent, or not at all](../implementing_it_or_not/README.md)

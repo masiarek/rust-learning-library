@@ -9,3 +9,10 @@ Checkpoint. What is 42_i32.to_owned()? Is (&ticket).to_owned() a new ticket?
 
 Derive Clone, and the same call on the same kind of reference copies the value
    b.to_owned() is the same address as b: false   (it is a Seat, seat 12)
+
+One &str, two impls: the spelling of the call picks one
+   <str as ToOwned>::Owned        = alloc::string::String
+   <&str as ToOwned>::Owned       = &str   (the blanket impl: &str is Clone)
+   s.to_owned()                   Self = str  -> alloc::string::String
+   <str as ToOwned>::to_owned(s)  Self = str  -> alloc::string::String
+   ToOwned::to_owned(&s)          Self = &str -> &str

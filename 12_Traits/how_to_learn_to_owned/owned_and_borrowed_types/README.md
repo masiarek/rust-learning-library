@@ -31,7 +31,7 @@ Each owned type says which borrowed half it has with `impl Deref for String { ty
 
 ## One direction is free, the other allocates
 
-Owned → borrowed copies nothing: the `&str` points at the `String`'s own bytes. Borrowed → owned has to build a new owner, with its own buffer — that is `to_owned`, and it is the only direction `ToOwned` covers. The way back again, owned → borrowed as a *trait*, is `Borrow`, [step 8](../borrow_the_way_back/README.md).
+Owned → borrowed copies nothing: the `&str` points at the `String`'s own bytes. Borrowed → owned has to build a new owner, with its own buffer — that is `to_owned`, and it is the only direction `ToOwned` covers. The way back again, owned → borrowed as a *trait*, is `Borrow`, [step 7](../borrow_the_way_back/README.md).
 
 ## Checkpoint
 
@@ -69,7 +69,7 @@ Going the other way has to build a new owner
 
 - [Step 1, again](../clone_vs_to_owned/README.md): `type Owned` is the name for the left-hand column, and `ToOwned for str` fills it with `String`.
 - [Step 5](../the_dot_picks_first/README.md): `Deref` is the rung the dot steps down when a method is not on the owned type.
-- [Step 8](../borrow_the_way_back/README.md): `Borrow` is the promise that the left-hand column can always lend out the middle one.
+- [Step 7](../borrow_the_way_back/README.md): `Borrow` is the promise that the left-hand column can always lend out the middle one.
 
 ## Go deeper
 
@@ -82,8 +82,9 @@ Going the other way has to build a new owner
 - [Coercion](../../../29_Conversion/coercion/README.md), where deref coercion happens and where it does not
 - [Arrays and slices — the trap: `&Vec<T>` in a signature](../../../26_Collections/arrays_and_slices/README.md#the-trap-vect-in-a-signature)
 - [Borrowing](../../../18_Ownership/borrowing/README.md), the rules for the right-hand column
+- [Stack and heap](../../../18_Ownership/stack_and_heap/README.md), and the rest of the [Ownership](../../../18_Ownership/README.md) section, for what owning a buffer means in the first place
 
-**Docs:** [`str` ↗](https://doc.rust-lang.org/std/primitive.str.html) · [`String`'s methods from `Deref<Target = str>` ↗](https://doc.rust-lang.org/std/string/struct.String.html#deref-methods-str), the list that shows `*s` is a `str` · [`Deref` ↗](https://doc.rust-lang.org/std/ops/trait.Deref.html)
+**Docs:** The Book, [ch. 4.1 — Memory and Allocation ↗](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#memory-and-allocation), a `String`'s three words and its heap bytes, drawn · [`str` ↗](https://doc.rust-lang.org/std/primitive.str.html) · [`String`'s methods from `Deref<Target = str>` ↗](https://doc.rust-lang.org/std/string/struct.String.html#deref-methods-str), the list that shows `*s` is a `str` · [`Deref` ↗](https://doc.rust-lang.org/std/ops/trait.Deref.html)
 
 **Words:** *string slice (`&str`)*, *deref coercion* and *zero-copy* in the [glossary](../../../GLOSSARY.md).
 

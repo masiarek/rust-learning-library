@@ -45,4 +45,13 @@ fn main() {
         std::ptr::eq(b, &copy),
         copy.seat
     );
+
+    println!();
+    println!("One &str, two impls: the spelling of the call picks one");
+    let s: &str = "hi";
+    println!("   <str as ToOwned>::Owned        = {}", type_name::<<str as ToOwned>::Owned>());
+    println!("   <&str as ToOwned>::Owned       = {}   (the blanket impl: &str is Clone)", type_name::<<&str as ToOwned>::Owned>());
+    println!("   s.to_owned()                   Self = str  -> {}", type_name_of_val(&s.to_owned()));
+    println!("   <str as ToOwned>::to_owned(s)  Self = str  -> {}", type_name_of_val(&<str as ToOwned>::to_owned(s)));
+    println!("   ToOwned::to_owned(&s)          Self = &str -> {}", type_name_of_val(&ToOwned::to_owned(&s)));
 }

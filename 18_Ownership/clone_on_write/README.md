@@ -253,7 +253,7 @@ rustc --edition 2024 18_Ownership/clone_on_write/examples/clone_on_write.rs -o /
 - [Six kinds of string](../../14_Strings/six_kinds_of_string/README.md) — `Cow<str>` in its place among the owned/borrowed pairs
 - [`String::from_utf8_lossy`](../../14_Strings/string_methods/string_from_utf8_lossy/README.md) — std's own function returning a `Cow<str>`: `Borrowed` when the bytes were already valid, `Owned` only when something had to be replaced
 - [`Cow` ↗](https://doc.rust-lang.org/std/borrow/enum.Cow.html) · [`ToOwned` ↗](https://doc.rust-lang.org/std/borrow/trait.ToOwned.html)
-- [Step 8 of the `ToOwned` path](../../12_Traits/how_to_learn_to_owned/borrow_the_way_back/README.md) — `Cow` as `ToOwned` for the write and `Borrow` for the read, with `to_mut()` run twice
+- [Step 7 of the `ToOwned` path](../../12_Traits/how_to_learn_to_owned/borrow_the_way_back/README.md) — `Cow` as `ToOwned` for the write and `Borrow` for the read, with `to_mut()` run twice
 
 ## Po polsku
 
