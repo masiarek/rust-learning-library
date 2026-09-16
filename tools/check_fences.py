@@ -84,7 +84,10 @@ SCOPE = (
     "15_First_Programs/where_a_bracket_error_points",
 )
 
-SKIP_DIRS = {".git", "site", ".venv", "target", "__pycache__", ".github"}
+# `.claude` holds this repo checked out again, once per agent worktree, so a scan
+# that walks into it sees every stem, page and link several times over and reports
+# each as a duplicate of itself. Nothing under it is part of the library.
+SKIP_DIRS = {".claude", ".git", "site", ".venv", "target", "__pycache__", ".github"}
 
 # The generated blocks `run_examples.py` fills. A ```rust fence inside one is the
 # example's own source, already compiled and answer-keyed by that tool — checking

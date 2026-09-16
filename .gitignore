@@ -35,3 +35,6 @@ __pycache__/
 10_Resources/anki/snippets/
 10_Resources/anki/bin/
 10_Resources/anki/out/
+
+# Agent worktrees: this repo checked out again, inside itself.
+.claude/worktrees/

@@ -1,0 +1,71 @@
+
+1. What std offers
+--------------------------------------------------------------
+std::process............................ exit, abort, Command
+std::thread............................. park, unpark, sleep
+a way to hear about SIGINT.............. none
+
+There is no std::signal. Ctrl-C is therefore whatever the kernel
+does by default: the process ends, no unwinding, no Drop, and no
+destructor for the file you were half-way through writing.
+
+2. Installing a handler through the C ABI
+--------------------------------------------------------------
+signal(SIGINT, on_sigint) returned...... 0
+...which is SIG_DFL..................... true
+
+SIG_DFL is 0 and SIG_IGN is 1; anything else is a function
+pointer. That return value is the only way back to what was there,
+and nothing keeps a copy for you.
+
+3. A real SIGINT, delivered to ourselves
+--------------------------------------------------------------
+INTERRUPTED before...................... false
+raise(SIGINT) returned.................. 0
+INTERRUPTED after....................... true
+the number the handler was passed....... 2
+
+The handler ran, returned, and execution carried on at the next
+line. A handler that returns resumes the code it interrupted: it is
+a call, not an unwind, so nothing was dropped on the way through.
+
+4. The flag is the program, not the handler
+--------------------------------------------------------------
+round 1................................. working
+round 2................................. working
+round 3................................. saw the flag, shutting down
+
+This is the whole Rust idiom. The handler sets an atomic; the work
+happens back in ordinary code, where allocating, locking and
+printing are allowed again. Everything a Python handler may do
+directly, a Rust handler has to ask for by leaving a note.
+
+5. What the handler may not do
+--------------------------------------------------------------
+It is a C signal handler, so the rule is C's rule: only
+async-signal-safe calls. That list is short, and nothing which
+locks or allocates is on it.
+
+    println!(...)....................... takes the Stdout lock
+    String::from, vec![], format!....... allocates
+    Mutex::lock......................... locks
+    an atomic store..................... fine, and is all this one does
+
+The failure is a deadlock, not a compile error: the signal arrives
+while main holds the Stdout lock, the handler asks for the same
+lock on the same thread, and the process stops there. Nothing in
+the type system says a fn is a signal handler, so nothing checks it.
+
+6. Ignoring, and putting the default back
+--------------------------------------------------------------
+signal(SIGINT, SIG_IGN) returned........ a function pointer
+...neither SIG_DFL nor SIG_IGN.......... true
+handler calls before a raise............ 2
+handler calls after it.................. 2
+
+SIG_IGN is the kernel discarding the signal before anyone is woken.
+
+signal(SIGINT, SIG_DFL) returned........ 1, which is SIG_IGN
+
+SIGINT is back to ending the process. Raising it now would stop this
+program with no further output, which is why this line is the last.

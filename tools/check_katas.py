@@ -45,7 +45,10 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 INDEX = REPO / "KATAS.md"
-SKIP_DIRS = {".git", "site", ".venv", "target", "__pycache__", ".github"}
+# `.claude` holds this repo checked out again, once per agent worktree, so a scan
+# that walks into it sees every stem, page and link several times over and reports
+# each as a duplicate of itself. Nothing under it is part of the library.
+SKIP_DIRS = {".claude", ".git", "site", ".venv", "target", "__pycache__", ".github"}
 
 # The two label captures are bounded by the *cell* (``[^|]+``) rather than by the
 # first ``]``. A kata title is free to contain brackets — ``&[&[i32]]``, ``v[0]``,

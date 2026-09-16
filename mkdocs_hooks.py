@@ -950,6 +950,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # FFI sits after `unsafe`, which it needs, and before the
         # union, which is the layout half of the same boundary.
         "calling_c",
+        # ...and the libc call whose danger is not the ABI at all: what the
+        # callee may do, which nothing in the type system checks.
+        "catching_a_signal",
         "what_a_union_is",
         # ...and where the bytes those layouts occupy actually came from.
         "the_global_allocator",

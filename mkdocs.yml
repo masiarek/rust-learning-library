@@ -46,6 +46,7 @@ exclude_docs: |
   /target/
   /34_Templates/*/template/target/
   /34_Templates/*/template/Cargo.lock
+  .claude/
 
 # Built and linkable, but kept out of the sidebar. Two kinds of page qualify.
 #

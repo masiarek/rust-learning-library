@@ -38,7 +38,10 @@ from collections import defaultdict
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-SKIP_DIRS = {"site", ".venv", ".git", "__pycache__", "target"}
+# `.claude` holds this repo checked out again, once per agent worktree, so a scan
+# that walks into it sees every stem, page and link several times over and reports
+# each as a duplicate of itself. Nothing under it is part of the library.
+SKIP_DIRS = {".claude", "site", ".venv", ".git", "__pycache__", "target"}
 
 # A topic map and the code terms that mark a lesson as belonging to it. This is
 # the one table to extend when a map page is added — cheap to leave stale,
