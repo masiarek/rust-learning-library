@@ -286,6 +286,7 @@ Without the `allow` line, rustc 1.98.0 warns three times. `text.clone()` and `nu
 - [What a clone costs](../../18_Ownership/what_a_clone_costs/README.md), with allocations counted field by field
 - [`str` is unsized](../../14_Strings/str_is_unsized/README.md) and [marker traits](../marker_traits/README.md), for `Sized` and `?Sized`
 - [`Rc`](../../18_Ownership/reference_counting/README.md) and [sharing across threads](../../18_Ownership/sharing_across_threads/README.md), the smart-pointer row in section 4
+- [Returned by value](../../18_Ownership/returned_by_value/README.md), why `Clone: Sized` rules out `str`: `-> Self` hands the value back into room the caller reserved, and a `str` has no one size for that room
 
 ## Sources
 

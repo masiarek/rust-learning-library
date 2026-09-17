@@ -225,7 +225,7 @@ pub trait Clone: Sized {
 
 `-> Self` is a return by value. A `str` could never be handed back that way, and std writes the requirement onto the trait line itself as the supertrait `: Sized`. So there is no `impl Clone for str`, and there can't be ([Step 4 of the `ToOwned` path](../../12_Traits/how_to_learn_to_owned/clone_returns_self/README.md#self-in-self-out)).
 
-What `name.clone()` on a `&str` does instead is part 4 of the output above. The call finds the reference's own `Clone`, which copies the two words. rustc flags it:
+What `name.clone()` on a `&str` does instead is part 4 of the output above. The call finds the reference's own `Clone`, which copies the two words ([Reading the `Clone for &T` hover](../../12_Traits/reading_the_clone_hover/README.md) reads that impl line by line). rustc flags it:
 
 ```text title="Abridged — clone_str.rs, rustc 1.98.0, the warning without its summary line"
 warning: call to `.clone()` on a reference in this situation does nothing
@@ -359,6 +359,7 @@ The `&str` is the only one that points into the input, so it is the only one the
 - [Wide pointers](../../36_Pointers/wide_pointers/README.md): the second word a `&str` or `Box<dyn Trait>` carries
 - [`Box<str>`](../../14_Strings/boxed_str/README.md) and [Returning a trait](../../12_Traits/returning_a_trait/README.md): two of the fixes in the table
 - [`Clone` hands back `Self`](../../12_Traits/how_to_learn_to_owned/clone_returns_self/README.md), [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) and [`ToOwned`](../../12_Traits/to_owned/README.md)
+- [Reading the `Clone for &T` hover](../../12_Traits/reading_the_clone_hover/README.md): the impl `.clone()` on a `&str` lands on, as the editor shows it
 
 **Underneath:**
 
