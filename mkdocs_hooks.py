@@ -429,6 +429,10 @@ NAV_ORDER: dict[str, list[str]] = {
         # rustc suggests it the first time a name collides with a keyword,
         # and the reason it exists (editions) is worth meeting early.
         "raw_identifiers",
+        # A check rather than a rung: a book chapter's first program (two
+        # boolean functions) and the sentences around it, run. It leans on
+        # nearly every page above, so it comes after them.
+        "and_or_claims_checked",
         # Last, because it is the first thing that needs anything outside
         # the standard library: the crate almost everyone adds first, and
         # the API the Book still teaches under its old names.
@@ -1166,6 +1170,7 @@ LABELS = {
     "to_owned_lints": "Lints around `ToOwned`",
     "to_owned_in_real_code": "`ToOwned` in real code",
     "cow_claims_checked": "`Cow` claims, run",
+    "and_or_claims_checked": "`and` and `or` claims, run",
     "to_owned_reading_list": "Helpful resources",
     "implementing_to_owned": "Implementing `ToOwned`",
     "reading_the_to_owned_docs": "Reading the `ToOwned` docs",

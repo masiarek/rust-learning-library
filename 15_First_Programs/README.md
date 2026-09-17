@@ -38,6 +38,7 @@ Then the three that stay open in a tab forever — [The Book](../00_Start_Here/t
 | [Debug and Display](debug_vs_display/README.md) | 101 → 201 | Two printing traits, two audiences: `{:?}` can be derived because it is structural and `{}` never will be — plus the compiler note that spreads the habit, and the four default paths that print your error's `Debug` form instead of the sentence you wrote |
 | [What `dbg!` does](what_dbg_does/README.md) | 101 → 201 | Why it is not a shorter `println!("{:?}")` — it returns your value, captures the expression source, writes to stderr, always pretty-prints, moves a non-`Copy` argument, and survives `--release` |
 | [Raw identifiers `r#`](raw_identifiers/README.md) | 201 | `r#type` makes a keyword an ordinary name — the escape rustc suggests before you know it exists, why editions make it necessary, the four names that refuse it, and why it is not the raw *string* |
+| [`and`, `or` and a first program's explanation, run](and_or_claims_checked/README.md) | 101 | A book chapter's two boolean functions compile as printed, but three sentences around them do not hold — the return is *implicit*, the `let` snippets lack semicolons, `&&` is no trait call — and a function wrapping `&&` evaluates both sides |
 | [Randomness](randomness/README.md) | 101 → 201 | `std` has no generator, so the Rust Book's guessing game no longer compiles — `thread_rng`/`gen_range` are gone, the trait to import is `RngExt`, and `% n` is biased for a reason no better generator can fix |
 
 ## Where it goes next

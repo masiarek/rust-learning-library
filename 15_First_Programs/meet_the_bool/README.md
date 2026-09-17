@@ -92,6 +92,8 @@ Nothing warns you. Both forms type-check, both are `bool → bool → bool`, and
 
 Use `&`/`|` on bools only when you want both sides evaluated on purpose, which is rare enough to deserve a comment.
 
+A function has the same property as `&`. `fn and(a: bool, b: bool) -> bool { a && b }` returns the same value as `&&`, but [every argument is evaluated before the call](../../25_Control_Flow/functions/README.md#arguments-are-evaluated-first-left-to-right), so `and(i < scores.len(), scores[i] > 0)` panics exactly as the `&` line does. [A book chapter's `and` and `or` functions](../and_or_claims_checked/README.md) run that difference.
+
 ## A `bool` can hand you a value without an `if`
 
 ```rust
@@ -308,6 +310,7 @@ fn main() {
 
 ## See also
 
+- [`and`, `or` and a first program's explanation, run](../and_or_claims_checked/README.md) — `and(x, y)` as a function, and the evaluation `&&` skips that it cannot
 - [Values](../values/README.md) — the census `bool` is one row of, and where the other primitive widths live
 - [Meet the byte](../../19_Numbers/meet_the_byte/README.md) — why one bit of information costs a whole byte
 - [Bit flags](../../19_Numbers/bit_flags/README.md) — packing eight bools into that one byte, on purpose

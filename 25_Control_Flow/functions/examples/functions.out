@@ -1,0 +1,32 @@
+=== the last expression is the return value ===
+  percent( -5) = 0
+  percent( 42) = 42
+  percent(250) = 100
+
+=== no -> means () ===
+  log: saved
+  log_line returned ()
+
+=== arguments are evaluated before the call, left to right ===
+  evaluating first
+  evaluating second
+  add = 5
+  so and(left, right) evaluates both:
+    evaluating left
+    evaluating right
+  and left && right stops at left:
+    evaluating left
+
+=== no overloading, no default arguments ===
+  square_area(3)        = 9
+  rect_area(3, 4)       = 12
+  greeting(None)        = Hello, world!
+  greeting(Some("Ada")) = Hello, Ada!
+
+=== a parameter is a pattern ===
+  swap((1, 2))      = (2, 1)
+  first_of(7, true) = 7
+
+=== a function is a value ===
+  and over TT TF FT FF = [true, false, false, false]
+  or  over TT TF FT FF = [true, true, true, false]

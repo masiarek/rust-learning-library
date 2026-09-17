@@ -12,10 +12,10 @@ That difference is the reason this section is not just a syntax reference. `let 
 | [`while` loops](while_loops/README.md) | 101 | The loop for when the count is unknown, and the `mut` it almost always needs |
 | [`loop`](the_loop_keyword/README.md) | 101 → 201 | The only loop that can produce a value, via `break v` |
 | [`break` and `continue`](break_and_continue/README.md) | 101 → 201 | Leaving early, and the label that leaves a *nested* loop without a flag variable |
-| [Functions](functions/README.md) | 101 | Signatures are never inferred; the last expression is the return value |
+| [Functions](functions/README.md) | 101 | Signatures are never inferred; the last expression is the return value; arguments are evaluated left to right, so a function cannot short-circuit |
 | [Macros](macros/README.md) | 101 → 201 | What the `!` means, and the three things a macro can do that a function cannot |
 
-**Every page in this section is currently a stub** — an outline with its boundaries and its trap written down, and no runnable example behind it yet. They graduate one at a time, and [CONTRIBUTING.md](../CONTRIBUTING.md) says what that takes.
+**Every page in this section except [Functions](functions/README.md) is still a stub** — an outline with its boundaries and its trap written down, and no runnable example behind it yet. They graduate one at a time, and [CONTRIBUTING.md](../CONTRIBUTING.md) says what that takes.
 
 ## Blocks and scopes are already covered
 

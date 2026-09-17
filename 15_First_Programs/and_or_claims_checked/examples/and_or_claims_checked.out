@@ -1,0 +1,39 @@
+1. The two functions reproduce both truth tables
+   A      B      and(A, B)  or(A, B)
+   true   true   true       true
+   true   false  false      true
+   false  true   false      true
+   false  false  false      false
+
+2. and() is not the same as &&: a function gets both arguments already evaluated
+   noisy(left) && noisy(right):
+     evaluated left
+     = false
+   and(noisy(left), noisy(right)):
+     evaluated left
+     evaluated right
+     = false
+
+3. Operators as trait method calls: true of & | !, not of && ||
+   true & false = false  true.bitand(false) = false
+   true | false = true   true.bitor(false)  = true
+   !true        = false  true.not()         = false
+   std::ops has no trait for && or || (use std::ops::And is E0432)
+
+4. An immutable binding may be assigned once, not only at the let
+   let a; then a = true; compiles without mut: a = true
+
+5. Shadowing hides a name; the old value is untouched
+   first still reads true, the new flag is false
+
+6. A type can come from a later line, not only from the value
+   before any push: alloc::vec::Vec<bool>
+   after answers.push(true): [true]
+
+7. A function with no -> returns (), and so does main
+   nothing_to_return() = ()
+
+8. The ! makes println a macro; the brackets can be any of three kinds
+   parentheses: true AND false = false
+   brackets:    true OR false = true
+   braces:      false AND false = false

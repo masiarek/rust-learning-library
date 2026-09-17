@@ -199,6 +199,7 @@ rustc --edition 2024 15_First_Programs/variables/examples/variables.rs -o /tmp/v
 - [The shadowing map](../../SHADOWING.md) — `let` twice, and the five questions it raises
 - [A name is not a place](../../18_Ownership/a_name_is_not_a_place/README.md) — the proof that `mut` and a shadow are different mechanisms
 - [What a warning is asking](../what_a_warning_is_asking/README.md) — `unused_mut` and its neighbours, read properly
+- [`and`, `or` and a first program's explanation, run](../and_or_claims_checked/README.md) — a book's `let` snippets checked: assign-once without `mut`, and the old value a shadow leaves alive
 - [Variables and mutability ↗](https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html) · [`E0384` ↗](https://doc.rust-lang.org/error_codes/E0384.html) · [Comprehensive Rust: Variables ↗](https://google.github.io/comprehensive-rust/types-and-values/variables.html)
 
 ## Po polsku
