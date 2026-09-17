@@ -324,6 +324,8 @@ and std wrote the SAFETY argument once.
 - [Null dereference](../../31_C_and_Cpp/null_dereference/README.md) and [Use-after-free](../../31_C_and_Cpp/use_after_free/README.md) — the C bugs these reads are
 - [`Vec::from_raw_parts`](../../26_Collections/vec_methods/vec_from_raw_parts/README.md) and [`String::from_raw_parts`](../../14_Strings/string_methods/string_from_raw_parts/README.md) — building owners out of raw pointers, and their contracts
 - [Function pointers](../../23_Closures/function_pointers/README.md) — `fn()`, the pointer type that points at code
+- [Six pointer types, one table](../../18_Ownership/references/pointer_types_compared/README.md) — the raw pointers beside `&T`, `&mut T`, `Box` and `Rc`, and why `*const T` and `*mut T` differ in variance
+- [Lints around references](../../18_Ownership/references/reference_lints/README.md) — `borrow_as_ptr`, `ref_as_ptr`, `ptr_as_ptr`, and three raw-pointer mistakes no lint catches
 
 ## Sources
 

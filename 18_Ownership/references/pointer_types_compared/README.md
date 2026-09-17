@@ -534,6 +534,8 @@ fn main() {
 - [Interior mutability](../../../09_Advanced/interior_mutability/README.md) — writing through a `&T` anyway
 - [Null dereference](../../../31_C_and_Cpp/null_dereference/README.md) — the null a reference cannot hold
 - [What reference explanations get wrong, run](../reference_claims_checked/README.md) — more claims from the same thread and its neighbours, run
+- [Pointers](../../../36_Pointers/README.md) — [wide pointers](../../../36_Pointers/wide_pointers/README.md), [alignment](../../../36_Pointers/aligned_to_the_referent/README.md) and [raw pointers](../../../36_Pointers/raw_pointers/README.md), each measured in its own lesson
+- [What makes a pointer smart](../../../41_Smart_Pointers/what_makes_a_pointer_smart/README.md) and [What a smart pointer costs](../../../41_Smart_Pointers/what_a_smart_pointer_costs/README.md) — the `Box` and `Rc` columns: `Deref`, `Drop`, and the allocations behind them
 - [`pointer` ↗](https://doc.rust-lang.org/std/primitive.pointer.html), [`reference` ↗](https://doc.rust-lang.org/std/primitive.reference.html), [`std::boxed` ↗](https://doc.rust-lang.org/std/boxed/index.html), [`std::rc` ↗](https://doc.rust-lang.org/std/rc/index.html)
 
 ## Sources

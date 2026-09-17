@@ -31,6 +31,8 @@ Pages marked **new** live in this folder. The rest are existing lessons elsewher
 | a table said `&T` lives on the stack and has shared ownership | [Six pointer types, one table](pointer_types_compared/README.md#what-the-popular-table-gets-wrong) |
 | `Option<&T>` is the same size as `&T` | [Six pointer types, one table](pointer_types_compared/README.md#a-reference-is-a-pointer-with-rules) |
 | a `Cell` changed behind a `&` | [Interior mutability](../../09_Advanced/interior_mutability/README.md) |
+| a pointer made from `p.addr()` compared equal to `p` and reading through it was still undefined | [Address, pointer, reference](../../36_Pointers/address_pointer_reference/README.md) |
+| a reference has to be aligned to the type it points at, not to `usize` | [A reference is aligned to its referent](../../36_Pointers/aligned_to_the_referent/README.md) |
 | a snippet from Stack Overflow, The Book or a course did not compile as printed | [Reference claims, run](reference_claims_checked/README.md) |
 
 ## The path
@@ -49,8 +51,9 @@ Pages marked **new** live in this folder. The rest are existing lessons elsewher
 | 8 | **new** [Re-pointing a slice](repointing_a_slice/README.md) | `&mut &mut [T]`: a `&mut` to the caller's reference, `mem::take`, and `Read for &[u8]` |
 | 9 | [How to learn lifetimes](../how_to_learn_lifetimes/README.md) → [Lifetime annotations](../lifetime_annotations/README.md) → [What `&'a T` claims](../what_a_reference_claims/README.md) → [Lifetimes at the call site](../lifetimes_at_the_call_site/README.md) → [Temporary lifetime extension](../temporary_lifetimes/README.md) | the loan's length written into a signature, and what it costs the caller |
 | 10 | **new** [Six pointer types, one table](pointer_types_compared/README.md) | `&T`, `&mut T`, `*const T`, `*mut T`, `Box<T>` and `Rc<T>` on seven questions, each cell run |
-| 11 | [`Rc`](../reference_counting/README.md) · [`Arc`](../sharing_across_threads/README.md) · [Interior mutability](../../09_Advanced/interior_mutability/README.md) · [`Cow`](../clone_on_write/README.md) | several owners, writing through a `&`, and borrowing until somebody writes |
-| 12 | [What `unsafe` turns off](../../09_Advanced/what_unsafe_turns_off/README.md) · [Use-after-free](../../31_C_and_Cpp/use_after_free/README.md) · [Null dereference](../../31_C_and_Cpp/null_dereference/README.md) · [Iterator invalidation](../../31_C_and_Cpp/iterator_invalidation/README.md) · [Lifetime safety in Clang](../../31_C_and_Cpp/lifetime_safety_in_clang/README.md) | raw pointers, and the C and C++ bugs the rules above make unwritable |
+| 11 | The [Pointers](../../36_Pointers/README.md) section: [Address, pointer, reference](../../36_Pointers/address_pointer_reference/README.md) → [Wide pointers](../../36_Pointers/wide_pointers/README.md) → [Aligned to the referent](../../36_Pointers/aligned_to_the_referent/README.md) → [Raw pointers](../../36_Pointers/raw_pointers/README.md) | what a pointer's value holds — a type, provenance, a second word, an alignment — and what goes when the promises do |
+| 12 | [`Rc`](../reference_counting/README.md) · [`Arc`](../sharing_across_threads/README.md) · [Interior mutability](../../09_Advanced/interior_mutability/README.md) · [`Cow`](../clone_on_write/README.md) | several owners, writing through a `&`, and borrowing until somebody writes — and the [Smart pointers](../../41_Smart_Pointers/README.md) section: `Deref`, `Drop`, and what each one allocates |
+| 13 | [What `unsafe` turns off](../../09_Advanced/what_unsafe_turns_off/README.md) · [Use-after-free](../../31_C_and_Cpp/use_after_free/README.md) · [Null dereference](../../31_C_and_Cpp/null_dereference/README.md) · [Iterator invalidation](../../31_C_and_Cpp/iterator_invalidation/README.md) · [Lifetime safety in Clang](../../31_C_and_Cpp/lifetime_safety_in_clang/README.md) | raw pointers, and the C and C++ bugs the rules above make unwritable |
 
 Beside the path:
 
@@ -72,7 +75,7 @@ The pages say what to understand; these make you write it. Each lives on its pag
 | 7 | [One character apart](../../30_Pattern_Matching/match_ergonomics/README.md#practice) — `Some(name)` against `&opt` and against `opt` | [Match ergonomics](../../30_Pattern_Matching/match_ergonomics/README.md) |
 | 8 | [Split off the header](repointing_a_slice/README.md#practice) — advance a `&mut &[u8]` and a `&mut &mut [u8]` | [Re-pointing a slice](repointing_a_slice/README.md) |
 | 10 | [Pick the pointer](pointer_types_compared/README.md#practice) — a config reader, a tree's children, a shared cache and C's `memchr` | [Six pointer types, one table](pointer_types_compared/README.md) |
-| 11 | [Predict the count four times](../reference_counting/README.md#practice) — one roster shared by three tallies, and the edge that leaks | [`Rc`](../reference_counting/README.md) |
+| 12 | [Predict the count four times](../reference_counting/README.md#practice) — one roster shared by three tallies, and the edge that leaks | [`Rc`](../reference_counting/README.md) |
 
 The full sequence, with every other kata in the library, is [KATAS.md](../../KATAS.md).
 
@@ -111,6 +114,7 @@ Most explanations of references state the rule correctly and get one fact under 
 ## See also
 
 - [How to learn lifetimes](../how_to_learn_lifetimes/README.md) — the same kind of page, for the other wall
+- [Pointers](../../36_Pointers/README.md) and [Smart pointers](../../41_Smart_Pointers/README.md) — the two sections on what a pointer holds and what a smart one manages, checked against *Rust in Action* ch. 6
 - [How to learn `ToOwned`](../../12_Traits/how_to_learn_to_owned/README.md) — where references meet `Clone`, method lookup and unsized types
 - [Ownership](../README.md) — the section this folder sits in
 - [Glossary](../../GLOSSARY.md) — *shared reference*, *exclusive reference*, *dangling reference*, *fat pointer*, *NLL*

@@ -51,6 +51,7 @@ Several of these had lessons before this section existed; they stay where they a
 ## See also
 
 - [Pointers](../36_Pointers/README.md) — addresses, references, wide and raw pointers
+- [Six pointer types, one table](../18_Ownership/references/pointer_types_compared/README.md) — `Box` and `Rc` beside the four built-in pointers, on seven questions
 - [Ownership](../18_Ownership/README.md) — what a smart pointer's `Drop` is taking part in
 - [Traits](../12_Traits/README.md) — where `Deref` and `Drop` sit among the others
 

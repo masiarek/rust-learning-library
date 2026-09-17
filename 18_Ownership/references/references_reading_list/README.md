@@ -32,6 +32,7 @@ Every link was checked on 2026-09-16. A print book is cited only by the chapter 
 - [TRPL ch. 15 — Smart Pointers ↗](https://doc.rust-lang.org/book/ch15-00-smart-pointers.html), [15.2 — Treating Smart Pointers Like Regular References ↗](https://doc.rust-lang.org/book/ch15-02-deref.html) and [15.4 — `Rc<T>`, the Reference Counted Smart Pointer ↗](https://doc.rust-lang.org/book/ch15-04-rc.html) — the cons list shared by two lists, and the counts 1, 2, 3, 2
 - [Effective Rust, Item 8 — Familiarize yourself with reference and pointer types ↗](https://effective-rust.com/references.html) — references, pointer traits, fat pointers, and smart pointer types, in that order
 - [Stack Overflow — Understanding and relationship between `Box`, `ref`, `&` and `*` ↗](https://stackoverflow.com/questions/31949579/understanding-and-relationship-between-box-ref-and) — see [Read with care](#read-with-care) before trusting any snippet in it
+- *Rust in Action* (Tim McNamara, Manning 2021), ch. 6 "Memory", §6.1–6.2 — pointers, references and raw pointers in the book's vocabulary; seventeen of its claims are run in [*Rust in Action*, chapter 6](../../../36_Pointers/rust_in_action_chapter_6/README.md): right on the three-way split, wrong on alignment, the second word of a wide pointer and the size of `Option`, and one listing is undefined behaviour
 - [Ralf Jung, *Pointers Are Complicated II* (2020) ↗](https://www.ralfj.de/blog/2020/12/14/provenance.html) — provenance: why two pointers to the same address are not interchangeable to an optimizing compiler
 
 ### `ref` and patterns

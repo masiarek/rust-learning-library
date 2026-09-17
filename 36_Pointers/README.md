@@ -36,6 +36,8 @@ These pages were written before this section, and each answers one pointer quest
 | Which address does `&x` give you, and why does no example print one? | [What an address shows](../18_Ownership/what_an_address_shows/README.md) |
 | What does the lifetime in `&'a T` promise? | [What `&'a T` claims](../18_Ownership/what_a_reference_claims/README.md) |
 | Why can there be many `&T` or one `&mut T`? | [Borrowing](../18_Ownership/borrowing/README.md) and [Reborrowing](../18_Ownership/reborrowing/README.md) |
+| How does the compiler decide a borrow is refused? | [A borrow is a loan](../18_Ownership/references/a_borrow_is_a_loan/README.md), and every page on references in order: [References: the map](../18_Ownership/references/README.md) |
+| `&T`, `&mut T`, `*const T`, `*mut T`, `Box<T>` and `Rc<T>` side by side? | [Six pointer types, one table](../18_Ownership/references/pointer_types_compared/README.md) |
 | How is "no value" written without a null? | [Nullable pointers](../17_Option_and_Result/nullable_pointers/README.md) and [`Option` is a one-item collection](../17_Option_and_Result/option_as_collection/README.md) |
 | Why is `&str` two words? | [`str` is unsized](../14_Strings/str_is_unsized/README.md) and [Step 2: Some types have no size](../12_Traits/how_to_learn_to_owned/types_with_no_size/README.md) |
 | What does a `String`'s pointer point at? | [The anatomy of a `String`](../14_Strings/anatomy_of_a_string/README.md) |
