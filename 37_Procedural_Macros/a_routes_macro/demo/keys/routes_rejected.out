@@ -1,0 +1,25 @@
+error: the path captures `{id}`, but `get_user` takes no `id`
+ --> routes_mistakes/src/main.rs:4:9
+  |
+4 |     GET "/users/{id}" => fn get_user() -> String {
+  |         ^^^^^^^^^^^^^
+
+error: `page` is not captured by "/users/{id}/orders"; add `{page}` to the path
+ --> routes_mistakes/src/main.rs:7:58
+  |
+7 |     GET "/users/{id}/orders" => fn list_orders(id: &str, page: &str) -> String {
+  |                                                          ^^^^
+
+error: this route matches the same requests as "/users/{id}"
+  --> routes_mistakes/src/main.rs:10:9
+   |
+10 |     GET "/users/{user_id}" => fn find_user(user_id: &str) -> String {
+   |         ^^^^^^^^^^^^^^^^^^
+
+error: the earlier route is here
+ --> routes_mistakes/src/main.rs:4:9
+  |
+4 |     GET "/users/{id}" => fn get_user() -> String {
+  |         ^^^^^^^^^^^^^
+
+error: could not compile `routes_mistakes` (bin "routes_mistakes") due to 4 previous errors

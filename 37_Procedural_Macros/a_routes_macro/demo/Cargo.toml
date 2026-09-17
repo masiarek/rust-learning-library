@@ -1,0 +1,6 @@
+# The `routes!` macro crate, a program that routes with it, and one that gets
+# every check wrong. `[workspace]` makes this folder its own workspace,
+# whatever manifest sits above it.
+[workspace]
+members = ["routes_macro", "routes_app", "routes_mistakes"]
+resolver = "3"

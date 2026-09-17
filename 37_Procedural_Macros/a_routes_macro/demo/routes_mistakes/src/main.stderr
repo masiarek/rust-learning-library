@@ -1,0 +1,23 @@
+error: the path captures `{id}`, but `get_user` takes no `id`
+ --> $WORKSPACE/routes_mistakes/src/main.rs
+  |
+  |     GET "/users/{id}" => fn get_user() -> String {
+  |         ^^^^^^^^^^^^^
+
+error: `page` is not captured by "/users/{id}/orders"; add `{page}` to the path
+ --> $WORKSPACE/routes_mistakes/src/main.rs
+  |
+  |     GET "/users/{id}/orders" => fn list_orders(id: &str, page: &str) -> String {
+  |                                                          ^^^^
+
+error: this route matches the same requests as "/users/{id}"
+ --> $WORKSPACE/routes_mistakes/src/main.rs
+  |
+  |     GET "/users/{user_id}" => fn find_user(user_id: &str) -> String {
+  |         ^^^^^^^^^^^^^^^^^^
+
+error: the earlier route is here
+ --> $WORKSPACE/routes_mistakes/src/main.rs
+  |
+  |     GET "/users/{id}" => fn get_user() -> String {
+  |         ^^^^^^^^^^^^^

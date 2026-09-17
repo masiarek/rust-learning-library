@@ -1,0 +1,8 @@
+[package]
+name = "routes_mistakes"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+routes_macro = { path = "../routes_macro" }

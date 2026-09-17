@@ -1,0 +1,21 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+
+[[run]]
+stem = "routes_requests"
+cmd = ["cargo", "run", "-q", "-p", "routes_app"]
+
+[[run]]
+stem = "routes_expanded"
+cmd = ["cargo", "rustc", "-q", "-p", "routes_app", "--profile=check", "--", "-Zunpretty=expanded"]
+env = { RUSTC_BOOTSTRAP = "1" }
+
+[[run]]
+stem = "routes_rejected"
+cmd = ["cargo", "build", "-q", "-p", "routes_mistakes"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "routes_trybuild"
+cmd = ["cargo", "test", "-q", "-p", "routes_macro", "--test", "ui"]
+filters = [["finished in [0-9.]+s", "finished in <elapsed>"]]

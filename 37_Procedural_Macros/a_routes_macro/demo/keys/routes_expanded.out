@@ -1,0 +1,43 @@
+#![feature(prelude_import)]
+extern crate std;
+#[prelude_import]
+use std::prelude::rust_2024::*;
+use routes_macro::routes;
+
+fn list_users() -> String { String::from("every user") }
+fn get_user(id: &str) -> String { String::from("user ") + id }
+fn create_user() -> String { String::from("a new user") }
+fn get_order(id: &str, order: &str) -> String {
+    String::from("order ") + order + " of user " + id
+}
+#[doc = r" The handler for `method` and `path`, and what it returned."]
+pub fn route(method: &str, path: &str) -> Option<(&'static str, String)> {
+    let segments: Vec<&str> = path.split('/').skip(1).collect();
+    match (method, segments.as_slice()) {
+        ("GET", ["users"]) => Some(("list_users", list_users())),
+        ("GET", ["users", id]) => Some(("get_user", get_user(id))),
+        ("POST", ["users"]) => Some(("create_user", create_user())),
+        ("GET", ["users", id, "orders", order]) =>
+            Some(("get_order", get_order(id, order))),
+        _ => None,
+    }
+}
+
+fn main() {
+    let requests =
+        [("GET", "/users"), ("GET", "/users/42"), ("POST", "/users"),
+                ("GET", "/users/42/orders/7"), ("DELETE", "/users/42"),
+                ("GET", "/teams")];
+    for (method, path) in requests {
+        match route(method, path) {
+            Some((handler, body)) => {
+                ::std::io::_print(format_args!("{0:<6} {1:<19} -> {2}: {3}\n",
+                        method, path, handler, body));
+            }
+            None => {
+                ::std::io::_print(format_args!("{0:<6} {1:<19} -> no route\n",
+                        method, path));
+            }
+        }
+    }
+}
