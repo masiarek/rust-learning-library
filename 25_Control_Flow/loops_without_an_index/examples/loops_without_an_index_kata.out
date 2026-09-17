@@ -1,0 +1,23 @@
+1. Number the lines from 1
+   ["1: [package]", "2: name = \"demo\"", "3: ", "4: [dependencies]"]
+   same as the index loop: true; (1..).zip(&lines) gives the same again: true
+
+2. Count the answers that differ
+   zip + filter + count = 2, index loop = 2
+   against a 2-answer sheet: zip says 1 and stops quietly; the index loop gives a panic (index out of bounds)
+
+3. The largest rise between consecutive readings
+   windows(2) + max = Some(7), index loop = 7
+   on [7]: windows says None; the index loop says -2147483648, a made-up number
+
+4. Sum every third reading, starting with the first
+   step_by(3) + sum = 55, index loop = 55
+
+5. Average each pair of readings
+   chunks(2)  -> [13.5, 14.5, 19.5, 25.0]
+   index loop -> [13.5, 14.5, 19.5]   <- 7 readings: the index loop had to drop the last one
+
+6. The one that keeps its indices: move every zero to the end, in place
+   [3, 5, 7, 2, 0, 0, 0]
+   two positions move independently -- `read` every turn, `write` only on a keep --
+   and swap needs both at once. No adapter says that more clearly than two indices.

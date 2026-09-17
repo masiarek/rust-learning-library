@@ -1,0 +1,16 @@
+1. What each construct evaluates to
+  if … else              &str         "small"
+  match                  &str         "odd"
+  for                    ()           ()
+  while                  ()           ()
+  loop + break value     i32          30
+  labelled block         i32          12
+  (the for loop added up to 28; the while loop counted to 3)
+
+2. How far each way out jumps
+  continue        next pass          kept the evens: [8, 12]
+  break           end of this loop   saw before the first r > 6: [3]
+  break 'rows     end of outer loop  first a * b == 6: Some((2, 3))
+  return          out of the fn      first_even: Some(8)
+  ?               out of the fn      total(1, 2, 3): Ok(6)
+  ?               out of the fn      total(1, x, 3): Err("\"x\": invalid digit found in string")

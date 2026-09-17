@@ -1,0 +1,29 @@
+1. The condition is checked before every pass
+   while n > 0, starting at 3   passes = 3, n after = 0
+   while n > 0, starting at 0   passes = 0, n after = 0   <- the body never ran
+   loop + break at the bottom   passes = 1, n after = -1  <- the do...while shape runs once
+
+2. The book's sample loop, over a fixed table instead of a sensor
+   readings = [42, -7, 55, 180, 61, 38, 999, 70, 12]
+   samples  = [42, 55, 61, 38, 70]
+   read 8 of 9 readings, skipped 3 outliers
+   The second condition, `next < readings.len()`, is the table talking:
+   a sensor never runs out, a table does.
+   filter(..).take(5)  = [42, 55, 61, 38, 70]   <- the same answer, no mut, no index
+
+3. A while loop evaluates to ()
+   let unit = while k < 3 { k += 1; };   unit = (), k = 3
+   The answer lives in the mut declared above the loop, never in the loop.
+
+4. Listing 2.7: a condition that is not a sequence
+   time_limit              = 10ms
+   count > 0               = true
+   elapsed >= time_limit   = true
+   The count itself differs on every run and every machine,
+   so this program checks it and does not print it.
+
+5. An index and a while is a for loop in disguise
+   while i < prices.len() { .. i += 1; }   total = 1325   (2 muts, 1 index)
+   for price in prices { .. }              total = 1325   (1 mut, no index)
+   prices.iter().sum()                     total = 1325
+   Forget `i += 1` and only the first version can loop forever.

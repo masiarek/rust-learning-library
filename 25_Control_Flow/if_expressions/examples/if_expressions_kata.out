@@ -1,0 +1,21 @@
+1. One line per row; a quantity of 0 leaves from inside the if
+   coffee    2 x $12.50 =  $25.00   <- $20 or more
+   napkins   skipped: quantity 0
+   mug       1 x  $8.99 =   $8.99
+   stickers  3 x    45c =   $1.35
+   grinder   1 x $24.99 =  $24.99   <- $20 or more
+
+2. Shipping is free from $50, and each total is one more if away
+   this cart       goods  $60.33   shipping  free   total  $60.33
+   mug + stickers  goods  $10.34   shipping $5.99   total  $16.33
+
+3. The three predictions
+   (a) `;` after the first format! in price. rustc says `mismatched
+       types`, expected `String`, found `()`, and the ^ is under the
+       branch you changed: the return type set the expectation.
+   (b) The same `;` after the marker string. Now it says `if` and
+       `else` have incompatible types, expected `()`, found `&str`,
+       and the ^ is under "", the branch you did NOT touch: nothing
+       outside the if expected a type, so the first branch set it.
+   (c) `if qty {`: expected `bool`, found `u32`. No truthiness; and
+       `u32` rather than `integer`, because the literal said 2u32.

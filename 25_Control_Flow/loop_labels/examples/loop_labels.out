@@ -1,0 +1,44 @@
+1. break 'outer leaves every loop out to the label
+   stopped at (x, y, z) = Some((0, 0, 1001))
+   x values seen: [0], y values seen: [0], z passes: 1002
+   The z loop alone carried the sum past 1000: x = 1 and y = 1 never happened.
+   plain break instead: [(0, 0, 1001), (0, 1, 1000), (0, 2, 999), (0, 3, 998)] ...
+   Each break ends one z loop, and y just moves on.
+
+2. The flag variable a label replaces, and two ways with no mut at all
+   flag variable      Some((1, 1))
+   break 'rows        Some((1, 1))
+   labelled block     Some((1, 1))
+   find_map           Some((1, 1))
+
+3. continue 'batches abandons the rest of an outer pass
+   kept (batch, sum) = [(0, 16), (2, 14)]
+   readings checked = 8 of 9   <- the reading after the -1 was never looked at
+   filter(all >= 0)  = [(0, 16), (2, 14)]
+
+4. A label is not a lifetime: one function uses 'a as both
+   first_long(&["an", "to", "apple"]) = "apple"
+   first_long(&["an", "to"])          = "(none)"
+
+5. A labelled block: break out of a block that is not a loop
+   "" -> empty
+   "12x" -> not a number
+   "42" -> ok
+
+6. No goto, and cleanup needs no jump
+   let goto = "an ordinary name";   let r#do = "a reserved word, escaped";
+   load(fail_at = 0):
+      drop: free buffer
+      drop: close file
+      result: Ok(42)
+   load(fail_at = 1):
+      drop: close file
+      result: Err("could not open")
+   load(fail_at = 2):
+      drop: free buffer
+      drop: close file
+      result: Err("\"4x\": invalid digit found in string")
+   The same shape without a function, as a labelled block:
+      drop: free buffer
+      drop: close file
+      outcome: Err("negative cell")

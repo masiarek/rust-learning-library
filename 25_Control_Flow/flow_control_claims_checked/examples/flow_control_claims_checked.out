@@ -1,0 +1,57 @@
+
+1. after `for item in container`, the container's lifetime has ended
+   an array of i32 is Copy, so it is still here: [1, 2, 3]
+   a Vec was moved, but the name v takes a new value: [9]
+
+2. `for item in &collection` is `for item in collection.iter()`
+   Vec:     IntoIterator for &Vec gives [10, 20, 30], iter() gives [10, 20, 30]
+   HashMap: IntoIterator for &HashMap gives [("ada", 36)], iter() gives [("ada", 36)]
+   same items, because each type's impl calls iter(); &String has no such impl
+
+3. `n..m` is exclusive and `n..=m` is inclusive
+   0..10 ran 10 times, 0..=10 ran 11 times
+
+5. a `for` over the collection guarantees it is not changed during the loop
+   the index loop compiled, ran 3 passes, and never saw the pushed 4: [1, 2, 3, 4]
+
+6. `continue` operates as you would expect
+   in a while loop, a continue before i += 1: i is still 1 after 10 passes
+
+9. `loop` runs until a `break`, or until the program is stopped from outside
+   first_negative([4, -1, 7]) = Some(1)  (left by return)
+   first_negative([4, 1, 7])  = None  (left by return)
+
+10. `for (x, y) in (0..).zip(0..)` with `break` when x + y > 100
+   stopped at x = 51, y = 51
+
+11. `break 'outer` leaves all three loops once x + y + z > 1000
+   stopped at (x, y, z) = (0, 0, 1001); x took the values [0]
+
+12. labels work with `continue` too
+   only row 3 finished its inner loop: [3]
+
+13. Rust does not include the `goto` keyword
+   `let goto = ...` compiles: goto is not reserved
+
+14. use loop labels for the jump-to-cleanup pattern
+   second step fails:
+   drop: config
+   -> Err("log could not be opened")
+   both steps succeed:
+   both open
+   drop: log
+   drop: config
+   -> Ok(())
+
+16. the `else` block matches anything that has not already been matched
+   one-three-two; conditions evaluated: [42, 132]
+
+17. assigning with `=` is a statement, so it has no value
+   `let assigned = total = 5;` compiles: assigned is (), total went 1 -> 5
+
+18. the `break` keyword also returns a value
+   let n = loop { break 123; };  n is 123
+
+20. Listing 2.8: `42 | 132` matches both, `_` matches the rest
+   42: hit!
+   132: hit!

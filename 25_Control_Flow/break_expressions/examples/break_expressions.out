@@ -1,0 +1,31 @@
+1. break leaves the innermost loop only
+   rows visited: [0, 1, 2]
+   found = Some((2, 0)), assigned 2 times
+   The first negative is at (0, 1). The row loop kept going after
+   the break, met -7 on row 2, and overwrote the answer.
+   with break 'rows: found = Some((0, 1))
+
+2. The book's endless zip, ended by break
+   stopped at (x, y) = Some((51, 51)) on pass 52
+   50 + 50 = 100 is not > 100, so (51, 51) is the first pair that is.
+
+3. break in a match arm leaves the loop, and has type !
+   read ["3", "4", "x"], sum = 7
+   "5" was never read: the break left the for loop, not the match.
+
+4. break with a value: loop and labelled blocks only
+   loop { .. break n; }              -> 5
+   'size: { .. break 'size "big"; }  -> "big"
+   loop { break; }                   -> ()   <- a bare break is break ()
+   (1..).find(|n| n * n > 20)        -> Some(5)   <- the for-shaped answer is an Option
+
+5. Stop at the first match as a value: position, any, find
+   for + break            -> Some(2) after 3 passes
+   position(t > 30)       -> Some(2) after 3 calls
+   any(t > 30)            -> true after 3 calls
+   find(t > 30)           -> Some(31) after 3 calls
+   filter(t > 30).count() -> 2 after 5 calls   <- counting has to see all five
+
+6. A closure cannot break; try_for_each stops on ControlFlow::Break
+   seen = ["alpha", "beta"]
+   result = Break("stop")

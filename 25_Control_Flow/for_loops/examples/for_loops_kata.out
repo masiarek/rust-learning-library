@@ -1,0 +1,19 @@
+=== part 1: the countdown ===
+  for n in 10..1       -> 0 lines   <- start > end is an EMPTY range, not a backwards one
+  for n in (1..=10).rev() -> 10 9 8 7 6 5 4 3 2 1
+  for n in (1..11).rev()  -> 10 9 8 7 6 5 4 3 2 1   <- same, but the 11 makes you do arithmetic
+  rustc compiles 10..1 without a word; clippy's reversed_empty_ranges is deny-by-default
+
+=== part 2: three doors, one Vec ===
+  for s in &scores     -> total 247, scores still [72, 85, 90]
+  for s in &mut scores -> *s += 5, scores now [77, 90, 95]
+  for s in scores      -> labels ["score: 77", "score: 90", "score: 95"]
+
+=== why door 3 comes last ===
+  `for s in scores` moves the Vec when that loop STARTS. Put it first and the
+  next loop is refused: error[E0382]: borrow of moved value: `scores`.
+  The caret sits on `&scores` in `for s in &scores`, the first use after the move;
+  the consuming `for` line is labelled
+  "`scores` moved due to this implicit call to `.into_iter()`".
+  One error, not two: the `&mut scores` loop after it is not reported separately.
+  The help is a one-character fix on the consuming loop: `for s in &scores`.

@@ -1,0 +1,13 @@
+1. The first empty slot, three ways
+   (a) flag       Some((1, 1))
+   (b) label      Some((1, 1))
+   (c) find_map   Some((1, 1))
+
+2. Total stock on the shelves that have no empty slot
+   full shelves [0, 2], total stock 46
+   the same with filter(all > 0): 46
+
+3. The prediction: (b) with the label taken off the break
+   answer Some((3, 0)), written 2 times
+   The break ended each shelf's slot loop, and the shelf loop went
+   on to shelf 3, whose empty slot replaced the right answer.

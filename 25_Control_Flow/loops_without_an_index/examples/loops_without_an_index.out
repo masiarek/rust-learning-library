@@ -1,0 +1,34 @@
+=== 1. the same total, with and without an index ===
+  for i in 0..prices.len() { prices[i] } -> 2029
+  for price in &prices                   -> 2029
+  and when the position IS wanted: enumerate -> index 1 holds 1200
+
+=== 2. 0..v.len() is evaluated once, before the first turn ===
+  pushing inside the loop compiles: 3 turns, queue = [1, 2, 3, 10, 30]
+  the pushed 10 and 30 were never visited -- the range was already 0..3
+
+=== 3. and removing inside it skips one element, then runs off the end ===
+  start [5, 0, 0, 4], remove every 0 by index
+  visited indices [0, 1, 2, 3], readings left as [5, 0, 4]
+  panic: index out of bounds: the len is 3 but the index is 3
+  retain(|&r| r != 0) -> [5, 4]
+
+=== 4. an index needs the right bound, and take(n) is not the same fix ===
+  sum_first_by_index(&[1, 2, 3], 2) = 3
+  sum_first_by_take (&[1, 2, 3], 2) = 3
+  sum_first_by_index(&[1, 2, 3], 5) -> panic: index out of bounds: the len is 3 but the index is 3
+  sum_first_by_take (&[1, 2, 3], 5) = 6   <- stops at the end, no panic
+
+=== 5. what the index was for, and the shape that says so ===
+  temps = [12, 15, 11, 18, 20, 19]
+  position     enumerate    warmest is index 4, 20 degrees
+  neighbours   windows(2)   [3, -4, 7, 2, -1]   same as temps[i] - temps[i - 1]: true
+  groups       chunks(2)    [27, 29, 39]          same as temps[i] + temps[i + 1]: true
+    on [1, 2, 3]: chunks(2) -> [3, 3] (a short last chunk); the index form -> panic: index out of bounds: the len is 3 but the index is 3
+  every k-th   step_by(2)   [12, 11, 20]
+  backwards    iter().rev() [19, 20, 18, 11, 15, 12]
+  two in step  zip          ["Thu 18", "Fri 20", "Sat 19"]
+
+=== 6. where an index is honest: two positions at once ===
+  swap(i, j) inside two index loops -> [11, 12, 15, 18, 19, 20]
+  an iterator hands out one element at a time; swap needs two places in one call

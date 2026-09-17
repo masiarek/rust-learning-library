@@ -1,0 +1,21 @@
+1. Retry until success: break carries the answer out
+   responses = [503, 503, 200, 503]
+   let status = loop { .. break code; };   status = 200, attempts = 3
+
+2. Read until a sentinel: the server shape, over a fixed table
+   handled = ["GET /", "GET /about"]
+   read 3 of 4 requests; the one after QUIT is never touched
+
+3. The same two loops, once there is an iterator to hand
+   responses.iter().position(..)  = Some(3)   <- attempts, as an Option
+   requests.iter().take_while(..) = ["GET /", "GET /about"]
+   Neither needs a mut, an index, or a break.
+
+4. Every way out of a loop
+   break with a value       status = 200
+   return from inside       first_success([503, 200]) = Some(2)
+                            first_success([503, 503]) = None
+   ? from inside            parse_all(["7", "8"])  = Ok([7, 8])
+                            parse_all(["7", "x"])  = Err(ParseIntError { kind: InvalidDigit })
+   a panic                  gave up after 3 passes
+   std::process::exit(0)    on pass 2: this is the last line the program prints

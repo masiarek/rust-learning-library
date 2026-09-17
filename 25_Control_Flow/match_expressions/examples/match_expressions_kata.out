@@ -1,0 +1,17 @@
+1. Three spellings, checked against each other on every u8
+   scores checked: 256, disagreements: 0
+    95 -> ladder A  catch-all A  named A
+    75 -> ladder C  catch-all C  named C
+    42 -> ladder F  catch-all F  named F
+   101 -> ladder ?  catch-all ?  named ?
+   255 -> ladder ?  catch-all ?  named ?
+
+2. Delete the C band from each, and predict before compiling
+   75 -> ladder D  catch-all ?  named: does not compile
+   79 -> ladder D  catch-all ?  named: does not compile
+   The ladder hands 70..=79 to the next rung down, so a C is a D.
+   The catch-all hands them to `_`, so a C is an invalid score.
+   Both compile without a warning, and both are wrong.
+   The named match is error[E0004]: non-exhaustive patterns:
+   `70_u8..=79_u8` not covered. It names the hole exactly, because
+   no arm was allowed to mean "everything else".

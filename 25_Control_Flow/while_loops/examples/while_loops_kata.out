@@ -1,0 +1,22 @@
+1. Steps to reach 1
+   start   1: Some(0)
+   start   6: Some(8)
+   start   7: Some(16)
+   start  27: Some(111)
+   start  97: Some(118)
+   start 1 is Some(0): the condition is false before the first pass.
+
+2. The start that never reaches the exit condition
+   start   0: None
+   0 is even, 0 / 2 is 0, and `while n != 1` stays true forever.
+   The early return is the only thing between this call and a hang.
+
+3. The width that runs out
+   u32 start 159487: None
+   u64 start 159487: Some(183)
+   peak on the way  = 17202377752
+   u32::MAX         = 4294967295
+   Nothing in the input is large. The climb is.
+
+4. The first start whose climb leaves u32
+   159487   (found by a while loop whose count nobody knew in advance)

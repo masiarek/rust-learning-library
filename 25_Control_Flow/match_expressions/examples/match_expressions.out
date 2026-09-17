@@ -1,0 +1,50 @@
+
+──── 1. Arms are tried top to bottom; the first that fits wins
+   4 -> low
+   7 -> middle
+  12 -> out of range
+  4 fits both ranges and takes the first. rustc does not warn:
+  the second arm still has 6..=9 to itself.
+
+──── 2. Exactly one arm runs: there is no fall-through, so no break
+  n = 1: ran the 1 arm
+  n = 2: ran the 2 | 3 arm
+  n = 3: ran the 2 | 3 arm
+
+──── 3. match has a value, and an arm may be a block
+  0 -> "none"
+  1 -> "one"
+  5 -> "5 items"
+
+──── 4. A bool: two arms are every case (the book's is_even)
+  6: match says even, if says even
+  7: match says odd, if says odd
+
+──── 5. Integers: ranges that meet end to end need no _
+    7u8 -> one digit
+   42u8 -> two digits
+  255u8 -> three digits
+  -2147483648i32 -> negative
+            0i32 -> zero
+           17i32 -> positive
+
+──── 6. A char: the ranges you care about, and _ for the rest of Unicode
+  'q' -> lowercase
+  'Q' -> uppercase
+  '7' -> digit
+  'ż' -> something else
+
+──── 7. Listing 2.8 from the book: item is a &i32, the patterns are not
+  42: hit!
+  132: hit!
+
+──── 8. A diverging arm fits any type
+  "12": added, total = 12
+  "seven": not a number, skipped
+  "30": added, total = 42
+
+──── 9. _ is exhaustive forever: a new variant goes where _ sends it
+  Standard catch-all:  599 cents   every variant named:  599 cents
+  Express  catch-all: 1299 cents   every variant named: 1299 cents
+  Pickup   catch-all: 1299 cents   every variant named:    0 cents
+  Pickup costs 1299 through the catch-all, and nothing warned.

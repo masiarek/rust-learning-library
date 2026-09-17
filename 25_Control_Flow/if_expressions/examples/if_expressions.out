@@ -1,0 +1,43 @@
+
+──── 1. The statement form: no parentheses, braces required
+  7 is a single digit
+
+──── 2. if has a value: the last expression of the branch that ran
+  n =  3 -> size = "small"
+  n = 10 -> size = "large"
+  n = 99 -> size = "large"
+
+──── 3. An else-if chain is still ONE expression
+   42 -> "forty-two"   (same as describe: true)
+  132 -> "one hundred thirty-two"   (same as describe: true)
+    7 -> "neither"   (same as describe: true)
+
+──── 4. A branch can do work before it hands back its value
+  1999 -> $19.99
+    45 -> 45 cents
+  `dollars` and `rest` never escape the branch; only the tail does.
+
+──── 5. Only the branch that is taken is evaluated
+  evaluating the then branch
+  x = 1; nothing was printed for the else branch
+
+──── 6. One type for the whole if: the type both branches agree on
+  let a     = if ready { 1 } else { 2 };         -> i32
+  let b: u8 = if ready { 1 } else { 2 };         -> u8
+  let s     = if ready { "yes" } else { "no" }; -> &str
+  The annotation on b reaches into BOTH branches: neither literal is an i32.
+
+──── 7. No else means the value is (), whichever way it goes
+  quiet = true: the block ran
+  quiet = true: unit = ()
+  quiet = false: unit = ()
+
+──── 8. A branch that never finishes fits any type
+  10 / 2 = 5
+  7 / 0: skipped
+  9 / 3 = 3
+
+──── 9. if goes anywhere a value goes: a tail, an argument
+  -5 is negative and odd
+   0 is zero and even
+   6 is positive and even

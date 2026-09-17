@@ -1,0 +1,51 @@
+=== 1. n..m stops before m; n..=m includes it ===
+  1..5               -> [1, 2, 3, 4]      4 turns, the last one is 4
+  1..=5              -> [1, 2, 3, 4, 5]   5 turns
+  for _ in 0..3      -> 3 turns, and no loop variable to name
+  for _ in 5..1      -> 0 turns  <- empty, not reversed; rustc says nothing
+  (1..5).rev()       -> [4, 3, 2, 1]
+
+=== 2. a range is a value, and for consumes it ===
+  let r = 1..5;      type core::ops::range::Range<i32>
+  r.contains(&5)     = false
+  for i in r.clone() -> [1, 2, 3, 4]   (Range is not Copy; a second `for i in r` is E0382)
+  for i in &mut rest, break at 3 -> rest is now 4..10
+
+=== 3. arrays, Vecs and slices go through the same door ===
+  for elem in array        -> [2, 4, 8]
+  for elem in &vector      -> [2, 4, 8]
+  for elem in &vector[1..] -> [4, 8]
+
+=== 4. what you hand to for decides what each item is ===
+  for p in &prices      item: &i32                    read  -> total = 1549, prices still [250, 1200, 99]
+  for p in &mut prices  item: &mut i32                write -> *p += 1, prices now [251, 1201, 100]
+  for name in names     item: alloc::string::String   owned -> kept = ["Ada", "Ben"], names is gone
+
+=== 5. the move happens as the loop starts, and the name survives it ===
+  [i32; 3] is Copy: after `for x in small`, sum = 6, small = [1, 2, 3]
+  Vec is not Copy: `for _ in v` ran 3 turns, then `v = vec![9]` -> v = [9]
+
+=== 6. `for x in &c` calls IntoIterator on the REFERENCE, whatever that does ===
+  (&words).into_iter()  core::slice::iter::Iter<'_, &str>
+  words.iter()          core::slice::iter::Iter<'_, &str>
+  for (fruit, n) in &stock -> apples = 3   fruit: &&str, n: &i32
+  for (fruit, n) in &stock -> pears = 0   fruit: &&str, n: &i32
+  for c in &s is E0277 (&String is not an iterator); s.chars() -> ['h', 'é', 'l', 'l', 'o']
+  s.bytes().count() = 6, s.chars().count() = 5
+
+=== 7. enumerate, not a counter kept by hand ===
+  0: alpha
+  1: beta
+
+=== 8. a for loop evaluates to (), so it cannot hand a value out ===
+  let unit = for _ in 0..0 {};  unit = ()
+  first element > 3, found without a loop: Some(4)
+
+=== 9. many for loops are a chain in disguise ===
+  loop:  sum of even squares in 1..=10 = 220
+  chain: (1..=10).filter(even).map(square).sum() = 220
+
+=== 10. the loop variable is the item, not the loop's counter ===
+  for mut i in 0..5, i += 2 when i == 1 -> [0, 3, 2, 3, 4]   <- 2 still arrives
+  to skip, say so to the iterator: filter  -> [0, 3, 4]
+  a fixed stride (C's i += 3) is step_by: (0..10).step_by(3) -> [0, 3, 6, 9]

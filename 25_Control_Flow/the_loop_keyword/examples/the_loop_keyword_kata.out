@@ -1,0 +1,18 @@
+responses = [503, 503, 200], then 503 forever
+
+budget   check at bottom   check at top   iterator
+     3   Ok(3)             Ok(3)          Ok(3)
+     5   Ok(3)             Ok(3)          Ok(3)
+     2   Err(2)            Err(2)         Err(2)
+     1   Err(1)            Err(1)         Err(1)
+     0   Err(1)            Err(0)         Err(0)
+
+Budget 0 is the only row where the columns disagree. With the check
+at the bottom the loop is a do...while: one request goes out before
+anyone asks whether it was allowed.
+
+Now `attempts == budget` instead of `>=`, against a server that never succeeds:
+   budget 3: Err(3)
+   budget 0: Err(10000)   <- stopped by the 10_000 cap, not by the budget
+attempts is already 1 when it is first compared, so 1 == 0 is the first
+of an endless run of false answers.
