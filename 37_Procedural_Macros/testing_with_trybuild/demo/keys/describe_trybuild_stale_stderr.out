@@ -1,0 +1,27 @@
+
+
+test tests/ui_stale/fail_enum.rs ... mismatch
+
+EXPECTED:
+┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
+error: Describe can only be derived for a struct
+ --> tests/ui_stale/fail_enum.rs:4:6
+  |
+4 | enum Direction {
+  |      ^^^^^^^^^
+┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
+
+ACTUAL OUTPUT:
+┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
+error: Describe needs a struct
+ --> tests/ui_stale/fail_enum.rs:4:6
+  |
+4 | enum Direction {
+  |      ^^^^^^^^^
+┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
+note: If the actual output is the correct output you can bless it by rerunning
+      your test with the environment variable TRYBUILD=overwrite
+
+
+
+error: test failed, to rerun pass `-p tested_describe --test ui_stale`

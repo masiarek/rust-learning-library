@@ -1,0 +1,22 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+
+[[run]]
+stem = "quote_holes_tour"
+cmd = ["cargo", "run", "-q", "-p", "quote_tour"]
+
+[[run]]
+stem = "quote_validate_app"
+cmd = ["cargo", "run", "-q", "-p", "quote_validate_app"]
+
+# What `cargo expand -p quote_validate_app` shows, recorded with the command
+# cargo-expand's README says it wraps.
+[[run]]
+stem = "validate_expanded"
+cmd = ["cargo", "rustc", "-q", "-p", "quote_validate_app", "--profile=check", "--", "-Zunpretty=expanded"]
+env = { RUSTC_BOOTSTRAP = "1" }
+
+[[run]]
+stem = "validate_missing_check"
+cmd = ["cargo", "build", "-q", "-p", "quote_missing_check"]
+expect = "failure"
+stream = "stderr"

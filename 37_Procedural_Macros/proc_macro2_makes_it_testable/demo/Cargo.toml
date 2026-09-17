@@ -1,0 +1,6 @@
+# A derive written as a thin wrapper over testable logic, the program that uses
+# it, and a program that calls `proc_macro` where it cannot work. `[workspace]`
+# makes this folder its own workspace, whatever manifest sits above it.
+[workspace]
+members = ["testable_field_names", "testable_app", "outside_a_macro"]
+resolver = "3"

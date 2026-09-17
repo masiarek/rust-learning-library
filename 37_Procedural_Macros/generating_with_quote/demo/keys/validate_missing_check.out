@@ -1,0 +1,21 @@
+error[E0599]: no associated function or constant named `check_sensor` found for struct `Reading` in the current scope
+ --> quote_missing_check/src/main.rs:6:5
+  |
+4 | struct Reading {
+  | -------------- associated function or constant `check_sensor` not found for this struct
+5 |     celsius: f64,
+6 |     sensor: String, // no check_sensor below
+  |     ^^^^^^ associated function or constant not found in `Reading`
+
+error[E0599]: no associated function or constant named `check_currency` found for struct `Price` in the current scope
+  --> quote_missing_check/src/main.rs:15:10
+   |
+15 | #[derive(ValidateFromString)]
+   |          ^^^^^^^^^^^^^^^^^^ associated function or constant not found in `Price`
+16 | struct Price {
+   | ------------ associated function or constant `check_currency` not found for this struct
+   |
+   = note: this error originates in the derive macro `ValidateFromString` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `quote_missing_check` (bin "quote_missing_check") due to 2 previous errors

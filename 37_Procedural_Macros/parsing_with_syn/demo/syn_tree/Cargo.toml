@@ -1,0 +1,9 @@
+[package]
+name = "syn_tree"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+syn = { version = "3", features = ["full", "extra-traits"] }
+proc-macro2 = "1"

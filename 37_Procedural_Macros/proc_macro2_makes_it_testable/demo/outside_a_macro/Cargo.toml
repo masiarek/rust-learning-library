@@ -1,0 +1,8 @@
+[package]
+name = "outside_a_macro"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+proc-macro2 = "1"

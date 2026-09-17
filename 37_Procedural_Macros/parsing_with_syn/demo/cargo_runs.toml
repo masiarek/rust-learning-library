@@ -1,0 +1,15 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+
+[[run]]
+stem = "syn_shapes_app"
+cmd = ["cargo", "run", "-q", "-p", "syn_shapes_app"]
+
+[[run]]
+stem = "derive_input_tree"
+cmd = ["cargo", "run", "-q", "-p", "syn_tree"]
+
+[[run]]
+stem = "shape_of_a_fn"
+cmd = ["cargo", "build", "-q", "-p", "syn_shape_of_a_fn"]
+expect = "failure"
+stream = "stderr"

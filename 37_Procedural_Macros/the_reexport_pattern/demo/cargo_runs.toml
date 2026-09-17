@@ -1,0 +1,23 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+
+[[run]]
+stem = "facade_describe_app"
+cmd = ["cargo", "run", "-q", "-p", "describe_facade_app"]
+
+[[run]]
+stem = "describe_without_the_facade"
+cmd = ["cargo", "build", "-q", "-p", "derive_crate_only"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "describe_facade_renamed"
+cmd = ["cargo", "build", "-q", "-p", "renamed_facade"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "trait_in_a_proc_macro_crate"
+cmd = ["cargo", "build", "-q", "-p", "trait_beside_the_derive"]
+expect = "failure"
+stream = "stderr"

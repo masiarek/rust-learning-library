@@ -2,20 +2,349 @@
 
 **Level:** 201 · working knowledge
 
-> **Stub — an outline, not a lesson.** There is no runnable example behind this page yet, so nothing on it has been through [the check that backs every other claim in this library](../../CONTRIBUTING.md). The bullets below are the questions the finished page has to answer.
+**One line:** `quote!` writes Rust with holes in it: `#name` inserts anything that implements `ToTokens`, `#(…)*` repeats over iterators, and `format_ident!` builds a new identifier that keeps the span of the one it came from, so an error in generated code can point at the user's field instead of at the macro. The result is a `proc_macro2::TokenStream`.
 
-**One line:** `quote!` writes Rust with holes in it: `#name` interpolates one value, `#(#fields),*` repeats over an iterator, and `format_ident!` builds a new identifier — the result is a `proc_macro2::TokenStream`.
+## A derive built with `quote!`
 
-## What it has to cover
+`#[derive(Validate)]` writes a `validate` method that calls `check_<field>` for every field, functions the user writes. The crate builds it twice, the second time the way [Three kinds of procedural macro](../three_kinds_of_procedural_macro/README.md) built its output, by formatting a string; [Spans](#spans-where-an-error-points) shows the difference.
 
-- Interpolation of `Ident`, `Type`, expressions, and anything `ToTokens`
-- Repetition, with and without separators, and zipping two iterators
-- `format_ident!` versus `Ident::new`, and the span a new identifier gets
-- Why not `format!` + `.parse()` (the approach the first lesson used): errors without locations, and lost spans
-- Printing the generated tokens, and formatting them for reading with `prettyplease` if the page needs it
+<!-- file:demo/quote_validate/src/lib.rs -->
+```rust title="demo/quote_validate/src/lib.rs"
+//! `#[derive(Validate)]` writes a `validate` method that calls `check_<field>`
+//! for every field, a function the user writes. It is built twice: with
+//! `quote!`, and by formatting a string and parsing it. Both write the same
+//! code; only the spans differ.
+
+use proc_macro::TokenStream;
+use quote::{format_ident, quote};
+use syn::{Data, DeriveInput, Field, Fields, parse_macro_input};
+
+#[proc_macro_derive(Validate)]
+pub fn derive_validate(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as DeriveInput);
+    let fields = match named_fields(&input) {
+        Ok(fields) => fields,
+        Err(error) => return error.into_compile_error().into(),
+    };
+    let name = &input.ident;
+    let idents: Vec<_> = fields.iter().map(|field| field.ident.as_ref().unwrap()).collect();
+    // `format_ident!` gives each new identifier the span of the field's name.
+    let checks = idents.iter().map(|ident| format_ident!("check_{}", ident));
+    quote! {
+        impl #name {
+            pub fn validate(&self) -> ::core::result::Result<(), ::std::string::String> {
+                #( Self::#checks(&self.#idents)?; )*
+                ::core::result::Result::Ok(())
+            }
+        }
+    }
+    .into()
+}
+
+/// The same method, written as text and parsed. Every token parsed from a
+/// string gets the same span: the place the macro was called.
+#[proc_macro_derive(ValidateFromString)]
+pub fn derive_validate_from_string(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as DeriveInput);
+    let fields = match named_fields(&input) {
+        Ok(fields) => fields,
+        Err(error) => return error.into_compile_error().into(),
+    };
+    let mut calls = String::new();
+    for field in fields {
+        let ident = field.ident.as_ref().unwrap();
+        calls += &format!("Self::check_{ident}(&self.{ident})?; ");
+    }
+    format!(
+        "impl {} {{ pub fn validate(&self) -> ::core::result::Result<(), ::std::string::String> {{ {calls}::core::result::Result::Ok(()) }} }}",
+        input.ident
+    )
+    .parse()
+    .unwrap()
+}
+
+fn named_fields(input: &DeriveInput) -> syn::Result<Vec<&Field>> {
+    match &input.data {
+        Data::Struct(data) if matches!(data.fields, Fields::Named(_)) => Ok(data.fields.iter().collect()),
+        _ => Err(syn::Error::new_spanned(&input.ident, "Validate needs a struct with named fields")),
+    }
+}
+```
+<!-- /file -->
+
+<!-- file:demo/quote_validate_app/src/main.rs -->
+```rust title="demo/quote_validate_app/src/main.rs"
+use quote_validate::Validate;
+
+#[derive(Validate)]
+struct Reading {
+    celsius: f64,
+    sensor: String,
+}
+
+impl Reading {
+    fn check_celsius(celsius: &f64) -> Result<(), String> {
+        if *celsius < -273.15 { Err("below absolute zero".to_string()) } else { Ok(()) }
+    }
+
+    fn check_sensor(sensor: &str) -> Result<(), String> {
+        if sensor.is_empty() { Err("no sensor name".to_string()) } else { Ok(()) }
+    }
+}
+
+fn main() {
+    let good = Reading { celsius: 21.5, sensor: "kitchen".to_string() };
+    let cold = Reading { celsius: -300.0, sensor: "freezer".to_string() };
+    println!("{:?}", good.validate());
+    println!("{:?}", cold.validate());
+}
+```
+<!-- /file -->
+
+<!-- cargo:quote_validate_app -->
+*Verified output of `cargo run -q -p quote_validate_app` — declared in [`cargo_runs.toml`](demo/cargo_runs.toml) and regenerated by `tools/run_cargo_demos.py`, never hand-typed.*
+
+```text
+Ok(())
+Err("below absolute zero")
+```
+<!-- /cargo -->
+
+Inside `derive_validate`'s `quote!`:
+
+- **`#name`** inserts `input.ident`, a `syn::Ident`.
+- **`#( Self::#checks(&self.#idents)?; )*`** is a repetition with no separator: the body is copied once per element, and the `;` inside it ends each statement.
+- **`#checks` and `#idents` are two iterators in one repetition**, and they advance together, like `zip`. Each pass [takes the next item from every iterator in the body, and stops when any of them runs out ↗](https://docs.rs/crate/quote/1.0.47/source/src/lib.rs#730).
+- **`::core::result::Result`** is spelled out because the code lands in the user's crate, where `Result` may be something else. [Absolute paths and hygiene](../absolute_paths_and_hygiene/README.md) is about that.
+
+## What it wrote
+
+[`cargo expand` ↗](https://github.com/dtolnay/cargo-expand) prints a crate after every macro in it has run, and `cargo expand -p quote_validate_app` is what you would type. Its README calls it a wrapper around `cargo rustc --profile=check -- -Zunpretty=expanded`, and it formats the result with `rustfmt` when that is installed, so its line breaks may not match the key below. The key was recorded with the underlying command; `RUSTC_BOOTSTRAP=1` in [`cargo_runs.toml`](demo/cargo_runs.toml) lets the stable compiler accept the unstable `-Z` flag, as on [Printing the HIR](../../20_Compilers/printing_the_hir/README.md).
+
+<!-- cargo:validate_expanded -->
+*Verified output of `cargo rustc -q -p quote_validate_app --profile=check -- -Zunpretty=expanded` — declared in [`cargo_runs.toml`](demo/cargo_runs.toml) and regenerated by `tools/run_cargo_demos.py`, never hand-typed.*
+
+```text
+#![feature(prelude_import)]
+extern crate std;
+#[prelude_import]
+use std::prelude::rust_2024::*;
+use quote_validate::Validate;
+
+struct Reading {
+    celsius: f64,
+    sensor: String,
+}
+impl Reading {
+    pub fn validate(&self)
+        -> ::core::result::Result<(), ::std::string::String> {
+        Self::check_celsius(&self.celsius)?;
+        Self::check_sensor(&self.sensor)?;
+        ::core::result::Result::Ok(())
+    }
+}
+
+impl Reading {
+    fn check_celsius(celsius: &f64) -> Result<(), String> {
+        if *celsius < -273.15 {
+            Err("below absolute zero".to_string())
+        } else { Ok(()) }
+    }
+
+    fn check_sensor(sensor: &str) -> Result<(), String> {
+        if sensor.is_empty() {
+            Err("no sensor name".to_string())
+        } else { Ok(()) }
+    }
+}
+
+fn main() {
+    let good = Reading { celsius: 21.5, sensor: "kitchen".to_string() };
+    let cold = Reading { celsius: -300.0, sensor: "freezer".to_string() };
+    { ::std::io::_print(format_args!("{0:?}\n", good.validate())); };
+    { ::std::io::_print(format_args!("{0:?}\n", cold.validate())); };
+}
+```
+<!-- /cargo -->
+
+The first `impl Reading` block is the derive's; the second is `main.rs`'s own. The first four lines were not written by the derive either: they are the compiler's `extern crate std` and prelude import, and `println!` has been expanded too.
+
+## Interpolation and repetition, printed
+
+`quote!` works in any program, so each rule can be printed on its own:
+
+<!-- file:demo/quote_tour/src/main.rs -->
+```rust title="demo/quote_tour/src/main.rs"
+//! `quote!` in an ordinary program. Each result is a `proc_macro2::TokenStream`,
+//! printed with `Display`, which puts a space between most pairs of tokens.
+
+use proc_macro2::{Ident, Literal, Span};
+use quote::{format_ident, quote};
+use syn::{Expr, Type};
+
+fn main() {
+    // `#var` inserts anything that implements `ToTokens`: an identifier, a
+    // syntax tree from `syn`, another token stream.
+    let name = Ident::new("total", Span::call_site());
+    let ty: Type = syn::parse_str("Vec<u32>").unwrap();
+    let expr: Expr = syn::parse_str("vec![1, 2, 3]").unwrap();
+    println!("1. {}", quote! { let #name: #ty = #expr; });
+
+    // A Rust value becomes a literal, and an integer keeps its type as a suffix.
+    let (label, count) = ("points", 3_usize);
+    println!("2. {}", quote! { const LABEL: &str = #label; const COUNT: u8 = #count; });
+    let count = Literal::usize_unsuffixed(count);
+    println!("3. {}", quote! { const COUNT: u8 = #count; });
+
+    // `#(...),*` repeats with a separator, `#(...)*` without one.
+    let fields = vec![format_ident!("x"), format_ident!("y")];
+    println!("4. {}", quote! { #(#fields),* });
+    println!("5. {}", quote! { #(let #fields = 0;)* });
+
+    // Two iterators in one repetition advance together, like `zip`.
+    let types: Vec<Type> = vec![syn::parse_str("i32").unwrap(), syn::parse_str("f64").unwrap()];
+    println!("6. {}", quote! { struct Point { #(#fields: #types),* } });
+
+    // A value that is not an iterator is inserted again on every pass.
+    println!("7. {}", quote! { #(#fields: #name),* });
+
+    // `format_ident!` builds an identifier from pieces, `Ident::new` from a whole string.
+    let check = format_ident!("check_{}", fields[0]);
+    let same = Ident::new("check_x", Span::call_site());
+    println!("8. {check} {}", check == same);
+}
+```
+<!-- /file -->
+
+<!-- cargo:quote_holes_tour -->
+*Verified output of `cargo run -q -p quote_tour` — declared in [`cargo_runs.toml`](demo/cargo_runs.toml) and regenerated by `tools/run_cargo_demos.py`, never hand-typed.*
+
+```text
+1. let total : Vec < u32 > = vec ! [1 , 2 , 3] ;
+2. const LABEL : & str = "points" ; const COUNT : u8 = 3usize ;
+3. const COUNT : u8 = 3 ;
+4. x , y
+5. let x = 0 ; let y = 0 ;
+6. struct Point { x : i32 , y : f64 }
+7. x : total , y : total
+8. check_x true
+```
+<!-- /cargo -->
+
+1. An `Ident`, a parsed `Type` and a parsed `Expr` all go in the same way. `quote!` accepts [anything that implements `ToTokens` ↗](https://docs.rs/crate/quote/1.0.47/source/src/lib.rs#146), which includes every `syn` syntax tree type and another `TokenStream`.
+2. **The trap:** a `&str` becomes a string literal, and a `usize` becomes `3usize`, [a suffixed literal ↗](https://docs.rs/crate/quote/1.0.47/source/src/to_tokens.rs#200). In a `u8` constant that is a type mismatch, reported in the user's crate.
+3. `proc_macro2::Literal::usize_unsuffixed` makes a bare `3`, which takes its type from where it lands.
+4. `#(#fields),*` puts the character before the `*` between the copies, and not after the last.
+5. `#(let #fields = 0;)*` has no separator. The body can hold any tokens around the variables.
+6. `#fields` and `#types` are zipped, as in `Validate`.
+7. `#name` is a single `Ident`, not an iterator, so it is inserted again on every pass. At least one variable in a repetition has to be an iterator; [`quote!` checks that at compile time ↗](https://docs.rs/crate/quote/1.0.47/source/src/runtime.rs#61).
+8. `format_ident!("check_{}", fields[0])` and `Ident::new("check_x", …)` compare equal, because `Ident`'s `==` compares the text. They are not the same token: the next section is about what `==` does not compare.
+
+The spacing in every line, `Vec < u32 >` and `x , y`, is `proc_macro2`'s printer, which [`proc-macro2` makes it testable](../proc_macro2_makes_it_testable/README.md#the-trap-to_string-is-not-source-code) takes apart. It does not matter to the compiler, which reads tokens, not text.
+
+## Spans: where an error points
+
+Every token carries a **span**, the place in source the compiler reports when something is wrong with it. `quote!` keeps [the span each interpolated value already has, and gives the tokens written inside the macro `Span::call_site()` ↗](https://docs.rs/crate/quote/1.0.47/source/src/lib.rs#167), the place the macro was called. `format_ident!` gives its new identifier [the span of its first `Ident` argument ↗](https://docs.rs/crate/quote/1.0.47/source/src/format.rs#39).
+
+Here each struct leaves out one of the functions its derive calls:
+
+<!-- file:demo/quote_missing_check/src/main.rs -->
+```rust title="demo/quote_missing_check/src/main.rs"
+use quote_validate::{Validate, ValidateFromString};
+
+#[derive(Validate)]
+struct Reading {
+    celsius: f64,
+    sensor: String, // no check_sensor below
+}
+
+impl Reading {
+    fn check_celsius(_: &f64) -> Result<(), String> {
+        Ok(())
+    }
+}
+
+#[derive(ValidateFromString)]
+struct Price {
+    cents: u64,
+    currency: String, // no check_currency below
+}
+
+impl Price {
+    fn check_cents(_: &u64) -> Result<(), String> {
+        Ok(())
+    }
+}
+
+fn main() {}
+```
+<!-- /file -->
+
+<!-- cargo:validate_missing_check -->
+*Verified output of `cargo build -q -p quote_missing_check`, which fails on purpose — declared in [`cargo_runs.toml`](demo/cargo_runs.toml) and regenerated by `tools/run_cargo_demos.py`, never hand-typed.*
+
+```text
+error[E0599]: no associated function or constant named `check_sensor` found for struct `Reading` in the current scope
+ --> quote_missing_check/src/main.rs:6:5
+  |
+4 | struct Reading {
+  | -------------- associated function or constant `check_sensor` not found for this struct
+5 |     celsius: f64,
+6 |     sensor: String, // no check_sensor below
+  |     ^^^^^^ associated function or constant not found in `Reading`
+
+error[E0599]: no associated function or constant named `check_currency` found for struct `Price` in the current scope
+  --> quote_missing_check/src/main.rs:15:10
+   |
+15 | #[derive(ValidateFromString)]
+   |          ^^^^^^^^^^^^^^^^^^ associated function or constant not found in `Price`
+16 | struct Price {
+   | ------------ associated function or constant `check_currency` not found for this struct
+   |
+   = note: this error originates in the derive macro `ValidateFromString` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `quote_missing_check` (bin "quote_missing_check") due to 2 previous errors
+```
+<!-- /cargo -->
+
+Both errors are about generated code, and both have the same cause. They point at different places:
+
+- **`Validate` points at `sensor`**, the field whose check is missing. The generated `check_sensor` was made by `format_ident!` from the field's `Ident`, so it carries that field's span.
+- **`ValidateFromString` points at the derive**, and the note says the error originates there. A token parsed from a string [gets `Span::call_site()` ↗](https://github.com/rust-lang/rust/blob/1.98.0/library/proc_macro/src/lib.rs#L325), and for a derive that is the name in `#[derive(…)]`.
+
+`Span` is the whole difference between the two derives, which generate the same code. When a whole chunk of generated code should point at one field, [`quote_spanned!` ↗](https://docs.rs/crate/quote/1.0.47/source/src/lib.rs#571) gives every token written inside it a span you choose instead of `Span::call_site()`.
+
+## Why not `format!` and `.parse()`
+
+- **The spans are gone**, as above: every error in the generated code points at the macro call.
+- **Nothing checks the text until a user compiles.** `quote!` is a macro, so its body has to be balanced tokens when the proc-macro crate itself compiles; a missing `}` is an error in your crate. A missing `}` in a `format!` string reaches `.parse()` in the user's build, and [unbalanced delimiters are one way that parse fails ↗](https://github.com/rust-lang/rust/blob/1.98.0/library/proc_macro/src/lib.rs#L323); the `.unwrap()` above turns the failure into a panic.
+- **Values have to be turned back into text**, and a `Type` or `Expr` from `syn` loses its span on the way.
+
+## Reading generated code
+
+From outside, `cargo expand` shows what a macro produced. Inside a program, a `TokenStream`'s `Display` is the single line you saw above. [`prettyplease` ↗](https://docs.rs/crate/prettyplease/0.3.0/source/src/lib.rs#381) formats a tree for people to read: `prettyplease::unparse(&file)` takes a `syn::File` and returns a `String`, and version 0.3 is the one built on `syn` 3. Its README names generated code such as `bindgen`'s output as what it is for. This chapter's demos do not depend on it.
+
+## If you are coming from another language
+
+- **C and C++.** A `#define` body is also code with holes, and `##` pastes tokens into a new identifier, the job `format_ident!` does: `check_ ## field` is `format_ident!("check_{}", field)`. The preprocessor has no loop over a list, which is what X-macros work around; `#(…)*` is repetition in the template itself.
+- **Python.** Generated Python is usually text, an f-string handed to `exec` or written to a file, and a mistake in it is a `SyntaxError` when that text is finally compiled. That is `format!` and `.parse()`. `quote!` is closer to building an `ast` tree and calling `ast.unparse`, except that the template is written as code and checked for balanced brackets when the macro crate compiles.
+- **Java.** [JavaPoet ↗](https://github.com/square/javapoet) builds `.java` source with typed placeholders: `$N` for a name, `$T` for a type, `$L` for a literal. `#var` is one placeholder for all of them, dispatched on the value's `ToTokens` implementation. What changes is where the result goes: JavaPoet writes a new source file, while a derive's tokens are added to the crate that is compiling.
+- **ABAP.** *(Not machine-checked — CI cannot run ABAP.)* `GENERATE SUBROUTINE POOL` compiles source lines built as a table of strings at run time, which is `format!` and `.parse()`: the text is checked only when it is generated, and an error message refers to the generated lines.
 
 ## See also
 
-- [Parsing with `syn`](../parsing_with_syn/README.md) — where the pieces come from
-- [Absolute paths and hygiene](../absolute_paths_and_hygiene/README.md) — what to write inside `quote!`
-- [Procedural macros](../README.md) — the chapter, in reading order
+- [Parsing with `syn`](../parsing_with_syn/README.md) — where `input.ident` and the fields come from
+- [`proc-macro2` makes it testable](../proc_macro2_makes_it_testable/README.md) — the type `quote!` returns, and testing it
+- [Absolute paths and hygiene](../absolute_paths_and_hygiene/README.md) — what to write inside `quote!` so it compiles in any crate
+- [Errors: from `panic!` to `syn::Error`](../errors_from_panic_to_syn_error/README.md) — spans chosen on purpose
+- [Every struct and enum shape](../every_struct_and_enum_shape/README.md) — `Validate` refuses tuple structs and enums; that page handles them
+- [The `quote` crate ↗](https://docs.rs/quote/1.0.47/quote/)
+
+## Po polsku
+
+**`quote!`** to szablon kodu w Ruscie z „dziurami”: `#name` wstawia dowolną wartość implementującą `ToTokens` (identyfikator, typ, wyrażenie z `syn`), `#(…),*` i `#(…)*` **powtarzają** fragment dla każdego elementu iteratora — z separatorem albo bez — a kilka iteratorów w jednym powtórzeniu idzie równo, jak `zip`. Wynikiem jest `proc_macro2::TokenStream`. `format_ident!("check_{}", pole)` tworzy nowy identyfikator i nadaje mu **zakres** (*span*) pierwszego identyfikatora z argumentów, więc błąd w wygenerowanym kodzie wskazuje pole użytkownika, a nie wywołanie makra.
+
+Pułapki: liczba `usize` wstawiona przez `#count` staje się literałem `3usize` (z sufiksem), a kod złożony przez `format!` i `.parse()` traci zakresy — każdy błąd wskazuje `#[derive(…)]` — i nie jest sprawdzany, dopóki użytkownik nie skompiluje swojego crate'a. Wygenerowany kod pokazuje `cargo expand`.
+
+**Szukaj po polsku:** generowanie kodu w makrach Rusta · `quote format_ident` · `quote repetition zip` · `rust proc macro span call_site` · `cargo expand`

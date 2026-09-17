@@ -2,19 +2,291 @@
 
 **Level:** 201 · working knowledge
 
-> **Stub — an outline, not a lesson.** There is no runnable example behind this page yet, so nothing on it has been through [the check that backs every other claim in this library](../../CONTRIBUTING.md). The bullets below are the questions the finished page has to answer.
+**One line:** A proc-macro crate can export only macros, so a library with a trait and its derive ships at least two crates, and the one users depend on re-exports the derive under the trait's name. The generated code then names the trait through that crate, `::describe_facade::Describe`, which is why depending on the derive crate alone, or renaming the dependency, breaks it.
 
-**One line:** A proc-macro crate can export only macros, so a library ships two crates — `serde` and `serde_derive`, `thiserror` and `thiserror-impl` — and the one users depend on re-exports the derive beside the trait it implements.
+## A facade and its derive
 
-## What it has to cover
+`describe_facade` is the crate a user depends on. It holds the trait, re-exports the derive, and keeps one hidden module:
 
-- A facade crate with the trait, and `pub use my_derive::MyTrait;` — the trait and the derive share a name, in two namespaces
-- serde's way (an optional `derive` feature) and thiserror's way (always on), read from their published manifests
-- Why the generated code must name the trait through the facade (`::my_facade::MyTrait`), and what breaks when a user depends only on the derive crate or renames the dependency
-- Hidden re-exports for generated code (`#[doc(hidden)] pub mod __private`)
+<!-- file:demo/describe_facade/src/lib.rs -->
+```rust title="demo/describe_facade/src/lib.rs"
+//! The crate users depend on. It holds the trait, re-exports the derive under
+//! the same name, and keeps a hidden module for the code the derive generates.
+
+/// A one-line description of a value, field by field.
+pub trait Describe {
+    fn describe(&self) -> String;
+}
+
+/// The derive macro. It lives in `describe_facade_derive`, because a
+/// proc-macro crate can export nothing but macros; this line makes it
+/// `describe_facade::Describe` too.
+pub use describe_facade_derive::Describe;
+
+/// Used by code that `#[derive(Describe)]` generates, which runs in the user's
+/// crate and so can only call what is public. Not part of the API.
+#[doc(hidden)]
+pub mod __private {
+    use std::fmt::Debug;
+
+    pub fn describe_fields(name: &str, fields: &[(&str, &dyn Debug)]) -> String {
+        let fields: Vec<String> = fields.iter().map(|(field, value)| format!("{field} = {value:?}")).collect();
+        format!("{name}: {}", fields.join(", "))
+    }
+}
+```
+<!-- /file -->
+
+<!-- file:demo/describe_facade/Cargo.toml -->
+```toml title="demo/describe_facade/Cargo.toml"
+[package]
+name = "describe_facade"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+describe_facade_derive = { path = "../describe_facade_derive" }
+```
+<!-- /file -->
+
+The derive lives in `describe_facade_derive`, and every path it generates starts with `::describe_facade`:
+
+<!-- file:demo/describe_facade_derive/src/lib.rs -->
+```rust title="demo/describe_facade_derive/src/lib.rs"
+//! `#[derive(Describe)]`. Every path in the generated code starts with
+//! `::describe_facade`, because that is the one crate a user depends on.
+
+use proc_macro::TokenStream;
+use quote::quote;
+use syn::{Data, DeriveInput, Fields, parse_macro_input};
+
+#[proc_macro_derive(Describe)]
+pub fn derive_describe(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as DeriveInput);
+    let name = &input.ident;
+    let Data::Struct(data) = &input.data else {
+        return syn::Error::new_spanned(name, "Describe needs a struct").into_compile_error().into();
+    };
+    let Fields::Named(fields) = &data.fields else {
+        return syn::Error::new_spanned(name, "Describe needs named fields").into_compile_error().into();
+    };
+    let idents: Vec<_> = fields.named.iter().map(|field| field.ident.as_ref().unwrap()).collect();
+    let labels = idents.iter().map(|ident| ident.to_string());
+    let type_name = name.to_string();
+    quote! {
+        impl ::describe_facade::Describe for #name {
+            fn describe(&self) -> ::std::string::String {
+                ::describe_facade::__private::describe_fields(#type_name, &[#((#labels, &self.#idents)),*])
+            }
+        }
+    }
+    .into()
+}
+```
+<!-- /file -->
+
+The user's crate depends on `describe_facade` only:
+
+<!-- file:demo/describe_facade_app/src/main.rs -->
+```rust title="demo/describe_facade_app/src/main.rs"
+use describe_facade::Describe; // the trait and the derive, in one `use`
+
+#[derive(Describe)]
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+fn main() {
+    let p = Point { x: 1, y: 2 };
+    println!("{}", p.describe());
+}
+```
+<!-- /file -->
+
+<!-- cargo:facade_describe_app -->
+*Verified output of `cargo run -q -p describe_facade_app` — declared in [`cargo_runs.toml`](demo/cargo_runs.toml) and regenerated by `tools/run_cargo_demos.py`, never hand-typed.*
+
+```text
+Point: x = 1, y = 2
+```
+<!-- /cargo -->
+
+- **One `use`, two items.** `describe_facade::Describe` is a trait in the type namespace and a derive macro in the macro namespace, and Rust keeps those separate, so the same name can hold both. `use describe_facade::Describe;` imports both: `#[derive(Describe)]` finds the macro, and `p.describe()` compiles because the trait is in scope.
+- **`__private` is `pub` and `#[doc(hidden)]`.** The generated `impl` is compiled in the user's crate, so anything it calls has to be public. `#[doc(hidden)]` leaves it out of the facade's documentation, which is how a crate says a public item is not part of its API.
+- **The derive crate is invisible.** The user never names `describe_facade_derive`; Cargo builds it because `describe_facade` depends on it.
+
+## Why two crates: the refusal
+
+A proc-macro crate is compiled into a library the compiler loads and runs, and it may export only the macros. Put the trait beside its derive:
+
+<!-- file:demo/trait_beside_the_derive/src/lib.rs -->
+```rust title="demo/trait_beside_the_derive/src/lib.rs"
+//! One crate for the trait and its derive: the layout the split exists to avoid.
+
+use proc_macro::TokenStream;
+
+pub trait Describe {
+    fn describe(&self) -> String;
+}
+
+#[proc_macro_derive(Describe)]
+pub fn derive_describe(_input: TokenStream) -> TokenStream {
+    TokenStream::new()
+}
+```
+<!-- /file -->
+
+<!-- cargo:trait_in_a_proc_macro_crate -->
+*Verified output of `cargo build -q -p trait_beside_the_derive`, which fails on purpose — declared in [`cargo_runs.toml`](demo/cargo_runs.toml) and regenerated by `tools/run_cargo_demos.py`, never hand-typed.*
+
+```text
+error: `proc-macro` crate types currently cannot export any items other than functions tagged with `#[proc_macro]`, `#[proc_macro_derive]`, or `#[proc_macro_attribute]`
+ --> trait_beside_the_derive/src/lib.rs:5:1
+  |
+5 | pub trait Describe {
+  | ^^^^^^^^^^^^^^^^^^
+
+error: could not compile `trait_beside_the_derive` (lib) due to 1 previous error
+```
+<!-- /cargo -->
+
+That rule is the whole reason for the split. [A proc-macro crate](../a_proc_macro_crate/README.md) covers what else such a crate can and cannot hold.
+
+## What breaks: a path the user's crate cannot resolve
+
+The derive writes `::describe_facade::Describe`. A leading `::` means *a crate named `describe_facade`*, looked up among the crates the user's crate depends on, under the name its `Cargo.toml` gives it. Two ways a user can make that name mean nothing.
+
+**Depending on the derive crate alone.** The derive is found, since it is `describe_facade_derive::Describe`, but the code it writes is not:
+
+<!-- file:demo/derive_crate_only/src/main.rs -->
+```rust title="demo/derive_crate_only/src/main.rs"
+use describe_facade_derive::Describe; // the derive crate, without the facade
+
+#[derive(Describe)]
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+fn main() {}
+```
+<!-- /file -->
+
+<!-- cargo:describe_without_the_facade -->
+*Verified output of `cargo build -q -p derive_crate_only`, which fails on purpose — declared in [`cargo_runs.toml`](demo/cargo_runs.toml) and regenerated by `tools/run_cargo_demos.py`, never hand-typed.*
+
+```text
+error[E0433]: cannot find `describe_facade` in the crate root
+ --> derive_crate_only/src/main.rs:3:10
+  |
+3 | #[derive(Describe)]
+  |          ^^^^^^^^ could not find `describe_facade` in the list of imported crates
+  |
+  = note: this error originates in the derive macro `Describe` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+For more information about this error, try `rustc --explain E0433`.
+error: could not compile `derive_crate_only` (bin "derive_crate_only") due to 1 previous error
+```
+<!-- /cargo -->
+
+**Renaming the facade.** Cargo lets a dependency take another name in the crate that uses it:
+
+<!-- file:demo/renamed_facade/Cargo.toml -->
+```toml title="demo/renamed_facade/Cargo.toml"
+[package]
+name = "renamed_facade"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+facade = { package = "describe_facade", path = "../describe_facade" }
+```
+<!-- /file -->
+
+<!-- file:demo/renamed_facade/src/main.rs -->
+```rust title="demo/renamed_facade/src/main.rs"
+use facade::Describe; // `describe_facade`, renamed to `facade` in Cargo.toml
+
+#[derive(Describe)]
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+fn main() {
+    let p = Point { x: 1, y: 2 };
+    println!("{}", p.describe());
+}
+```
+<!-- /file -->
+
+<!-- cargo:describe_facade_renamed -->
+*Verified output of `cargo build -q -p renamed_facade`, which fails on purpose — declared in [`cargo_runs.toml`](demo/cargo_runs.toml) and regenerated by `tools/run_cargo_demos.py`, never hand-typed.*
+
+```text
+error[E0433]: cannot find `describe_facade` in the crate root
+ --> renamed_facade/src/main.rs:3:10
+  |
+3 | #[derive(Describe)]
+  |          ^^^^^^^^ could not find `describe_facade` in the list of imported crates
+  |
+  = note: this error originates in the derive macro `Describe` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+For more information about this error, try `rustc --explain E0433`.
+error: could not compile `renamed_facade` (bin "renamed_facade") due to 1 previous error
+```
+<!-- /cargo -->
+
+Same error, and in both the compiler points at the derive, not at a line the user wrote: the `::describe_facade` tokens came from `quote!`, so they carry the derive's call-site span ([Generating with `quote`](../generating_with_quote/README.md#spans-where-an-error-points) explains). Nothing in the tokens a derive receives says what the user named the facade. So a derive documents that it needs the facade under its own name, or accepts the path as an argument, which is what serde does below.
+
+A relative path would not help: `impl Describe for Point` resolves only if the user's module happens to have a trait called `Describe` in scope. [Absolute paths and hygiene](../absolute_paths_and_hygiene/README.md) compares the choices.
+
+## serde and thiserror, from their published sources
+
+Both are written this way, and they differ in the details. Every link below is to the source of the version named, on docs.rs.
+
+| | `serde` 1.0.229 | `thiserror` 2.0.20 |
+|---|---|---|
+| Crates | three: `serde`, the traits in [`serde_core` ↗](https://docs.rs/crate/serde/1.0.229/source/Cargo.toml.orig#18), the derives in [`serde_derive` ↗](https://docs.rs/crate/serde/1.0.229/source/Cargo.toml.orig#19) | two: `thiserror`, and the derive in [`thiserror-impl` ↗](https://docs.rs/crate/thiserror/2.0.20/source/Cargo.toml.orig#31) |
+| The derive dependency | `optional = true`, switched on by the [`derive` feature ↗](https://docs.rs/crate/serde/1.0.229/source/Cargo.toml.orig#42) | always on, pinned `=2.0.20` |
+| The re-export | [`pub use serde_derive::{Deserialize, Serialize};` ↗](https://docs.rs/crate/serde/1.0.229/source/src/lib.rs#279), beside [`pub use serde_core::{…, Deserialize, …, Serialize, …}` ↗](https://docs.rs/crate/serde/1.0.229/source/src/lib.rs#252) | [`pub use thiserror_impl::*;` ↗](https://docs.rs/crate/thiserror/2.0.20/source/src/lib.rs#287) |
+| The trait shares the derive's name | yes, `Serialize` and `Deserialize` | no: the derive is `Error`, and the trait is std's `Error` |
+| Hidden module for generated code | `__private229`, [written by `build.rs` ↗](https://docs.rs/crate/serde/1.0.229/source/build.rs#7) | `__private20`, [written by `build.rs` ↗](https://docs.rs/crate/thiserror/2.0.20/source/build.rs#10) |
+| How generated code names the facade | [`extern crate serde as _serde;` ↗](https://docs.rs/crate/serde_derive/1.0.229/source/src/dummy.rs#11), or [`use <path> as _serde;` ↗](https://docs.rs/crate/serde_derive/1.0.229/source/src/dummy.rs#7) when the user writes [`#[serde(crate = "…")]` ↗](https://docs.rs/crate/serde_derive/1.0.229/source/src/internals/attr.rs#484) | [`::thiserror::__private20::Error` ↗](https://docs.rs/crate/thiserror-impl/2.0.20/source/src/expand.rs#43), with no way to change it |
+
+Four things in that table are worth reading twice:
+
+- **Why serde's derive is optional.** A comment above the re-export says the derive is off by default because crates that write their impls by hand, or implement data formats, would otherwise have to turn off default features and turn `std` back on just to be rid of it ([`lib.rs` line 268 ↗](https://docs.rs/crate/serde/1.0.229/source/src/lib.rs#268)). thiserror offers nothing without its derive.
+- **`#[serde(crate = "…")]` is the answer to the renamed dependency** above. Without it, the generated code writes `extern crate serde`, which needs a dependency the user's crate calls `serde`.
+- **The hidden module's name carries the patch version.** Both `build.rs` files write `pub mod __private$$` with `$$` replaced by `CARGO_PKG_VERSION_PATCH`, and both derives generate the same name from their own patch version ([`serde_derive` ↗](https://docs.rs/crate/serde_derive/1.0.229/source/src/lib.rs#101), [`thiserror-impl` ↗](https://docs.rs/crate/thiserror-impl/2.0.20/source/src/lib.rs#51)). A derive from one release, used with a facade from another, generates a path that does not exist.
+- **The versions move in lockstep.** thiserror pins `thiserror-impl = "=2.0.20"`. serde's derive is optional, so the pin is elsewhere: `serde_core`'s manifest has a [dependency on `serde_derive = "=1.0.229"` under `cfg(any())` ↗](https://docs.rs/crate/serde_core/1.0.229/source/Cargo.toml.orig#39), a condition that is never true, whose comment says it exists only to force the two versions together, because generated code uses non-public APIs that semver does not cover.
+
+That last point is the price of `__private`: whatever is in it can change in any release, so the derive and the facade must always come from the same one. A published crate of your own that uses the pattern should pin its derive with `=` the same way.
+
+## If you are coming from another language
+
+- **Java.** MapStruct ships two artifacts: `mapstruct`, with the annotations users write, and `mapstruct-processor`, which runs inside `javac` and is put on the annotation processor path in the build file. That is the same split, made because the processor is compiler-time code the application should not carry. Rust forces it: the macros go in a crate that is loaded into the compiler, and nothing else may go in it. What Java does not need is the facade, because an annotation's type is an ordinary class the user imports.
+- **Python.** A decorator and the class it works with can live in one module, because the decorator runs in the same interpreter as the program; nothing forces a split. A package's `__init__.py` that imports names from submodules is the facade habit, and the leading underscore, `_private`, is the nearest thing to `#[doc(hidden)]`: reachable, and hidden by agreement.
+- **C and C++.** A header that `#include`s the implementation header and exposes one public name is a facade too. And a C macro has the path problem: it expands to names that are looked up wherever it lands, so it breaks when the file using it lacks the right `#include`, the same class of failure as the missing facade above.
 
 ## See also
 
-- [A proc-macro crate](../a_proc_macro_crate/README.md) — why the split is forced
-- [Absolute paths and hygiene](../absolute_paths_and_hygiene/README.md) — naming the facade from generated code
-- [Procedural macros](../README.md) — the chapter, in reading order
+- [A proc-macro crate](../a_proc_macro_crate/README.md) — the crate type that forces the split
+- [Absolute paths and hygiene](../absolute_paths_and_hygiene/README.md) — choosing the paths in generated code
+- [Expanding `thiserror`](../expanding_thiserror/README.md) — the `::thiserror::__private…` paths in a real expansion
+- [Three kinds of procedural macro](../three_kinds_of_procedural_macro/README.md#in-the-wild) — the `#[proc_macro_derive]` declarations in `serde_derive` and `thiserror-impl`
+- [Testing with `trybuild`](../testing_with_trybuild/README.md) — the next page, which tests this derive's errors
+- [Bringing names in with `use`](../../27_Modules/the_use_declaration/README.md) — what `use` binds, and in which namespace
+- [Adding a dependency](../../05_Tooling/cargo_dependencies/README.md) — what the version string in `Cargo.toml` permits, and why `=` is different
+- [The Cargo Book: renaming dependencies ↗](https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#renaming-dependencies-in-cargotoml)
+
+## Po polsku
+
+Crate typu `proc-macro` może eksportować **wyłącznie makra** — kompilator odrzuca w nim publiczny trait. Dlatego biblioteka z traitem i jego derive'em to co najmniej dwa crate'y: **fasada** (*facade*), od której zależy użytkownik, trzyma trait i **reeksportuje** (*re-export*) makro pod tą samą nazwą (`pub use describe_facade_derive::Describe;`), bo trait i makro żyją w różnych przestrzeniach nazw. Wygenerowany kod musi odwoływać się do fasady ścieżką absolutną, `::describe_facade::Describe`, a pomocnicze funkcje trzyma w publicznym, ale ukrytym module `#[doc(hidden)] pub mod __private`.
+
+Pułapki: użytkownik zależny tylko od crate'a z makrem albo taki, który w `Cargo.toml` zmienił nazwę zależności, dostaje błąd E0433 wskazujący na `#[derive(…)]`. `serde` 1.0.229 (trzy crate'y: `serde`, `serde_core`, `serde_derive`, derive za feature'em `derive`) rozwiązuje to atrybutem `#[serde(crate = "…")]`; `thiserror` 2.0.20 zawsze włącza `thiserror-impl` i przypina wersję przez `=`. Nazwy `__private229` i `__private20` zawierają numer wersji, więc makro i fasada muszą pochodzić z tego samego wydania.
+
+**Szukaj po polsku:** reeksport makra derive w Ruscie · `proc-macro crate types currently cannot export` · `serde_derive serde_core` · `#[serde(crate)]` · `rust facade crate derive`

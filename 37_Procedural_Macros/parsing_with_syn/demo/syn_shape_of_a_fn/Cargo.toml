@@ -1,0 +1,8 @@
+[package]
+name = "syn_shape_of_a_fn"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+syn_shapes = { path = "../syn_shapes" }

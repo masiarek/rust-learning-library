@@ -1,0 +1,5 @@
+proc_macro2: struct Point { x : i32 }
+
+thread 'main' (<id>) panicked at /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/proc_macro/src/bridge/client.rs:200:32:
+procedural macro API is used outside of a procedural macro
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

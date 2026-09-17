@@ -1,0 +1,6 @@
+# `quote!` in an ordinary program, a derive built with it (and the same derive
+# built from a string), a program that uses it, and one that leaves out a
+# function the derive calls. `[workspace]` makes this folder its own workspace.
+[workspace]
+members = ["quote_tour", "quote_validate", "quote_validate_app", "quote_missing_check"]
+resolver = "3"

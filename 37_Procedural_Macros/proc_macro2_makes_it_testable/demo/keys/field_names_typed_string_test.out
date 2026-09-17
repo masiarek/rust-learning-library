@@ -1,0 +1,21 @@
+
+running 1 test
+tests::expected_as_a_typed_string --- FAILED
+
+failures:
+
+---- tests::expected_as_a_typed_string stdout ----
+
+thread 'tests::expected_as_a_typed_string' (<id>) panicked at testable_field_names/src/lib.rs:61:9:
+assertion `left == right` failed
+  left: "impl Point { pub const FIELD_NAMES : & [& str] = & [\"x\" , \"y\"] ; }"
+ right: "impl Point { pub const FIELD_NAMES: &[&str] = &[\"x\", \"y\"]; }"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    tests::expected_as_a_typed_string
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in <elapsed>
+
+error: test failed, to rerun pass `-p testable_field_names --lib`

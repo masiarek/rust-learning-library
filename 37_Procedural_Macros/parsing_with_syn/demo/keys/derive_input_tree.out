@@ -1,0 +1,54 @@
+DeriveInput {
+    attrs: [],
+    vis: Visibility::Public(
+        Token![pub],
+    ),
+    ident: Ident(
+        Point,
+    ),
+    generics: Generics {
+        lt_token: None,
+        params: [],
+        gt_token: None,
+        where_clause: None,
+    },
+    data: Data::Struct {
+        struct_token: Token![struct],
+        fields: Fields::Named {
+            brace_token: Brace,
+            named: [
+                Field {
+                    attrs: [],
+                    vis: Visibility::Inherited,
+                    modifiers: FieldModifiers,
+                    ident: Some(
+                        Ident(
+                            x,
+                        ),
+                    ),
+                    colon_token: Some(
+                        Token![:],
+                    ),
+                    ty: Type::Path {
+                        attrs: [],
+                        qself: None,
+                        path: Path {
+                            leading_colon: None,
+                            segments: [
+                                PathSegment {
+                                    ident: Ident(
+                                        i32,
+                                    ),
+                                    arguments: PathArguments::None,
+                                },
+                            ],
+                        },
+                    },
+                    default: None,
+                },
+            ],
+        },
+        semi_token: None,
+    },
+}
+same tree: true

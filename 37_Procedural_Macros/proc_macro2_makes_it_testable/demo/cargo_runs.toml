@@ -1,0 +1,31 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+#
+# Two things in a test or panic transcript change from run to run, and are
+# replaced before the key is compared: the thread id rustc prints after a
+# thread's name, and the time libtest took.
+
+[[run]]
+stem = "testable_field_names_app"
+cmd = ["cargo", "run", "-q", "-p", "testable_app"]
+
+[[run]]
+stem = "field_names_unit_tests"
+cmd = ["cargo", "test", "-q", "-p", "testable_field_names"]
+filters = [['finished in [0-9.]+s', 'finished in <elapsed>']]
+
+[[run]]
+stem = "field_names_typed_string_test"
+cmd = ["cargo", "test", "-q", "-p", "testable_field_names", "--", "--ignored"]
+expect = "failure"
+stream = "both"
+filters = [
+    ["thread '([^']*)' \\([0-9]+\\)", "thread '\\1' (<id>)"],
+    ['finished in [0-9.]+s', 'finished in <elapsed>'],
+]
+
+[[run]]
+stem = "proc_macro_outside_a_macro"
+cmd = ["cargo", "run", "-q", "-p", "outside_a_macro"]
+expect = "failure"
+stream = "both"
+filters = [["thread '([^']*)' \\([0-9]+\\)", "thread '\\1' (<id>)"]]

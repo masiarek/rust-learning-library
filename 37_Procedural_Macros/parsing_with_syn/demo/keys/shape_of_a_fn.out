@@ -1,0 +1,7 @@
+error: expected one of: `struct`, `enum`, `union`
+ --> syn_shape_of_a_fn/src/main.rs:4:30
+  |
+4 |     println!("{}", shape_of!(fn point() {})); // a function is not a DeriveInput
+  |                              ^^
+
+error: could not compile `syn_shape_of_a_fn` (bin "syn_shape_of_a_fn") due to 1 previous error

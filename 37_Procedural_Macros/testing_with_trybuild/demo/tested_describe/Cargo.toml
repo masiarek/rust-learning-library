@@ -1,0 +1,11 @@
+[package]
+name = "tested_describe"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+tested_describe_derive = { path = "../tested_describe_derive" }
+
+[dev-dependencies]
+trybuild = "1"

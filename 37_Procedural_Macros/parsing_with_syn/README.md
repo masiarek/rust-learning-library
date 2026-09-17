@@ -2,21 +2,327 @@
 
 **Level:** 201 · working knowledge
 
-> **Stub — an outline, not a lesson.** There is no runnable example behind this page yet, so nothing on it has been through [the check that backs every other claim in this library](../../CONTRIBUTING.md). The bullets below are the questions the finished page has to answer.
+**One line:** `syn` turns a `TokenStream` into a syntax tree, so a derive reads `input.ident` and matches on `Data::Struct` and `Fields::Named` instead of walking tokens; `parse_macro_input!` does the parsing inside a macro, and `syn::parse2` and `syn::parse_str` do it anywhere else.
 
-**One line:** `syn` turns a `TokenStream` into a syntax tree — `DeriveInput` for a derive, `ItemFn` for an attribute on a function — so a macro asks for `input.ident` and `data.fields` instead of counting tokens.
+## A derive that reads the definition
 
-## What it has to cover
+`#[derive(Shape)]` adds a constant describing the type's shape. `shape_of!` does the same for a definition written inside its parentheses:
 
-- `parse_macro_input!` and `syn::parse2` / `syn::parse_str`
-- `DeriveInput`: `attrs`, `vis`, `ident`, `generics`, `data` — printed from a real struct with `extra-traits`' `Debug`
-- `Data::Struct` / `Data::Enum` / `Data::Union`, `Fields::Named` / `Unnamed` / `Unit`
-- Features: what `full` and `extra-traits` add, and what a derive-only macro needs
-- This library pins `syn` 3; if a course or blog uses `syn` 2, note on the page any API the demo shows that differs (check the syn 3 release notes; do not assume)
+<!-- file:demo/syn_shapes/src/lib.rs -->
+```rust title="demo/syn_shapes/src/lib.rs"
+//! Two macros that read a type definition with `syn` and describe its shape.
+//!
+//! Both start the same way: `parse_macro_input!` turns the tokens into a
+//! `DeriveInput`, or hands the parse error back to the compiler. After that the
+//! work is a `match` on `Data` and `Fields`, not a walk over tokens.
+
+use proc_macro::TokenStream;
+use quote::{ToTokens, quote};
+use syn::{Data, DeriveInput, Fields, FieldsNamed, parse_macro_input};
+
+/// `#[derive(Shape)]` adds `pub const SHAPE: &str` to the type.
+#[proc_macro_derive(Shape)]
+pub fn derive_shape(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as DeriveInput);
+    let name = &input.ident;
+    let shape = describe(&input);
+    quote! {
+        impl #name {
+            pub const SHAPE: &str = #shape;
+        }
+    }
+    .into()
+}
+
+/// `shape_of!(struct Foo;)` becomes a string literal. Unlike a derive, it can be
+/// handed tokens that are not a type definition at all.
+#[proc_macro]
+pub fn shape_of(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as DeriveInput);
+    let shape = describe(&input);
+    quote! { #shape }.into()
+}
+
+fn describe(input: &DeriveInput) -> String {
+    match &input.data {
+        Data::Struct(data) => format!("struct with {}", describe_fields(&data.fields)),
+        Data::Enum(data) => {
+            let variants: Vec<String> = data
+                .variants
+                .iter()
+                .map(|variant| format!("{} with {}", variant.ident, describe_fields(&variant.fields)))
+                .collect();
+            format!("enum of {}", variants.join("; "))
+        }
+        Data::Union(data) => format!("union with {}", describe_named(&data.fields)),
+    }
+}
+
+fn describe_fields(fields: &Fields) -> String {
+    match fields {
+        Fields::Named(named) => describe_named(named),
+        Fields::Unnamed(unnamed) => {
+            let types: Vec<String> =
+                unnamed.unnamed.iter().map(|field| field.ty.to_token_stream().to_string()).collect();
+            format!("unnamed fields ({})", types.join(", "))
+        }
+        Fields::Unit => "no fields".to_string(),
+    }
+}
+
+fn describe_named(named: &FieldsNamed) -> String {
+    // Every field in `FieldsNamed` has a name, so `ident` is always `Some`.
+    let names: Vec<String> = named.named.iter().map(|field| field.ident.as_ref().unwrap().to_string()).collect();
+    format!("named fields {}", names.join(", "))
+}
+```
+<!-- /file -->
+
+<!-- file:demo/syn_shapes_app/src/main.rs -->
+```rust title="demo/syn_shapes_app/src/main.rs"
+#![allow(dead_code)] // the types are described, never built
+
+use syn_shapes::{Shape, shape_of};
+
+#[derive(Shape)]
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+#[derive(Shape)]
+struct Meters(f64);
+
+#[derive(Shape)]
+struct Marker;
+
+#[derive(Shape)]
+enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+}
+
+#[derive(Shape)]
+union IntOrFloat {
+    i: u32,
+    f: f32,
+}
+
+fn main() {
+    println!("Point:      {}", Point::SHAPE);
+    println!("Meters:     {}", Meters::SHAPE);
+    println!("Marker:     {}", Marker::SHAPE);
+    println!("Message:    {}", Message::SHAPE);
+    println!("IntOrFloat: {}", IntOrFloat::SHAPE);
+    println!("shape_of!:  {}", shape_of!(struct Pair(i32, i32);));
+}
+```
+<!-- /file -->
+
+<!-- cargo:syn_shapes_app -->
+*Verified output of `cargo run -q -p syn_shapes_app` — declared in [`cargo_runs.toml`](demo/cargo_runs.toml) and regenerated by `tools/run_cargo_demos.py`, never hand-typed.*
+
+```text
+Point:      struct with named fields x, y
+Meters:     struct with unnamed fields (f64)
+Marker:     struct with no fields
+Message:    enum of Quit with no fields; Move with named fields x, y; Write with unnamed fields (String)
+IntOrFloat: union with named fields i, f
+shape_of!:  struct with unnamed fields (i32, i32)
+```
+<!-- /cargo -->
+
+- **`parse_macro_input!(input as DeriveInput)`** parses the macro's `proc_macro::TokenStream` into the type named after `as`. It can only be used in a function that returns `proc_macro::TokenStream`, for a reason shown [below](#when-the-tokens-are-not-a-definition).
+- **`DeriveInput`** is what a derive receives, as [five public fields ↗](https://docs.rs/crate/syn/3.0.6/source/src/derive.rs#13): `attrs`, `vis`, `ident`, `generics` and `data`. `Shape` uses two of them.
+- **`Data`** says which kind of definition it was: [`Struct`, `Enum` or `Union` ↗](https://docs.rs/crate/syn/3.0.6/source/src/derive.rs#31).
+- **`Fields`** says how a struct's or a variant's fields are written: [`Named`, `Unnamed` or `Unit` ↗](https://docs.rs/crate/syn/3.0.6/source/src/data.rs#38). A union can only have named fields, so `DataUnion` holds a `FieldsNamed` directly, and `describe` needs `describe_named` for it.
+
+Neither `match` has a `_` arm, and the crate compiles: `Data` and `Fields` are exhaustive enums. [`Type` ↗](https://docs.rs/crate/syn/3.0.6/source/src/ty.rs#24) and [`Expr` ↗](https://docs.rs/crate/syn/3.0.6/source/src/expr.rs#139) are not: both are `#[non_exhaustive]`, because Rust keeps adding syntax, so a `match` on either needs a fallback arm.
+
+The types in `Meters(f64)` and `Write(String)` came out of the tree as `syn::Type` values, and `to_token_stream().to_string()` printed them back. That is fine for a description; generated code should interpolate the `Type` itself, as [Generating with `quote`](../generating_with_quote/README.md) does.
+
+## The whole tree
+
+`syn` is an ordinary library, so a program can parse with it too, and print what it built. `Debug` on syntax tree types comes from the `extra-traits` feature:
+
+<!-- file:demo/syn_tree/src/main.rs -->
+```rust title="demo/syn_tree/src/main.rs"
+//! `syn` is an ordinary library, so an ordinary program can call it: here, to
+//! print the tree a derive on a one-field struct works with.
+
+use syn::DeriveInput;
+
+fn main() {
+    let from_str: DeriveInput = syn::parse_str("pub struct Point { x: i32 }").unwrap();
+    println!("{from_str:#?}");
+
+    // The same tokens laid out differently, parsed from a token stream.
+    let tokens: proc_macro2::TokenStream = "pub struct Point {\n    x: i32\n}".parse().unwrap();
+    let from_tokens: DeriveInput = syn::parse2(tokens).unwrap();
+    println!("same tree: {}", from_str == from_tokens);
+}
+```
+<!-- /file -->
+
+<!-- cargo:derive_input_tree -->
+*Verified output of `cargo run -q -p syn_tree` — declared in [`cargo_runs.toml`](demo/cargo_runs.toml) and regenerated by `tools/run_cargo_demos.py`, never hand-typed.*
+
+```text
+DeriveInput {
+    attrs: [],
+    vis: Visibility::Public(
+        Token![pub],
+    ),
+    ident: Ident(
+        Point,
+    ),
+    generics: Generics {
+        lt_token: None,
+        params: [],
+        gt_token: None,
+        where_clause: None,
+    },
+    data: Data::Struct {
+        struct_token: Token![struct],
+        fields: Fields::Named {
+            brace_token: Brace,
+            named: [
+                Field {
+                    attrs: [],
+                    vis: Visibility::Inherited,
+                    modifiers: FieldModifiers,
+                    ident: Some(
+                        Ident(
+                            x,
+                        ),
+                    ),
+                    colon_token: Some(
+                        Token![:],
+                    ),
+                    ty: Type::Path {
+                        attrs: [],
+                        qself: None,
+                        path: Path {
+                            leading_colon: None,
+                            segments: [
+                                PathSegment {
+                                    ident: Ident(
+                                        i32,
+                                    ),
+                                    arguments: PathArguments::None,
+                                },
+                            ],
+                        },
+                    },
+                    default: None,
+                },
+            ],
+        },
+        semi_token: None,
+    },
+}
+same tree: true
+```
+<!-- /cargo -->
+
+That is every value a derive on `pub struct Point { x: i32 }` works with. Reading it from the top:
+
+- **`attrs: []`.** Attributes and doc comments on the struct would be here. Inside a real derive, the `#[derive(…)]` attribute itself is not: the compiler removes it before calling the macro ([Three kinds of procedural macro](../three_kinds_of_procedural_macro/README.md) shows this).
+- **`Token![pub]`, `Token![struct]`, `Token![:]`, `Brace`.** Every keyword, punctuation mark and bracket is kept, with its span. A macro rarely reads them, but they are what lets `syn` print a tree back as tokens, and what an error can point at.
+- **`data: Data::Struct { … }`.** In code the variant is `Data::Struct(DataStruct)`; `syn`'s [`Debug` for `Data` ↗](https://docs.rs/crate/syn/3.0.6/source/src/gen/debug.rs#341) prints the `DataStruct` fields inline.
+- **`ty: Type::Path`.** `i32` is not special to `syn`: it is a path with one segment, the same shape `String` or `std::string::String` would have. A macro sees names, never types, so it cannot tell whether two paths name the same type.
+- **`modifiers: FieldModifiers` and `default: None`** are new in `syn` 3, below.
+
+The last line compares this tree with one parsed by `syn::parse2` from the same tokens laid out over three lines. `==`, also from `extra-traits`, compares the syntax, not the layout.
+
+## Three ways in
+
+| Function | Takes | Where it works |
+|---|---|---|
+| [`syn::parse` ↗](https://docs.rs/crate/syn/3.0.6/source/src/lib.rs#1025) | `proc_macro::TokenStream` | inside a macro only, like everything that touches `proc_macro` |
+| [`syn::parse2` ↗](https://docs.rs/crate/syn/3.0.6/source/src/lib.rs#1043) | `proc_macro2::TokenStream` | anywhere: a macro's testable `expand`, a test, a program |
+| [`syn::parse_str` ↗](https://docs.rs/crate/syn/3.0.6/source/src/lib.rs#1073) | `&str` | anywhere |
+
+All three are generic over the result: `fn parse2<T: parse::Parse>(tokens: proc_macro2::TokenStream) -> Result<T>`. `DeriveInput`, `ItemFn`, `Expr`, `Type` and every other tree type implement `Parse`, so the type annotation picks the parser. [`proc-macro2` makes it testable](../proc_macro2_makes_it_testable/README.md) uses `parse2`, and [Parsing arbitrary tokens](../parsing_arbitrary_tokens/README.md) implements `Parse` for a type of its own.
+
+## When the tokens are not a definition
+
+A derive is only ever attached to a struct, an enum or a union, so its `DeriveInput` always parses. `shape_of!` takes whatever is between its parentheses:
+
+<!-- file:demo/syn_shape_of_a_fn/src/main.rs -->
+```rust title="demo/syn_shape_of_a_fn/src/main.rs"
+use syn_shapes::shape_of;
+
+fn main() {
+    println!("{}", shape_of!(fn point() {})); // a function is not a DeriveInput
+}
+```
+<!-- /file -->
+
+<!-- cargo:shape_of_a_fn -->
+*Verified output of `cargo build -q -p syn_shape_of_a_fn`, which fails on purpose — declared in [`cargo_runs.toml`](demo/cargo_runs.toml) and regenerated by `tools/run_cargo_demos.py`, never hand-typed.*
+
+```text
+error: expected one of: `struct`, `enum`, `union`
+ --> syn_shape_of_a_fn/src/main.rs:4:30
+  |
+4 |     println!("{}", shape_of!(fn point() {})); // a function is not a DeriveInput
+  |                              ^^
+
+error: could not compile `syn_shape_of_a_fn` (bin "syn_shape_of_a_fn") due to 1 previous error
+```
+<!-- /cargo -->
+
+The error is `syn`'s, and it points at `fn`, the first token that could not start a `DeriveInput`. [`parse_macro_input!` ↗](https://docs.rs/crate/syn/3.0.6/source/src/parse_macro_input.rs#108) is a `match`: on `Ok` it evaluates to the value, and on `Err` it **returns** the error, converted to a `compile_error!` invocation, as the macro's whole output. That `return` is why it only works inside the function whose return type is `proc_macro::TokenStream`. [Errors: from `panic!` to `syn::Error`](../errors_from_panic_to_syn_error/README.md) produces errors like this one on purpose.
+
+## Features
+
+`syn` compiles only what its features ask for. The list is in [the crate's own documentation ↗](https://docs.rs/crate/syn/3.0.6/source/src/lib.rs#241):
+
+| Feature | Default | What it adds |
+|---|---|---|
+| `derive` | yes | the types a derive receives: `DeriveInput`, `Data`, `Fields`, `Type`, `Generics`, and a subset of `Expr` |
+| `parsing` | yes | `Parse`, and `parse`, `parse2`, `parse_str` |
+| `printing` | yes | `ToTokens` for tree types, so `quote!` can interpolate them |
+| `proc-macro` | yes | the link to the compiler's `proc_macro`, which `syn::parse` and `parse_macro_input!` need |
+| `clone-impls` | yes | `Clone` on every tree type |
+| `full` | no | every item, statement and expression: `ItemFn`, `Block`, all of `Expr` |
+| `extra-traits` | no | `Debug`, `Eq`, `PartialEq` and `Hash` on every tree type |
+| `visit`, `visit-mut`, `fold` | no | traits that walk a whole tree |
+
+`Shape` needs only the defaults. Every demo in this chapter asks for `full` and `extra-traits` anyway, so that one shared build of `syn` serves all of them; a crate of your own should ask for `full` when it parses a function, a block or an arbitrary expression (an attribute macro on a `fn`, say), and for `extra-traits` when it prints or compares trees.
+
+## `syn` 3, if your tutorial uses `syn` 2
+
+This library pins `syn` 3.0.6. `DeriveInput`, `Data` and `Fields` did not change: `src/derive.rs` is identical in 2.0.119 and 3.0.6. What the tree above shows that `syn` 2 would print differently:
+
+- **`Field` lost `mutability` and gained `modifiers` and `default`.** `syn` 2's [`mutability: FieldMutability` ↗](https://docs.rs/crate/syn/2.0.119/source/src/data.rs#190) became [`modifiers: FieldModifiers` ↗](https://docs.rs/crate/syn/3.0.6/source/src/data.rs#193), and [`default: Option<(Token![=], Expr)>` ↗](https://docs.rs/crate/syn/3.0.6/source/src/data.rs#204) holds a field's `= value` from the in-progress default field values syntax.
+- **Every `Type` variant has `attrs`**, which is why `Type::Path` above starts with `attrs: []`.
+- **`Type::BareFn` is now `Type::FnPtr`.** Not on this page, but a derive that matches on its fields' types and names `BareFn` stops compiling.
+
+The [3.0.0 release notes ↗](https://github.com/dtolnay/syn/releases/tag/3.0.0) list every change. Code that constructs a `Field` by hand, or names its `mutability`, is where these bite.
+
+## If you are coming from another language
+
+- **Python.** `ast.parse(source)` gives a tree whose `ClassDef` node has `.name`, `.decorator_list` and `.body`, and `ast.dump` prints it much like `{:#?}` above. The difference is what each tree is for: Python's `ast` is parsed from source text for any tool that wants it, while `syn` mostly parses tokens the compiler hands a macro, and gives back tokens rather than compiling anything itself.
+- **Java.** An annotation processor gets a `TypeElement` and calls `getSimpleName()` and `getEnclosedElements()` on it, and that model is *semantic*: a field's `TypeMirror` knows which class it refers to. `syn` stops at syntax. `ty: Type::Path` for `i32` is only a path, and a macro that needs to know whether a field's type implements a trait has to generate code that makes the compiler check it.
+- **C and C++.** The preprocessor never sees a tree, only tokens, so the nearest thing is libclang, which parses a translation unit into cursors for struct and field declarations. `syn` is that job for one item at a time, done by a library inside the macro rather than by a separate tool.
+- **ABAP.** *(Not machine-checked — CI cannot run ABAP.)* RTTS gives a runtime description of a structure, `cl_abap_structdescr` with its list of components, which is the same question `Fields::Named` answers. RTTS answers it about data while the program runs; `syn` answers it about source, while the compiler runs, before any value exists.
 
 ## See also
 
-- [Tokens and token streams](../tokens_and_token_streams/README.md) — what `syn` saves you from
-- [Generating with `quote`](../generating_with_quote/README.md) — the other direction
-- [Every struct and enum shape](../every_struct_and_enum_shape/README.md) — handling every `Fields` variant in a real derive
-- [Procedural macros](../README.md) — the chapter, in reading order
+- [Tokens and token streams](../tokens_and_token_streams/README.md) — what `syn` saves you from walking by hand
+- [Generating with `quote`](../generating_with_quote/README.md) — the other direction: tree pieces back into tokens
+- [Every struct and enum shape](../every_struct_and_enum_shape/README.md) — every `Fields` variant handled in a real derive
+- [Generics, lifetimes and `where`](../generics_lifetimes_and_where/README.md) — the `generics` field, which `Shape` ignores
+- [Helper attributes by hand](../helper_attributes_by_hand/README.md) — reading `attrs`
+- [The `syn` crate ↗](https://docs.rs/syn/3.0.6/syn/)
+
+## Po polsku
+
+**`syn`** zamienia strumień tokenów w **drzewo składni** (*syntax tree*). Makro derive dostaje `DeriveInput` z pięcioma polami — `attrs`, `vis`, `ident`, `generics`, `data` — i zamiast liczyć tokeny dopasowuje `Data::Struct`, `Data::Enum` albo `Data::Union`, a pola rozróżnia przez `Fields::Named` (nazwane), `Fields::Unnamed` (krotkowe) i `Fields::Unit` (brak pól). Wewnątrz makra parsuje `parse_macro_input!`, który przy błędzie *zwraca* z funkcji `compile_error!` wskazujący zły token; poza makrem — w teście albo zwykłym programie — służą do tego `syn::parse2` (z `proc_macro2::TokenStream`) i `syn::parse_str` (z tekstu). `Debug` i `PartialEq` na drzewie włącza feature `extra-traits`, a pełną składnię funkcji i wyrażeń — `full`. Makro widzi tylko składnię: `i32` to dla niego ścieżka, nie typ.
+
+Biblioteka używa `syn` 3; w porównaniu z `syn` 2 pole `Field::mutability` zastąpiło `modifiers`, doszło `default`, a każdy wariant `Type` ma `attrs`.
+
+**Szukaj po polsku:** `syn DeriveInput` · parsowanie w makrach proceduralnych · `parse_macro_input` · `syn Data Fields Named Unnamed` · `syn 3 migration`

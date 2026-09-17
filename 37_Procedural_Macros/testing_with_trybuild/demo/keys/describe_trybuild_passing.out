@@ -1,0 +1,7 @@
+
+
+test tests/ui/pass_named_fields.rs [should pass] ... ok
+test tests/ui/fail_enum.rs [should fail to compile] ... ok
+test tests/ui/fail_tuple_struct.rs [should fail to compile] ... ok
+
+

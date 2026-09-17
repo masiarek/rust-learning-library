@@ -1,0 +1,8 @@
+[package]
+name = "derive_crate_only"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+describe_facade_derive = { path = "../describe_facade_derive" }

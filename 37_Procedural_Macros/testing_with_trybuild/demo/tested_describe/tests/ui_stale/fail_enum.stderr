@@ -1,0 +1,5 @@
+error: Describe can only be derived for a struct
+ --> tests/ui_stale/fail_enum.rs:4:6
+  |
+4 | enum Direction {
+  |      ^^^^^^^^^

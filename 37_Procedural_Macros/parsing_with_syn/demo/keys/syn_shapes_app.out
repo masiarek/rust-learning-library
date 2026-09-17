@@ -1,0 +1,6 @@
+Point:      struct with named fields x, y
+Meters:     struct with unnamed fields (f64)
+Marker:     struct with no fields
+Message:    enum of Quit with no fields; Move with named fields x, y; Write with unnamed fields (String)
+IntOrFloat: union with named fields i, f
+shape_of!:  struct with unnamed fields (i32, i32)

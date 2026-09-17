@@ -1,0 +1,13 @@
+# A facade crate and the derive it re-exports, a program that uses them the
+# intended way, two that do not, and a proc-macro crate that tries to hold the
+# trait too. `[workspace]` makes this folder its own workspace.
+[workspace]
+members = [
+    "describe_facade",
+    "describe_facade_derive",
+    "describe_facade_app",
+    "derive_crate_only",
+    "renamed_facade",
+    "trait_beside_the_derive",
+]
+resolver = "3"

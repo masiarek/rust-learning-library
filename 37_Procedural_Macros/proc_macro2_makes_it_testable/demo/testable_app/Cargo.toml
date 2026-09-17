@@ -1,0 +1,8 @@
+[package]
+name = "testable_app"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+testable_field_names = { path = "../testable_field_names" }

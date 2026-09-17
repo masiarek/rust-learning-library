@@ -1,0 +1,5 @@
+# The facade and derive from The re-export pattern, with the facade's UI tests.
+# `[workspace]` makes this folder its own workspace.
+[workspace]
+members = ["tested_describe", "tested_describe_derive"]
+resolver = "3"

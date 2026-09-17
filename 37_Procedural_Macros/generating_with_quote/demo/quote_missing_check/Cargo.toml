@@ -1,0 +1,8 @@
+[package]
+name = "quote_missing_check"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+quote_validate = { path = "../quote_validate" }

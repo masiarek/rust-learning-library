@@ -1,0 +1,20 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+#
+# Both keys are stderr, where trybuild writes its report; libtest's own summary
+# goes to stdout and is not part of either key. The filter deletes Cargo's
+# progress lines from the build trybuild starts ("Compiling", "Checking",
+# "Finished ... in 0.30s", "Blocking waiting for file lock"): they carry
+# absolute paths and timings, and appear only when something was rebuilt.
+
+[[run]]
+stem = "describe_trybuild_passing"
+cmd = ["cargo", "test", "-q", "-p", "tested_describe", "--test", "ui"]
+stream = "stderr"
+filters = [['(?m)^ *(Blocking|Compiling|Checking|Finished|Downloading|Downloaded|Locking|Updating|Adding) .*\n', '']]
+
+[[run]]
+stem = "describe_trybuild_stale_stderr"
+cmd = ["cargo", "test", "-q", "-p", "tested_describe", "--test", "ui_stale"]
+expect = "failure"
+stream = "stderr"
+filters = [['(?m)^ *(Blocking|Compiling|Checking|Finished|Downloading|Downloaded|Locking|Updating|Adding) .*\n', '']]

@@ -1,0 +1,5 @@
+error: Describe needs named fields
+ --> tests/ui/fail_tuple_struct.rs:4:8
+  |
+4 | struct Meters(f64);
+  |        ^^^^^^

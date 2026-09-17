@@ -1,0 +1,6 @@
+# A derive and a function-like macro that read a `DeriveInput`, a program that
+# uses them, one that misuses them, and a program that prints the tree `syn`
+# builds. `[workspace]` makes this folder its own workspace.
+[workspace]
+members = ["syn_shapes", "syn_shapes_app", "syn_shape_of_a_fn", "syn_tree"]
+resolver = "3"
