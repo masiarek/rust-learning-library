@@ -126,6 +126,7 @@ That is the two groups without the panic policy — the "teach you Rust" half on
 - [Scale the denominator away](../../09_Advanced/scaled_integers/README.md) — `checked_*` and `saturating_*`, which `arithmetic_side_effects` makes mandatory
 - Erik Schwartz, [*Your clippy config should be stricter* ↗](https://emschwartz.me/your-clippy-config-should-be-stricter/) — the argument at length, cited from the source above
 - [Lints around tests](../../28_Testing/testing_lints/README.md) — `allow-unwrap-in-tests` run, and the test lints worth turning on
+- [Lints around `size_of`, `len` and `capacity`](../../14_Strings/size_len_capacity_lints/README.md) — four deny-by-default correctness lints, and the restriction lint `arithmetic_side_effects` on `s.len() - 1`
 
 ---
 

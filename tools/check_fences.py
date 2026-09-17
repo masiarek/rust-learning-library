@@ -134,6 +134,9 @@ SCOPE = (
     # size_of, len and capacity: twenty-four `compile_fail` fences, each
     # beside a fix that must compile.
     "14_Strings/size_len_capacity_errors",
+    # And its warnings: twenty-six bad and silent pairs, plus six programs
+    # no lint flags.
+    "14_Strings/size_len_capacity_lints",
 )
 
 # `.claude` holds this repo checked out again, once per agent worktree, so a scan

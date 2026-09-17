@@ -1058,6 +1058,7 @@ A debug build builds the array in the stack frame before moving it into the box,
 - [Arrays: the map](../README.md) — every array page, and which question each one answers
 - [Strict clippy](../../../05_Tooling/strict_lints/README.md) — turning whole lint groups on for a project, and what that costs
 - [Lints around `ToOwned`](../../../12_Traits/how_to_learn_to_owned/to_owned_lints/README.md) — the same kind of page for `clone` and `Cow`, including `iter_cloned_collect` and `ptr_arg`
+- [Lints around `size_of`, `len` and `capacity`](../../../14_Strings/size_len_capacity_lints/README.md) — the same kind of page for measuring a `String` or a `Vec`, with `uninit_vec` and `read_zero_byte_vec`
 
 ## Po polsku
 

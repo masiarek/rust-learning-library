@@ -1,6 +1,6 @@
 # Every `size_of`, `len` and `capacity` error, and its fix
 
-[The anatomy of a `String`](../anatomy_of_a_string/README.md) › **Beside the lesson** · the three numbers these errors are about, measured: [Measuring the picture](../anatomy_of_a_string/README.md#measuring-the-picture)
+[The anatomy of a `String`](../anatomy_of_a_string/README.md) › **Beside the lesson** · the three numbers these errors are about, measured: [Measuring the picture](../anatomy_of_a_string/README.md#measuring-the-picture) · the warnings, not the errors: [Lints around `size_of`, `len` and `capacity`](../size_len_capacity_lints/README.md)
 
 **Level:** 101 → 201 · a reference, by symptom
 
@@ -971,6 +971,7 @@ What changes: Java's `length()` counts UTF-16 units, and Rust's `len()` counts U
 ## See also
 
 - [The anatomy of a `String`](../anatomy_of_a_string/README.md) — the three numbers, measured, and a kata that predicts them for five strings
+- [Lints around `size_of`, `len` and `capacity`](../size_len_capacity_lints/README.md) — what compiles with a warning, where this page is what does not compile
 - [Stack and heap](../../18_Ownership/stack_and_heap/README.md) — what `size_of` and `size_of_val` can and cannot see
 - [`str` is unsized](../str_is_unsized/README.md) — why `size_of::<str>()` has no answer
 - [Four lengths, and which one the other system means](../four_lengths/README.md) — `len()`, `chars().count()` and two counts std does not give you

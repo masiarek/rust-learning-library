@@ -321,6 +321,7 @@ Part 3 — predict which of seven lines allocates, then count.
 - [What an address shows](../what_an_address_shows/README.md) — the demonstration behind the first row of the table: `&x` is the header's address, so a move changes it without relocating a byte
 - [The anatomy of a `String`](../../14_Strings/anatomy_of_a_string/README.md) — the three-word header drawn out, and why growth is amortised
 - [Every `size_of`, `len` and `capacity` error, and its fix](../../14_Strings/size_len_capacity_errors/README.md) — `size_of(s)`, `size_of::<str>()` and `size_of_val(s)` refused, and why
+- [Lints around `size_of`, `len` and `capacity`](../../14_Strings/size_len_capacity_lints/README.md) — `size_of_ref`, where `size_of_val(&s)` on a reference measures the reference
 - [`String` vs `&str`](../../14_Strings/string_vs_str/README.md) — the same owner-and-view split, and which one a function should take
 - [Ownership and moves](../ownership_and_moves/README.md) — what a move transfers, which is responsibility for the heap side
 - [The global allocator](../../09_Advanced/the_global_allocator/README.md) — how to count the heap side rather than assert it
