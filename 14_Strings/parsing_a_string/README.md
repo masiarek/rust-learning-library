@@ -745,6 +745,8 @@ fn main() {
 
 ## See also
 
+- [`Ok` and `Err`](../../17_Option_and_Result/ok_and_err/README.md) — reading the `Result` that `parse` hands back
+- [A first test, step by step](../../28_Testing/a_first_test_step_by_step/making_it_pass/README.md) — `parse().unwrap()` loading a CSV, and the empty field that fails it
 - [Making a `String`](../making_a_string/README.md) — the other direction, and why you implement `Display` rather than `ToString`
 - [Walking a `String`](../walking_a_string/README.md) — the splitting that feeds a parser, and the empty fields it produces
 - [`unwrap_or`](../../17_Option_and_Result/unwrap_or/README.md) — the eager fallback, and when it runs

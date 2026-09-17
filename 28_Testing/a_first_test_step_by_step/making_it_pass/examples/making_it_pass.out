@@ -1,0 +1,17 @@
+1. The test's three assertions, checked here without the harness
+   all three hold: [[1.0, 1.0, 1.0], [1.0, -1.0, 1.0], [-1.0, 1.0, 1.0], [-1.0, -1.0, -1.0]]
+
+2. What each stage hands to the next
+   csv.lines()          is a core::str::iter::Lines<'_>
+   first line           = "1,1,1"
+   line.split(',')      is a core::str::iter::Split<'_, char>
+   its items            = ["1", "1", "1"]
+   "-1".parse::<f32>()  = Ok(-1.0)   <- integer text parses as a float
+   inner collect()      -> Vec<f32>, outer collect() -> Vec<Vec<f32>>, both from the return type
+
+3. Why trim(), and why lines() rather than split('\n')
+   " 1".parse::<f32>()   = Err(ParseFloatError { kind: Invalid })
+   lines()        gives ["1,1", "-1,1"]
+   split('\n')    gives ["1,1", "-1,1", ""]
+   "".parse::<f32>()    = Err(ParseFloatError { kind: Empty })
+   the loader rewritten with split('\n') panics: called `Result::unwrap()` on an `Err` value: ParseFloatError { kind: Empty }

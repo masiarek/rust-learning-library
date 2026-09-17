@@ -256,7 +256,7 @@ Real books, published by real publishers, each with a narrower audience than the
 | [The Secrets of Rust: Tools ↗](https://bitfieldconsulting.com/books/rust-tools) | John Arundel · self-published · $29.95 | **Unvetted** — see [the disclosure below](#where-the-second-opinions-come-from) |
 | [The Rust Spellbook ↗](https://bitfieldconsulting.com/books/rust-spellbook) | John Arundel · self-published · $29.95 | **Unvetted** — same disclosure |
 | [Programming WebAssembly with Rust ↗](https://pragprog.com/titles/khrust/programming-webassembly-with-rust/) | Kevin Hoffman · Pragmatic · 2019 | **Dated** — the wasm toolchain is unrecognisable since |
-| [Rust for Machine Learning ↗](https://learning.oreilly.com/library/view/-/0642572279820/) | Marcos Silveira · O'Reilly · Early Release since Jul 2026, print listed for Aug 2027 · 400 pp | **Only if** you want to build a neural network from scratch while learning Rust. Unedited draft, and its first Rust pages have [three errors, run here](../../15_First_Programs/and_or_claims_checked/README.md) |
+| [Rust for Machine Learning ↗](https://learning.oreilly.com/library/view/-/0642572279820/) | Marcos Silveira · O'Reilly · Early Release since Jul 2026, print listed for Aug 2027 · 400 pp | **Only if** you want to build a neural network from scratch while learning Rust. Unedited draft. Chapter 1 is checked in two places: [its first program](../../15_First_Programs/and_or_claims_checked/README.md) and [its first test](../../28_Testing/a_first_test_step_by_step/README.md) |
 
 ## Books that were good and are now dated
 

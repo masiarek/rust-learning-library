@@ -1,0 +1,17 @@
+1. On a Result
+   "1.5".parse::<f32>().unwrap() returned 1.5
+   "x".parse::<f32>().unwrap()   panicked: called `Result::unwrap()` on an `Err` value: ParseFloatError { kind: Invalid }
+
+2. On an Option
+   row.get(2).unwrap()  returned 1.0
+   row.get(9).unwrap()  panicked: called `Option::unwrap()` on a `None` value
+
+3. The same Err through the methods beside unwrap
+   .expect("a CSV field")   panicked: a CSV field: ParseFloatError { kind: Invalid }
+   .unwrap_or(0.0)          returned 0.0
+   .unwrap_or_default()     returned 0.0
+   .ok()                    returned None
+
+4. The message uses the error's Debug form, not its Display form
+   Debug:   ParseFloatError { kind: Invalid }
+   Display: invalid float literal

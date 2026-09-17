@@ -1,0 +1,4 @@
+Each stub compiles, and each one panics when it is called:
+  parse_rows(..)  -> "not yet implemented"
+  a_count()       -> "not yet implemented: count the rows"
+  a_label()       -> "not implemented"

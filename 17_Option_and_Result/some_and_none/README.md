@@ -293,6 +293,7 @@ rustc --edition 2024 17_Option_and_Result/some_and_none/examples/some_and_none.r
 
 ## See also
 
+- [`Ok` and `Err`](../ok_and_err/README.md) — the same reading, for an operation that can fail
 - [`Option` vs `Result`](../option_vs_result/README.md) — the next question: when is `None` not enough of an answer?
 - [`if let`](../if_let/README.md) — the one-arm shortcut, and what the compiler stops checking when you take it
 - [Partial functions](../partial_functions/README.md) — why the standard library hands you `Option`s in the first place

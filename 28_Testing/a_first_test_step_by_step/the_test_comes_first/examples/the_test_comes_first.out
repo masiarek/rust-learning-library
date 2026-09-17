@@ -1,0 +1,5 @@
+This is a normal build; cfg!(test) = false
+
+A child module reaches its parent's private items through use super::*:
+  running in    the_test_comes_first::data::checks
+  row_count()   = 4   <- private to data, visible here

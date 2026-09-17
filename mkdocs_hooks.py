@@ -238,6 +238,9 @@ NAV_ORDER: dict[str, list[str]] = {
     # documentation.
     "28_Testing": [
         "README.md",
+        # A 101 path through one test, from a book chapter: it does not
+        # compile, it fails, it passes. Before the 201 pages it leads into.
+        "a_first_test_step_by_step",
         "what_a_test_asserts",
         "where_a_test_goes",
         "doc_tests",
@@ -562,7 +565,12 @@ NAV_ORDER: dict[str, list[str]] = {
         # The enum itself before anything built on it.
         "some_and_none",
         "some_is_a_constructor",
+        # ...and the other enum, read the same way, before the question of
+        # which one to return.
+        "ok_and_err",
         "option_vs_result",
+        # ...and the shortest way out of either, before the dozen that do not panic.
+        "what_unwrap_does",
         # ...and, much later, the name for the shape all of these share.
         "what_a_monad_is",
         "if_let",
@@ -775,6 +783,14 @@ NAV_ORDER: dict[str, list[str]] = {
     ],
     # The ToOwned learning path: one page per step, in the order they unlock,
     # then the comparison that closes it and the reading list beside it.
+    # One test written before its function, one page per state of the build.
+    "28_Testing/a_first_test_step_by_step": [
+        "README.md",
+        "the_test_comes_first",
+        "what_the_test_body_says",
+        "a_stub_that_panics",
+        "making_it_pass",
+    ],
     "12_Traits/how_to_learn_to_owned": [
         "README.md",
         "clone_vs_to_owned",
@@ -1318,6 +1334,11 @@ LABELS = {
     "clone_into": "`clone_into`",
     "to_owned": "`ToOwned`",
     "how_to_learn_to_owned": "How to learn `ToOwned`",
+    "a_first_test_step_by_step": "A first test, step by step",
+    "the_test_comes_first": "1 · The test comes first",
+    "what_the_test_body_says": "2 · What the test body says",
+    "a_stub_that_panics": "3 · A stub that panics",
+    "making_it_pass": "4 · Making it pass",
     "clone_vs_to_owned": "1 · `Clone` vs `ToOwned`",
     "types_with_no_size": "2 · Types with no size",
     "owned_and_borrowed_types": "3 · Owned and borrowed types",
@@ -1390,6 +1411,8 @@ LABELS = {
     "representing_a_record": "What is a record, in memory?",
     # 17_Option_and_Result — these are method names, so they are code.
     "some_and_none": "`Some` and `None`",
+    "ok_and_err": "`Ok` and `Err`",
+    "what_unwrap_does": "What `unwrap` does",
     "some_is_a_constructor": "`Some` is a constructor",
     "if_let": "`if let`",
     "while_let": "`while let`",

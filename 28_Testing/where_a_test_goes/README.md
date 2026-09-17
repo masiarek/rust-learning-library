@@ -307,6 +307,7 @@ fn main() {
 
 ## See also
 
+- [A first test, step by step](../a_first_test_step_by_step/README.md) — one unit test from nothing to passing, a page per build
 - [What a test asserts](../what_a_test_asserts/README.md) — the assertions the tests above are made of
 - [The example that is a test](../doc_tests/README.md) — the third kind, which runs in the same command
 - [What an attribute is](../../27_Modules/what_an_attribute_is/README.md) — `#[cfg]`, `#[test]` and the lint levels

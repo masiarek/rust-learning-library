@@ -469,6 +469,7 @@ fn main() {
 
 ## See also
 
+- [What `unwrap` does](../what_unwrap_does/README.md) — the same panic without the sentence
 - [What a panic costs](../what_a_panic_costs/README.md) — what the crash this method chooses actually does
 - [`unwrap_or`](../unwrap_or/README.md) — the answer when the missing value is not a bug, and the eager-argument rule this page inherits
 - [`unwrap_or_else`](../unwrap_or_else/README.md) — where `panic!` goes when the message needs a runtime value

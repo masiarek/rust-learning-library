@@ -243,6 +243,7 @@ both implementations agreed on all 6 inputs
 
 ## See also
 
+- [What `unwrap` does](../../17_Option_and_Result/what_unwrap_does/README.md) — the method itself, before the habit this page is about
 - [`expect`](../../17_Option_and_Result/expect/README.md) — the marker to use if you leave one, and why the message matters
 - [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md) — what actually happens when one of these fires
 - [Strict clippy lints](../../05_Tooling/strict_lints/README.md) — the configuration that makes the compiler ask

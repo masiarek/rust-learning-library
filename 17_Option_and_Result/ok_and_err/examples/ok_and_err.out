@@ -1,0 +1,18 @@
+1. What parse hands back
+   read_field("1"   ) = Ok(1.0)
+   read_field("-1.5") = Ok(-1.5)
+   read_field(" 1 " ) = Ok(1.0)
+   read_field("x"   ) = Err(ParseFloatError { kind: Invalid })
+   read_field(""    ) = Err(ParseFloatError { kind: Empty })
+
+2. match reads both shapes, and must
+   "-1": Ok, the value is -1
+   "yes": Err, because invalid float literal
+
+3. The error is a value too: Debug for a developer, Display for a user
+   {:?} -> ParseFloatError { kind: Invalid }
+   {}   -> invalid float literal
+
+4. Asking without taking the value out
+   good.is_ok() = true, bad.is_err() = true
+   good.ok()    = Some(1.0), bad.ok() = None   <- Result to Option, error dropped

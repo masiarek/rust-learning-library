@@ -6,6 +6,7 @@ The test framework is part of the language rather than a dependency, which has o
 
 | Lesson | Level | What it covers |
 |---|---|---|
+| [A first test, step by step](a_first_test_step_by_step/README.md) | 101 → 201 | One test written before its function, from *Rust for Machine Learning*: it does not compile, it fails on `todo!()`, it passes — and `#[cfg(test)]`, `use super::*`, a `Vec` equal to an array, and the `split('\n')` that fails it |
 | [What a test asserts](what_a_test_asserts/README.md) | 201 | `assert!` vs `assert_eq!`, the message, floats, and the assertion that cannot fail |
 | [Where a test goes](where_a_test_goes/README.md) | 201 | Inside the module or outside the crate, and the `#[should_panic]` that passes on any panic |
 | [The example that is a test](doc_tests/README.md) | 201 | Doc tests: an integration test that is also the documentation |

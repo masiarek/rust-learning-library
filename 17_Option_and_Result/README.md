@@ -20,7 +20,9 @@ Red marks the four that can panic. Notice where they land: `unwrap` and `expect`
 |---|---|---|
 | [`Some` and `None`](some_and_none/README.md) | 101 | The enum itself: two shapes, one exhaustive `match`, and why `Some(0)` is not `None` |
 | [`Some` is a constructor, not a flag](some_is_a_constructor/README.md) | 101 → 201 | Why `Some(None)` is `E0308` and not "present but empty" — `Some` is a `fn(T) -> Option<T>`, so the argument must be the payload; plus the one type where `Some(None)` is the right answer |
+| [`Ok` and `Err`](ok_and_err/README.md) | 101 | The `Result` enum read the way `Some` and `None` read an `Option` — why a `Result` is not the value (`E0308`, `E0004`, the `#[must_use]` warning), and the six ways out |
 | [`Option` vs `Result`](option_vs_result/README.md) | 101 | Absence versus failure — and the single question ("could the caller ask *why not?*") that decides which type you want |
+| [What `unwrap` does](what_unwrap_does/README.md) | 101 | The value or a panic, decided at run time: the `match` in `core`, why the message is `Debug` and points at your line, the `E: Debug` bound, and the methods beside it |
 | [What a monad is](what_a_monad_is/README.md) | 301 | The shape `Option`, `Result` and `Vec` all share — and why Rust uses monads without ever saying the word |
 | [`if let`](if_let/README.md) | 101 | A `match` with one arm — the family (`if let` / `let … else` / `while let` / `matches!`), and the exhaustiveness you trade away |
 | [`while let`](while_let/README.md) | 201 | The loop whose exit condition is a pattern — and the one bug `if let` cannot have: a body that never makes progress |

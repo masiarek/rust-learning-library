@@ -1,0 +1,20 @@
+1. A \ at the end of a line removes the newline and the next line's indent
+   with \:    "1,1,1\n1,-1,1\n"
+   without:  "1,1,1\n         1,-1,1"
+
+2. Vec<Vec<f32>>: a Vec of rows, each row a Vec of columns
+   rows.len()  = 4, rows[1].len() = 3
+   rows[1]     = [1.0, -1.0, 1.0]   <- one row, a Vec<f32>
+   rows[1][1]  = -1.0               <- row 1, column 1, an f32
+   rows.get(9) = None               <- rows[9] would panic instead
+
+3. assert_eq! compares a Vec with an array: Vec<T> implements PartialEq<[U; N]>
+   rows[3] == [-1.0, -1.0, -1.0]  is true
+   rows[3] == [-1.0, -1.0]        is false   <- lengths differ
+   assert_eq!(rows[3], [-1.0, -1.0, -1.0]) passed
+
+4. The literal 1.0 takes its type from what it is compared with
+   1.0 on its own:          f64
+   1.0 beside rows[0][2]:   f32
+   rows[0][2] == 1.0 is true: 1.0 and -1.0 are exact in binary
+   0.1_f32 == 0.1_f64 as f32 is true, 0.1_f32 as f64 == 0.1 is false

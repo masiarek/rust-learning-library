@@ -398,6 +398,8 @@ Same row = same idea on both types.
 
 ## See also
 
+- [`Ok` and `Err`](../ok_and_err/README.md) — reading a `Result` before choosing between the two
+- [What `unwrap` does](../what_unwrap_does/README.md) — the panic both types offer as the shortest way out
 - [The Rust Book, ch. 9 — Error Handling ↗](https://doc.rust-lang.org/book/ch09-00-error-handling.html)
 - [`std::option` ↗](https://doc.rust-lang.org/std/option/) and [`std::result` ↗](https://doc.rust-lang.org/std/result/) — the method lists are worth one slow read; most of what you would write by hand is already there
 - [Rust by Example — Error handling ↗](https://doc.rust-lang.org/rust-by-example/error.html)

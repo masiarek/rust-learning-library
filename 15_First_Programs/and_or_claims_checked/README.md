@@ -21,7 +21,7 @@ fn main() {
 
 ## Where it comes from
 
-*Rust for Machine Learning* by Marcos Silveira, O'Reilly, read as an Early Release (first release 2026-07-23, print listed for August 2027). Chapter 1, "The First Neuron", works toward a perceptron. It first writes the boolean functions AND and OR in Rust, then treats their truth tables as a dataset to learn from. The part checked here is the section "Building Intuition with AND and OR" and the opening of "Replacing Code with Data". An Early Release is the author's unedited draft, so any of this may be fixed before print. The book is listed on [the shelf](../../10_Resources/books/README.md#also-on-the-shelf).
+*Rust for Machine Learning* by Marcos Silveira, O'Reilly, read as an Early Release (first release 2026-07-23, print listed for August 2027). Chapter 1, "The First Neuron", works toward a perceptron. It first writes the boolean functions AND and OR in Rust, then treats their truth tables as a dataset to learn from. The part checked here is the section "Building Intuition with AND and OR" and the opening of "Replacing Code with Data". An Early Release is the author's unedited draft, so any of this may be fixed before print. The book is listed on [the shelf](../../10_Resources/books/README.md#also-on-the-shelf), and the chapter's next section, its first test, is [A first test, step by step](../../28_Testing/a_first_test_step_by_step/README.md).
 
 The program in the chapter is the one above, with `a` and `b` in variables and a longer format string. Built the way the chapter says, with bare `rustc main.rs` and then `./main`, it prints its two lines exactly. Bare `rustc` compiles as [edition 2015](../rustc_without_cargo/README.md#the-trap-rustcs-default-edition-is-2015), which makes no difference to a program this small. `and` and `or` are ordinary names: neither is a keyword in any edition, unlike in Python and C++ ([below](#if-you-are-coming-from-another-language)).
 
@@ -135,6 +135,7 @@ Two more statements hold as written, and rustc enforces both. Function and varia
 - [The shadowing map](../../SHADOWING.md) — five pages on what a second `let` does
 - [Running a scratch program](../rustc_without_cargo/README.md) — `rustc main.rs` without Cargo, and its edition-2015 default
 - [What `Cow` explanations get wrong, run](../../12_Traits/how_to_learn_to_owned/cow_claims_checked/README.md) — the same kind of check, on a harder topic
+- [A first test, step by step](../../28_Testing/a_first_test_step_by_step/README.md) — the same chapter's next section: loading the truth table, test first
 - [Books](../../10_Resources/books/README.md) — where *Rust for Machine Learning* sits on the shelf
 
 ## Po polsku
