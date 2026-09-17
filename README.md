@@ -16,6 +16,8 @@ No page here hand-types what a program prints. Each lesson links a real `.rs` fi
 
 **New to Rust entirely?** [**00_Start_Here/**](00_Start_Here/README.md) is the plan: which three free resources to use, in what order, and why each covers what the other two cannot.
 
+**Looking for one topic by name?** [**TOPICS.md**](TOPICS.md) lists every topic under the names people search for — *vector*, *hash map*, *static const*, *compound types* — with the page that is its home, and [**TYPES.md**](TYPES.md) hangs every Rust type on one tree.
+
 Already writing Rust? Two lessons to begin with:
 
 | Lesson | What it teaches |
@@ -45,7 +47,7 @@ Five sections in between follow one long arc: **turning a snippet into a program
 
 [**RUST_BY_EXAMPLE.md**](RUST_BY_EXAMPLE.md) is a map of a different kind: [Rust by Example ↗](https://doc.rust-lang.org/rust-by-example/) chapter by chapter, with the lesson here that covers each one, and an honest list of what it does not.
 
-Five topics are big enough to have a map of their own rather than a single page: [**OPTION.md**](OPTION.md), [**SHADOWING.md**](SHADOWING.md), [**STRUCTS.md**](STRUCTS.md), [**STRINGS.md**](STRINGS.md) and [**TOOLCHAIN.md**](TOOLCHAIN.md) each collect every lesson on their subject in reading order, and say what the idea is before the syllabus starts. The first four cross section boundaries because the lessons do; the fifth sorts one section by the problem you actually have.
+Two maps are indexes rather than reading orders: [**TOPICS.md**](TOPICS.md), every topic A–Z under its other names, and [**TYPES.md**](TYPES.md), the tree of every type from `u8` to `Box<dyn Trait>`. Five topics are big enough to have a map of their own rather than a single page: [**OPTION.md**](OPTION.md), [**SHADOWING.md**](SHADOWING.md), [**STRUCTS.md**](STRUCTS.md), [**STRINGS.md**](STRINGS.md) and [**TOOLCHAIN.md**](TOOLCHAIN.md) each collect every lesson on their subject in reading order, and say what the idea is before the syllabus starts. The first four cross section boundaries because the lessons do; the fifth sorts one section by the problem you actually have.
 
 [**ERRORS.md**](ERRORS.md) is a map you arrive at from the opposite direction: not "what shall I learn next" but "rustc printed `E0502` and I am stuck". It lists the 58 error codes this library teaches with the lesson that explains each one, and it is honest about the two that have no single home — `E0308` most of all, which is what rustc says when almost anything is wrong.
 
@@ -98,6 +100,11 @@ The sidebar is sorted **alphabetically**, because that is how you find a section
 | 33 | [Procedural macros](37_Procedural_Macros/README.md) | Rust that runs on your Rust: derive, function-like and attribute macros with `syn`, `quote` and `darling`, from reading `thiserror`'s expansion to a derive that rejects a bad state transition while compiling — read it any time after Traits and Generics |
 | 34 | [Pointers](36_Pointers/README.md) | Address, pointer, reference: what each layer adds, the second word a wide pointer carries, alignment, and raw pointers — checked against *Rust in Action* chapter 6; read it any time after Ownership |
 | 35 | [Smart pointers](41_Smart_Pointers/README.md) | `Deref`, `Drop`, and what `Box`, `Rc` and `RefCell` cost at run time — read it after Pointers |
+| 36 | [Declarative macros](38_Declarative_Macros/README.md) | `macro_rules!` — what a function cannot do, and how to read what a macro wrote. Stubs; read it after Traits |
+| 37 | [API design](39_API_Design/README.md) | *Rust for Rustaceans* ch. 3 as stubs — the interface a caller cannot misuse; read it after Generics |
+| 38 | [Without std](40_Without_std/README.md) | `core`, `alloc`, and the runtime you stop getting for free. Stubs; read it after Advanced |
+| 39 | [WebAssembly](42_WebAssembly/README.md) | The same Rust in a browser tab or a sandbox. Stubs; read it after Tooling |
+| 40 | [Games with Bevy](43_Games/README.md) | An entity–component system is ownership at scale. Stubs; read it any time after Traits |
 
 Nothing enforces this order and no page depends on it; skipping around is fine. It is here because a sidebar can be sorted one way only, and A–Z answers the more common question.
 

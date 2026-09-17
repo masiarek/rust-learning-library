@@ -381,6 +381,7 @@ fn main() {
 - [`const` and `static`](../../27_Modules/const_and_static/README.md) — `static mut`, and what replaced it
 - [Raw pointers](../../36_Pointers/raw_pointers/README.md) — what safe code may do with a pointer, and the aliasing rules that stay in force when the borrow checker is not looking
 - [A reference is aligned to its referent](../../36_Pointers/aligned_to_the_referent/README.md) — the promise a misaligned `&*p` breaks, in debug, `-O` and Miri
+- [Validity invariants](../validity_invariants/README.md) · [Unsafe traits](../unsafe_traits/README.md) · [Miri](../miri/README.md) — what a value may never be, who carries an `unsafe impl`'s proof, and the tool that checks (stubs)
 
 ## Sources
 

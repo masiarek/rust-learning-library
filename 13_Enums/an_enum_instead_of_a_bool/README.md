@@ -359,6 +359,7 @@ sizes:
 - [An enum as a state machine](../an_enum_as_a_state_machine/README.md) — the same argument with a `match (state, event)` table behind it
 - [A typo becomes a binding](../a_typo_becomes_a_binding/README.md) — the other enum trap the obvious lints do not catch
 - [Strict clippy](../../05_Tooling/strict_lints/README.md) — what turning on `pedantic` actually costs
+- [Making misuse a compile error](../../39_API_Design/making_misuse_a_compile_error/README.md) — this page's idea as a design rule (stub)
 
 ## Po polsku
 

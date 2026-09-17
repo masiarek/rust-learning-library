@@ -290,6 +290,7 @@ fn main() {
 - [STRUCTS.md](../../STRUCTS.md) — the map, including layout and `repr`
 - [Reference — unions ↗](https://doc.rust-lang.org/reference/items/unions.html) · [`repr(C)` enums with fields ↗](https://doc.rust-lang.org/reference/type-layout.html#reprc-enums-with-fields) · [`ManuallyDrop` ↗](https://doc.rust-lang.org/std/mem/struct.ManuallyDrop.html)
 - [The Nomicon — exotic sizes ↗](https://doc.rust-lang.org/nomicon/exotic-sizes.html) for the zero-sized types the unit struct is an instance of
+- [Type layout](../type_layout/README.md) — `repr(C)`, padding and the niche, for structs and enums as well (stub)
 
 ## Po polsku
 

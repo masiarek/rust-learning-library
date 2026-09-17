@@ -13,6 +13,9 @@ The section builds one small type — a container, then a linked list — and ta
 | [Where the bound goes](where_the_bound_goes/README.md) | 201 → 301 | What an unbounded `T` can do (store, move, drop — that is the list), three spellings of which only two mean the same thing, why a bound on the *struct* locks out callers who never needed it, and the bound `derive` invents |
 | [Generic enums](generic_enums/README.md) | 201 | `<T>` on an enum: every variant shares it, a payload-free variant still needs one, two parameters (`Result<T, E>` is not built in), and the tag that costs nothing |
 | [A generic recursive type](a_generic_recursive_type/README.md) | 201 → 301 | `E0072` and the pointer that breaks the cycle, why `Option<Box<T>>` costs nothing, why a hand-rolled `End` variant is `Option` with the API removed, and why the payload should not be boxed |
+| [Associated types or type parameters?](associated_types_or_type_parameters/README.md) | 201 | `type Item` is an output the impl picks once; `<T>` is an input that allows many impls. Stub |
+| [Blanket impls](blanket_impls/README.md) | 301 | `impl<T: Display> ToString for T` — one impl for every type meeting a bound, and the `E0119` that keeps two from overlapping. Stub |
+| [Const generics](const_generics/README.md) | 301 | A value as a generic parameter — `[T; N]` as one type, and the arithmetic on `N` stable Rust still refuses. Stub |
 
 ## Generic pages that live elsewhere
 
@@ -28,7 +31,7 @@ The library used generics for a year before this section existed, so several of 
 
 ## Not yet written
 
-Listed here rather than as empty pages, so the gaps are visible: **generic functions in anger** (the `largest`/`smallest` pair, and returning a reference to dodge a `Copy` bound), **lifetimes as generic parameters** (`struct Excerpt<'a>` — the same brackets, a different kind of thing inside), **associated types versus type parameters** (`Iterator::Item` and why it is not `Iterator<T>`), **`impl Trait` in return position** and what it hides, **const generics** (`[T; N]`, and the arrays that finally became one type), **default type parameters** (`Add<Rhs = Self>`), **blanket impls** (`impl<T: Display> ToString for T`, and the coherence rules that bound them), and **variance** — why `&'static str` is accepted where `&'a str` is wanted, and where that stops.
+Listed here so the gaps are visible; three now have stubs in the table above: **generic functions in anger** (the `largest`/`smallest` pair, and returning a reference to dodge a `Copy` bound), **lifetimes as generic parameters** (`struct Excerpt<'a>` — the same brackets, a different kind of thing inside), **[associated types versus type parameters](associated_types_or_type_parameters/README.md)** (`Iterator::Item` and why it is not `Iterator<T>`), **`impl Trait` in return position** and what it hides, **[const generics](const_generics/README.md)** (`[T; N]`, and the arrays that finally became one type), **default type parameters** (`Add<Rhs = Self>`), **[blanket impls](blanket_impls/README.md)** (`impl<T: Display> ToString for T`, and the coherence rules that bound them), and **variance** — why `&'static str` is accepted where `&'a str` is wanted, and where that stops.
 
 ## Po polsku
 

@@ -300,6 +300,7 @@ RUSTC_BOOTSTRAP=1 cargo rustc -- -Zunpretty=hir         # inside a Cargo project
 - [Macros](../../25_Control_Flow/macros/README.md) — what the `!` means, before looking at what it became
 - [`for` loops](../../25_Control_Flow/for_loops/README.md) — the loop whose desugaring this page prints, taught from the user's side
 - [*Rust in Action* §2.4, run](../../25_Control_Flow/flow_control_claims_checked/README.md#claim-21-read-from-the-hir) — the same printout for a `while` loop, which becomes a `loop` around an `if` rather than a `match`
+- [Expanding a macro](../../38_Declarative_Macros/expanding_a_macro/README.md) — the same view with only the macros expanded (stub)
 
 ## Documentation
 

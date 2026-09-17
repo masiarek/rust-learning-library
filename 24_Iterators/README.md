@@ -10,6 +10,7 @@ The property everything else follows from is **laziness**: `map` and `filter` bu
 |---|---|---|
 | [Iterators are lazy](iterators_are_lazy/README.md) | 201 | Adapters build a plan and consumers run it, counted: 6 closure calls for `collect`, 1 for `find`, 0 for a chain nobody consumed — plus the interleaving proof that a chain is one pass, not one per adapter |
 | [`iter`, `iter_mut`, `into_iter`](iter_iter_mut_into_iter/README.md) | 101 → 201 | The three doors onto a collection, which one a `for` loop picked for you, the array `into_iter` that changed meaning in edition 2021, and why the clone you added to make it compile was probably the wrong door |
+| [Ranges](ranges/README.md) | 201 | `0..5` is a `Range<i32>` value — stored, passed, sliced with, matched against, and consumed by the loop that walks it. Stub |
 | [Implementing `Iterator`](implementing_iterator/README.md) | 201 → 301 | One method and seventy-five arrive free; what does not (`rev`, `len`, `size_hint`); and why a collection must never *be* an iterator |
 | [`fold` and `reduce`](fold_and_reduce/README.md) | 201 | The consumer the others are made of — `sum` really is `fold(0, +)` in std — plus `try_fold`, and the `.clone()` inside a fold that makes it quadratic |
 | [Collect the iterator into a `Vec`](collect_into_a_vec/README.md) | 101 → 201 | Materialize, or just walk it: what the `Vec` buys, the six questions that need none of it, the pieces that turn out to be slices of the original — and why a `Vec<&str>` can never outlive its string |

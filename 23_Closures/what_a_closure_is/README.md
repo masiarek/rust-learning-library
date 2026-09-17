@@ -301,6 +301,7 @@ SO WHAT DOES IT DO?
 - [`unwrap_or_else`](../../17_Option_and_Result/unwrap_or_else/README.md) — the first closure most people write in Rust, and it is an `FnOnce`
 - [What a struct is](../../16_Structs/what_a_struct_is/README.md) — the thing the compiler is writing for you here
 - [Iterators are lazy](../../24_Iterators/iterators_are_lazy/README.md) — where most of the closures you write actually go, and what the adapter is allowed to do with yours
+- [Items inside a function](../../27_Modules/items_inside_a_function/README.md) — the nested `fn` that looks like a closure and captures nothing
 
 ## Sources
 

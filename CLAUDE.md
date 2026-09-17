@@ -67,6 +67,7 @@ Then commit, rebase onto `origin/master`, run the gates yourself, fetch late, an
 - **Lead a lesson with the working answer**, never with broken code at the top of the page.
 - **Counts come from `git grep`**, never bare `grep` — Adam's `grep` is ugrep, which ignores `--include` and searches the whole tree anyway. Label what a count counted; it's pattern-sensitive.
 - **Never paste output you piped through a formatter** to read it. `tr -s ' '` and `sed 's/ *$//'` delete exactly the padding evidence a platform-split page is about. Build the fence from the live run.
+- **Cross-reference generously — a standing rule (Adam, 2026-09-16).** Every page you write or touch, stubs included, links its neighbours *both ways* (a See also on the new page, and a return link on each page it points at) and ends with *If you are coming from another language*, linking the matching page in the sibling libraries (Python, C, C++, Go, Java text, Concurrency, Encodings, Linux, Perl, Ruby, Math — `https://masiarek.github.io/<name>-learning-library/…`, checked with curl before linking). A new topic also gets a row in [TOPICS.md](TOPICS.md) under every name a reader might search for, and a type in [TYPES.md](TYPES.md). The why: Adam learns by moving around the library and by comparing with languages he already knows, and a page nobody can find by the word they typed does not exist for them.
 - `mdview <file.md>` opens Markdown rendered in the browser — hand it to him beside any `.md` deliverable, since he clicks a link to *read* it.
 
 ## Memory

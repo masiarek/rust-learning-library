@@ -75,6 +75,7 @@ Google's speaker notes suggest asking the room which languages they already writ
 - [Comprehensive Rust in the shelf](../../10_Resources/books/README.md) — what the course is good at, and the one cost of its slide format
 - [C and C++](../../31_C_and_Cpp/README.md) — the nine bugs the first two tables prevent, each one compiled and run
 - [Undefined behaviour](../../GLOSSARY.md) — the term the second table is really about
+- [What Rust is](../what_rust_is/README.md) — the one-page definition these twenty claims are about
 
 ## Po polsku
 

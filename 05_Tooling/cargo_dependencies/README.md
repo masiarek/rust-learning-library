@@ -125,6 +125,7 @@ Neither is required for anything. `search` + `info` + `add` is the whole job; th
 - [Running a scratch program](../../15_First_Programs/rustc_without_cargo/README.md) — what `cargo new` set up, and what `rustc` does without it
 - [Compile times](../compile_times/README.md) — why an unused dependency is not free
 - [The Cargo Book — specifying dependencies ↗](https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html) — every operator, plus `git =` and `path =` sources
+- [Cargo features](../cargo_features/README.md) and [Publishing a crate](../publishing_a_crate/README.md) — the other two halves of a manifest
 
 ## Po polsku
 

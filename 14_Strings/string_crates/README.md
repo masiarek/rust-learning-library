@@ -65,3 +65,4 @@ A non-empty `String` always owns a heap buffer — three words on the stack, the
 - [Strings: links, books and videos](../resources/README.md) — the reading list this page sits beside
 - [When `String` is too slow](../when_string_is_too_slow/README.md) — the stub that decides when the third table is worth reaching for
 - [Scratch programs with a crate](../../05_Tooling/scratch_with_a_crate/README.md) — how to try one of these without starting a project
+- [Internationalization](../internationalization/README.md) — `fluent` and `icu` for messages, plurals, numbers and collation

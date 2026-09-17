@@ -24,6 +24,7 @@ Deriving both traits makes a struct part of a **file format**. Rename a field an
 - [The `Default` trait](../../03_Command_Line/the_default_trait/README.md) — what `#[serde(default)]` reaches for when a field is missing
 - [Debug and Display](../../15_First_Programs/debug_vs_display/README.md) — three ways to turn a value into text, and the audience each one has
 - [A record on the wire ↗](https://masiarek.github.io/c-learning-library/05_Bytes_on_the_Wire/a_record_on_the_wire/index.html) — serialization without a derive: the C library packs the same kind of record field by field, and shows the struct padding `serde` never sends
+- [Zero-copy deserialization](../zero_copy_deserialization/README.md) — borrowing from the input instead of allocating
 
 ## Po polsku
 

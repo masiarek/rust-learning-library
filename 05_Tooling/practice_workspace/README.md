@@ -136,6 +136,7 @@ So: **workspace for the practice tree, `cargo generate` for real project skeleto
 - [Strict clippy lints](../strict_lints/README.md) — the policy this tree inherits, and the three lines worth leaving off while learning
 - [bacon](../bacon/README.md) and [nextest](../nextest/README.md) — the two tools that make the loop inside such a tree quick
 - [Scaffolding a practice tree](../scaffolding/README.md) — a script for the one job left over: writing this root, and the `.idea/` files no workspace can share
+- [Workspaces](../workspaces/README.md) — the mechanism in general: what a workspace shares, and the feature unification it brings
 
 ## Po polsku
 

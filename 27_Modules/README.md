@@ -6,11 +6,15 @@ A module does two jobs at once, and confusing them is where most of the difficul
 
 | Lesson | Level | What it covers |
 |---|---|---|
+| [Packages and crates](packages_and_crates/README.md) | 101 | The two levels above a module — a package is a `Cargo.toml`, a crate is one compiled unit, and why `src/bin/` cannot see `main.rs`. Stub |
 | [Modules and visibility](modules_and_visibility/README.md) | 201 | Private by default, the four `pub` forms, and the door a helper in the same module leaves open |
 | [Bringing names in with `use`](the_use_declaration/README.md) | 101 → 201 | A shortcut, not an import — plus the rename that fixes a collision and the glob that causes one |
+| [A crate prelude](a_crate_prelude/README.md) | 201 | `use x::prelude::*` is an ordinary module of `pub use` lines — mostly traits, and the glob collision it invites. Stub |
 | [One module per file](one_module_per_file/README.md) | 201 | `mod name;` is a declaration; the tree is the same either way; and the file nobody declared |
 | [`const` and `static`](const_and_static/README.md) | 201 | Substituted at every use, versus one address for the program — and `const fn` |
+| [Items inside a function](items_inside_a_function/README.md) | 201 | A nested `fn` is an item, not a closure — it sees no locals (`E0434`), and its position in the block does not matter. Stub |
 | [What an attribute is](what_an_attribute_is/README.md) | 201 | `derive`, the four lint levels, `cfg`, and the field order a derived `Ord` reads |
+| [Conditional compilation](conditional_compilation/README.md) | 201 | `#[cfg]` deletes code before type checking, `cfg!` is a `bool` in code that always compiles — and the misspelled condition that compiles nothing. Stub |
 
 ## The order to read them
 

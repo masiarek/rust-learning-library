@@ -57,6 +57,10 @@ Outlines with no runnable example behind them yet — the same arrangement as [E
 | [Compiled, interpreted, or something between](compiled_or_interpreted/README.md) | 101 | Where the JVM, ART, CPython and Rust actually differ — and why "compiled" describes a moment, not a language |
 | [Reading a compilation failure](reading_a_compilation_failure/README.md) | 101 → 201 | Which stage is talking, what an `E0xxx` code buys you, and why a borrow error and a type error need different habits |
 | [A build system is not a compiler](build_systems_are_not_compilers/README.md) | 201 | What CMake, Make and Cargo actually do — decide *what* to compile and in what order — and why "why did it rebuild everything?" is never a compiler question |
+| [The Rust Project](the_rust_project/README.md) | 201 | Who makes Rust: the teams and Leadership Council, RFCs, the six-week release train, editions, and the Rust Foundation beside the Project — and why an accepted RFC is not a shipped feature. Stub |
+| [Building the compiler](building_the_compiler/README.md) | 301 | `./x setup`, `bootstrap.toml` (formerly `config.toml`), stages 0, 1 and 2, submodules, and the 30 GB of disk the rustc dev guide asks for. Stub |
+| [Using a compiler you built](using_a_compiler_you_built/README.md) | 201 | `rustup toolchain link stage1 build/host/stage1`, `rustc +stage1` against a test program, and `./x test tests/ui` with `--bless` — plus the pinned toolchain that silently answers instead. Stub |
+| [A first contribution](a_first_contribution/README.md) | 201 | `E-easy` and `E-mentor` issues, a UI test beside the fix, `tidy`, review, and `@bors r+` into the merge queue — and the submodule change `git add .` sweeps in. Stub |
 
 ## Where this sits, and where it came from
 

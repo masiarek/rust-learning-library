@@ -332,6 +332,7 @@ fn main() {
 - [The global allocator](../../09_Advanced/the_global_allocator/README.md) — the counter behind every number on this page
 - [When `String` is too slow](../when_string_is_too_slow/README.md) — what comes after the right signature
 - [STRINGS.md](../../STRINGS.md) — where this page sits on the route
+- [Generic or concrete parameters](../../39_API_Design/generic_or_concrete_parameters/README.md) — the same question for every parameter type, not only strings (stub)
 
 ## Po polsku
 

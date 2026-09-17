@@ -13,17 +13,25 @@ These pages are not about making your program better. They are about the loop yo
 | [A tree of practice projects](practice_workspace/README.md) | 201 | Forty exercise folders want the same four config files — a workspace shares them from the root, and `cargo new` writes the opt-in for you, so there is no script to maintain |
 | [Adding a dependency](cargo_dependencies/README.md) | 101 → 201 | `search`, `info`, `add` — and the fact that `rayon = "1.12.0"` is a *range*, not the version you got |
 | [bacon](bacon/README.md) | 101 → 201 | A pane that re-runs check, clippy or the tests on every save — the cheapest tool here, and where `watchexec` wins instead |
+| [Build scripts](build_scripts/README.md) | 301 | `build.rs` runs before your crate and talks back only through printed `cargo::` lines — linking C, generating code, and the one directory it may write to. Stub |
 | [cargo-nextest](nextest/README.md) | 201 | A process per test rather than a thread, so a test that *aborts* is one failure and not a lost run — and the doctests it silently stops running |
 | [`Cargo.lock`](cargo_lock/README.md) | 201 | Every `cargo` command writes it, `build` and `test` obey it, `cargo install` ignores it without `--locked`, and it never reaches your dependents — plus what `cargo update --precise` cannot do |
+| [Cargo features](cargo_features/README.md) | 201 | Optional code behind a named switch — unified across the whole build, which is why a feature must only ever add. Stub |
+| [Cargo subcommands worth knowing](cargo_subcommands/README.md) | 201 | `cargo-foo` on your `PATH` becomes `cargo foo` — the dozen that answer questions `cargo` cannot, and why `cargo install` wants `--locked`. Stub |
 | [Choosing an editor](editors/README.md) | reference | Every editor but RustRover is a front end for the same `rust-analyzer`, so the choice is what the window costs you before it shows you a type — with the pros and cons of six of them, and one verified way the do-it-yourself path fails silently |
 | [Commit on green](commit_on_green/README.md) | 201 | `savepoint` commits on the one transition that matters — red to green — and why that is neither `git stash` nor anything to do with GitHub; plus what squashing is, and `--soft` vs `--hard` |
 | [Compile times](compile_times/README.md) | 201 | A build is four phases, and each optimization reaches exactly one — reduced debug info, the parallel front end, Cranelift, and why a saving is never portable |
 | [devenv](devenv/README.md) | 201 | What a Nix development environment buys — and the ladder of cheaper tools it sits on top of, so you can tell which rung your project is actually standing on |
 | [Formatting](formatting/README.md) | 101 → 201 | Hand the whitespace argument to `rustfmt` — and learn which of your IDE's *two* Rust formatters just ran, because a selection and a whole file do not go through the same one |
+| [MSRV](msrv/README.md) | 201 | `rust-version` is a promise the field does not check — keeping it means a CI job on the oldest compiler. Stub |
 | [From one `.rs` file to a Cargo project](from_rustc_to_cargo/README.md) | 101 → 201 | `cargo init` adopts `ok.rs` only when the package is named `ok` — otherwise `cargo run` prints `Hello, world!` — plus the two other traps on the way, and the `rustc` line `cargo run -v` prints, [flag by flag](from_rustc_to_cargo/what_cargo_passes_rustc/README.md) |
 | [Neovim with LazyVim](neovim_setup/README.md) | 201 | A verified Rust setup in four commands — and the two independent ways it installs perfectly, looks healthy, and never starts a language server |
 | [Nightly by default](nightly/README.md) | 201 | `rustup default nightly` changes the compiler for every project on the machine, and is the one toolchain choice recorded nowhere |
 | [Pinning the toolchain](pinning_the_toolchain/README.md) | 201 | Which `rustc` verified the answer keys — nothing here says, and `rust-toolchain.toml` is the four-line file that makes the laptop and CI agree on purpose |
+| [Private registries](private_registries/README.md) | 301 | crates.io's protocol on your own server — `[registries]`, the `publish = [...]` guard, Shipyard and friends. Stub |
+| [Publishing a crate](publishing_a_crate/README.md) | 201 | A version is permanent, so the checks come first — `cargo package --list`, `--dry-run`, and what yanking does not undo. Stub |
+| [Registry authentication](registry_authentication/README.md) | 301 | Tokens for the registry API and SSH keys for a git index are two different doors — and why `ssh -T` working proves nothing about `cargo build`. Stub |
+| [Release profiles](release_profiles/README.md) | 201 | `--release` is a bundle — `opt-level`, `lto`, `codegen-units`, `panic`, `strip`, `overflow-checks` — moved toward speed, size or build time. Stub |
 | [RustRover Code Vision](rustrover_code_vision/README.md) | 101 → 201 | The grey `1 usage · 1 implementation` line above every declaration — the right-click that hides one metric, the checkbox that hides all of them, and the three toggles that are not the same toggle |
 | [RustRover setup](rustrover_setup/README.md) | 101 → 201 | Make clippy the on-the-fly linter, teach the run configurations which workspace package you meant, stop the documentation and Build panels misbehaving, find a light theme when the three bundled ones are not enough, and the things the IDE needs no help with |
 | [rustup](rustup/README.md) | 101 → 201 | The `rustc` on your `PATH` is a 154-byte shim, and the five-rung rule it uses to pick the real one |
@@ -32,6 +40,7 @@ These pages are not about making your program better. They are about the loop yo
 | [Two versions of one crate](two_versions_of_one_crate/README.md) | 201 | `rand = "0.8"` and `rand = "0.9"` are as far apart as `1` and `2`, so Cargo links both — silently — until a `StdRng` is *a different* `StdRng`; `cargo tree -d` is the check |
 | [Vendoring, and the `[patch]` table](vendoring_and_patch/README.md) | 201 | `cargo vendor` copies the sources in, and "read-only" then means two things: an incremental build ignores your edit, a clean build refuses it by checksum — `[patch.crates-io]` is the sanctioned door |
 | [What MCP is](what_mcp_is/README.md) | 201 | JSON-RPC on a pipe — a whole MCP server in dependency-free Rust, the `println!` that corrupts one, and what *Always allow (`rustrover:*`)* actually grants |
+| [Workspaces](workspaces/README.md) | 201 | One lockfile and one `target/` for several packages — and one feature set for everything built together. Stub |
 | [Zed setup](zed_setup/README.md) | 101 → 201 | Ctrl+R saves and runs the Rust file in front of you — and the three defaults in its way: a file is not a project, no `Cargo.toml` means no `rust-analyzer`, and a task runs what is on disk rather than what you see |
 
 The one tooling page that is a *prerequisite* rather than a refinement lives in Foundations instead: [running a scratch program](../15_First_Programs/rustc_without_cargo/README.md), which is how you run anything in this library at all.
@@ -42,8 +51,6 @@ Rough order, not a promise:
 
 - **`cargo test`, and the three kinds of test** — unit, integration, and doc tests; what each one can see, and which file it belongs in
 - **Clippy** — the lints worth arguing with, and `#[allow]` as a comment that the compiler checks
-- **Workspaces** — one `target/`, one lockfile, many crates, and the split that actually speeds a build up
-- **Features** — `[features]`, `default-features = false`, and why turning one on in a dependency turns it on for everyone in the build
 
 ## Po polsku
 

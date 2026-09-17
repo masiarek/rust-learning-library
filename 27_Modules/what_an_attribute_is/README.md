@@ -327,6 +327,7 @@ fn main() {
 - [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) — two of the derives above, and why one is a marker
 - [`const` and `static`](../const_and_static/README.md) — the other item-level metadata
 - [Marker traits](../../12_Traits/marker_traits/README.md) — what `derive(Eq)` actually generates, which is nothing
+- [Conditional compilation](../conditional_compilation/README.md) — `#[cfg]`, `cfg!` and `cfg_attr` in full
 
 ## Sources
 

@@ -90,6 +90,7 @@ That last point is what separates timing from benchmarking, and it is the part s
 - [`black_box` is a hint](../black_box_is_a_hint/README.md) — the next thing a timing needs
 - [What the optimizer does](../../20_Compilers/what_the_optimizer_does/README.md) — why the build you time matters
 - [The three closure traits](../../23_Closures/three_closure_traits/README.md) — why `timed` takes an `FnOnce`
+- [Benchmark harnesses](../benchmark_harnesses/README.md) — what Criterion and Divan add to a single measurement
 
 ## Po polsku
 

@@ -230,6 +230,7 @@ sizes: Pair<u8, u8> 2 · Pair<u8, u64> 16
 - [Static vs dynamic dispatch](../../12_Traits/static_vs_dynamic_dispatch/README.md) — what monomorphization costs, and the collection that forces `dyn`
 - [What a struct is](../../16_Structs/what_a_struct_is/README.md) — the non-generic version of the type above
 - [The Book, ch. 10 — generic data types ↗](https://doc.rust-lang.org/book/ch10-01-syntax.html) — the same material with the generated code written out
+- [Associated types or type parameters?](../associated_types_or_type_parameters/README.md) · [Const generics](../const_generics/README.md) · [Blanket impls](../blanket_impls/README.md) — the three next steps, as stubs
 
 ## Po polsku
 

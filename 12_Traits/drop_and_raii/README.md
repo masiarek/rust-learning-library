@@ -378,6 +378,7 @@ fn main() {
 - [Marker traits](../marker_traits/README.md) — why a type that implements `Drop` cannot also be `Copy`
 - [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md) — the unwind that still runs every `drop` on the way out
 - [What makes a pointer smart](../../41_Smart_Pointers/what_makes_a_pointer_smart/README.md) — `Drop` as the half of a smart pointer that does its job
+- [Drop guards](../drop_guards/README.md) — the pattern built on `Drop`: a value that exists only to clean up
 
 ## Sources
 

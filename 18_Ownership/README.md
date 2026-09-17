@@ -40,6 +40,7 @@ The back half is names rather than values. Shadowing, scope, and lifetimes are t
 | [Sharing across threads: `Arc`](sharing_across_threads/README.md) | 201 | The same counter made atomic — the difference is not a performance note but the reason one of the two compiles across a thread boundary, and `Arc<Mutex<T>>` is what shared *mutable* state costs |
 | [What a smart pointer is](what_a_smart_pointer_is/README.md) | 201 | `Deref` plus `Drop`: `Box`, `Rc`, `Arc`, `String` and a lock guard as one family with different ownership rules — *stub* |
 | [What a clone costs](what_a_clone_costs/README.md) | 201 | A derived `Clone` clones every field, so it costs what the fields cost — two allocations for two `String`s, none for two `Arc<str>`s, none for a move — and nothing at the call site says which |
+| [Indices instead of references](indices_instead_of_references/README.md) | 301 | Graphs and back-links in a `Vec` addressed by index — the borrow errors that disappear and the stale index that replaces them. Stub |
 
 `Cow`, `Rc` and `Arc` are the ways out of a copy the one-owner rule would otherwise force: borrow until somebody writes, or let several owners share one value and count them.
 

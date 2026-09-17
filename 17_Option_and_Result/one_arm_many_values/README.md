@@ -505,6 +505,7 @@ claim you can check on every input, for a function this small, in four lines.
 - [What a warning is asking](../../15_First_Programs/what_a_warning_is_asking/README.md) — including the unreachable arm, and why the fix is rarely to silence it
 - [Bit flags](../../19_Numbers/bit_flags/README.md) — the *other* `|`, on the computing side of the `=>`
 - [Rust reference: pattern syntax ↗](https://doc.rust-lang.org/reference/patterns.html) · [`unreachable_patterns` ↗](https://doc.rust-lang.org/rustc/lints/listing/warn-by-default.html#unreachable-patterns)
+- [Ranges](../../24_Iterators/ranges/README.md) — `0..=7` outside a pattern: the value, its six types, and why iterating it consumes it
 
 ## Po polsku
 

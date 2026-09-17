@@ -1,6 +1,6 @@
 # Glossary
 
-Short definitions. Every entry links to the page that explains it properly — a definition that dead-ends hides the lesson that already exists.
+Short definitions. Every entry links to the page that explains it properly — a definition that dead-ends hides the lesson that already exists. To find a *topic* rather than define a word, use [TOPICS.md](TOPICS.md).
 
 **Algebraic data type (ADT)** — The umbrella term for the two ways Rust builds a compound type. A `struct` is a **product** type: it holds a field *and* a field *and* a field, so its possible values multiply. An `enum` is a **sum** type: it is one variant *or* another, so its values add. Every Rust data model is these two composed — `Option` is a sum of two, a struct of three `Option`s is a product of sums. → [What a struct is](16_Structs/what_a_struct_is/README.md)
 

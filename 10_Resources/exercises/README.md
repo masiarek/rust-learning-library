@@ -12,6 +12,7 @@ All links checked 2026-08-23.
 | [100 Exercises to Learn Rust ↗](https://github.com/mainmatter/100-exercises-to-learn-rust) | first month | a course that builds one program, test-driven |
 | [Rust By Practice ↗](https://practice.course.rs/why-exercise.html) | any, as a drill | topic-by-topic problems with solutions |
 | [this library's katas](../../KATAS.md) | alongside a lesson | one exercise per idea, in reading order |
+| [Advent of Code](advent_of_code/README.md) | after the first month, each December | twenty-five puzzles that each open with parsing text — stub page |
 
 ## rustlings
 

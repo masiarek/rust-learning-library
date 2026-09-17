@@ -16,7 +16,7 @@ Read them in this order. Each section assumes the ones above it and nothing else
 | [Strings](../14_Strings/README.md) | Text is an owner and a view — and the bytes underneath are why `len()` is not a character count |
 | [Numbers and bytes](../19_Numbers/README.md) | The unit everything else is measured in, how to write one down, and the type that cannot hold the value you typed |
 
-Four of those topics are big enough to have a reading map of their own, which crosses section boundaries where the lessons do: [OPTION.md](../OPTION.md), [SHADOWING.md](../SHADOWING.md), [STRUCTS.md](../STRUCTS.md), [STRINGS.md](../STRINGS.md).
+Four of those topics are big enough to have a reading map of their own, which crosses section boundaries where the lessons do: [OPTION.md](../OPTION.md), [SHADOWING.md](../SHADOWING.md), [STRUCTS.md](../STRUCTS.md), [STRINGS.md](../STRINGS.md). Two more are indexes: [TYPES.md](../TYPES.md), every type on one tree, and [TOPICS.md](../TOPICS.md), every topic under every name it goes by.
 
 Two sections sit alongside these rather than after them, because between them they are what the rest of the language is made of: [Enums](../13_Enums/README.md) and [Traits](../12_Traits/README.md).
 

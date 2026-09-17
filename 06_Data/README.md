@@ -8,6 +8,7 @@ A program that forgets everything when it exits is a calculator. This section is
 |---|---|---|
 | [Deriving `Serialize` and `Deserialize`](serde_derive/README.md) | 201 | What `serde`'s derive actually writes for you, and why the format is a separate crate |
 | [The round trip](json_round_trip/README.md) | 201 | Save then load, asserted equal — the test that designs the API before the API exists |
+| [Zero-copy deserialization](zero_copy_deserialization/README.md) | 301 | Borrowing strings from the input instead of allocating them — the lifetime it costs, and the escaped string that makes `&str` fail and `Cow` necessary |
 | [A type instead of a `Vec`](a_type_instead_of_a_vec/README.md) | 201 → 301 | Wrapping the collection in a struct that knows where it lives, and the methods that stop callers passing the wrong list |
 
 ## Po polsku

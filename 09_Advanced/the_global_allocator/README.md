@@ -318,6 +318,7 @@ rustc --edition 2024 09_Advanced/the_global_allocator/examples/the_global_alloca
 - [Stack and heap](../../18_Ownership/stack_and_heap/README.md) — which values reach this allocator at all, decided by the type rather than by a keyword
 - [`std::alloc` ↗](https://doc.rust-lang.org/std/alloc/) · [`GlobalAlloc` ↗](https://doc.rust-lang.org/std/alloc/trait.GlobalAlloc.html) — the module and the contract
 - [What a smart pointer costs](../../41_Smart_Pointers/what_a_smart_pointer_costs/README.md) — the same counting allocator on `Box`, `Rc`, `Arc`, `String` and `RefCell`
+- [Allocating without std](../../40_Without_std/allocating_without_std/README.md) — the same attribute where there is no system allocator to wrap (stub)
 
 ## Po polsku
 

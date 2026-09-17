@@ -13,6 +13,7 @@ Both chapters follow Matt Godbolt's C++Now 2026 keynote, [*Benchmarking: It's Ab
 | [A `Duration` cannot be negative](a_duration_cannot_be_negative/README.md) | One unsigned type for every unit, and what you get instead when a subtraction would go below zero | [A duration is a count and a unit ↗](https://masiarek.github.io/cpp-learning-library/01_Time_and_Benchmarking/a_duration_is_a_count_and_a_unit/index.html) |
 | [Timing a block](timing_a_block/README.md) | `Instant::now()` and `elapsed()`, why never `SystemTime`, and what a single timing cannot tell you | [Timing a block ↗](https://masiarek.github.io/cpp-learning-library/01_Time_and_Benchmarking/timing_a_block/index.html) |
 | [`black_box` is a hint](black_box_is_a_hint/README.md) | What `std::hint::black_box` protects — a value, not the work that produced it — and why C++ has no standard answer at all | [The optimizer deletes your benchmark ↗](https://masiarek.github.io/cpp-learning-library/01_Time_and_Benchmarking/the_optimizer_deletes_your_benchmark/index.html) |
+| [Benchmark harnesses](benchmark_harnesses/README.md) | What Criterion and Divan add to one `Instant` measurement — warm-up, repetition, a distribution, a comparison with the last run. Stub | [One number is not a measurement ↗](https://masiarek.github.io/cpp-learning-library/01_Time_and_Benchmarking/one_number_is_not_a_measurement/index.html) |
 
 The order is the order of dependence: the second page subtracts the two types the first one introduces, the third is the type every subtraction produces, and the last two spend all three.
 

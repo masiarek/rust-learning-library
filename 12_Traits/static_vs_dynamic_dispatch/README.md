@@ -180,6 +180,7 @@ Reach for the enum when the set of implementors is genuinely closed — a token 
 - [The Book, ch. 10 — performance of code using generics ↗](https://doc.rust-lang.org/book/ch10-01-syntax.html#performance-of-code-using-generics) — monomorphization, with the generated code written out
 - [LogRocket — disambiguating Rust traits: `Copy`, `Clone` and `Dynamic` ↗](https://blog.logrocket.com/disambiguating-rust-traits-copy-clone-dynamic/) — a clear introduction whose cost section says `dyn` values "have to be checked for their type at runtime". They are not; the `E0599` above is what asking actually gets you. Its closing refactor is the enum above, filed under the wrong name — an enum and a `match` is not monomorphization, which is what the *generic* half of this page does
 - [Wide pointers](../../36_Pointers/wide_pointers/README.md) — the vtable word in `&dyn Trait`, and what `size_of_val` reads from it
+- [Dyn compatibility](../../39_API_Design/dyn_compatibility/README.md) — `E0038` and designing a trait so it can be `dyn` (stub)
 
 ## Po polsku
 

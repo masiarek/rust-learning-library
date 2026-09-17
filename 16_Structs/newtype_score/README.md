@@ -285,6 +285,7 @@ rustc --edition 2024 16_Structs/newtype_score/examples/newtype_score.rs -o /tmp/
 - [`Option` is a one-item collection](../../17_Option_and_Result/option_as_collection/README.md) — the niche that makes `Option<Stars>` free
 - [`Option` fields](../../17_Option_and_Result/option_fields/README.md) — the same "required by default" instinct applied to structs
 - [The long way round](../../ROADMAP.md) — where this rung sits, and what comes next
+- [A type alias is not a new type](../type_aliases/README.md) — the `type Score = u8;` that looks like this page and enforces nothing
 
 ## Po polsku
 

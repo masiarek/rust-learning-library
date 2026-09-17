@@ -415,6 +415,7 @@ Round 4 -- what a per-character table cannot say at all
 - [Comparison has a mode ↗](https://masiarek.github.io/python-learning-library/01_Text_and_Bytes/comparison_has_a_mode/index.html) — the same three questions from Python, which has folding and a linguistic API and still ends up ordinal by default; the page that names the mode both languages pick silently, and measures what Python's near-substitutes do instead
 - [Strings: links, books and videos](../resources/README.md)
 - [`sort` is not alphabetical ↗](https://masiarek.github.io/perl-learning-library/04_Records_and_Fields/sort_is_not_alphabetical/index.html) — Perl's code-point `sort` beside the collation its core modules ship, tailored per language
+- [Internationalization](../internationalization/README.md) — locale-aware collation, which byte order is not
 
 ## Po polsku
 

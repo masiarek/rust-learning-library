@@ -106,6 +106,7 @@ NAV_ORDER: dict[str, list[str]] = {
     ],
     "00_Start_Here": [
         "README.md",
+        "what_rust_is",
         "benefits_of_rust",
         # The counterpart list: same job, other evidence. Google's twenty are
         # compiler refusals; cheats.rs's six are citations, so the two pages
@@ -167,6 +168,7 @@ NAV_ORDER: dict[str, list[str]] = {
         # Three std traits in depth: the one that runs at a place you can point
         # to in the source, and the two whose names confuse next to `clone`.
         "drop_and_raii",
+        "drop_guards",
         # ...the way in for a reader the trait has not clicked for yet: the
         # five ideas under ToOwned, in the order they unlock.
         "how_to_learn_to_owned",
@@ -228,11 +230,15 @@ NAV_ORDER: dict[str, list[str]] = {
     # taught.
     "27_Modules": [
         "README.md",
+        "packages_and_crates",
         "modules_and_visibility",
         "the_use_declaration",
+        "a_crate_prelude",
         "one_module_per_file",
         "const_and_static",
+        "items_inside_a_function",
         "what_an_attribute_is",
+        "conditional_compilation",
     ],
     # What a test says first, then where it goes, then the one that is also
     # documentation.
@@ -343,6 +349,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "a_duration_cannot_be_negative",
         "timing_a_block",
         "black_box_is_a_hint",
+        "benchmark_harnesses",
     ],
     # The six parts of the course outline the section README follows, in its
     # order: macros you already use, the toolkit, derive, function-like and
@@ -410,10 +417,13 @@ NAV_ORDER: dict[str, list[str]] = {
         "what_a_generic_is",
         "when_the_compiler_cannot_infer",
         "where_the_bound_goes",
+        "associated_types_or_type_parameters",
+        "blanket_impls",
         # ...and then the two shapes that need all three: the same parameter
         # on an enum, and the type that contains itself.
         "generic_enums",
         "a_generic_recursive_type",
+        "const_generics",
     ],
     "23_Closures": [
         "README.md",
@@ -433,6 +443,7 @@ NAV_ORDER: dict[str, list[str]] = {
         # are describing, and the one that explains why a chain costs nothing.
         "iterators_are_lazy",
         "iter_iter_mut_into_iter",
+        "ranges",
         # ...then writing `next` yourself, which needs both halves and the
         # lifetime a borrowing iterator carries.
         "implementing_iterator",
@@ -484,6 +495,10 @@ NAV_ORDER: dict[str, list[str]] = {
         "compiled_or_interpreted",
         "reading_a_compilation_failure",
         "build_systems_are_not_compilers",
+        "the_rust_project",
+        "building_the_compiler",
+        "using_a_compiler_you_built",
+        "a_first_contribution",
     ],
     "15_First_Programs": [
         "README.md",
@@ -558,6 +573,7 @@ NAV_ORDER: dict[str, list[str]] = {
         # eight of them, and the fix each is asking for.
         "when_a_struct_refuses",
         "newtype_score",
+        "type_aliases",
         "representing_a_record",
     ],
     "17_Option_and_Result": [
@@ -699,6 +715,7 @@ NAV_ORDER: dict[str, list[str]] = {
         # atomic so it can cross a thread boundary.
         "reference_counting",
         "sharing_across_threads",
+        "indices_instead_of_references",
         # ...and what Box, Rc and Arc have in common, once all three are met.
         "what_a_smart_pointer_is",
         # ...and what all three are avoiding, priced: a derived Clone is the
@@ -944,6 +961,7 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...and the outside world: the crates std leaves room for, then
         # books, essays, the video, and the exercises.
         "string_crates",
+        "internationalization",
         "resources",
     ],
     # Reading order for the command-line-tool arc. These sections are stubs for
@@ -1033,8 +1051,15 @@ NAV_ORDER: dict[str, list[str]] = {
         # entry's source is a folder in the repo rather than the registry.
         "cargo_lock",
         "two_versions_of_one_crate",
+        "cargo_features",
         "vendoring_and_patch",
         "practice_workspace",
+        "workspaces",
+        "publishing_a_crate",
+        "msrv",
+        "private_registries",
+        "registry_authentication",
+        "build_scripts",
         # Day one, and cheap: settle the whitespace question before anything else.
         "formatting",
         "strict_lints",
@@ -1042,6 +1067,7 @@ NAV_ORDER: dict[str, list[str]] = {
         # that connects the window to everything configured above.
         "bacon",
         "nextest",
+        "cargo_subcommands",
         "commit_on_green",
         "rustrover_setup",
         "rustrover_code_vision",
@@ -1054,6 +1080,7 @@ NAV_ORDER: dict[str, list[str]] = {
         # the checks that keep the files agreeing with each other afterwards.
         "scaffolding",
         "compile_times",
+        "release_profiles",
         # Last, because it subsumes every rung above and costs the most.
         "devenv",
     ],
@@ -1061,6 +1088,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "README.md",
         "serde_derive",
         "json_round_trip",
+        "zero_copy_deserialization",
         "a_type_instead_of_a_vec",
     ],
     "07_Clients": [
@@ -1080,6 +1108,8 @@ NAV_ORDER: dict[str, list[str]] = {
     "10_Resources": [
         "README.md",
         "books",
+        "rust_for_rustaceans",
+        "ultimate_rust_courses",
         # Books argue; these define. Second, because the question "what does
         # Rust actually do here" arrives the moment the first book is closed.
         "official_docs",
@@ -1110,14 +1140,23 @@ NAV_ORDER: dict[str, list[str]] = {
         # Starting a thread and handing it work, before anything about sharing:
         # scope and a channel cover most of what a program actually needs.
         "spawning_a_thread",
+        "concurrency_or_parallelism",
         "channels",
+        "crossbeam_channels",
+        "worker_pools",
+        "actors",
+        "rayon",
         # ...and then the lock, and the Result it hands you.
         "mutex_poisoning",
         # ...and the two rungs either side of that lock, once the Result it
         # hands you has been read.
         "rwlock_and_atomics",
+        "atomic_orderings",
+        "compare_and_exchange",
+        "false_sharing",
         # ...and what the compiler was checking all along to allow any of it.
         "send_and_sync",
+        "testing_concurrent_code",
         # The single-threaded cousin of a Mutex: same idea, check moved to run
         # time and failure moved from blocking to a panic.
         "interior_mutability",
@@ -1137,13 +1176,21 @@ NAV_ORDER: dict[str, list[str]] = {
         "what_an_invariant_is",
         # The keyword itself, before the two features that need it.
         "what_unsafe_turns_off",
+        "unsafe_traits",
+        "validity_invariants",
+        "panics_in_unsafe_code",
+        "transmute",
+        "the_drop_check",
+        "miri",
         # FFI sits after `unsafe`, which it needs, and before the
         # union, which is the layout half of the same boundary.
         "calling_c",
+        "callbacks_across_ffi",
         # ...and the libc call whose danger is not the ABI at all: what the
         # callee may do, which nothing in the type system checks.
         "catching_a_signal",
         "what_a_union_is",
+        "type_layout",
         # ...and where the bytes those layouts occupy actually came from.
         "the_global_allocator",
         # ...and the one request every Vec makes of it that has a rule
@@ -1171,6 +1218,63 @@ NAV_ORDER: dict[str, list[str]] = {
         # Last, because it is the only recommendation in the section.
         "what_to_instrument",
     ],
+    # 2026-09-16: stub section from the topic-organisation pass.
+    "38_Declarative_Macros": [
+        "README.md",
+        "expanding_a_macro",
+        "macro_rules_patterns",
+        "repetition",
+        "hygiene",
+        "exporting_a_macro",
+        "std_macros_you_have_not_met",
+    ],
+    # 2026-09-16: stub section from the topic-organisation pass.
+    "39_API_Design": [
+        "README.md",
+        "naming_conventions",
+        "traits_every_type_should_consider",
+        "blanket_impls_for_references",
+        "wrapper_types",
+        "generic_or_concrete_parameters",
+        "dyn_compatibility",
+        "destructors_that_can_fail",
+        "documenting_an_interface",
+        "semver_hazards",
+        "making_misuse_a_compile_error",
+    ],
+    # 2026-09-16: stub section from the topic-organisation pass.
+    "40_Without_std": [
+        "README.md",
+        "core_alloc_and_std",
+        "the_panic_handler",
+        "allocating_without_std",
+        "before_main_runs",
+        "out_of_memory",
+        "memory_mapped_registers",
+        "hardware_you_cannot_misuse",
+        "cross_compiling",
+    ],
+    # 2026-09-16: stub section from the topic-organisation pass.
+    "42_WebAssembly": [
+        "README.md",
+        "what_webassembly_is",
+        "compiling_to_wasm32",
+        "rust_in_the_browser",
+        "wasm_outside_the_browser",
+        "shipping_a_wasm_page",
+    ],
+    # 2026-09-16: stub section from the topic-organisation pass.
+    "43_Games": [
+        "README.md",
+        "what_a_game_engine_is",
+        "entities_and_components",
+        "systems_and_queries",
+        "resources_and_plugins",
+        "keyboard_mouse_and_gamepad",
+        "sprites_and_meshes",
+        "music_and_sound_effects",
+        "text_and_menus",
+    ],
 }
 
 # Labels the sentence-caser cannot reach on its own: proper names, code
@@ -1178,6 +1282,93 @@ NAV_ORDER: dict[str, list[str]] = {
 # name than their own H1. Keyed by ON-DISK FOLDER NAME — which only works
 # because `clean()` is handed that name rather than MkDocs's rendering of it.
 LABELS = {
+    # 2026-09-16 stub agents' pages (09_Advanced, 20_Compilers, sections 38-40, 42-43).
+    "concurrency_or_parallelism": 'Concurrency or parallelism',
+    "worker_pools": 'Worker pools',
+    "actors": 'Actors',
+    "rayon": '`rayon`',
+    "crossbeam_channels": '`crossbeam` channels',
+    "compare_and_exchange": '`compare_exchange`',
+    "atomic_orderings": '`atomic::Ordering`',
+    "false_sharing": 'False sharing',
+    "testing_concurrent_code": 'Testing concurrent code',
+    "unsafe_traits": '`unsafe trait`',
+    "validity_invariants": 'Validity invariants',
+    "panics_in_unsafe_code": 'Panics in unsafe code',
+    "transmute": '`mem::transmute`',
+    "the_drop_check": 'The drop check',
+    "miri": 'Miri',
+    "type_layout": 'Type layout',
+    "callbacks_across_ffi": 'Callbacks across FFI',
+    "expanding_a_macro": 'Expanding a macro',
+    "macro_rules_patterns": 'Matchers and fragment specifiers',
+    "repetition": 'Repetition',
+    "hygiene": 'Hygiene',
+    "exporting_a_macro": 'Exporting a macro',
+    "std_macros_you_have_not_met": 'The std macros you have not met',
+    "naming_conventions": 'Naming conventions',
+    "traits_every_type_should_consider": 'Traits every type should consider',
+    "blanket_impls_for_references": 'Your trait for `&T` and `Box<T>`',
+    "wrapper_types": 'Wrapper types',
+    "generic_or_concrete_parameters": 'Generic or concrete parameters',
+    "dyn_compatibility": 'Dyn compatibility',
+    "destructors_that_can_fail": 'Destructors that can fail',
+    "documenting_an_interface": 'Documenting an interface',
+    "semver_hazards": 'SemVer hazards',
+    "making_misuse_a_compile_error": 'Making misuse a compile error',
+    "the_rust_project": 'The Rust Project',
+    "building_the_compiler": 'Building the compiler',
+    "using_a_compiler_you_built": 'Using a compiler you built',
+    "a_first_contribution": 'A first contribution',
+    "core_alloc_and_std": '`core`, `alloc` and `std`',
+    "the_panic_handler": 'The panic handler',
+    "allocating_without_std": 'Allocating without std',
+    "before_main_runs": 'What runs before `main`',
+    "out_of_memory": 'Out of memory',
+    "memory_mapped_registers": 'Memory-mapped registers',
+    "hardware_you_cannot_misuse": 'Hardware you cannot misuse',
+    "cross_compiling": 'Cross-compiling',
+    "what_webassembly_is": 'What WebAssembly is',
+    "compiling_to_wasm32": 'Compiling to `wasm32`',
+    "rust_in_the_browser": 'Rust in the browser',
+    "wasm_outside_the_browser": 'Outside the browser',
+    "shipping_a_wasm_page": 'Shipping a wasm page',
+    "what_a_game_engine_is": 'What a game engine is',
+    "entities_and_components": 'Entities and components',
+    "systems_and_queries": 'Systems and queries',
+    "resources_and_plugins": 'Resources and plugins',
+    "keyboard_mouse_and_gamepad": 'Keyboard, mouse and gamepad',
+    "sprites_and_meshes": 'Sprites and meshes',
+    "music_and_sound_effects": 'Music and sound effects',
+    "text_and_menus": 'Text and menus',
+    # 2026-09-16 stubs and maps from the topic-organisation pass (TOPICS.md, TYPES.md).
+    "what_rust_is": 'What Rust is',
+    "cargo_features": 'Cargo features',
+    "workspaces": 'Workspaces',
+    "publishing_a_crate": 'Publishing a crate',
+    "msrv": 'MSRV',
+    "private_registries": 'Private registries',
+    "registry_authentication": 'Registry authentication',
+    "build_scripts": 'Build scripts',
+    "cargo_subcommands": 'Cargo subcommands',
+    "release_profiles": 'Release profiles',
+    "zero_copy_deserialization": 'Zero-copy deserialization',
+    "rust_for_rustaceans": '*Rust for Rustaceans*, mapped',
+    "ultimate_rust_courses": 'Ultimate Rust courses, mapped',
+    "advent_of_code": 'Advent of Code',
+    "drop_guards": 'Drop guards',
+    "internationalization": 'Internationalization',
+    "type_aliases": 'Type aliases',
+    "indices_instead_of_references": 'Indices instead of references',
+    "associated_types_or_type_parameters": 'Associated types or type parameters?',
+    "blanket_impls": 'Blanket impls',
+    "const_generics": 'Const generics',
+    "ranges": 'Ranges',
+    "packages_and_crates": 'Packages and crates',
+    "a_crate_prelude": 'A crate prelude',
+    "items_inside_a_function": 'Items inside a function',
+    "conditional_compilation": 'Conditional compilation',
+    "benchmark_harnesses": 'Benchmark harnesses',
     # The sections. Folder names are Title_Cased so a file listing reads well;
     # the sidebar follows each section page's own `# H1` instead.
     "00_Start_Here": "Start here",

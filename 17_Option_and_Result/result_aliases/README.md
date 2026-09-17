@@ -304,6 +304,7 @@ rustc --edition 2024 17_Option_and_Result/result_aliases/examples/result_aliases
 - [matklad — Study of `std::io::Error` ↗](https://matklad.github.io/2020/10/15/study-of-std-io-error.html) — a slow read of the single error type behind `io::Result`, and the best short lesson available on designing an `E`
 - [The Rust Book, ch. 9 — Error Handling ↗](https://doc.rust-lang.org/book/ch09-00-error-handling.html)
 - [`std::result` ↗](https://doc.rust-lang.org/std/result/) — the method list the aliases inherit
+- [A type alias is not a new type](../../16_Structs/type_aliases/README.md) — aliases in general, and why one never separates two types
 
 ## Po polsku
 

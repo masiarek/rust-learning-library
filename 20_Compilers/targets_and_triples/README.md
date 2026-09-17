@@ -25,6 +25,7 @@ A target triple looks like a naming convention and behaves like a contract. Two 
 - [The linker](../the_linker/README.md) — the stage where a target mismatch is discovered, and why the message names an architecture
 - [LLVM and its IR](../llvm_and_its_ir/README.md) — one IR, many back ends: the reason a target is a flag rather than a different compiler
 - [rustup](../../05_Tooling/rustup/README.md) — components, toolchains and targets, and which of the three a given command changes
+- [Cross-compiling](../../40_Without_std/cross_compiling/README.md) · [Compiling to wasm32](../../42_WebAssembly/compiling_to_wasm32/README.md) — two targets put to use (stubs)
 
 ## Po polsku
 

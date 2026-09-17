@@ -294,6 +294,7 @@ And `-O` changes one line of the output above — `debug_assertions` reports `fa
 - [CONTRIBUTING.md](../../CONTRIBUTING.md) — how a lesson's example is compiled, run, and held to a recorded answer key
 - [The long way round to a column summary](../../ROADMAP.md) — rung 10 is where the single-file rule finally retires and this repo grows a `Cargo.toml`
 - [The Cargo Book — Cargo targets ↗](https://doc.rust-lang.org/cargo/reference/cargo-targets.html) — `autobins`, `src/bin/`, and the manifest keys behind all of the above
+- [Packages and crates](../../27_Modules/packages_and_crates/README.md) — why each file in `src/bin/` is its own crate
 
 ## Po polsku
 

@@ -367,6 +367,7 @@ Part 3 — the back edge, and whether Drop runs.
 - [What a smart pointer is](../what_a_smart_pointer_is/README.md) — `Box`, `Rc` and `Arc` as one family
 - [What a smart pointer costs](../../41_Smart_Pointers/what_a_smart_pointer_costs/README.md) — the 24 bytes behind an `Rc<u64>`, and the `free` that waits for the last `Weak`
 - [Smart pointer claims, run](../../41_Smart_Pointers/smart_pointer_claims_checked/README.md) — "raw pointers such as `Rc`" and "single-threaded", checked
+- [Indices instead of references](../indices_instead_of_references/README.md) — the other way out for a graph, with no count and no `RefCell`
 
 ## Po polsku
 

@@ -65,6 +65,7 @@ Two things a toolchain carries beyond the compiler, and they are not the same ki
 - [Pinning the toolchain](../pinning_the_toolchain/README.md) — rung 4, and why it is the only rung worth using for a shared project
 - [Nightly by default](../nightly/README.md) — rung 5, and what it quietly decides
 - [Running a scratch program](../../15_First_Programs/rustc_without_cargo/README.md) — what `rustc` does once the shim has picked one
+- [Using a compiler you built](../../20_Compilers/using_a_compiler_you_built/README.md) — `rustup toolchain link` for a rustc you compiled yourself (stub)
 
 ---
 
