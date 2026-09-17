@@ -118,7 +118,7 @@ A folder has one name, and it is rarely the word you typed: a *vector* lives in 
 | **Formatting**, `format!`, `{:>8}`, rustfmt | [The format mini-language](14_Strings/the_format_language/README.md) | [Formatting: `rustfmt`](05_Tooling/formatting/README.md) |
 | **`From` and `Into`**, orphan rule | [`From` and `Into`](29_Conversion/from_and_into/README.md) | [`TryFrom` and `TryInto`](29_Conversion/tryfrom_and_tryinto/README.md) |
 | **Function pointers**, `fn(u32) -> u32` | [Function pointers](23_Closures/function_pointers/README.md) | |
-| **Functions**, parameters, return values | [Functions](25_Control_Flow/functions/README.md) | [The call stack](18_Ownership/the_call_stack/README.md) · [Items inside a function](27_Modules/items_inside_a_function/README.md) *stub* |
+| **Functions**, parameters, return values | [Functions](25_Control_Flow/functions/README.md) | [The call stack](18_Ownership/the_call_stack/README.md) · [Returned by value](18_Ownership/returned_by_value/README.md) · [Items inside a function](27_Modules/items_inside_a_function/README.md) *stub* |
 
 ## G – L
 
@@ -192,6 +192,7 @@ A folder has one name, and it is rarely the word you typed: a *vector* lives in 
 | **Release builds**, `--release`, profiles, LTO | [Release profiles](05_Tooling/release_profiles/README.md) *stub* | [What the optimizer does](20_Compilers/what_the_optimizer_does/README.md) |
 | **`Result`**, `Ok`, `Err` | [`Ok` and `Err`](17_Option_and_Result/ok_and_err/README.md) | [`Option` vs `Result`](17_Option_and_Result/option_vs_result/README.md) · [The `Result` you are reading is probably an alias](17_Option_and_Result/result_aliases/README.md) |
 | **Resources**, books, courses, videos | [Resources](10_Resources/README.md) | [Books](10_Resources/books/README.md) · [Start here](00_Start_Here/README.md) |
+| **Returned by value**, return values, return slot, `sret`, `-> str`, unsized return type | [Returned by value](18_Ownership/returned_by_value/README.md) | [The call stack](18_Ownership/the_call_stack/README.md) · [`str` is unsized](14_Strings/str_is_unsized/README.md) · [Every returned-by-value error](18_Ownership/returned_by_value_errors/README.md) · [Returning a trait](12_Traits/returning_a_trait/README.md) |
 | **Rust itself**, what is Rust | [What Rust is](00_Start_Here/what_rust_is/README.md) *stub* | [Benefits of Rust](00_Start_Here/benefits_of_rust/README.md) |
 | **rustup**, toolchains, nightly | [rustup](05_Tooling/rustup/README.md) | [Pinning the toolchain](05_Tooling/pinning_the_toolchain/README.md) · [Nightly by default](05_Tooling/nightly/README.md) |
 

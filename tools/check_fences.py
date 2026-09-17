@@ -123,6 +123,12 @@ SCOPE = (
     # five bad/good lint pairs plus the program no lint flags.
     "18_Ownership/borrowing_forever_errors",
     "18_Ownership/borrowing_forever_lints",
+    # Returning by value: the lesson's fences (a listing whose IR the page
+    # reads), seventeen `compile_fail` fences each beside a fix, and eight
+    # lints as bad/good pairs.
+    "18_Ownership/returned_by_value",
+    "18_Ownership/returned_by_value_errors",
+    "18_Ownership/returned_by_value_lints",
 )
 
 # `.claude` holds this repo checked out again, once per agent worktree, so a scan

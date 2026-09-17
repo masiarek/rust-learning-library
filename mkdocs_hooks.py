@@ -660,6 +660,14 @@ NAV_ORDER: dict[str, list[str]] = {
         # sketches: what a CALL does to the stack region, since the frame is
         # the unit every lifetime rule is ultimately stated against.
         "the_call_stack",
+        # ...and the same region seen on the way out: a returned value lands in
+        # room the CALLER reserved before the call, so it needs one size. That
+        # is the reason `-> str` fails and `str` can never be `Clone`.
+        "returned_by_value",
+        # Its companions, by symptom, by lint, and by source.
+        "returned_by_value_errors",
+        "returned_by_value_lints",
+        "returned_by_value_resources",
         # ...the same frames stacked until they run out, which is the one
         # failure mode of the stack that is not a borrow error.
         "recursion_and_the_stack",
@@ -1739,6 +1747,10 @@ LABELS = {
     "borrowing_forever_errors": "Borrowing forever: every error",
     "borrowing_forever_lints": "Borrowing forever: lints",
     "borrowing_forever_resources": "Borrowing forever: reading",
+    "returned_by_value": "Returned by value",
+    "returned_by_value_errors": "Returned by value: every error",
+    "returned_by_value_lints": "Returned by value: lints",
+    "returned_by_value_resources": "Returned by value: reading",
     "shadowing_does_not_drop": "A shadow does not drop",
     "clone_on_write": "`Cow`, clone on write",
     # 20_Compilers
