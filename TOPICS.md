@@ -4,7 +4,7 @@
 
 **One line:** Every topic in this library under every name you might look for it by — *vector*, *hash map*, *static const*, *compound types*, *Shipyard* — with the page that is its home and the pages to read next.
 
-A folder has one name, and it is rarely the word you typed: arrays live in `26_Collections/arrays_and_slices`, `static` lives in `27_Modules/const_and_static`, and "SSH keys for a private registry" lives in `05_Tooling/registry_authentication`. This page is the index at the back of the book. Rows marked *stub* are outlines with their boundaries written down but no checked example yet.
+A folder has one name, and it is rarely the word you typed: a *vector* lives in `26_Collections/the_vec`, `static` lives in `27_Modules/const_and_static`, and "SSH keys for a private registry" lives in `05_Tooling/registry_authentication`. This page is the index at the back of the book. Rows marked *stub* are outlines with their boundaries written down but no checked example yet.
 
 ## How to find anything here
 
@@ -254,6 +254,6 @@ Search the site first (`/`), then [TODO.md](TODO.md) for the strings vocabulary 
 
 ## Po polsku
 
-To jest indeks tematów — odpowiednik indeksu na końcu książki. Nazwa katalogu rzadko jest słowem, które wpisujesz: tablice mieszkają w `26_Collections/arrays_and_slices`, a `static` w `27_Modules/const_and_static`. Każdy wiersz podaje temat pod kilkoma nazwami, stronę, która jest jego domem, i strony do przeczytania potem; polskie odpowiedniki terminów zbiera [POLSKI.md](POLSKI.md).
+To jest indeks tematów — odpowiednik indeksu na końcu książki. Nazwa katalogu rzadko jest słowem, które wpisujesz: wektor mieszka w `26_Collections/the_vec`, a `static` w `27_Modules/const_and_static`. Każdy wiersz podaje temat pod kilkoma nazwami, stronę, która jest jego domem, i strony do przeczytania potem; polskie odpowiedniki terminów zbiera [POLSKI.md](POLSKI.md).
 
 **Szukaj po polsku:** indeks tematów · spis pojęć Rust · `rust topics index` · `rust learning roadmap`
