@@ -55,6 +55,7 @@ Each surprise below is one missing idea, not a mystery about `ToOwned`. Start at
 Beside the steps:
 
 - [`ToOwned` in real code](to_owned_in_real_code/README.md) — fourteen excerpts from std at 1.98.0 and from `serde_json`, `bstr`, `camino`, `regex`, `borrowme` and `beef`, each behind a pinned permalink; read it after step 10.
+- [Lints around `ToOwned`: bad and good, run](to_owned_lints/README.md) — twenty-two rustc and clippy warnings, each with a program that triggers it, the warning, a silent version and when the lint is right, plus the `to_owned` mistakes no lint catches.
 - [Every `ToOwned` error, and its fix](to_owned_errors/README.md) — twenty compiler errors around `ToOwned`, `Clone`, `Borrow` and `Cow`, findable by code or by message: the code, rustc's words, the mistake, and a fix that compiles.
 - [Where `Clone` will not do: code only](where_clone_will_not_do/README.md) — ten pairs of fences, `.clone()` that fails to compile beside `ToOwned` that works, each checked by the compiler on every build.
 - [What `Cow` explanations get wrong, run](cow_claims_checked/README.md) — ten claims about `Cow` from articles, books and chat answers, each checked against the compiler; read it after step 7.
@@ -90,6 +91,7 @@ The steps say what to understand; these make you write it. Each lives on the pag
 | 2 | [Measure both halves of a reference](../../14_Strings/str_is_unsized/README.md#practice) — `&str`, `&[i32]`, `&dyn Display` and `&i32`, and the `?Sized` that takes all four | [`str` is unsized](../../14_Strings/str_is_unsized/README.md) |
 | 3 | [One `&str` parameter, three callers](../../14_Strings/string_vs_str/README.md#practice) — then flip it to `String` and count what each call site pays | [`String` vs `&str`](../../14_Strings/string_vs_str/README.md) |
 | 4 | [One `E0382`, three fixes](../../16_Structs/copy_vs_clone/README.md#practice) — and what each costs the caller | [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) |
+| 5 | [Predict the receiver, then take it away from the dot](the_dot_picks_first/README.md#practice) — five calls, three that are not a `String`, each fixed two ways | [Step 5](the_dot_picks_first/README.md) |
 | 6 | [Give every slice a `.middle()`](../extension_traits/README.md#practice) — one trait, two methods, and only one of them reachable through a dot | [Extension traits](../extension_traits/README.md) |
 | 6 | [Predict the owned twin before you run it](../to_owned/README.md#practice) — six receivers, and the two everybody gets wrong | [`ToOwned`](../to_owned/README.md) |
 | 7 | [One lookup for every kind of key](../borrow_trait/README.md#practice) — three maps searched by their borrowed forms, zero allocations counted | [`Borrow`](../borrow_trait/README.md) |
@@ -99,7 +101,7 @@ The steps say what to understand; these make you write it. Each lives on the pag
 | 9 | [Four loops that all look like reuse](../clone_into/README.md#practice) — predict the allocations, then count them | [`clone_into`](../clone_into/README.md) |
 | 10 | [A slice that promises its order](../implementing_to_owned/README.md#practice) — `Sorted<T>` with `Borrow`, `ToOwned` and a `Cow` | [Implementing `ToOwned`](../implementing_to_owned/README.md) |
 
-Step 5 has no kata of its own; step 6's katas exercise the same lookup order. The full sequence, with every other kata in the library, is [KATAS.md](../../KATAS.md).
+Every step has at least one. The full sequence, with every other kata in the library, is [KATAS.md](../../KATAS.md).
 
 ## Tests for anything else you read
 

@@ -427,9 +427,9 @@ The crate that answers [step 10's](../implementing_it_or_not/README.md#why-a-vie
     Borrowed("a") += "x"            -> Owned "ax"
 
 §8  from_utf8_lossy borrows unless a byte needs replacing
-    []                     -> Borrowed ""
+    []                       -> Borrowed ""
     [118, 97, 108, 105, 100] -> Borrowed "valid"
-    [99, 97, 102, 233]     -> Owned "caf�"
+    [99, 97, 102, 233]       -> Owned "caf�"
 
 §9  a Box lends what it holds, which is what lets `type Owned = Box<RawValue>` work
     Box<str>: Borrow<str> -> "{\"raw\": true}"

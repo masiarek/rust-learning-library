@@ -46,7 +46,7 @@ fn main() {
     for bytes in [&b""[..], b"valid", b"caf\xe9"] {
         let text = String::from_utf8_lossy(bytes);
         let shown = format!("{bytes:?}");
-        println!("    {shown:<22} -> {} {text:?}", variant(&text));
+        println!("    {shown:<24} -> {} {text:?}", variant(&text));
     }
 
     println!();

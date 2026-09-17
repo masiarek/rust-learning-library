@@ -1,0 +1,16 @@
+1. Predict, then check
+   r.clone()       r: &String     -> alloc::string::String
+   rr.clone()      rr: &&String   -> &alloc::string::String
+   ss.to_owned()   ss: &&str      -> &str
+   shared.clone()  shared: Rc     -> alloc::rc::Rc<alloc::string::String>
+   m.clone()       m: &mut String -> alloc::string::String
+
+2. The three that were not a String, fixed by dereferencing to the right rung
+   (*rr).clone()        -> alloc::string::String
+   (*ss).to_owned()     -> alloc::string::String
+   (*shared).clone()    -> alloc::string::String
+
+3. The same three with no search at all: name the type, and the argument is coerced
+   <String as Clone>::clone(rr)       -> alloc::string::String
+   <str as ToOwned>::to_owned(ss)     -> alloc::string::String
+   <String as Clone>::clone(&shared)  -> alloc::string::String

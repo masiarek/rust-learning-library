@@ -903,6 +903,7 @@ pub fn shout(label: &str) -> Cow<'_, str> {
 ## See also
 
 - [Where `Clone` will not do: code only](../where_clone_will_not_do/README.md) — the same failures as ten pairs, without the transcripts
+- [Lints around `ToOwned`: bad and good, run](../to_owned_lints/README.md) — the warnings, where this page is the refusals
 - [What `Cow` explanations get wrong, run](../cow_claims_checked/README.md) — the claims behind errors 14 and 15
 - [ERRORS.md](../../../ERRORS.md) — every error code the library explains, by code
 - [How to learn `ToOwned`](../README.md) — the path these errors are stations on

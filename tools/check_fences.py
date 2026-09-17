@@ -89,6 +89,8 @@ SCOPE = (
     # Its companion by symptom: twenty errors, each a `compile_fail` fence
     # beside a fix that must compile, with the transcript recorded between.
     "12_Traits/how_to_learn_to_owned/to_owned_errors",
+    # And its companion for warnings: every bad and good program compiles.
+    "12_Traits/how_to_learn_to_owned/to_owned_lints",
 )
 
 # `.claude` holds this repo checked out again, once per agent worktree, so a scan
