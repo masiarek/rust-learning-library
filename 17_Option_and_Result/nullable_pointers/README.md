@@ -267,6 +267,8 @@ rustc --edition 2024 17_Option_and_Result/nullable_pointers/examples/nullable_po
 - [`Option` vs `Result`](../option_vs_result/README.md) — when absence should be a failure with a reason instead
 - [`Option` fields](../option_fields/README.md) — `Option` in a type definition rather than a return type
 - [`std::boxed::Box` ↗](https://doc.rust-lang.org/std/boxed/struct.Box.html) and [`Option::as_deref` ↗](https://doc.rust-lang.org/core/option/enum.Option.html#method.as_deref)
+- [Raw pointers](../../36_Pointers/raw_pointers/README.md) — `NonNull<T>`, and the null check a debug build puts before a raw-pointer read
+- [*Rust in Action*, chapter 6, run](../../36_Pointers/rust_in_action_chapter_6/README.md) — the book's claim that `Option<T>` occupies 0 bytes, measured
 
 ## Po polsku
 

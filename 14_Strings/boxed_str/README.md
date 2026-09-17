@@ -437,6 +437,8 @@ rustc --edition 2024 14_Strings/boxed_str/examples/boxed_str.rs -o /tmp/bs && /t
 - [`ToOwned`](../../12_Traits/to_owned/README.md) — where the `.to_owned()` trap is named in full
 - [`Cow`: borrow until somebody writes](../../18_Ownership/clone_on_write/README.md) — the other answer to "do I have to copy this?"
 - [`Rc<T>` ↗](https://doc.rust-lang.org/std/rc/struct.Rc.html) · [`Arc<T>` ↗](https://doc.rust-lang.org/std/sync/struct.Arc.html) · [`Box<str>` from `String` ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.into_boxed_str)
+- [Wide pointers](../../36_Pointers/wide_pointers/README.md) — why `Box<str>` and `Rc<str>` are two words
+- [What a smart pointer costs](../../41_Smart_Pointers/what_a_smart_pointer_costs/README.md) — the counts beside the value that make `Rc` allocations bigger than `Box` ones
 
 ## Po polsku
 

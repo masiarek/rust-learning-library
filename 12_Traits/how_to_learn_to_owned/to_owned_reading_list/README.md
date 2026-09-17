@@ -38,7 +38,7 @@ Every entry was checked on 2026-09-16. Free material links to the page itself. A
 - [Effective Rust, Item 8 — fat pointer types ↗](https://effective-rust.com/references.html#fat-pointer-types)
 - [pretzelhammer, *Sizedness in Rust* (2020) ↗](https://github.com/pretzelhammer/rust-blog/blob/master/posts/sizedness-in-rust.md)
 - *Rust for Rustaceans* (Gjengset, No Starch 2021), ch. 2 "Types" → "Dynamically Sized Types and Wide Pointers" (p. 23)
-- *Rust in Action* (McNamara, Manning 2021), ch. 6 "Memory" → §6.2 "Exploring Rust's reference and pointer types", whose note on p. 185 defines a fat pointer as "usually two `usize` wide"
+- *Rust in Action* (McNamara, Manning 2021), ch. 6 "Memory" → §6.2 "Exploring Rust's reference and pointer types", whose note on p. 185 defines a fat pointer as "usually two `usize` wide" — the rest of that chapter's pointer claims are run in [*Rust in Action*, chapter 6](../../../36_Pointers/rust_in_action_chapter_6/README.md)
 - Video: [Crust of Rust — Dispatch and Fat Pointers ↗](https://www.youtube.com/watch?v=xcygqF5LVmM) (Jon Gjengset, 2021) — *The Sized Trait* at 0:27:13, *Sizing Unsized Types* at 0:39:34, *Dynamically Sized Types* at 1:43:03
 
 ### [3. Owned and borrowed are two different types](../owned_and_borrowed_types/README.md)
@@ -138,7 +138,7 @@ The path meets `Cow` in [steps 7](../borrow_the_way_back/README.md) and [8](../t
 
 - [Easy Rust, *Cow* ↗](https://dhghomon.github.io/easy_rust/Chapter_42.html) (headed "Chapter 43" although the URL says 42) — a gentle first telling, with a `modulo_3` example that shows both variants. It says `Cow` has "`into_owned` or `into_borrowed`"; there is no `into_borrowed`.
 - [Thor, *Tipping Cows, a Primer on Rust's Most Bovine Data Structure* (2020, updated 2022) ↗](https://thork.net/posts/2020_cows_in_the_wild/) — a readable primer with a lazy `abs` over a `Cow<[i32]>`. Its `Cow<'a, Vec<T>>` wrapper compiles only through the blanket impl, and takes fewer inputs than `Cow<'a, [T]>`: a `Borrowed` there must point at a whole `Vec`.
-- *Rust in Action*, ch. 6, listing 6.3 (p. 182) — `Cow` in code, as the return of `CStr::to_string_lossy`. Learn the `Cow` from it and not the rest: the listing builds a `String` with `String::from_raw_parts` over a `static` array, which `String` then tries to free. On rustc 1.98.0 it prints its line and aborts with `SIGABRT` when `main` returns. Its p. 187 also names `core::ptr::Shared`, which no longer exists; `Rc` and `Arc` hold a `NonNull`.
+- *Rust in Action*, ch. 6, listing 6.3 (p. 182) — `Cow` in code, as the return of `CStr::to_string_lossy`. Learn the `Cow` from it and not the rest: the listing builds a `String` with `String::from_raw_parts` over a `static` array, which `String` then tries to free. On rustc 1.98.0 it prints its line and aborts with `SIGABRT` when `main` returns. Miri names the undefined behaviour, and Linux prints `free(): invalid pointer`: [Listing 6.3, run](../../../36_Pointers/rust_in_action_chapter_6/README.md#listing-63-a-string-that-frees-a-static). Its p. 187 also names `core::ptr::Shared`, which no longer exists; `Rc` and `Arc` hold a `NonNull`.
 
 Two more circulate widely and are not recommended: a LinkedIn article on `Cow<T>` in Rust, which says `String` implements `ToOwned`, that `as_ref()` returns a `Cow`, and that `Cow` costs dynamic dispatch; and chat-generated explanations that describe `Owned` as "the cloned value". Each of those is run on [the claims page](../cow_claims_checked/README.md).
 

@@ -365,6 +365,8 @@ Part 3 — the back edge, and whether Drop runs.
 - [`Rc` ↗](https://doc.rust-lang.org/std/rc/struct.Rc.html) · [`Weak` ↗](https://doc.rust-lang.org/std/rc/struct.Weak.html) · [`RefCell` ↗](https://doc.rust-lang.org/std/cell/struct.RefCell.html)
 - [Step 8 of the `ToOwned` path](../../12_Traits/how_to_learn_to_owned/to_owned_traps/README.md) — `.to_owned()` on an `Rc` or a `Cow` copies the wrapper, not the text
 - [What a smart pointer is](../what_a_smart_pointer_is/README.md) — `Box`, `Rc` and `Arc` as one family
+- [What a smart pointer costs](../../41_Smart_Pointers/what_a_smart_pointer_costs/README.md) — the 24 bytes behind an `Rc<u64>`, and the `free` that waits for the last `Weak`
+- [Smart pointer claims, run](../../41_Smart_Pointers/smart_pointer_claims_checked/README.md) — "raw pointers such as `Rc`" and "single-threaded", checked
 
 ## Po polsku
 

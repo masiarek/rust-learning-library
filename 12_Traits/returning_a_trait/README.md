@@ -91,6 +91,7 @@ A `&dyn Trait` is a **fat pointer**: two words, one to the data and one to the v
 - [What a trait is](../what_a_trait_is/README.md) — the declaration being returned
 - [Nullable pointers](../../17_Option_and_Result/nullable_pointers/README.md) — `Box` in its other role, making a recursive type possible
 - [`String` vs `&str`](../../14_Strings/string_vs_str/README.md) — the same owned/borrowed split, one layer down
+- [Wide pointers](../../36_Pointers/wide_pointers/README.md) — the two words of a `Box<dyn Trait>`, and why this library now says *wide*
 
 ## Po polsku
 

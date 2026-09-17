@@ -87,6 +87,7 @@ Almost every example online writes `fn f(input: &str) -> Cow<str>`. On rustc 1.9
 - Why `"élan"` broke claim 7: [Walking a string](../../../14_Strings/walking_a_string/README.md) and [Four lengths](../../../14_Strings/four_lengths/README.md).
 - The elided lifetime in the warning: [Lifetime annotations](../../../18_Ownership/lifetime_annotations/README.md).
 - Articles and chapters on `Cow`, with what each gets right: [Helpful resources — `Cow`, specifically](../to_owned_reading_list/README.md#cow-specifically).
+- The same kind of page for smart pointers in general: [Smart pointer claims, run](../../../41_Smart_Pointers/smart_pointer_claims_checked/README.md).
 
 **Docs:** [`Cow` ↗](https://doc.rust-lang.org/std/borrow/enum.Cow.html) · [`Cow::to_mut` ↗](https://doc.rust-lang.org/std/borrow/enum.Cow.html#method.to_mut) · [`Rc::make_mut` ↗](https://doc.rust-lang.org/std/rc/struct.Rc.html#method.make_mut)
 

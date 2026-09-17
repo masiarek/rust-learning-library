@@ -295,6 +295,7 @@ fn main() {
 - [Stack and heap](../../18_Ownership/stack_and_heap/README.md) — why a local needs a known size in the first place
 - [`Sized` ↗](https://doc.rust-lang.org/std/marker/trait.Sized.html) · [`?Sized` in the Book ↗](https://doc.rust-lang.org/book/ch20-03-advanced-types.html#dynamically-sized-types-and-the-sized-trait) · [Exotically sized types ↗](https://doc.rust-lang.org/nomicon/exotic-sizes.html)
 - [Step 2 of the `ToOwned` path](../../12_Traits/how_to_learn_to_owned/types_with_no_size/README.md) — why having no size is the reason `ToOwned` exists at all
+- [Wide pointers](../../36_Pointers/wide_pointers/README.md) — the second word is a length for `str`, and a vtable pointer for `dyn Trait`; why *wide* rather than *fat*
 
 ## Po polsku
 

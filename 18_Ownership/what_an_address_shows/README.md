@@ -97,6 +97,8 @@ That is a real claim about memory (`u8` values sit one byte apart), it is checka
 - [The anatomy of a `String`](../../14_Strings/anatomy_of_a_string/README.md) — the three words this page is addressing
 - [A name is not a place](../a_name_is_not_a_place/README.md) — the same distinction from the other side: a binding is not a storage location
 - [Meet the byte](../../19_Numbers/meet_the_byte/README.md) — the unit that distance was measured in
+- [Address, pointer, reference](../../36_Pointers/address_pointer_reference/README.md) — what the number is, and the type and provenance a pointer adds to it
+- [A reference is aligned to its referent](../../36_Pointers/aligned_to_the_referent/README.md) — distances between addresses, used to show a `&u8` may sit at an odd one
 
 ## Po polsku
 

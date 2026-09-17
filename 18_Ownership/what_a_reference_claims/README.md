@@ -148,6 +148,7 @@ The same asymmetry is the whole story behind returning references *out of* a `&m
 - [Borrowed state](../borrowed_state/README.md) — the lock the second claim puts on the referent
 - [`&'static str`](../../14_Strings/static_str/README.md) — the longest lifetime, and why `T: 'static` does not mean "lives forever"
 - [Generics](../../22_Generics/README.md) — where the type-parameter half of this analogy is made properly
+- [Address, pointer, reference](../../36_Pointers/address_pointer_reference/README.md) — the other promises a `&T` makes: aligned, not null, a valid value, no `&mut` beside it
 
 ## Po polsku
 

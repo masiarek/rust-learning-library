@@ -225,6 +225,8 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K205 | [Collatz with a `while` that has to earn its exit — the start that never reaches 1, and the small start whose climb leaves `u32`](25_Control_Flow/while_loops/README.md#practice) | [`while` loops](25_Control_Flow/while_loops/README.md) | 101 → 201 |
 | K206 | [Retry with a budget — a `loop` whose `break` carries a `Result`, and the budget of 0 that sends one request anyway](25_Control_Flow/the_loop_keyword/README.md#practice) | [`loop`](25_Control_Flow/the_loop_keyword/README.md) | 101 → 201 |
 | K207 | [Three ways out of a grid of shelves — the first empty slot with a flag, a label and `find_map`, full shelves with `continue 'shelves`, and what an unlabelled `break` reports](25_Control_Flow/loop_labels/README.md#practice) | [Loop labels](25_Control_Flow/loop_labels/README.md) | 101 → 201 |
+| K208 | [Walk a slice with a raw pointer — start to one past the end, a `// SAFETY:` comment on every read, and the empty slice whose start is never read](36_Pointers/raw_pointers/README.md#practice) | [Raw pointers: `*const T` and `*mut T`](36_Pointers/raw_pointers/README.md) | 201 → 301 |
+| K209 | [A pointer that counts its reads — `Deref` through a `Cell`, and five lines predicted one call at a time](41_Smart_Pointers/what_makes_a_pointer_smart/README.md#practice) | [What makes a pointer smart](41_Smart_Pointers/what_makes_a_pointer_smart/README.md) | 201 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -512,6 +514,14 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K205 · [Collatz with a `while` that has to earn its exit](25_Control_Flow/while_loops/README.md#practice)
 - K206 · [Retry with a budget](25_Control_Flow/the_loop_keyword/README.md#practice)
 - K207 · [Three ways out of a grid of shelves](25_Control_Flow/loop_labels/README.md#practice)
+
+**[Pointers](36_Pointers/README.md)** — 1 kata
+
+- K208 · [Walk a slice with a raw pointer](36_Pointers/raw_pointers/README.md#practice)
+
+**[Smart Pointers](41_Smart_Pointers/README.md)** — 1 kata
+
+- K209 · [A pointer that counts its reads](41_Smart_Pointers/what_makes_a_pointer_smart/README.md#practice)
 
 <!-- by-subject:end -->
 

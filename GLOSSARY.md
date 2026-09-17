@@ -326,7 +326,7 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **`escape_ascii`** — Show a byte slice the way Python shows `b'…'`: each printable ASCII byte as itself, `\t` `\n` `\r` `\\` `\'` `\"` by name, every other byte as `\xNN`. Lossless, ASCII-only, and valid inside a `b"…"` literal — where `{:?}` gives a list of numbers and a `&[u8]` has no `{}` at all. → [Printing bytes](19_Numbers/printing_bytes/README.md)
 
-**Fat pointer** — A reference carrying a second word beside the address: `&str` and `&[T]` add a length (16 bytes on a 64-bit target), `&dyn Trait` adds a vtable pointer. It is why `size_of::<&str>()` is not 8. → [Arrays and slices](26_Collections/arrays_and_slices/README.md), [Meet the byte](19_Numbers/meet_the_byte/README.md)
+**Fat pointer** — The older name for a **wide pointer**, still used in parts of std's docs; the Reference and the Rustonomicon say *wide*. A reference carrying a second word beside the address: `&str` and `&[T]` add a length (16 bytes on a 64-bit target), `&dyn Trait` adds a vtable pointer. It is why `size_of::<&str>()` is not 8. → [Arrays and slices](26_Collections/arrays_and_slices/README.md), [Meet the byte](19_Numbers/meet_the_byte/README.md)
 
 **Shift masking** — With overflow checks off, `a << b` uses `b` modulo the type's bit width, so `1u8 << 8` is `1u8 << 0` — the same expression that panics in a debug build silently returns a wrong answer in release. `checked_shl` is the honest form whenever the shift amount is not a visible literal. → [Meet the byte](19_Numbers/meet_the_byte/README.md)
 
@@ -662,6 +662,18 @@ Short definitions. Every entry links to the page that explains it properly — a
 **Sealed trait** — A public trait with a private supertrait, so other crates can use it but not implement it — the API Guidelines' C-SEALED. `std`'s `Pattern` is closed a different way: it is unstable, so you can pass a `char`, a `&str` or a closure to `find`, but cannot name `Pattern` in a signature of your own on stable Rust. → [Searching without splitting](14_Strings/searching_a_string/README.md) · [Sealed traits, C-SEALED ↗](https://rust-lang.github.io/api-guidelines/future-proofing.html#sealed-traits-protect-against-downstream-implementations-c-sealed)
 
 **`Pin<P>`** — A pointer whose pointee promises not to move — unless its type is `Unpin`, in which case the promise is empty. `str` is `Unpin`, so `Pin<Box<str>>` compiles and guarantees nothing a `Box<str>` did not; `Pin::into_inner` hands the box straight back. Pinning is for values that point into themselves, such as futures, not for text. → [There is no `Move` trait](18_Ownership/no_move_trait/README.md)
+
+**Memory address** — A number naming one byte of a process's virtual address space; `usize` in Rust, obtained from a pointer with `p.addr()`. It has lost the two things a pointer carries: the type of what is there, and provenance. → [Address, pointer, reference](36_Pointers/address_pointer_reference/README.md)
+
+**Raw pointer** — `*const T` or `*mut T`: an address with a type and no promises — it may be null, dangling or misaligned. Safe code may make, cast and compare one; reading, writing, offsetting with `add`, and turning it back into a reference need `unsafe`. → [Raw pointers](36_Pointers/raw_pointers/README.md)
+
+**Provenance** — The permission a pointer carries to access a particular allocation, beside its address. Two pointers with the same address can differ in it, so `ptr::without_provenance(p.addr()) == p` is `true` and reading through the left side is still undefined behaviour. → [Address, pointer, reference](36_Pointers/address_pointer_reference/README.md#a-pointer-is-more-than-its-address-provenance)
+
+**Wide pointer** — A pointer to an unsized type, two words: the address and the metadata — a length for `&[T]` and `&str`, a vtable pointer for `&dyn Trait`. Raw pointers and smart pointers to unsized types are wide too (`*const [u8]`, `Box<str>`). Also called a *fat pointer*. → [Wide pointers](36_Pointers/wide_pointers/README.md)
+
+**Padding** — Unused bytes the compiler puts between a struct's fields, and after the last, so every field sits at a multiple of its own alignment and the size is a multiple of the struct's. `#[repr(C)]` keeps the written field order; the default layout may reorder to need less; `#[repr(packed)]` removes it, and then a reference to a field is `E0793`. → [A reference is aligned to its referent](36_Pointers/aligned_to_the_referent/README.md)
+
+**Smart pointer** — A type that acts like a pointer through `Deref` and usually does a job in `Drop`: `Box`, `Rc`, `Arc`, `String`, `Vec`, `Cow`, the `Ref` and `MutexGuard` guards. Most own what they point at; `Cow::Borrowed` and the guards do not, and `Weak` has no `Deref` at all. → [What makes a pointer smart](41_Smart_Pointers/what_makes_a_pointer_smart/README.md)
 
 **`unicode-segmentation`** — Grapheme-cluster, word and sentence boundaries by Unicode's UAX #29 — the "how many characters does a reader see" answer, which `std` does not give because `chars()` counts scalar values. → [The string crates](14_Strings/string_crates/README.md) · [Four lengths, and which one the other system means](14_Strings/four_lengths/README.md)
 

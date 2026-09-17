@@ -316,6 +316,7 @@ rustc --edition 2024 09_Advanced/the_global_allocator/examples/the_global_alloca
 - [`Cow`: borrow until somebody writes](../../18_Ownership/clone_on_write/README.md) — not allocating at all, which beats allocating cheaply
 - [What an address shows](../../18_Ownership/what_an_address_shows/README.md) — the other way to watch memory, from the value's side
 - [`std::alloc` ↗](https://doc.rust-lang.org/std/alloc/) · [`GlobalAlloc` ↗](https://doc.rust-lang.org/std/alloc/trait.GlobalAlloc.html) — the module and the contract
+- [What a smart pointer costs](../../41_Smart_Pointers/what_a_smart_pointer_costs/README.md) — the same counting allocator on `Box`, `Rc`, `Arc`, `String` and `RefCell`
 
 ## Po polsku
 

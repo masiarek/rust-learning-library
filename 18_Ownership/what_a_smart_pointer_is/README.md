@@ -6,6 +6,8 @@
 
 **One line:** A smart pointer is a type that owns or manages what it points at and still behaves like a reference — [`Deref` ↗](https://doc.rust-lang.org/std/ops/trait.Deref.html) makes `*p` and method calls reach the target, and `Drop` runs its cleanup — so `Box`, `Rc`, `Arc`, `String` and a `MutexGuard` are all the same idea with different rules about who owns what.
 
+Two finished lessons already answer much of this outline: [What makes a pointer smart](../../41_Smart_Pointers/what_makes_a_pointer_smart/README.md) (a hand-written smart pointer with `Deref` and `Drop`, the `Deref` targets of the family, `String` and `Vec` included) and [What a smart pointer costs](../../41_Smart_Pointers/what_a_smart_pointer_costs/README.md). The [Smart pointers](../../41_Smart_Pointers/README.md) section maps the rest.
+
 ## What it has to cover
 
 - The two traits that make a type a smart pointer, with one hand-written `MyBox<T>` implementing both and printing when each runs
@@ -33,6 +35,7 @@ Implementing `Deref` on a newtype to inherit the inner type's methods. It compil
 - [Coercion](../../29_Conversion/coercion/README.md) — deref coercion as one of the conversions the compiler does for you
 - [Drop and RAII](../../12_Traits/drop_and_raii/README.md) — the other trait
 - [Stack and heap](../stack_and_heap/README.md) — where the pointer lives and where its target does
+- [Smart pointers](../../41_Smart_Pointers/README.md) — the section: `Deref` and `Drop` measured, the costs counted, and claims about smart pointers run
 - [The Book, chapter 15 ↗](https://doc.rust-lang.org/book/ch15-00-smart-pointers.html)
 
 ## Po polsku

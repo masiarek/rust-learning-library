@@ -114,6 +114,7 @@ No `*` anywhere, and three types involved. This is also where the search's conve
 - [Reborrowing](../../18_Ownership/reborrowing/README.md) — the receiver the search inserts is a reborrow, not a move
 - [`String` vs `&str`](../../14_Strings/string_vs_str/README.md) — the single most-used rung of this ladder
 - [Step 5 of the `ToOwned` path](../how_to_learn_to_owned/the_dot_picks_first/README.md) — `.clone()` and `.to_owned()` walked candidate by candidate, and where a deref does not happen
+- [What makes a pointer smart](../../41_Smart_Pointers/what_makes_a_pointer_smart/README.md) — a `Deref` of your own, and a kata that counts the derefs one method call makes
 
 ## Sources
 

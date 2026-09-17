@@ -371,6 +371,25 @@ NAV_ORDER: dict[str, list[str]] = {
         "a_retry_attribute",
         "a_state_machine_derive",
     ],
+    # Ordered as the section README reads them: the three layers first, then
+    # what a pointer's value holds (the second word) and where it may point
+    # (alignment), then the pointer that promises nothing -- and last the
+    # book chapter the section was checked against.
+    "36_Pointers": [
+        "README.md",
+        "address_pointer_reference",
+        "wide_pointers",
+        "aligned_to_the_referent",
+        "raw_pointers",
+        "rust_in_action_chapter_6",
+    ],
+    # The two traits before what the jobs behind them cost, and the claims last.
+    "41_Smart_Pointers": [
+        "README.md",
+        "what_makes_a_pointer_smart",
+        "what_a_smart_pointer_costs",
+        "smart_pointer_claims_checked",
+    ],
     "34_Templates": [
         "README.md",
         "training",
@@ -1318,6 +1337,13 @@ LABELS = {
     "and_or_claims_checked": "`and` and `or` claims, run",
     "comparing_numbers_claims_checked": "Rust in Action §2.3.3, run",
     "comparing_two_number_types": "Comparing two number types",
+    # 36_Pointers and 41_Smart_Pointers -- clean() drops the commas, the book
+    # title's capitals and the code spans.
+    "address_pointer_reference": "Address, pointer, reference",
+    "aligned_to_the_referent": "Alignment",
+    "raw_pointers": "Raw pointers",
+    "rust_in_action_chapter_6": "Rust in Action, chapter 6",
+    "smart_pointer_claims_checked": "Smart pointer claims, run",
     "to_owned_reading_list": "Helpful resources",
     "implementing_to_owned": "Implementing `ToOwned`",
     "reading_the_to_owned_docs": "Reading the `ToOwned` docs",

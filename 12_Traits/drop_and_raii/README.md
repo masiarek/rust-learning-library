@@ -376,6 +376,7 @@ fn main() {
 - [`Box`](../../26_Collections/the_box/README.md) — the recursive drop that can overflow the stack
 - [Marker traits](../marker_traits/README.md) — why a type that implements `Drop` cannot also be `Copy`
 - [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md) — the unwind that still runs every `drop` on the way out
+- [What makes a pointer smart](../../41_Smart_Pointers/what_makes_a_pointer_smart/README.md) — `Drop` as the half of a smart pointer that does its job
 
 ## Sources
 

@@ -284,6 +284,7 @@ you write the conversion yourself.
 - [Arrays and slices](../../26_Collections/arrays_and_slices/README.md) — the unsizing coercion, from the array's side
 - [Static vs dynamic dispatch](../../12_Traits/static_vs_dynamic_dispatch/README.md) — where `Box<T>` → `Box<dyn Trait>` leads
 - [Method resolution](../../12_Traits/method_resolution/README.md) — the receiver-side rule this page separates itself from, in full
+- [What makes a pointer smart](../../41_Smart_Pointers/what_makes_a_pointer_smart/README.md) — deref coercion through a smart pointer you write yourself
 
 ## Po polsku
 

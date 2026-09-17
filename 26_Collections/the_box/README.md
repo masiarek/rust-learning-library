@@ -329,6 +329,8 @@ fn main() {
 - [`Vec::into_boxed_slice`](../vec_methods/vec_into_boxed_slice/README.md) — the usual way to get a `Box<[T]>`, the other fat box
 - [The third owned form](../../14_Strings/boxed_str/README.md) — `Box<str>`, the same shape over UTF-8
 - [What a smart pointer is](../../18_Ownership/what_a_smart_pointer_is/README.md) — `Box`, `Rc` and `Arc` as one family
+- [What makes a pointer smart](../../41_Smart_Pointers/what_makes_a_pointer_smart/README.md) — `Box` among the other smart pointers, and the `Deref` and `Drop` they share
+- [What a smart pointer costs](../../41_Smart_Pointers/what_a_smart_pointer_costs/README.md) — the 8-byte allocation `Box::new(7u64)` makes, counted beside `Rc`'s 24
 
 ## Sources
 

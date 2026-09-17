@@ -379,6 +379,8 @@ fn main() {
 - [Arrays and slices](../../26_Collections/arrays_and_slices/README.md) — what `from_raw_parts_mut` is building
 - [Modules and visibility](../../27_Modules/modules_and_visibility/README.md) — why the module is the audit unit
 - [`const` and `static`](../../27_Modules/const_and_static/README.md) — `static mut`, and what replaced it
+- [Raw pointers](../../36_Pointers/raw_pointers/README.md) — what safe code may do with a pointer, and the aliasing rules that stay in force when the borrow checker is not looking
+- [A reference is aligned to its referent](../../36_Pointers/aligned_to_the_referent/README.md) — the promise a misaligned `&*p` breaks, in debug, `-O` and Miri
 
 ## Sources
 

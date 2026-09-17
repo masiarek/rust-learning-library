@@ -27,6 +27,8 @@
 - [Lock poisoning](../mutex_poisoning/README.md) — the threaded counterpart, and what its `Result` is telling you
 - [What `unsafe` turns off](../what_unsafe_turns_off/README.md) — the `UnsafeCell` underneath, and why a safe API over a small unsafe core is the pattern
 - [`RefCell` ↗](https://doc.rust-lang.org/std/cell/struct.RefCell.html) · [Comprehensive Rust: Interior Mutability ↗](https://google.github.io/comprehensive-rust/borrowing/interior-mutability.html)
+- [What a smart pointer costs](../../41_Smart_Pointers/what_a_smart_pointer_costs/README.md) — `RefCell<i32>` is 16 bytes where `Cell<i32>` is 4, and the borrow flag checked at run time
+- [Smart pointers](../../41_Smart_Pointers/README.md) — the section `Rc<RefCell<T>>` is half of, with a video walkthrough of the pair
 
 ## Po polsku
 

@@ -82,6 +82,7 @@ The last line is worth a second look: two `&str` start at the same byte and stil
 - [Stack and heap — what `size_of` can see, and what it cannot](../../../18_Ownership/stack_and_heap/README.md#what-size_of-can-see-and-what-it-cannot)
 - [The third owned form](../../../14_Strings/boxed_str/README.md): `Box<str>`, the owned pointer to an unsized type
 - [Static vs dynamic dispatch](../../static_vs_dynamic_dispatch/README.md), where the second word is a vtable instead of a length
+- [Wide pointers](../../../36_Pointers/wide_pointers/README.md) — both kinds of second word measured, raw pointers included, and why *wide* rather than *fat*
 
 **Docs:** [`Sized` ↗](https://doc.rust-lang.org/std/marker/trait.Sized.html) · [Dynamically sized types ↗](https://doc.rust-lang.org/reference/dynamically-sized-types.html), in the Reference · [Exotically sized types ↗](https://doc.rust-lang.org/nomicon/exotic-sizes.html), in the Rustonomicon
 

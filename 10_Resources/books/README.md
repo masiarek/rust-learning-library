@@ -208,17 +208,20 @@ The **3rd edition** of The Book is a genuine revision rather than a reprint: bui
 
 Two of the four dependency failures are worth the minute they take, because they are two different ways code that compiled in 2021 stops compiling. `num-bigint` 0.3.0 calls `.div_ceil(&u64::from(bits))` on a `u64`, meaning `num-integer`'s `Integer::div_ceil(&self, other: &Self)`; std gained an inherent `u64::div_ceil` in 1.73.0, method resolution finds the inherent method first, and std's takes its argument by value — so a new std method breaks an old crate that never changed a line. `socket2` 0.3.9 `transmute`s std's `SocketAddrV4` into C's `sockaddr_in`, betting on a layout std never promised: on 1.98.0 the one is 48 bits and the other 128, and the compiler refuses the transmute outright. `transmute` checks sizes at compile time, so the two matched when the crate was written; std has since shrunk its type, which it was always free to do.
 
-The chapter 1 refusals are the Rust half of three C programs this library compiles and lets misbehave — [Use-after-free](../../31_C_and_Cpp/use_after_free/README.md), [Iterator invalidation](../../31_C_and_Cpp/iterator_invalidation/README.md) and [Data races](../../31_C_and_Cpp/data_races/README.md). Five more chapters meet a lesson here:
+The chapter 1 refusals are the Rust half of three C programs this library compiles and lets misbehave — [Use-after-free](../../31_C_and_Cpp/use_after_free/README.md), [Iterator invalidation](../../31_C_and_Cpp/iterator_invalidation/README.md) and [Data races](../../31_C_and_Cpp/data_races/README.md). Six more chapters meet a lesson here:
 
 | Book folder | Read alongside |
 |---|---|
 | `ch2` — `ok.rs` moved into a folder, `cargo init`, then `cargo run -v` | [From one `.rs` file to a Cargo project](../../05_Tooling/from_rustc_to_cargo/README.md) · [What `cargo run -v` shows](../../05_Tooling/from_rustc_to_cargo/what_cargo_passes_rustc/README.md) — the steps re-run on 1.98, with three traps they do not mention |
 | `ch2` — listings 2.7 and 2.8 from §2.4, a `while` that counts until a clock says stop and a `match` over a haystack | [Flow control](../../25_Control_Flow/flow_control/README.md) · [§2.4's claims, run](../../25_Control_Flow/flow_control_claims_checked/README.md): of twenty-one, twelve hold as written, four with a condition, and five need a correction |
 | `ch5` — an `f32` taken apart into sign, exponent and mantissa | [What a float actually stores](../../19_Numbers/what_a_float_stores/README.md) |
+| `ch6` — pointers, `Box`, and the memory-scanning listings | [Pointers](../../36_Pointers/README.md) · [Smart pointers](../../41_Smart_Pointers/README.md) |
 | `ch7-fview` — a hex viewer, sixteen bytes to a line | [A file is bytes](../../04_Files/a_file_is_bytes/README.md) · [Byte tools](../../11_Unix/byte_tools/README.md) |
 | `ch9` — clocks, from `chrono::Local::now` to an NTP client | [Two clocks](../../33_Time_and_Benchmarking/two_clocks/README.md) |
 | `ch10` — threads, and channels from `crossbeam` | [Spawning a thread](../../09_Advanced/spawning_a_thread/README.md) · [Channels](../../09_Advanced/channels/README.md) |
 | `ch12` — signal handlers through the `libc` crate | [Catching a signal](../../09_Advanced/catching_a_signal/README.md) |
+
+Chapter 6 is the one whose text needs checking as well as its code: its alignment, wide-pointer and `Option`-size claims do not hold on 1.98.0, and listing 6.3 — not in the repository, only in the book — builds a `String` over a `static`, which is undefined behaviour. [*Rust in Action*, chapter 6: pointer claims, run](../../36_Pointers/rust_in_action_chapter_6/README.md) runs each one, and [Smart pointer claims, run](../../41_Smart_Pointers/smart_pointer_claims_checked/README.md#from-rust-in-action-623) checks the §6.2.3 building blocks.
 
 **Command-Line Rust** rebuilds a dozen coreutils — `head`, `cut`, `wc`, `find` — each with a test suite written first. As a bridge from "I have read The Book" to "I have shipped something", it is the most practical exercise book in print. The `clap` API moved after publication, so expect to translate the argument-parsing code; the author's code repository tracks a 2024 printing.
 

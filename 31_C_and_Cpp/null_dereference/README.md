@@ -237,6 +237,7 @@ THE HABITS THAT REPLACE THE NULL CHECK
 - [`Some` and `None`](../../17_Option_and_Result/some_and_none/README.md) — the type itself, from the beginning
 - [Partial functions](../../17_Option_and_Result/partial_functions/README.md) — the idea underneath: "no answer" as one of the answers
 - [The bugs Rust is a reply to](../README.md) — the other eight
+- [Raw pointers](../../36_Pointers/raw_pointers/README.md) — reading address 0 and address 1 from Rust: a debug-build panic, a segfault, and what Miri says
 
 ## Po polsku
 

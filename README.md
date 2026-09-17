@@ -96,6 +96,8 @@ The sidebar is sorted **alphabetically**, because that is how you find a section
 | 31 | [Time and benchmarking](33_Time_and_Benchmarking/README.md) | Two clocks, a duration that cannot go negative, and the hint that keeps a benchmark honest — the Rust twin of the C++ library's first chapter; read it any time after Compilers |
 | 32 | [Async](35_Async/README.md) | Futures as std defines them, then a fifteen-chapter Tokio course that builds a small database server — stubs; read it after Advanced |
 | 33 | [Procedural macros](37_Procedural_Macros/README.md) | Rust that runs on your Rust: derive, function-like and attribute macros with `syn`, `quote` and `darling`, from reading `thiserror`'s expansion to a derive that rejects a bad state transition while compiling — read it any time after Traits and Generics |
+| 34 | [Pointers](36_Pointers/README.md) | Address, pointer, reference: what each layer adds, the second word a wide pointer carries, alignment, and raw pointers — checked against *Rust in Action* chapter 6; read it any time after Ownership |
+| 35 | [Smart pointers](41_Smart_Pointers/README.md) | `Deref`, `Drop`, and what `Box`, `Rc` and `RefCell` cost at run time — read it after Pointers |
 
 Nothing enforces this order and no page depends on it; skipping around is fine. It is here because a sidebar can be sorted one way only, and A–Z answers the more common question.
 
