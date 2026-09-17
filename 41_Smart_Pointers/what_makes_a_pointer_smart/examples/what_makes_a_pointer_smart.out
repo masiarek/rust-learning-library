@@ -1,0 +1,32 @@
+1. Deref: a struct that acts like a pointer
+   (*greeting).len()         5   explicit: *greeting is the String
+   greeting.len()            5   the method search derefs for you
+   greeting.to_uppercase()   HELLO   a str method, two derefs away
+   shout(&greeting)          HELLO   &Loud<String> coerced to &str at the call
+   after push_str via DerefMut: "hello, world"
+
+2. Drop: something happens when it goes
+   *temp + 1 = 42
+   end of block:
+   drop: temp lets go of its value
+   drop(greeting) before the end of main:
+   drop: greeting lets go of its value
+
+3. std's smart pointers, and what each derefs to
+   String     -> str
+   Vec<u8>    -> [u8]
+   Box<u8>    -> u8
+   Rc<u64>    -> u64
+   Cow<str>   -> str
+   Ref<i32>   -> i32
+
+4. "Owns what it points at" is usually true, and not always
+   Cow::Borrowed points into `text`, which it does not own: true
+   while the Ref guard lives, try_borrow_mut is_err: true
+   after drop(guard),         try_borrow_mut is_ok:  true
+   The guard never owned the 5. Its Drop gives the borrow back.
+
+5. Weak: a pointer to shared data with no Deref at all
+   weak.upgrade()                    Some(7)
+   after the last Rc is dropped      None
+   `*weak` does not compile. You ask for an Rc, and may get None.

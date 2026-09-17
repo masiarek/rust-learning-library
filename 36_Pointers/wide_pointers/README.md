@@ -1,0 +1,148 @@
+# Wide pointers
+
+[Pointers](../README.md) › **Wide pointers**
+
+**Level:** 201 · working knowledge
+
+**One line:** A pointer to a type whose size the compiler does not know is two words — the address and a second word called the *metadata* — and that second word is a **length** for slices and `str`, and a **pointer to a vtable** for `dyn Trait`, never just "an integer".
+
+```rust
+use std::fmt::Debug;
+use std::mem::size_of;
+
+fn main() {
+    println!("{}", size_of::<&[u8; 10]>());   // 8   the 10 is in the type
+    println!("{}", size_of::<&[u8]>());       // 16  address + length
+    println!("{}", size_of::<&dyn Debug>());  // 16  address + vtable pointer
+}
+```
+
+## Why "wide", not "fat"
+
+Both names mean the same thing. The Reference and the Rustonomicon say **wide pointer**; the std, core and alloc API docs shipped with 1.98.0 still use both — "fat pointer" in 12 files, "wide pointer" in 7. This library's older pages say *fat* ([`str` is unsized](../../14_Strings/str_is_unsized/README.md), [Static vs dynamic dispatch](../../12_Traits/static_vs_dynamic_dispatch/README.md)); new pages say *wide*, and the [glossary](../../GLOSSARY.md) lists both. The opposite is a **thin** pointer: the address alone.
+
+## The size moved out of the type, so it moved into the pointer
+
+A `[u8; 10]` has its length in its type, so `&[u8; 10]` needs one word. A `[u8]` does not — `&NAME[2..7]` and `&NAME[0..10]` have the same type — so the length has to travel with the pointer. That is the whole reason a pointer is ever wide, and [Step 2: Some types have no size](../../12_Traits/how_to_learn_to_owned/types_with_no_size/README.md) is the long version.
+
+Which is why the drawing of *Rust in Action*'s listing 6.1 needs care: the book's figure 6.3 gives `b` a length field and an address field, but the listing's `b` is `&B` where `B: [u8; 10]` — a thin pointer, and listing 6.2's own output says so, 8 bytes. The figure is drawing the `String` of listing 6.3, as the book goes on to say. A `Box<[u8]>` in listing 6.2 is the one that prints 16.
+
+## The second word is not always a length
+
+| Pointer to | Second word | Read it with |
+|---|---|---|
+| `[T]` | the number of **elements** | `.len()`, on `&[T]` and on `*const [T]` |
+| `str` | the number of **bytes** | `.len()` |
+| `dyn Trait` | a pointer to the **vtable** | `size_of_val`, `align_of_val`, and every method call |
+| a `struct` whose last field is unsized | whatever that last field needs | — |
+
+*Rust in Action* describes a reference to a dynamically sized type as a pointer and an integer, and says Rust keeps a length alongside the pointer. That is true of the first two rows. For a trait object the second word is an address, of a table std's [`DynMetadata` ↗](https://doc.rust-lang.org/std/ptr/struct.DynMetadata.html) documents as holding the type's size, its alignment, a pointer to its `drop_in_place`, and pointers to the method implementations. Section 3 of the run proves the table is there: the same type `&dyn Debug` reports size 4 for a `u32` and 24 for a `String`, and neither number is stored in the value.
+
+## A raw pointer is wide too
+
+The metadata belongs to the pointee's type, not to the promises, so `*const [u8]` and `*const dyn Debug` are 16 bytes like their references, and `raw.len()` (stable since 1.79.0) reads the length without touching the bytes.
+
+Casting to a thin pointer throws the second word away — the Reference calls it discarding the metadata ([`as` on pointers ↗](https://doc.rust-lang.org/reference/expressions/operator-expr.html#r-expr.as.pointer.discard-metadata)). `raw as *const u8` keeps the address and nothing in it remembers there were 5 bytes. The C habit of passing `(ptr, len)` as two arguments is that same pair, taken apart by hand.
+
+## `{:p}` prints both words
+
+On rustc 1.98.0, formatting a wide pointer with `{:p}` prints the metadata as well:
+
+```rust
+use std::fmt::Debug;
+
+fn main() {
+    let text: &str = "hello";
+    let bytes = [1u8, 2, 3];
+    let shown: &dyn Debug = &5u32;
+    println!("&str \"hello\"   {:p}", text);
+    println!("&[u8] of 3     {:p}", &bytes[..]);
+    println!("&dyn Debug     {:p}", shown);
+    println!("&[u8; 3]       {:p}", &bytes);
+}
+```
+
+```text title="One run, x86-64 macOS, rustc 1.98.0 — the addresses differ on every run"
+&str "hello"   Pointer { addr: 0x10f007d80, metadata: 5 }
+&[u8] of 3     Pointer { addr: 0x7ff7b0f37785, metadata: 3 }
+&dyn Debug     Pointer { addr: 0x10f007d90, metadata: DynMetadata(0x10f00f260) }
+&[u8; 3]       0x7ff7b0f37785
+```
+
+The `DynMetadata` line prints the vtable's address, where a slice prints its length. *Rust in Action*'s `memscan-3` listing formats a `*const str` this way, and on 1.98.0 its `local_str` line reads `Pointer { addr: …, metadata: 1 }` where the book's run shows a bare address. Section 5 of the verified run checks the shape without printing an address.
+
+## The verified output
+
+<!-- output:wide_pointers -->
+*Verified output of [`wide_pointers.rs`](examples/wide_pointers.rs) — regenerated by `tools/run_examples.py`, never hand-typed.*
+
+```text
+1. Thin: the address and nothing else
+   &u8               8 bytes
+   &[u8; 10]         8 bytes
+   &String           8 bytes
+   *const u8         8 bytes
+   Box<u64>          8 bytes
+   `&[u8; 10]` is thin: the 10 is part of the TYPE, so the pointer
+   has nothing more to carry.
+
+2. Wide, second word a length
+   &[u8]            16 bytes
+   &str             16 bytes
+   *const [u8]      16 bytes
+   Box<[u8]>        16 bytes
+   Rc<str>          16 bytes
+   &NAME       as &[u8; 10]  8 bytes
+   &NAME[2..7] as &[u8]      16 bytes: the length left the type and joined the pointer
+   raw.len() = 5   read from the pointer, not from the bytes
+
+3. Wide, second word a vtable
+   &dyn Debug       16 bytes, 2 words
+   Box<dyn Debug>   16 bytes
+   size_of_val(dn) = 4   size_of_val(ds) = 24
+   Same type, &dyn Debug, two different sizes: the size is looked up
+   in the vtable the second word points at. It is not a length.
+   first word is the address of n: true
+
+4. Casting to a thin pointer drops the second word
+   raw as *const u8: 8 bytes, same address: true
+   The length is gone. Nothing in `thin` remembers there were 5 bytes.
+
+5. {:p} shows the second word
+   {:p} of *const [u8] mentions `metadata: 5`: true
+   {:p} of *const u8 has no metadata part:     true
+
+6. The niche survives the second word
+   Option<&[u8]> 16 bytes   Option<&dyn Debug> 16 bytes
+```
+<!-- /output -->
+
+## If you are coming from another language
+
+- **C.** There is no wide pointer; there is a pointer and a separate `size_t len` argument, and nothing ties them together. `char *` strings use a third convention, the NUL at the end ([A string is bytes up to a NUL ↗](https://masiarek.github.io/c-learning-library/03_Strings/a_string_is_bytes_up_to_a_nul/index.html), in the C learning library), which is what [`CStr`](../../09_Advanced/calling_c/README.md) reads. Rust's `&[T]` is the `(ptr, len)` pair made into one value that cannot be split by accident.
+- **C++.** `std::span<T>` and `std::string_view` are wide pointers — pointer plus length — as library types. The vtable is where C++ differs: a C++ object with virtual functions carries its own vtable pointer inside the object, so `Base*` stays thin. Rust puts the vtable pointer in the *pointer*, so a `u32` has no vtable slot until you make a `&dyn Debug` to it.
+- **Go.** A slice header is three words (pointer, length, capacity) — the size of a Rust `Vec`, not of a `&[T]` — and an interface value is two words, a type/method table and a data pointer, the same layout as `&dyn Trait`.
+- **Python.** `memoryview` is the nearest thing to `&[u8]`: a view that knows its length without copying the bytes.
+
+## See also
+
+- [Address, pointer, reference](../address_pointer_reference/README.md) — the thin case, and what the type adds to an address
+- [`str` is unsized](../../14_Strings/str_is_unsized/README.md) — the length word, for text
+- [Arrays and slices](../../26_Collections/arrays_and_slices/README.md) — the length moving from the type into the value
+- [Returning a trait](../../12_Traits/returning_a_trait/README.md) and [Static vs dynamic dispatch](../../12_Traits/static_vs_dynamic_dispatch/README.md) — the vtable word, used
+- [The third owned form: `Box<str>`, `Rc<str>`, `Arc<str>`](../../14_Strings/boxed_str/README.md) — smart pointers that are wide
+- [*Rust in Action*, chapter 6, run](../rust_in_action_chapter_6/README.md) — listings 6.1 and 6.2, and the "pointer and an integer" claim
+
+## Sources
+
+The Reference's [dynamically sized types ↗](https://doc.rust-lang.org/reference/dynamically-sized-types.html) and [pointer and reference layout ↗](https://doc.rust-lang.org/reference/type-layout.html#pointers-and-references-layout); the Rustonomicon's [exotically sized types ↗](https://doc.rust-lang.org/nomicon/exotic-sizes.html); std's [`DynMetadata` ↗](https://doc.rust-lang.org/std/ptr/struct.DynMetadata.html). The fat/wide counts are `grep -rli` over `std`, `core`, `alloc`, `reference` and `nomicon` in the 1.98.0 `rust-docs` component.
+
+## Po polsku
+
+Wskaźnik do typu, którego rozmiaru kompilator nie zna (`[T]`, `str`, `dyn Trait`), zajmuje **dwa słowa**: adres i tak zwane metadane. Ta strona mówi o nim **wskaźnik szeroki** (*wide pointer*), jak Reference i Rustonomicon; starsza nazwa, *fat pointer*, znaczy to samo i wciąż pojawia się w dokumentacji std.
+
+Drugie słowo to **długość** dla wycinków i `str`, ale dla obiektu cechy (`dyn Trait`) to **wskaźnik do vtable** — tablicy z rozmiarem, wyrównaniem, funkcją niszczącą i metodami. Stąd `size_of_val` na `&dyn Debug` zwraca 4 dla `u32` i 24 dla `String`, choć typ jest ten sam. Stwierdzenie z *Rust in Action*, że to „wskaźnik i liczba całkowita”, jest więc prawdziwe tylko w połowie.
+
+`&[u8; 10]` jest **wąski** (*thin*): długość siedzi w typie. Rzutowanie szerokiego wskaźnika na wąski (`as *const u8`) gubi drugie słowo. A `{:p}` na rustc 1.98.0 wypisuje oba: `Pointer { addr: …, metadata: 5 }`.
+
+**Szukaj po polsku:** wskaźnik szeroki · fat pointer Rust · typy o dynamicznym rozmiarze · `rust wide pointer metadata` · `rust vtable dyn trait size`

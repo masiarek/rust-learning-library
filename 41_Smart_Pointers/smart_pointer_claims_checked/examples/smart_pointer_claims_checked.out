@@ -1,0 +1,38 @@
+1. "A compile-time construct the compiler boils away"
+   strong_count before clone 1, after 2
+   RefCell borrow_mut while borrowed: Err(BorrowMutError)
+   A count that changes and a borrow refused at run time are state the
+   program carries. The allocations are counted on the costs page.
+
+2. "String and Vec<T> are smart pointers"
+   String derefs to str, Vec<u8> to [u8]
+   needs_drop: String true, Vec<u8> true
+   String: 'static true, Vec<u8>: 'static true
+   Deref and Drop: smart pointers in the sense std's Deref docs use.
+   Neither has a lifetime parameter, so the buffer is not held by a
+   reference: std stores a raw pointer (a NonNull) and frees it in Drop.
+
+3. "A smart pointer owns the data it refers to"
+   Cow::Borrowed(&text) is Borrowed: true
+   a Weak outliving its value: upgrade() = None
+   Cow::Borrowed owns nothing and a Weak keeps nothing alive; The Book
+   says smart pointers own their data "in many cases".
+
+4. "Some raw pointers, such as Rc<T>, offer shared ownership"
+   Rc::as_ptr(&counted) is a *const u8
+   needs_drop: Rc<u8> true, *const u8 false
+   size_of Option<Rc<u8>> 8, Option<*const u8> 16
+   Rc is a smart pointer built on a NonNull. A raw pointer is what
+   Rc::as_ptr hands you: no count, no drop, and nullable.
+
+5. "Use a smart pointer in place of its referent without fuss"
+   boxed.checked_add(1)  Some(42)   a method: found through Deref
+   *boxed + 1            42         an operator: needs the *
+   `boxed + 1` is E0369. Method calls and coercion sites deref for you;
+   operators and patterns do not.
+
+6. Rc is "single-threaded"; Arc is the one that crosses
+   thread read Arc<String>: len 4
+   strong_count after join: 1
+   The same spawn with an Rc is E0277: Rc<String> cannot be sent
+   between threads safely.

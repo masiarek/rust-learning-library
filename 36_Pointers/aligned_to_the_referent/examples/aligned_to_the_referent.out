@@ -1,0 +1,36 @@
+1. Each type has its own alignment
+   align_of::<u8>()         = 1
+   align_of::<[u8; 10]>()   = 1
+   align_of::<u16>()        = 2
+   align_of::<u32>()        = 4
+   align_of::<[u32; 3]>()   = 4
+   align_of::<u64>()        = 8
+   align_of::<usize>()      = 8
+   align_of::<&u8>()        = 8
+   A &u8 is itself 8-aligned; the u8 it points at needs only 1.
+
+2. So a &u8 may sit at any address
+   &bytes[1] - &bytes[0] = 1
+   at least one of the two is not a multiple of 8: true
+   and both are perfectly good references.
+
+3. Every reference meets ITS type's alignment
+   (&small as *const u16).is_aligned() true
+   (&mid   as *const u32).is_aligned() true
+   (&big   as *const u64).is_aligned() true
+
+4. Padding is how a struct keeps each field aligned
+   #[repr(C)]  HeaderC  size 12  tag @0 count @4 flag @8
+   repr(Rust)  Header   size  8  tag @4 count @0 flag @5
+   repr(C) keeps the written order: 3 bytes of padding before count, 3
+   after flag. Rust's default layout may reorder, and on rustc 1.98.0 it
+   put count first and needs only 2 bytes of padding.
+
+5. #[repr(packed)] removes the padding, and with it the alignment
+   Packed  size 5  align 1  count @1
+   &raw const ...count  is_aligned() false
+   place.read_unaligned()  = 42
+   { boxed.0.count } copied out = 42
+   A &u32 there would break the promise every &u32 makes, so rustc
+   refuses to create one; the raw pointer and read_unaligned do not
+   promise alignment, so they are allowed.

@@ -1,0 +1,10 @@
+Reads counted after each line:
+  name.len()             1
+  name.to_uppercase()    2
+  takes_str(&name)       3
+  &*name                 4
+  &name                  4
+
+Each line that reads through the pointer added one call to deref, and
+`&name`, which only borrows the pointer, added none. The second hop in
+to_uppercase and takes_str, String -> str, is String's Deref, not ours.

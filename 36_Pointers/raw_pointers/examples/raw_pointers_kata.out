@@ -1,0 +1,15 @@
+Walking a slice with a raw pointer:
+  [10, 20, 30] by pointer 60   by index 60   iter().sum() 60
+  []           by pointer  0   by index  0   iter().sum()  0
+  [7]          by pointer  7   by index  7   iter().sum()  7
+
+The empty slice is the case to think about:
+  start == one-past-the-end  true
+  as_ptr() on an empty slice is never null (rustc's useless_ptr_null_checks
+  lint says so if you test it), but it points at no element. The loop
+  body never runs, so that start is never read; reading it would be
+  undefined behaviour.
+
+What the unsafe version bought: nothing here. std's slice::Iter holds
+the same pair, a pointer to the next element and one past the end,
+and std wrote the SAFETY argument once.

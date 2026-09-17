@@ -1,0 +1,42 @@
+1. The pointer itself: one word, and the niche is kept
+   *const u64         8 bytes
+   Box<u64>           8 bytes
+   Rc<u64>            8 bytes
+   Arc<u64>           8 bytes
+   Weak<u64>          8 bytes
+   Option<Rc<u64>>    8 bytes
+   This is the zero-cost part: the handle is no bigger than the raw
+   pointer you would have kept by hand.
+
+2. Making one: an allocation, sized by what is stored beside the value
+   Box::new(7u64)                     alloc 1  free 0  bytes  8
+   Rc::new(7u64)                      alloc 1  free 0  bytes 24
+   Arc::new(7u64)                     alloc 1  free 0  bytes 24
+   String::from("hello")              alloc 1  free 0  bytes  5
+   Vec::<u32>::with_capacity(4)       alloc 1  free 0  bytes 16
+   Cow::Borrowed("hello")             alloc 0  free 0  bytes  0
+   RefCell::new(5i32)                 alloc 0  free 0  bytes  0
+   Box asks for the u64 alone. Rc and Arc ask for 24: a strong count,
+   a weak count, then the u64. The two that allocate nothing are the
+   two that store nothing on the heap.
+
+3. Sharing one: no allocation, but a count changes at run time
+   Rc::clone(&shared)                 alloc 0  free 0  bytes  0
+   Rc::downgrade(&shared)             alloc 0  free 0  bytes  0
+   strong_count 2   weak_count 1
+
+4. Letting go: only the last strong owner drops the value
+   drop(second)                       alloc 0  free 0  bytes  0
+   strong_count 1
+   drop(shared), the last Rc          alloc 0  free 0  bytes  0
+   weak.upgrade() None
+   drop(weak), the last Weak          alloc 0  free 1  bytes  0
+   The value was dropped with the last Rc, but its 24 bytes were freed
+   only with the last Weak, because the weak count lives there too.
+
+5. RefCell: a flag in the value, and a check on every borrow
+   size_of i32 4   Cell<i32> 4   RefCell<i32> 16
+   borrow_mut while a borrow is live: Err(BorrowMutError)
+   after the borrow ends:             Ok(())
+   Cell hands out no references, so it needs no flag. RefCell counts
+   its borrows in a word beside the value and checks it at run time.

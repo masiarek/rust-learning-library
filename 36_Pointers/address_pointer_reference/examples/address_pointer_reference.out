@@ -1,0 +1,35 @@
+1. One number, three types
+   r as *const u32 == p           true
+   r as *const u32 as usize == a  true
+   size_of: &u32 8, *const u32 8, usize 8
+   Same number, same width. The difference is what each type lets you do.
+
+2. What a pointer adds to an address: the type of what is there
+   read as u32 through p                 707406378
+   read as u8 through p.cast::<u8>()     42
+   size_of::<*const u8>()          = 8
+   size_of::<*const [u64; 1000]>() = 8
+   Same address, 4 bytes read or 1. The type says how many bytes to
+   read and what they mean, and it exists only in the compiler: at run
+   time a pointer to one byte and a pointer to 8,000 are both one word.
+
+3. What an address alone has lost: provenance
+   bare.addr() == p.addr()        true
+   bare == p                      true
+   Equal as numbers and equal under ==, which compares addresses only.
+   Reading through `bare` is still undefined behaviour: it was made from
+   a number, so it carries no permission to touch x. Miri reports it as
+   a pointer that "has no provenance". This program never reads it.
+
+4. A raw pointer can be made from nothing
+   0x1000 as *const u32  -> is_null() false, addr() 0x1000
+   Making it compiled with no unsafe and no warning. The compiler knows
+   the type, and nothing about whether 4 bytes of u32 sit at 0x1000.
+
+5. What a reference adds to a pointer: promises the compiler holds you to
+   std: a reference is a pointer assumed to be aligned, not null, and
+   pointing at a valid value of its type. The borrow checker adds that
+   it outlives every use, and that a &mut to the same place is not live.
+   unsafe { &*p } points where r does: true
+   Turning a pointer back into a reference is the step that needs unsafe:
+   the compiler cannot check the promises, so you make them.

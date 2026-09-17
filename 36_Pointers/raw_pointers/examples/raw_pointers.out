@@ -1,0 +1,32 @@
+1. Safe code may make, copy, cast and compare raw pointers
+   null.is_null()             true
+   start.is_null()            false
+   end.addr() - start.addr()  12 bytes
+   start.cast::<u8>() == start as *const u8  true
+   start.cast_mut() compiles too: *const -> *mut is only a relabelling
+   None of these reads memory, so none of them needs unsafe.
+
+2. Reading, writing and offsetting need unsafe
+   unsafe { *start.add(2) }        30
+   unsafe { null.as_ref() }        None
+   unsafe { start.as_ref() }       Some(10)
+   `add` is unsafe and `wrapping_add` is not: `add` promises the result
+   stays inside the allocation, and the compiler may rely on that.
+
+3. No borrow checker: two *mut to one place at once
+   write through a, write through b: count = 2
+   Two &mut u32 to `count` would be E0499. Two raw pointers compile,
+   and this use is sound. The rules have not gone away, only the checks:
+   a pointer taken from a &mut is invalid once a NEW &mut to the same
+   place is made, and writing through it after that is undefined
+   behaviour that no compiler flags. Miri does; see the page.
+
+4. Back to a reference: you make the promises
+   unsafe { &mut *a }, += 40: count = 42
+
+5. NonNull<T>: a raw pointer with one promise, never null
+   NonNull::new(null_mut)          None
+   size_of Option<*mut u32>        16
+   size_of Option<NonNull<u32>>    8
+   unsafe { *nn.as_ptr() }          5
+   The one promise buys the niche: Box, Rc and Vec are built on it.

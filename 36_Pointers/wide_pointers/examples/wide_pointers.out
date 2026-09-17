@@ -1,0 +1,37 @@
+1. Thin: the address and nothing else
+   &u8               8 bytes
+   &[u8; 10]         8 bytes
+   &String           8 bytes
+   *const u8         8 bytes
+   Box<u64>          8 bytes
+   `&[u8; 10]` is thin: the 10 is part of the TYPE, so the pointer
+   has nothing more to carry.
+
+2. Wide, second word a length
+   &[u8]            16 bytes
+   &str             16 bytes
+   *const [u8]      16 bytes
+   Box<[u8]>        16 bytes
+   Rc<str>          16 bytes
+   &NAME       as &[u8; 10]  8 bytes
+   &NAME[2..7] as &[u8]      16 bytes: the length left the type and joined the pointer
+   raw.len() = 5   read from the pointer, not from the bytes
+
+3. Wide, second word a vtable
+   &dyn Debug       16 bytes, 2 words
+   Box<dyn Debug>   16 bytes
+   size_of_val(dn) = 4   size_of_val(ds) = 24
+   Same type, &dyn Debug, two different sizes: the size is looked up
+   in the vtable the second word points at. It is not a length.
+   first word is the address of n: true
+
+4. Casting to a thin pointer drops the second word
+   raw as *const u8: 8 bytes, same address: true
+   The length is gone. Nothing in `thin` remembers there were 5 bytes.
+
+5. {:p} shows the second word
+   {:p} of *const [u8] mentions `metadata: 5`: true
+   {:p} of *const u8 has no metadata part:     true
+
+6. The niche survives the second word
+   Option<&[u8]> 16 bytes   Option<&dyn Debug> 16 bytes

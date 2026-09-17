@@ -1,0 +1,53 @@
+1. "Option<T> occupies 0 bytes" (null pointer optimization)
+   &u8                 8 bytes
+   Option<&u8>         8 bytes
+   Box<u8>             8 bytes
+   Option<Box<u8>>     8 bytes
+   *const u8           8 bytes
+   Option<*const u8>  16 bytes
+   u64                 8 bytes
+   Option<u64>        16 bytes
+   The Option costs 0 EXTRA bytes where the inner type has a niche;
+   it never occupies 0 bytes, and without a niche it costs a word.
+
+2. "References are aligned to multiples of usize"
+   align_of::<u8>() = 1, align_of::<usize>() = 8
+   two neighbouring &u8, one byte apart; one is not a multiple of 8: true
+   A reference is aligned to align_of::<T>(), which for u8 is 1.
+
+3. "A pointer and an integer" for dynamically sized types
+   &[u8] second word is a length:     slice.len() = 4
+   &dyn Debug second word is a vtable: size_of_val = 1 and 24
+   The integer is right for slices and str; a trait object carries a
+   pointer to a table of size, alignment, drop and methods instead.
+
+4. "When a compiler creates a pointer to an i32, it can verify 4 bytes"
+   0x1000 as *const i32 compiled; size_of::<i32>() = 4
+   is_null() = false — and nothing checked that an i32 lives there.
+   The size is known from the type. Whether the bytes exist is only
+   guaranteed for a reference, never for a raw pointer.
+
+5. Listing 6.2's sizes: a reference to an array, and a box of a slice
+   usize 8   &[u8; 10] 8   Box<[u8]> 16   [u8; 10] 10   [u8; 11] 11
+   boxed holds a copy, not the static: same bytes true, same address false
+   &[u8; 10] is thin (the 10 is in the type); Box<[u8]> is wide (the 11
+   moved into the pointer). Neither is a String's three words.
+
+6. Listing 6.3's two strings, without from_raw_parts
+   str::from_utf8(&NAME)               "carrytowel"   borrowed, nothing to free
+   CStr::from_bytes_with_nul(&C_NAME)  "thanksfish"   checks the NUL is last
+   equal to the literal c"thanksfish": true
+   The book builds a String over the static with from_raw_parts, and
+   that String then frees memory no allocator gave it. See the page.
+
+7. "The conversion to c_char works because we stay under 128"
+   bytes read through a *const c_char: [104, 200, 105]
+   to_string_lossy():                  "h�i"
+   A pointer cast converts no byte. 200 came through as 200; only the
+   UTF-8 decoding in to_string_lossy cared, and replaced it with U+FFFD.
+
+8. Printing a pointer to a str with {:p}, as memscan-3 does
+   the text starts with "Pointer { addr: " true
+   and ends with "metadata: 1 }"        true
+   A *const str is wide, and {:p} on rustc 1.98.0 prints both words,
+   where the book's run printed a bare address.
