@@ -664,6 +664,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # room the CALLER reserved before the call, so it needs one size. That
         # is the reason `-> str` fails and `str` can never be `Clone`.
         "returned_by_value",
+        # ...and the hidden pointer that page measures, drawn in three panels,
+        # written out by hand as an out-parameter, and watched in lldb.
+        "drawing_the_return_slot",
         # Its companions, by symptom, by lint, and by source.
         "returned_by_value_errors",
         "returned_by_value_lints",
@@ -1748,6 +1751,7 @@ LABELS = {
     "borrowing_forever_lints": "Borrowing forever: lints",
     "borrowing_forever_resources": "Borrowing forever: reading",
     "returned_by_value": "Returned by value",
+    "drawing_the_return_slot": "Drawing sret",
     "returned_by_value_errors": "Returned by value: every error",
     "returned_by_value_lints": "Returned by value: lints",
     "returned_by_value_resources": "Returned by value: reading",

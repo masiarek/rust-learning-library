@@ -129,6 +129,8 @@ SCOPE = (
     "18_Ownership/returned_by_value",
     "18_Ownership/returned_by_value_errors",
     "18_Ownership/returned_by_value_lints",
+    # Its drawing: the by_hand.rs listing and the lldb program are pasteable.
+    "18_Ownership/drawing_the_return_slot",
 )
 
 # `.claude` holds this repo checked out again, once per agent worktree, so a scan
