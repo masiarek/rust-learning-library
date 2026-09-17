@@ -1,0 +1,23 @@
+error: `Custom` carries data; VariantName needs variants without fields
+ --> two_mistakes/src/main.rs:6:11
+  |
+6 |     Custom(String),
+  |           ^^^^^^^^
+
+error: `Numbered` carries data; VariantName needs variants without fields
+ --> two_mistakes/src/main.rs:8:14
+  |
+8 |     Numbered { code: u16 },
+  |              ^^^^^^^^^^^^^
+
+error[E0599]: no method named `name` found for enum `Method` in the current scope
+  --> two_mistakes/src/main.rs:13:27
+   |
+ 4 | enum Method {
+   | ----------- method `name` not found for this enum
+...
+13 |     println!("{}", method.name());
+   |                           ^^^^ method not found in `Method`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `variant_name_two_mistakes` (bin "variant_name_two_mistakes") due to 3 previous errors

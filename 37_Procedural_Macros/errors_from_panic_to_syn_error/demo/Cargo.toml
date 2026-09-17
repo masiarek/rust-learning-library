@@ -1,0 +1,12 @@
+# One derive written three ways, and the programs that use it. `[workspace]`
+# makes this folder its own workspace.
+[workspace]
+members = [
+    "variant_name",
+    "method_app",
+    "reported_by_panic",
+    "reported_by_compile_error",
+    "reported_by_syn_error",
+    "two_mistakes",
+]
+resolver = "3"

@@ -1,0 +1,3 @@
+reported_by_panic/src/main.rs:3:10: error: proc-macro derive panicked
+reported_by_panic/src/main.rs:12:27: error[E0599]: no method named `name` found for enum `Method` in the current scope: method not found in `Method`
+error: could not compile `variant_name_by_panic` (bin "variant_name_by_panic") due to 2 previous errors

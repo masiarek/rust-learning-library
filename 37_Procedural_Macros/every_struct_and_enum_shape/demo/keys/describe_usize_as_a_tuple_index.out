@@ -1,0 +1,15 @@
+error: suffixes on a tuple index are invalid
+ --> usize_as_an_index/src/main.rs:3:10
+  |
+3 | #[derive(DescribeUsizeIndex)]
+  |          ^^^^^^^^^^^^^^^^^^ invalid suffix `usize`
+  |
+  = note: this error originates in the derive macro `DescribeUsizeIndex` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: proc-macro derive produced unparsable tokens
+ --> usize_as_an_index/src/main.rs:3:10
+  |
+3 | #[derive(DescribeUsizeIndex)]
+  |          ^^^^^^^^^^^^^^^^^^
+
+error: could not compile `describe_usize_as_an_index` (bin "describe_usize_as_an_index") due to 2 previous errors

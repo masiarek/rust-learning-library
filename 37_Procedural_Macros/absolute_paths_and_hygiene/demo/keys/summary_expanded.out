@@ -1,0 +1,49 @@
+#![feature(prelude_import)]
+//! The same struct twice: once under each version of the derive.
+extern crate std;
+#[prelude_import]
+use std::prelude::rust_2024::*;
+
+pub mod call_site {
+    pub struct Comment {
+        pub author: String,
+        pub text: String,
+    }
+    impl Comment {
+        pub fn summary(&self) -> ::std::string::String {
+            let Self { author, text } = self;
+            let mut text = ::std::string::String::new();
+            text.push_str(&
+                    ::alloc::__export::must_use({
+                            ::alloc::fmt::format(format_args!("[{0} = {1}]", "author",
+                                    author))
+                        }));
+            text.push_str(&::alloc::__export::must_use({
+                            ::alloc::fmt::format(format_args!("[{0} = {1}]", "text",
+                                    text))
+                        }));
+            text
+        }
+    }
+}
+pub mod mixed_site {
+    pub struct Comment {
+        pub author: String,
+        pub text: String,
+    }
+    impl Comment {
+        pub fn summary(&self) -> ::std::string::String {
+            let Self { author, text } = self;
+            let mut text = ::std::string::String::new();
+            text.push_str(&::alloc::__export::must_use({
+                            ::alloc::fmt::format(format_args!("[{0} = {1}]", "author",
+                                    author))
+                        }));
+            text.push_str(&::alloc::__export::must_use({
+                            ::alloc::fmt::format(format_args!("[{0} = {1}]", "text",
+                                    text))
+                        }));
+            text
+        }
+    }
+}

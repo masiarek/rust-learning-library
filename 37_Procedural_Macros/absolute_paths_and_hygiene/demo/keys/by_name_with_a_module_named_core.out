@@ -1,0 +1,63 @@
+error[E0433]: cannot find `fmt` in `core`
+  --> module_named_core/src/main.rs:10:10
+   |
+10 | #[derive(ByNameCore)]
+   |          ^^^^^^^^^^ could not find `fmt` in `core`
+   |
+   = note: this error originates in the derive macro `ByNameCore` (in Nightly builds, run with -Z macro-backtrace for more info)
+help: consider importing one of these modules
+   |
+ 1 + use std::fmt;
+   |
+ 1 + use ::core::fmt;
+   |
+
+error[E0433]: cannot find `str` in `core`
+  --> module_named_core/src/main.rs:10:10
+   |
+10 | #[derive(ByNameCore)]
+   |          ^^^^^^^^^^ could not find `str` in `core`
+   |
+   = note: this error originates in the derive macro `ByNameCore` (in Nightly builds, run with -Z macro-backtrace for more info)
+help: consider importing one of these modules
+   |
+ 1 + use std::str;
+   |
+ 1 + use ::core::str;
+   |
+
+error[E0433]: cannot find `result` in `core`
+  --> module_named_core/src/main.rs:10:10
+   |
+10 | #[derive(ByNameCore)]
+   |          ^^^^^^^^^^ could not find `result` in `core`
+   |
+   = note: this error originates in the derive macro `ByNameCore` (in Nightly builds, run with -Z macro-backtrace for more info)
+help: consider importing one of these modules
+   |
+ 1 + use std::result;
+   |
+ 1 + use ::core::result;
+   |
+
+error[E0433]: cannot find `result` in `core`
+  --> module_named_core/src/main.rs:10:10
+   |
+10 | #[derive(ByNameCore)]
+   |          ^^^^^^^^^^ could not find `result` in `core`
+   |
+   = note: this error originates in the derive macro `ByNameCore` (in Nightly builds, run with -Z macro-backtrace for more info)
+help: consider importing one of these items
+   |
+ 1 + use std::fmt::Result;
+   |
+ 1 + use std::io::Result;
+   |
+ 1 + use std::result::Result;
+   |
+ 1 + use std::thread::Result;
+   |
+   = and 2 other candidates
+
+For more information about this error, try `rustc --explain E0433`.
+error: could not compile `by_name_module_named_core` (bin "by_name_module_named_core") due to 4 previous errors

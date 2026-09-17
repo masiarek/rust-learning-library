@@ -1,0 +1,32 @@
+error[E0592]: duplicate definitions with name `summary`
+  --> own_summary_method/src/main.rs:3:10
+   |
+ 3 | #[derive(Summary)]
+   |          ^^^^^^^ duplicate definitions for `summary`
+...
+11 |     fn summary(&self) -> String {
+   |     --------------------------- other definition for `summary`
+   |
+   = note: this error originates in the derive macro `Summary` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0034]: multiple applicable items in scope
+  --> own_summary_method/src/main.rs:21:28
+   |
+21 |     println!("{}", comment.summary());
+   |                            ^^^^^^^ multiple `summary` found
+   |
+note: candidate #1 is defined in an impl for the type `Comment`
+  --> own_summary_method/src/main.rs:3:10
+   |
+ 3 | #[derive(Summary)]
+   |          ^^^^^^^
+note: candidate #2 is defined in an impl for the type `Comment`
+  --> own_summary_method/src/main.rs:11:5
+   |
+11 |     fn summary(&self) -> String {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = note: this error originates in the derive macro `Summary` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+Some errors have detailed explanations: E0034, E0592.
+For more information about an error, try `rustc --explain E0034`.
+error: could not compile `summary_own_method` (bin "summary_own_method") due to 2 previous errors

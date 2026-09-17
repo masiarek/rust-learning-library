@@ -1,0 +1,8 @@
+[package]
+name = "describe_usize_as_an_index"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+describe_mistakes = { path = "../describe_mistakes" }

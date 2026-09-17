@@ -1,0 +1,48 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+
+[[run]]
+stem = "variant_name_works"
+cmd = ["cargo", "run", "-q", "-p", "variant_name_app"]
+
+[[run]]
+stem = "variant_name_reported_by_panic"
+cmd = ["cargo", "build", "-q", "-p", "variant_name_by_panic"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "variant_name_reported_by_compile_error"
+cmd = ["cargo", "build", "-q", "-p", "variant_name_by_compile_error"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "variant_name_reported_by_syn_error"
+cmd = ["cargo", "build", "-q", "-p", "variant_name_by_syn_error"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "variant_name_two_mistakes_combined"
+cmd = ["cargo", "build", "-q", "-p", "variant_name_two_mistakes"]
+expect = "failure"
+stream = "stderr"
+
+# The same three builds, one line per diagnostic.
+[[run]]
+stem = "variant_name_panic_short"
+cmd = ["cargo", "build", "-q", "--message-format=short", "-p", "variant_name_by_panic"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "variant_name_compile_error_short"
+cmd = ["cargo", "build", "-q", "--message-format=short", "-p", "variant_name_by_compile_error"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "variant_name_syn_error_short"
+cmd = ["cargo", "build", "-q", "--message-format=short", "-p", "variant_name_by_syn_error"]
+expect = "failure"
+stream = "stderr"

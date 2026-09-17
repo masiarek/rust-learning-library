@@ -1,0 +1,3 @@
+reported_by_compile_error/src/main.rs:3:10: error: `Custom` carries data; VariantName needs variants without fields
+reported_by_compile_error/src/main.rs:12:27: error[E0599]: no method named `name` found for enum `Method` in the current scope: method not found in `Method`
+error: could not compile `variant_name_by_compile_error` (bin "variant_name_by_compile_error") due to 2 previous errors

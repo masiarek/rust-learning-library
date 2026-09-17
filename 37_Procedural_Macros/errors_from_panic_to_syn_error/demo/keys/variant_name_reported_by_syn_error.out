@@ -1,0 +1,17 @@
+error: `Custom` carries data; VariantName needs variants without fields
+ --> reported_by_syn_error/src/main.rs:7:11
+  |
+7 |     Custom(String),
+  |           ^^^^^^^^
+
+error[E0599]: no method named `name` found for enum `Method` in the current scope
+  --> reported_by_syn_error/src/main.rs:12:27
+   |
+ 4 | enum Method {
+   | ----------- method `name` not found for this enum
+...
+12 |     println!("{}", method.name());
+   |                           ^^^^ method not found in `Method`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `variant_name_by_syn_error` (bin "variant_name_by_syn_error") due to 2 previous errors

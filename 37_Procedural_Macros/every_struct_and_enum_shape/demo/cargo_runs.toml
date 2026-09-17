@@ -1,0 +1,29 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+
+[[run]]
+stem = "describe_every_shape"
+cmd = ["cargo", "run", "-q", "-p", "describe_shapes_app"]
+
+# What `cargo expand -p describe_shapes` shows, recorded without cargo-expand.
+[[run]]
+stem = "describe_every_shape_expanded"
+cmd = ["cargo", "rustc", "-q", "-p", "describe_shapes", "--profile=check", "--", "-Zunpretty=expanded"]
+env = { RUSTC_BOOTSTRAP = "1" }
+
+[[run]]
+stem = "describe_named_only_on_a_tuple"
+cmd = ["cargo", "build", "-q", "-p", "describe_named_only_on_a_tuple"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "describe_usize_as_a_tuple_index"
+cmd = ["cargo", "build", "-q", "-p", "describe_usize_as_an_index"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "describe_refuses_a_union"
+cmd = ["cargo", "build", "-q", "-p", "describe_a_union"]
+expect = "failure"
+stream = "stderr"

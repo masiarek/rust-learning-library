@@ -1,0 +1,8 @@
+[package]
+name = "describe_a_union"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+describe_derive = { path = "../describe" }

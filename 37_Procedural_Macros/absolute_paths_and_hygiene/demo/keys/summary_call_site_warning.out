@@ -1,0 +1,8 @@
+warning: unused variable: `text`
+ --> comments/src/lib.rs:7:13
+  |
+7 |         pub text: String,
+  |             ^^^^ help: try ignoring the field: `text: _`
+  |
+  = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+

@@ -1,0 +1,19 @@
+error: `Custom` carries data; VariantName needs variants without fields
+ --> reported_by_compile_error/src/main.rs:3:10
+  |
+3 | #[derive(VariantNameCompileError)]
+  |          ^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: this error originates in the derive macro `VariantNameCompileError` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0599]: no method named `name` found for enum `Method` in the current scope
+  --> reported_by_compile_error/src/main.rs:12:27
+   |
+ 4 | enum Method {
+   | ----------- method `name` not found for this enum
+...
+12 |     println!("{}", method.name());
+   |                           ^^^^ method not found in `Method`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `variant_name_by_compile_error` (bin "variant_name_by_compile_error") due to 2 previous errors

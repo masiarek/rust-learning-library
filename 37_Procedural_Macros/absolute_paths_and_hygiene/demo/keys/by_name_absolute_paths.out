@@ -1,0 +1,3 @@
+Get    -> Get, safe: true
+Delete -> Delete, safe: false
+PATCH  -> error: no variant has that name

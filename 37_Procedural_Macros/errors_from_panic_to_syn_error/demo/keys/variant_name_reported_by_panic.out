@@ -1,0 +1,19 @@
+error: proc-macro derive panicked
+ --> reported_by_panic/src/main.rs:3:10
+  |
+3 | #[derive(VariantNamePanics)]
+  |          ^^^^^^^^^^^^^^^^^
+  |
+  = help: message: `Custom` carries data; VariantName needs variants without fields
+
+error[E0599]: no method named `name` found for enum `Method` in the current scope
+  --> reported_by_panic/src/main.rs:12:27
+   |
+ 4 | enum Method {
+   | ----------- method `name` not found for this enum
+...
+12 |     println!("{}", method.name());
+   |                           ^^^^ method not found in `Method`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `variant_name_by_panic` (bin "variant_name_by_panic") due to 2 previous errors

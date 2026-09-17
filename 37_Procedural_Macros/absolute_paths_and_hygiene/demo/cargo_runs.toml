@@ -1,0 +1,63 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+
+[[run]]
+stem = "by_name_without_fmt_imported"
+cmd = ["cargo", "build", "-q", "-p", "by_name_forgot_fmt"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "by_name_with_its_own_result"
+cmd = ["cargo", "build", "-q", "-p", "by_name_own_result"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "by_name_with_a_module_named_core"
+cmd = ["cargo", "build", "-q", "-p", "by_name_module_named_core"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "by_name_absolute_paths"
+cmd = ["cargo", "run", "-q", "-p", "by_name_paths_app"]
+
+# Short form: the full transcript has a note pointing into the standard
+# library's source, at a path that depends on the machine.
+[[run]]
+stem = "by_name_with_its_own_str"
+cmd = ["cargo", "build", "-q", "--message-format=short", "-p", "by_name_own_str_core"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "by_name_primitive_str"
+cmd = ["cargo", "run", "-q", "-p", "by_name_own_str"]
+
+[[run]]
+stem = "summary_call_site_or_mixed_site"
+cmd = ["cargo", "run", "-q", "-p", "summary_hygiene_app"]
+
+# What `cargo expand -p summary_comments` shows, recorded without cargo-expand.
+[[run]]
+stem = "summary_expanded"
+cmd = ["cargo", "rustc", "-q", "-p", "summary_comments", "--profile=check", "--", "-Zunpretty=expanded"]
+env = { RUSTC_BOOTSTRAP = "1" }
+
+# The build succeeds; this records what it wrote to stderr.
+[[run]]
+stem = "summary_call_site_warning"
+cmd = ["cargo", "build", "-q", "-p", "summary_comments"]
+stream = "stderr"
+
+[[run]]
+stem = "summary_method_name_collides"
+cmd = ["cargo", "build", "-q", "-p", "summary_own_method"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "summary_local_meets_a_const"
+cmd = ["cargo", "build", "-q", "-p", "summary_const_named_text"]
+expect = "failure"
+stream = "stderr"

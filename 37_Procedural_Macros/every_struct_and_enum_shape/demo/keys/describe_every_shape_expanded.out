@@ -1,0 +1,71 @@
+#![feature(prelude_import)]
+//! Every shape a struct can have, and an enum with every shape of variant.
+extern crate std;
+#[prelude_import]
+use std::prelude::rust_2024::*;
+
+use describe_derive::Describe;
+
+pub struct Point {
+    pub x: i32,
+    pub y: i32,
+}
+impl Point {
+    pub fn describe(&self)
+        ->
+            (&'static str,
+            ::std::vec::Vec<(&'static str, &dyn ::core::fmt::Debug)>) {
+        ("Point { .. }",
+            ::std::vec::Vec::from([("x", &self.x as &dyn ::core::fmt::Debug),
+                        ("y", &self.y as &dyn ::core::fmt::Debug)]))
+    }
+}
+
+pub struct Meters(pub f64);
+impl Meters {
+    pub fn describe(&self)
+        ->
+            (&'static str,
+            ::std::vec::Vec<(&'static str, &dyn ::core::fmt::Debug)>) {
+        ("Meters(..)",
+            ::std::vec::Vec::from([("0",
+                            &self.0 as &dyn ::core::fmt::Debug)]))
+    }
+}
+
+pub struct Origin;
+impl Origin {
+    pub fn describe(&self)
+        ->
+            (&'static str,
+            ::std::vec::Vec<(&'static str, &dyn ::core::fmt::Debug)>) {
+        ("Origin", ::std::vec::Vec::from([]))
+    }
+}
+
+pub enum Shape {
+    Circle {
+        radius: f64,
+    },
+    Rect(u32, u32),
+    Empty,
+}
+impl Shape {
+    pub fn describe(&self)
+        ->
+            (&'static str,
+            ::std::vec::Vec<(&'static str, &dyn ::core::fmt::Debug)>) {
+        match self {
+            Self::Circle { radius: field_0 } =>
+                ("Shape::Circle { .. }",
+                    ::std::vec::Vec::from([("radius",
+                                    field_0 as &dyn ::core::fmt::Debug)])),
+            Self::Rect(field_0, field_1) =>
+                ("Shape::Rect(..)",
+                    ::std::vec::Vec::from([("0",
+                                    field_0 as &dyn ::core::fmt::Debug),
+                                ("1", field_1 as &dyn ::core::fmt::Debug)])),
+            Self::Empty => ("Shape::Empty", ::std::vec::Vec::from([])),
+        }
+    }
+}

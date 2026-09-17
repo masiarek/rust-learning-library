@@ -1,0 +1,18 @@
+# Two macro crates: `by_name` for paths, `summary` for hygiene. Each program
+# below uses one of them. `[workspace]` makes this folder its own workspace.
+[workspace]
+members = [
+    "by_name",
+    "summary",
+    "forgot_fmt",
+    "own_result",
+    "module_named_core",
+    "paths_app",
+    "own_str_core",
+    "own_str",
+    "comments",
+    "hygiene_app",
+    "own_summary_method",
+    "const_named_text",
+]
+resolver = "3"

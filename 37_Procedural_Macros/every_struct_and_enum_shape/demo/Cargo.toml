@@ -1,0 +1,13 @@
+# One derive that handles every shape, two that do not, and the crates that use
+# them. `[workspace]` makes this folder its own workspace.
+[workspace]
+members = [
+    "describe",
+    "describe_mistakes",
+    "shapes",
+    "shapes_app",
+    "named_only_on_a_tuple",
+    "usize_as_an_index",
+    "describe_a_union",
+]
+resolver = "3"

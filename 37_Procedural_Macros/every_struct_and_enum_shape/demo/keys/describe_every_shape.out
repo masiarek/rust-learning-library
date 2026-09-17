@@ -1,0 +1,12 @@
+Point { .. }
+   x = 1
+   y = 2
+Meters(..)
+   0 = 5.5
+Origin
+Shape::Circle { .. }
+   radius = 1.5
+Shape::Rect(..)
+   0 = 3
+   1 = 4
+Shape::Empty

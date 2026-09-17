@@ -1,0 +1,23 @@
+error: expected identifier, found keyword `as`
+ --> named_only_on_a_tuple/src/main.rs:3:10
+  |
+3 | #[derive(DescribeNamedOnly)]
+  |          ^^^^^^^^^^^^^^^^^ expected identifier, found keyword
+  |
+  = note: this error originates in the derive macro `DescribeNamedOnly` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: expected expression, found keyword `dyn`
+ --> named_only_on_a_tuple/src/main.rs:3:10
+  |
+3 | #[derive(DescribeNamedOnly)]
+  |          ^^^^^^^^^^^^^^^^^ expected expression
+  |
+  = note: this error originates in the derive macro `DescribeNamedOnly` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: proc-macro derive produced unparsable tokens
+ --> named_only_on_a_tuple/src/main.rs:3:10
+  |
+3 | #[derive(DescribeNamedOnly)]
+  |          ^^^^^^^^^^^^^^^^^
+
+error: could not compile `describe_named_only_on_a_tuple` (bin "describe_named_only_on_a_tuple") due to 3 previous errors
