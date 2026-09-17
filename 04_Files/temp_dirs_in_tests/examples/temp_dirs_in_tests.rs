@@ -73,19 +73,28 @@ fn workspace_members(root: &Path) -> io::Result<Vec<String>> {
 }
 
 /// Two "tests" on two threads. Each writes its config to the directory it is
-/// given, then reads it back, with the writes forced to happen before either read.
+/// given, then reads it back. Two barriers force one order every run: A writes,
+/// then B writes, then both read.
 fn two_tests(dir_a: PathBuf, dir_b: PathBuf) -> (Option<String>, Option<String>) {
-    let both_wrote = Arc::new(Barrier::new(2));
-    let run = |dir: PathBuf, editor: &'static str, both_wrote: Arc<Barrier>| {
+    let a_wrote = Arc::new(Barrier::new(2));
+    let b_wrote = Arc::new(Barrier::new(2));
+    let a = {
+        let (a_wrote, b_wrote) = (Arc::clone(&a_wrote), Arc::clone(&b_wrote));
         thread::spawn(move || {
-            let config = dir.join("config.txt");
-            fs::write(&config, format!("editor = {editor}\n")).expect("write");
-            both_wrote.wait();
+            let config = dir_a.join("config.txt");
+            fs::write(&config, "editor = vim\n").expect("write");
+            a_wrote.wait();
+            b_wrote.wait();
             default_editor(&config).expect("read")
         })
     };
-    let a = run(dir_a, "vim", Arc::clone(&both_wrote));
-    let b = run(dir_b, "hx", both_wrote);
+    let b = thread::spawn(move || {
+        a_wrote.wait();
+        let config = dir_b.join("config.txt");
+        fs::write(&config, "editor = hx\n").expect("write");
+        b_wrote.wait();
+        default_editor(&config).expect("read")
+    });
     (a.join().expect("a"), b.join().expect("b"))
 }
 
