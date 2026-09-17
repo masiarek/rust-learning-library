@@ -224,6 +224,7 @@ The nearest true analogy is not `pip` at all but a `pyproject.toml` plus a lockf
 
 ## See also
 
+- [From one `.rs` file to a Cargo project](../from_rustc_to_cargo/README.md) — `cargo init` instead of `cargo new`, when the file already exists
 - [Running a scratch program](../../15_First_Programs/rustc_without_cargo/README.md) — the page this one is the sequel to: `rustc` alone, `cargo new`, `src/bin/`, and what each leaves out
 - [Randomness, and the `rand` API the Rust Book still teaches](../../15_First_Programs/randomness/README.md) — the *next* error after this one, and the reason `rand` is the crate everybody meets first
 - [Adding a dependency](../cargo_dependencies/README.md) — `cargo search`, `cargo info`, and what a caret requirement really permits

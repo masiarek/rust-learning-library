@@ -679,6 +679,10 @@ NAV_ORDER: dict[str, list[str]] = {
         "cow_claims_checked",
         "to_owned_reading_list",
     ],
+    "05_Tooling/from_rustc_to_cargo": [
+        "README.md",
+        "what_cargo_passes_rustc",
+    ],
     "05_Tooling/create_rust_proj": [
         "README.md",
         "scratch_sh",
@@ -864,6 +868,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "rustup",
         "pinning_the_toolchain",
         "nightly",
+        # A single .rs file that already works under rustc, adopted by
+        # cargo init — and the rustc line Cargo runs for it, flag by flag.
+        "from_rustc_to_cargo",
         # Then what the build pulls in: the three commands that turn a loose
         # .rs file into a project that can have a dependency at all, what the
         # requirement they wrote actually permits, and how to lay out many
@@ -1106,6 +1113,8 @@ LABELS = {
     "nextest": "cargo-nextest",
     "editors": "Choosing an editor",
     "nightly": "Nightly by default",
+    "from_rustc_to_cargo": "From one file to `cargo init`",
+    "what_cargo_passes_rustc": "What `cargo run -v` shows",
     "scratch_with_a_crate": "A throwaway that needs a crate",
     "create_rust_proj": "A disposable Rust workspace",
     "scratch_sh": "scratch.sh",

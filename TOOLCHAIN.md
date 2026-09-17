@@ -34,28 +34,30 @@ Start wherever your question is; each page stands alone.
 | # | Page | The question it answers |
 |---|---|---|
 | 1 | [Running a scratch program](15_First_Programs/rustc_without_cargo/README.md) | How do I run a `.rs` file at all? |
-| 2 | [rustup](05_Tooling/rustup/README.md) | Why is the `rustc` on my `PATH` 154 bytes, and how does it choose? |
-| 3 | [Pinning the toolchain](05_Tooling/pinning_the_toolchain/README.md) | Which compiler verified this — and how do I stop that being luck? |
-| 4 | [Nightly by default](05_Tooling/nightly/README.md) | Should I run `rustup default nightly`? |
-| 5 | [A throwaway that needs a crate](05_Tooling/scratch_with_a_crate/README.md) | My scratch file says `use rand::…` and will not compile — what is missing? |
-| 6 | [A disposable Rust workspace, six ways](05_Tooling/create_rust_proj/README.md) | I want a throwaway project *now*, with crates and the IDE open on it — and gone when I am done? |
-| 7 | [Adding a dependency](05_Tooling/cargo_dependencies/README.md) | What did `cargo add` actually write in my manifest? |
-| 8 | [`Cargo.lock`](05_Tooling/cargo_lock/README.md) | Who writes the lockfile, who reads it, and which command ignores it? |
-| 9 | [Two versions of one crate](05_Tooling/two_versions_of_one_crate/README.md) | Why is `rand` in my build twice, and why is a `StdRng` "a different `StdRng`"? |
-| 10 | [Vendoring, and the `[patch]` table](05_Tooling/vendoring_and_patch/README.md) | How do I build with no network, and how do I fix a bug in a dependency? |
-| 11 | [A tree of practice projects](05_Tooling/practice_workspace/README.md) | Forty small projects want the same four config files — do I need a script? |
-| 12 | [Formatting](05_Tooling/formatting/README.md) | Who decides the whitespace, and which formatter just ran? |
-| 13 | [Strict clippy lints](05_Tooling/strict_lints/README.md) | Should my project be forbidden from panicking? |
-| 14 | [bacon](05_Tooling/bacon/README.md) | How do I stop asking the compiler and let it tell me? |
-| 15 | [cargo-nextest](05_Tooling/nextest/README.md) | Is `cargo test` costing me anything? |
-| 16 | [Choosing an editor](05_Tooling/editors/README.md) | Which window am I going to read all of this through? |
-| 17 | [RustRover setup](05_Tooling/rustrover_setup/README.md) | How do I wire the IDE to everything above? |
-| 18 | [RustRover Code Vision](05_Tooling/rustrover_code_vision/README.md) | What is the grey `1 usage` line above every declaration, and which toggle hides it? |
-| 19 | [Neovim with LazyVim](05_Tooling/neovim_setup/README.md) | …or the other window, and the two ways it silently does nothing |
-| 20 | [Zed setup](05_Tooling/zed_setup/README.md) | …or Zed, where one key should save and run the file in front of me |
-| 21 | [Scaffolding a practice tree](05_Tooling/scaffolding/README.md) | I keep writing the same seven config files — what should a script write, and what must it not? |
-| 22 | [Compile times](05_Tooling/compile_times/README.md) | Where do the seconds go, and which knob reaches them? |
-| 23 | [devenv](05_Tooling/devenv/README.md) | Should I declare the *whole* environment, and what does Nix cost? |
+| 2 | [From one `.rs` file to a Cargo project](05_Tooling/from_rustc_to_cargo/README.md) | My file runs under `rustc` — how do I make it a Cargo project without losing it? |
+| 3 | [What `cargo run -v` shows](05_Tooling/from_rustc_to_cargo/what_cargo_passes_rustc/README.md) | What does Cargo actually pass to `rustc`, and why each flag? |
+| 4 | [rustup](05_Tooling/rustup/README.md) | Why is the `rustc` on my `PATH` 154 bytes, and how does it choose? |
+| 5 | [Pinning the toolchain](05_Tooling/pinning_the_toolchain/README.md) | Which compiler verified this — and how do I stop that being luck? |
+| 6 | [Nightly by default](05_Tooling/nightly/README.md) | Should I run `rustup default nightly`? |
+| 7 | [A throwaway that needs a crate](05_Tooling/scratch_with_a_crate/README.md) | My scratch file says `use rand::…` and will not compile — what is missing? |
+| 8 | [A disposable Rust workspace, six ways](05_Tooling/create_rust_proj/README.md) | I want a throwaway project *now*, with crates and the IDE open on it — and gone when I am done? |
+| 9 | [Adding a dependency](05_Tooling/cargo_dependencies/README.md) | What did `cargo add` actually write in my manifest? |
+| 10 | [`Cargo.lock`](05_Tooling/cargo_lock/README.md) | Who writes the lockfile, who reads it, and which command ignores it? |
+| 11 | [Two versions of one crate](05_Tooling/two_versions_of_one_crate/README.md) | Why is `rand` in my build twice, and why is a `StdRng` "a different `StdRng`"? |
+| 12 | [Vendoring, and the `[patch]` table](05_Tooling/vendoring_and_patch/README.md) | How do I build with no network, and how do I fix a bug in a dependency? |
+| 13 | [A tree of practice projects](05_Tooling/practice_workspace/README.md) | Forty small projects want the same four config files — do I need a script? |
+| 14 | [Formatting](05_Tooling/formatting/README.md) | Who decides the whitespace, and which formatter just ran? |
+| 15 | [Strict clippy lints](05_Tooling/strict_lints/README.md) | Should my project be forbidden from panicking? |
+| 16 | [bacon](05_Tooling/bacon/README.md) | How do I stop asking the compiler and let it tell me? |
+| 17 | [cargo-nextest](05_Tooling/nextest/README.md) | Is `cargo test` costing me anything? |
+| 18 | [Choosing an editor](05_Tooling/editors/README.md) | Which window am I going to read all of this through? |
+| 19 | [RustRover setup](05_Tooling/rustrover_setup/README.md) | How do I wire the IDE to everything above? |
+| 20 | [RustRover Code Vision](05_Tooling/rustrover_code_vision/README.md) | What is the grey `1 usage` line above every declaration, and which toggle hides it? |
+| 21 | [Neovim with LazyVim](05_Tooling/neovim_setup/README.md) | …or the other window, and the two ways it silently does nothing |
+| 22 | [Zed setup](05_Tooling/zed_setup/README.md) | …or Zed, where one key should save and run the file in front of me |
+| 23 | [Scaffolding a practice tree](05_Tooling/scaffolding/README.md) | I keep writing the same seven config files — what should a script write, and what must it not? |
+| 24 | [Compile times](05_Tooling/compile_times/README.md) | Where do the seconds go, and which knob reaches them? |
+| 25 | [devenv](05_Tooling/devenv/README.md) | Should I declare the *whole* environment, and what does Nix cost? |
 
 ## Or, by the problem you actually have
 
@@ -64,6 +66,8 @@ Start wherever your question is; each page stands alone.
 | "it works on my machine" | [Pinning the toolchain](05_Tooling/pinning_the_toolchain/README.md), then [devenv](05_Tooling/devenv/README.md) if the answer is a system library rather than a compiler |
 | "CI disagrees with me about formatting" | [Nightly by default](05_Tooling/nightly/README.md) — unstable `rustfmt` options are the usual cause — and [Formatting](05_Tooling/formatting/README.md) |
 | "a tutorial told me to use nightly" | [Nightly by default](05_Tooling/nightly/README.md) |
+| "`cargo init` made a project, and `cargo run` prints `Hello, world!` instead of my program" | [From one `.rs` file to a Cargo project](05_Tooling/from_rustc_to_cargo/README.md) — the file was not named after the package, so `cargo init` wrote its own `src/main.rs`; and after a `mv`, Cargo may still say `Fresh` |
+| "a book's `cargo run -v` transcript does not match mine" | [What `cargo run -v` shows](05_Tooling/from_rustc_to_cargo/what_cargo_passes_rustc/README.md) — flag by flag, which ones Cargo added since, and the ones that came from the author's `RUSTFLAGS` |
 | "a tutorial's `use rand::…` will not compile" | [A throwaway that needs a crate](05_Tooling/scratch_with_a_crate/README.md) — nothing is missing; the file is being compiled by `rustc` rather than Cargo |
 | "my build got slower" | [Compile times](05_Tooling/compile_times/README.md), then [Adding a dependency](05_Tooling/cargo_dependencies/README.md) on what an unused crate costs, and `cargo tree -d` from [Two versions of one crate](05_Tooling/two_versions_of_one_crate/README.md) for a subtree compiled twice |
 | "the tool I `cargo install`ed behaves differently from the one I tested" | [`Cargo.lock`](05_Tooling/cargo_lock/README.md) — `cargo install` ignores the lockfile unless you pass `--locked` |

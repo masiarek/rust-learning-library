@@ -106,6 +106,7 @@ One more habit: `src/` is usually not in a Rustlings-style `.gitignore` (that fi
 | Reading this library's examples | the same — that is all they are |
 | You want a dependency, or `cargo test`/`clippy`/`fmt` | [`cargo new`, then `cargo add`](../../05_Tooling/scratch_with_a_crate/README.md) |
 | Poking at an idea beside an exercise you are doing | `src/bin/scratch.rs` in that package |
+| A file that works here and has outgrown a single `rustc` command | [`cargo init`](../../05_Tooling/from_rustc_to_cargo/README.md) in a folder named after it |
 | Something you will still have next week | `cargo new`, somewhere you will find it again |
 
 ## What the program itself can tell you
@@ -285,6 +286,8 @@ And `-O` changes one line of the output above — `debug_assertions` reports `fa
 
 ## See also
 
+- [From one `.rs` file to a Cargo project](../../05_Tooling/from_rustc_to_cargo/README.md) — route 1 turned into route 2 without retyping: `cargo init` adopts `ok.rs`, and three traps on the way
+- [What `cargo run -v` shows](../../05_Tooling/from_rustc_to_cargo/what_cargo_passes_rustc/README.md) — the `rustc` command Cargo runs, so the list above can be checked flag by flag
 - [A throwaway that needs a crate](../../05_Tooling/scratch_with_a_crate/README.md) — the sequel to route 2: the three commands that clear the dependency wall above, and the `rustc` message that means you skipped them
 - [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md) — the exit code 101 mentioned above, and what unwinding does and does not give back
 - [`if let`](../../17_Option_and_Result/if_let/README.md) — the let chain used as an edition detector, and why it is 2024-only
