@@ -143,6 +143,7 @@ Two details do a lot of work. The state is `&mut` — you mutate through it rath
 ## See also
 
 - [Iterators are lazy](../iterators_are_lazy/README.md) — why ordering the chain changes the work but not the answer
+- [`continue`](../../25_Control_Flow/continue_expressions/README.md) — the loop form of `filter` and `filter_map`, and the `while` loop where it skips your increment
 - [`fold` and `reduce`](../fold_and_reduce/README.md) — `scan` without the intermediates, and the consumer the rest are built on
 - [`collect` and `FromIterator`](../collect_and_fromiterator/README.md) — where `partition` and `unzip` get their two collections, and the honest way to keep errors
 - [When a `for` loop beats a chain](../when_a_loop_beats_a_chain/README.md) — the cases where none of these is the right answer

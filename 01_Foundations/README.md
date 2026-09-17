@@ -9,7 +9,7 @@ Read them in this order. Each section assumes the ones above it and nothing else
 | Section | What it covers |
 |---|---|
 | [First programs](../15_First_Programs/README.md) | Running a `.rs` file at all, reading what the compiler says back, the braces every later page uses without explaining, and getting a program to print — then `let`, the built-in types, and who decides which one you got |
-| [Control flow](../25_Control_Flow/README.md) | `if`, `match` and the three loops — all of them expressions, so all of them have values. Stubs for now |
+| [Control flow](../25_Control_Flow/README.md) | `if`, `match` and the three loops — all of them expressions, so all of them have values, plus `break`, `continue` and loop labels |
 | [Structs](../16_Structs/README.md) | A type of your own: fields here, behaviour in a separate `impl` block, no constructor, and the eight errors one produces |
 | [`Option` and `Result`](../17_Option_and_Result/README.md) | No null and no exceptions — two ordinary enums, and the dozen small methods between `match` and `.unwrap()` |
 | [Ownership](../18_Ownership/README.md) | One owner per value, what a move actually transfers, borrowing, and the three questions the word "scope" collapses into one |

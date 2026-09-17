@@ -48,7 +48,7 @@ No iterator can express this. An iterator **borrows the collection for as long a
 
 ## 3. When you need out of two levels at once
 
-`break 'outer` leaves a nested loop from the inside. There is no adapter for that: the chain equivalent is to flatten and search, which works —
+[`break 'outer`](../../25_Control_Flow/loop_labels/README.md) leaves a nested loop from the inside. There is no adapter for that: the chain equivalent is to flatten and search, which works —
 
 ```rust
 grid.iter().enumerate().find_map(|(r, row)| row.iter().position(|c| *c == 5).map(|c| (r, c)))
@@ -138,6 +138,7 @@ The corollary matters more: because both compile the same, the choice really is 
 ## See also
 
 - [Adapters by job](../adapters_by_job/README.md) — the chain vocabulary this page is deciding against
+- [`for` loops](../../25_Control_Flow/for_loops/README.md) — the loop side of the decision, from the ground up
 - [`fold` and `reduce`](../fold_and_reduce/README.md) — the tuple accumulator in case 4, and when it is worth it
 - [Iterators are lazy](../iterators_are_lazy/README.md) — why a chain does not walk the data once per adapter
 - [Borrowing](../../18_Ownership/borrowing/README.md) — the rule that makes case 2 a compile error rather than a choice

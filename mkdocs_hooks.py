@@ -707,21 +707,29 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...and the Rust in Action section that prompted it, claim by claim.
         "comparing_numbers_claims_checked",
     ],
-    # Control flow is taught in the order a program is built out of it: the two
-    # branching forms first (two cases, then many), then the three loops from
-    # most-structured to least, then the two ways out of one -- and finally the
-    # two things that hold the whole lot, a function and a macro.
+    # Control flow is taught in the order a program is built out of it: the map
+    # first, then the two branching forms (two cases, then many), then the three
+    # loops from most-structured to least, then the ways out of one -- and
+    # finally the two things that hold the whole lot, a function and a macro.
     "25_Control_Flow": [
         "README.md",
+        # Every construct once, with its value and how far each exit jumps.
+        "flow_control",
         "if_expressions",
         "match_expressions",
         # The loops, most structured first: `for` knows the sequence, `while`
         # knows only a condition, `loop` knows neither.
         "for_loops",
+        # ...and the index variable a `for` over the collection makes unneeded.
+        "loops_without_an_index",
         "while_loops",
         "the_loop_keyword",
-        # ...and the keyword all three share, which only `loop` can hand a value.
-        "break_and_continue",
+        # The keywords all three loops share: leave, skip, and name which loop.
+        "break_expressions",
+        "continue_expressions",
+        "loop_labels",
+        # A book's section on all of the above, checked once they are all read.
+        "flow_control_claims_checked",
         "functions",
         "macros",
     ],
@@ -1186,7 +1194,9 @@ LABELS = {
     "for_loops": "`for` loops",
     "while_loops": "`while` loops",
     "the_loop_keyword": "`loop`",
-    "break_and_continue": "`break` and `continue`",
+    "break_expressions": "`break`",
+    "continue_expressions": "`continue`",
+    "flow_control_claims_checked": "Rust in Action §2.4, run",
     # 26_Collections — the type names read as code.
     "the_vec": "`Vec`",
     "the_vecdeque": "`VecDeque`",

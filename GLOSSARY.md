@@ -386,7 +386,7 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **`E0308`** — *mismatched types.* The most common error in Rust, and its most common **cause** is a semicolon: the `^^^` points at a function's declared return type while the `help:` four lines down names the semicolon that threw the value away. Changing the signature silences it and breaks the function. → [A block is an expression](15_First_Programs/a_block_is_an_expression/README.md)
 
-**`E0317`** — *`if` may be missing an `else` clause.* An `if` used as a value with no `else`, carrying the note that says why in one line: "`if` expressions without `else` evaluate to `()`". → [A block is an expression](15_First_Programs/a_block_is_an_expression/README.md)
+**`E0317`** — *`if` may be missing an `else` clause.* An `if` used as a value with no `else`, carrying the note that says why in one line: "`if` expressions without `else` evaluate to `()`". → [A block is an expression](15_First_Programs/a_block_is_an_expression/README.md), [`if` expressions](25_Control_Flow/if_expressions/README.md)
 
 **Inline format argument (`{n}`)** — Naming a variable directly inside a format string, stabilized in Rust 1.58. It captures an **identifier** and nothing else — resolved by the macro at compile time, by ordinary name lookup — so `{n + 1}`, `{v.len()}` and `{self.voter}` are all compile errors, and the format string itself must be a literal. Not a Python f-string, which takes a full expression. → [The braces take a name](15_First_Programs/braces_take_a_name/README.md)
 
@@ -702,3 +702,7 @@ Short definitions. Every entry links to the page that explains it properly — a
 **BiDi override** — A Unicode control (U+202E and its family) that reverses the displayed order of what follows, so source code can *read* differently from how it *runs*. A dump shows it as `e2 80 ae`. → [Writing a file inspector](03_Command_Line/writing_a_file_inspector/README.md#terms)
 
 **Procedural macro** — A function from `TokenStream` to `TokenStream`, compiled in a crate of its own and run by the compiler on the crate that uses it. Three kinds: a **derive** receives an item and can only add code after it, a **function-like** macro receives what sits between its delimiters, and an **attribute** receives its arguments and the item and returns the item's replacement. `#[derive(Debug)]` and `#[test]` look like procedural macros and are built into the compiler instead. → [Three kinds of procedural macro](37_Procedural_Macros/three_kinds_of_procedural_macro/README.md), and the chapter → [Procedural macros](37_Procedural_Macros/README.md)
+
+**Loop label** — A name like `'outer:` written before a `for`, `while`, `loop` or block, so that `break 'outer` or `continue 'outer` can leave or restart that one rather than the innermost loop. It looks like a lifetime and is not one. It replaces the flag variable other languages need to leave a nested loop. → [Loop labels](25_Control_Flow/loop_labels/README.md)
+
+**`break` with a value** — `break v` hands `v` out as the value of the whole `loop` or labelled block it leaves: `let n = loop { break 123; };`. A `for` or `while` loop can end without reaching a `break`, so it always evaluates to `()` and refuses one (`E0571`). → [`break`](25_Control_Flow/break_expressions/README.md), [Flow control](25_Control_Flow/flow_control/README.md)

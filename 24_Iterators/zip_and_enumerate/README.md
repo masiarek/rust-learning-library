@@ -331,6 +331,7 @@ fn main() {
 ## See also
 
 - [Adapters by job](../adapters_by_job/README.md) — the other nineteen, including `chain` for the end-to-end join and `unzip`, which is this page run backwards
+- [Loops without an index](../../25_Control_Flow/loops_without_an_index/README.md) — the `for i in 0..v.len()` loops these two adapters replace, and the cases where the index should stay
 - [`Vec::append`](../../26_Collections/vec_methods/vec_append/README.md) — the other meaning of *merge two vectors*: one emptied onto the end of the other
 - [Iterators are lazy](../iterators_are_lazy/README.md) — including the measured proof that `zip` pulls the **left** side before it discovers the right one is empty, so the longer side is always pulled one extra time
 - [`iter`, `iter_mut`, `into_iter`](../iter_iter_mut_into_iter/README.md) — the three doors the `zip` argument is choosing between

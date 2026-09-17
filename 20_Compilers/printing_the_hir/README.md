@@ -298,6 +298,8 @@ RUSTC_BOOTSTRAP=1 cargo rustc -- -Zunpretty=hir         # inside a Cargo project
 - [LLVM and its IR](../llvm_and_its_ir/README.md) — the IR rustc hands on to LLVM once MIR is done, where the optimizer works
 - [`rustup default nightly`](../../05_Tooling/nightly/README.md) — the other way to get `-Z` flags, and why it is the wrong default
 - [Macros](../../25_Control_Flow/macros/README.md) — what the `!` means, before looking at what it became
+- [`for` loops](../../25_Control_Flow/for_loops/README.md) — the loop whose desugaring this page prints, taught from the user's side
+- [*Rust in Action* §2.4, run](../../25_Control_Flow/flow_control_claims_checked/README.md#claim-21-read-from-the-hir) — the same printout for a `while` loop, which becomes a `loop` around an `if` rather than a `match`
 
 ## Documentation
 

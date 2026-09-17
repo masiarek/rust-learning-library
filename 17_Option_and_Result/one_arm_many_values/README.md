@@ -499,6 +499,7 @@ claim you can check on every input, for a function this small, in four lines.
 ## See also
 
 - [`Some` and `None`](../some_and_none/README.md) — where `match` is introduced, and the arms that make it exhaustive
+- [`match` expressions](../../25_Control_Flow/match_expressions/README.md) — the basics this page builds on: first arm wins, no fall-through, every case covered
 - [`if let`](../if_let/README.md) — one arm instead of all of them, and what the compiler stops checking in exchange
 - [Six kinds of zero](../six_kinds_of_zero/README.md) — a `match` over row markers, and the catch-all that quietly refiled two of them
 - [What a warning is asking](../../15_First_Programs/what_a_warning_is_asking/README.md) — including the unreachable arm, and why the fix is rarely to silence it

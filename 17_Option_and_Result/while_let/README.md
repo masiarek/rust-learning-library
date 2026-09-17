@@ -270,6 +270,7 @@ rustc --edition 2024 17_Option_and_Result/while_let/examples/while_let.rs -o /tm
 ## See also
 
 - [`if let`](../if_let/README.md) — the single-shot version, and the rest of the family
+- [`while` loops](../../25_Control_Flow/while_loops/README.md) — the same loop with a `bool` condition, which `while let` is the pattern version of
 - [Partial functions](../partial_functions/README.md) — why `pop()`, `next()`, and `recv()` hand back something that can say "no more"
 - [Borrowing](../../18_Ownership/borrowing/README.md) — why copying `*top` out ends the borrow, and the last-use rule that decides which order compiles
 - [`Option` is a one-item collection](../option_as_collection/README.md) — the iterator toolbox this loop is competing with

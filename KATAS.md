@@ -218,6 +218,13 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K198 | [The write, four ways, and the one caught without running](31_C_and_Cpp/buffer_overflow/README.md#practice) | [Buffer overflow](31_C_and_Cpp/buffer_overflow/README.md) | 201 |
 | K199 | [Write the function that hands back the owned twin — one generic line, six arguments, and the `?Sized` that lets `str` in](12_Traits/how_to_learn_to_owned/clone_vs_to_owned/README.md#practice) | [Step 1: `ToOwned` is `Clone` with a separate owned type](12_Traits/how_to_learn_to_owned/clone_vs_to_owned/README.md) | 101 → 201 |
 | K200 | [Predict the receiver, then take it away from the dot — five calls, three that are not a `String`, each fixed by a deref and by a fully qualified call](12_Traits/how_to_learn_to_owned/the_dot_picks_first/README.md#practice) | [Step 5: The dot takes the first receiver that fits](12_Traits/how_to_learn_to_owned/the_dot_picks_first/README.md) | 201 |
+| K201 | [A receipt with no placeholders — every decision an `if` that is the value, then predict which branch a stray `;` gets blamed on](25_Control_Flow/if_expressions/README.md#practice) | [`if` expressions](25_Control_Flow/if_expressions/README.md) | 101 |
+| K202 | [The grade table with a hole in it — one function three ways, delete a band, and predict which two still compile](25_Control_Flow/match_expressions/README.md#practice) | [`match` expressions](25_Control_Flow/match_expressions/README.md) | 101 → 201 |
+| K203 | [Countdown, then three doors — predict what `for n in 10..1` prints, then three loops over one `Vec`: which must come last, and what `E0382` points at](25_Control_Flow/for_loops/README.md#practice) | [`for` loops](25_Control_Flow/for_loops/README.md) | 101 |
+| K204 | [Five index loops, and the one to keep — rewrite each without an index, then feed a short answer sheet, a single reading and an odd count to both versions](25_Control_Flow/loops_without_an_index/README.md#practice) | [Loops without an index](25_Control_Flow/loops_without_an_index/README.md) | 101 → 201 |
+| K205 | [Collatz with a `while` that has to earn its exit — the start that never reaches 1, and the small start whose climb leaves `u32`](25_Control_Flow/while_loops/README.md#practice) | [`while` loops](25_Control_Flow/while_loops/README.md) | 101 → 201 |
+| K206 | [Retry with a budget — a `loop` whose `break` carries a `Result`, and the budget of 0 that sends one request anyway](25_Control_Flow/the_loop_keyword/README.md#practice) | [`loop`](25_Control_Flow/the_loop_keyword/README.md) | 101 → 201 |
+| K207 | [Three ways out of a grid of shelves — the first empty slot with a flag, a label and `find_map`, full shelves with `continue 'shelves`, and what an unlabelled `break` reports](25_Control_Flow/loop_labels/README.md#practice) | [Loop labels](25_Control_Flow/loop_labels/README.md) | 101 → 201 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -495,6 +502,16 @@ The table above is the order to attempt them in. This is the same katas grouped 
 **[Command line](03_Command_Line/README.md)** — 1 kata
 
 - K197 · [Sum what you are given](03_Command_Line/reading_stdin/README.md#practice)
+
+**[Control flow](25_Control_Flow/README.md)** — 7 katas
+
+- K201 · [A receipt with no placeholders](25_Control_Flow/if_expressions/README.md#practice)
+- K202 · [The grade table with a hole in it](25_Control_Flow/match_expressions/README.md#practice)
+- K203 · [Countdown, then three doors](25_Control_Flow/for_loops/README.md#practice)
+- K204 · [Five index loops, and the one to keep](25_Control_Flow/loops_without_an_index/README.md#practice)
+- K205 · [Collatz with a `while` that has to earn its exit](25_Control_Flow/while_loops/README.md#practice)
+- K206 · [Retry with a budget](25_Control_Flow/the_loop_keyword/README.md#practice)
+- K207 · [Three ways out of a grid of shelves](25_Control_Flow/loop_labels/README.md#practice)
 
 <!-- by-subject:end -->
 

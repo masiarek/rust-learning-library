@@ -159,6 +159,7 @@ Same letter, unrelated feature. [A raw string](../../14_Strings/raw_strings_and_
 ## See also
 
 - [Variables](../variables/README.md) — the `let` this page is escaping
+- [Loop labels](../../25_Control_Flow/loop_labels/README.md#no-goto-and-the-cleanup-it-was-for-is-drop) — `goto` is not reserved and needs no `r#`, while `do` does
 - [Raw strings and escapes](../../14_Strings/raw_strings_and_escapes/README.md) — the other `r#`, and the one you will use far more
 - [Modules and visibility](../../27_Modules/modules_and_visibility/README.md) — `crate`, `self` and `super`, the four names that refuse the prefix
 - [Pinning the toolchain](../../05_Tooling/pinning_the_toolchain/README.md) — where this library's edition and compiler are set

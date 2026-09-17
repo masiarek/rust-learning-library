@@ -386,6 +386,8 @@ fn main() {
 ## See also
 
 - [A block is an expression](../a_block_is_an_expression/README.md) — the semicolon that produces `()`, and the `E0308` it causes
+- [`if` expressions](../../25_Control_Flow/if_expressions/README.md) — an `if` with no `else` is `()`, and `E0317` when you use it as a value
+- [Flow control](../../25_Control_Flow/flow_control/README.md) — `for` and `while` loops evaluate to `()` too
 - [Tuples](../../26_Collections/tuples/README.md) — `()` is the zero-field member of that family
 - [Values](../values/README.md) — the census of everything you can write a literal for; `()` is the one with a single value
 - [`Some` and `None`](../../17_Option_and_Result/some_and_none/README.md) — the absence `()` is confused with

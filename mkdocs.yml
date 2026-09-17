@@ -149,6 +149,9 @@ plugins:
         23_Functional/iterators_are_lazy/README.md: 24_Iterators/iterators_are_lazy/README.md
         23_Functional/iter_iter_mut_into_iter/README.md: 24_Iterators/iter_iter_mut_into_iter/README.md
         23_Functional/implementing_iterator/README.md: 24_Iterators/implementing_iterator/README.md
+        # 2026-09-16: one page for both keywords became a folder each, with loop
+        # labels split out as a third, when the stub graduated.
+        25_Control_Flow/break_and_continue/README.md: 25_Control_Flow/break_expressions/README.md
 
         # 2026-09-02: the struct-design lesson was written around a ballot, back
         # when this library borrowed its examples from its voting sibling. The

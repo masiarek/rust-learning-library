@@ -108,6 +108,7 @@ The talk's subject is the last of those, generalized: if a compiler pass can rew
 ## See also
 
 - [What a compiler does before your program runs](../what_a_compiler_does/README.md) — the other route to 55: `const` evaluation runs your loop during the build, with no optimizer involved
+- [Loops without an index](../../25_Control_Flow/loops_without_an_index/README.md) — a second `--emit asm` experiment: the bounds checks the optimizer can prove away, and the one it cannot
 - [Compile times](../../05_Tooling/compile_times/README.md) — codegen is where this work happens, and usually where a build's seconds go
 - [LLVM and its IR](../llvm_and_its_ir/README.md) — the language this transformation is actually performed in, before any assembly exists
 - [Static vs dynamic dispatch](../../12_Traits/static_vs_dynamic_dispatch/README.md) — monomorphization, the thing that gives the optimizer a concrete function to work on in the first place

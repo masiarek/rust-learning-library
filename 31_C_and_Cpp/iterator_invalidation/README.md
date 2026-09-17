@@ -239,6 +239,7 @@ WHY THIS ONE IS THE MOST INSTRUCTIVE ON THE LIST
 ## See also
 
 - [Borrowing](../../18_Ownership/borrowing/README.md) — one mutable borrow or many shared ones, which is the whole rule
+- [Loops without an index](../../25_Control_Flow/loops_without_an_index/README.md) — the loophole: an index loop compiles where the iterator loop is refused, and then misses the element you pushed or panics on the one you removed
 - [Iterators are lazy](../../24_Iterators/iterators_are_lazy/README.md) — why the borrow lives as long as the chain does
 - [Use-after-free](../use_after_free/README.md) — the reallocation half of this bug
 - [The bugs Rust is a reply to](../README.md) — the other eight

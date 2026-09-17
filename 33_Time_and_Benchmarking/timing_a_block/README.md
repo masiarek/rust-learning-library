@@ -86,6 +86,7 @@ That last point is what separates timing from benchmarking, and it is the part s
 ## See also
 
 - [Two clocks](../two_clocks/README.md) — why `Instant`, and what it does and does not promise
+- [`while` loops: Listing 2.7](../../25_Control_Flow/while_loops/README.md#listing-27-a-condition-that-is-not-a-sequence) — a loop that counts until a clock says stop, and why that count is not a benchmark
 - [`black_box` is a hint](../black_box_is_a_hint/README.md) — the next thing a timing needs
 - [What the optimizer does](../../20_Compilers/what_the_optimizer_does/README.md) — why the build you time matters
 - [The three closure traits](../../23_Closures/three_closure_traits/README.md) — why `timed` takes an `FnOnce`

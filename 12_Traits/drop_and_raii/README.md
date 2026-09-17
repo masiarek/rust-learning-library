@@ -368,6 +368,7 @@ fn main() {
 ## See also
 
 - [Ownership and moves](../../18_Ownership/ownership_and_moves/README.md) — whose scope the drop happens in
+- [Loop labels: no `goto`](../../25_Control_Flow/loop_labels/README.md#no-goto-and-the-cleanup-it-was-for-is-drop) — the C `goto cleanup` pattern, and why `Drop` makes the jump unnecessary
 - [Scope is about names, not values](../../18_Ownership/scope_is_about_names/README.md) — the timing this page depends on, from the other side
 - [Assignment drops the old value](../../18_Ownership/assignment_is_a_drop/README.md) — the other place `drop` runs, with no brace to mark it
 - [The drop flag](../../18_Ownership/the_drop_flag/README.md) — how the call at that brace is decided when the compiler cannot tell statically, and why `E0509` refuses to split a `Drop` type

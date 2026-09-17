@@ -245,6 +245,7 @@ rustc --edition 2024 17_Option_and_Result/initial_values/examples/initial_values
 ## See also
 
 - [`Option` fields](../option_fields/README.md) — the case where deferring is not available
+- [`loop`](../../25_Control_Flow/the_loop_keyword/README.md#while-true-is-not-loop-and-rustc-says-so-three-ways) — a binding assigned inside `loop` counts as initialized after it; inside `while true` it is `E0381`
 - [Partial functions](../partial_functions/README.md) — why `iter().max()` returns `Option` in the first place
 - [`OnceLock` ↗](https://doc.rust-lang.org/std/sync/struct.OnceLock.html) — initialize-once, for statics and lazy globals
 

@@ -57,7 +57,7 @@ Notice what four of those six have in common: **one code, several causes.** That
 | [E0282 ↗](https://doc.rust-lang.org/error_codes/E0282.html) | [Type inference](15_First_Programs/type_inference/README.md) | **13** other pages |
 | [E0284 ↗](https://doc.rust-lang.org/error_codes/E0284.html) | [What a type annotation does](15_First_Programs/what_an_annotation_does/README.md) | 1 other page |
 | [E0308 ↗](https://doc.rust-lang.org/error_codes/E0308.html) | [Concatenating strings](14_Strings/concatenating_strings/README.md) — but see [below](#the-two-codes-with-no-single-home) | **36** other pages |
-| [E0317 ↗](https://doc.rust-lang.org/error_codes/E0317.html) | [A block is an expression](15_First_Programs/a_block_is_an_expression/README.md) | — |
+| [E0317 ↗](https://doc.rust-lang.org/error_codes/E0317.html) | [A block is an expression](15_First_Programs/a_block_is_an_expression/README.md) · [`if` expressions](25_Control_Flow/if_expressions/README.md) | — |
 | [E0368 ↗](https://doc.rust-lang.org/error_codes/E0368.html) | [Concatenating strings](14_Strings/concatenating_strings/README.md) | 1 other page |
 | [E0369 ↗](https://doc.rust-lang.org/error_codes/E0369.html) | [Concatenating strings](14_Strings/concatenating_strings/README.md) | **4** other pages |
 | [E0373 ↗](https://doc.rust-lang.org/error_codes/E0373.html) | [The `move` keyword](23_Closures/the_move_keyword/README.md) — but see [below](#the-two-codes-with-no-single-home) | **2** other pages |

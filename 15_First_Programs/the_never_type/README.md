@@ -54,7 +54,7 @@ error[E0308]: mismatched types
 |---|---|
 | [`panic!(..)`](../../25_Control_Flow/macros/README.md) | the value never arrives |
 | `loop {}` with no `break` | control never leaves the loop |
-| `return` · `break` · `continue` | control goes somewhere other than here |
+| `return` · [`break`](../../25_Control_Flow/break_expressions/README.md) · [`continue`](../../25_Control_Flow/continue_expressions/README.md) | control goes somewhere other than here |
 | [`std::process::exit(..)` ↗](https://doc.rust-lang.org/std/process/fn.exit.html) | the process is gone |
 
 `unreachable!()`, `todo!()` and `unimplemented!()` are all `panic!` underneath, so all three have type `!` too — which is why any of them can stand in for a value of any type while the function around it is still being written.
@@ -188,6 +188,7 @@ println!("{value}");   // 5
 - [A block is an expression](../a_block_is_an_expression/README.md) — the semicolon rule this page is the exception to
 - [`let else`](../../30_Pattern_Matching/let_else/README.md) — "the `else` must diverge", restated
 - [The `loop` keyword](../../25_Control_Flow/the_loop_keyword/README.md) — where `loop {}` gets its type, and `break v` gives it one instead
+- [`match` expressions](../../25_Control_Flow/match_expressions/README.md) — the diverging arm beside a valued one, in the lesson on `match` itself
 - [`expect`](../../17_Option_and_Result/expect/README.md) — the everyday diverging call, and the message that says why you believed it could not happen
 - [Never type ↗](https://doc.rust-lang.org/reference/types/never.html) · [`Infallible` ↗](https://doc.rust-lang.org/std/convert/enum.Infallible.html) · [tracking issue #35121 ↗](https://github.com/rust-lang/rust/issues/35121)
 

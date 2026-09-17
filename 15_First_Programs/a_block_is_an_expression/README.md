@@ -510,6 +510,7 @@ fn main() {
 - [Scope is about names, not values](../../18_Ownership/scope_is_about_names/README.md) — what job 1 actually ends, and the two other things "out of scope" is asked to mean
 - [Initial values](../../17_Option_and_Result/initial_values/README.md) — the other route away from `mut`: declare without initializing and let the compiler prove you assigned
 - [SHADOWING.md](../../SHADOWING.md) — the map, if the nested-`n` snippet is what brought you here
+- [Flow control](../../25_Control_Flow/flow_control/README.md) — the rule met again in every construct: [`if`](../../25_Control_Flow/if_expressions/README.md), [`match`](../../25_Control_Flow/match_expressions/README.md) and [`loop`](../../25_Control_Flow/the_loop_keyword/README.md) have values, `for` and `while` evaluate to `()`
 
 ## Po polsku
 

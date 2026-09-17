@@ -345,6 +345,7 @@ fn main() {
 ## See also
 
 - [`iter`, `iter_mut`, `into_iter`](../iter_iter_mut_into_iter/README.md) — where the chain starts, and what it hands you
+- [`break`](../../25_Control_Flow/break_expressions/README.md) — `position`, `any` and `find` stop after the same passes a `for` with `break` makes
 - [Implementing `Iterator`](../implementing_iterator/README.md) — the `next` method all of this laziness is made of
 - [The three closure traits](../../23_Closures/three_closure_traits/README.md) — why `map` takes an `FnMut` and `unwrap_or_else` takes an `FnOnce`
 - [`Option` is a one-item collection](../../17_Option_and_Result/option_as_collection/README.md) — the same adapters, on an iterator of length 0 or 1

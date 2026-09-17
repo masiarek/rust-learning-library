@@ -213,6 +213,7 @@ The chapter 1 refusals are the Rust half of three C programs this library compil
 | Book folder | Read alongside |
 |---|---|
 | `ch2` — `ok.rs` moved into a folder, `cargo init`, then `cargo run -v` | [From one `.rs` file to a Cargo project](../../05_Tooling/from_rustc_to_cargo/README.md) · [What `cargo run -v` shows](../../05_Tooling/from_rustc_to_cargo/what_cargo_passes_rustc/README.md) — the steps re-run on 1.98, with three traps they do not mention |
+| `ch2` — listings 2.7 and 2.8 from §2.4, a `while` that counts until a clock says stop and a `match` over a haystack | [Flow control](../../25_Control_Flow/flow_control/README.md) · [§2.4's claims, run](../../25_Control_Flow/flow_control_claims_checked/README.md): of twenty-one, twelve hold as written, four with a condition, and five need a correction |
 | `ch5` — an `f32` taken apart into sign, exponent and mantissa | [What a float actually stores](../../19_Numbers/what_a_float_stores/README.md) |
 | `ch7-fview` — a hex viewer, sixteen bytes to a line | [A file is bytes](../../04_Files/a_file_is_bytes/README.md) · [Byte tools](../../11_Unix/byte_tools/README.md) |
 | `ch9` — clocks, from `chrono::Local::now` to an NTP client | [Two clocks](../../33_Time_and_Benchmarking/two_clocks/README.md) |
