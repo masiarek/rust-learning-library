@@ -91,6 +91,10 @@ SCOPE = (
     "12_Traits/how_to_learn_to_owned/to_owned_errors",
     # And its companion for warnings: every bad and good program compiles.
     "12_Traits/how_to_learn_to_owned/to_owned_lints",
+    # A lesson page with its errors and lints on the page itself: five
+    # `compile_fail` fences, each beside a fix that must compile, three bad
+    # and good lint pairs, and a kata prompt that is a whole program.
+    "14_Strings/drawing_the_owner_and_the_view",
 )
 
 # `.claude` holds this repo checked out again, once per agent worktree, so a scan

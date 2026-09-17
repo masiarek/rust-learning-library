@@ -1,0 +1,25 @@
+1. Two handles, measured in machine words
+   String  3 words   a pointer, a length and a capacity
+   &str    2 words   a pointer and a length
+
+2. The owner's buffer, one column per byte
+   s = "héllo world"   len 12   capacity 12
+   offset  0  1  2  3  4  5  6  7  8  9 10 11
+   byte   68 c3 a9 6c 6c 6f 20 77 6f 72 6c 64
+   char    h  é  ·  l  l  o  ␣  w  o  r  l  d
+
+3. The view points into that buffer
+   world = "world"   len 5
+   starts at offset Some(7) of s's buffer
+   7, not 6: 'é' is the two bytes c3 a9
+
+4. Making the view owned makes a second buffer
+   world.to_owned() == world          true
+   its pointer, as an offset into s   None
+   len 5   capacity 5   a buffer of its own
+
+5. A move copies the handle and leaves the buffer where it is
+   let moved = s;   buffer address changed: false
+
+6. Even two bytes of text live on the heap, not inside the handle
+   String::from("hi")   capacity 2   bytes inside the handle: false

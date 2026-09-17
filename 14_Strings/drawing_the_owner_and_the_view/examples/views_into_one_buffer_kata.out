@@ -1,0 +1,14 @@
+1. Three views into one buffer of 26 bytes
+   word       offset  len  chars
+   "zażółć"        0   10      6
+   "gęślą"        11    8      5
+   "jaźń"         20    6      4
+
+2. The second buffer
+   words holds 3 handles of 2 machine words each
+   and they sit in a buffer of their own: inside line's buffer? false
+   Text bytes copied to make the three words: none. Heap buffers: two,
+   line's text and the Vec's array of handles.
+
+3. What owning them would cost
+   to_owned on each word: 3 more buffers, none inside line's: true
