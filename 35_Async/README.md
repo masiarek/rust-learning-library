@@ -35,9 +35,9 @@ The section has two parts. **The basics** are what the language and std define o
 | [14. Diagnosing a stuck runtime](building_minidb/diagnosing_a_stuck_runtime/README.md) | 301 | `tokio-console`, runtime metrics, and the sync–async bridges that fail quietly |
 | [15. Testing against a hostile network](building_minidb/testing_against_a_hostile_network/README.md) | 301 | `turmoil`: latency, dropped connections and partitions inside a unit test |
 
-## The gap these pages have to close
+## How these pages will be checked
 
-Every checked example in this library is a single `.rs` file compiled by `rustc` with no dependencies. The basics fit that rule: `Future`, `Pin`, `Context` and a do-nothing `Waker::noop()` are all in std, so a future that prints nothing until its first poll can be an ordinary answer-keyed example. Tokio does not fit it — it is a crate, so the course chapters cannot graduate the same way. [Observability](../21_Observability/README.md) has the same problem and splits each page into a mechanism modelled in std plus an API fence marked as not compiled here; that split is the default plan here too, until the library can check a Cargo project.
+The basics fit the library's oldest rule — one `.rs` file compiled by `rustc` with no dependencies: `Future`, `Pin`, `Context` and a do-nothing `Waker::noop()` are all in std, so a future that prints nothing until its first poll can be an ordinary answer-keyed example. Tokio is a crate, so the course chapters take the other route [Adding a lesson](../CONTRIBUTING.md) now describes: a Cargo workspace in the lesson's `demo/` folder, with a committed `Cargo.lock`, run by `tools/run_cargo_demos.py` against a recorded key — the way [Procedural macros](../37_Procedural_Macros/README.md) is checked. Output that depends on timing or the network (chapters 5, 6 and 15) still has to be made deterministic first, with the paused clock and the simulated network the course itself builds.
 
 ## Where the rest of it is
 

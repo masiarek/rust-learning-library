@@ -4,7 +4,7 @@
 
 **One line:** Fifteen chapters that take `minidb` — a small in-memory key–value store — from a synchronous library to a TCP server that shares its state safely, survives cancellation, overload, shutdown and restarts, and is tested against a network that misbehaves on purpose.
 
-**Every chapter below is a stub** — an outline and the questions the finished page has to answer. See [Adding a lesson](../../CONTRIBUTING.md#stubs), and [the gap these pages have to close](../README.md#the-gap-these-pages-have-to-close): Tokio is a crate, and nothing here is compiled yet.
+**Every chapter below is a stub** — an outline and the questions the finished page has to answer. See [Adding a lesson](../../CONTRIBUTING.md#stubs), and [how these pages will be checked](../README.md#how-these-pages-will-be-checked): Tokio is a crate, so each chapter will graduate with a Cargo `demo/` workspace; nothing here is compiled yet.
 
 ## Before chapter 1
 
@@ -36,7 +36,7 @@ Chapters 1–4 build a server that works when nothing goes wrong. Chapters 5–7
 
 ## One project per chapter
 
-Each chapter's minidb should be a complete Cargo project of its own, frozen once written — the same rule as [the long way round](../../ROADMAP.md): the diff between chapter *n* and chapter *n + 1* is the lesson, and a shared crate would mean editing chapter 3 to break chapter 9's page.
+Each chapter's minidb should be a complete Cargo project of its own — the lesson's `demo/` workspace — frozen once written — the same rule as [the long way round](../../ROADMAP.md): the diff between chapter *n* and chapter *n + 1* is the lesson, and a shared crate would mean editing chapter 3 to break chapter 9's page.
 
 The crates the course needs, all by chapter 15: [`tokio` ↗](https://docs.rs/tokio/latest/tokio/), `tokio-util` (codecs, `CancellationToken`, `TaskTracker`), `futures` (`Stream`, `Sink`), [`criterion` ↗](https://docs.rs/criterion/latest/criterion/), [`tracing` ↗](https://docs.rs/tracing/latest/tracing/), [`tokio-console` ↗](https://github.com/tokio-rs/console) and [`turmoil` ↗](https://docs.rs/turmoil/latest/turmoil/).
 
