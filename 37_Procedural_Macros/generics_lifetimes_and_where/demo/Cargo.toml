@@ -1,0 +1,15 @@
+# One derive written four ways, and the programs that show where each one
+# breaks. `[workspace]` makes this folder its own workspace, whatever manifest
+# sits above it.
+[workspace]
+members = [
+    "debug_generics",
+    "generics_app",
+    "generic_pieces",
+    "ignores_generics",
+    "forgets_where",
+    "phantom_trap",
+    "phantom_fixed",
+    "recursive_trap",
+]
+resolver = "3"

@@ -1,0 +1,57 @@
+error[E0277]: `Meters` doesn't implement `Debug`
+  --> phantom_trap/src/main.rs:31:15
+   |
+31 |     println!("{ours:?}");
+   |               ^^^^^^^^ `Meters` cannot be formatted using `{:?}` because it doesn't implement `Debug`
+   |
+   = help: the trait `Debug` is not implemented for `Meters`
+help: the trait `Debug` is conditionally implemented for `Length<T>`
+  --> phantom_trap/src/main.rs:9:10
+   |
+ 9 | #[derive(DebugBoundingParams)]
+   |          ^^^^^^^^^^^^^^^^^^^ unsatisfied requirement introduced here: `Meters: Debug`
+note: required for `Length<Meters>` to implement `Debug`
+  --> phantom_trap/src/main.rs:10:8
+   |
+ 9 | #[derive(DebugBoundingParams)]
+   |          ------------------- type parameter would need to implement `Debug`
+10 | struct Length<T> {
+   |        ^^^^^^^^^
+   = help: consider manually implementing `Debug` to avoid undesired bounds
+   = note: this error originates in the macro `$crate::format_args_nl` which comes from the expansion of the derive macro `DebugBoundingParams` (in Nightly builds, run with -Z macro-backtrace for more info)
+help: consider annotating `Meters` with `#[derive(Debug)]`
+   |
+ 6 + #[derive(Debug)]
+ 7 | struct Meters;
+   |
+
+error[E0277]: `Meters` doesn't implement `Debug`
+  --> phantom_trap/src/main.rs:32:15
+   |
+32 |     println!("{std:?}");
+   |               ^^^^^^^ `Meters` cannot be formatted using `{:?}` because it doesn't implement `Debug`
+   |
+   = help: the trait `Debug` is not implemented for `Meters`
+help: the trait `Debug` is conditionally implemented for `StdLength<T>`
+  --> phantom_trap/src/main.rs:16:10
+   |
+16 | #[derive(Debug)]
+   |          ^^^^^
+17 | struct StdLength<T> {
+   |                  - unsatisfied requirement introduced here: `Meters: Debug`
+note: required for `StdLength<Meters>` to implement `Debug`
+  --> phantom_trap/src/main.rs:17:8
+   |
+16 | #[derive(Debug)]
+   |          ----- in this derive macro expansion
+17 | struct StdLength<T> {
+   |        ^^^^^^^^^ - type parameter would need to implement `Debug`
+   = help: consider manually implementing `Debug` to avoid undesired bounds
+help: consider annotating `Meters` with `#[derive(Debug)]`
+   |
+ 6 + #[derive(Debug)]
+ 7 | struct Meters;
+   |
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `phantom_trap` (bin "phantom_trap") due to 2 previous errors

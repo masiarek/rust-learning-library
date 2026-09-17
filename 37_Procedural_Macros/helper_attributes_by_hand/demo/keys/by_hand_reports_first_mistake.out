@@ -1,0 +1,7 @@
+error: unknown key: expected `rename`, `skip` or `redact`
+ --> by_hand_mistakes/src/main.rs:6:13
+  |
+6 |     #[debug(skipp)] // a typo
+  |             ^^^^^
+
+error: could not compile `by_hand_mistakes` (bin "by_hand_mistakes") due to 1 previous error

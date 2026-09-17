@@ -1,0 +1,27 @@
+#![feature(prelude_import)]
+extern crate std;
+#[prelude_import]
+use std::prelude::rust_2024::*;
+use std::marker::PhantomData;
+
+use debug_generics::DebugBoundingFields;
+
+/// A unit of measure: a marker type, never constructed, with no `Debug`.
+struct Meters;
+
+struct Length<T> {
+    value: u32,
+    unit: PhantomData<T>,
+}
+impl<T> ::core::fmt::Debug for Length<T> where u32: ::core::fmt::Debug,
+    PhantomData<T>: ::core::fmt::Debug {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+        f.debug_struct("Length").field("value",
+                    &self.value).field("unit", &self.unit).finish()
+    }
+}
+
+fn main() {
+    let length: Length<Meters> = Length { value: 5, unit: PhantomData };
+    { ::std::io::_print(format_args!("{0:?}\n", length)); };
+}

@@ -1,0 +1,20 @@
+darling_derive v0.1.0 (proc-macro)
+├── darling v0.24.1
+│   ├── darling_core v0.24.1
+│   │   ├── ident_case v1.0.1
+│   │   ├── proc-macro2 v1.0.107
+│   │   │   └── unicode-ident v1.0.25
+│   │   ├── quote v1.0.47
+│   │   │   └── proc-macro2 v1.0.107 (*)
+│   │   ├── strsim v0.11.1
+│   │   └── syn v3.0.6
+│   │       ├── proc-macro2 v1.0.107 (*)
+│   │       ├── quote v1.0.47 (*)
+│   │       └── unicode-ident v1.0.25
+│   └── darling_macro v0.24.1 (proc-macro)
+│       ├── darling_core v0.24.1 (*)
+│       ├── quote v1.0.47 (*)
+│       └── syn v3.0.6 (*)
+├── proc-macro2 v1.0.107 (*)
+├── quote v1.0.47 (*)
+└── syn v3.0.6 (*)

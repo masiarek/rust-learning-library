@@ -1,0 +1,13 @@
+# The derive from helper_attributes_by_hand, with its attributes read by
+# darling, plus the same two programs and a line counter. `[workspace]` makes
+# this folder its own workspace, whatever manifest sits above it.
+[workspace]
+members = [
+    "darling_derive",
+    "darling_app",
+    "darling_mistakes",
+    "mask_required",
+    "forgot_mask",
+    "darling_line_counts",
+]
+resolver = "3"

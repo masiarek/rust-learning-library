@@ -1,0 +1,28 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+
+[[run]]
+stem = "custom_debug_with_darling"
+cmd = ["cargo", "run", "-q", "-p", "darling_app"]
+
+[[run]]
+stem = "darling_reports_every_mistake"
+cmd = ["cargo", "build", "-q", "-p", "darling_mistakes"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "darling_missing_field"
+cmd = ["cargo", "build", "-q", "-p", "forgot_mask"]
+expect = "failure"
+stream = "stderr"
+
+# Reads both lessons' derive sources; see darling_line_counts/src/main.rs.
+[[run]]
+stem = "darling_line_counts"
+cmd = ["cargo", "run", "-q", "-p", "darling_line_counts"]
+
+# The first line names the package's absolute path, which differs per machine.
+[[run]]
+stem = "darling_dependency_tree"
+cmd = ["cargo", "tree", "-p", "darling_derive", "-e", "normal"]
+filters = [[' \(/[^)]*\)', '']]

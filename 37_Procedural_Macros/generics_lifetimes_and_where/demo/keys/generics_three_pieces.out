@@ -1,0 +1,3 @@
+impl_generics  < 'a , T : Clone , const N : usize >
+ty_generics    < 'a , T , N >
+where_clause   where T : PartialEq ,

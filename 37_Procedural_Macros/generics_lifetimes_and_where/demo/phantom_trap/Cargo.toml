@@ -1,0 +1,8 @@
+[package]
+name = "phantom_trap"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+debug_generics = { path = "../debug_generics" }

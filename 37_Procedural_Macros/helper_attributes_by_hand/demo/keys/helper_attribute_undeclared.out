@@ -1,0 +1,7 @@
+error: cannot find attribute `debug` in this scope
+ --> undeclared_helper/src/main.rs:4:7
+  |
+4 |     #[debug(skip)]
+  |       ^^^^^
+
+error: could not compile `undeclared_helper` (bin "undeclared_helper") due to 1 previous error

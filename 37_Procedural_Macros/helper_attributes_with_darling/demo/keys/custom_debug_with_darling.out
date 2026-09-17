@@ -1,0 +1,9 @@
+Account { id: 7, email: "ada@example.com", password: <hidden>, .. }
+Account {
+    id: 7,
+    email: "ada@example.com",
+    password: <hidden>,
+    ..
+}
+hidden, not gone: password has 7 bytes, failed_logins = 3
+Point { x: 1, y: 2 }

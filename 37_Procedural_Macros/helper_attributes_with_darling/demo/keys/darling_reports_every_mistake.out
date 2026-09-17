@@ -1,0 +1,19 @@
+error: Duplicate field `rename`
+ --> darling_mistakes/src/main.rs:4:29
+  |
+4 | #[debug(rename = "Account", rename = "User")] // the same key twice
+  |                             ^^^^^^
+
+error: Unknown field: `skipp`. Did you mean `skip`?
+ --> darling_mistakes/src/main.rs:6:13
+  |
+6 |     #[debug(skipp)] // a typo
+  |             ^^^^^
+
+error: Unexpected type `int`
+ --> darling_mistakes/src/main.rs:8:22
+  |
+8 |     #[debug(rename = 5)] // a number where a string belongs
+  |                      ^
+
+error: could not compile `darling_mistakes` (bin "darling_mistakes") due to 3 previous errors

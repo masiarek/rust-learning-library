@@ -1,0 +1,25 @@
+#![feature(prelude_import)]
+extern crate std;
+#[prelude_import]
+use std::prelude::rust_2024::*;
+use debug_generics::DebugBoundingParams;
+
+/// A lifetime, a bounded type parameter, a const parameter and a `where` clause.
+struct Wrapper<'a, T: Clone, const N : usize> where T: PartialEq {
+    label: &'a str,
+    items: [T; N],
+}
+impl<'a, T: Clone, const N : usize> ::core::fmt::Debug for Wrapper<'a, T, N>
+    where T: PartialEq, T: ::core::fmt::Debug {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+        f.debug_struct("Wrapper").field("label",
+                    &self.label).field("items", &self.items).finish()
+    }
+}
+
+fn main() {
+    let evens = Wrapper { label: "evens", items: [2, 4, 6] };
+    let words = Wrapper { label: "words", items: ["foo", "bar"] };
+    { ::std::io::_print(format_args!("{0:?}\n", evens)); };
+    { ::std::io::_print(format_args!("{0:?}\n", words)); };
+}

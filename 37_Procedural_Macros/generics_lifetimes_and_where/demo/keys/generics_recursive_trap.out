@@ -1,0 +1,12 @@
+error[E0275]: overflow evaluating the requirement `List<i32>: Debug`
+  --> recursive_trap/src/main.rs:27:15
+   |
+27 |     println!("{by_fields:?}");
+   |               ^^^^^^^^^^^^^
+   |
+   = note: required for `Box<List<i32>>` to implement `Debug`
+   = note: 2 redundant requirements hidden
+   = note: required for `List<i32>` to implement `Debug`
+
+For more information about this error, try `rustc --explain E0275`.
+error: could not compile `recursive_trap` (bin "recursive_trap") due to 1 previous error

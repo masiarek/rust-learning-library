@@ -1,0 +1,47 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+
+[[run]]
+stem = "generics_split_for_impl"
+cmd = ["cargo", "run", "-q", "-p", "generics_app"]
+
+[[run]]
+stem = "generics_split_for_impl_expanded"
+cmd = ["cargo", "rustc", "-q", "-p", "generics_app", "--profile=check", "--", "-Zunpretty=expanded"]
+env = { RUSTC_BOOTSTRAP = "1" }
+
+[[run]]
+stem = "generics_three_pieces"
+cmd = ["cargo", "run", "-q", "-p", "generic_pieces"]
+
+[[run]]
+stem = "generics_ignored"
+cmd = ["cargo", "build", "-q", "-p", "ignores_generics"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "generics_where_forgotten"
+cmd = ["cargo", "build", "-q", "-p", "forgets_where"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "generics_phantom_trap"
+cmd = ["cargo", "build", "-q", "-p", "phantom_trap"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "generics_phantom_fixed"
+cmd = ["cargo", "run", "-q", "-p", "phantom_fixed"]
+
+[[run]]
+stem = "generics_phantom_fixed_expanded"
+cmd = ["cargo", "rustc", "-q", "-p", "phantom_fixed", "--profile=check", "--", "-Zunpretty=expanded"]
+env = { RUSTC_BOOTSTRAP = "1" }
+
+[[run]]
+stem = "generics_recursive_trap"
+cmd = ["cargo", "build", "-q", "-p", "recursive_trap"]
+expect = "failure"
+stream = "stderr"

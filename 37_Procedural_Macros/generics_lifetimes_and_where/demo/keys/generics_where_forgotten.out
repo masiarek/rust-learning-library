@@ -1,0 +1,55 @@
+error[E0277]: can't compare `T` with `T`
+ --> forgets_where/src/main.rs:3:10
+  |
+3 | #[derive(DebugForgettingWhere)]
+  |          ^^^^^^^^^^^^^^^^^^^^ no implementation for `T == T`
+  |
+note: required by a bound in `Wrapper`
+ --> forgets_where/src/main.rs:6:8
+  |
+4 | struct Wrapper<'a, T: Clone, const N: usize>
+  |        ------- required by a bound in this struct
+5 | where
+6 |     T: PartialEq,
+  |        ^^^^^^^^^ required by this bound in `Wrapper`
+  = note: this error originates in the derive macro `DebugForgettingWhere` (in Nightly builds, run with -Z macro-backtrace for more info)
+help: consider further restricting type parameter `T` with trait `PartialEq`
+  |
+4 | struct Wrapper<'a, T: Clone + std::cmp::PartialEq, const N: usize>
+  |                             +++++++++++++++++++++
+
+error[E0277]: can't compare `T` with `T`
+ --> forgets_where/src/main.rs:4:8
+  |
+4 | struct Wrapper<'a, T: Clone, const N: usize>
+  |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no implementation for `T == T`
+  |
+note: required by a bound in `Wrapper`
+ --> forgets_where/src/main.rs:6:8
+  |
+4 | struct Wrapper<'a, T: Clone, const N: usize>
+  |        ------- required by a bound in this struct
+5 | where
+6 |     T: PartialEq,
+  |        ^^^^^^^^^ required by this bound in `Wrapper`
+help: consider further restricting type parameter `T` with trait `PartialEq`
+  |
+4 | struct Wrapper<'a, T: Clone + std::cmp::PartialEq, const N: usize>
+  |                             +++++++++++++++++++++
+
+error[E0277]: `T` doesn't implement `Debug`
+ --> forgets_where/src/main.rs:3:10
+  |
+3 | #[derive(DebugForgettingWhere)]
+  |          ^^^^^^^^^^^^^^^^^^^^ the trait `Debug` is not implemented for `T`
+  |
+  = note: required for `[T; N]` to implement `Debug`
+  = note: required for the cast from `&[T; N]` to `&dyn Debug`
+  = note: this error originates in the derive macro `DebugForgettingWhere` (in Nightly builds, run with -Z macro-backtrace for more info)
+help: consider further restricting type parameter `T` with trait `Debug`
+  |
+4 | struct Wrapper<'a, T: Clone + std::fmt::Debug, const N: usize>
+  |                             +++++++++++++++++
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `forgets_where` (bin "forgets_where") due to 3 previous errors

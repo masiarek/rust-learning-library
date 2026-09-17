@@ -1,0 +1,8 @@
+file      version  lines  code
+attrs.rs  by hand     96    84
+attrs.rs  darling     28    20
+lib.rs    by hand     54    42
+lib.rs    darling     56    44
+
+darling_app is by_hand_app, unchanged: true
+darling_mistakes is by_hand_mistakes, unchanged: true

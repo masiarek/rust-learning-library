@@ -1,0 +1,53 @@
+#![feature(prelude_import)]
+extern crate std;
+#[prelude_import]
+use std::prelude::rust_2024::*;
+use custom_debug::CustomDebug;
+
+#[debug(rename = "Account", mask = "<hidden>")]
+struct User {
+    id: u64,
+    #[debug(rename = "email")]
+    email_address: String,
+    /// A doc comment is an attribute too; the derive has to step over it.
+    #[debug(redact)]
+    password: String,
+    #[debug(skip)]
+    failed_logins: u32,
+}
+impl ::core::fmt::Debug for User {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+        f.debug_struct("Account").field("id",
+                        &self.id).field("email",
+                    &self.email_address).field("password",
+                &format_args!("{0}", "<hidden>")).finish_non_exhaustive()
+    }
+}
+
+struct Point {
+    x: i32,
+    y: i32,
+}
+impl ::core::fmt::Debug for Point {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+        f.debug_struct("Point").field("x",
+                    &self.x).field("y", &self.y).finish()
+    }
+}
+
+fn main() {
+    let user =
+        User {
+            id: 7,
+            email_address: "ada@example.com".to_owned(),
+            password: "hunter2".to_owned(),
+            failed_logins: 3,
+        };
+    { ::std::io::_print(format_args!("{0:?}\n", user)); };
+    { ::std::io::_print(format_args!("{0:#?}\n", user)); };
+    {
+        ::std::io::_print(format_args!("hidden, not gone: password has {0} bytes, failed_logins = {1}\n",
+                user.password.len(), user.failed_logins));
+    };
+    { ::std::io::_print(format_args!("{0:?}\n", Point { x: 1, y: 2 })); };
+}

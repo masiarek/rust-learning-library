@@ -1,0 +1,28 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+
+[[run]]
+stem = "custom_debug_by_hand"
+cmd = ["cargo", "run", "-q", "-p", "by_hand_app"]
+
+[[run]]
+stem = "custom_debug_by_hand_expanded"
+cmd = ["cargo", "rustc", "-q", "-p", "by_hand_app", "--profile=check", "--", "-Zunpretty=expanded"]
+env = { RUSTC_BOOTSTRAP = "1" }
+
+[[run]]
+stem = "by_hand_reports_first_mistake"
+cmd = ["cargo", "build", "-q", "-p", "by_hand_mistakes"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "helper_attribute_undeclared"
+cmd = ["cargo", "build", "-q", "-p", "undeclared_helper"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "helper_attribute_before_derive"
+cmd = ["cargo", "build", "-q", "-p", "helper_before_derive"]
+expect = "failure"
+stream = "stderr"

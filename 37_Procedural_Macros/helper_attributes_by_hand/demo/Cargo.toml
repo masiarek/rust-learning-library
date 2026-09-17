@@ -1,0 +1,12 @@
+# One derive macro with helper attributes, and the programs that use it well
+# and badly. `[workspace]` makes this folder its own workspace, whatever
+# manifest sits above it.
+[workspace]
+members = [
+    "by_hand_derive",
+    "by_hand_app",
+    "by_hand_mistakes",
+    "undeclared_helper",
+    "helper_before_derive",
+]
+resolver = "3"

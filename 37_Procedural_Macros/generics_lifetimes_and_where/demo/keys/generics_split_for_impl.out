@@ -1,0 +1,2 @@
+Wrapper { label: "evens", items: [2, 4, 6] }
+Wrapper { label: "words", items: ["foo", "bar"] }

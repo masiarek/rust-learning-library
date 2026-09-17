@@ -1,0 +1,8 @@
+[package]
+name = "by_hand_mistakes"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+custom_debug = { path = "../by_hand_derive", package = "by_hand_derive" }
