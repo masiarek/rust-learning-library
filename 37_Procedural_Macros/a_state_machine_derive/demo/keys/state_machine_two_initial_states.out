@@ -1,0 +1,7 @@
+error: `Open` is already the initial state
+ --> refusals/../state_machine/tests/ui/two_initial_states.rs:7:13
+  |
+7 |     #[state(initial, to(Open))]
+  |             ^^^^^^^
+
+error: could not compile `refusals` (bin "two_initial_states") due to 1 previous error

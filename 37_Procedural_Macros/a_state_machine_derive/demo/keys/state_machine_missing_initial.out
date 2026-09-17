@@ -1,0 +1,7 @@
+error: no initial state: mark one variant `#[state(initial)]`
+ --> refusals/../state_machine/tests/ui/missing_initial.rs:4:6
+  |
+4 | enum Door {
+  |      ^^^^
+
+error: could not compile `refusals` (bin "missing_initial") due to 1 previous error

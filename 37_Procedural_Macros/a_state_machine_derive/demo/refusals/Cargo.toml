@@ -1,0 +1,22 @@
+# The trybuild cases, built as ordinary binaries too, so a plain `cargo build`
+# shows the same errors a user of the derive would see.
+[package]
+name = "refusals"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+state_machine = { path = "../state_machine" }
+
+[[bin]]
+name = "unknown_state"
+path = "../state_machine/tests/ui/unknown_state.rs"
+
+[[bin]]
+name = "missing_initial"
+path = "../state_machine/tests/ui/missing_initial.rs"
+
+[[bin]]
+name = "two_initial_states"
+path = "../state_machine/tests/ui/two_initial_states.rs"

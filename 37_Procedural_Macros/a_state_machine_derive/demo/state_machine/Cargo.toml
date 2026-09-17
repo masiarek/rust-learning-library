@@ -1,0 +1,11 @@
+[package]
+name = "state_machine"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+state_machine_derive = { path = "../state_machine_derive" }
+
+[dev-dependencies]
+trybuild = "1"

@@ -1,0 +1,6 @@
+# The capstone: a facade crate, its derive, a program that uses them, a build
+# full of names the derive could have taken, and three builds that must fail.
+# `[workspace]` makes this folder its own workspace, whatever sits above it.
+[workspace]
+members = ["state_machine", "state_machine_derive", "door", "no_clash", "refusals"]
+resolver = "3"

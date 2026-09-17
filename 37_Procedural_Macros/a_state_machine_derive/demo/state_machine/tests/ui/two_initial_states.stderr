@@ -1,0 +1,5 @@
+error: `Open` is already the initial state
+ --> tests/ui/two_initial_states.rs:7:13
+  |
+7 |     #[state(initial, to(Open))]
+  |             ^^^^^^^

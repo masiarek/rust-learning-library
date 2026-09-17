@@ -1,0 +1,44 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+
+[[run]]
+stem = "state_machine_door"
+cmd = ["cargo", "run", "-q", "-p", "door"]
+
+[[run]]
+stem = "state_machine_door_expanded"
+cmd = ["cargo", "rustc", "-q", "-p", "door", "--lib", "--profile=check", "--", "-Zunpretty=expanded"]
+env = { RUSTC_BOOTSTRAP = "1" }
+
+# Each refusal is a trybuild case, built here as an ordinary binary.
+[[run]]
+stem = "state_machine_unknown_state"
+cmd = ["cargo", "build", "-q", "-p", "refusals", "--bin", "unknown_state"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "state_machine_missing_initial"
+cmd = ["cargo", "build", "-q", "-p", "refusals", "--bin", "missing_initial"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "state_machine_two_initial_states"
+cmd = ["cargo", "build", "-q", "-p", "refusals", "--bin", "two_initial_states"]
+expect = "failure"
+stream = "stderr"
+
+# trybuild reports each case on stderr, after the output of the cargo it runs
+# inside. Those status lines ("Checking …", "Finished … in 0.40s") depend on
+# what was already built and where, so the filter removes them.
+[[run]]
+stem = "state_machine_trybuild"
+cmd = ["cargo", "test", "-q", "-p", "state_machine", "--test", "ui"]
+stream = "stderr"
+filters = [['(?m)^ +[A-Z][a-z]+ .*\n', '']]
+
+# Both streams, so the key shows the build had nothing to warn about either.
+[[run]]
+stem = "state_machine_no_clash"
+cmd = ["cargo", "run", "-q", "-p", "no_clash"]
+stream = "both"

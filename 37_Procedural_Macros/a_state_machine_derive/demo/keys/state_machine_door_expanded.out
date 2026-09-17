@@ -1,0 +1,35 @@
+#![feature(prelude_import)]
+extern crate std;
+#[prelude_import]
+use std::prelude::rust_2024::*;
+use state_machine::StateMachine;
+
+/// A door that can be locked only while closed.
+pub enum Door {
+
+    #[state(initial, to(Closed))]
+    Open,
+
+    #[state(to(Open, Locked))]
+    Closed,
+
+    #[state(to(Closed))]
+    Locked,
+}
+impl ::state_machine::StateMachine for Door {
+    const INITIAL: Self = Self::Open;
+    fn name(&self) -> &'static ::core::primitive::str {
+        match self {
+            Self::Open => "Open",
+            Self::Closed => "Closed",
+            Self::Locked => "Locked",
+        }
+    }
+    fn next_states(&self) -> &'static [Self] {
+        match self {
+            Self::Open => &[Self::Closed],
+            Self::Closed => &[Self::Open, Self::Locked],
+            Self::Locked => &[Self::Closed],
+        }
+    }
+}

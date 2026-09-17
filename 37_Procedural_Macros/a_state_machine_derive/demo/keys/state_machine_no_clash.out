@@ -1,0 +1,5 @@
+state_machine::whose()            the user's module
+Order::INITIAL                    Paid
+<Order as StateMachine>::INITIAL  Placed
+order.name()                      order (Placed)
+refused                           no transition from Shipped to Placed

@@ -1,0 +1,11 @@
+error: `Door` has no state named `Clsoed`
+ --> tests/ui/unknown_state.rs:5:25
+  |
+5 |     #[state(initial, to(Clsoed))]
+  |                         ^^^^^^
+
+error: `Door` has no state named `Lockd`
+ --> tests/ui/unknown_state.rs:7:22
+  |
+7 |     #[state(to(Open, Lockd))]
+  |                      ^^^^^

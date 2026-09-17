@@ -1,0 +1,10 @@
+Open   -> Closed
+Closed -> Open, Locked
+Locked -> Closed
+
+start: Open
+  now: Closed
+  now: Locked
+  refused: no transition from Locked to Open
+  now: Closed
+  now: Open

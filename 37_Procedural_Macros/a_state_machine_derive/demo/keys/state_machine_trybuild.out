@@ -1,0 +1,7 @@
+
+
+test tests/ui/missing_initial.rs ... ok
+test tests/ui/two_initial_states.rs ... ok
+test tests/ui/unknown_state.rs ... ok
+
+

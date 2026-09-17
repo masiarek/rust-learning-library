@@ -1,0 +1,13 @@
+error: `Door` has no state named `Clsoed`
+ --> refusals/../state_machine/tests/ui/unknown_state.rs:5:25
+  |
+5 |     #[state(initial, to(Clsoed))]
+  |                         ^^^^^^
+
+error: `Door` has no state named `Lockd`
+ --> refusals/../state_machine/tests/ui/unknown_state.rs:7:22
+  |
+7 |     #[state(to(Open, Lockd))]
+  |                      ^^^^^
+
+error: could not compile `refusals` (bin "unknown_state") due to 2 previous errors
