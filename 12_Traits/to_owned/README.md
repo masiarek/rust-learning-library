@@ -355,6 +355,7 @@ fn main() {
 - [What a trait is](../what_a_trait_is/README.md) — associated types, which are what make `Owned` possible
 - [Strings: links, books and videos](../../14_Strings/resources/README.md) — where to read more, since `&str` is the case this trait exists for
 - [Step 1 of the `ToOwned` path](../how_to_learn_to_owned/clone_vs_to_owned/README.md) — the two signatures side by side, and the impl on `str` rather than `&str`
+- [Where `Clone` will not do: code only](../how_to_learn_to_owned/where_clone_will_not_do/README.md) — ten pairs, `.clone()` failing beside `ToOwned` compiling, checked on every build
 
 ## Sources
 

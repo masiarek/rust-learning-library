@@ -82,6 +82,10 @@ SCOPE = (
     # files rustc refuses over one bracket. Its whole program with three
     # mistakes is `compile_fail`, and the working answer above it must compile.
     "15_First_Programs/where_a_bracket_error_points",
+    # A code-only gallery: ten pairs, each a `compile_fail` fence that reaches
+    # for `.clone()` and a fence that must compile with `ToOwned`. The page
+    # makes no claim in prose that the fences do not make themselves.
+    "12_Traits/how_to_learn_to_owned/where_clone_will_not_do",
 )
 
 # `.claude` holds this repo checked out again, once per agent worktree, so a scan

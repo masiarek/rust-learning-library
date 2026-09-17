@@ -1,0 +1,14 @@
+ 1. keep("Ada")                -> "Ada", alloc::string::String
+ 2. (*name).to_owned()         -> "Ada", alloc::string::String
+ 3. keep(&[3, 1, 2])           -> [3, 1, 2], alloc::vec::Vec<i32>
+ 4. keep(Path::new(..))        -> "notes.txt", std::path::PathBuf
+ 5. refill(&mut buf, "Grace")  -> "Grace", same buffer: true
+ 6. own_all::<str>             -> ["Ada", "Grace"], alloc::vec::Vec<alloc::string::String>
+    own_all::<[i32]>           -> [[1, 2], [3]], alloc::vec::Vec<alloc::vec::Vec<i32>>
+ 7. Keeper::<str>::new         -> kept "Ada", alloc::string::String
+    Keeper::<[u8]>::new        -> kept [65, 100, 97], alloc::vec::Vec<u8>
+ 8. underscores("first name")  -> Owned "first_name"
+ 8. underscores("surname")     -> Borrowed "surname"
+ 9. count words, &str keys     -> [("ada", 2), ("grace", 1)]
+    count chunks, &[u8] keys   -> [([71, 69, 84], 2), ([80, 85, 84], 1)]
+10. own_words(&["Ada", ..])    -> ["Ada", "Grace"], alloc::vec::Vec<alloc::string::String>

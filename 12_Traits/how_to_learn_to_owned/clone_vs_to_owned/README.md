@@ -16,7 +16,7 @@ fn clone(&self) -> Self;             // &String -> String
 fn to_owned(&self) -> Self::Owned;   // &str -> String
 ```
 
-That is the whole difference, and the rest of the path is about why it has to exist. Here is the trait in full:
+That is the whole difference, and the rest of the path is about why it has to exist. To see it decide whether code compiles before reading any further, [Where `Clone` will not do](../where_clone_will_not_do/README.md) is ten pairs of fences and no prose. Here is the trait in full:
 
 ```rust
 pub trait ToOwned {
