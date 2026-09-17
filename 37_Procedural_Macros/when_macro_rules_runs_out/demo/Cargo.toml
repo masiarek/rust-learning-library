@@ -1,0 +1,6 @@
+# One procedural macro and the program that uses it, beside the `macro_rules!`
+# attempts at the same job. `[workspace]` makes this folder its own workspace,
+# whatever manifest sits above it.
+[workspace]
+members = ["counters_macro", "counters_app", "rules_pasted", "rules_concat", "still_rules"]
+resolver = "3"

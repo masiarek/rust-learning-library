@@ -1,0 +1,10 @@
+error[E0080]: evaluation panicked: not a hex string
+ --> still_rules/src/bin/bad_hex.rs:4:20
+  |
+4 |     println!("{}", hex!("coffee"));
+  |                    ^^^^^^^^^^^^^^ evaluation of `main::_` failed here
+  |
+  = note: this error originates in the macro `$crate::panic::panic_2021` which comes from the expansion of the macro `hex` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+For more information about this error, try `rustc --explain E0080`.
+error: could not compile `still_rules` (bin "bad_hex") due to 1 previous error

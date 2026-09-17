@@ -1,0 +1,43 @@
+error: missing parameters for function definition
+  --> rules_pasted/src/main.rs:15:27
+   |
+15 |             $(pub fn incr_$name(&mut self) {
+   |                           ^
+...
+22 | counters!(requests, errors);
+   | --------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `counters` (in Nightly builds, run with -Z macro-backtrace for more info)
+help: add a parameter list
+   |
+15 |             $(pub fn incr_()$name(&mut self) {
+   |                           ++
+
+error: expected one of `->`, `<`, `where`, or `{`, found identifier `requests`
+  --> rules_pasted/src/main.rs:15:27
+   |
+10 |         impl Counters {
+   |                       - while parsing this item list starting here
+...
+15 |             $(pub fn incr_$name(&mut self) {
+   |                           ^^^^^ expected one of `->`, `<`, `where`, or `{`
+...
+18 |         }
+   |         - the item list ends here
+...
+22 | counters!(requests, errors);
+   | --------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `counters` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0599]: no method named `incr_requests` found for struct `Counters` in the current scope
+  --> rules_pasted/src/main.rs:26:12
+   |
+ 6 |         pub struct Counters {
+   |         ------------------- method `incr_requests` not found for this struct
+...
+26 |     counts.incr_requests();
+   |            ^^^^^^^^^^^^^ method not found in `Counters`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `rules_pasted` (bin "rules_pasted") due to 3 previous errors

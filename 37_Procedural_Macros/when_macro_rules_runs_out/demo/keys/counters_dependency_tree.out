@@ -1,0 +1,12 @@
+counters_app v0.1.0
+└── counters_macro v0.1.0 (proc-macro)
+    ├── proc-macro2 v1.0.107
+    │   └── unicode-ident v1.0.25
+    ├── quote v1.0.47
+    │   └── proc-macro2 v1.0.107 (*)
+    └── syn v3.0.6
+        ├── proc-macro2 v1.0.107 (*)
+        ├── quote v1.0.47 (*)
+        └── unicode-ident v1.0.25
+
+still_rules v0.1.0

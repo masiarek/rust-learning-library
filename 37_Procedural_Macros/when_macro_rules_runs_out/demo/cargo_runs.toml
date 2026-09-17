@@ -1,0 +1,43 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+
+[[run]]
+stem = "counters_proc_macro"
+cmd = ["cargo", "run", "-q", "-p", "counters_app"]
+
+[[run]]
+stem = "counters_expanded"
+cmd = ["cargo", "rustc", "-q", "-p", "counters_app", "--profile=check", "--", "-Zunpretty=expanded"]
+env = { RUSTC_BOOTSTRAP = "1" }
+
+[[run]]
+stem = "counters_rules_pasted"
+cmd = ["cargo", "build", "-q", "-p", "rules_pasted"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "counters_rules_concat"
+cmd = ["cargo", "build", "-q", "-p", "rules_concat"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "still_rules_can"
+cmd = ["cargo", "run", "-q", "-p", "still_rules", "--bin", "still_rules"]
+
+[[run]]
+stem = "still_rules_bad_hex"
+cmd = ["cargo", "build", "-q", "-p", "still_rules", "--bin", "bad_hex"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "still_rules_bad_method"
+cmd = ["cargo", "build", "-q", "-p", "still_rules", "--bin", "bad_method"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "counters_dependency_tree"
+cmd = ["cargo", "tree", "-p", "counters_app", "-p", "still_rules", "-e", "normal"]
+filters = [[" \\((/|[A-Za-z]:)[^)]*\\)", ""]]

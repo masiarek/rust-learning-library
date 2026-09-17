@@ -1,0 +1,24 @@
+#![feature(prelude_import)]
+extern crate std;
+#[prelude_import]
+use std::prelude::rust_2024::*;
+pub struct Counters {
+    pub requests: u64,
+    pub errors: u64,
+}
+impl Counters {
+    pub fn new() -> Self { Self { requests: 0, errors: 0 } }
+    pub fn incr_requests(&mut self) { self.requests += 1; }
+    pub fn incr_errors(&mut self) { self.errors += 1; }
+}
+
+fn main() {
+    let mut counts = Counters::new();
+    counts.incr_requests();
+    counts.incr_requests();
+    counts.incr_errors(); // requests = 2, errors = 1
+    {
+        ::std::io::_print(format_args!("requests = {0}, errors = {1}\n",
+                counts.requests, counts.errors));
+    };
+}

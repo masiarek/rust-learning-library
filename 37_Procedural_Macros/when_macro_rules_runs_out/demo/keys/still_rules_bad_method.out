@@ -1,0 +1,21 @@
+error: unknown method `PATCH`
+ --> still_rules/src/bin/bad_method.rs:4:20
+  |
+4 |     println!("{}", method!(PATCH));
+  |                    ^^^^^^^^^^^^^^
+  |
+  = note: this error originates in the macro `method` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: no rules expected `"GET"`
+  --> still_rules/src/bin/bad_method.rs:5:28
+   |
+ 5 |     println!("{}", method!("GET"));
+   |                            ^^^^^ no rules expected this token in macro call
+   |
+note: while trying to match `GET`
+  --> still_rules/src/lib.rs:29:6
+   |
+29 |     (GET) => {
+   |      ^^^
+
+error: could not compile `still_rules` (bin "bad_method") due to 2 previous errors
