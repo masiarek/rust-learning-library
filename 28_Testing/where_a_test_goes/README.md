@@ -315,6 +315,8 @@ fn main() {
 - [cargo-nextest](../../05_Tooling/nextest/README.md) — a different harness, one process per test
 - [Testing a command](../../03_Command_Line/testing_a_command/README.md) — integration testing a binary rather than a library
 - [How `cargo test` runs your tests](../how_cargo_test_runs/README.md) — what the three kinds cost to build and run, and the tests that share a process
+- [Every testing error, and its fix](../testing_errors/README.md): the compiler errors around tests, each with a fix that compiles
+- [Lints around tests](../testing_lints/README.md): rustc and clippy on test code, bad and good
 
 ## Sources
 

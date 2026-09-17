@@ -295,6 +295,8 @@ fn main() {
 - [Temporary directories in tests](../../04_Files/temp_dirs_in_tests/README.md): the real filesystem, isolated, instead of a fake one
 - [Mocking a server](../../07_Clients/mocking_a_server/README.md): the double one level further out, at the HTTP boundary
 - [Testing: courses and links](../resources/README.md): the Advanced Rust testing course's mocking section, which this page follows
+- [Every testing error, and its fix](../testing_errors/README.md): the compiler errors around tests, each with a fix that compiles
+- [Lints around tests](../testing_lints/README.md): rustc and clippy on test code, bad and good
 
 ## Po polsku
 

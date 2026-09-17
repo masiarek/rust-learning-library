@@ -332,6 +332,7 @@ fn main() {
 - [`Path` and `PathBuf`](../path_and_pathbuf/README.md): the owned name that outlives the directory
 - [Testing a command](../../03_Command_Line/testing_a_command/README.md): the tests that need a filesystem of their own
 - [Testing: courses and links](../../28_Testing/resources/README.md): the Advanced Rust testing course's filesystem-isolation section, which this page follows
+- [Every testing error, and its fix](../../28_Testing/testing_errors/README.md): E0515 and E0716 from the same trap, with fixes
 
 ## Po polsku
 

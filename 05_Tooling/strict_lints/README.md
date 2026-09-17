@@ -125,6 +125,7 @@ That is the two groups without the panic policy — the "teach you Rust" half on
 - [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md) — what the panic set is actually buying you
 - [Scale the denominator away](../../09_Advanced/scaled_integers/README.md) — `checked_*` and `saturating_*`, which `arithmetic_side_effects` makes mandatory
 - Erik Schwartz, [*Your clippy config should be stricter* ↗](https://emschwartz.me/your-clippy-config-should-be-stricter/) — the argument at length, cited from the source above
+- [Lints around tests](../../28_Testing/testing_lints/README.md) — `allow-unwrap-in-tests` run, and the test lints worth turning on
 
 ---
 

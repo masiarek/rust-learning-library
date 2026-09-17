@@ -14,6 +14,8 @@ The test framework is part of the language rather than a dependency, which has o
 | [Other kinds of test](other_kinds_of_test/README.md) | 201 → 301 | Property, snapshot, compile-fail, fuzz and benchmark: what each checks that an example cannot — *stub* |
 | [A test double is a second `impl`](a_test_double_by_hand/README.md) | 201 → 301 | Refactor to a trait, write the fake yourself, and the call-counting test that fails on a harmless refactor |
 | [A harness of your own](a_harness_of_your_own/README.md) | 301 | What `#[test]` expands to, and everything `harness = false` hands back to you |
+| [Every testing error, and its fix](testing_errors/README.md) | reference | Sixteen compiler errors from writing tests, each with rustc's output and a fix that compiles |
+| [Lints around tests](testing_lints/README.md) | reference | Eighteen rustc and clippy lints on test code, bad and good, including the deny-by-default one clippy switches off in tests |
 
 The reading list, with the Advanced Rust testing course mapped section by section onto these pages, is [Testing: courses and links](resources/README.md).
 

@@ -23,7 +23,7 @@ The **on** column is how many lesson pages in this library have to mention the c
 | [E0282 ↗](https://doc.rust-lang.org/error_codes/E0282.html) | type annotations needed | 14 | it is asking *which type*, and for `collect` it is asking [which collection](24_Iterators/collect_and_fromiterator/README.md). [Type inference](15_First_Programs/type_inference/README.md) is the general case |
 | [E0599 ↗](https://doc.rust-lang.org/error_codes/E0599.html) | no method named … | 12 | [one code over three unrelated mistakes](12_Traits/no_method_named/README.md) — never written, not imported, not implemented — and the `help:` line tells them apart |
 
-**Errors around `ToOwned`, `Clone`, `Borrow` and `Cow` have a page of their own**, findable by code or by message: [Every `ToOwned` error, and its fix](12_Traits/how_to_learn_to_owned/to_owned_errors/README.md) — twenty of them, each with the code that causes it and a fix that compiles.
+**Errors around `ToOwned`, `Clone`, `Borrow` and `Cow` have a page of their own**, findable by code or by message: [Every `ToOwned` error, and its fix](12_Traits/how_to_learn_to_owned/to_owned_errors/README.md) — twenty of them, each with the code that causes it and a fix that compiles. **So do the errors you meet writing tests**, including the ones that exist only in a test build: [Every testing error, and its fix](28_Testing/testing_errors/README.md).
 
 Notice what four of those six have in common: **one code, several causes.** That is the reason this page is a map to lessons rather than a glossary of codes — the code narrows the search, and the lesson finishes it.
 

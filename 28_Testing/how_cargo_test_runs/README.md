@@ -186,7 +186,7 @@ Timings are from an Intel Mac and the ratio is what carries over, not the number
 - **Python.** `pytest` runs every test in one interpreter process, one after another, so `os.chdir` or `os.environ[...] = ...` in one test leaks into every test after it. That is why pytest ships `monkeypatch.chdir`, `monkeypatch.setenv` and `tmp_path`: each one undoes itself after the test. Two things change in Rust. The default is parallel threads, so a leak becomes a race rather than an ordering bug, and "it fails when run after test X" turns into "it fails some of the time". And there is no monkeypatch to reach for, because changing the environment while other threads run is unsound rather than just untidy. Module-level globals map to statics: per process in both. `pytest-xdist` workers are separate processes, which is the nextest end of the table. pytest's `-s` is `--nocapture`, and `-k` is the name filter.
 - **ABAP.** ABAP Unit runs a test class's methods one after another in one session, so `CLASS-DATA` set in one test method is still set in the next. That is a Rust static inside one test binary. `SETUP` and `TEARDOWN` are the discipline that keeps it tidy. What ABAP developers rarely meet is the parallel half: two test methods do not run at the same time, so the leak shows up as an order dependency and never as a flake. In Rust, write tests as if another test is running beside them, because one is.
 - **Java.** JUnit runs a module's tests in one JVM, so static fields are shared exactly as statics are here. Maven Surefire's `forkCount` and `reuseForks` are the knobs for more processes, which is cargo-nextest's territory. JUnit 5 runs tests in parallel only when you switch it on. `cargo test` has parallel on by default.
-- **Go.** `go test` builds one test binary per package and runs a package's tests one after another unless they call `t.Parallel()`. Go reached the same conclusion about the environment that `set_var` did: `t.Setenv` refuses to run in a parallel test, and `t.Chdir` exists so a test can move directory and have it undone afterwards.
+- **Go.** `go test` builds one test binary per package and runs a package's tests one after another unless they call `t.Parallel()`. Go reached the same conclusion about the environment that `set_var` did: `t.Setenv` refuses to run in a parallel test, and `t.Chdir` exists so a test can move directory and have it undone afterwards. The Go library's [Testing concurrent code ↗](https://masiarek.github.io/go-learning-library/07_Testing_Concurrent_Code/) chapter covers the tools Go adds on top, `-race` and `testing/synctest`.
 
 ---
 
@@ -415,10 +415,13 @@ fn main() {
 - [cargo-nextest](../../05_Tooling/nextest/README.md): one process per test, and the doc tests it does not run
 - [A harness of your own](../a_harness_of_your_own/README.md): what libtest is, and what `harness = false` hands back to you
 - [Other kinds of test](../other_kinds_of_test/README.md): where property, snapshot and compile-fail tests fit in the run
+- [Deterministic scheduling for tests ↗](https://masiarek.github.io/concurrency-learning-library/11_Concepts/testing_and_tools/deterministic_testing/) in the Concurrency library: the practice's barriers, done by a scheduler instead (loom, `synctest`); an outline there so far
 - [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md): the mechanism a failing test is built on
 - [Standard error, and exit status](../../02_Errors/stderr_and_exit_status/README.md): what 101 means to the shell that ran it
 - [`cargo test` ↗](https://doc.rust-lang.org/cargo/commands/cargo-test.html) and [the test harness ↗](https://doc.rust-lang.org/rustc/tests/index.html): the reference
 - [Testing: courses and links](../resources/README.md): the Advanced Rust testing course, whose "testing system" interlude covers this page's ground
+- [Every testing error, and its fix](../testing_errors/README.md): the compiler errors around tests, each with a fix that compiles
+- [Lints around tests](../testing_lints/README.md): rustc and clippy on test code, bad and good
 
 ## Po polsku
 

@@ -276,6 +276,8 @@ fn main() {
 - [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md) — the mechanism a failing test is built on
 - [What a float actually stores](../../19_Numbers/what_a_float_stores/README.md) — why the two float lines above disagree
 - [cargo-nextest](../../05_Tooling/nextest/README.md) — one process per test, and what that buys
+- [Every testing error, and its fix](../testing_errors/README.md): the compiler errors around tests, each with a fix that compiles
+- [Lints around tests](../testing_lints/README.md): rustc and clippy on test code, bad and good
 
 ## Sources
 

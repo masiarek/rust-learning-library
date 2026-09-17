@@ -258,6 +258,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # the binaries are clear, and the reading list behind the section.
         "a_test_double_by_hand",
         "a_harness_of_your_own",
+        # ...and the section's error and lint references, beside its reading list.
+        "testing_errors",
+        "testing_lints",
         "resources",
     ],
     # Infallible, fallible, and the one with no check at all -- in that order,
@@ -1490,6 +1493,8 @@ LABELS = {
     # 28_Testing
     "doc_tests": "The example that is a test",
     "a_test_double_by_hand": "A test double is a second `impl`",
+    "testing_errors": "Errors, by symptom",
+    "testing_lints": "Lints, bad and good",
     # 29_Conversion
     "from_and_into": "`From` and `Into`",
     "tryfrom_and_tryinto": "`TryFrom` and `TryInto`",

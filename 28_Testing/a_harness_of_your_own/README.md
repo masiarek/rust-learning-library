@@ -318,6 +318,8 @@ fn main() {
 - [What an attribute is](../../27_Modules/what_an_attribute_is/README.md): `#[test]` and `#[cfg(test)]` as the building blocks
 - [cargo-nextest](../../05_Tooling/nextest/README.md): replacing the runner instead of the harness
 - [Testing: courses and links](../resources/README.md): the Advanced Rust testing course's test-harness and test-macro sections, which this page follows
+- [Every testing error, and its fix](../testing_errors/README.md): the compiler errors around tests, each with a fix that compiles
+- [Lints around tests](../testing_lints/README.md): rustc and clippy on test code, bad and good
 
 ## Po polsku
 
