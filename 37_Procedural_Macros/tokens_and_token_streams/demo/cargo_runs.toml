@@ -2,4 +2,4 @@
 
 [[run]]
 stem = "token_trees_one_by_one"
-cmd = ["cargo", "run", "-q", "-p", "app"]
+cmd = ["cargo", "run", "-q", "-p", "tokens_app"]

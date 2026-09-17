@@ -3,13 +3,6 @@
 version = 4
 
 [[package]]
-name = "app"
-version = "0.1.0"
-dependencies = [
- "retry",
-]
-
-[[package]]
 name = "bad_args"
 version = "0.1.0"
 dependencies = [
@@ -103,6 +96,13 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "retry_app"
+version = "0.1.0"
+dependencies = [
+ "retry",
 ]
 
 [[package]]

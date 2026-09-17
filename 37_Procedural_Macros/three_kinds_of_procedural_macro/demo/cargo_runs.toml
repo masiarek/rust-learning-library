@@ -2,7 +2,7 @@
 
 [[run]]
 stem = "three_kinds"
-cmd = ["cargo", "run", "-q", "-p", "app"]
+cmd = ["cargo", "run", "-q", "-p", "three_kinds_app"]
 
 [[run]]
 stem = "a_derive_cannot_replace"

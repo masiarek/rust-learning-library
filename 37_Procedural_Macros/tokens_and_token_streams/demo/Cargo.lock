@@ -3,12 +3,12 @@
 version = 4
 
 [[package]]
-name = "app"
+name = "inspect_tokens"
+version = "0.1.0"
+
+[[package]]
+name = "tokens_app"
 version = "0.1.0"
 dependencies = [
  "inspect_tokens",
 ]
-
-[[package]]
-name = "inspect_tokens"
-version = "0.1.0"

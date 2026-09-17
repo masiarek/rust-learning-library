@@ -3,13 +3,6 @@
 version = 4
 
 [[package]]
-name = "app"
-version = "0.1.0"
-dependencies = [
- "field_names",
-]
-
-[[package]]
 name = "concat_ident"
 version = "0.1.0"
 
@@ -20,6 +13,13 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "getters_app"
+version = "0.1.0"
+dependencies = [
+ "field_names",
 ]
 
 [[package]]

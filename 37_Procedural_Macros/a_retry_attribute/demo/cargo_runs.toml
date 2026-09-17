@@ -2,7 +2,7 @@
 
 [[run]]
 stem = "retry_attempts_and_delays"
-cmd = ["cargo", "run", "-q", "-p", "app"]
+cmd = ["cargo", "run", "-q", "-p", "retry_app"]
 
 [[run]]
 stem = "retry_expanded"

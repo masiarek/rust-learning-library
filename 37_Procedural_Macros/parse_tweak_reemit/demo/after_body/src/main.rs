@@ -1,6 +1,6 @@
 use trace::trace_after_body;
 
-/// The same `port` as in `app`, under the macro that prints `leave` after the body.
+/// The same `port` as in `trace_app`, under the macro that prints `leave` after the body.
 #[trace_after_body]
 fn port(address: &str) -> Result<u16, String> {
     let Some((_, port)) = address.split_once(':') else {

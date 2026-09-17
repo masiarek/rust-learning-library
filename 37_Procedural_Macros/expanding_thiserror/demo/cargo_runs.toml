@@ -7,7 +7,7 @@ env = { RUSTC_BOOTSTRAP = "1" }
 
 [[run]]
 stem = "thiserror_same_as_by_hand"
-cmd = ["cargo", "run", "-q", "-p", "app"]
+cmd = ["cargo", "run", "-q", "-p", "thiserror_app"]
 
 [[run]]
 stem = "thiserror_needs_debug"

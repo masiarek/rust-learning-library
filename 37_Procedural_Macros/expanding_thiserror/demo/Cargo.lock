@@ -3,14 +3,6 @@
 version = 4
 
 [[package]]
-name = "app"
-version = "0.1.0"
-dependencies = [
- "by_hand",
- "config_error",
-]
-
-[[package]]
 name = "by_hand"
 version = "0.1.0"
 
@@ -75,6 +67,14 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "thiserror_app"
+version = "0.1.0"
+dependencies = [
+ "by_hand",
+ "config_error",
 ]
 
 [[package]]

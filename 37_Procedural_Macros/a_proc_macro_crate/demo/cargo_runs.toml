@@ -2,7 +2,7 @@
 
 [[run]]
 stem = "hello_macro_derived"
-cmd = ["cargo", "run", "-q", "-p", "app"]
+cmd = ["cargo", "run", "-q", "-p", "hello_app"]
 
 [[run]]
 stem = "proc_macro_crate_exports_only_macros"

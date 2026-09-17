@@ -2,7 +2,7 @@
 
 [[run]]
 stem = "logged_on_a_method"
-cmd = ["cargo", "run", "-q", "-p", "app"]
+cmd = ["cargo", "run", "-q", "-p", "logged_app"]
 
 [[run]]
 stem = "logged_error_only_cascade"

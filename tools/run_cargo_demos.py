@@ -53,6 +53,14 @@ Four things are pinned so a key recorded on one machine holds on another:
   demo inside the repo would otherwise inherit it and print absolute paths.
 - `CARGO_TERM_COLOR=never`, so a key never holds an escape code.
 
+Sharing the target directory has one hazard, and the tool refuses it rather
+than documenting it: **every package in every demo must have a name no other
+demo uses.** Cargo hashes a path package from its name, its path relative to
+its workspace and its dependencies, then trusts file times. Two demos that each
+hold an `app/` package named `app` with the same dependency names get the same
+hash, so the second one's build can be handed the first one's compiled crate
+without a word -- which a macro lesson would record as its answer key.
+
 Unlike `run_examples.py` this needs the network the first time, and a minute or
 two while the dependencies compile. It runs in CI as its own job.
 """
@@ -130,7 +138,31 @@ def find_runs() -> dict[str, Run]:
                     f"  {runs[run.stem].where}\n  {run.where}"
                 )
             runs[run.stem] = run
+    check_package_names({run.demo for run in runs.values()})
     return runs
+
+
+def check_package_names(demos: set[Path]) -> None:
+    """Exit if two demos contain a package with the same name. See the docstring."""
+    seen: dict[str, Path] = {}
+    clashes: list[str] = []
+    for demo in sorted(demos):
+        for manifest in sorted(demo.rglob("Cargo.toml")):
+            if "target" in manifest.relative_to(demo).parts:
+                continue
+            name = tomllib.loads(manifest.read_text(encoding="utf-8")).get("package", {}).get("name")
+            if name is None:
+                continue
+            if name in seen and demo not in seen[name].parents:
+                clashes.append(
+                    f"{name!r}: {seen[name].relative_to(REPO)} and {manifest.relative_to(REPO)}"
+                )
+            seen.setdefault(name, manifest)
+    if clashes:
+        sys.exit(
+            "ERROR: demo package names must be unique across the repo, because every "
+            "demo shares one target directory:\n  " + "\n  ".join(clashes)
+        )
 
 
 def command(run: Run) -> list[str]:

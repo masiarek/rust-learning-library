@@ -2,7 +2,7 @@
 
 [[run]]
 stem = "trace_enter_and_leave"
-cmd = ["cargo", "run", "-q", "-p", "app"]
+cmd = ["cargo", "run", "-q", "-p", "trace_app"]
 
 [[run]]
 stem = "trace_item_fn_fields"
@@ -10,7 +10,7 @@ cmd = ["cargo", "run", "-q", "-p", "item_fn_fields"]
 
 [[run]]
 stem = "trace_expanded"
-cmd = ["cargo", "rustc", "-q", "-p", "app", "--lib", "--profile=check", "--", "-Zunpretty=expanded"]
+cmd = ["cargo", "rustc", "-q", "-p", "trace_app", "--lib", "--profile=check", "--", "-Zunpretty=expanded"]
 env = { RUSTC_BOOTSTRAP = "1" }
 
 [[run]]

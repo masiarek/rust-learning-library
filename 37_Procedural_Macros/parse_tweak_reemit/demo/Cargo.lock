@@ -10,13 +10,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "app"
-version = "0.1.0"
-dependencies = [
- "trace",
-]
-
-[[package]]
 name = "item_fn_fields"
 version = "0.1.0"
 dependencies = [
@@ -60,6 +53,13 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "trace_app"
+version = "0.1.0"
+dependencies = [
+ "trace",
 ]
 
 [[package]]

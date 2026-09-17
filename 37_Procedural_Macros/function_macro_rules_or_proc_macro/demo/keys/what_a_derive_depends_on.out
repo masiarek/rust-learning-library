@@ -1,4 +1,4 @@
-app v0.1.0
+getters_app v0.1.0
 └── field_names v0.1.0 (proc-macro)
     ├── proc-macro2 v1.0.107
     │   └── unicode-ident v1.0.25

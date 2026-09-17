@@ -2,7 +2,7 @@
 
 [[run]]
 stem = "one_task_three_ways"
-cmd = ["cargo", "run", "-q", "-p", "app"]
+cmd = ["cargo", "run", "-q", "-p", "getters_app"]
 
 [[run]]
 stem = "macro_rules_cannot_concat"
@@ -18,6 +18,6 @@ stream = "stderr"
 
 [[run]]
 stem = "what_a_derive_depends_on"
-cmd = ["cargo", "tree", "-p", "app"]
+cmd = ["cargo", "tree", "-p", "getters_app"]
 # A path dependency is printed with its absolute folder; drop it.
 filters = [[' \(/[^)]*\)', '']]

@@ -1,7 +1,7 @@
 use std::pin::pin;
 use std::task::{Context, Poll, Waker};
 
-use app::{double, largest, port};
+use trace_app::{double, largest, port};
 
 fn main() {
     let ok = port("localhost:8080");
