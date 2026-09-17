@@ -1,0 +1,41 @@
+1. THE WORKING ANSWER: CONVERT ONE SIDE, LOSSLESSLY
+   a: i32 = 10, b: u16 = 100
+   a < i32::from(b)        : true
+   a < b.into()            : true
+   a.cmp(&i32::from(b))    : Less
+   i32::from(u16) compiles only because every u16 fits in an i32.
+
+2. PICK THE TYPE THAT HOLDS BOTH RANGES
+   u16 and i32   i32     -1 < 65535                  : true
+   i32 and u32   i64     -1 < 3000000000             : true
+   i64 and u64   i128    -1 < 18446744073709551615   : true
+   usize and u64 u64     3 > 2                       : true
+                         no From either way, so u64::try_from(len) = Ok(3)
+   i128 and u128 none    -1 < 1                      : true
+                         no wider type exists: test the sign, then compare as u128
+
+3. THE SAME COMPARISONS WITH `as`, AND WHERE THEY LIE
+   -1i32 as u32 < 1u32          : false  -1 became 4294967295
+   -1i32 as u64 < 1u64          : false  a WIDER type, and -1 became 18446744073709551615
+   -1i32 < 3_000_000_000 as i32 : false  3000000000 became -1294967296
+   widening is safe when the TARGET holds every value of the source:
+   width is not enough, the sign has to fit too. From only exists
+   where it does, so i32::from(b) cannot make this mistake.
+
+4. INTEGER AND FLOAT: f64 HOLDS EVERY i32, NOT EVERY i64
+   f64::from(i32::MAX) = 2147483647   exact
+   n = 9007199254740993 (2^53 + 1), f = 9007199254740992.0 (2^53)
+   n as f64 == f              : true   <- two different numbers, 'equal'
+   n as f64 > f               : false
+   cmp_i64_f64(n, f)          : Some(Greater)   <- exact
+   cmp_i64_f64(3, 3.5)        : Some(Less)
+   cmp_i64_f64(-3, -3.5)      : Some(Greater)
+   cmp_i64_f64(i64::MAX, 2^63): Some(Less)
+   cmp_i64_f64(0, NAN)        : None
+
+5. try_into() FOR A CONVERSION THAT CANNOT FAIL
+   b.try_into() as i32 has type core::result::Result<i32, core::convert::Infallible>
+   Infallible has no values, so that unwrap() can never panic.
+   the conversion that CAN fail is the other direction:
+   u16::try_from(70_000i32)   = Err(TryFromIntError(PosOverflow))
+   u16::try_from(-1i32)       = Err(TryFromIntError(NegOverflow))

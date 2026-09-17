@@ -208,6 +208,8 @@ Two smaller instances of the same policy are worth knowing: rustc's `invalid_nan
 
 **Making it whole again** — `floor`, `ceil`, `trunc`, `round`, and the three places std decides a .5 — is [the next page](../rounding_a_float/README.md).
 
+**Comparing a float with an integer**, and choosing the type a mixed comparison happens in, is [Comparing two numbers of different types](../comparing_two_number_types/README.md). *Rust in Action*'s section on the same hazards, including an `EPSILON` example whose difference is exactly zero, is checked claim by claim on [its own page](../comparing_numbers_claims_checked/README.md).
+
 **The order the additions happen in** is [its own page](../letting_the_compiler_reorder/README.md): because `0.1` is not 0.1, regrouping a sum changes the result, which is why `+` is pinned left-to-right and why Rust 1.98 added five methods that let you unpin it.
 
 **What happens when you subtract two of them** is in the sibling math library: [catastrophic cancellation ↗](https://masiarek.github.io/math-learning-library/01_Precision/catastrophic_cancellation/index.html). The error described above is invisible until a subtraction removes the leading digits that were hiding it — `(0.1 + 0.2) - 0.3` is not a fresh mistake, it is *this page's* mistake promoted from the seventeenth digit to the only one. That library comes at the cut from the measurement side rather than the binary side, so it also answers the question this page does not raise: how many of the digits were ever real to begin with.

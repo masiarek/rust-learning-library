@@ -23,6 +23,7 @@
 ## See also
 
 - [What a float actually stores](../../19_Numbers/what_a_float_stores/README.md) — the `NaN` this page's `Partial` exists for, measured rather than asserted
+- [Comparing two numbers of different types](../../19_Numbers/comparing_two_number_types/README.md) — `PartialOrd<Rhs>` exists, and std still implements `i32 < u16` for no `Rhs` but `i32`
 - [What a trait is](../what_a_trait_is/README.md) — the mechanism underneath
 - [Marker traits](../marker_traits/README.md) — `Eq` and `Ord` are nearly markers: promises with no code
 - [Operators are traits](../operators_are_traits/README.md) — the other half of "an operator is a trait call"

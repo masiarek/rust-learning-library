@@ -612,6 +612,11 @@ NAV_ORDER: dict[str, list[str]] = {
         # sum is part of its answer, so the compiler may not choose it for you —
         # unless you say so. Hands off to the 09_Advanced exactness cluster.
         "letting_the_compiler_reorder",
+        # Beside the arc: comparing two numbers of different types — the type a
+        # mixed comparison happens in, and why `as` picks the wrong one.
+        "comparing_two_number_types",
+        # ...and the Rust in Action section that prompted it, claim by claim.
+        "comparing_numbers_claims_checked",
     ],
     # Control flow is taught in the order a program is built out of it: the two
     # branching forms first (two cases, then many), then the three loops from
@@ -1171,6 +1176,8 @@ LABELS = {
     "to_owned_in_real_code": "`ToOwned` in real code",
     "cow_claims_checked": "`Cow` claims, run",
     "and_or_claims_checked": "`and` and `or` claims, run",
+    "comparing_numbers_claims_checked": "Rust in Action §2.3.3, run",
+    "comparing_two_number_types": "Comparing two number types",
     "to_owned_reading_list": "Helpful resources",
     "implementing_to_owned": "Implementing `ToOwned`",
     "reading_the_to_owned_docs": "Reading the `ToOwned` docs",

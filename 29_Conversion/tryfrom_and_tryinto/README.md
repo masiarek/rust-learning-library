@@ -306,6 +306,7 @@ fn main() {
 
 - [`From` and `Into`](../from_and_into/README.md) — the infallible half, and where `?`'s conversion rule is explained
 - [Casting with `as`](../casting_with_as/README.md) — the conversion with no check at all
+- [Comparing two numbers of different types](../../19_Numbers/comparing_two_number_types/README.md) — `try_into()` on a widening that cannot fail has error type `Infallible`
 - [Parsing out of a string](../../14_Strings/parsing_a_string/README.md) — `.parse()` from the text side
 - [`Option` vs `Result`](../../17_Option_and_Result/option_vs_result/README.md) — why this returns a `Result` and not an `Option`
 - [A score is not a number](../../16_Structs/newtype_score/README.md) — the type this conversion is protecting

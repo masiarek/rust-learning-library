@@ -14,6 +14,8 @@ This section is where `.len()` finally means something. A byte is the thing `siz
 | [What a float actually stores](what_a_float_stores/README.md) | 201 | The one division that ends exactness — why `0.1` is not 0.1, why the error goes both ways, and why Rust withholds `Eq` and `Ord` from `f64` |
 | [Making a float whole](rounding_a_float/README.md) | 101 → 201 | `floor`, `ceil`, `trunc` and `round` pick four different whole numbers once a value is negative or ends in .5, and every one hands back an `f64` — so `9.0` prints as `9`, `-0.4` rounds to `-0`, and the three places std decides a tie (`round`, `round_ties_even`, `{:.N}`) can disagree on the same value |
 | [Letting the compiler reorder a float sum](letting_the_compiler_reorder/README.md) | 201 → 301 | Why `a + b + c` is pinned to one grouping, what that costs a hot loop, and the five `algebraic_*` methods Rust 1.98 added to lift the ban one operation at a time |
+| [Comparing two numbers of different types](comparing_two_number_types/README.md) | 101 → 201 | `i32 < u16` is `E0308`: compare in a type that holds every value of both, converted with `From` — because `-1i32 as u64 < 1u64` is `false`, and `(2⁵³ + 1) as f64` equals `2⁵³` |
+| [*Rust in Action* §2.3.3, run](comparing_numbers_claims_checked/README.md) | 201 | The book section on comparing numbers, fifteen claims checked: an `EPSILON` example whose difference is exactly zero, a `-42.0.sqrt()` that is −6.48, and a CPU exception that is really a flag |
 
 ## Related sections
 
