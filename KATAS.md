@@ -244,6 +244,7 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K224 | [A static lookup table, checked for order while it compiles](26_Collections/arrays/static_arrays/README.md#practice) | [An array in a `const` or a `static`](26_Collections/arrays/static_arrays/README.md) | 201 |
 | K225 | [Unlock the cursor — a `next_word(&'a mut self)` that is `E0499` in a loop, still `E0499` with both lifetimes elided, and the one lifetime that frees it](18_Ownership/borrowing_forever/README.md#practice) | [Borrowing something forever](18_Ownership/borrowing_forever/README.md) | 201 → 301 |
 | K226 | [Give the log a constructor — a struct that held a reference to its own longest line, rebuilt with a range so it can be returned, moved into a `Vec` and appended to](18_Ownership/self_referential_structs/README.md#practice) | [A struct that points into itself](18_Ownership/self_referential_structs/README.md) | 201 |
+| K227 | [Three numbers, five strings — predict `size_of_val`, `len` and `capacity` for an empty, a short, a Polish, a repeated and a pre-sized `String`, then say which number `clear` moves and which `shrink_to_fit` moves](14_Strings/anatomy_of_a_string/README.md#practice) | [The anatomy of a `String`](14_Strings/anatomy_of_a_string/README.md) | 101 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -372,7 +373,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K194 · [Undo `escape_ascii`](19_Numbers/printing_bytes/README.md#practice)
 - K197 · [Half up, by hand](19_Numbers/rounding_a_float/README.md#practice)
 
-**[Strings](14_Strings/README.md)** — 47 katas
+**[Strings](14_Strings/README.md)** — 48 katas
 
 - K62 · [One `&str` parameter, three callers](14_Strings/string_vs_str/README.md#practice)
 - K63 · [Cut a name in half without panicking](14_Strings/string_slices/README.md#practice)
@@ -421,6 +422,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K169 · [The test that would have caught it](14_Strings/wrong_but_not_unsafe/README.md#practice)
 - K214 · [Three questions, from the drawing](14_Strings/drawing_the_owner_and_the_view/README.md#practice)
 - K215 · [Views into one buffer](14_Strings/drawing_the_owner_and_the_view/README.md#practice)
+- K227 · [Three numbers, five strings](14_Strings/anatomy_of_a_string/README.md#practice)
 
 **[Enums](13_Enums/README.md)** — 5 katas
 
