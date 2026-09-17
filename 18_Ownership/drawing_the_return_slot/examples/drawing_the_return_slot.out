@@ -1,0 +1,11 @@
+1. The room main reserves for `let t: [u64; 3]`
+   24 bytes; t[0] at +0, t[1] at +8, t[2] at +16
+
+2. sret by hand, with a room main has to zero first
+   before the call: [0, 0, 0]
+   the pointer handed back is main's t: true
+   after the call:  [7, 8, 9]
+
+3. sret by hand, with a room nobody has written to
+   write() hands back the room it filled: true
+   read back through it: [7, 8, 9]

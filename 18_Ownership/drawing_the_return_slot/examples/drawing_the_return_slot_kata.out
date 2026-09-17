@@ -1,0 +1,7 @@
+the room: 16 bytes
+   +0   corners[0].x
+   +4   corners[0].y
+   +8   corners[1].x
+   +12  corners[1].y
+the callee filled main's room and handed it back: true
+[Point { x: 0, y: 0 }, Point { x: 640, y: 480 }]

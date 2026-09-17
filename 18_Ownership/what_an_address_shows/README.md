@@ -102,6 +102,7 @@ That is a real claim about memory (`u8` values sit one byte apart), it is checka
 - [Drawing the owner and the view](../../14_Strings/drawing_the_owner_and_the_view/README.md) — addresses printed as offsets into one buffer, which stay the same from run to run
 - [A struct that points into itself](../self_referential_structs/README.md) — a move that leaves the heap bytes in place would leave a reference into them valid, and the borrow checker refuses it anyway
 - [Returned by value](../returned_by_value/README.md) — the same header-not-text move, through a `return`
+- [Drawing `sret`](../drawing_the_return_slot/README.md) — addresses compared rather than printed, to show a callee writing into its caller's variable
 
 ## Po polsku
 

@@ -94,6 +94,7 @@ Every entry was checked on 2026-09-17: each URL answered 200 to `curl`, except S
 - [Returning a trait](../../12_Traits/returning_a_trait/README.md) and [The third owned form: `Box<str>`](../../14_Strings/boxed_str/README.md): two of the lesson's fixes
 - [The C ABI](../../31_C_and_Cpp/migrating_c_to_rust/the_c_abi/README.md): the `extern "C"` side, where the calling convention is a published promise
 - [Helpful resources for the `ToOwned` path](../../12_Traits/how_to_learn_to_owned/to_owned_reading_list/README.md) and [Books](../../10_Resources/books/README.md): the neighbouring reading lists
+- [Drawing `sret`](../drawing_the_return_slot/README.md): the psABI rule and the LangRef definition above, drawn and checked
 
 ## Po polsku
 

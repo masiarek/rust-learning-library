@@ -201,6 +201,7 @@ Nothing about the behaviour changes. It is the same permission the optimizer run
 - [Compile times](../../05_Tooling/compile_times/README.md) — codegen is LLVM's share of your build, and Cranelift is the alternative back end that trades output quality for speed
 - [LLVM Language Reference ↗](https://llvm.org/docs/LangRef.html) — the IR, defined
 - [Returned by value](../../18_Ownership/returned_by_value/README.md) — `define` lines read for their return types: `i64`, `{ ptr, i64 }`, and `sret`
+- [Drawing `sret`](../../18_Ownership/drawing_the_return_slot/README.md) — one parameter attribute, `sret`, read against the assembly and a debugger
 
 ## Po polsku
 

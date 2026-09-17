@@ -131,7 +131,7 @@ define { i64, i64 } @two_numbers() unnamed_addr #3 {
 | `-> String` | `void`, and `ptr sret([24 x i8])` | the same: a `String` header is 24 bytes here |
 | `-> [u8; 1000]` | `void`, and `ptr sret([1000 x i8])` | the same, 1000 bytes |
 
-One number or a pair of them came back in registers; the two-word array did not, and neither did anything bigger. `sret` is LLVM's name for the hidden argument: *structure return*. Either way the size is written into the function's own signature — `i64`, `{ ptr, i64 }`, `[1000 x i8]`. For `-> str` there would be no number to write there.
+One number or a pair of them came back in registers; the two-word array did not, and neither did anything bigger. `sret` is LLVM's name for the hidden argument: *structure return* ([drawn here](../drawing_the_return_slot/README.md)). Either way the size is written into the function's own signature — `i64`, `{ ptr, i64 }`, `[1000 x i8]`. For `-> str` there would be no number to write there.
 
 The assembly shows both halves. `caller` reserves the room and passes its address in `rdi`. `three_numbers` writes through `rdi` and never allocates anything:
 
@@ -352,6 +352,7 @@ The `&str` is the only one that points into the input, so it is the only one the
 - [Stack and heap](../stack_and_heap/README.md): why a `String` is 24 bytes whether it holds 5 characters or 5,000
 - [What an address shows](../what_an_address_shows/README.md): a move copies the header and relocates no text, the same thing part 3 shows for a return
 - [Ownership and moves](../ownership_and_moves/README.md): a returned value moves to the caller, which now owns it
+- [Drawing `sret`](../drawing_the_return_slot/README.md): the hidden pointer drawn in three panels, written out by hand, and watched in lldb
 
 **The unsized types:**
 

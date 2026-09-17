@@ -34,6 +34,7 @@ Believing undefined behaviour needs a use. `let n: u32 = unsafe { MaybeUninit::u
 - [Meet the `bool`](../../15_First_Programs/meet_the_bool/README.md) · [Why a `char` is 32 bits wide](../../14_Strings/why_char_is_32_bits/README.md) — two types whose spare bit patterns this page is about
 - [Nullable pointers](../../17_Option_and_Result/nullable_pointers/README.md) — the niche that makes a null `&T` a `None`
 - [GLOSSARY.md](../../GLOSSARY.md) — *niche*, *undefined behaviour* and *invariant*
+- [Drawing `sret`](../../18_Ownership/drawing_the_return_slot/README.md) — `MaybeUninit::write` as a hand-written return slot, and the zeroing a `&mut` out-parameter costs instead
 
 ## If you are coming from another language
 

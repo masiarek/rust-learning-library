@@ -332,6 +332,7 @@ Part 3 — four nested frames.
 - [What an address shows](../what_an_address_shows/README.md) — why `&x` changes on a move without a byte relocating
 - [Scope is about names, not values](../scope_is_about_names/README.md) — the three different questions "goes out of scope" is asked
 - [Returned by value](../returned_by_value/README.md) — the return slot from the caller's side: who reserves it, how big, and the `sret` pointer that fills it
+- [Drawing `sret`](../drawing_the_return_slot/README.md) — the return slot drawn: room in the caller's frame, filled by the callee through `rdi`
 
 ## Po polsku
 

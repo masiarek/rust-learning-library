@@ -636,6 +636,7 @@ rustc --edition 2024 14_Strings/drawing_the_owner_and_the_view/examples/drawing_
 - [Borrowing](../../18_Ownership/borrowing/README.md) — errors 2 and 3, as a rule
 - [How to learn `ToOwned`](../../12_Traits/how_to_learn_to_owned/README.md) — the path that assumes this drawing, and where `to_owned()` on line 4 is explained
 - [UTF-8 by hand ↗](https://masiarek.github.io/encodings-learning-library/03_Encodings/utf8_by_hand/index.html) — why `é` is `c3 a9`, in the encodings library
+- [Drawing `sret`](../../18_Ownership/drawing_the_return_slot/README.md) — the same kind of drawing for a return value: the caller's room and the hidden pointer that fills it
 
 ## Resources
 
