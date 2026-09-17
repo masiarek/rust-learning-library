@@ -289,6 +289,7 @@ fn main() {
 - [STRINGS.md](../../STRINGS.md) — the map: every string lesson, in reading order
 - [`String` vs `&str`](../string_vs_str/README.md) — the owner-and-view split, of which this page is the mechanism
 - [The anatomy of a `String`](../anatomy_of_a_string/README.md) — the three words, one of which `&str` does not have
+- [Every `size_of`, `len` and `capacity` error, and its fix](../size_len_capacity_errors/README.md) — `size_of::<str>()` refused with `E0277`, and the two measures that work
 - [String slices](../string_slices/README.md) — what the two words point at, and the `E0502` that keeps them honest
 - [The third owned form](../boxed_str/README.md) — `Box<str>`, `Rc<str>`, `Arc<str>`: owned, and still two words
 - [`ToOwned`](../../12_Traits/to_owned/README.md) — the trait `Clone: Sized` made necessary

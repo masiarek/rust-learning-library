@@ -1250,6 +1250,7 @@ fn main() {
 - [Lints around arrays](../array_lints/README.md) — what compiles with a warning, where this page is what does not compile
 - [What array explanations get wrong, run](../array_claims_checked/README.md) — several of these errors, met through a claim that says they should not happen
 - [The error-code map](../../../ERRORS.md) — every code the library teaches, and the lesson for each
+- [Every `size_of`, `len` and `capacity` error, and its fix](../../../14_Strings/size_len_capacity_errors/README.md) — the same kind of page for measuring a `String`; its `E0435` is an array sized by `s.len()`
 - [Every `ToOwned` error, and its fix](../../../12_Traits/how_to_learn_to_owned/to_owned_errors/README.md) — the same kind of page, for `ToOwned`, `Clone` and `Cow`
 
 ## Po polsku

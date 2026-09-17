@@ -818,6 +818,7 @@ rustc --edition 2024 14_Strings/building_a_string/examples/building_a_string.rs 
 - [STRINGS.md](../../STRINGS.md) — the map: every string lesson, in reading order
 - [Concatenating strings](../concatenating_strings/README.md) — the other half of this: joining two pieces you already have, and the `E0369` two literals produce
 - [The anatomy of a `String`](../anatomy_of_a_string/README.md) — capacity, growth, and why appending is cheap
+- [Every `size_of`, `len` and `capacity` error, and its fix](../size_len_capacity_errors/README.md) — `String::new(64)`, `with_capacity` without `mut`, and `push_str` chained onto a constructor
 - [Making a `String`](../making_a_string/README.md) — getting one in the first place
 - [String slices](../string_slices/README.md) — the same byte-index panic, on the reading side
 - [Borrowing](../../18_Ownership/borrowing/README.md) — why a `&str` into a string you are about to `push_str` is refused

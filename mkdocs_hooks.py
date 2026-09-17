@@ -947,6 +947,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...then what the owning half is made of: three words on the stack,
         # bytes on the heap, and a capacity that is not the length.
         "anatomy_of_a_string",
+        # ...and its refusals: size_of for a type, len for the bytes, capacity
+        # only read, each beside a fix.
+        "size_len_capacity_errors",
         # ...then both halves on one drawing: the view's pointer lands inside
         # the owner's buffer, and five borrow errors read straight off it.
         "drawing_the_owner_and_the_view",
@@ -1681,6 +1684,7 @@ LABELS = {
     "string_vs_str": "`String` vs `&str`",
     "inside_a_split": "Inside a `Split`",
     "anatomy_of_a_string": "The anatomy of a `String`",
+    "size_len_capacity_errors": "Size, length and capacity errors",
     "making_a_string": "Making a `String`",
     "building_a_string": "Building a `String`",
     "walking_a_string": "Walking a `String`",

@@ -70,7 +70,7 @@ s1.capacity()          = 5
 - **Capacity is 5 here, but std promises only `>= len`.** `String::from` buys a buffer the exact size of the text. The `// >= 5` comment states the contract, and code should rely on that. [Growth](#growth-runs-ahead-of-you) is where capacity pulls ahead.
 - **The `use` line is optional.** `size_of` and `size_of_val` have been in the prelude since Rust 1.80. The import still compiles without a warning, because the `redundant_imports` lint that would flag it is allow-by-default.
 
-The *Three numbers, five strings* kata under [Practice](#practice) asks the same three questions of five different `String`s.
+The *Three numbers, five strings* kata under [Practice](#practice) asks the same three questions of five different `String`s. What rustc says when they are asked wrongly — `size_of(s)`, `s.len` without `()`, `capacity(64)` — is on [Every `size_of`, `len` and `capacity` error, and its fix](../size_len_capacity_errors/README.md).
 
 ---
 
@@ -509,6 +509,7 @@ rustc --edition 2024 14_Strings/anatomy_of_a_string/examples/anatomy_of_a_string
 - [The global allocator](../../09_Advanced/the_global_allocator/README.md) — the capacity ladder above, watched from the allocator's side: `0 → 8 → 16 → 32` is one allocation and two reallocations, and you can count them
 - [STRINGS.md](../../STRINGS.md) — the map: every string lesson, in reading order
 - [Stack and heap](../../18_Ownership/stack_and_heap/README.md) — what `size_of` and `size_of_val` can and cannot see, for `String` and six other types
+- [Every `size_of`, `len` and `capacity` error, and its fix](../size_len_capacity_errors/README.md) — twenty-four refusals around these three numbers, each with a fix that compiles
 - [`String` vs `&str`](../string_vs_str/README.md) — who owns, who looks
 - [Meet the `char`](../meet_the_char/README.md) — what those heap bytes encode
 - [Borrowing](../../18_Ownership/borrowing/README.md) — the rule that stopped `view` above

@@ -407,6 +407,7 @@ fn main() {
 
 - [STRINGS.md](../../STRINGS.md) — the map: every string lesson, in reading order
 - [Meet the `char`](../meet_the_char/README.md) — what the counts are counting; this page is which one to hand over
+- [Every `size_of`, `len` and `capacity` error, and its fix](../size_len_capacity_errors/README.md) — `chars().len()`, `s[s.len() - 1]` and `size()` refused, with the fix for each
 - [String slices](../string_slices/README.md) — the boundary panic in full, and the `E0502` that keeps a view honest
 - [Walking a `String`](../walking_a_string/README.md) — `chars()`, `char_indices()` and the split family
 - [Comparing and sorting text](../comparing_strings/README.md) — the other place byte order is not human order

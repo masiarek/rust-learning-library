@@ -131,6 +131,9 @@ SCOPE = (
     "18_Ownership/returned_by_value_lints",
     # Its drawing: the by_hand.rs listing and the lldb program are pasteable.
     "18_Ownership/drawing_the_return_slot",
+    # size_of, len and capacity: twenty-four `compile_fail` fences, each
+    # beside a fix that must compile.
+    "14_Strings/size_len_capacity_errors",
 )
 
 # `.claude` holds this repo checked out again, once per agent worktree, so a scan

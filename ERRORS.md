@@ -27,6 +27,8 @@ The **on** column is how many lesson pages in this library have to mention the c
 
 **So do errors around arrays:** [Every array error, and its fix](26_Collections/arrays/array_errors/README.md) — twenty-nine, from *expected an array with a size of 3* and *can't compare `[i8; 3]` with `[i8; 4]`* to `E0614` in a filter written before edition 2021.
 
+**And errors around measuring a `String`:** [Every `size_of`, `len` and `capacity` error, and its fix](14_Strings/size_len_capacity_errors/README.md) — twenty-four, from *this function takes 0 arguments* on `size_of(s)` to *no method named `len` found for struct `Chars`*.
+
 Notice what four of those six have in common: **one code, several causes.** That is the reason this page is a map to lessons rather than a glossary of codes — the code narrows the search, and the lesson finishes it.
 
 ## Every code the library teaches
@@ -41,7 +43,9 @@ Notice what four of those six have in common: **one code, several causes.** That
 | [E0046 ↗](https://doc.rust-lang.org/error_codes/E0046.html) | [When the `impl` does not match the trait](12_Traits/matching_the_trait/README.md) | — |
 | [E0050 ↗](https://doc.rust-lang.org/error_codes/E0050.html) | [When the `impl` does not match the trait](12_Traits/matching_the_trait/README.md) | — |
 | [E0053 ↗](https://doc.rust-lang.org/error_codes/E0053.html) | [When the `impl` does not match the trait](12_Traits/matching_the_trait/README.md) | — |
+| [E0061 ↗](https://doc.rust-lang.org/error_codes/E0061.html) | [Every `size_of`, `len` and `capacity` error, and its fix](14_Strings/size_len_capacity_errors/README.md#1-passing-a-value-to-size_of) | — |
 | [E0063 ↗](https://doc.rust-lang.org/error_codes/E0063.html) | [When a struct refuses](16_Structs/when_a_struct_refuses/README.md) | — |
+| [E0070 ↗](https://doc.rust-lang.org/error_codes/E0070.html) | [Every `size_of`, `len` and `capacity` error, and its fix](14_Strings/size_len_capacity_errors/README.md#17-assigning-to-capacity) | — |
 | [E0072 ↗](https://doc.rust-lang.org/error_codes/E0072.html) | [`Box`](26_Collections/the_box/README.md) | **3** other pages |
 | [E0106 ↗](https://doc.rust-lang.org/error_codes/E0106.html) | [Lifetime annotations](18_Ownership/lifetime_annotations/README.md) | **6** other pages |
 | [E0117 ↗](https://doc.rust-lang.org/error_codes/E0117.html) | [`From` and `Into`](29_Conversion/from_and_into/README.md) | — |
@@ -78,6 +82,7 @@ Notice what four of those six have in common: **one code, several causes.** That
 | [E0435 ↗](https://doc.rust-lang.org/error_codes/E0435.html) | [What a compiler does before your program runs](20_Compilers/what_a_compiler_does/README.md) | **3** other pages |
 | [E0449 ↗](https://doc.rust-lang.org/error_codes/E0449.html) | [When the `impl` does not match the trait](12_Traits/matching_the_trait/README.md) | — |
 | [E0451 ↗](https://doc.rust-lang.org/error_codes/E0451.html) | [Modules and visibility](27_Modules/modules_and_visibility/README.md) | — |
+| [E0493 ↗](https://doc.rust-lang.org/error_codes/E0493.html) | [Every `size_of`, `len` and `capacity` error, and its fix](14_Strings/size_len_capacity_errors/README.md#13-a-strings-length-in-a-const) | — |
 | [E0499 ↗](https://doc.rust-lang.org/error_codes/E0499.html) | [What `unsafe` turns off](09_Advanced/what_unsafe_turns_off/README.md) | **5** other pages |
 | [E0502 ↗](https://doc.rust-lang.org/error_codes/E0502.html) | [Borrowing: `&T`, `&mut T`, and where a borrow ends](18_Ownership/borrowing/README.md) | **17** other pages |
 | [E0505 ↗](https://doc.rust-lang.org/error_codes/E0505.html) | [A shadow does not drop](18_Ownership/shadowing_does_not_drop/README.md) | **2** other pages |
@@ -93,9 +98,11 @@ Notice what four of those six have in common: **one code, several causes.** That
 | [E0596 ↗](https://doc.rust-lang.org/error_codes/E0596.html) | [`impl` blocks](16_Structs/impl_blocks/README.md) | **3** other pages |
 | [E0597 ↗](https://doc.rust-lang.org/error_codes/E0597.html) | [`&'static str`](14_Strings/static_str/README.md) | **2** other pages |
 | [E0599 ↗](https://doc.rust-lang.org/error_codes/E0599.html) | ["No method named …"](12_Traits/no_method_named/README.md) | **11** other pages |
+| [E0600 ↗](https://doc.rust-lang.org/error_codes/E0600.html) | [Every `size_of`, `len` and `capacity` error, and its fix](14_Strings/size_len_capacity_errors/README.md#14-comparing-a-length-with-1) | — |
 | [E0603 ↗](https://doc.rust-lang.org/error_codes/E0603.html) | [Modules and visibility](27_Modules/modules_and_visibility/README.md) | **2** other pages |
 | [E0605 ↗](https://doc.rust-lang.org/error_codes/E0605.html) | [What an enum is](13_Enums/what_an_enum_is/README.md) | — |
 | [E0614 ↗](https://doc.rust-lang.org/error_codes/E0614.html) | [Every array error, and its fix](26_Collections/arrays/array_errors/README.md#22-x-in-a-filter-over-into_iter) | — |
+| [E0615 ↗](https://doc.rust-lang.org/error_codes/E0615.html) | [Every `size_of`, `len` and `capacity` error, and its fix](14_Strings/size_len_capacity_errors/README.md#7-slen-without-the-call) | — |
 | [E0616 ↗](https://doc.rust-lang.org/error_codes/E0616.html) | [Modules and visibility](27_Modules/modules_and_visibility/README.md) | 1 other page |
 | [E0618 ↗](https://doc.rust-lang.org/error_codes/E0618.html) | [A type is not a constructor](16_Structs/a_type_is_not_a_constructor/README.md) | **2** other pages |
 | [E0624 ↗](https://doc.rust-lang.org/error_codes/E0624.html) | ["No method named …"](12_Traits/no_method_named/README.md) | — |
