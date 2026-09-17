@@ -445,6 +445,7 @@ fn main() {
 - [Borrowing](../../18_Ownership/borrowing/README.md) — why a slice cannot outlive what it points at
 - [The unit type `()`](../../15_First_Programs/the_unit_type/README.md) — what `sort` and `reverse` hand back, and why nothing complains
 - [Stack and heap](../../18_Ownership/stack_and_heap/README.md) — where the array's elements actually are
+- [Listing 2.3, run](../../10_Resources/rust_in_action/intro_to_numbers/README.md) — an array whose element type is chosen by its suffixed members, and a constant index past the end that does not compile
 
 ## Sources
 

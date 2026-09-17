@@ -341,6 +341,7 @@ fn main() {
 - [`and`, `or` and a first program's explanation, run](../../15_First_Programs/and_or_claims_checked/README.md) — a book's "operators are trait calls", checked against `&&`, `&`, `||`, `|` and `!` on `bool`
 - [Where the bound goes](../../22_Generics/where_the_bound_goes/README.md) — writing a function generic over `T: Add<Output = T>`
 - [An `Instant` is not a `SystemTime`](../../33_Time_and_Benchmarking/an_instant_is_not_a_system_time/README.md) — `Instant - Instant` is a `Duration` because std chose that `Output`; `SystemTime` has no such impl at all, and `E0308` is how you find out
+- [Listing 2.3, run](../../10_Resources/rust_in_action/intro_to_numbers/README.md) — `i32 + i64` has no `Add` impl, with rustc's transcript
 
 ## Sources
 

@@ -1,0 +1,9 @@
+1. the listing's e = 90
+2. a is i32, wide is i64, alone is i32
+3. b is i32, c is i32, d is i32, c == d: true
+4. size was assigned once, after its let, with no mut: big
+5. println! is an expression...
+   ...whose value is (); format! gives a String: "90"
+6. add is below main, double is inside it: 6
+7. sign(-5) = negative, sign(5) = not negative
+8. 'é' is a char of 4 bytes; "é" is a &str holding 2 bytes

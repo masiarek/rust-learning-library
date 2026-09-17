@@ -835,6 +835,14 @@ NAV_ORDER: dict[str, list[str]] = {
         "reference_lints",
         "references_reading_list",
     ],
+    # Rust in Action, in the book's own order: listing, listing, then tables.
+    "10_Resources/rust_in_action": [
+        "README.md",
+        "first_steps",
+        "intro_to_numbers",
+        "non_base2",
+        "scalar_number_types",
+    ],
     # The ToOwned learning path: one page per step, in the order they unlock,
     # then the comparison that closes it and the reading list beside it.
     # One test written before its function, one page per state of the build.
@@ -1134,6 +1142,8 @@ NAV_ORDER: dict[str, list[str]] = {
         "books",
         "rust_for_rustaceans",
         "ultimate_rust_courses",
+        # One book, run listing by listing, beside the other book maps.
+        "rust_in_action",
         # Books argue; these define. Second, because the question "what does
         # Rust actually do here" arrives the moment the first book is closed.
         "official_docs",
@@ -1565,6 +1575,13 @@ LABELS = {
     # 10_Resources — a topic page on the shelf, named for the shelf so it is not
     # mistaken for the Structs section.
     "structs": "Structs: the shelf",
+    # Rust in Action, run — the book's numbering, so a reader holding the book
+    # finds the page by the listing number printed on it.
+    "rust_in_action": "Rust in Action, run",
+    "first_steps": "Listing 2.2 · first steps",
+    "intro_to_numbers": "Listing 2.3 · numbers",
+    "non_base2": "Listing 2.4 · bases 2, 8, 16",
+    "scalar_number_types": "Tables 2.1–2.2 · number types",
     # 12_Traits
     "trait_in_scope": "A trait must be in scope",
     "clone_into": "`clone_into`",

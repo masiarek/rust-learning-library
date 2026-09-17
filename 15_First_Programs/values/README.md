@@ -423,6 +423,7 @@ rustc --edition 2024 15_First_Programs/values/examples/values.rs -o /tmp/values 
 - [Meet the `char`](../../14_Strings/meet_the_char/README.md) — four bytes here, one to four bytes inside a `String`
 - [Bit flags](../../19_Numbers/bit_flags/README.md) — putting eight `bool`s where one would have gone
 - [Primitive types ↗](https://doc.rust-lang.org/book/ch03-02-data-types.html) · [Literal expressions ↗](https://doc.rust-lang.org/reference/expressions/literal-expr.html) · [Comprehensive Rust: Values ↗](https://google.github.io/comprehensive-rust/types-and-values/values.html)
+- [Tables 2.1 and 2.2, run](../../10_Resources/rust_in_action/scalar_number_types/README.md) — *Rust in Action*'s table of numeric types, checked: the missing `i128` and `u128`, and why `usize` follows the pointer rather than the CPU
 
 ## Po polsku
 

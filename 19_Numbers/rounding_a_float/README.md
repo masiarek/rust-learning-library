@@ -266,6 +266,7 @@ fn main() {
 - [Rationals](../other_number_types/rational_numbers/README.md#a-tie-rounds-away-from-zero) and [Decimals](../other_number_types/decimal_numbers/README.md) — the same split outside std: `num`'s `Ratio::round` sends a tie away from zero, `rust_decimal`'s `round` sends it to even
 - [`f64` in std ↗](https://doc.rust-lang.org/std/primitive.f64.html#method.round) — `round` documents *away from 0.0*; `round_ties_even` sits directly under it
 - *Learn Rust in a Month of Lunches* (MacLeod, 2024), §20.4 — the four methods on one page; its rule for `round` is the positive-side one
+- [Listing 2.3, run](../../10_Resources/rust_in_action/intro_to_numbers/README.md) — why `24.5.round()` does not compile and `f32::round(24.5)` does
 
 ## Po polsku
 

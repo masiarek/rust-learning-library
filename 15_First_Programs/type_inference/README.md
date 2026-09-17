@@ -204,6 +204,7 @@ rustc --edition 2024 15_First_Programs/type_inference/examples/type_inference.rs
 - [When the compiler cannot infer](../../22_Generics/when_the_compiler_cannot_infer/README.md) — `E0282` and `E0283` once generics are involved
 - [`str::parse`](../../14_Strings/str_methods/str_parse/README.md) — the method that has no return type until you supply one
 - [Type inference ↗](https://doc.rust-lang.org/reference/type-inference.html) · [`E0282` ↗](https://doc.rust-lang.org/error_codes/E0282.html) · [Comprehensive Rust: Type Inference ↗](https://google.github.io/comprehensive-rust/types-and-values/inference.html)
+- [Listing 2.2, run](../../10_Resources/rust_in_action/first_steps/README.md) — *Rust in Action*'s first listing, where `let a = 10;` takes its type from the function it is passed to
 
 ## Po polsku
 

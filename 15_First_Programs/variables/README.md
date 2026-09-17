@@ -201,6 +201,7 @@ rustc --edition 2024 15_First_Programs/variables/examples/variables.rs -o /tmp/v
 - [What a warning is asking](../what_a_warning_is_asking/README.md) — `unused_mut` and its neighbours, read properly
 - [`and`, `or` and a first program's explanation, run](../and_or_claims_checked/README.md) — a book's `let` snippets checked: assign-once without `mut`, and the old value a shadow leaves alive
 - [Variables and mutability ↗](https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html) · [`E0384` ↗](https://doc.rust-lang.org/error_codes/E0384.html) · [Comprehensive Rust: Variables ↗](https://google.github.io/comprehensive-rust/types-and-values/variables.html)
+- [Listing 2.2, run](../../10_Resources/rust_in_action/first_steps/README.md) — *Rust in Action*'s "immutable by default", checked: `let size;` assigned once, later, with no `mut`
 
 ## Po polsku
 

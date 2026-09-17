@@ -15,7 +15,7 @@ A folder has one name, and it is rarely the word you typed: arrays live in `26_C
 | an error code such as `E0502` | [ERRORS.md](ERRORS.md) |
 | a term to define in one line | [GLOSSARY.md](GLOSSARY.md) |
 | something to type | [KATAS.md](KATAS.md) |
-| a book or course, chapter by chapter | [Rust by Example](RUST_BY_EXAMPLE.md) · [*Rust for Rustaceans*](10_Resources/rust_for_rustaceans/README.md) · [the Ultimate Rust courses](10_Resources/ultimate_rust_courses/README.md) |
+| a book or course, chapter by chapter | [Rust by Example](RUST_BY_EXAMPLE.md) · [*Rust for Rustaceans*](10_Resources/rust_for_rustaceans/README.md) · [the Ultimate Rust courses](10_Resources/ultimate_rust_courses/README.md) · [*Rust in Action*, run](10_Resources/rust_in_action/README.md) |
 | what to read next, section by section | [the course table on the homepage](index.md#the-course-in-order) |
 | Polish terminology | [POLSKI.md](POLSKI.md) |
 

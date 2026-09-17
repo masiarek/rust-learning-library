@@ -28,6 +28,7 @@ A macro is not a function, so the usual intuitions about evaluation do not hold:
 - [Procedural macros](../../37_Procedural_Macros/README.md) — writing derive, function-like and attribute macros, starting from [the three kinds](../../37_Procedural_Macros/three_kinds_of_procedural_macro/README.md)
 - [Printing the HIR](../../20_Compilers/printing_the_hir/README.md) — what a `println!` actually became, printed by rustc itself
 - [Comprehensive Rust: Macros ↗](https://google.github.io/comprehensive-rust/control-flow-basics/macros.html)
+- [Listing 2.2, run](../../10_Resources/rust_in_action/first_steps/README.md) — `println!` expands to code, and that code has the value `()`
 
 ## Po polsku
 

@@ -285,6 +285,7 @@ you write the conversion yourself.
 - [Static vs dynamic dispatch](../../12_Traits/static_vs_dynamic_dispatch/README.md) — where `Box<T>` → `Box<dyn Trait>` leads
 - [Method resolution](../../12_Traits/method_resolution/README.md) — the receiver-side rule this page separates itself from, in full
 - [What makes a pointer smart](../../41_Smart_Pointers/what_makes_a_pointer_smart/README.md) — deref coercion through a smart pointer you write yourself
+- [Listing 2.3, run](../../10_Resources/rust_in_action/intro_to_numbers/README.md) — where *Rust in Action*'s "conversions are always explicit" holds (numbers) and where it does not (`&String` to `&str`)
 
 ## Po polsku
 

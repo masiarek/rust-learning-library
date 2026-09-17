@@ -97,6 +97,7 @@ Notice what four of those six have in common: **one code, several causes.** That
 | [E0624 ↗](https://doc.rust-lang.org/error_codes/E0624.html) | ["No method named …"](12_Traits/no_method_named/README.md) | — |
 | [E0659 ↗](https://doc.rust-lang.org/error_codes/E0659.html) | [Bringing names in with `use`](27_Modules/the_use_declaration/README.md) | — |
 | [E0665 ↗](https://doc.rust-lang.org/error_codes/E0665.html) | [What an attribute is](27_Modules/what_an_attribute_is/README.md) | 1 other page |
+| [E0689 ↗](https://doc.rust-lang.org/error_codes/E0689.html) | [Listing 2.3, run: integers and floats](10_Resources/rust_in_action/intro_to_numbers/README.md) | — |
 | [E0700 ↗](https://doc.rust-lang.org/error_codes/E0700.html) | [Returning an iterator](24_Iterators/returning_an_iterator/README.md) | — |
 | [E0716 ↗](https://doc.rust-lang.org/error_codes/E0716.html) | [`Vec::into_iter` — and the three `IntoIterator` impls](26_Collections/vec_methods/vec_into_iter/README.md) | 1 other page |
 | [E0740 ↗](https://doc.rust-lang.org/error_codes/E0740.html) | [What a union is](09_Advanced/what_a_union_is/README.md) | — |
@@ -104,9 +105,9 @@ Notice what four of those six have in common: **one code, several causes.** That
 
 ## Mentioned, but not taught
 
-Seven more codes appear once or twice in passing, without a lesson behind them. They are listed for completeness, and each links to rustc's own explanation:
+Eight more codes appear once or twice in passing, without a lesson behind them. They are listed for completeness, and each links to rustc's own explanation:
 
-[E0080 ↗](https://doc.rust-lang.org/error_codes/E0080.html) on [What a compiler does before your program runs](20_Compilers/what_a_compiler_does/README.md), [E0170 ↗](https://doc.rust-lang.org/error_codes/E0170.html) on [A typo becomes a binding](13_Enums/a_typo_becomes_a_binding/README.md), [E0283 ↗](https://doc.rust-lang.org/error_codes/E0283.html) on [Type inference](15_First_Programs/type_inference/README.md), [E0405 ↗](https://doc.rust-lang.org/error_codes/E0405.html) on [There is no `Move` trait](18_Ownership/no_move_trait/README.md), [E0432 ↗](https://doc.rust-lang.org/error_codes/E0432.html) on [A typo becomes a binding](13_Enums/a_typo_becomes_a_binding/README.md), [E0493 ↗](https://doc.rust-lang.org/error_codes/E0493.html) on [`Vec` methods](26_Collections/vec_methods/README.md), [E0658 ↗](https://doc.rust-lang.org/error_codes/E0658.html) on [`unwrap_or`: the default you already have](17_Option_and_Result/unwrap_or/README.md)
+[E0080 ↗](https://doc.rust-lang.org/error_codes/E0080.html) on [What a compiler does before your program runs](20_Compilers/what_a_compiler_does/README.md), [E0170 ↗](https://doc.rust-lang.org/error_codes/E0170.html) on [A typo becomes a binding](13_Enums/a_typo_becomes_a_binding/README.md), [E0283 ↗](https://doc.rust-lang.org/error_codes/E0283.html) on [Type inference](15_First_Programs/type_inference/README.md), [E0405 ↗](https://doc.rust-lang.org/error_codes/E0405.html) on [There is no `Move` trait](18_Ownership/no_move_trait/README.md), [E0432 ↗](https://doc.rust-lang.org/error_codes/E0432.html) on [A typo becomes a binding](13_Enums/a_typo_becomes_a_binding/README.md), [E0493 ↗](https://doc.rust-lang.org/error_codes/E0493.html) on [`Vec` methods](26_Collections/vec_methods/README.md), [E0601 ↗](https://doc.rust-lang.org/error_codes/E0601.html) on [Listing 2.2, run](10_Resources/rust_in_action/first_steps/README.md), [E0658 ↗](https://doc.rust-lang.org/error_codes/E0658.html) on [`unwrap_or`: the default you already have](17_Option_and_Result/unwrap_or/README.md)
 
 ## The two codes with no single home
 
@@ -118,7 +119,7 @@ The table above names one lesson per code, chosen as the page that treats it at 
 
 ## How this page is kept honest
 
-Every row was derived from the library rather than written from memory: the owning lesson for each code is the page that mentions it most, and the "also appears on" count is the number of other pages carrying it. All 75 code links were checked live. If a code moves to a better home, the count moves with it — so re-derive this table rather than editing a row by hand.
+Every row was derived from the library rather than written from memory: the owning lesson for each code is the page that mentions it most, and the "also appears on" count is the number of other pages carrying it. All 79 code links were checked live. If a code moves to a better home, the count moves with it — so re-derive this table rather than editing a row by hand.
 
 ## Sources
 

@@ -393,6 +393,7 @@ fn main() {
 - [`Some` and `None`](../../17_Option_and_Result/some_and_none/README.md) — the absence `()` is confused with
 - [`Option` vs `Result`](../../17_Option_and_Result/option_vs_result/README.md) — where `Result<(), E>` sits
 - [The `HashSet`](../../26_Collections/the_hashset/README.md) — the standard library's `HashMap<T, ()>`, with a better `insert`
+- [Listing 2.2, run](../../10_Resources/rust_in_action/first_steps/README.md) — where a semicolon does and does not turn a function's result into `()`, checked against *Rust in Action*
 
 ## Po polsku
 

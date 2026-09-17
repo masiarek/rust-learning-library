@@ -669,6 +669,7 @@ rustc --edition 2024 14_Strings/meet_the_char/examples/meet_the_char.rs -o /tmp/
 - [Is it a letter? ↗](https://masiarek.github.io/python-learning-library/01_Text_and_Bytes/is_it_a_letter/index.html) — the same predicates from Python's side, where they are whole-string methods rather than `char` ones. `is_alphabetic` reads the Alphabetic *property* and `str.isalpha()` reads the `L*` *categories*, so they disagree on a combining mark — and on `一`, in the other direction
 - [Lowercasing is not folding ↗](https://masiarek.github.io/python-learning-library/01_Text_and_Bytes/lowercasing_is_not_folding/index.html) — the case *conversion* side from Python, where `'ß'.upper()` is `"SS"` too but the method returns a `str` rather than an iterator, so nothing in the signature warns you. It also has the operation std does not: `str.casefold()`, which is why `'straße'` and `'STRASSE'` compare equal there and not here
 - [A `char` is a byte, not a character ↗](https://masiarek.github.io/c-learning-library/03_Strings/char_is_a_byte_not_a_character/index.html) — the same word *café* in C, where `char` is one byte, `strlen` is 5, and `toupper` touches ASCII only
+- [Listing 2.2, run](../../10_Resources/rust_in_action/first_steps/README.md) — *Rust in Action*'s single quotes against double quotes, and the thumbs-up that does not fit in one `char`
 
 ## Po polsku
 

@@ -39,13 +39,15 @@ Which base to reach for is not taste — it is whether the digits line up with t
 
 ## The underscore is for your eyes
 
-It may go anywhere inside the literal, any number of times, and it changes nothing:
+It may go almost anywhere inside the literal, any number of times, and it changes nothing:
 
 ```rust
 assert_eq!(1_000_000, 1000000);
 assert_eq!(0xDEAD_BEEFu32, 3735928559);
 assert_eq!(1_0_0, 100);          // legal, and nobody should
 ```
+
+Three places it may not go. **First:** `_1000` is a name, not a number, and rustc looks for a variable called that (`E0425`). **Inside the prefix:** `0_x1` is `0` followed by an *invalid suffix `x1`*. **Inside the suffix:** `30i_32` is an *invalid suffix `i_32`*. Everywhere else is accepted, including the end: `1_000_`, `0x_ff` and `1_.5` all compile.
 
 Group at the boundary that matters: thousands in a decimal quantity, bytes in hex (`0xDEAD_BEEF`), nibbles in binary (`0b1011_1110`).
 
@@ -403,6 +405,8 @@ fn main() {
 - [Meet the `char`](../../14_Strings/meet_the_char/README.md) — the other half of `b'A'` versus `'A'`
 - [RFC 69 — how Rust got `b'A'`](../../14_Strings/rfc_69_byte_literals/README.md) — the two-page proposal that added the `b` prefix, and why it borrowed the spelling from Python without borrowing the semantics
 - [The Rust Reference: Literal expressions ↗](https://doc.rust-lang.org/reference/expressions/literal-expr.html) — the grammar itself, including every suffix the parser accepts
+- [Listing 2.3, run](../../10_Resources/rust_in_action/intro_to_numbers/README.md) — suffixes and underscores in *Rust in Action*'s second listing, with the `: i64` it cannot do without
+- [Listing 2.4, run](../../10_Resources/rust_in_action/non_base2/README.md) — the three prefixes, and `0x1f32`: a hex literal that swallows what looks like a float suffix
 
 ## Po polsku
 

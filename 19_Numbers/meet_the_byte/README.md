@@ -421,6 +421,7 @@ The ninth candidate is the point. A debug build panics with `attempt to shift le
 - Julia Evans, *How Integers and Floats Work* ([wizardzines.com ↗](https://wizardzines.com/)) — the zine this page follows; its "meet the byte" and "8 bytes, many meanings" pages are the source of the `b"computer"` decode, whose integer rows the example above reproduces exactly
 - [Byte order on the wire ↗](https://masiarek.github.io/c-learning-library/05_Bytes_on_the_Wire/byte_order_on_the_wire/index.html) — where `to_be_bytes`'s C twin lives: the same fixed order, built by hand with shifts and `htonl`
 - [The integer types](../the_integer_types/README.md) — the eleven integer types beside `u8`
+- [Tables 2.1 and 2.2, run](../../10_Resources/rust_in_action/scalar_number_types/README.md) — *Rust in Action*'s bit patterns for 20, printed, and the same eight bits read as 236 and −20
 
 ## Po polsku
 

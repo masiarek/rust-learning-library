@@ -325,6 +325,7 @@ rustc --edition 2024 15_First_Programs/what_an_annotation_does/examples/what_an_
 - [Type inference](../type_inference/README.md) — what the compiler works out when you write no annotation at all, and where it stops
 - [When the compiler cannot infer](../../22_Generics/when_the_compiler_cannot_infer/README.md) — `E0282` in full: the three places to write the missing type, and why a later line can supply it
 - [Type inference ↗](https://doc.rust-lang.org/reference/type-inference.html) · [`E0282` ↗](https://doc.rust-lang.org/error_codes/E0282.html) · [Deref coercion ↗](https://doc.rust-lang.org/book/ch15-02-deref.html#implicit-deref-coercions-with-functions-and-methods)
+- [Listing 2.3, run](../../10_Resources/rust_in_action/intro_to_numbers/README.md) — a `: i64` in *Rust in Action* that looks optional and is not: without it, `pow` is `E0689`
 
 ## Po polsku
 

@@ -403,6 +403,10 @@ Three things worth taking from that run.
 
 **The fix and its bill are the same move as the lesson's.** Cross-multiplying removes the division, and then the products overflow at national scale — so you divide out each pair's `gcd` first and compare 9 × 5 against 8 × 6 instead of two 38-digit numbers. That is `Reduce::BeforeTheMultiply` from the lesson, arrived at from the other direction: not to make a rational reach further, but to make a comparison fit at all. Reduction is headroom, wherever you meet it.
 
+## See also
+
+- [Tables 2.1 and 2.2, run](../../10_Resources/rust_in_action/scalar_number_types/README.md) — the table of integer types in *Rust in Action* that stops at 64 bits
+
 ## Po polsku
 
 Po `i128` sięga się zwykle dziesięć minut po tym, jak `f64` zepsuł remis: dwie sumy matematycznie równe wychodzą różne na ostatnim bicie, więc drabinka rozstrzygnięć w ogóle się nie uruchamia, a mandat bierze ten, w którą stronę spadło zaokrąglenie. Instynkt jest dobry, tylko słowo „dokładny” znaczy tutaj **trzy różne rzeczy naraz**: dokładność pod `+ − ×`, dokładność pod `÷` i brak sufitu. `i128` ma **pierwszą z nich** — i tylko ją. To szerszy typ całkowity, nie biblioteka arytmetyki dokładnej. Dzielenie obcina dokładnie tak samo jak w `i64`: 100 kart na trzech kandydatów to 33 na głowę i jedna karta znika w powietrzu. Poszerzanie typu kupuje **zakres**, a nie domknięcie na dzieleniu — i sufit jest twardy, bo `i256` nie istnieje: 128 bitów to koniec typów prostych w Ruscie.

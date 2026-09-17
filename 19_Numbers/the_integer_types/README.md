@@ -29,6 +29,7 @@ Choosing `u32` for a length "because it cannot be negative", then subtracting tw
 
 - [Meet the byte](../meet_the_byte/README.md) — `u8`, and the overflow that differs by build
 - [Writing a number down](../writing_a_number_down/README.md) — literal suffixes such as `5u64`
+- [Tables 2.1 and 2.2, run](../../10_Resources/rust_in_action/scalar_number_types/README.md) — ten of the types printed with their ranges, and the targets where `usize` is not the CPU's width
 - [Casting with `as`](../../29_Conversion/casting_with_as/README.md) — converting between these types without a check
 - [The Reference: numeric types ↗](https://doc.rust-lang.org/reference/types/numeric.html)
 
