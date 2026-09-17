@@ -169,6 +169,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # to in the source, and the two whose names confuse next to `clone`.
         "drop_and_raii",
         "drop_guards",
+        # ...the hover on `.clone()` over a `&str`, read line by line: the
+        # `Clone for &T` impl every reference path below leans on...
+        "reading_the_clone_hover",
         # ...the way in for a reader the trait has not clicked for yet: the
         # five ideas under ToOwned, in the order they unlock.
         "how_to_learn_to_owned",

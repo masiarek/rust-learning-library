@@ -387,6 +387,7 @@ Part 2 — convert once, then clone for free
 ## See also
 
 - [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) — why `Clone` promises ownership rather than depth
+- [Reading the `Clone for &T` hover](../../12_Traits/reading_the_clone_hover/README.md) — the three kinds of "duplicate" std's own `Clone` docs list, each measured
 - [Struct update syntax](../../16_Structs/struct_update/README.md) — which fields a `..base` moves, and which stay readable
 - [`Rc`: the clone that copies a pointer](../reference_counting/README.md) — the count, and the `Rc::clone(&x)` spelling
 - [Sharing across threads: `Arc`](../sharing_across_threads/README.md) — what the atomic buys, before this page prices it

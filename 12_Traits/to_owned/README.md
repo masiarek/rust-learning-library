@@ -347,6 +347,7 @@ fn main() {
 - [Implementing `ToOwned` for your own type](../implementing_to_owned/README.md) — the unsized wrapper this page says the trait needs, built and run
 - [`Borrow`: look up an owned key with a borrowed one](../borrow_trait/README.md) — the trait in `type Owned`'s bound, and the promise about hashing it carries
 - [Reading the `ToOwned` docs](../reading_the_to_owned_docs/README.md) — the std page for this trait, block by block, with every claim on it run
+- [Reading the `Clone for &T` hover](../reading_the_clone_hover/README.md) — the impl `.clone()` on a `&str` lands on, read line by line from the editor's hover
 - [Making a `String`](../../14_Strings/making_a_string/README.md) — the five spellings that produce a `String`, and which to prefer; this page is the trait *behind* one of them
 - [Concatenating strings](../../14_Strings/concatenating_strings/README.md) — where `s1.to_owned() + s2` comes from: `+` needs an owned left operand
 - [`String` vs `&str`](../../14_Strings/string_vs_str/README.md) — the owned/borrowed pair this trait converts between

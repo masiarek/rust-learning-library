@@ -1,0 +1,26 @@
+1. impl<T: PointeeSized> Clone for &T: every T, even with no size, even not Clone
+   T = str         -> &str                                 same address: true
+   T = [i32]       -> &[i32]                               same address: true
+   T = dyn Display -> &dyn core::fmt::Display              same address: true
+   T = Ticket      -> &reading_the_clone_hover::Ticket     same address: true
+   Ticket is not Clone, and &Ticket still is: seat 12
+
+2. fn clone(&self) -> Self, with Self = &str
+   self is &&str, the body is *self, the result is &str   same address: true
+
+3. The three kinds of "duplicate" the doc lists, measured
+   String::clone     new buffer: true
+   <&String>::clone  same String: true
+   Arc::clone        same String: true   strong_count: 2
+   Vec<Rc<String>>   new Vec buffer: true   but same String inside: true   ("most types" is not all)
+
+4. The first doc example: its source starts with a hidden allow line
+   hello.clone() is &str, same address: true   nothing was duplicated
+
+5. The second doc example: two Arc handles, one Mutex
+   strong_count after the clone: 2
+   pushed 4 through data, read through data_clone: [1, 2, 3, 4]
+   after drop(data): strong_count 1, the vector still there: [1, 2, 3, 4]
+
+6. The hover only lands on &T when T has no clone of its own
+   (&String).clone() is alloc::string::String   new buffer: true   the hover shows impl Clone for String

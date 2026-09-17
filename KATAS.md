@@ -245,6 +245,7 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K225 | [Unlock the cursor — a `next_word(&'a mut self)` that is `E0499` in a loop, still `E0499` with both lifetimes elided, and the one lifetime that frees it](18_Ownership/borrowing_forever/README.md#practice) | [Borrowing something forever](18_Ownership/borrowing_forever/README.md) | 201 → 301 |
 | K226 | [Give the log a constructor — a struct that held a reference to its own longest line, rebuilt with a range so it can be returned, moved into a `Vec` and appended to](18_Ownership/self_referential_structs/README.md#practice) | [A struct that points into itself](18_Ownership/self_referential_structs/README.md) | 201 |
 | K227 | [Three numbers, five strings — predict `size_of_val`, `len` and `capacity` for an empty, a short, a Polish, a repeated and a pre-sized `String`, then say which number `clear` moves and which `shrink_to_fit` moves](14_Strings/anatomy_of_a_string/README.md#practice) | [The anatomy of a `String`](14_Strings/anatomy_of_a_string/README.md) | 101 |
+| K228 | [Which impl does the hover land on — five `.clone()` calls on `&str`, `&String`, `&&String`, `Rc<str>` and `&[i32]`, the type each returns, and the two lints three of them draw](12_Traits/reading_the_clone_hover/README.md#practice) | [Reading the `Clone for &T` hover](12_Traits/reading_the_clone_hover/README.md) | 101 → 201 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -432,7 +433,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K172 · [Four shapes one way and four fields the other -- which one makes a circle with a width impossible](13_Enums/variants_that_carry_data/README.md#practice)
 - K173 · [Sixteen cells the compiler counted for you, and the wildcard that would throw them away](13_Enums/an_enum_as_a_state_machine/README.md#practice)
 
-**[Traits](12_Traits/README.md)** — 11 katas
+**[Traits](12_Traits/README.md)** — 12 katas
 
 - K95 · [Predict the owned twin before you run it](12_Traits/to_owned/README.md#practice)
 - K96 · [One lookup for every kind of key](12_Traits/borrow_trait/README.md#practice)
@@ -445,6 +446,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K196 · [Four impls that disagree with their trait](12_Traits/matching_the_trait/README.md#practice)
 - K203 · [Write the function that hands back the owned twin](12_Traits/how_to_learn_to_owned/clone_vs_to_owned/README.md#practice)
 - K204 · [Predict the receiver, then take it away from the dot](12_Traits/how_to_learn_to_owned/the_dot_picks_first/README.md#practice)
+- K228 · [Which impl does the hover land on](12_Traits/reading_the_clone_hover/README.md#practice)
 
 **[Generics](22_Generics/README.md)** — 2 katas
 

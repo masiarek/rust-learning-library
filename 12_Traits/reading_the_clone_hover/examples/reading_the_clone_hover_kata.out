@@ -1,0 +1,5 @@
+text.clone()    &str                     impl Clone for &T, T = str
+words.clone()   alloc::string::String    impl Clone for String
+twice.clone()   &alloc::string::String   impl Clone for &T, T = String
+counted.clone() alloc::rc::Rc<str>       impl Clone for Rc<T, A>, strong_count now 2
+numbers.clone() &[i32]                   impl Clone for &T, T = [i32]

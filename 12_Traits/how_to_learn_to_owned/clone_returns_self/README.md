@@ -24,11 +24,11 @@ That `Sized` is written into the declaration as a **supertrait** — it is not m
 
 ## `&T` is `Copy` for every `T`
 
-std carries `impl<T: ?Sized> Clone for &T` and `impl<T: ?Sized> Copy for &T` — one impl each, for references specifically. There is no `impl<T: Copy> Clone for T` anywhere in std; it runs the other way, `Copy: Clone`, so every `Copy` type writes (or derives) its `Clone` too. A shared reference is an address (and, for unsized `T`, a length), and duplicating one is always safe — both copies only read. So:
+std carries `impl<T: PointeeSized> Clone for &T` and `impl<T: PointeeSized> Copy for &T` — one impl each, for references specifically. `PointeeSized` is how the 1.98.0 docs spell the bound; on stable, read it as `?Sized` ([Reading the `Clone for &T` hover](../../reading_the_clone_hover/README.md#2-implt-pointeesized-clone-for-t) has the three levels). There is no `impl<T: Copy> Clone for T` anywhere in std; it runs the other way, `Copy: Clone`, so every `Copy` type writes (or derives) its `Clone` too. A shared reference is an address (and, for unsized `T`, a length), and duplicating one is always safe — both copies only read. So:
 
 - `&Ticket` is `Copy` even though `Ticket` is not `Clone`, and `let b = a;` copies the reference instead of moving it.
 - `&str` is `Clone`. Cloning a `&str` copies the reference and hands back a `&str` — rustc warns about exactly that call, `noop_method_call`.
-- `&mut T` is **not** `Copy`, and not `Clone` either — std spells that out with `impl<T: ?Sized> !Clone for &mut T`. Two live `&mut` to the same value is the one thing the borrow checker exists to prevent. [Step 5](../the_dot_picks_first/README.md#where-clone-goes-further-and-where-it-never-does) shows what that does to `.clone()` on a `&mut String`.
+- `&mut T` is **not** `Copy`, and not `Clone` either — std spells that out with `impl<T: PointeeSized> !Clone for &mut T`. Two live `&mut` to the same value is the one thing the borrow checker exists to prevent. [Step 5](../the_dot_picks_first/README.md#where-clone-goes-further-and-where-it-never-does) shows what that does to `.clone()` on a `&mut String`.
 
 Hold on to the second bullet. Every type in Rust now has a `Clone` impl within one `&` of it, and [steps 5 and 6](../the_dot_picks_first/README.md) are what that does to a method call.
 
@@ -74,6 +74,7 @@ And Clone on the reference hands back the reference
 - [Copy or move](../../../18_Ownership/copy_or_move/README.md)
 - [Stack and heap — what each duplication does to the heap side](../../../18_Ownership/stack_and_heap/README.md#what-each-duplication-does-to-the-heap-side)
 - [Reborrowing](../../../18_Ownership/reborrowing/README.md), what happens to a `&mut` instead of a copy
+- [Reading the `Clone for &T` hover](../../reading_the_clone_hover/README.md), this step's impl as the editor's hover shows it, line by line
 
 **Docs:** The Book, [ch. 4.1 — Variables and Data Interacting with Clone ↗](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#variables-and-data-interacting-with-clone) and [Stack-Only Data: Copy ↗](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#stack-only-data-copy) · [`Clone` ↗](https://doc.rust-lang.org/std/clone/trait.Clone.html) · [the reference primitive ↗](https://doc.rust-lang.org/std/primitive.reference.html), whose *Trait implementations* section lists `Copy` and `Clone` for every `&T` and warns that `Clone` there does not defer to `T`'s
 

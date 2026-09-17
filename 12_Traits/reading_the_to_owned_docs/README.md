@@ -200,6 +200,7 @@ Each follows from the blanket impl row in section 8, which is why the [learning 
 
 - [How to learn `ToOwned`](../how_to_learn_to_owned/README.md) — the ten steps, each now pointing at the documentation for its idea
 - [`ToOwned`](../to_owned/README.md) — the lesson behind every block on this page
+- [Reading the `Clone for &T` hover](../reading_the_clone_hover/README.md) — the same kind of reading for `Clone`, starting from the hover rather than the docs page
 - [`Borrow`: look up an owned key with a borrowed one](../borrow_trait/README.md) — the trait in `type Owned`'s bound
 - [`clone_into`](../clone_into/README.md) — the provided method, measured
 - [Implementing `ToOwned` for your own type](../implementing_to_owned/README.md) — when a new row in section 8's table is worth writing

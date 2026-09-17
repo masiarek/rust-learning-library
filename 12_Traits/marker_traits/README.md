@@ -100,6 +100,7 @@ That is the whole idea and not the whole story — the field is a claim about va
 
 - [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) — the marker trait most people meet first, and the one that changes what `=` means
 - [`ToOwned`](../to_owned/README.md) — what `Sized` being implicit costs `str`
+- [Reading the `Clone for &T` hover](../reading_the_clone_hover/README.md) — `PointeeSized`, the bound below `?Sized` that 1.98's docs print on every reference impl
 - [A score is not a number](../../16_Structs/newtype_score/README.md) — the same "make it unwriteable" instinct, without generics
 - [What a trait is](../what_a_trait_is/README.md) — the ordinary kind, with methods in it
 

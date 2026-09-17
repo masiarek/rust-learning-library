@@ -404,6 +404,7 @@ The rule to carry away:
 - [`Cow`: borrow until somebody writes](../../18_Ownership/clone_on_write/README.md) — the clone deferred until a write actually needs one
 - [The `move` keyword](../../23_Closures/the_move_keyword/README.md) — the `move` closure that copies instead of moving, because what it captured was `Copy`: it compiles, runs, and changes nothing outside itself
 - [Step 4 of the `ToOwned` path](../../12_Traits/how_to_learn_to_owned/clone_returns_self/README.md) — `Clone` returning `Self`, and every `&T` being `Clone`, as the ground `ToOwned` stands on
+- [Reading the `Clone for &T` hover](../../12_Traits/reading_the_clone_hover/README.md) — the editor's hover on `.clone()` over a `&str`, line by line, with the doc's three kinds of "duplicate" measured
 
 ## Sources
 
