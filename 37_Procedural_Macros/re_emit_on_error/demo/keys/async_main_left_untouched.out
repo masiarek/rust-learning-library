@@ -1,0 +1,14 @@
+error: unknown argument
+ --> async_main/src/main.rs:3:1
+  |
+3 | compile_error!("unknown argument");
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0752]: `main` function is not allowed to be `async`
+ --> async_main/src/main.rs:4:1
+  |
+4 | async fn main() {
+  | ^^^^^^^^^^^^^^^ `main` function is not allowed to be `async`
+
+For more information about this error, try `rustc --explain E0752`.
+error: could not compile `async_main` (bin "async_main") due to 2 previous errors

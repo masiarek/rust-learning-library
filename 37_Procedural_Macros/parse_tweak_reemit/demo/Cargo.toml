@@ -1,0 +1,6 @@
+# One attribute macro, what syn makes of a function, and the programs that use
+# the macro. `[workspace]` makes this folder its own workspace, whatever
+# manifest sits above it.
+[workspace]
+members = ["trace", "item_fn_fields", "app", "after_body", "trace_args"]
+resolver = "3"

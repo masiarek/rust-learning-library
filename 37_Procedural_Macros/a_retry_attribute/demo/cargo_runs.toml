@@ -1,0 +1,28 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+
+[[run]]
+stem = "retry_attempts_and_delays"
+cmd = ["cargo", "run", "-q", "-p", "app"]
+
+[[run]]
+stem = "retry_expanded"
+cmd = ["cargo", "rustc", "-q", "-p", "outline", "--profile=check", "--", "-Zunpretty=expanded"]
+env = { RUSTC_BOOTSTRAP = "1" }
+
+[[run]]
+stem = "retry_darling_errors"
+cmd = ["cargo", "build", "-q", "-p", "bad_args"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "retry_refused_functions"
+cmd = ["cargo", "build", "-q", "-p", "bad_functions"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "retry_consumed_argument"
+cmd = ["cargo", "build", "-q", "-p", "consumes_argument"]
+expect = "failure"
+stream = "stderr"

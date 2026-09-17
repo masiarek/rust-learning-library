@@ -1,0 +1,24 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+
+[[run]]
+stem = "trace_enter_and_leave"
+cmd = ["cargo", "run", "-q", "-p", "app"]
+
+[[run]]
+stem = "trace_item_fn_fields"
+cmd = ["cargo", "run", "-q", "-p", "item_fn_fields"]
+
+[[run]]
+stem = "trace_expanded"
+cmd = ["cargo", "rustc", "-q", "-p", "app", "--lib", "--profile=check", "--", "-Zunpretty=expanded"]
+env = { RUSTC_BOOTSTRAP = "1" }
+
+[[run]]
+stem = "trace_takes_no_arguments"
+cmd = ["cargo", "build", "-q", "-p", "trace_args"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "trace_after_body_misses_leave"
+cmd = ["cargo", "run", "-q", "-p", "after_body"]

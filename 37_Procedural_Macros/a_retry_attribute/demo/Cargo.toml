@@ -1,0 +1,6 @@
+# The #[retry] attribute and the programs that use it, well and badly.
+# `[workspace]` makes this folder its own workspace, whatever manifest sits
+# above it.
+[workspace]
+members = ["retry", "app", "outline", "bad_args", "bad_functions", "consumes_argument"]
+resolver = "3"

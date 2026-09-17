@@ -1,0 +1,27 @@
+error: Unknown field: `delay`. Did you mean `delay_ms`?
+ --> bad_args/src/main.rs:3:20
+  |
+3 | #[retry(times = 3, delay = 100)]
+  |                    ^^^^^
+
+error: Unexpected type `float`
+ --> bad_args/src/main.rs:8:31
+  |
+8 | #[retry(times = 3, delay_ms = 0.5)]
+  |                               ^^^
+
+error: number would be zero for non-zero type
+  --> bad_args/src/main.rs:13:17
+   |
+13 | #[retry(times = 0)]
+   |                 ^
+
+error: Missing field `times`
+  --> bad_args/src/main.rs:18:1
+   |
+18 | #[retry(delay_ms = 100)]
+   | ^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this error originates in the attribute macro `retry` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: could not compile `bad_args` (bin "bad_args") due to 4 previous errors

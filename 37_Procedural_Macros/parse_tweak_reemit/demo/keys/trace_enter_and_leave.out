@@ -1,0 +1,20 @@
+enter port
+leave port
+= Ok(8080)
+
+enter port
+leave port
+= Err("no port in \"localhost\"")
+
+enter port
+leave port
+= Err("invalid digit found in string")
+
+enter largest
+leave largest
+= Some(7)
+
+double(21) called, nothing printed yet
+enter double
+leave double
+= 42

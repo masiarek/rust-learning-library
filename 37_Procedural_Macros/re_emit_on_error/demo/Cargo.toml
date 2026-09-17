@@ -1,0 +1,6 @@
+# Two versions of one attribute macro, and the programs that show what each
+# returns on an error. `[workspace]` makes this folder its own workspace,
+# whatever manifest sits above it.
+[workspace]
+members = ["logged", "app", "cascade", "one_error", "free_function", "not_a_function", "async_main"]
+resolver = "3"

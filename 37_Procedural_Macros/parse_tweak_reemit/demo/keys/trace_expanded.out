@@ -1,0 +1,60 @@
+#![feature(prelude_import)]
+//! Three functions a `#[trace]` must hand back unchanged apart from the body:
+//! one with an early `return` and a `?`, one generic with a `where` clause, and
+//! an `async fn`.
+extern crate std;
+#[prelude_import]
+use std::prelude::rust_2024::*;
+
+use trace::trace;
+
+#[doc = " The port in `host:port`."]
+pub fn port(address: &str) -> Result<u16, String> {
+    struct Leave;
+    impl ::core::ops::Drop for Leave {
+        fn drop(&mut self) {
+
+
+            { ::std::io::_print(format_args!("leave {0}\n", "port")); };
+        }
+    }
+    { ::std::io::_print(format_args!("enter {0}\n", "port")); };
+    let _leave = Leave;
+    {
+        let Some((_, port)) =
+            address.split_once(':') else {
+                return Err(::alloc::__export::must_use({
+                                ::alloc::fmt::format(format_args!("no port in {0:?}",
+                                        address))
+                            }));
+            };
+        let port = port.parse::<u16>().map_err(|e| e.to_string())?;
+        Ok(port)
+    }
+}
+pub fn largest<T>(items: &[T]) -> Option<&T> where T: PartialOrd {
+    struct Leave;
+    impl ::core::ops::Drop for Leave {
+        fn drop(&mut self) {
+            { ::std::io::_print(format_args!("leave {0}\n", "largest")); };
+        }
+    }
+    { ::std::io::_print(format_args!("enter {0}\n", "largest")); };
+    let _leave = Leave;
+    {
+        let mut best = items.first()?;
+        for item in items { if item > best { best = item; } }
+        Some(best)
+    }
+}
+pub async fn double(n: u32) -> u32 {
+    struct Leave;
+    impl ::core::ops::Drop for Leave {
+        fn drop(&mut self) {
+            { ::std::io::_print(format_args!("leave {0}\n", "double")); };
+        }
+    }
+    { ::std::io::_print(format_args!("enter {0}\n", "double")); };
+    let _leave = Leave;
+    { n * 2 }
+}

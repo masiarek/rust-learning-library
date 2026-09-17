@@ -1,0 +1,35 @@
+error: expected "debug", "info" or "warn"
+ --> cascade/src/main.rs:9:25
+  |
+9 |     #[logged_error_only("warning")] // the level is "warn"
+  |                         ^^^^^^^^^
+
+error[E0599]: no method named `area` found for struct `Rect` in the current scope
+  --> cascade/src/main.rs:17:25
+   |
+ 3 | struct Rect {
+   | ----------- method `area` not found for this struct
+...
+17 |     println!("{}", rect.area());
+   |                         ^^^^ method not found in `Rect`
+
+error[E0599]: no method named `area` found for struct `Rect` in the current scope
+  --> cascade/src/main.rs:18:25
+   |
+ 3 | struct Rect {
+   | ----------- method `area` not found for this struct
+...
+18 |     println!("{}", rect.area() * 2);
+   |                         ^^^^ method not found in `Rect`
+
+error[E0599]: no method named `area` found for struct `Rect` in the current scope
+  --> cascade/src/main.rs:19:25
+   |
+ 3 | struct Rect {
+   | ----------- method `area` not found for this struct
+...
+19 |     println!("{}", rect.area() + 1);
+   |                         ^^^^ method not found in `Rect`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `cascade` (bin "cascade") due to 4 previous errors

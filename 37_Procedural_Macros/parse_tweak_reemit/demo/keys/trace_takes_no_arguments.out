@@ -1,0 +1,7 @@
+error: #[trace] takes no arguments
+ --> trace_args/src/main.rs:3:9
+  |
+3 | #[trace(verbose)] // #[trace] takes no arguments
+  |         ^^^^^^^
+
+error: could not compile `trace_args` (bin "trace_args") due to 1 previous error

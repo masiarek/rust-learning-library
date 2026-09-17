@@ -1,0 +1,11 @@
+attempt 1: ""
+  asked to sleep 100ms
+attempt 2: "n/a"
+  asked to sleep 100ms
+attempt 3: "21"
+= Ok(21)
+
+attempt 1
+  asked to sleep 250ms
+attempt 2
+= Err("refused on attempt 2")

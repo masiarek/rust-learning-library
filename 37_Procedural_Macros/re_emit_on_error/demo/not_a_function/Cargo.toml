@@ -1,0 +1,8 @@
+[package]
+name = "not_a_function"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+logged = { path = "../logged" }

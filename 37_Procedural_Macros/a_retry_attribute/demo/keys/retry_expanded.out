@@ -1,0 +1,22 @@
+#![feature(prelude_import)]
+//! The attribute exactly as the course outline writes it, with no `sleep` key.
+//! Nothing calls `fetch`: this crate is here to be expanded, not run.
+extern crate std;
+#[prelude_import]
+use std::prelude::rust_2024::*;
+
+use retry::retry;
+
+pub fn fetch(path: &str) -> Result<String, std::io::Error> {
+    let mut attempts_left: u32 = 3u32;
+    loop {
+        attempts_left -= 1;
+        match (|| -> Result<String, std::io::Error>
+                        { std::fs::read_to_string(path) })() {
+            ::core::result::Result::Err(_) if attempts_left > 0 => {
+                ::std::thread::sleep(::core::time::Duration::from_millis(100u64));
+            }
+            result => return result,
+        }
+    }
+}

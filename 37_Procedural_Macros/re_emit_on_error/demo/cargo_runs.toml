@@ -1,0 +1,35 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+
+[[run]]
+stem = "logged_on_a_method"
+cmd = ["cargo", "run", "-q", "-p", "app"]
+
+[[run]]
+stem = "logged_error_only_cascade"
+cmd = ["cargo", "build", "-q", "-p", "cascade"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "logged_reemit_one_error"
+cmd = ["cargo", "build", "-q", "-p", "one_error"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "logged_free_function_hides_the_cascade"
+cmd = ["cargo", "build", "-q", "-p", "free_function"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "logged_on_an_impl_block"
+cmd = ["cargo", "build", "-q", "-p", "not_a_function"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "async_main_left_untouched"
+cmd = ["cargo", "build", "-q", "-p", "async_main"]
+expect = "failure"
+stream = "stderr"

@@ -1,0 +1,13 @@
+error: #[retry] cannot wait inside an `async fn`
+ --> bad_functions/src/main.rs:4:1
+  |
+4 | async fn in_async() -> Result<(), String> {
+  | ^^^^^
+
+error: #[retry] needs a function that returns a `Result`
+ --> bad_functions/src/main.rs:9:4
+  |
+9 | fn no_result() {}
+  |    ^^^^^^^^^
+
+error: could not compile `bad_functions` (bin "bad_functions") due to 2 previous errors

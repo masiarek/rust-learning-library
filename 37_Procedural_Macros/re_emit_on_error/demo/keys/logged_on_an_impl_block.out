@@ -1,0 +1,7 @@
+error: expected `fn`
+ --> not_a_function/src/main.rs:9:1
+  |
+9 | impl Rect {
+  | ^^^^
+
+error: could not compile `not_a_function` (bin "not_a_function") due to 1 previous error

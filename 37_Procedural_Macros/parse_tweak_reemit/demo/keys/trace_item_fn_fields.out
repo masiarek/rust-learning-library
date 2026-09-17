@@ -1,0 +1,14 @@
+2 attrs
+  attr          # [doc = " The port in `host:port`."]
+  attr          # [inline]
+vis             pub
+modifiers       FnModifiers { defaultness: None }
+sig             async fn port < T : Copy > (address : & str) -> Result < u16 , String > where T : Default
+  asyncness     async
+  safety        Safety::Default
+  ident         port
+  generics      < T : Copy >
+  where_clause  where T : Default
+  inputs        address : & str
+  output        -> Result < u16 , String >
+block           { todo ! () }

@@ -1,0 +1,7 @@
+error: expected "debug", "info" or "warn"
+ --> free_function/src/main.rs:3:21
+  |
+3 | #[logged_error_only("warning")] // the level is "warn"
+  |                     ^^^^^^^^^
+
+error: could not compile `free_function` (bin "free_function") due to 1 previous error
