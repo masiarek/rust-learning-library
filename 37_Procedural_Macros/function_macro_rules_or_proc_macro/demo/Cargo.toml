@@ -1,0 +1,6 @@
+# One task done three ways, and the two places `macro_rules!` stops on stable.
+# `[workspace]` makes this folder its own workspace, whatever manifest sits
+# above it.
+[workspace]
+members = ["field_names", "app", "concat_ident", "rules_derive"]
+resolver = "3"

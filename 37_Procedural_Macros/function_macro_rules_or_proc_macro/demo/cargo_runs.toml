@@ -1,0 +1,23 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+
+[[run]]
+stem = "one_task_three_ways"
+cmd = ["cargo", "run", "-q", "-p", "app"]
+
+[[run]]
+stem = "macro_rules_cannot_concat"
+cmd = ["cargo", "build", "-q", "-p", "concat_ident"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "macro_rules_cannot_derive_or_attr"
+cmd = ["cargo", "build", "-q", "-p", "rules_derive"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "what_a_derive_depends_on"
+cmd = ["cargo", "tree", "-p", "app"]
+# A path dependency is printed with its absolute folder; drop it.
+filters = [[' \(/[^)]*\)', '']]

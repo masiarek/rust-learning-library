@@ -1,0 +1,20 @@
+error[E0277]: `EmptyConfig` doesn't implement `Debug`
+ --> no_debug/src/lib.rs:7:12
+  |
+5 | #[derive(Error)]
+  |          ----- in this derive macro expansion
+6 | #[error("the config file is empty")]
+7 | pub struct EmptyConfig;
+  |            ^^^^^^^^^^^ the trait `Debug` is not implemented for `EmptyConfig`
+  |
+note: required by a bound in `std::error::Error`
+ --> /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/error.rs:59:0
+  = note: this error originates in the derive macro `Error` (in Nightly builds, run with -Z macro-backtrace for more info)
+help: consider annotating `EmptyConfig` with `#[derive(Debug)]`
+  |
+7 + #[derive(Debug)]
+8 | pub struct EmptyConfig;
+  |
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `no_debug` (lib) due to 1 previous error

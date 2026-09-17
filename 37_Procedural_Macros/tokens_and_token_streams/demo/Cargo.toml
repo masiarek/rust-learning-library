@@ -1,0 +1,6 @@
+# A macro crate that takes its input apart token by token, and the program that
+# feeds it. `[workspace]` makes this folder its own workspace, whatever manifest
+# sits above it.
+[workspace]
+members = ["inspect_tokens", "app"]
+resolver = "3"

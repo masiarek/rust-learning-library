@@ -1,0 +1,5 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+
+[[run]]
+stem = "token_trees_one_by_one"
+cmd = ["cargo", "run", "-q", "-p", "app"]

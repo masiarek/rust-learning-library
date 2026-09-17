@@ -1,0 +1,96 @@
+#![feature(prelude_import)]
+//! The error type of a program that reads a port number from a config file.
+//!
+//! This file is all there is: `cargo expand -p config_error` shows every line
+//! the derive adds to it.
+extern crate std;
+#[prelude_import]
+use std::prelude::rust_2024::*;
+
+use std::io;
+use std::num::ParseIntError;
+use std::path::PathBuf;
+
+use thiserror::Error;
+
+pub enum ConfigError {
+
+    #[error("the config file is empty")]
+    Empty,
+
+    #[error("cannot read the config file")]
+    Io(
+        #[from]
+        io::Error),
+
+    #[error("{path} has no valid port")]
+    BadPort {
+        path: PathBuf,
+        #[source]
+        cause: ParseIntError,
+    },
+}
+#[automatically_derived]
+impl ::core::fmt::Debug for ConfigError {
+    #[inline]
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        match self {
+            ConfigError::Empty =>
+                ::core::fmt::Formatter::write_str(f, "Empty"),
+            ConfigError::Io(__self_0) =>
+                ::core::fmt::Formatter::debug_tuple_field1_finish(f, "Io",
+                    &__self_0),
+            ConfigError::BadPort { path: __self_0, cause: __self_1 } =>
+                ::core::fmt::Formatter::debug_struct_field2_finish(f,
+                    "BadPort", "path", __self_0, "cause", &__self_1),
+        }
+    }
+}
+#[allow(unused_qualifications)]
+#[automatically_derived]
+impl ::thiserror::__private20::Error for ConfigError {
+    fn source(&self)
+        ->
+            ::core::option::Option<&(dyn ::thiserror::__private20::Error +
+            'static)> {
+        use ::thiserror::__private20::AsDynError as _;
+
+        #[allow(deprecated)]
+        match self {
+            ConfigError::Empty { .. } => ::core::option::Option::None,
+            ConfigError::Io { 0: source, .. } =>
+                ::core::option::Option::Some(source.as_dyn_error()),
+            ConfigError::BadPort { cause: source, .. } =>
+                ::core::option::Option::Some(source.as_dyn_error()),
+        }
+    }
+}
+#[allow(unused_qualifications)]
+#[automatically_derived]
+impl ::core::fmt::Display for ConfigError {
+    fn fmt(&self, __formatter: &mut ::core::fmt::Formatter)
+        -> ::core::fmt::Result {
+        use ::thiserror::__private20::AsDisplay as _;
+
+        #[allow(unused_variables, deprecated, clippy ::
+        used_underscore_binding)]
+        match self {
+            ConfigError::Empty {} =>
+                __formatter.write_str("the config file is empty"),
+            ConfigError::Io(_0) =>
+                __formatter.write_str("cannot read the config file"),
+            ConfigError::BadPort { path, cause } =>
+                match (path.as_display(),) {
+                    (__display_path,) =>
+                        __formatter.write_fmt(format_args!("{0} has no valid port",
+                                __display_path)),
+                },
+        }
+    }
+}
+#[allow(deprecated, unused_qualifications,)]
+#[automatically_derived]
+impl ::core::convert::From<io::Error> for ConfigError {
+    #[allow(clippy :: redundant_field_names)]
+    fn from(source: io::Error) -> Self { ConfigError::Io { 0: source } }
+}

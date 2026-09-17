@@ -1,0 +1,13 @@
+error: `proc-macro` crate types currently cannot export any items other than functions tagged with `#[proc_macro]`, `#[proc_macro_derive]`, or `#[proc_macro_attribute]`
+ --> exports_a_trait/src/lib.rs:6:1
+  |
+6 | pub trait HelloMacro {
+  | ^^^^^^^^^^^^^^^^^^^^
+
+error: `proc-macro` crate types currently cannot export any items other than functions tagged with `#[proc_macro]`, `#[proc_macro_derive]`, or `#[proc_macro_attribute]`
+  --> exports_a_trait/src/lib.rs:10:1
+   |
+10 | pub fn greeting(name: &str) -> String {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: could not compile `exports_a_trait` (lib) due to 2 previous errors

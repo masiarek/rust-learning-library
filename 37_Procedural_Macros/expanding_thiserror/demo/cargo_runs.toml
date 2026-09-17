@@ -1,0 +1,16 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+
+[[run]]
+stem = "thiserror_expanded"
+cmd = ["cargo", "rustc", "-q", "-p", "config_error", "--profile=check", "--", "-Zunpretty=expanded"]
+env = { RUSTC_BOOTSTRAP = "1" }
+
+[[run]]
+stem = "thiserror_same_as_by_hand"
+cmd = ["cargo", "run", "-q", "-p", "app"]
+
+[[run]]
+stem = "thiserror_needs_debug"
+cmd = ["cargo", "build", "-q", "-p", "no_debug"]
+expect = "failure"
+stream = "stderr"

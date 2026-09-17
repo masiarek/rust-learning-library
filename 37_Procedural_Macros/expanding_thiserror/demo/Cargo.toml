@@ -1,0 +1,6 @@
+# One error enum written twice, once by thiserror and once by hand, and a
+# program that shows the two behave the same. `[workspace]` makes this folder
+# its own workspace, whatever manifest sits above it.
+[workspace]
+members = ["config_error", "by_hand", "app", "no_debug"]
+resolver = "3"

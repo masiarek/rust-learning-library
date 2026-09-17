@@ -1,0 +1,7 @@
+error: can't use a procedural macro from the same crate that defines it
+  --> uses_its_own_derive/src/lib.rs:10:10
+   |
+10 | #[derive(HelloMacro)]
+   |          ^^^^^^^^^^
+
+error: could not compile `uses_its_own_derive` (lib) due to 1 previous error

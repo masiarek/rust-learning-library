@@ -1,0 +1,23 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+
+[[run]]
+stem = "hello_macro_derived"
+cmd = ["cargo", "run", "-q", "-p", "app"]
+
+[[run]]
+stem = "proc_macro_crate_exports_only_macros"
+cmd = ["cargo", "build", "-q", "-p", "exports_a_trait"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "proc_macro_crate_cannot_use_its_own"
+cmd = ["cargo", "build", "-q", "-p", "uses_its_own_derive"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "proc_macro_crate_without_cargo"
+cmd = ["sh", "bare_rustc.sh"]
+# The library's file name is the one thing that differs between platforms.
+filters = [['libhello_macro\.(dylib|so)\n', "libhello_macro.dylib on macOS, libhello_macro.so on Linux\n"]]

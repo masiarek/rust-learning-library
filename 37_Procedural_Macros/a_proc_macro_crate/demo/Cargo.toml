@@ -1,0 +1,6 @@
+# A proc-macro crate, the program that uses it, and two proc-macro crates that
+# break the rules. `[workspace]` makes this folder its own workspace, whatever
+# manifest sits above it.
+[workspace]
+members = ["hello_macro", "app", "exports_a_trait", "uses_its_own_derive"]
+resolver = "3"

@@ -1,0 +1,10 @@
+error[E0658]: the `concat` meta-variable expression is unstable
+ --> concat_ident/src/main.rs:9:19
+  |
+9 |             $(fn ${concat(get_, $field)}(&self) -> &$ty { &self.$field })*
+  |                   ^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: see issue #124225 <https://github.com/rust-lang/rust/issues/124225> for more information
+
+For more information about this error, try `rustc --explain E0658`.
+error: could not compile `concat_ident` (bin "concat_ident") due to 1 previous error

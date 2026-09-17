@@ -1,0 +1,29 @@
+error[E0658]: `macro_rules!` derives are unstable
+  --> rules_derive/src/main.rs:5:1
+   |
+ 5 | / macro_rules! FieldNames {
+ 6 | |     derive() (struct $name:ident { $($field:ident : $ty:ty),* $(,)? }) => {
+ 7 | |         impl $name {
+ 8 | |             const FIELD_NAMES: &[&str] = &[$(stringify!($field)),*];
+ 9 | |         }
+10 | |     };
+11 | | }
+   | |_^
+   |
+   = note: see issue #143549 <https://github.com/rust-lang/rust/issues/143549> for more information
+
+error[E0658]: `macro_rules!` attributes are unstable
+  --> rules_derive/src/main.rs:13:1
+   |
+13 | / macro_rules! with_field_names {
+14 | |     attr() (struct $name:ident { $($field:ident : $ty:ty),* $(,)? }) => {
+15 | |         struct $name { $($field: $ty),* }
+...  |
+20 | |     };
+21 | | }
+   | |_^
+   |
+   = note: see issue #143547 <https://github.com/rust-lang/rust/issues/143547> for more information
+
+For more information about this error, try `rustc --explain E0658`.
+error: could not compile `rules_derive` (bin "rules_derive") due to 2 previous errors

@@ -1,0 +1,66 @@
+1. Four kinds of token tree
+    38:54  Ident    GET
+    38:58  Punct    /  Alone
+    38:59  Ident    users
+    38:64  Punct    /  Alone
+    38:65  Group    Brace
+    38:66      Ident    id
+    38:70  Punct    =  Joint
+    38:71  Punct    >  Alone
+    38:73  Ident    list_users
+2. Spacing
+    39:37  Ident    x
+    39:39  Punct    +  Joint
+    39:40  Punct    =  Alone
+    39:42  Literal  1
+    39:43  Punct    ;  Alone
+    39:45  Punct    &  Alone
+    39:46  Punct    '  Joint
+    39:46  Ident    a
+    39:49  Ident    str
+    39:52  Punct    ;  Alone
+    39:54  Literal  'a'
+    39:57  Punct    ;  Alone
+    39:59  Punct    -  Alone
+    39:60  Literal  1
+3. Delimiters
+    40:40  Group    Parenthesis
+    40:41      Ident    a
+    40:44  Group    Bracket
+    40:45      Ident    b
+    40:48  Group    Brace
+    40:49      Ident    c
+   and the invisible one, around a macro_rules! $e
+    18:22  Group    None
+    41:71      Literal  1
+    41:73      Punct    +  Alone
+    41:75      Literal  1
+    18:25  Punct    *  Alone
+    18:27  Literal  2
+4. A doc comment, straight to the macro
+     44:9  Punct    #  Alone
+     44:9  Group    Bracket
+     44:9      Ident    doc
+     44:9      Punct    =  Alone
+     44:9      Literal  " hi"
+   and forwarded by macro_rules!
+     47:9  Punct    #  Alone
+     47:9  Group    Bracket
+     47:9      Ident    doc
+     47:9      Punct    =  Alone
+     47:9      Literal  r" hi"
+   to_string, straight to a function-like macro
+    /// hi
+   to_string, forwarded by macro_rules!
+    #[doc = r" hi"]
+   to_string in a derive
+    /// A road.
+    struct Road { length: Meters, }
+   to_string in an attribute
+    /// Greets.
+    fn greet() {}
+5. to_string and whitespace
+    x:i32
+    x : i32
+    x : i32
+road.length = 5
