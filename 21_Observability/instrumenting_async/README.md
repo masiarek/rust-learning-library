@@ -24,6 +24,7 @@ The whole page is the trap. Every other failure in this section announces itself
 - [A span is not a log line](../spans_not_lines/README.md) — where the ambient current span is introduced as a convenience
 - [Carrying the trace across a boundary](../context_propagation/README.md) — the same problem one boundary out, between processes
 - [Advanced](../../09_Advanced/README.md) — the section for things that assume the foundations
+- [Testing async code](../../35_Async/building_minidb/testing_async_code/README.md) — spans captured in a test and asserted as data, in the Tokio course
 
 ## Po polsku
 

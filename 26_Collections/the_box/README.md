@@ -328,6 +328,7 @@ fn main() {
 - [Static vs dynamic dispatch](../../12_Traits/static_vs_dynamic_dispatch/README.md) — what the second pointer in a fat box is for
 - [`Vec::into_boxed_slice`](../vec_methods/vec_into_boxed_slice/README.md) — the usual way to get a `Box<[T]>`, the other fat box
 - [The third owned form](../../14_Strings/boxed_str/README.md) — `Box<str>`, the same shape over UTF-8
+- [What a smart pointer is](../../18_Ownership/what_a_smart_pointer_is/README.md) — `Box`, `Rc` and `Arc` as one family
 
 ## Sources
 

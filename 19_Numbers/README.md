@@ -7,6 +7,7 @@ This section is where `.len()` finally means something. A byte is the thing `siz
 | Lesson | Level | What it teaches |
 |---|---|---|
 | [Meet the byte](meet_the_byte/README.md) | 101 → 201 | `u8` is one byte and the unit `size_of` counts in — plus the three bills a width comes with: overflow that differs by build, the shift the type picks, and a `.len()` measured in bytes |
+| [The integer types](the_integer_types/README.md) | 101 → 201 | Twelve widths, `usize` for anything that indexes, `i32` when nothing says otherwise — and the unsigned subtraction that wraps in release — *stub* |
 | [Writing a number down](writing_a_number_down/README.md) | 101 → 201 | The four things you can attach to a literal — the base prefix (`0` says *not decimal*, the letter names the base), the underscore, the type suffix, and the `b` that means bytes — plus the range each width promises, and why `b'A'` is not Python's `b'A'` |
 | [Why hexadecimal](why_hexadecimal/README.md) | 101 → 201 | Why a byte is two hex digits and always will be — plus the three traps that follow: unpadded `{:x}` losing the byte boundary, `from_str_radix` refusing the `0x` it just printed, and hex of a negative showing two's complement |
 | [Printing bytes](printing_bytes/README.md) | 101 → 201 | A byte slice has no `{}`, and `{:?}` prints numbers — `escape_ascii()` prints what Python's `b'…'` shows, keeps every byte, and is valid source for the same bytes; plus the hand-rolled loop that escapes the letters too |

@@ -129,6 +129,7 @@ Books here are listed so the shelf is complete; [Going deeper](../going_deeper/R
 | Parsing | [The Nominomicon ↗](https://tfpk.github.io/nominomicon/) | **Read it for** `nom` specifically |
 | Security review | [Secure Rust Guidelines ↗](https://anssi-fr.github.io/rust-guide/) | **Reference** — the French cybersecurity agency's rules, and the only formal checklist here |
 | C++ interop | [CXX ↗](https://cxx.rs) | **Reference** — the crate's own book, and the best explanation of the problem |
+| C to Rust migration | [The C to Rust Migration Book ↗](https://mainmatter.com/c-to-rust-migration-book/) | **Unvetted** — Jonas Kruckenberg for Mainmatter; online, with a public exercise repository, and still gaining chapters on 2026-09-16. [Migrating C to Rust](../../31_C_and_Cpp/migrating_c_to_rust/README.md) follows its outline |
 | Serialization | [Serde ↗](https://serde.rs/) | **Reference** — the crate's own book, better than most paid chapters on the subject |
 
 ## Build something books

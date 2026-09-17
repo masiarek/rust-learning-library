@@ -126,6 +126,7 @@ The fix is not to make the loop a stream. It is to move the blocking work off th
 - [`while let`](../../17_Option_and_Result/while_let/README.md) — the loop form that replaces `for` here
 - [Returning an iterator](../returning_an_iterator/README.md) — `impl Iterator` and `impl Stream` have the same lifetime story
 - [Mutex poisoning](../../09_Advanced/mutex_poisoning/README.md) — the other place a blocking call on a shared thread ruins somebody else's day
+- [Streams, sinks, and pipelining](../../35_Async/building_minidb/streams_sinks_and_pipelining/README.md) — a stream put to work in a server, in the Tokio course
 
 ## Sources
 

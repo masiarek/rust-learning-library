@@ -282,6 +282,7 @@ fn main() {
 - [Who waits when main returns? ↗](https://masiarek.github.io/concurrency-learning-library/01_Threads/who_waits_when_main_returns/index.html) — the last paragraph of *A panicking thread* above, measured in Rust, Go, C, C++, Java and Python: which of them waits, and why a spawned thread's output can stop in the middle of a line
 - [Getting a result back ↗](https://masiarek.github.io/concurrency-learning-library/01_Threads/getting_a_result_back/index.html) — `join`'s `Result` beside C's `void *`, Go's channels, and the futures of C++, Java and Python
 - [A goroutine has no handle ↗](https://masiarek.github.io/go-learning-library/01_Goroutines/a_goroutine_has_no_handle/index.html) — Go's `spawn` with no `JoinHandle`, and what Go programs do instead
+- [Tasks](../../35_Async/building_minidb/tasks/README.md) — `tokio::spawn`, the same `'static` bound, and why a task is not a thread
 
 ## Sources
 

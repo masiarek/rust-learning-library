@@ -313,6 +313,7 @@ fn main() {
 - [Modules and visibility](../../27_Modules/modules_and_visibility/README.md) — the privacy boundary this page's split is built on
 - [cargo-nextest](../../05_Tooling/nextest/README.md) — a different harness, one process per test
 - [Testing a command](../../03_Command_Line/testing_a_command/README.md) — integration testing a binary rather than a library
+- [How `cargo test` runs your tests](../how_cargo_test_runs/README.md) — what the three kinds cost to build and run, and the tests that share a process
 
 ## Sources
 

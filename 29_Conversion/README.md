@@ -18,6 +18,7 @@ The first three are traits, so they are extensible, greppable, and visible in a 
 | [`TryFrom` and `TryInto`](tryfrom_and_tryinto/README.md) | 201 | The same shape plus a `type Error`, and `FromStr` for the text case |
 | [Casting with `as`](casting_with_as/README.md) | 201 | Truncation, sign reinterpretation, saturation and rounding, all silent |
 | [Coercion: the conversion you never write](coercion/README.md) | 201 | The fifth one, and the only implicit one — where it fires, the closed list of what it will do, and the three places it will not help you |
+| [`AsRef` and `AsMut`](as_ref_and_as_mut/README.md) | 201 | The cheap borrow-as conversion behind `P: AsRef<Path>`, and how it differs from `Into` and `Borrow` — *stub* |
 
 ## The one table
 

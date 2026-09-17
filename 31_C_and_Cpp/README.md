@@ -33,6 +33,10 @@ The nine pages show what C and C++ allow. The next two show C++'s own replies �
 | [Safe Buffers](safe_buffers/README.md) | spatial | a length on every buffer, a check on every index, raw-pointer indexing flagged | the same three rules — as a warning and a build mode rather than a default |
 | [Lifetime safety in Clang](lifetime_safety_in_clang/README.md) | temporal | a flow-sensitive check that no pointer is read after its object died | the borrow checker's first rule, down to the three-point diagnostic — without its second |
 
+## Moving C code to Rust
+
+The pages above show why Rust refuses these programs. [Migrating C to Rust](migrating_c_to_rust/README.md) is the practical sequel for a codebase that already exists: twelve outlines that go from the C ABI and the `-sys` crate, through the types, validation and error codes a boundary needs, to a playbook for replacing one module at a time behind an unchanged header — and testing the result with sanitizers, Valgrind and Miri. **Stubs today**; [Calling C](../09_Advanced/calling_c/README.md) is the verified first step.
+
 ## Why these pages have no answer key
 
 Every other page in this library ends with a transcript that CI recompiles, re-runs and diffs against a recorded file. The C halves of these pages cannot work that way, and the reason is the subject:

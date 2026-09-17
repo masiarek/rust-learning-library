@@ -9,6 +9,8 @@ The test framework is part of the language rather than a dependency, which has o
 | [What a test asserts](what_a_test_asserts/README.md) | 201 | `assert!` vs `assert_eq!`, the message, floats, and the assertion that cannot fail |
 | [Where a test goes](where_a_test_goes/README.md) | 201 | Inside the module or outside the crate, and the `#[should_panic]` that passes on any panic |
 | [The example that is a test](doc_tests/README.md) | 201 | Doc tests: an integration test that is also the documentation |
+| [How `cargo test` runs your tests](how_cargo_test_runs/README.md) | 201 | One binary per test file, tests as threads in one process, and the shared state that makes a suite flaky — *stub* |
+| [Other kinds of test](other_kinds_of_test/README.md) | 201 → 301 | Property, snapshot, compile-fail, fuzz and benchmark: what each checks that an example cannot — *stub* |
 
 ## The three, in one table
 

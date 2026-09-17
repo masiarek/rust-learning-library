@@ -364,6 +364,7 @@ Part 3 — the back edge, and whether Drop runs.
 - [The global allocator](../../09_Advanced/the_global_allocator/README.md) — the counting allocator section 2 measures with
 - [`Rc` ↗](https://doc.rust-lang.org/std/rc/struct.Rc.html) · [`Weak` ↗](https://doc.rust-lang.org/std/rc/struct.Weak.html) · [`RefCell` ↗](https://doc.rust-lang.org/std/cell/struct.RefCell.html)
 - [Step 8 of the `ToOwned` path](../../12_Traits/how_to_learn_to_owned/to_owned_traps/README.md) — `.to_owned()` on an `Rc` or a `Cow` copies the wrapper, not the text
+- [What a smart pointer is](../what_a_smart_pointer_is/README.md) — `Box`, `Rc` and `Arc` as one family
 
 ## Po polsku
 

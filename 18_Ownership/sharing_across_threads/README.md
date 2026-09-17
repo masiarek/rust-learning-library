@@ -351,6 +351,7 @@ Part 3 — the Arc you can delete.
 - [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) — the trait both counters are implementing
 - [Ownership and moves](../ownership_and_moves/README.md) — the rule a thread boundary enforces most visibly
 - [`Arc` ↗](https://doc.rust-lang.org/std/sync/struct.Arc.html) · [`Mutex` ↗](https://doc.rust-lang.org/std/sync/struct.Mutex.html) · [`thread::scope` ↗](https://doc.rust-lang.org/std/thread/fn.scope.html) · [`Send` ↗](https://doc.rust-lang.org/std/marker/trait.Send.html)
+- [What a smart pointer is](../what_a_smart_pointer_is/README.md) — `Box`, `Rc` and `Arc` as one family
 
 ## Po polsku
 

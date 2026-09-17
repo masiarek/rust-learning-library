@@ -156,6 +156,7 @@ What that does *not* prove is that C can call it, which needs a C compiler and a
 - [Use-after-free](../../31_C_and_Cpp/use_after_free/README.md) — the bug `CStr::from_ptr` lets back in, compiled and run
 - [Benefits of Rust](../../00_Start_Here/benefits_of_rust/README.md) · [Measured claims](../../00_Start_Here/measured_claims/README.md) — the two lists this page is the footnote to
 - [The Nomicon — repr(Rust) ↗](https://doc.rust-lang.org/nomicon/repr-rust.html) · [`CString` ↗](https://doc.rust-lang.org/std/ffi/struct.CString.html) · [`CStr::from_ptr` ↗](https://doc.rust-lang.org/std/ffi/struct.CStr.html#method.from_ptr) · [Edition guide — unsafe extern blocks ↗](https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-extern.html)
+- [Migrating C to Rust](../../31_C_and_Cpp/migrating_c_to_rust/README.md) — the arc this page opens: building and linking, bindings, FFI-safe types, validation, error codes and testing, as outlines
 
 ## Po polsku
 

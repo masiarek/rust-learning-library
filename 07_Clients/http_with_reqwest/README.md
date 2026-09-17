@@ -23,6 +23,7 @@
 - [Injecting the base URL](../injecting_the_base_url/README.md) — the very next thing to do to this code, before it is written twice
 - [Deserializing a response](../deserializing_a_response/README.md) — what to do with the body
 - [`anyhow` and context](../../02_Errors/anyhow_and_context/README.md) — three failure modes that all deserve to say which URL they were fetching
+- [Async](../../35_Async/README.md) — what the `async` half of the decision involves, from `Future` to a Tokio server
 
 ## Po polsku
 

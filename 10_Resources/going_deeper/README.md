@@ -12,6 +12,8 @@ All links checked 2026-08-23. The organising rule: these are for when you have a
 - **[An unsafe mental model ↗](https://ia0.github.io/unsafe-mental-model/introduction.html)** — a shorter, more recent attempt at the *model* rather than the rules. A good first read before the Nomicon.
 - **[The Nomicon's FFI chapter ↗](https://doc.rust-lang.org/nomicon/ffi.html)** — calling C, and being called by it. (The widely-linked Michael Bryan FFI guide is dead as of 2026-08-23; this covers the same ground and is maintained.)
 - **[bindgen ↗](https://rust-lang.github.io/rust-bindgen/)** — generates Rust bindings from C headers, so you do not transcribe a struct by hand and get the padding wrong.
+- **[cheadergen ↗](https://cheadergen.com/)** and **[cbindgen ↗](https://github.com/mozilla/cbindgen)** — the other direction: C headers generated from Rust. cheadergen reads the compiler's view through rustdoc JSON, so it needs a pinned nightly; cbindgen parses the source.
+- **[The C to Rust Migration Book ↗](https://mainmatter.com/c-to-rust-migration-book/)** — Jonas Kruckenberg's online course for Mainmatter, with [exercises ↗](https://github.com/mainmatter/migrating-c-to-rust): FFI fundamentals, types and data across the boundary, FFI-safe types, validation, error handling and API design, and production-quality FFI. New chapters were still arriving when this entry was added on 2026-09-16. This library's outline of the same arc is [Migrating C to Rust](../../31_C_and_Cpp/migrating_c_to_rust/README.md).
 
 The reason this section is first: `unsafe` is the one place where a mistake is not a compile error, so it is the one place where reading before writing genuinely pays.
 
@@ -24,6 +26,7 @@ The reason this section is first: `unsafe` is the one place where a mistake is n
 ## Async
 
 - **[The Async Book ↗](https://rust-lang.github.io/async-book/)** — futures, executors, `async`/`await`, and what a runtime actually is.
+- **[Tokio's tutorial ↗](https://tokio.rs/tokio/tutorial)** — builds a small Redis clone, and is the best second explanation of tasks, shared state and framing. This library's [Async](../../35_Async/README.md) section outlines a longer course on the same pattern.
 
 Worth one warning: async Rust is a distinct dialect with its own difficulties (pinning, `Send` bounds across await points, lifetimes in futures), and almost none of them are the difficulties of ordinary Rust. Learn ordinary Rust first, and reach for async when you have a program that is genuinely waiting on I/O rather than because it sounds modern.
 

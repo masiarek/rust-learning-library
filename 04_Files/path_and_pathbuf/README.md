@@ -24,6 +24,7 @@
 - [Opening a file](../opening_a_file/README.md) — the first thing you do with a path
 - [Command-line arguments](../../03_Command_Line/command_line_arguments/README.md) — where the non-UTF-8 filename problem starts
 - [A score is not a number](../../16_Structs/newtype_score/README.md) — the same idea one level down: a type that refuses to be confused with the thing it wraps
+- [`AsRef` and `AsMut`](../../29_Conversion/as_ref_and_as_mut/README.md) — the trait behind `P: AsRef<Path>`
 
 ## Po polsku
 

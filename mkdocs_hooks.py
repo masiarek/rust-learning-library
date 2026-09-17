@@ -241,6 +241,10 @@ NAV_ORDER: dict[str, list[str]] = {
         "what_a_test_asserts",
         "where_a_test_goes",
         "doc_tests",
+        # ...then what running all three costs, and the kinds of test the
+        # harness does not provide.
+        "how_cargo_test_runs",
+        "other_kinds_of_test",
     ],
     # Infallible, fallible, and the one with no check at all -- in that order,
     # because the third is only judgeable against the first two.
@@ -253,6 +257,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # you, and the three places it declines to. After the written three,
         # because it is defined by what it is NOT.
         "coercion",
+        # ...and the cheap borrow-as conversion a generic parameter uses, after
+        # the four, because it is defined against From and Borrow.
+        "as_ref_and_as_mut",
     ],
     # Ordered by how much a reader has to know to follow the Rust half:
     # the three ownership bugs first, then the two about threads, then the
@@ -273,6 +280,54 @@ NAV_ORDER: dict[str, list[str]] = {
         "signed_overflow",
         "safe_buffers",
         "lifetime_safety_in_clang",
+        # ...and then the practical question after the bugs: moving C code
+        # to Rust, one module at a time.
+        "migrating_c_to_rust",
+    ],
+    # The migration arc: get both languages into one binary, then the boundary
+    # from its data to its errors, then what makes the Rust side worth having,
+    # then how you know it worked.
+    "31_C_and_Cpp/migrating_c_to_rust": [
+        "README.md",
+        "the_c_abi",
+        "building_and_linking",
+        "generating_bindings",
+        "data_across_the_boundary",
+        "ffi_safe_types",
+        "validating_at_the_boundary",
+        "errors_across_ffi",
+        "c_idioms_in_rust",
+        "safe_wrappers",
+        "documenting_unsafe_contracts",
+        "testing_ffi_code",
+        "rewriting_a_module",
+    ],
+    # std's half of async first, then the course that needs a runtime.
+    "35_Async": [
+        "README.md",
+        "what_a_future_is",
+        "async_fn_and_await",
+        "common_async_pitfalls",
+        "building_minidb",
+    ],
+    # The course's own chapter order, which the outline page explains.
+    "35_Async/building_minidb": [
+        "README.md",
+        "the_tokio_runtime",
+        "tasks",
+        "building_the_server",
+        "who_owns_the_state",
+        "cancellation",
+        "backpressure",
+        "shutdown_and_supervision",
+        "testing_async_code",
+        "durability_across_restarts",
+        "async_read_and_async_write",
+        "codecs_and_framing",
+        "streams_sinks_and_pipelining",
+        "async_functions_in_traits",
+        "diagnosing_a_stuck_runtime",
+        "testing_against_a_hostile_network",
     ],
     # Ordered by dependence, as the section README says: the two clocks, then
     # what subtracting one from the other does, then the type every
@@ -587,6 +642,8 @@ NAV_ORDER: dict[str, list[str]] = {
         # atomic so it can cross a thread boundary.
         "reference_counting",
         "sharing_across_threads",
+        # ...and what Box, Rc and Arc have in common, once all three are met.
+        "what_a_smart_pointer_is",
         # ...and what all three are avoiding, priced: a derived Clone is the
         # sum of its fields, so one `.clone()` is two allocations or none.
         "what_a_clone_costs",
@@ -595,6 +652,8 @@ NAV_ORDER: dict[str, list[str]] = {
         "README.md",
         # Opens the numbers arc: the unit every other size is counted in.
         "meet_the_byte",
+        # ...and the eleven integer types beside it.
+        "the_integer_types",
         # ...and how to put one on the page: the prefix, the suffix, the b.
         "writing_a_number_down",
         # ...and how to write one down, which is the last thing before meaning.
@@ -1059,6 +1118,19 @@ LABELS = {
     "an_instant_is_not_a_system_time": "An `Instant` is not a `SystemTime`",
     "a_duration_cannot_be_negative": "A `Duration` cannot be negative",
     "black_box_is_a_hint": "`black_box` is a hint",
+    # 35_Async -- keywords, trait names and a product name.
+    "async_fn_and_await": "`async fn` and `.await`",
+    "the_tokio_runtime": "The Tokio runtime",
+    "async_read_and_async_write": "`AsyncRead` and `AsyncWrite`",
+    "streams_sinks_and_pipelining": "Streams, sinks, and pipelining",
+    # 31_C_and_Cpp/migrating_c_to_rust -- clean() lowercases the language name.
+    "migrating_c_to_rust": "Migrating C to Rust",
+    "the_c_abi": "The C ABI",
+    "c_idioms_in_rust": "C idioms in Rust",
+    "ffi_safe_types": "FFI-safe types",
+    # 28_Testing / 29_Conversion -- a command and two trait names.
+    "how_cargo_test_runs": "How `cargo test` runs",
+    "as_ref_and_as_mut": "`AsRef` and `AsMut`",
     # 25_Control_Flow -- every one of these is a keyword, and reads as code.
     "if_expressions": "`if` expressions",
     "match_expressions": "`match` expressions",

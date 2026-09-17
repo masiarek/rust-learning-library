@@ -62,7 +62,7 @@ Chapter **names** are given as well as numbers on purpose: the numbering changed
 | `16_lifetimes` | ch10.3 Lifetimes | [Borrowing](../../18_Ownership/borrowing/README.md) |
 | `17_tests` | ch11 Writing Automated Tests | [cargo-nextest](../../05_Tooling/nextest/README.md) |
 | `18_iterators` | ch13.1 Closures · ch13.2 Iterators | [`Option` is a one-item collection](../../17_Option_and_Result/option_as_collection/README.md) |
-| `19_smart_pointers` | ch15 Smart Pointers | [Nullable pointers](../../17_Option_and_Result/nullable_pointers/README.md) |
+| `19_smart_pointers` | ch15 Smart Pointers | [Nullable pointers](../../17_Option_and_Result/nullable_pointers/README.md) · [What a smart pointer is](../../18_Ownership/what_a_smart_pointer_is/README.md) |
 | `20_threads` | ch16 Fearless Concurrency | [Mutex poisoning](../../09_Advanced/mutex_poisoning/README.md) |
 | `21_macros` | ch20 Advanced Features | [The braces take a name](../../15_First_Programs/braces_take_a_name/README.md) |
 | `22_clippy` | *(no chapter — tooling)* | [Strict clippy lints](../../05_Tooling/strict_lints/README.md) |
