@@ -23,6 +23,8 @@ A green suite against a mock is evidence about the mock. That is worth having an
 - [Injecting the base URL](../injecting_the_base_url/README.md) — the precondition for any of this
 - [Testing a command](../../03_Command_Line/testing_a_command/README.md) — the other end of the same program, tested the same way
 - [Deserializing a response](../deserializing_a_response/README.md) — what the fixture is actually exercising
+- [A test double is a second `impl`](../../28_Testing/a_test_double_by_hand/README.md) — the other way to fake the API: behind a trait, with no server at all
+- [Testing: courses and links](../../28_Testing/resources/README.md) — the Advanced Rust testing course's HTTP section, built on `wiremock`
 
 ## Po polsku
 

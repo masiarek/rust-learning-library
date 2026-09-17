@@ -153,87 +153,91 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K133 | [Five assertions, two of which cannot fail — say what would have to break before each one noticed](28_Testing/what_a_test_asserts/README.md#practice) | [What a test asserts](28_Testing/what_a_test_asserts/README.md) | 201 |
 | K134 | [The test that could not see it — a private helper, and a `should_panic` that goes green on the wrong panic](28_Testing/where_a_test_goes/README.md#practice) | [Where a test goes](28_Testing/where_a_test_goes/README.md) | 201 |
 | K135 | [The example that documents half the sentence — then a third case the doc comment never promised at all](28_Testing/doc_tests/README.md#practice) | [The example that is a test](28_Testing/doc_tests/README.md) | 201 |
-| K136 | [Four impls for one `*`, and an operator that should not exist — then three plausible readings of adding two turnout figures](12_Traits/operators_are_traits/README.md#practice) | [Operators are traits](12_Traits/operators_are_traits/README.md) | 201 |
-| K137 | [Three drop orders, and the guard released one line early — two of the orders are opposites, and one binding is a bug](12_Traits/drop_and_raii/README.md#practice) | [`Drop`, and what RAII buys](12_Traits/drop_and_raii/README.md) | 201 |
-| K138 | [Count the drops on four paths — two of them need a run-time decision at the closing brace, and the fourth makes that decision readable](18_Ownership/the_drop_flag/README.md#practice) | [The drop flag](18_Ownership/the_drop_flag/README.md) | 301 |
-| K139 | [The same fan-out three ways — sequential, `spawn` plus `Arc`, and `scope`, then the E0373 that explains why the middle one exists](09_Advanced/spawning_a_thread/README.md#practice) | [Spawning a thread](09_Advanced/spawning_a_thread/README.md) | 201 → 301 |
-| K140 | [A three-stage pipeline, and the drop that ends it — then reproduce the classic mpsc hang without hanging](09_Advanced/channels/README.md#practice) | [Channels](09_Advanced/channels/README.md) | 201 → 301 |
-| K141 | [The safe line the unsafe block depends on — write `split_at_mut`, delete its assert, then find the ordinary `pub fn` that makes an unchecked read unsound](09_Advanced/what_unsafe_turns_off/README.md#practice) | [What `unsafe` turns off](09_Advanced/what_unsafe_turns_off/README.md) | 301 |
-| K142 | [Three calls, three causes — one `E0599` each, and only one of them is fixed by implementing the trait the method came from](12_Traits/no_method_named/README.md#practice) | ["No method named …"](12_Traits/no_method_named/README.md) | 201 |
-| K143 | [Three predictions about one call — which of the two addresses moved, where the free happened, and which of your three claims was about Rust rather than about one build](18_Ownership/the_call_stack/README.md#practice) | [The call stack](18_Ownership/the_call_stack/README.md) | 101 → 201 |
-| K144 | [Prove the reuse, then get the compiler to stop you exploiting it — the same address twice, `E0106` before `E0515`, and the two fixes that are not annotations](18_Ownership/a_stack_slot_is_reused/README.md#practice) | [A stack slot is reused](18_Ownership/a_stack_slot_is_reused/README.md) | 201 |
-| K145 | [Freeze a candidate column three ways — handles and buffers for `String`, `Box<str>` and an interned `Rc<str>`, then the `.to_owned()` that clones a pointer instead of the text](14_Strings/boxed_str/README.md#practice) | [The third owned form](14_Strings/boxed_str/README.md) | 201 → 301 |
-| K146 | [An interner that hands out numbers — the `&str` handle that earns `E0499` on the second call, and a `Symbol` that borrows nothing](14_Strings/boxed_str/README.md#practice) | [The third owned form](14_Strings/boxed_str/README.md) | 201 → 301 |
-| K147 | [Rebuild `char::from_u32`, then price the fixed width — the 2,048 refusals, the ratio for four alphabets, and the one `Option` that doubles](14_Strings/why_char_is_32_bits/README.md#practice) | [Why a `char` is 32 bits wide](14_Strings/why_char_is_32_bits/README.md) | 201 → 301 |
-| K148 | [Measure a column four ways, then truncate it without breaking a letter — the rows where three limit rules disagree, the value that splits all three, and the `get(..n)` that returns `None` where a slice would panic](14_Strings/four_lengths/README.md#practice) | [Four lengths](14_Strings/four_lengths/README.md) | 201 |
-| K149 | [Edit distance, in the unit you choose — one generic table over `char` and `u8`, and one word spelt two ways that is not distance zero](14_Strings/four_lengths/README.md#practice) | [Four lengths](14_Strings/four_lengths/README.md) | 301 |
-| K150 | [The invariant nobody wrote down — one ordinary `pub fn` desyncs a cached total, and the wrong answer arrives with no `unsafe`, no panic and no error](09_Advanced/what_an_invariant_is/README.md#practice) | [What an invariant is](09_Advanced/what_an_invariant_is/README.md) | 301 |
-| K151 | [Give every slice a `.middle()`, then find out why your `.first()` never runs — one trait, two methods, and only one of them reachable through a dot](12_Traits/extension_traits/README.md#practice) | [Extension traits](12_Traits/extension_traits/README.md) | 201 |
-| K152 | [Two numbers, one prefix, and the trait you cannot name — a character index beside `find`'s byte offset, the `starts_with` constant that goes stale, and the three stable helpers that stand in for `P: Pattern`](14_Strings/searching_a_string/README.md#practice) | [Searching without splitting](14_Strings/searching_a_string/README.md) | 101 → 201 |
-| K153 | [The longest common prefix, by letters — five tests, a borrowed version that needs one lifetime, and the shared byte that is not a shared letter](14_Strings/searching_a_string/README.md#practice) | [Searching without splitting](14_Strings/searching_a_string/README.md) | 201 → 301 |
-| K154 | [A regex engine with two operators — slice patterns on `&[char]`, and the `.` that means half an `é` when it runs on bytes](14_Strings/searching_a_string/README.md#practice) | [Searching without splitting](14_Strings/searching_a_string/README.md) | 201 → 301 |
-| K155 | [`replace`, without `replace` — the overlapping pair that yields one match, and the empty pattern that never lets the loop move](14_Strings/replacing_in_a_string/README.md#practice) | [Replacing part of a string](14_Strings/replacing_in_a_string/README.md) | 101 → 201 |
-| K156 | [Escape it twice, then escape it once — the swap no ordering can perform, the last-`n` replacement `replacen` counts from the wrong end, and what a stale offset does to a string that has already changed length](14_Strings/replacing_in_a_string/README.md#practice) | [Replacing part of a string](14_Strings/replacing_in_a_string/README.md) | 101 → 201 |
-| K157 | [The conversion you did not need, and the method that changed under you — five owners of one string and how few conversions they need, then an inherent method that silently steals a trait's call site](14_Strings/str_as_str/README.md#practice) | [`str::as_str`](14_Strings/str_as_str/README.md) | 201 → 301 |
-| K158 | [Three questions about nothing — the empty haystack that splits in two, the byte offsets a Polish word refuses to report, and every character as a borrowed `&str`](14_Strings/splitting_on_nothing/README.md#practice) | [Splitting on nothing](14_Strings/splitting_on_nothing/README.md) | 201 |
-| K159 | [One question, three answers, and the row where none of them is right — then a two-level key that files `Ł` between L and M, the three match arms that have to change for Swedish, and the Czech letter no per-character key can express](14_Strings/comparing_strings/README.md#practice) | [Comparing and sorting text](14_Strings/comparing_strings/README.md) | 201 |
-| K160 | [One bad config value handled four ways, the space after `=` that breaks three of them, and a `FromStr` whose error the caller can match on instead of read](14_Strings/parsing_a_string/README.md#practice) | [Parsing out of a string](14_Strings/parsing_a_string/README.md) | 101 → 201 |
-| K161 | [A tokenizer with quotes — three rules the tests leave open, and the unterminated quote only a `Result` can report](14_Strings/parsing_a_string/README.md#practice) | [Parsing out of a string](14_Strings/parsing_a_string/README.md) | 301 |
-| K162 | [A CSV reader, and the newline inside the quotes — doubled quotes, empty fields kept, and the line-first split that cuts a record in two](14_Strings/parsing_a_string/README.md#practice) | [Parsing out of a string](14_Strings/parsing_a_string/README.md) | 201 → 301 |
-| K163 | [A table sized from its own data, the `{:?}` column that refuses to pad, precision that counts chars rather than bytes, and the last alignment `fmt` cannot fix](14_Strings/the_format_language/README.md#practice) | [The format mini-language](14_Strings/the_format_language/README.md) | 201 |
-| K164 | [Full justification, and the width that is not bytes — spare spaces shared leftmost first, the one line `{:<16}` can do alone, and two Polish words that stop fitting](14_Strings/the_format_language/README.md#practice) | [The format mini-language](14_Strings/the_format_language/README.md) | 301 |
-| K165 | [Write the safe version of three CVEs — `join`, `retain` and `repeat` with no `unsafe` — drive all three with the hostile input that broke `std`, then name what each fast path has to prove in order to skip the work you just did](14_Strings/when_the_invariant_broke/README.md#practice) | [When the UTF-8 invariant broke](14_Strings/when_the_invariant_broke/README.md) | 301 |
-| K166 | [The test that would have caught it — sweep every substring of a periodic word, sweep the ASCII run before a final sigma, break a third fast path the same way, then measure the ASCII prefix in `std`'s own sigma tests](14_Strings/wrong_but_not_unsafe/README.md#practice) | [Wrong, but not unsafe](14_Strings/wrong_but_not_unsafe/README.md) | 201 → 301 |
-| K167 | [A closed set of three, and the fourth variant that breaks every match that forgot it](13_Enums/what_an_enum_is/README.md#practice) | [What an enum is](13_Enums/what_an_enum_is/README.md) | 101 → 201 |
-| K168 | [The swapped call nothing can catch, and the same call as a build error](13_Enums/an_enum_instead_of_a_bool/README.md#practice) | [An enum instead of a bool](13_Enums/an_enum_instead_of_a_bool/README.md) | 201 |
-| K169 | [Four shapes one way and four fields the other -- which one makes a circle with a width impossible](13_Enums/variants_that_carry_data/README.md#practice) | [Variants that carry data](13_Enums/variants_that_carry_data/README.md) | 201 |
-| K170 | [Sixteen cells the compiler counted for you, and the wildcard that would throw them away](13_Enums/an_enum_as_a_state_machine/README.md#practice) | [An enum as a state machine](13_Enums/an_enum_as_a_state_machine/README.md) | 201 |
-| K171 | [Four closures, four sizes -- and two with identical source text that are still two types](23_Closures/what_a_closure_is/README.md#practice) | [What a closure is](23_Closures/what_a_closure_is/README.md) | 101 → 201 |
-| K172 | [Put three closures on the ladder, then find what does NOT decide the rung](23_Closures/three_closure_traits/README.md#practice) | [The three closure traits](23_Closures/three_closure_traits/README.md) | 201 |
-| K173 | [Two places move is not optional, and the Copy type that makes it look like it did nothing](23_Closures/the_move_keyword/README.md#practice) | [The `move` keyword](23_Closures/the_move_keyword/README.md) | 201 |
-| K174 | [Which of the three can become an fn -- and the closure that is smaller than a pointer](23_Closures/function_pointers/README.md#practice) | [Function pointers](23_Closures/function_pointers/README.md) | 201 |
-| K175 | [Two programs one character apart, and the u32 binding that is not a u32](30_Pattern_Matching/match_ergonomics/README.md#practice) | [Match ergonomics](30_Pattern_Matching/match_ergonomics/README.md) | 201 |
-| K176 | [let _ = guard against let _guard = guard, and the one sentence both follow from](30_Pattern_Matching/the_wildcard/README.md#practice) | [The wildcard `_`](30_Pattern_Matching/the_wildcard/README.md) | 201 |
-| K177 | [Declare without assigning, delete one branch, and read E0381](31_C_and_Cpp/uninitialized_reads/README.md#practice) | [Uninitialized reads](31_C_and_Cpp/uninitialized_reads/README.md) | 201 |
-| K178 | [Option<&T> is the same eight bytes as &T -- and Option<u32> is not](31_C_and_Cpp/null_dereference/README.md#practice) | [Null dereference](31_C_and_Cpp/null_dereference/README.md) | 201 |
-| K179 | [Four ways past the end, and the one rejected without running](31_C_and_Cpp/buffer_overruns/README.md#practice) | [Buffer overruns](31_C_and_Cpp/buffer_overruns/README.md) | 201 |
-| K180 | [The comparison -O2 deletes, and four named behaviours that replace it](31_C_and_Cpp/signed_overflow/README.md#practice) | [Signed overflow](31_C_and_Cpp/signed_overflow/README.md) | 201 |
-| K181 | [Drop it and use it -- then make a reference outlive its owner](31_C_and_Cpp/use_after_free/README.md#practice) | [Use-after-free](31_C_and_Cpp/use_after_free/README.md) | 201 |
-| K182 | [Pass it by value twice, and watch responsibility become a compile error](31_C_and_Cpp/double_free/README.md#practice) | [Double-free](31_C_and_Cpp/double_free/README.md) | 201 |
-| K183 | [Erase while iterating: the bug that returns a plausible wrong answer](31_C_and_Cpp/iterator_invalidation/README.md#practice) | [Iterator invalidation](31_C_and_Cpp/iterator_invalidation/README.md) | 201 |
-| K184 | [Eight threads, one counter, and the two traits that reject the bad program](31_C_and_Cpp/data_races/README.md#practice) | [Data races](31_C_and_Cpp/data_races/README.md) | 201 |
-| K185 | [The early return that cannot hold the lock, and the one-character way to drop it too soon](31_C_and_Cpp/forgotten_unlock/README.md#practice) | [Forgotten unlock](31_C_and_Cpp/forgotten_unlock/README.md) | 201 |
-| K186 | [Spanify Clang's own example — a raw pointer and a length, then one slice](31_C_and_Cpp/safe_buffers/README.md#practice) | [Safe Buffers](31_C_and_Cpp/safe_buffers/README.md) | 201 |
-| K187 | [One contract, two spellings — a lifetime in Rust, an attribute in C++](31_C_and_Cpp/lifetime_safety_in_clang/README.md#practice) | [Lifetime safety in Clang](31_C_and_Cpp/lifetime_safety_in_clang/README.md) | 301 |
-| K188 | [Price an order before you run it](18_Ownership/what_a_clone_costs/README.md#practice) | [What a clone costs](18_Ownership/what_a_clone_costs/README.md) | 201 |
-| K189 | [Return a palindrome you did not copy — one reference in so elision works, a tie the test decides, then two references and `E0106`](18_Ownership/how_to_learn_lifetimes/README.md#practice) | [How to learn lifetimes](18_Ownership/how_to_learn_lifetimes/README.md) | 301 |
-| K190 | [A log that keeps views, not copies — a `String` per line against views into one buffer, the struct that earns `E0515` and `E0505`, and the ranges that fix it](18_Ownership/how_to_learn_lifetimes/README.md#practice) | [How to learn lifetimes](18_Ownership/how_to_learn_lifetimes/README.md) | 301 |
-| K191 | [Undo `escape_ascii` — read a printed byte string back, and prove it exact over all 65,536 two-byte strings](19_Numbers/printing_bytes/README.md#practice) | [Printing bytes](19_Numbers/printing_bytes/README.md) | 201 |
-| K192 | [Predict, then ask the compiler — six values through `let b = a;`, one of them a `Range` that holds two `i32`s and still moves](18_Ownership/copy_or_move/README.md#practice) | [Copy or move?](18_Ownership/copy_or_move/README.md) | 101 |
-| K193 | [Four impls that disagree with their trait — one compile, four error codes, and a `help:` line that fixes the arrow but not the body](12_Traits/matching_the_trait/README.md#practice) | [When the `impl` does not match the trait](12_Traits/matching_the_trait/README.md) | 201 |
-| K194 | [Half up, by hand — the one-liner everyone writes first, the two inputs that break it, and the version that reads `x` instead of adding to it](19_Numbers/rounding_a_float/README.md#practice) | [Making a float whole](19_Numbers/rounding_a_float/README.md) | 201 |
-| K195 | [A log that is never truncated, and a lock that is claimed once — `append` needs `create`, and `create_new` matched on `AlreadyExists` rather than on `is_err()`](04_Files/opening_a_file/README.md#practice) | [Opening a file](04_Files/opening_a_file/README.md) | 201 |
-| K196 | [Read a Latin-2 file properly — `InvalidData` as the signal, an eighteen-letter table as the decoder, and the two bytes that pass as UTF-8 by accident](04_Files/a_file_is_bytes/README.md#practice) | [A file is bytes; a `String` is a promise](04_Files/a_file_is_bytes/README.md) | 201 |
-| K197 | [Sum what you are given — blank lines, spaces, a bad line, `\r\n`, a last line with no newline, and the `while let Ok(_)` loop that never ends](03_Command_Line/reading_stdin/README.md#practice) | [Reading a line from standard input](03_Command_Line/reading_stdin/README.md) | 101 |
-| K198 | [The write, four ways, and the one caught without running](31_C_and_Cpp/buffer_overflow/README.md#practice) | [Buffer overflow](31_C_and_Cpp/buffer_overflow/README.md) | 201 |
-| K199 | [Write the function that hands back the owned twin — one generic line, six arguments, and the `?Sized` that lets `str` in](12_Traits/how_to_learn_to_owned/clone_vs_to_owned/README.md#practice) | [Step 1: `ToOwned` is `Clone` with a separate owned type](12_Traits/how_to_learn_to_owned/clone_vs_to_owned/README.md) | 101 → 201 |
-| K200 | [Predict the receiver, then take it away from the dot — five calls, three that are not a `String`, each fixed by a deref and by a fully qualified call](12_Traits/how_to_learn_to_owned/the_dot_picks_first/README.md#practice) | [Step 5: The dot takes the first receiver that fits](12_Traits/how_to_learn_to_owned/the_dot_picks_first/README.md) | 201 |
-| K201 | [A receipt with no placeholders — every decision an `if` that is the value, then predict which branch a stray `;` gets blamed on](25_Control_Flow/if_expressions/README.md#practice) | [`if` expressions](25_Control_Flow/if_expressions/README.md) | 101 |
-| K202 | [The grade table with a hole in it — one function three ways, delete a band, and predict which two still compile](25_Control_Flow/match_expressions/README.md#practice) | [`match` expressions](25_Control_Flow/match_expressions/README.md) | 101 → 201 |
-| K203 | [Countdown, then three doors — predict what `for n in 10..1` prints, then three loops over one `Vec`: which must come last, and what `E0382` points at](25_Control_Flow/for_loops/README.md#practice) | [`for` loops](25_Control_Flow/for_loops/README.md) | 101 |
-| K204 | [Five index loops, and the one to keep — rewrite each without an index, then feed a short answer sheet, a single reading and an odd count to both versions](25_Control_Flow/loops_without_an_index/README.md#practice) | [Loops without an index](25_Control_Flow/loops_without_an_index/README.md) | 101 → 201 |
-| K205 | [Collatz with a `while` that has to earn its exit — the start that never reaches 1, and the small start whose climb leaves `u32`](25_Control_Flow/while_loops/README.md#practice) | [`while` loops](25_Control_Flow/while_loops/README.md) | 101 → 201 |
-| K206 | [Retry with a budget — a `loop` whose `break` carries a `Result`, and the budget of 0 that sends one request anyway](25_Control_Flow/the_loop_keyword/README.md#practice) | [`loop`](25_Control_Flow/the_loop_keyword/README.md) | 101 → 201 |
-| K207 | [Three ways out of a grid of shelves — the first empty slot with a flag, a label and `find_map`, full shelves with `continue 'shelves`, and what an unlabelled `break` reports](25_Control_Flow/loop_labels/README.md#practice) | [Loop labels](25_Control_Flow/loop_labels/README.md) | 101 → 201 |
-| K208 | [Walk a slice with a raw pointer — start to one past the end, a `// SAFETY:` comment on every read, and the empty slice whose start is never read](36_Pointers/raw_pointers/README.md#practice) | [Raw pointers: `*const T` and `*mut T`](36_Pointers/raw_pointers/README.md) | 201 → 301 |
-| K209 | [A pointer that counts its reads — `Deref` through a `Cell`, and five lines predicted one call at a time](41_Smart_Pointers/what_makes_a_pointer_smart/README.md#practice) | [What makes a pointer smart](41_Smart_Pointers/what_makes_a_pointer_smart/README.md) | 201 |
-| K210 | [Three questions, from the drawing — why a `&str` carries a length, which bytes `let t = s;` moves, and why `&s[1..2]` on `"héllo"` panics rather than fails to compile](14_Strings/drawing_the_owner_and_the_view/README.md#practice) | [Drawing the owner and the view](14_Strings/drawing_the_owner_and_the_view/README.md) | 101 → 201 |
-| K211 | [Views into one buffer — the offset and byte length of every word `split` returns from `"zażółć gęślą jaźń"`, and how many heap buffers exist before and after `to_owned`](14_Strings/drawing_the_owner_and_the_view/README.md#practice) | [Drawing the owner and the view](14_Strings/drawing_the_owner_and_the_view/README.md) | 101 → 201 |
-| K212 | [Reference to a local variable — name the loan and the condition the `}` breaks, then fix `E0597` two ways](18_Ownership/references/a_borrow_is_a_loan/README.md#practice) | [A borrow is a loan](18_Ownership/references/a_borrow_is_a_loan/README.md) | 201 |
-| K213 | [Borrow one field, move the other — one `let` pattern, and why `&upload` cannot do its job](18_Ownership/references/the_ref_keyword/README.md#practice) | [`ref` borrows where a pattern would move](18_Ownership/references/the_ref_keyword/README.md) | 201 |
-| K214 | [Fewest stars — six lines written without a `*` or `&`, fix each with the fewest and name the rule; two need none](18_Ownership/references/when_you_need_the_star/README.md#practice) | [When you need the `*`](18_Ownership/references/when_you_need_the_star/README.md) | 101 → 201 |
-| K215 | [Split off the header — advance a `&mut &[u8]` and a `&mut &mut [u8]`, hold two writable headers, and catch the `?` after `mem::take` that empties the caller's slice on `None`](18_Ownership/references/repointing_a_slice/README.md#practice) | [Re-pointing the caller's slice: `&mut &mut [T]`](18_Ownership/references/repointing_a_slice/README.md) | 201 |
-| K216 | [Pick the pointer — a config reader, a tree's children, a shared cache and C's `memchr`, each shown working](18_Ownership/references/pointer_types_compared/README.md#practice) | [Six pointer types, one table](18_Ownership/references/pointer_types_compared/README.md) | 201 |
+| K136 | [The test that passes alone — force the race with two barriers, then make it harmless without removing a single `set_current_dir`](28_Testing/how_cargo_test_runs/README.md#practice) | [How `cargo test` runs your tests](28_Testing/how_cargo_test_runs/README.md) | 201 |
+| K137 | [The clock you cannot wait for — a `Clock` trait, a fixed clock, and the boundary second the test has to decide](28_Testing/a_test_double_by_hand/README.md#practice) | [A test double is a second `impl`](28_Testing/a_test_double_by_hand/README.md) | 201 → 301 |
+| K138 | [One test per row — five named trials from a table, every broken row reported, and why a filter on `2.5` runs two](28_Testing/a_harness_of_your_own/README.md#practice) | [A harness of your own](28_Testing/a_harness_of_your_own/README.md) | 301 |
+| K139 | [Four impls for one `*`, and an operator that should not exist — then three plausible readings of adding two turnout figures](12_Traits/operators_are_traits/README.md#practice) | [Operators are traits](12_Traits/operators_are_traits/README.md) | 201 |
+| K140 | [Three drop orders, and the guard released one line early — two of the orders are opposites, and one binding is a bug](12_Traits/drop_and_raii/README.md#practice) | [`Drop`, and what RAII buys](12_Traits/drop_and_raii/README.md) | 201 |
+| K141 | [Count the drops on four paths — two of them need a run-time decision at the closing brace, and the fourth makes that decision readable](18_Ownership/the_drop_flag/README.md#practice) | [The drop flag](18_Ownership/the_drop_flag/README.md) | 301 |
+| K142 | [The same fan-out three ways — sequential, `spawn` plus `Arc`, and `scope`, then the E0373 that explains why the middle one exists](09_Advanced/spawning_a_thread/README.md#practice) | [Spawning a thread](09_Advanced/spawning_a_thread/README.md) | 201 → 301 |
+| K143 | [A three-stage pipeline, and the drop that ends it — then reproduce the classic mpsc hang without hanging](09_Advanced/channels/README.md#practice) | [Channels](09_Advanced/channels/README.md) | 201 → 301 |
+| K144 | [The safe line the unsafe block depends on — write `split_at_mut`, delete its assert, then find the ordinary `pub fn` that makes an unchecked read unsound](09_Advanced/what_unsafe_turns_off/README.md#practice) | [What `unsafe` turns off](09_Advanced/what_unsafe_turns_off/README.md) | 301 |
+| K145 | [Three calls, three causes — one `E0599` each, and only one of them is fixed by implementing the trait the method came from](12_Traits/no_method_named/README.md#practice) | ["No method named …"](12_Traits/no_method_named/README.md) | 201 |
+| K146 | [Three predictions about one call — which of the two addresses moved, where the free happened, and which of your three claims was about Rust rather than about one build](18_Ownership/the_call_stack/README.md#practice) | [The call stack](18_Ownership/the_call_stack/README.md) | 101 → 201 |
+| K147 | [Prove the reuse, then get the compiler to stop you exploiting it — the same address twice, `E0106` before `E0515`, and the two fixes that are not annotations](18_Ownership/a_stack_slot_is_reused/README.md#practice) | [A stack slot is reused](18_Ownership/a_stack_slot_is_reused/README.md) | 201 |
+| K148 | [Freeze a candidate column three ways — handles and buffers for `String`, `Box<str>` and an interned `Rc<str>`, then the `.to_owned()` that clones a pointer instead of the text](14_Strings/boxed_str/README.md#practice) | [The third owned form](14_Strings/boxed_str/README.md) | 201 → 301 |
+| K149 | [An interner that hands out numbers — the `&str` handle that earns `E0499` on the second call, and a `Symbol` that borrows nothing](14_Strings/boxed_str/README.md#practice) | [The third owned form](14_Strings/boxed_str/README.md) | 201 → 301 |
+| K150 | [Rebuild `char::from_u32`, then price the fixed width — the 2,048 refusals, the ratio for four alphabets, and the one `Option` that doubles](14_Strings/why_char_is_32_bits/README.md#practice) | [Why a `char` is 32 bits wide](14_Strings/why_char_is_32_bits/README.md) | 201 → 301 |
+| K151 | [Measure a column four ways, then truncate it without breaking a letter — the rows where three limit rules disagree, the value that splits all three, and the `get(..n)` that returns `None` where a slice would panic](14_Strings/four_lengths/README.md#practice) | [Four lengths](14_Strings/four_lengths/README.md) | 201 |
+| K152 | [Edit distance, in the unit you choose — one generic table over `char` and `u8`, and one word spelt two ways that is not distance zero](14_Strings/four_lengths/README.md#practice) | [Four lengths](14_Strings/four_lengths/README.md) | 301 |
+| K153 | [The invariant nobody wrote down — one ordinary `pub fn` desyncs a cached total, and the wrong answer arrives with no `unsafe`, no panic and no error](09_Advanced/what_an_invariant_is/README.md#practice) | [What an invariant is](09_Advanced/what_an_invariant_is/README.md) | 301 |
+| K154 | [Give every slice a `.middle()`, then find out why your `.first()` never runs — one trait, two methods, and only one of them reachable through a dot](12_Traits/extension_traits/README.md#practice) | [Extension traits](12_Traits/extension_traits/README.md) | 201 |
+| K155 | [Two numbers, one prefix, and the trait you cannot name — a character index beside `find`'s byte offset, the `starts_with` constant that goes stale, and the three stable helpers that stand in for `P: Pattern`](14_Strings/searching_a_string/README.md#practice) | [Searching without splitting](14_Strings/searching_a_string/README.md) | 101 → 201 |
+| K156 | [The longest common prefix, by letters — five tests, a borrowed version that needs one lifetime, and the shared byte that is not a shared letter](14_Strings/searching_a_string/README.md#practice) | [Searching without splitting](14_Strings/searching_a_string/README.md) | 201 → 301 |
+| K157 | [A regex engine with two operators — slice patterns on `&[char]`, and the `.` that means half an `é` when it runs on bytes](14_Strings/searching_a_string/README.md#practice) | [Searching without splitting](14_Strings/searching_a_string/README.md) | 201 → 301 |
+| K158 | [`replace`, without `replace` — the overlapping pair that yields one match, and the empty pattern that never lets the loop move](14_Strings/replacing_in_a_string/README.md#practice) | [Replacing part of a string](14_Strings/replacing_in_a_string/README.md) | 101 → 201 |
+| K159 | [Escape it twice, then escape it once — the swap no ordering can perform, the last-`n` replacement `replacen` counts from the wrong end, and what a stale offset does to a string that has already changed length](14_Strings/replacing_in_a_string/README.md#practice) | [Replacing part of a string](14_Strings/replacing_in_a_string/README.md) | 101 → 201 |
+| K160 | [The conversion you did not need, and the method that changed under you — five owners of one string and how few conversions they need, then an inherent method that silently steals a trait's call site](14_Strings/str_as_str/README.md#practice) | [`str::as_str`](14_Strings/str_as_str/README.md) | 201 → 301 |
+| K161 | [Three questions about nothing — the empty haystack that splits in two, the byte offsets a Polish word refuses to report, and every character as a borrowed `&str`](14_Strings/splitting_on_nothing/README.md#practice) | [Splitting on nothing](14_Strings/splitting_on_nothing/README.md) | 201 |
+| K162 | [One question, three answers, and the row where none of them is right — then a two-level key that files `Ł` between L and M, the three match arms that have to change for Swedish, and the Czech letter no per-character key can express](14_Strings/comparing_strings/README.md#practice) | [Comparing and sorting text](14_Strings/comparing_strings/README.md) | 201 |
+| K163 | [One bad config value handled four ways, the space after `=` that breaks three of them, and a `FromStr` whose error the caller can match on instead of read](14_Strings/parsing_a_string/README.md#practice) | [Parsing out of a string](14_Strings/parsing_a_string/README.md) | 101 → 201 |
+| K164 | [A tokenizer with quotes — three rules the tests leave open, and the unterminated quote only a `Result` can report](14_Strings/parsing_a_string/README.md#practice) | [Parsing out of a string](14_Strings/parsing_a_string/README.md) | 301 |
+| K165 | [A CSV reader, and the newline inside the quotes — doubled quotes, empty fields kept, and the line-first split that cuts a record in two](14_Strings/parsing_a_string/README.md#practice) | [Parsing out of a string](14_Strings/parsing_a_string/README.md) | 201 → 301 |
+| K166 | [A table sized from its own data, the `{:?}` column that refuses to pad, precision that counts chars rather than bytes, and the last alignment `fmt` cannot fix](14_Strings/the_format_language/README.md#practice) | [The format mini-language](14_Strings/the_format_language/README.md) | 201 |
+| K167 | [Full justification, and the width that is not bytes — spare spaces shared leftmost first, the one line `{:<16}` can do alone, and two Polish words that stop fitting](14_Strings/the_format_language/README.md#practice) | [The format mini-language](14_Strings/the_format_language/README.md) | 301 |
+| K168 | [Write the safe version of three CVEs — `join`, `retain` and `repeat` with no `unsafe` — drive all three with the hostile input that broke `std`, then name what each fast path has to prove in order to skip the work you just did](14_Strings/when_the_invariant_broke/README.md#practice) | [When the UTF-8 invariant broke](14_Strings/when_the_invariant_broke/README.md) | 301 |
+| K169 | [The test that would have caught it — sweep every substring of a periodic word, sweep the ASCII run before a final sigma, break a third fast path the same way, then measure the ASCII prefix in `std`'s own sigma tests](14_Strings/wrong_but_not_unsafe/README.md#practice) | [Wrong, but not unsafe](14_Strings/wrong_but_not_unsafe/README.md) | 201 → 301 |
+| K170 | [A closed set of three, and the fourth variant that breaks every match that forgot it](13_Enums/what_an_enum_is/README.md#practice) | [What an enum is](13_Enums/what_an_enum_is/README.md) | 101 → 201 |
+| K171 | [The swapped call nothing can catch, and the same call as a build error](13_Enums/an_enum_instead_of_a_bool/README.md#practice) | [An enum instead of a bool](13_Enums/an_enum_instead_of_a_bool/README.md) | 201 |
+| K172 | [Four shapes one way and four fields the other -- which one makes a circle with a width impossible](13_Enums/variants_that_carry_data/README.md#practice) | [Variants that carry data](13_Enums/variants_that_carry_data/README.md) | 201 |
+| K173 | [Sixteen cells the compiler counted for you, and the wildcard that would throw them away](13_Enums/an_enum_as_a_state_machine/README.md#practice) | [An enum as a state machine](13_Enums/an_enum_as_a_state_machine/README.md) | 201 |
+| K174 | [Four closures, four sizes -- and two with identical source text that are still two types](23_Closures/what_a_closure_is/README.md#practice) | [What a closure is](23_Closures/what_a_closure_is/README.md) | 101 → 201 |
+| K175 | [Put three closures on the ladder, then find what does NOT decide the rung](23_Closures/three_closure_traits/README.md#practice) | [The three closure traits](23_Closures/three_closure_traits/README.md) | 201 |
+| K176 | [Two places move is not optional, and the Copy type that makes it look like it did nothing](23_Closures/the_move_keyword/README.md#practice) | [The `move` keyword](23_Closures/the_move_keyword/README.md) | 201 |
+| K177 | [Which of the three can become an fn -- and the closure that is smaller than a pointer](23_Closures/function_pointers/README.md#practice) | [Function pointers](23_Closures/function_pointers/README.md) | 201 |
+| K178 | [Two programs one character apart, and the u32 binding that is not a u32](30_Pattern_Matching/match_ergonomics/README.md#practice) | [Match ergonomics](30_Pattern_Matching/match_ergonomics/README.md) | 201 |
+| K179 | [let _ = guard against let _guard = guard, and the one sentence both follow from](30_Pattern_Matching/the_wildcard/README.md#practice) | [The wildcard `_`](30_Pattern_Matching/the_wildcard/README.md) | 201 |
+| K180 | [Declare without assigning, delete one branch, and read E0381](31_C_and_Cpp/uninitialized_reads/README.md#practice) | [Uninitialized reads](31_C_and_Cpp/uninitialized_reads/README.md) | 201 |
+| K181 | [Option<&T> is the same eight bytes as &T -- and Option<u32> is not](31_C_and_Cpp/null_dereference/README.md#practice) | [Null dereference](31_C_and_Cpp/null_dereference/README.md) | 201 |
+| K182 | [Four ways past the end, and the one rejected without running](31_C_and_Cpp/buffer_overruns/README.md#practice) | [Buffer overruns](31_C_and_Cpp/buffer_overruns/README.md) | 201 |
+| K183 | [The comparison -O2 deletes, and four named behaviours that replace it](31_C_and_Cpp/signed_overflow/README.md#practice) | [Signed overflow](31_C_and_Cpp/signed_overflow/README.md) | 201 |
+| K184 | [Drop it and use it -- then make a reference outlive its owner](31_C_and_Cpp/use_after_free/README.md#practice) | [Use-after-free](31_C_and_Cpp/use_after_free/README.md) | 201 |
+| K185 | [Pass it by value twice, and watch responsibility become a compile error](31_C_and_Cpp/double_free/README.md#practice) | [Double-free](31_C_and_Cpp/double_free/README.md) | 201 |
+| K186 | [Erase while iterating: the bug that returns a plausible wrong answer](31_C_and_Cpp/iterator_invalidation/README.md#practice) | [Iterator invalidation](31_C_and_Cpp/iterator_invalidation/README.md) | 201 |
+| K187 | [Eight threads, one counter, and the two traits that reject the bad program](31_C_and_Cpp/data_races/README.md#practice) | [Data races](31_C_and_Cpp/data_races/README.md) | 201 |
+| K188 | [The early return that cannot hold the lock, and the one-character way to drop it too soon](31_C_and_Cpp/forgotten_unlock/README.md#practice) | [Forgotten unlock](31_C_and_Cpp/forgotten_unlock/README.md) | 201 |
+| K189 | [Spanify Clang's own example — a raw pointer and a length, then one slice](31_C_and_Cpp/safe_buffers/README.md#practice) | [Safe Buffers](31_C_and_Cpp/safe_buffers/README.md) | 201 |
+| K190 | [One contract, two spellings — a lifetime in Rust, an attribute in C++](31_C_and_Cpp/lifetime_safety_in_clang/README.md#practice) | [Lifetime safety in Clang](31_C_and_Cpp/lifetime_safety_in_clang/README.md) | 301 |
+| K191 | [Price an order before you run it](18_Ownership/what_a_clone_costs/README.md#practice) | [What a clone costs](18_Ownership/what_a_clone_costs/README.md) | 201 |
+| K192 | [Return a palindrome you did not copy — one reference in so elision works, a tie the test decides, then two references and `E0106`](18_Ownership/how_to_learn_lifetimes/README.md#practice) | [How to learn lifetimes](18_Ownership/how_to_learn_lifetimes/README.md) | 301 |
+| K193 | [A log that keeps views, not copies — a `String` per line against views into one buffer, the struct that earns `E0515` and `E0505`, and the ranges that fix it](18_Ownership/how_to_learn_lifetimes/README.md#practice) | [How to learn lifetimes](18_Ownership/how_to_learn_lifetimes/README.md) | 301 |
+| K194 | [Undo `escape_ascii` — read a printed byte string back, and prove it exact over all 65,536 two-byte strings](19_Numbers/printing_bytes/README.md#practice) | [Printing bytes](19_Numbers/printing_bytes/README.md) | 201 |
+| K195 | [Predict, then ask the compiler — six values through `let b = a;`, one of them a `Range` that holds two `i32`s and still moves](18_Ownership/copy_or_move/README.md#practice) | [Copy or move?](18_Ownership/copy_or_move/README.md) | 101 |
+| K196 | [Four impls that disagree with their trait — one compile, four error codes, and a `help:` line that fixes the arrow but not the body](12_Traits/matching_the_trait/README.md#practice) | [When the `impl` does not match the trait](12_Traits/matching_the_trait/README.md) | 201 |
+| K197 | [Half up, by hand — the one-liner everyone writes first, the two inputs that break it, and the version that reads `x` instead of adding to it](19_Numbers/rounding_a_float/README.md#practice) | [Making a float whole](19_Numbers/rounding_a_float/README.md) | 201 |
+| K198 | [A log that is never truncated, and a lock that is claimed once — `append` needs `create`, and `create_new` matched on `AlreadyExists` rather than on `is_err()`](04_Files/opening_a_file/README.md#practice) | [Opening a file](04_Files/opening_a_file/README.md) | 201 |
+| K199 | [Read a Latin-2 file properly — `InvalidData` as the signal, an eighteen-letter table as the decoder, and the two bytes that pass as UTF-8 by accident](04_Files/a_file_is_bytes/README.md#practice) | [A file is bytes; a `String` is a promise](04_Files/a_file_is_bytes/README.md) | 201 |
+| K200 | [The fixture helper that returned a path to nowhere — `NotFound` from a file written one line earlier, and why the compiler said nothing](04_Files/temp_dirs_in_tests/README.md#practice) | [Temporary directories in tests](04_Files/temp_dirs_in_tests/README.md) | 201 → 301 |
+| K201 | [Sum what you are given — blank lines, spaces, a bad line, `\r\n`, a last line with no newline, and the `while let Ok(_)` loop that never ends](03_Command_Line/reading_stdin/README.md#practice) | [Reading a line from standard input](03_Command_Line/reading_stdin/README.md) | 101 |
+| K202 | [The write, four ways, and the one caught without running](31_C_and_Cpp/buffer_overflow/README.md#practice) | [Buffer overflow](31_C_and_Cpp/buffer_overflow/README.md) | 201 |
+| K203 | [Write the function that hands back the owned twin — one generic line, six arguments, and the `?Sized` that lets `str` in](12_Traits/how_to_learn_to_owned/clone_vs_to_owned/README.md#practice) | [Step 1: `ToOwned` is `Clone` with a separate owned type](12_Traits/how_to_learn_to_owned/clone_vs_to_owned/README.md) | 101 → 201 |
+| K204 | [Predict the receiver, then take it away from the dot — five calls, three that are not a `String`, each fixed by a deref and by a fully qualified call](12_Traits/how_to_learn_to_owned/the_dot_picks_first/README.md#practice) | [Step 5: The dot takes the first receiver that fits](12_Traits/how_to_learn_to_owned/the_dot_picks_first/README.md) | 201 |
+| K205 | [A receipt with no placeholders — every decision an `if` that is the value, then predict which branch a stray `;` gets blamed on](25_Control_Flow/if_expressions/README.md#practice) | [`if` expressions](25_Control_Flow/if_expressions/README.md) | 101 |
+| K206 | [The grade table with a hole in it — one function three ways, delete a band, and predict which two still compile](25_Control_Flow/match_expressions/README.md#practice) | [`match` expressions](25_Control_Flow/match_expressions/README.md) | 101 → 201 |
+| K207 | [Countdown, then three doors — predict what `for n in 10..1` prints, then three loops over one `Vec`: which must come last, and what `E0382` points at](25_Control_Flow/for_loops/README.md#practice) | [`for` loops](25_Control_Flow/for_loops/README.md) | 101 |
+| K208 | [Five index loops, and the one to keep — rewrite each without an index, then feed a short answer sheet, a single reading and an odd count to both versions](25_Control_Flow/loops_without_an_index/README.md#practice) | [Loops without an index](25_Control_Flow/loops_without_an_index/README.md) | 101 → 201 |
+| K209 | [Collatz with a `while` that has to earn its exit — the start that never reaches 1, and the small start whose climb leaves `u32`](25_Control_Flow/while_loops/README.md#practice) | [`while` loops](25_Control_Flow/while_loops/README.md) | 101 → 201 |
+| K210 | [Retry with a budget — a `loop` whose `break` carries a `Result`, and the budget of 0 that sends one request anyway](25_Control_Flow/the_loop_keyword/README.md#practice) | [`loop`](25_Control_Flow/the_loop_keyword/README.md) | 101 → 201 |
+| K211 | [Three ways out of a grid of shelves — the first empty slot with a flag, a label and `find_map`, full shelves with `continue 'shelves`, and what an unlabelled `break` reports](25_Control_Flow/loop_labels/README.md#practice) | [Loop labels](25_Control_Flow/loop_labels/README.md) | 101 → 201 |
+| K212 | [Walk a slice with a raw pointer — start to one past the end, a `// SAFETY:` comment on every read, and the empty slice whose start is never read](36_Pointers/raw_pointers/README.md#practice) | [Raw pointers: `*const T` and `*mut T`](36_Pointers/raw_pointers/README.md) | 201 → 301 |
+| K213 | [A pointer that counts its reads — `Deref` through a `Cell`, and five lines predicted one call at a time](41_Smart_Pointers/what_makes_a_pointer_smart/README.md#practice) | [What makes a pointer smart](41_Smart_Pointers/what_makes_a_pointer_smart/README.md) | 201 |
+| K214 | [Three questions, from the drawing — why a `&str` carries a length, which bytes `let t = s;` moves, and why `&s[1..2]` on `"héllo"` panics rather than fails to compile](14_Strings/drawing_the_owner_and_the_view/README.md#practice) | [Drawing the owner and the view](14_Strings/drawing_the_owner_and_the_view/README.md) | 101 → 201 |
+| K215 | [Views into one buffer — the offset and byte length of every word `split` returns from `"zażółć gęślą jaźń"`, and how many heap buffers exist before and after `to_owned`](14_Strings/drawing_the_owner_and_the_view/README.md#practice) | [Drawing the owner and the view](14_Strings/drawing_the_owner_and_the_view/README.md) | 101 → 201 |
+| K216 | [Reference to a local variable — name the loan and the condition the `}` breaks, then fix `E0597` two ways](18_Ownership/references/a_borrow_is_a_loan/README.md#practice) | [A borrow is a loan](18_Ownership/references/a_borrow_is_a_loan/README.md) | 201 |
+| K217 | [Borrow one field, move the other — one `let` pattern, and why `&upload` cannot do its job](18_Ownership/references/the_ref_keyword/README.md#practice) | [`ref` borrows where a pattern would move](18_Ownership/references/the_ref_keyword/README.md) | 201 |
+| K218 | [Fewest stars — six lines written without a `*` or `&`, fix each with the fewest and name the rule; two need none](18_Ownership/references/when_you_need_the_star/README.md#practice) | [When you need the `*`](18_Ownership/references/when_you_need_the_star/README.md) | 101 → 201 |
+| K219 | [Split off the header — advance a `&mut &[u8]` and a `&mut &mut [u8]`, hold two writable headers, and catch the `?` after `mem::take` that empties the caller's slice on `None`](18_Ownership/references/repointing_a_slice/README.md#practice) | [Re-pointing the caller's slice: `&mut &mut [T]`](18_Ownership/references/repointing_a_slice/README.md) | 201 |
+| K220 | [Pick the pointer — a config reader, a tree's children, a shared cache and C's `memchr`, each shown working](18_Ownership/references/pointer_types_compared/README.md#practice) | [Six pointer types, one table](18_Ownership/references/pointer_types_compared/README.md) | 201 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -301,18 +305,18 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K102 · [Predict the count four times, then find the edge that leaks](18_Ownership/reference_counting/README.md#practice)
 - K108 · [Three refusals, three fixes, and the one you can delete](18_Ownership/sharing_across_threads/README.md#practice)
 - K109 · [Predict seven sizes, then predict which of seven lines allocates](18_Ownership/stack_and_heap/README.md#practice)
-- K138 · [Count the drops on four paths](18_Ownership/the_drop_flag/README.md#practice)
-- K143 · [Three predictions about one call](18_Ownership/the_call_stack/README.md#practice)
-- K144 · [Prove the reuse, then get the compiler to stop you exploiting it](18_Ownership/a_stack_slot_is_reused/README.md#practice)
-- K188 · [Price an order before you run it](18_Ownership/what_a_clone_costs/README.md#practice)
-- K189 · [Return a palindrome you did not copy](18_Ownership/how_to_learn_lifetimes/README.md#practice)
-- K190 · [A log that keeps views, not copies](18_Ownership/how_to_learn_lifetimes/README.md#practice)
-- K192 · [Predict, then ask the compiler](18_Ownership/copy_or_move/README.md#practice)
-- K212 · [Reference to a local variable](18_Ownership/references/a_borrow_is_a_loan/README.md#practice)
-- K213 · [Borrow one field, move the other](18_Ownership/references/the_ref_keyword/README.md#practice)
-- K214 · [Fewest stars](18_Ownership/references/when_you_need_the_star/README.md#practice)
-- K215 · [Split off the header](18_Ownership/references/repointing_a_slice/README.md#practice)
-- K216 · [Pick the pointer](18_Ownership/references/pointer_types_compared/README.md#practice)
+- K141 · [Count the drops on four paths](18_Ownership/the_drop_flag/README.md#practice)
+- K146 · [Three predictions about one call](18_Ownership/the_call_stack/README.md#practice)
+- K147 · [Prove the reuse, then get the compiler to stop you exploiting it](18_Ownership/a_stack_slot_is_reused/README.md#practice)
+- K191 · [Price an order before you run it](18_Ownership/what_a_clone_costs/README.md#practice)
+- K192 · [Return a palindrome you did not copy](18_Ownership/how_to_learn_lifetimes/README.md#practice)
+- K193 · [A log that keeps views, not copies](18_Ownership/how_to_learn_lifetimes/README.md#practice)
+- K195 · [Predict, then ask the compiler](18_Ownership/copy_or_move/README.md#practice)
+- K216 · [Reference to a local variable](18_Ownership/references/a_borrow_is_a_loan/README.md#practice)
+- K217 · [Borrow one field, move the other](18_Ownership/references/the_ref_keyword/README.md#practice)
+- K218 · [Fewest stars](18_Ownership/references/when_you_need_the_star/README.md#practice)
+- K219 · [Split off the header](18_Ownership/references/repointing_a_slice/README.md#practice)
+- K220 · [Pick the pointer](18_Ownership/references/pointer_types_compared/README.md#practice)
 
 **[Errors](02_Errors/README.md)** — 1 kata
 
@@ -339,10 +343,10 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K50 · [The audit that has to know when to stop](09_Advanced/interval_arithmetic/README.md#practice)
 - K86 · [Build the same choice twice](09_Advanced/what_a_union_is/README.md#practice)
 - K97 · [Predict, then count](09_Advanced/the_global_allocator/README.md#practice)
-- K139 · [The same fan-out three ways](09_Advanced/spawning_a_thread/README.md#practice)
-- K140 · [A three-stage pipeline, and the drop that ends it](09_Advanced/channels/README.md#practice)
-- K141 · [The safe line the unsafe block depends on](09_Advanced/what_unsafe_turns_off/README.md#practice)
-- K150 · [The invariant nobody wrote down](09_Advanced/what_an_invariant_is/README.md#practice)
+- K142 · [The same fan-out three ways](09_Advanced/spawning_a_thread/README.md#practice)
+- K143 · [A three-stage pipeline, and the drop that ends it](09_Advanced/channels/README.md#practice)
+- K144 · [The safe line the unsafe block depends on](09_Advanced/what_unsafe_turns_off/README.md#practice)
+- K153 · [The invariant nobody wrote down](09_Advanced/what_an_invariant_is/README.md#practice)
 
 **[Tooling](05_Tooling/README.md)** — 2 katas
 
@@ -357,8 +361,8 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K44 · [A tic-tac-toe game in 18 bits](19_Numbers/bit_flags/README.md#practice)
 - K45 · [The results table that would not sort](19_Numbers/what_a_float_stores/README.md#practice)
 - K93 · [Make the sum land on the number you would have typed](19_Numbers/letting_the_compiler_reorder/README.md#practice)
-- K191 · [Undo `escape_ascii`](19_Numbers/printing_bytes/README.md#practice)
-- K194 · [Half up, by hand](19_Numbers/rounding_a_float/README.md#practice)
+- K194 · [Undo `escape_ascii`](19_Numbers/printing_bytes/README.md#practice)
+- K197 · [Half up, by hand](19_Numbers/rounding_a_float/README.md#practice)
 
 **[Strings](14_Strings/README.md)** — 47 katas
 
@@ -387,36 +391,36 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K84 · [Two rulers over one string](14_Strings/walking_a_string/README.md#practice)
 - K85 · [Six searches, and the two that want a regex](14_Strings/walking_a_string/README.md#practice)
 - K94 · [Let the source pick the spelling](14_Strings/making_a_string/README.md#practice)
-- K145 · [Freeze a candidate column three ways](14_Strings/boxed_str/README.md#practice)
-- K146 · [An interner that hands out numbers](14_Strings/boxed_str/README.md#practice)
-- K147 · [Rebuild `char::from_u32`, then price the fixed width](14_Strings/why_char_is_32_bits/README.md#practice)
-- K148 · [Measure a column four ways, then truncate it without breaking a letter](14_Strings/four_lengths/README.md#practice)
-- K149 · [Edit distance, in the unit you choose](14_Strings/four_lengths/README.md#practice)
-- K152 · [Two numbers, one prefix, and the trait you cannot name](14_Strings/searching_a_string/README.md#practice)
-- K153 · [The longest common prefix, by letters](14_Strings/searching_a_string/README.md#practice)
-- K154 · [A regex engine with two operators](14_Strings/searching_a_string/README.md#practice)
-- K155 · [`replace`, without `replace`](14_Strings/replacing_in_a_string/README.md#practice)
-- K156 · [Escape it twice, then escape it once](14_Strings/replacing_in_a_string/README.md#practice)
-- K157 · [The conversion you did not need, and the method that changed under you](14_Strings/str_as_str/README.md#practice)
-- K158 · [Three questions about nothing](14_Strings/splitting_on_nothing/README.md#practice)
-- K159 · [One question, three answers, and the row where none of them is right](14_Strings/comparing_strings/README.md#practice)
-- K160 · [One bad config value handled four ways, the space after `=` that breaks three of them, and a `FromStr` whose error the caller can match on instead of read](14_Strings/parsing_a_string/README.md#practice)
-- K161 · [A tokenizer with quotes](14_Strings/parsing_a_string/README.md#practice)
-- K162 · [A CSV reader, and the newline inside the quotes](14_Strings/parsing_a_string/README.md#practice)
-- K163 · [A table sized from its own data, the `{:?}` column that refuses to pad, precision that counts chars rather than bytes, and the last alignment `fmt` cannot fix](14_Strings/the_format_language/README.md#practice)
-- K164 · [Full justification, and the width that is not bytes](14_Strings/the_format_language/README.md#practice)
-- K165 · [Write the safe version of three CVEs](14_Strings/when_the_invariant_broke/README.md#practice)
-- K166 · [The test that would have caught it](14_Strings/wrong_but_not_unsafe/README.md#practice)
-- K210 · [Three questions, from the drawing](14_Strings/drawing_the_owner_and_the_view/README.md#practice)
-- K211 · [Views into one buffer](14_Strings/drawing_the_owner_and_the_view/README.md#practice)
+- K148 · [Freeze a candidate column three ways](14_Strings/boxed_str/README.md#practice)
+- K149 · [An interner that hands out numbers](14_Strings/boxed_str/README.md#practice)
+- K150 · [Rebuild `char::from_u32`, then price the fixed width](14_Strings/why_char_is_32_bits/README.md#practice)
+- K151 · [Measure a column four ways, then truncate it without breaking a letter](14_Strings/four_lengths/README.md#practice)
+- K152 · [Edit distance, in the unit you choose](14_Strings/four_lengths/README.md#practice)
+- K155 · [Two numbers, one prefix, and the trait you cannot name](14_Strings/searching_a_string/README.md#practice)
+- K156 · [The longest common prefix, by letters](14_Strings/searching_a_string/README.md#practice)
+- K157 · [A regex engine with two operators](14_Strings/searching_a_string/README.md#practice)
+- K158 · [`replace`, without `replace`](14_Strings/replacing_in_a_string/README.md#practice)
+- K159 · [Escape it twice, then escape it once](14_Strings/replacing_in_a_string/README.md#practice)
+- K160 · [The conversion you did not need, and the method that changed under you](14_Strings/str_as_str/README.md#practice)
+- K161 · [Three questions about nothing](14_Strings/splitting_on_nothing/README.md#practice)
+- K162 · [One question, three answers, and the row where none of them is right](14_Strings/comparing_strings/README.md#practice)
+- K163 · [One bad config value handled four ways, the space after `=` that breaks three of them, and a `FromStr` whose error the caller can match on instead of read](14_Strings/parsing_a_string/README.md#practice)
+- K164 · [A tokenizer with quotes](14_Strings/parsing_a_string/README.md#practice)
+- K165 · [A CSV reader, and the newline inside the quotes](14_Strings/parsing_a_string/README.md#practice)
+- K166 · [A table sized from its own data, the `{:?}` column that refuses to pad, precision that counts chars rather than bytes, and the last alignment `fmt` cannot fix](14_Strings/the_format_language/README.md#practice)
+- K167 · [Full justification, and the width that is not bytes](14_Strings/the_format_language/README.md#practice)
+- K168 · [Write the safe version of three CVEs](14_Strings/when_the_invariant_broke/README.md#practice)
+- K169 · [The test that would have caught it](14_Strings/wrong_but_not_unsafe/README.md#practice)
+- K214 · [Three questions, from the drawing](14_Strings/drawing_the_owner_and_the_view/README.md#practice)
+- K215 · [Views into one buffer](14_Strings/drawing_the_owner_and_the_view/README.md#practice)
 
 **[Enums](13_Enums/README.md)** — 5 katas
 
 - K91 · [Which defence catches a silent catch-all](13_Enums/a_typo_becomes_a_binding/README.md#practice)
-- K167 · [A closed set of three, and the fourth variant that breaks every match that forgot it](13_Enums/what_an_enum_is/README.md#practice)
-- K168 · [The swapped call nothing can catch, and the same call as a build error](13_Enums/an_enum_instead_of_a_bool/README.md#practice)
-- K169 · [Four shapes one way and four fields the other -- which one makes a circle with a width impossible](13_Enums/variants_that_carry_data/README.md#practice)
-- K170 · [Sixteen cells the compiler counted for you, and the wildcard that would throw them away](13_Enums/an_enum_as_a_state_machine/README.md#practice)
+- K170 · [A closed set of three, and the fourth variant that breaks every match that forgot it](13_Enums/what_an_enum_is/README.md#practice)
+- K171 · [The swapped call nothing can catch, and the same call as a build error](13_Enums/an_enum_instead_of_a_bool/README.md#practice)
+- K172 · [Four shapes one way and four fields the other -- which one makes a circle with a width impossible](13_Enums/variants_that_carry_data/README.md#practice)
+- K173 · [Sixteen cells the compiler counted for you, and the wildcard that would throw them away](13_Enums/an_enum_as_a_state_machine/README.md#practice)
 
 **[Traits](12_Traits/README.md)** — 11 katas
 
@@ -424,13 +428,13 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K96 · [One lookup for every kind of key](12_Traits/borrow_trait/README.md#practice)
 - K98 · [Four loops that all look like reuse](12_Traits/clone_into/README.md#practice)
 - K99 · [A slice that promises its order](12_Traits/implementing_to_owned/README.md#practice)
-- K136 · [Four impls for one `*`, and an operator that should not exist](12_Traits/operators_are_traits/README.md#practice)
-- K137 · [Three drop orders, and the guard released one line early](12_Traits/drop_and_raii/README.md#practice)
-- K142 · [Three calls, three causes](12_Traits/no_method_named/README.md#practice)
-- K151 · [Give every slice a `.middle()`, then find out why your `.first()` never runs](12_Traits/extension_traits/README.md#practice)
-- K193 · [Four impls that disagree with their trait](12_Traits/matching_the_trait/README.md#practice)
-- K199 · [Write the function that hands back the owned twin](12_Traits/how_to_learn_to_owned/clone_vs_to_owned/README.md#practice)
-- K200 · [Predict the receiver, then take it away from the dot](12_Traits/how_to_learn_to_owned/the_dot_picks_first/README.md#practice)
+- K139 · [Four impls for one `*`, and an operator that should not exist](12_Traits/operators_are_traits/README.md#practice)
+- K140 · [Three drop orders, and the guard released one line early](12_Traits/drop_and_raii/README.md#practice)
+- K145 · [Three calls, three causes](12_Traits/no_method_named/README.md#practice)
+- K154 · [Give every slice a `.middle()`, then find out why your `.first()` never runs](12_Traits/extension_traits/README.md#practice)
+- K196 · [Four impls that disagree with their trait](12_Traits/matching_the_trait/README.md#practice)
+- K203 · [Write the function that hands back the owned twin](12_Traits/how_to_learn_to_owned/clone_vs_to_owned/README.md#practice)
+- K204 · [Predict the receiver, then take it away from the dot](12_Traits/how_to_learn_to_owned/the_dot_picks_first/README.md#practice)
 
 **[Generics](22_Generics/README.md)** — 2 katas
 
@@ -477,65 +481,69 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K131 · [The address you may not rely on](27_Modules/const_and_static/README.md#practice)
 - K132 · [The derive that changed behaviour when a field moved](27_Modules/what_an_attribute_is/README.md#practice)
 
-**[Testing](28_Testing/README.md)** — 3 katas
+**[Testing](28_Testing/README.md)** — 6 katas
 
 - K133 · [Five assertions, two of which cannot fail](28_Testing/what_a_test_asserts/README.md#practice)
 - K134 · [The test that could not see it](28_Testing/where_a_test_goes/README.md#practice)
 - K135 · [The example that documents half the sentence](28_Testing/doc_tests/README.md#practice)
+- K136 · [The test that passes alone](28_Testing/how_cargo_test_runs/README.md#practice)
+- K137 · [The clock you cannot wait for](28_Testing/a_test_double_by_hand/README.md#practice)
+- K138 · [One test per row](28_Testing/a_harness_of_your_own/README.md#practice)
 
 **[Closures](23_Closures/README.md)** — 4 katas
 
-- K171 · [Four closures, four sizes -- and two with identical source text that are still two types](23_Closures/what_a_closure_is/README.md#practice)
-- K172 · [Put three closures on the ladder, then find what does NOT decide the rung](23_Closures/three_closure_traits/README.md#practice)
-- K173 · [Two places move is not optional, and the Copy type that makes it look like it did nothing](23_Closures/the_move_keyword/README.md#practice)
-- K174 · [Which of the three can become an fn -- and the closure that is smaller than a pointer](23_Closures/function_pointers/README.md#practice)
+- K174 · [Four closures, four sizes -- and two with identical source text that are still two types](23_Closures/what_a_closure_is/README.md#practice)
+- K175 · [Put three closures on the ladder, then find what does NOT decide the rung](23_Closures/three_closure_traits/README.md#practice)
+- K176 · [Two places move is not optional, and the Copy type that makes it look like it did nothing](23_Closures/the_move_keyword/README.md#practice)
+- K177 · [Which of the three can become an fn -- and the closure that is smaller than a pointer](23_Closures/function_pointers/README.md#practice)
 
 **[Pattern Matching](30_Pattern_Matching/README.md)** — 2 katas
 
-- K175 · [Two programs one character apart, and the u32 binding that is not a u32](30_Pattern_Matching/match_ergonomics/README.md#practice)
-- K176 · [let _ = guard against let _guard = guard, and the one sentence both follow from](30_Pattern_Matching/the_wildcard/README.md#practice)
+- K178 · [Two programs one character apart, and the u32 binding that is not a u32](30_Pattern_Matching/match_ergonomics/README.md#practice)
+- K179 · [let _ = guard against let _guard = guard, and the one sentence both follow from](30_Pattern_Matching/the_wildcard/README.md#practice)
 
 **[C and Cpp](31_C_and_Cpp/README.md)** — 12 katas
 
-- K177 · [Declare without assigning, delete one branch, and read E0381](31_C_and_Cpp/uninitialized_reads/README.md#practice)
-- K178 · [Option<&T> is the same eight bytes as &T -- and Option<u32> is not](31_C_and_Cpp/null_dereference/README.md#practice)
-- K179 · [Four ways past the end, and the one rejected without running](31_C_and_Cpp/buffer_overruns/README.md#practice)
-- K180 · [The comparison -O2 deletes, and four named behaviours that replace it](31_C_and_Cpp/signed_overflow/README.md#practice)
-- K181 · [Drop it and use it -- then make a reference outlive its owner](31_C_and_Cpp/use_after_free/README.md#practice)
-- K182 · [Pass it by value twice, and watch responsibility become a compile error](31_C_and_Cpp/double_free/README.md#practice)
-- K183 · [Erase while iterating: the bug that returns a plausible wrong answer](31_C_and_Cpp/iterator_invalidation/README.md#practice)
-- K184 · [Eight threads, one counter, and the two traits that reject the bad program](31_C_and_Cpp/data_races/README.md#practice)
-- K185 · [The early return that cannot hold the lock, and the one-character way to drop it too soon](31_C_and_Cpp/forgotten_unlock/README.md#practice)
-- K186 · [Spanify Clang's own example](31_C_and_Cpp/safe_buffers/README.md#practice)
-- K187 · [One contract, two spellings](31_C_and_Cpp/lifetime_safety_in_clang/README.md#practice)
-- K198 · [The write, four ways, and the one caught without running](31_C_and_Cpp/buffer_overflow/README.md#practice)
+- K180 · [Declare without assigning, delete one branch, and read E0381](31_C_and_Cpp/uninitialized_reads/README.md#practice)
+- K181 · [Option<&T> is the same eight bytes as &T -- and Option<u32> is not](31_C_and_Cpp/null_dereference/README.md#practice)
+- K182 · [Four ways past the end, and the one rejected without running](31_C_and_Cpp/buffer_overruns/README.md#practice)
+- K183 · [The comparison -O2 deletes, and four named behaviours that replace it](31_C_and_Cpp/signed_overflow/README.md#practice)
+- K184 · [Drop it and use it -- then make a reference outlive its owner](31_C_and_Cpp/use_after_free/README.md#practice)
+- K185 · [Pass it by value twice, and watch responsibility become a compile error](31_C_and_Cpp/double_free/README.md#practice)
+- K186 · [Erase while iterating: the bug that returns a plausible wrong answer](31_C_and_Cpp/iterator_invalidation/README.md#practice)
+- K187 · [Eight threads, one counter, and the two traits that reject the bad program](31_C_and_Cpp/data_races/README.md#practice)
+- K188 · [The early return that cannot hold the lock, and the one-character way to drop it too soon](31_C_and_Cpp/forgotten_unlock/README.md#practice)
+- K189 · [Spanify Clang's own example](31_C_and_Cpp/safe_buffers/README.md#practice)
+- K190 · [One contract, two spellings](31_C_and_Cpp/lifetime_safety_in_clang/README.md#practice)
+- K202 · [The write, four ways, and the one caught without running](31_C_and_Cpp/buffer_overflow/README.md#practice)
 
-**[Files](04_Files/README.md)** — 2 katas
+**[Files](04_Files/README.md)** — 3 katas
 
-- K195 · [A log that is never truncated, and a lock that is claimed once](04_Files/opening_a_file/README.md#practice)
-- K196 · [Read a Latin-2 file properly](04_Files/a_file_is_bytes/README.md#practice)
+- K198 · [A log that is never truncated, and a lock that is claimed once](04_Files/opening_a_file/README.md#practice)
+- K199 · [Read a Latin-2 file properly](04_Files/a_file_is_bytes/README.md#practice)
+- K200 · [The fixture helper that returned a path to nowhere](04_Files/temp_dirs_in_tests/README.md#practice)
 
 **[Command line](03_Command_Line/README.md)** — 1 kata
 
-- K197 · [Sum what you are given](03_Command_Line/reading_stdin/README.md#practice)
+- K201 · [Sum what you are given](03_Command_Line/reading_stdin/README.md#practice)
 
 **[Control flow](25_Control_Flow/README.md)** — 7 katas
 
-- K201 · [A receipt with no placeholders](25_Control_Flow/if_expressions/README.md#practice)
-- K202 · [The grade table with a hole in it](25_Control_Flow/match_expressions/README.md#practice)
-- K203 · [Countdown, then three doors](25_Control_Flow/for_loops/README.md#practice)
-- K204 · [Five index loops, and the one to keep](25_Control_Flow/loops_without_an_index/README.md#practice)
-- K205 · [Collatz with a `while` that has to earn its exit](25_Control_Flow/while_loops/README.md#practice)
-- K206 · [Retry with a budget](25_Control_Flow/the_loop_keyword/README.md#practice)
-- K207 · [Three ways out of a grid of shelves](25_Control_Flow/loop_labels/README.md#practice)
+- K205 · [A receipt with no placeholders](25_Control_Flow/if_expressions/README.md#practice)
+- K206 · [The grade table with a hole in it](25_Control_Flow/match_expressions/README.md#practice)
+- K207 · [Countdown, then three doors](25_Control_Flow/for_loops/README.md#practice)
+- K208 · [Five index loops, and the one to keep](25_Control_Flow/loops_without_an_index/README.md#practice)
+- K209 · [Collatz with a `while` that has to earn its exit](25_Control_Flow/while_loops/README.md#practice)
+- K210 · [Retry with a budget](25_Control_Flow/the_loop_keyword/README.md#practice)
+- K211 · [Three ways out of a grid of shelves](25_Control_Flow/loop_labels/README.md#practice)
 
 **[Pointers](36_Pointers/README.md)** — 1 kata
 
-- K208 · [Walk a slice with a raw pointer](36_Pointers/raw_pointers/README.md#practice)
+- K212 · [Walk a slice with a raw pointer](36_Pointers/raw_pointers/README.md#practice)
 
 **[Smart Pointers](41_Smart_Pointers/README.md)** — 1 kata
 
-- K209 · [A pointer that counts its reads](41_Smart_Pointers/what_makes_a_pointer_smart/README.md#practice)
+- K213 · [A pointer that counts its reads](41_Smart_Pointers/what_makes_a_pointer_smart/README.md#practice)
 
 <!-- by-subject:end -->
 

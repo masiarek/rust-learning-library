@@ -56,6 +56,7 @@ For an exercise with three `#[test]` functions, none of that applies, and `cargo
 
 ## See also
 
+- [How `cargo test` runs your tests](../../28_Testing/how_cargo_test_runs/README.md) — the binaries and shared process this page's table is about, checked on a real package
 - [bacon](../bacon/README.md) — press `t` and this is what runs, if it is installed
 - [A tree of practice projects](../practice_workspace/README.md) — `cargo nextest run` at the workspace root runs every exercise's tests at once
 - [Strict clippy lints](../strict_lints/README.md) — where `unwrap` is allowed again, because in a test it *is* the assertion

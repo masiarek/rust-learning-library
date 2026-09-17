@@ -37,7 +37,7 @@ Worth one warning: async Rust is a distinct dialect with its own difficulties (p
 ## Testing
 
 - **[Test organization ↗](https://doc.rust-lang.org/book/ch11-03-test-organization.html)** — The Book's chapter, and the one that answers "unit or integration, and which file does it go in".
-- **[Advanced testing workshop ↗](https://rust-exercises.com/advanced-testing/)** ([repo ↗](https://github.com/mainmatter/rust-advanced-testing-workshop)) — for after `#[test]`: fixtures, property testing, snapshots.
+- **[Advanced testing workshop ↗](https://rust-exercises.com/advanced-testing/)** ([repo ↗](https://github.com/mainmatter/rust-advanced-testing-workshop)) — for after `#[test]`: matchers, snapshots, mocks, isolating the filesystem, a database and HTTP, then test macros and harnesses. Property testing is not in it. The section-by-section map, with what has changed since, is [Testing: courses and links](../../28_Testing/resources/README.md).
 - **[The fuzz book ↗](https://rust-fuzz.github.io/book/introduction.html)** — `cargo-fuzz`, for the inputs you would not have thought of.
 
 See also this library's [cargo-nextest](../../05_Tooling/nextest/README.md) page for the runner, which is a different question from what to test.

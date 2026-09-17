@@ -34,7 +34,7 @@ The two that get confused are the first two. A book *argues*; a reference *defin
 | [Why Haskell](haskell/README.md) | curiosity — what Rust borrowed, renamed, and deliberately left behind |
 | [Structs](structs/README.md) | one topic — the checked shelf for structs: the chapter, the normative sources, the videos worth the time |
 
-**Some sections keep their own reading list** next to the lessons, because the sources for one subject belong beside it: [Traits](../12_Traits/resources/README.md) and [Strings](../14_Strings/resources/README.md) both do. [Structs](structs/README.md) is the exception that sits here, because it is the topic where the free material is thickest and the quality spread widest.
+**Some sections keep their own reading list** next to the lessons, because the sources for one subject belong beside it: [Traits](../12_Traits/resources/README.md), [Strings](../14_Strings/resources/README.md) and [Testing](../28_Testing/resources/README.md) all do. [Structs](structs/README.md) is the exception that sits here, because it is the topic where the free material is thickest and the quality spread widest.
 
 ## Where to start, honestly
 

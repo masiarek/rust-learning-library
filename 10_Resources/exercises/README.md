@@ -32,7 +32,7 @@ This is the one to do properly if you are going to do one properly. It is test-d
 
 ## Workshops with a syllabus
 
-- **[Advanced testing ↗](https://rust-exercises.com/advanced-testing/)** ([repo ↗](https://github.com/mainmatter/rust-advanced-testing-workshop)) — the workshop for after `#[test]` stops being enough.
+- **[Advanced testing ↗](https://rust-exercises.com/advanced-testing/)** ([repo ↗](https://github.com/mainmatter/rust-advanced-testing-workshop)) — the workshop for after `#[test]` stops being enough. [Testing: courses and links](../../28_Testing/resources/README.md) maps it section by section onto this library's pages and lists ten details that have changed since it was written.
 - **[proc-macro-workshop ↗](https://github.com/dtolnay/proc-macro-workshop)** — David Tolnay's procedural macro exercises, and the standard way people learn macros. Genuinely hard; save it.
 - **[teach-rs ↗](https://github.com/trifectatechfoundation/teach-rs)** — a full modular course, if you are the one teaching.
 - **[Kobzol on Rust exercises ↗](https://kobzol.github.io/teaching/2024/12/18/rust-exercises.html)** — a write-up of designing exercises for a university Rust course, and a useful survey of what exists.

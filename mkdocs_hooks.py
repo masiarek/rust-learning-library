@@ -254,6 +254,11 @@ NAV_ORDER: dict[str, list[str]] = {
         # harness does not provide.
         "how_cargo_test_runs",
         "other_kinds_of_test",
+        # ...the test double that removes a dependency, the harness itself once
+        # the binaries are clear, and the reading list behind the section.
+        "a_test_double_by_hand",
+        "a_harness_of_your_own",
+        "resources",
     ],
     # Infallible, fallible, and the one with no check at all -- in that order,
     # because the third is only judgeable against the first two.
@@ -1474,6 +1479,7 @@ LABELS = {
     "const_and_static": "`const` and `static`",
     # 28_Testing
     "doc_tests": "The example that is a test",
+    "a_test_double_by_hand": "A test double is a second `impl`",
     # 29_Conversion
     "from_and_into": "`From` and `Into`",
     "tryfrom_and_tryinto": "`TryFrom` and `TryInto`",
