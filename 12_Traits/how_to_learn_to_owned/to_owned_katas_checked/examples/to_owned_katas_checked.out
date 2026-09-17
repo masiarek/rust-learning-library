@@ -1,0 +1,26 @@
+Kata 1. "str: ToOwned<Owned = String>, [T]: ToOwned<Owned = Vec<T>>"
+   text.to_owned() -> alloc::string::String
+   nums.to_owned() -> alloc::vec::Vec<i32>
+   words           -> ["a", "bb", "ccc"]   holds.
+
+Kata 2. "x.to_owned() on a &&T would silently return &T"
+   Vec<_> from .map(|x| x.to_owned()) -> alloc::vec::Vec<&str>   silent here
+   inside clone_each, Vec<T::Owned> is asked for -> E0277, not silent
+   clone_each(&[&str])  -> alloc::vec::Vec<alloc::string::String>
+   clone_each(&[&Path]) -> alloc::vec::Vec<std::path::PathBuf>
+   clone_each(&[&i32])  -> alloc::vec::Vec<i32>   (the blanket impl: Owned = T)
+
+Kata 3. "a custom ToOwned whose Owned form is a transformed value"
+   the kata's own round trip starts from a canonical name:
+      tidy.to_owned().borrow() == tidy ? true
+   the same round trip from the input the kata is about:
+      raw.to_owned().borrow() == raw  ? false
+
+   Cow: to_mut() is documented to CLONE; here it rewrites the value
+      before to_mut: "  Grace  Hopper "   after: "grace-hopper"
+      Cow::Borrowed(raw) == Cow::Owned(raw.to_owned()) ? false
+
+   HashMap<Username, _>: a lookup by the borrowed form, as Borrow promises
+      insert UsernameRef::new("Ada").to_owned(), then:
+      get(UsernameRef::new("Ada")) = None
+      get(UsernameRef::new("ada")) = Some(3)

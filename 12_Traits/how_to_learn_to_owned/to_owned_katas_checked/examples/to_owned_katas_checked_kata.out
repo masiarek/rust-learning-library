@@ -1,0 +1,16 @@
+1. The kata's four tests, with Username::new as the canonical() helper
+   "  Alice  "       -> "alice"
+   "Foo   Bar\tBaz"  -> "foo-bar-baz"
+   "bob"             -> "bob"
+   borrow round trip -> grace-hopper, r.to_owned() == u: true
+   all four assertions hold, unchanged
+
+2. Raw text can no longer become a UsernameRef
+   parse("  Grace  Hopper ") -> Err, did you mean Username("grace-hopper")?
+   parse("grace-hopper")     -> Ok(grace-hopper)
+
+3. The checks the transforming to_owned failed, run again
+   tidy.to_owned().borrow() == tidy       true
+   to_mut() kept the value                true
+   Cow::Borrowed == Cow::Owned            true
+   seats.get(parse("ada"))                Some(3)

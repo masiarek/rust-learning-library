@@ -248,6 +248,8 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K228 | [Which impl does the hover land on — five `.clone()` calls on `&str`, `&String`, `&&String`, `Rc<str>` and `&[i32]`, the type each returns, and the two lints three of them draw](12_Traits/reading_the_clone_hover/README.md#practice) | [Reading the `Clone for &T` hover](12_Traits/reading_the_clone_hover/README.md) | 101 → 201 |
 | K229 | [Three ways around `-> str` — `&str`, `String` and `Box<str>` measured in words, which one points into the input, and which one a `drop` of the input ends](18_Ownership/returned_by_value/README.md#practice) | [Returned by value](18_Ownership/returned_by_value/README.md) | 201 |
 | K230 | [Draw the room for `-> [Point; 2]` — its size and four `#[repr(C)]` offsets predicted, then the hidden pointer written out with `MaybeUninit::write`](18_Ownership/drawing_the_return_slot/README.md#practice) | [Drawing `sret`](18_Ownership/drawing_the_return_slot/README.md) | 201 → 301 |
+| K231 | [Own every borrow in a `&[&T]` — the obvious closure, `E0277` where the return type asks for `T::Owned` and a quiet `Vec<&T>` where nothing does, fixed three ways](12_Traits/how_to_learn_to_owned/the_blanket_to_owned/README.md#practice) | [Step 6: One blanket impl covers every `Clone` type](12_Traits/how_to_learn_to_owned/the_blanket_to_owned/README.md) | 201 |
+| K232 | [Repair the username kata — move the canonicalizing out of `to_owned` and into the doors, then watch `Cow::to_mut` and a `HashMap` lookup agree again](12_Traits/how_to_learn_to_owned/to_owned_katas_checked/README.md#practice) | [Three `ToOwned` katas, run](12_Traits/how_to_learn_to_owned/to_owned_katas_checked/README.md) | 201 → 301 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -437,7 +439,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K172 · [Four shapes one way and four fields the other -- which one makes a circle with a width impossible](13_Enums/variants_that_carry_data/README.md#practice)
 - K173 · [Sixteen cells the compiler counted for you, and the wildcard that would throw them away](13_Enums/an_enum_as_a_state_machine/README.md#practice)
 
-**[Traits](12_Traits/README.md)** — 12 katas
+**[Traits](12_Traits/README.md)** — 14 katas
 
 - K95 · [Predict the owned twin before you run it](12_Traits/to_owned/README.md#practice)
 - K96 · [One lookup for every kind of key](12_Traits/borrow_trait/README.md#practice)
@@ -451,6 +453,8 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K203 · [Write the function that hands back the owned twin](12_Traits/how_to_learn_to_owned/clone_vs_to_owned/README.md#practice)
 - K204 · [Predict the receiver, then take it away from the dot](12_Traits/how_to_learn_to_owned/the_dot_picks_first/README.md#practice)
 - K228 · [Which impl does the hover land on](12_Traits/reading_the_clone_hover/README.md#practice)
+- K231 · [Own every borrow in a `&[&T]`](12_Traits/how_to_learn_to_owned/the_blanket_to_owned/README.md#practice)
+- K232 · [Repair the username kata](12_Traits/how_to_learn_to_owned/to_owned_katas_checked/README.md#practice)
 
 **[Generics](22_Generics/README.md)** — 2 katas
 

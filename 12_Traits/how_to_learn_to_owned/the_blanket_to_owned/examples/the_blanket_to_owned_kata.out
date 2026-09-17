@@ -1,0 +1,11 @@
+1. Where nothing asks for T::Owned, the obvious closure is quiet
+   words.iter().map(|x| x.to_owned()) -> alloc::vec::Vec<&str>
+
+2. Three bodies that reach T's impl, four kinds of T
+   T = str    by_deref   -> ["ada", "grace"] alloc::vec::Vec<alloc::string::String>
+   T = [i32]  by_pattern -> [[1, 2], [3]]    alloc::vec::Vec<alloc::vec::Vec<i32>>
+   T = Path   by_path    -> ["/a", "/b/c"]   alloc::vec::Vec<std::path::PathBuf>
+   T = i32    by_deref   -> [1, 2]           alloc::vec::Vec<i32>
+
+3. Why i32 works too: the blanket impl gives every Clone type Owned = Self
+   <i32 as ToOwned>::Owned is i32, so Vec<T::Owned> is Vec<i32>

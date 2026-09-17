@@ -902,6 +902,7 @@ NAV_ORDER: dict[str, list[str]] = {
         "to_owned_lints",
         "to_owned_in_real_code",
         "cow_claims_checked",
+        "to_owned_katas_checked",
         "to_owned_reading_list",
     ],
     "05_Tooling/from_rustc_to_cargo": [
@@ -1661,6 +1662,7 @@ LABELS = {
     "to_owned_lints": "Lints around `ToOwned`",
     "to_owned_in_real_code": "`ToOwned` in real code",
     "cow_claims_checked": "`Cow` claims, run",
+    "to_owned_katas_checked": "Three `ToOwned` katas, run",
     "and_or_claims_checked": "`and` and `or` claims, run",
     "comparing_numbers_claims_checked": "Rust in Action §2.3.3, run",
     "comparing_two_number_types": "Comparing two number types",

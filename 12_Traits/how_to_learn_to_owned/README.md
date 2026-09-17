@@ -31,6 +31,8 @@ Each surprise below is one missing idea, not a mystery about `ToOwned`. Start at
 | `.to_owned()` on an `Rc` did not copy the string | [8](to_owned_traps/README.md#rc-the-outer-type-is-the-first-candidate) |
 | `.to_owned()` on a `Cow::Borrowed` is still borrowed | [8](to_owned_traps/README.md#cow-to_owned-is-not-into_owned) |
 | an article said `Cow` has `into_borrowed`, or that `to_mut()` gives a `&mut str` | [the `Cow` claims, run](cow_claims_checked/README.md) |
+| `x.to_owned()` inside a `map` over a `&[&T]` gave `&T`s, or `E0277` about `FromIterator<&T>` | [6](the_blanket_to_owned/README.md#practice) |
+| a kata had you write a `to_owned` that canonicalizes, and `Cow::to_mut()` changed your text | [three `ToOwned` katas, run](to_owned_katas_checked/README.md#kata-3-a-toowned-that-changes-the-value) |
 | `clone_into` into a `String::new()` saved nothing, but into an empty `String::with_capacity(64)` it did | [9](clone_into_refills/README.md) |
 | `impl ToOwned for MyType` is `E0119` | [10](implementing_it_or_not/README.md) |
 | you cannot write `Borrow` for your view struct | [10](implementing_it_or_not/README.md) |
@@ -59,6 +61,7 @@ Beside the steps:
 - [Every `ToOwned` error, and its fix](to_owned_errors/README.md) — twenty compiler errors around `ToOwned`, `Clone`, `Borrow` and `Cow`, findable by code or by message: the code, rustc's words, the mistake, and a fix that compiles.
 - [Where `Clone` will not do: code only](where_clone_will_not_do/README.md) — ten pairs of fences, `.clone()` that fails to compile beside `ToOwned` that works, each checked by the compiler on every build.
 - [What `Cow` explanations get wrong, run](cow_claims_checked/README.md) — ten claims about `Cow` from articles, books and chat answers, each checked against the compiler; read it after step 7.
+- [Three `ToOwned` katas, run](to_owned_katas_checked/README.md) — a circulating set of three katas with tests and solutions: which are sound, the one wrong word in the second, and the third's canonicalizing `to_owned`, which breaks `Cow` and map lookups, repaired.
 - [Helpful resources for the path](to_owned_reading_list/README.md) — book chapters, the Reference, the Rustonomicon, articles and talks for every step, with the ones to read with care.
 
 ## Everything else `ToOwned` touches
@@ -93,6 +96,7 @@ The steps say what to understand; these make you write it. Each lives on the pag
 | 4 | [One `E0382`, three fixes](../../16_Structs/copy_vs_clone/README.md#practice) — and what each costs the caller | [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) |
 | 5 | [Predict the receiver, then take it away from the dot](the_dot_picks_first/README.md#practice) — five calls, three that are not a `String`, each fixed two ways | [Step 5](the_dot_picks_first/README.md) |
 | 6 | [Give every slice a `.middle()`](../extension_traits/README.md#practice) — one trait, two methods, and only one of them reachable through a dot | [Extension traits](../extension_traits/README.md) |
+| 6 | [Own every borrow in a `&[&T]`](the_blanket_to_owned/README.md#practice) — the obvious closure, loud in one place and quiet in another, fixed three ways | [Step 6](the_blanket_to_owned/README.md) |
 | 6 | [Predict the owned twin before you run it](../to_owned/README.md#practice) — six receivers, and the two everybody gets wrong | [`ToOwned`](../to_owned/README.md) |
 | 7 | [One lookup for every kind of key](../borrow_trait/README.md#practice) — three maps searched by their borrowed forms, zero allocations counted | [`Borrow`](../borrow_trait/README.md) |
 | 7 | [Pay only when you have to](../../18_Ownership/clone_on_write/README.md#practice) — a `Cow` that copies only the rows it changes | [`Cow`](../../18_Ownership/clone_on_write/README.md) |
@@ -100,6 +104,7 @@ The steps say what to understand; these make you write it. Each lives on the pag
 | 8 | [Freeze a candidate column three ways](../../14_Strings/boxed_str/README.md#practice) — ending on the `.to_owned()` that clones a pointer instead of the text | [The third owned form](../../14_Strings/boxed_str/README.md) |
 | 9 | [Four loops that all look like reuse](../clone_into/README.md#practice) — predict the allocations, then count them | [`clone_into`](../clone_into/README.md) |
 | 10 | [A slice that promises its order](../implementing_to_owned/README.md#practice) — `Sorted<T>` with `Borrow`, `ToOwned` and a `Cow` | [Implementing `ToOwned`](../implementing_to_owned/README.md) |
+| 10 | [Repair the username kata](to_owned_katas_checked/README.md#practice) — canonicalize at the door, copy in `to_owned`, and watch `Cow` and `HashMap` agree again | [Three `ToOwned` katas, run](to_owned_katas_checked/README.md) |
 
 Every step has at least one. The full sequence, with every other kata in the library, is [KATAS.md](../../KATAS.md).
 
@@ -112,6 +117,7 @@ Most explanations of `ToOwned` get the trait right and one step underneath it wr
 - **"On a reference, `clone()` just copies the pointer."** True only when the pointee is not `Clone` — [step 5](the_dot_picks_first/README.md). On a `&String` it allocates a new `String`.
 - **"`ToOwned` almost always allocates on the heap."** `42_i32.to_owned()` touches no heap, and `.to_owned()` on an `Rc` bumps a count. It allocates when the impl it lands on does — [step 8](to_owned_traps/README.md) and [after the steps](clone_to_owned_or_from/README.md).
 - **"After `to_mut()`, writing to a `Cow` never allocates."** The clone happens at most once, on the first `to_mut()`. Growth is a separate cost: the fresh `String` has no spare capacity, so the first `push` reallocates, as it would for any `String` — [step 7](borrow_the_way_back/README.md#checkpoint).
+- **"`ToOwned`'s `Owned` form can be a transformed value, not just a clone."** It compiles, and it breaks everything built on the trait: `Cow::to_mut()` rewrites the text before you write, and a map lookup by the borrowed form misses. Every std impl copies; put the transform in a constructor — [three `ToOwned` katas, run](to_owned_katas_checked/README.md#kata-3-a-toowned-that-changes-the-value).
 - **"To implement `ToOwned` for your struct, write `type Owned = Self`."** It compiles only while the struct is not `Clone`, is `Clone` under another name, and becomes `E0119` the day someone adds `#[derive(Clone)]` — [step 10](implementing_it_or_not/README.md).
 - **"`clone_into` is another way to get owned data."** It is the way to *refill* owned data. Into a `String` with no capacity it saves nothing; into one with enough capacity it reuses the buffer, even at length zero — [step 9](clone_into_refills/README.md).
 - **"Prefer `to_owned()` to `to_string()`, because it is faster."** Not since Rust 1.9; the [`ToOwned`](../to_owned/README.md#for-everything-else-they-are-the-same-call) page has the measurements. The argument that survives is that `to_owned` names what changes — the owner.
