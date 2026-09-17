@@ -44,8 +44,8 @@ A compound type groups several values into one type. [The Book, §3.2 ↗](https
 
 | Type | Primitive compound? | Why |
 |---|---|---|
-| tuple `(i32, &str)` | **yes** | built into the language; values of different types, fields numbered |
-| array `[u8; 3]` | **yes** | built into the language; one element type, length fixed in the type |
+| tuple `(i32, &str)` | **yes** | built into the language; values of different types, fields numbered — [Tuples](26_Collections/tuples/README.md) |
+| array `[u8; 3]` | **yes** | built into the language; one element type, length fixed in the type — [Arrays: the map](26_Collections/arrays/README.md) |
 | `Vec<T>` | no | a struct in `std` over a heap allocation — a *collection*, not a primitive |
 | `HashMap<K, V>`, `String` | no | structs in `std`, same reason |
 | `struct`, `enum` | no | compound, but *user-defined*: you declare them, the language does not provide them |
@@ -60,7 +60,7 @@ A compound type groups several values into one type. [The Book, §3.2 ↗](https
 | `bool` | [Meet the `bool`](15_First_Programs/meet_the_bool/README.md) | not a number, no truthiness |
 | `char` | [Meet the `char`](14_Strings/meet_the_char/README.md) · [Why a `char` is 32 bits](14_Strings/why_char_is_32_bits/README.md) | one Unicode scalar value, always four bytes |
 | tuple | [Tuples](26_Collections/tuples/README.md) | a struct whose fields are numbered |
-| array `[T; N]` | [Arrays and slices](26_Collections/arrays_and_slices/README.md) · [Array or `Vec`?](26_Collections/array_or_vec/README.md) · [Const generics](22_Generics/const_generics/README.md) | the length is part of the type |
+| array `[T; N]` | [Arrays: the map](26_Collections/arrays/README.md) · [Arrays and slices](26_Collections/arrays_and_slices/README.md) · [Array or `Vec`?](26_Collections/array_or_vec/README.md) · [Const generics](22_Generics/const_generics/README.md) | the length is part of the type |
 | slice `[T]` | [Arrays and slices](26_Collections/arrays_and_slices/README.md) · [`slice` methods](26_Collections/slice_methods/README.md) | held as `&[T]`, a pointer and a length |
 | `str` | [`str` is unsized](14_Strings/str_is_unsized/README.md) · [String slices](14_Strings/string_slices/README.md) | held as `&str` |
 | unit `()` | [The unit type](15_First_Programs/the_unit_type/README.md) | the empty tuple: one value, zero bytes |

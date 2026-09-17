@@ -110,7 +110,7 @@ fn main() {
 }
 ```
 
-`const N: usize` makes the length a parameter. One function then serves every length, and the signature promises the result is as long as the argument, which `&[i32] -> Vec<i32>` cannot say. `[i32; N]::map` keeps the length. [The kata](#practice) uses the same idea to transpose a matrix.
+`const N: usize` makes the length a parameter; [Const generics](../../../22_Generics/const_generics/README.md) *(stub)* is the page for the feature itself. One function then serves every length, and the signature promises the result is as long as the argument, which `&[i32] -> Vec<i32>` cannot say. `[i32; N]::map` keeps the length. [The kata](#practice) uses the same idea to transpose a matrix.
 
 ## If you are coming from another language
 
@@ -160,7 +160,7 @@ fn main() {
 
 **Transpose a matrix.** Turn `[[1, 2, 3], [4, 5, 6], [7, 8, 9]]` into `[[1, 4, 7], [2, 5, 8], [3, 6, 9]]`: row *i* of the input becomes column *i* of the output. Write it first as two index loops into a zeroed `[[0; 3]; 3]`. Run clippy on it and note whether [`needless_range_loop`](../array_lints/README.md#needless_range_loop) fires, and why or why not.
 
-Then make it work for every square size with `const N: usize` and `std::array::from_fn` inside `std::array::from_fn`. Then for any shape, where the type turns `[[T; C]; R]` into `[[T; R]; C]`. Check that transposing twice gives back the original.
+Then make it work for every square size with [`const N: usize`](../../../22_Generics/const_generics/README.md) and `std::array::from_fn` inside `std::array::from_fn`. Then for any shape, where the type turns `[[T; C]; R]` into `[[T; R]; C]`. Check that transposing twice gives back the original.
 
 A formatting tip for the matrix literal. rustfmt 1.9.0, the one shipped with 1.98.0, collapses a short `[[1, 2, 3], [4, 5, 6], [7, 8, 9]]` written over three lines onto one. A `//` comment after the first row keeps one row per line:
 

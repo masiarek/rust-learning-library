@@ -113,6 +113,11 @@ SCOPE = (
     # `--test`, which is the only build where an error about a test exists.
     "28_Testing/testing_errors",
     "28_Testing/testing_lints",
+    # The arrays hub, whole: its errors page (a `compile_fail` fence beside a
+    # fix for each refusal), its lints page (bad and good programs), and lesson
+    # pages whose fences are complete programs or items. Surveyed clean before
+    # it was added; the one `ignore` is a lint that a metadata build cannot see.
+    "26_Collections/arrays",
 )
 
 # `.claude` holds this repo checked out again, once per agent worktree, so a scan

@@ -238,6 +238,10 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K218 | [Fewest stars — six lines written without a `*` or `&`, fix each with the fewest and name the rule; two need none](18_Ownership/references/when_you_need_the_star/README.md#practice) | [When you need the `*`](18_Ownership/references/when_you_need_the_star/README.md) | 101 → 201 |
 | K219 | [Split off the header — advance a `&mut &[u8]` and a `&mut &mut [u8]`, hold two writable headers, and catch the `?` after `mem::take` that empties the caller's slice on `None`](18_Ownership/references/repointing_a_slice/README.md#practice) | [Re-pointing the caller's slice: `&mut &mut [T]`](18_Ownership/references/repointing_a_slice/README.md) | 201 |
 | K220 | [Pick the pointer — a config reader, a tree's children, a shared cache and C's `memchr`, each shown working](18_Ownership/references/pointer_types_compared/README.md#practice) | [Six pointer types, one table](18_Ownership/references/pointer_types_compared/README.md) | 201 |
+| K221 | [The first ten odd numbers, two ways — a block that fills a zeroed array, `array::from_fn`, and the edit that compiles and leaves zeros](26_Collections/arrays/writing_an_array_down/README.md#practice) | [Writing an array down](26_Collections/arrays/writing_an_array_down/README.md) | 101 |
+| K222 | [Transpose a matrix — two index loops, then every square size with const generics, then any shape](26_Collections/arrays/arrays_in_signatures/README.md#practice) | [Arrays in and out of functions](26_Collections/arrays/arrays_in_signatures/README.md) | 101 → 201 |
+| K223 | [Nine sizes, then a megabyte on a 64 KiB stack without touching it](26_Collections/arrays/where_an_array_lives/README.md#practice) | [Where an array lives](26_Collections/arrays/where_an_array_lives/README.md) | 201 |
+| K224 | [A static lookup table, checked for order while it compiles](26_Collections/arrays/static_arrays/README.md#practice) | [An array in a `const` or a `static`](26_Collections/arrays/static_arrays/README.md) | 201 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -449,7 +453,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K106 · [Five references where you meant five numbers](24_Iterators/double_ended_and_exact_size/README.md#practice)
 - K107 · [Five pairings, and the row that vanishes](24_Iterators/zip_and_enumerate/README.md#practice)
 
-**[Collections](26_Collections/README.md)** — 14 katas
+**[Collections](26_Collections/README.md)** — 18 katas
 
 - K110 · [Four fields, and the transposition that compiles](26_Collections/tuples/README.md#practice)
 - K111 · [One function, four callers](26_Collections/arrays_and_slices/README.md#practice)
@@ -465,6 +469,10 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K121 · [A word ladder, and the key a lookup hands back](26_Collections/the_hashset/README.md#practice)
 - K122 · [Two orders from one tally, and the key you cannot use](26_Collections/sorted_collections/README.md#practice)
 - K123 · [Two walks and a drop order](26_Collections/the_box/README.md#practice)
+- K221 · [The first ten odd numbers, two ways](26_Collections/arrays/writing_an_array_down/README.md#practice)
+- K222 · [Transpose a matrix](26_Collections/arrays/arrays_in_signatures/README.md#practice)
+- K223 · [Nine sizes, then a megabyte on a 64 KiB stack without touching it](26_Collections/arrays/where_an_array_lives/README.md#practice)
+- K224 · [A static lookup table, checked for order while it compiles](26_Collections/arrays/static_arrays/README.md#practice)
 
 **[Conversion](29_Conversion/README.md)** — 4 katas
 

@@ -275,6 +275,8 @@ fn main() {
 - [A score is not a number](../../16_Structs/newtype_score/README.md) — the one-field tuple struct, which is a different feature with a similar look
 - [One arm, many values](../../17_Option_and_Result/one_arm_many_values/README.md) — matching on a tuple to cover two questions in one `match`
 - [A block is an expression](../../15_First_Programs/a_block_is_an_expression/README.md) — where `()` comes from, and the semicolon that produces it
+- [The unit type `()`](../../15_First_Programs/the_unit_type/README.md) — the empty tuple on its own page
+- [Arrays: the map](../arrays/README.md) — the other compound type, across every page that covers it
 
 ## Sources
 

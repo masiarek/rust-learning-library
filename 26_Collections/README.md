@@ -7,6 +7,7 @@ Two of them are built into the language and have no `use` line: the tuple and th
 | Lesson | Level | What it covers |
 |---|---|---|
 | [Tuples](tuples/README.md) | 101 | A struct with numbered fields — free to return, and readable for about two of them |
+| [Arrays: the map](arrays/README.md) | 101 → 301 | Every array page in reading order — writing one down, slices, array or `Vec`, in and out of functions, where it lives, `const` and `static` tables, iterating — plus a question-to-page table, katas, the claims that fail when run, every error and lint, and resources |
 | [Arrays and slices](arrays_and_slices/README.md) | 101 → 201 | `[T; N]` is a type per length; `&[T]` is the one that belongs in a signature |
 | [`Vec`](the_vec/README.md) | 101 → 201 | Three numbers on the stack, doubling growth you can watch, and two removals with opposite guarantees |
 | [Array or `Vec`?](array_or_vec/README.md) | 101 → 201 | The default is `Vec` because most lengths come from input — plus the four things an array buys when the length is a fact about the problem: a compile error for the wrong one, `Copy`, a `const`, and no allocator |
@@ -26,7 +27,7 @@ Two of them are built into the language and have no `use` line: the tuple and th
 | You have | You want |
 |---|---|
 | two or three values of *different* types, used right here | a **tuple** |
-| a fixed number of values, known when you compile | an **array**, `[T; N]` |
+| a fixed number of values, known when you compile | an **array**, `[T; N]` — [every array page](arrays/README.md) |
 | a list that grows | a **`Vec`** |
 | part of any of those, passed to a function | a **slice**, `&[T]` |
 | a grid, rows all the same length | a **flat `Vec`** and a width — see [grids](vec_of_vecs/README.md) |

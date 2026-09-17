@@ -191,6 +191,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "README.md",
         # The two compound types the language itself provides...
         "tuples",
+        # ...the map of every array page, placed before the first of them so a
+        # reader looking for "arrays" meets the index before the lessons...
+        "arrays",
         "arrays_and_slices",
         # ...then the three that grow, in the order a program needs them...
         "the_vec",
@@ -880,6 +883,19 @@ NAV_ORDER: dict[str, list[str]] = {
         "README.md",
         "what_cargo_passes_rustc",
     ],
+    # The arrays hub: its lessons in reading order, then the four pages beside
+    # them. The lessons it maps that live elsewhere keep their own places.
+    "26_Collections/arrays": [
+        "README.md",
+        "writing_an_array_down",
+        "arrays_in_signatures",
+        "where_an_array_lives",
+        "static_arrays",
+        "array_claims_checked",
+        "array_errors",
+        "array_lints",
+        "array_resources",
+    ],
     "05_Tooling/create_rust_proj": [
         "README.md",
         "scratch_sh",
@@ -1487,6 +1503,13 @@ LABELS = {
     "the_hashmap": "`HashMap`",
     "the_hashset": "`HashSet`",
     "the_box": "`Box`",
+    # 26_Collections/arrays — the hub keeps its folder's own label, "Arrays".
+    "arrays_in_signatures": "Arrays in and out of functions",
+    "static_arrays": "Arrays in `const` and `static`",
+    "array_claims_checked": "Array claims, run",
+    "array_errors": "Every array error, fixed",
+    "array_lints": "Lints around arrays",
+    "array_resources": "Helpful resources",
     # 27_Modules
     "the_use_declaration": "Bringing names in with `use`",
     "const_and_static": "`const` and `static`",

@@ -398,6 +398,7 @@ fn main() {
 
 ## See also
 
+- [Arrays: the map](../arrays/README.md) — every array page in the library, and which question each one answers
 - [Grids and nested `Vec`s](../vec_of_vecs/README.md) — the shape to reach for when rows *do* differ in length: what the extra allocations buy, and the `*` that `iter_mut` needs
 - [Array or `Vec`?](../array_or_vec/README.md) — the same decision for a single row, and the four things an array buys when the length is a fact about the problem
 - [Arrays and slices](../arrays_and_slices/README.md) — why `[u8; 4]` and `[u8; 3]` are different types, which is what makes the push above an error

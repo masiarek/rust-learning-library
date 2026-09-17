@@ -438,6 +438,8 @@ fn main() {
 
 ## See also
 
+- [Arrays: the map](../arrays/README.md) — every array page in the library, and which question each one answers
+- [Writing an array down](../arrays/writing_an_array_down/README.md) — `[value; how many]`, and how inference picks the element type
 - [`Vec`](../the_vec/README.md) — the growable one, which derefs to exactly the slice type on this page
 - [Grids and nested `Vec`s](../vec_of_vecs/README.md) — `[[T; N]; M]` against `Vec<Vec<T>>`, and `chunks` turning one block back into rows
 - [Tuples](../tuples/README.md) — the other built-in compound type, for fields of *different* types

@@ -500,6 +500,8 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Array (`[T; N]`)** — A fixed-length block of one type, laid out inline with no header, and a **separate type for every length** — which is why it almost never appears in a signature. `Copy` when `T` is. → [Arrays and slices](26_Collections/arrays_and_slices/README.md)
 
+**Repeat expression (`[value; N]`)** — The array form that writes one value N times: `[0; 3]` is `[0, 0, 0]`. N must be a constant, and the value is evaluated once and copied, so for two or more elements it must be `Copy` or a constant: `[String::new(); 3]` is `E0277`, while `[const { String::new() }; 3]`, `std::array::repeat` and `std::array::from_fn` all work. `vec![value; n]` is the `Vec` form, where `n` may come from run time. → [Writing an array down](26_Collections/arrays/writing_an_array_down/README.md#value-how-many)
+
 **Slice (`&[T]`)** — A borrowed view of a run of elements: a pointer and a length, so one function serves an array of any length, a `Vec`, or part of either. The length moved out of the *type* and into the *value*, which is the whole trick. Take `&[T]` in a signature, never `&Vec<T>`. → [Arrays and slices](26_Collections/arrays_and_slices/README.md)
 
 **Amortised growth** — `Vec` doubles its capacity when it fills, so *n* pushes cost O(*n*) in total rather than O(*n*²), at the price of copying everything already stored each time it grows. `with_capacity` and `collect` over a known-length iterator skip the copying entirely. The exact sequence is std's choice, not a language guarantee. → [`Vec`](26_Collections/the_vec/README.md)

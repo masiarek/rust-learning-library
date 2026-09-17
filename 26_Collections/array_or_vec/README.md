@@ -284,6 +284,8 @@ fn main() {
 
 ## See also
 
+- [Arrays: the map](../arrays/README.md) — every array page in the library, and which question each one answers
+- [Where an array lives](../arrays/where_an_array_lives/README.md) — "usually the stack", measured: a `Box`, a `Vec`, a `static`, and the megabyte that overflows a thread
 - [Arrays and slices](../arrays_and_slices/README.md) — the array in full, and why `&[T]` is what belongs in a signature
 - [`Vec`](../the_vec/README.md) — the three numbers, the doubling growth, and the two removals
 - [Tuples](../tuples/README.md) — the other fixed-length option, for values of *different* types

@@ -148,6 +148,7 @@ The rule of thumb worth carrying: **a `.clone()` added to make a borrow compile 
 
 ## See also
 
+- [Arrays: the map](../../26_Collections/arrays/README.md) — every array page, including [`array_into_iter` on editions 2015 and 2018](../../26_Collections/arrays/array_lints/README.md#array_into_iter) and the filter errors the 2021 change causes
 - [`Vec::into_iter`](../../26_Collections/vec_methods/vec_into_iter/README.md) — the three `IntoIterator` impls written out, and why `self` is a reference in two of them
 - [`for` loops](../../25_Control_Flow/for_loops/README.md) — the loop that calls these for you: when the move happens, and the `&String` and `&Range` that have no `IntoIterator` at all
 - [Iterators are lazy](../iterators_are_lazy/README.md) — what the chain after `iter()` does, and when

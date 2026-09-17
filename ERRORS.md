@@ -25,6 +25,8 @@ The **on** column is how many lesson pages in this library have to mention the c
 
 **Errors around `ToOwned`, `Clone`, `Borrow` and `Cow` have a page of their own**, findable by code or by message: [Every `ToOwned` error, and its fix](12_Traits/how_to_learn_to_owned/to_owned_errors/README.md) — twenty of them, each with the code that causes it and a fix that compiles. **So do the errors you meet writing tests**, including the ones that exist only in a test build: [Every testing error, and its fix](28_Testing/testing_errors/README.md).
 
+**So do errors around arrays:** [Every array error, and its fix](26_Collections/arrays/array_errors/README.md) — twenty-nine, from *expected an array with a size of 3* and *can't compare `[i8; 3]` with `[i8; 4]`* to `E0614` in a filter written before edition 2021.
+
 Notice what four of those six have in common: **one code, several causes.** That is the reason this page is a map to lessons rather than a glossary of codes — the code narrows the search, and the lesson finishes it.
 
 ## Every code the library teaches
@@ -81,6 +83,7 @@ Notice what four of those six have in common: **one code, several causes.** That
 | [E0505 ↗](https://doc.rust-lang.org/error_codes/E0505.html) | [A shadow does not drop](18_Ownership/shadowing_does_not_drop/README.md) | **2** other pages |
 | [E0506 ↗](https://doc.rust-lang.org/error_codes/E0506.html) | [A name is not a place](18_Ownership/a_name_is_not_a_place/README.md) | 1 other page |
 | [E0507 ↗](https://doc.rust-lang.org/error_codes/E0507.html) | [Transforms instead of `match`](17_Option_and_Result/transforms_instead_of_match/README.md) | **5** other pages |
+| [E0508 ↗](https://doc.rust-lang.org/error_codes/E0508.html) | [Every array error, and its fix](26_Collections/arrays/array_errors/README.md#13-moving-one-string-out-of-an-array) | — |
 | [E0509 ↗](https://doc.rust-lang.org/error_codes/E0509.html) | [The drop flag](18_Ownership/the_drop_flag/README.md) | — |
 | [E0515 ↗](https://doc.rust-lang.org/error_codes/E0515.html) | [Collect the iterator into a `Vec`](24_Iterators/collect_into_a_vec/README.md) | **6** other pages |
 | [E0521 ↗](https://doc.rust-lang.org/error_codes/E0521.html) | [Every `ToOwned` error, and its fix](12_Traits/how_to_learn_to_owned/to_owned_errors/README.md#18-keeping-a-short-lived-cow-in-a-static-cache) | — |
@@ -92,6 +95,7 @@ Notice what four of those six have in common: **one code, several causes.** That
 | [E0599 ↗](https://doc.rust-lang.org/error_codes/E0599.html) | ["No method named …"](12_Traits/no_method_named/README.md) | **11** other pages |
 | [E0603 ↗](https://doc.rust-lang.org/error_codes/E0603.html) | [Modules and visibility](27_Modules/modules_and_visibility/README.md) | **2** other pages |
 | [E0605 ↗](https://doc.rust-lang.org/error_codes/E0605.html) | [What an enum is](13_Enums/what_an_enum_is/README.md) | — |
+| [E0614 ↗](https://doc.rust-lang.org/error_codes/E0614.html) | [Every array error, and its fix](26_Collections/arrays/array_errors/README.md#22-x-in-a-filter-over-into_iter) | — |
 | [E0616 ↗](https://doc.rust-lang.org/error_codes/E0616.html) | [Modules and visibility](27_Modules/modules_and_visibility/README.md) | 1 other page |
 | [E0618 ↗](https://doc.rust-lang.org/error_codes/E0618.html) | [A type is not a constructor](16_Structs/a_type_is_not_a_constructor/README.md) | **2** other pages |
 | [E0624 ↗](https://doc.rust-lang.org/error_codes/E0624.html) | ["No method named …"](12_Traits/no_method_named/README.md) | — |
@@ -119,7 +123,7 @@ The table above names one lesson per code, chosen as the page that treats it at 
 
 ## How this page is kept honest
 
-Every row was derived from the library rather than written from memory: the owning lesson for each code is the page that mentions it most, and the "also appears on" count is the number of other pages carrying it. All 79 code links were checked live. If a code moves to a better home, the count moves with it — so re-derive this table rather than editing a row by hand.
+Every row was derived from the library rather than written from memory: the owning lesson for each code is the page that mentions it most, and the "also appears on" count is the number of other pages carrying it. All 81 code links were checked live. If a code moves to a better home, the count moves with it — so re-derive this table rather than editing a row by hand.
 
 ## Sources
 
