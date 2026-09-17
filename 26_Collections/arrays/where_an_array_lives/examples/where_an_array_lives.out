@@ -1,0 +1,29 @@
+1. No header: the value is the elements
+   size_of::<[i32; 3]>()        = 12
+   size_of::<Reading>()         = 16  (a u16 and the three i32s, inline)
+   Reading { id: 1, samples: [4, 5, 6] }
+
+2. Four owners, four places
+   local:  the array is the stack slot; &local[0] is the slot's address: true
+   Box:    8 bytes on the stack, and the box's pointer is the first element: true
+   Vec:    the rows sit end to end in the Vec's one buffer: flat[3] is in_vec[1][0]: true
+   static: &TABLE is one address, whichever function asks: true
+
+3. Box<[i32; 3]> and Box<[i32]>
+   size_of_val(&thin) = 8  the length is in the type
+   size_of_val(&fat)  = 16 the length rides beside the pointer
+   size_of_val(&*fat) = 12 the three i32s on the heap
+   a run-time length: vec![0; n].into_boxed_slice() = [0, 0, 0, 0]
+                      (1..=n).collect::<Box<[i32]>>() = [1, 2, 3, 4]
+   and back to a length in the type: Box<[i32; 4]> = [1, 2, 3, 4]
+
+4. Moving an array moves its bytes; moving a Box moves a pointer
+   size_of_val(&moved_plain) = 64 bytes copied by `let moved_plain = plain;`
+   size_of_val(&moved_box)   = 8  bytes copied by `let moved_box = in_box;`
+   the elements did not move: true
+
+5. A megabyte on a 256 KiB thread
+   let buf = [7u8; 1_000_000];              aborted: thread 'small' has overflowed its stack
+   Box::new([7u8; 1_000_000]), debug build  aborted: thread 'small' has overflowed its stack
+   vec![7u8; 1_000_000].into_boxed_slice()  finished, printed 7
+   ... .try_into::<Box<[u8; 1_000_000]>>()  finished, printed 7

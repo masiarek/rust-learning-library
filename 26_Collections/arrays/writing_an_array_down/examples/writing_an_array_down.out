@@ -1,0 +1,59 @@
+1. Three spellings
+   [1, 2, 3]              [1, 2, 3]  is [i32; 3]
+   let _: [u8; 3] = ...   [1, 2, 3]  is [u8; 3]
+   [0u8; 3]               [0, 0, 0]  is [u8; 3]
+   let _: [i32; _] = [4, 5, 6, 7] is [i32; 4] -- the compiler counts
+
+2. Any element type, one per array
+   [0.5, 1.5, 2.5] is [f64; 3]
+   ["a", "b", "c", "d"] is [&str; 4]
+   ['a', 'b'] is [char; 2]
+   [true, false, true] is [bool; 3]
+   ['c', 'c', 'c'] is [char; 3]
+   ["d", "d", "d"] is [&str; 3]
+
+3. [value; how many]
+   [99; 5]     = [99, 99, 99, 99, 99]
+   ['a'; 10]   = ['a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a']
+   [true; 1000] has len 1000 and size_of 1000 bytes
+   [const { String::new() }; 3]          = ["", "", ""]
+   std::array::repeat(String::from("bb")) = ["bb", "bb", "bb"]
+   std::array::from_fn(|i| format!(..))   = ["row 0", "row 1", "row 2"]
+   [String::from("only"); 1] compiles too: ["only"]
+   (a non-Copy value is fine when there is one copy to make: none)
+
+4. One suffix types the whole array
+   [0u8, 0, 0] is [u8; 3]
+   [0, 0i32, 0] is [i32; 3]
+   [1u8, 2, 3] is [u8; 3]
+
+5. Inference reads the neighbours
+   let alone = [1, 2, 3];  alone is [i32; 3]
+   the same literal beside a [u8; 3]:
+   one is [u8; 3], blank1 is [u8; 3]
+   arrays is [[u8; 3]; 4]
+   size_of_val(&arrays) = 12 bytes: twelve u8s, no headers
+
+6. Brackets add a level
+   [[a1], [a2]] is [[[u8; 5]; 1]; 2]
+   [a1, a2]     is [[u8; 5]; 2]
+
+7. Declare now, assign once, later
+   let later: [i64; 5]; later = [...];  later = [100, 101, 102, 103, 104]
+
+8. Walking it by reference
+   a is &[u8; 3]   [1, 2, 3] -> n + 10 = [11, 12, 13]
+   a is &[u8; 3]   [1, 2, 3] -> n + 10 = [11, 12, 13]
+   a is &[u8; 3]   [0, 0, 0] -> n + 10 = [10, 10, 10]
+   a is &[u8; 3]   [0, 0, 0] -> n + 10 = [10, 10, 10]
+   n is &u8, and 1 + 10 = 11: &u8 implements Add<u8>
+
+9. The sum nobody typed is a u8
+   index_loop_sum(&[1, 2, 3]) = 6
+   index_loop_sum(&[200, 100, 0]) panicked: attempt to add with overflow
+   a release build does not check, and wraps: 200u8.wrapping_add(100) = 44
+   widen first: row.iter().map(|&n| u32::from(n)).sum::<u32>() = 300
+
+10. Two functions called from_fn
+   std::array::from_fn(|i| i * i) -> [0, 1, 4, 9, 16]  (index in, element out, N from the type)
+   std::iter::from_fn(|| ..)      -> [3, 2, 1]  (nothing in, Option out, stops at None)

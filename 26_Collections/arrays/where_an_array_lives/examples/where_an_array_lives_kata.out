@@ -1,0 +1,16 @@
+1. Nine sizes, predicted before they were printed
+   [u16; 4]                8  the four u16s
+   [[u16; 4]; 2]          16  eight u16s, still no header
+   (u8, [u16; 4])         10  nine bytes of data, padded to u16's alignment
+   &[u16; 4]               8  a pointer; the 4 is in the type
+   &[u16]                 16  a pointer and a length
+   Box<[u16; 4]>           8  thin, like the reference
+   Box<[u16]>             16  fat, like the slice reference
+   Option<Box<[u16; 4]>>   8  None is the null pointer a Box never is
+   Vec<[u16; 4]>          24  three words; the rows are on the heap
+   and Rc<[u16]> = 16: fat too; the counts live on the heap beside the elements
+
+2. A megabyte on a thread with a 64 KiB stack
+   len 1048576, sum 42, and the Box on that small stack is 8 bytes
+   Box::new([0u8; MIB]) in the same closure aborts a debug build:
+   the array is built in the closure's frame first, then moved in.

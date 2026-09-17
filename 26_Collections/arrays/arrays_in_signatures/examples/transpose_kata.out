@@ -1,0 +1,25 @@
+1. Two index loops
+   [[1, 4, 7], [2, 5, 8], [3, 6, 9]]
+
+2. from_fn inside from_fn, for any N
+   [[1, 4, 7], [2, 5, 8], [3, 6, 9]]
+   2x2: [[101, 201], [102, 202]]
+   twice is the identity: true
+
+3. Not square: [[T; 3]; 2] in, [[T; 2]; 3] out
+   [['a', 'b', 'c'], ['d', 'e', 'f']]
+   [['a', 'd'], ['b', 'e'], ['c', 'f']]
+   [[char; 3]; 2] -> [[char; 2]; 3]
+
+4. {:#?} prints one number per line, which is why a test's
+   failure message for a matrix is long:
+[
+    [
+        101,
+        201,
+    ],
+    [
+        102,
+        202,
+    ],
+]

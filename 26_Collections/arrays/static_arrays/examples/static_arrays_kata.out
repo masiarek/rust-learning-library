@@ -1,0 +1,14 @@
+1. Lookups
+   reason(200) = Some("OK")
+   reason(404) = Some("Not Found")
+   reason(418) = Some("I'm a teapot")
+   reason(302) = None
+
+2. Why the return type may say 'static
+   "Moved Permanently" is a borrow of REASONS, which lives for the whole run;
+   `code` is a u16 copied in, so there is no input borrow to tie it to
+
+3. The order check ran before main did
+   strictly_sorted(&REASONS) = true
+   with rows 404 and 301 swapped, rustc stops with E0080:
+   evaluation panicked: REASONS must be sorted by code

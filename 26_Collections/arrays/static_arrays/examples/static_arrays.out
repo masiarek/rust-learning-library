@@ -1,0 +1,29 @@
+1. A table of records in a static
+   ["m", "meter"] -> Length
+   ["g", "gram"] -> Mass
+   ["s", "second"] -> Time
+   find("gram") = Some(Mass)
+   find("inch") = None
+
+2. What is in `names`
+   UNITS[0].names    is [&str; 2]
+   UNITS[0].names[1] is &str = "meter": a borrowed literal, not a String
+   UNITS_ELIDED, written [Unit; 1], holds ["m", "meter"]
+
+3. A Unit<'static> that does not live forever
+   inside a block: ["h", "hour"]
+   wants_static(&local) -> accepted
+   the block ended and `local` is gone; UNITS is still here: ["s", "second"]
+   a String local is 'static too: wants_static(&text) -> accepted
+   T: 'static means T holds no short borrows, not that the value is immortal
+
+4. A const array, and a local that changes its contents
+   MY_DATA = [1, 2, 3], my_data = [1, 2, 3], equal: true
+   `mut` let us overwrite two elements; no method on [i8; 3] adds a fourth
+   MY_DATA[..] == MY_DATA_4[..] -> false  (as arrays: E0277, can't compare)
+   MY_DATA == MY_DATA_4[..3]    -> true
+
+5. const or static
+   a const is a value pasted in at each use; a static is one place
+   find("m") points into UNITS itself, no copy: true
+   size_of_val(&UNITS) = 120 bytes: 3 x (two &str of 16 + a 1-byte enum, padded)

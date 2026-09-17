@@ -1,0 +1,26 @@
+1. Returning an array returns its elements
+   create_array() = [1, 2, 3], a [i32; 3]
+
+2. Returning &'static [i32]: a promoted constant
+   create_slice() = [1, 2, 3], a &[i32]
+   let promoted: &'static [i32] = &[1, 2, 3];  -> [1, 2, 3]
+   With a run-time element, &[x, 1, 2] is a temporary: E0515.
+
+3. Returning part of the caller's array
+   slice = [2, 3], len 2
+   slice[0] = 10  ->  arr = [1, 10, 3, 4]
+   slice index 0 is array index 1: the view starts where the range did
+
+4. A getter on a Copy array returns a copy
+   copy = [0, 8, 9], r.data = [7, 8, 9]  (the field did not change)
+   With data: [String; 3] the same body is E0507: cannot move out
+
+5. Parameters: exactly N, or any length
+   print_array([1, 2, 3])     -> [1, 2, 3]
+   print_array([1, 2, 3, 4])  -> E0308, expected an array with a size of 3
+   print_slice(&[1, 2, 3, 4]) -> 4 elements: [1, 2, 3, 4]
+   print_slice(&arr[..2])     -> 2 elements: [1, 10]
+
+6. Const generics: every length, and the same length back
+   doubled([1, 2])          = [2, 4], a [i32; 2]
+   doubled([1, 2, 3, 4, 5]) = [2, 4, 6, 8, 10], a [i32; 5]
