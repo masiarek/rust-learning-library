@@ -1,0 +1,21 @@
+§3  [T]::clone_into reuses the elements too, not just the Vec
+    target ["ab", "cd"], first String kept its own buffer: true
+
+§5  CStr::clone_into into a CString of the same length reuses its buffer
+    name "Bob", same buffer: true
+
+§7  += on an empty Cow<str> borrows the right-hand side instead of allocating
+    Borrowed("") += "x"             -> Borrowed
+    Owned(capacity 64, empty) += "x" -> Borrowed   (the buffer is dropped)
+    Borrowed("a") += "x"            -> Owned "ax"
+
+§8  from_utf8_lossy borrows unless a byte needs replacing
+    []                     -> Borrowed ""
+    [118, 97, 108, 105, 100] -> Borrowed "valid"
+    [99, 97, 102, 233]     -> Owned "caf�"
+
+§9  a Box lends what it holds, which is what lets `type Owned = Box<RawValue>` work
+    Box<str>: Borrow<str> -> "{\"raw\": true}"
+
+§14 std's Cow<str>, measured in words
+    size_of::<Cow<str>>() = 3 words

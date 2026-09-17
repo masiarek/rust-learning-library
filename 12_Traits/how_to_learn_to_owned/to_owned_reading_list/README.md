@@ -118,6 +118,10 @@ Every entry was checked on 2026-09-16. Free material links to the page itself. A
 - *Rust for Rustaceans*, ch. 3 "Designing Interfaces" → "Generic Arguments" (p. 43) and "Borrowed vs. Owned" (p. 45)
 - *Programming Rust*, 2nd ed., ch. 13 → "From and Into"; ch. 17 → "Converting Other Types to Strings"
 
+## Source code worth reading
+
+[`ToOwned` in real code](../to_owned_in_real_code/README.md) collects fourteen excerpts — std's `str`, `[T]`, `Path`, `CStr`, `Cow::to_mut`, `Cow`'s `+=` and `from_utf8_lossy`, and `serde_json`, `bstr`, `camino`, `regex`, `borrowme` and `beef` — each pinned to a release tag.
+
 ## `Cow`, specifically
 
 The path meets `Cow` in [steps 7](../borrow_the_way_back/README.md) and [8](../to_owned_traps/README.md); [What `Cow` explanations get wrong](../cow_claims_checked/README.md) runs the claims the sources below repeat.

@@ -79,6 +79,8 @@ Only the inherent method's result outlives the text it was made from
 - [Lifetime annotations — on a struct it becomes part of the type](../../../18_Ownership/lifetime_annotations/README.md#on-a-struct-it-becomes-part-of-the-type), the `'a` a view struct carries and its owned twin does not
 - [Phantom types](../../phantom_types/README.md) and [a score is not a number](../../../16_Structs/newtype_score/README.md), other wrappers that add a promise to a type
 
+**In real code:** [`ToOwned` in real code](../to_owned_in_real_code/README.md) — std's own `Path` (§4) and `serde_json`'s `RawValue` (§9) doing exactly this, and `borrowme` (§13) doing what std's traits cannot.
+
 **Docs:** [`E0119` ↗](https://doc.rust-lang.org/error_codes/E0119.html) · [Trait implementation coherence ↗](https://doc.rust-lang.org/reference/items/implementations.html#trait-implementation-coherence) · [The transparent representation ↗](https://doc.rust-lang.org/reference/type-layout.html#the-transparent-representation), which the unsized wrapper relies on
 
 **Words:** *orphan rule* and *`Borrow<Q>`* in the [glossary](../../../GLOSSARY.md).
