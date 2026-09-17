@@ -459,6 +459,7 @@ rustc --edition 2024 14_Strings/string_vs_str/examples/string_vs_str.rs -o /tmp/
 - [Easy Rust, ch. 14 — Strings ↗](https://dhghomon.github.io/easy_rust/Chapter_14.html) — the gentlest second telling
 - [Step 3 of the `ToOwned` path](../../12_Traits/how_to_learn_to_owned/owned_and_borrowed_types/README.md) — the owned/borrowed pair as the thing `type Owned` names
 - [Drawing the owner and the view](../drawing_the_owner_and_the_view/README.md) — the owner and the view on one drawing, with the view's offset into the owner's buffer measured
+- [Returned by value](../../18_Ownership/returned_by_value/README.md) — which of the two a function can return, and what each hands back
 
 ## Po polsku
 

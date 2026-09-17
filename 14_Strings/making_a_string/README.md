@@ -574,6 +574,7 @@ rustc --edition 2024 14_Strings/making_a_string/examples/making_a_string.rs -o /
 - [`ToOwned`](../../12_Traits/to_owned/README.md) — the trait behind `to_owned()`, and why `str`'s owned twin is a different type
 - [`ToString` ↗](https://doc.rust-lang.org/std/string/trait.ToString.html) · [`Display` ↗](https://doc.rust-lang.org/std/fmt/trait.Display.html) · [`FromStr` ↗](https://doc.rust-lang.org/std/str/trait.FromStr.html) · [Rust Language Cheat Sheet — String conversions ↗](https://cheats.rs/#string-conversions)
 - [`Clone`, `ToOwned` or `From`?](../../12_Traits/how_to_learn_to_owned/clone_to_owned_or_from/README.md) — the traits behind `to_owned`, `String::from` and `into`, with the heap read off the addresses
+- [Returned by value](../../18_Ownership/returned_by_value/README.md) — why a function that builds text returns a `String` and never a `str`
 
 ## Po polsku
 

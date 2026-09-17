@@ -1,0 +1,5 @@
+input "   hello   "
+   -> &str      2 words  "hello"  points into the input: true
+   -> String    3 words  "hello"  points into the input: false
+   -> Box<str>  2 words  "hello"  points into the input: false
+after drop(input), b and c still work: hello hello

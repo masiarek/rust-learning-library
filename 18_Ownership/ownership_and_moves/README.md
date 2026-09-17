@@ -312,6 +312,7 @@ rustc --edition 2024 18_Ownership/ownership_and_moves/examples/ownership_and_mov
 - [The `move` keyword](../../23_Closures/the_move_keyword/README.md) — the same move, performed by a closure capturing the value, and the two errors that demand it
 - [The Rust Book, ch. 4 — Understanding Ownership ↗](https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html)
 - [Drawing the owner and the view](../../14_Strings/drawing_the_owner_and_the_view/README.md) — a move drawn: three words copied, the buffer left where it was
+- [Returned by value](../returned_by_value/README.md) — a move out of a function: what the caller reserves, and what comes back
 
 ## Po polsku
 

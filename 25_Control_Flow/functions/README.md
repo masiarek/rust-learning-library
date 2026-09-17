@@ -212,6 +212,7 @@ A `fn` inside an `impl` block whose first parameter is `self`, `&self` or `&mut 
 - [The Reference: functions ↗](https://doc.rust-lang.org/reference/items/functions.html) — the grammar, including parameters as patterns
 - [Comprehensive Rust: Functions ↗](https://google.github.io/comprehensive-rust/control-flow-basics/functions.html)
 - [Listing 2.2, run](../../10_Resources/rust_in_action/first_steps/README.md) — parameter types required, the return type optional, and the semicolon that breaks `-> i32`, each shown by rustc
+- [Returned by value](../../18_Ownership/returned_by_value/README.md) — what the type after `->` needs: a size the caller can reserve, and what to return instead of `str`
 
 ## Po polsku
 

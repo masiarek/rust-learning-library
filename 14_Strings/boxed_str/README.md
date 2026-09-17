@@ -439,6 +439,7 @@ rustc --edition 2024 14_Strings/boxed_str/examples/boxed_str.rs -o /tmp/bs && /t
 - [`Rc<T>` ↗](https://doc.rust-lang.org/std/rc/struct.Rc.html) · [`Arc<T>` ↗](https://doc.rust-lang.org/std/sync/struct.Arc.html) · [`Box<str>` from `String` ↗](https://doc.rust-lang.org/std/string/struct.String.html#method.into_boxed_str)
 - [Wide pointers](../../36_Pointers/wide_pointers/README.md) — why `Box<str>` and `Rc<str>` are two words
 - [What a smart pointer costs](../../41_Smart_Pointers/what_a_smart_pointer_costs/README.md) — the counts beside the value that make `Rc` allocations bigger than `Box` ones
+- [Returned by value](../../18_Ownership/returned_by_value/README.md) — `Box<str>` as one of three ways to hand back text a function made
 
 ## Po polsku
 

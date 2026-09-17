@@ -330,6 +330,7 @@ Part 4 — the two fixes, both compiling above.
 - [Lifetime annotations](../lifetime_annotations/README.md) — why `<'a>` cannot rescue any of this
 - [How to learn lifetimes](../how_to_learn_lifetimes/README.md) — the scaffold that sidesteps the whole question while it lands
 - [A shadow does not drop](../shadowing_does_not_drop/README.md) — the neighbouring case, with [its own C comparison](../shadowing_does_not_drop/c_comparison/dangling.c) for the heap version of the same bug
+- [Returned by value](../returned_by_value/README.md) — the fix for `E0515`: hand back the value instead of an address, and what comes back
 
 ## Po polsku
 

@@ -93,6 +93,7 @@ That declaration compiles. What you cannot do is write a `Record { .. }` literal
 ## What this forces elsewhere
 
 - **`Clone` requires `Sized`,** so `str` cannot implement it. Calling `.clone()` on a `&str` therefore clones the *reference* and hands back another `&str` — rustc warns (`noop_method_call`), and [`ToOwned`](../../12_Traits/to_owned/README.md) exists precisely to fill the gap: `&str → String`, a different type entirely.
+- **A function cannot return one.** `-> str` is `E0277`, *"the return type of a function must have a statically known size"* (rustc 1.98.0): the caller reserves room for a returned value before the call, and a `str` has no one size to reserve. Return `&str`, `String` or `Box<str>` instead — [Returned by value](../../18_Ownership/returned_by_value/README.md) measures what each hands back.
 - **The owned forms are two words, not one.** `Box<str>`, `Rc<str>` and `Arc<str>` all carry the length in the handle. That is [`boxed_str`](../boxed_str/README.md)'s subject, including the `Rc<String>` mistake it makes tempting.
 - **`Sized` is a marker trait** — no methods, implemented automatically, and meaningful only as a bound. [Marker traits](../../12_Traits/marker_traits/README.md) covers the family.
 
@@ -297,6 +298,7 @@ fn main() {
 - [Step 2 of the `ToOwned` path](../../12_Traits/how_to_learn_to_owned/types_with_no_size/README.md) — why having no size is the reason `ToOwned` exists at all
 - [Wide pointers](../../36_Pointers/wide_pointers/README.md) — the second word is a length for `str`, and a vtable pointer for `dyn Trait`; why *wide* rather than *fat*
 - [Drawing the owner and the view](../drawing_the_owner_and_the_view/README.md) — the fat pointer's two words, drawn landing inside a `String`'s buffer
+- [Returned by value](../../18_Ownership/returned_by_value/README.md) — why a function cannot hand back a `str`, and the sized things it returns instead
 
 ## Po polsku
 

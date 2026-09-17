@@ -185,6 +185,7 @@ The fully qualified calls accept `rr` and `&shared` although neither is a `&Stri
 - ["No method named …"](../../no_method_named/README.md), what `E0599` means when the search finds nothing
 - [Reborrowing](../../../18_Ownership/reborrowing/README.md), what the `&mut U` entries do to a `&mut` receiver
 - [`String` vs `&str`](../../../14_Strings/string_vs_str/README.md), where `s.len()` reaching `str::len` first shows up
+- [Returned by value — a common explanation, checked](../../../18_Ownership/returned_by_value/README.md#a-common-explanation-checked), where *"no `str::clone` for auto-deref to find"* meets this page's walk
 
 **Docs:** [Method call expressions ↗](https://doc.rust-lang.org/reference/expressions/method-call-expr.html), in the Reference: the candidate list, in order · [The dot operator ↗](https://doc.rust-lang.org/nomicon/dot-operator.html), in the Rustonomicon · [`noop_method_call` ↗](https://doc.rust-lang.org/rustc/lints/listing/warn-by-default.html#noop-method-call)
 

@@ -358,6 +358,7 @@ fn main() {
 - [Step 1 of the `ToOwned` path](../how_to_learn_to_owned/clone_vs_to_owned/README.md) — the two signatures side by side, and the impl on `str` rather than `&str`
 - [Where `Clone` will not do: code only](../how_to_learn_to_owned/where_clone_will_not_do/README.md) — ten pairs, `.clone()` failing beside `ToOwned` compiling, checked on every build
 - [Every `ToOwned` error, and its fix](../how_to_learn_to_owned/to_owned_errors/README.md) — twenty errors by code and message, each with the fix
+- [Returned by value](../../18_Ownership/returned_by_value/README.md) — the reason `Clone: Sized` rules out `str`, down to what the machine reserves
 
 ## Sources
 

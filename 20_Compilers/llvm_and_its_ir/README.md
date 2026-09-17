@@ -200,6 +200,7 @@ Nothing about the behaviour changes. It is the same permission the optimizer run
 - [The linker](../the_linker/README.md) — what happens after the generator, and the one stage that is nobody's compiler
 - [Compile times](../../05_Tooling/compile_times/README.md) — codegen is LLVM's share of your build, and Cranelift is the alternative back end that trades output quality for speed
 - [LLVM Language Reference ↗](https://llvm.org/docs/LangRef.html) — the IR, defined
+- [Returned by value](../../18_Ownership/returned_by_value/README.md) — `define` lines read for their return types: `i64`, `{ ptr, i64 }`, and `sret`
 
 ## Po polsku
 

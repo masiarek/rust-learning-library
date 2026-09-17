@@ -132,6 +132,7 @@ The `DynMetadata` line prints the vtable's address, where a slice prints its len
 - [Returning a trait](../../12_Traits/returning_a_trait/README.md) and [Static vs dynamic dispatch](../../12_Traits/static_vs_dynamic_dispatch/README.md) — the vtable word, used
 - [The third owned form: `Box<str>`, `Rc<str>`, `Arc<str>`](../../14_Strings/boxed_str/README.md) — smart pointers that are wide
 - [*Rust in Action*, chapter 6, run](../rust_in_action_chapter_6/README.md) — listings 6.1 and 6.2, and the "pointer and an integer" claim
+- [Returned by value](../../18_Ownership/returned_by_value/README.md) — a `&str` coming back from a call as two registers, `{ ptr, i64 }`
 
 ## Sources
 

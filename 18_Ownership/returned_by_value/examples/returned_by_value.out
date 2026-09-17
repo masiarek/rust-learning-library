@@ -1,0 +1,19 @@
+1. What comes back from each signature
+   -> usize       1 word      the number itself: 7
+   -> &str        2 words     an address and a length: "hello"
+   -> Box<str>    2 words     an address and a length: "hello"
+   -> String      3 words     address, capacity, length: "hello"
+   -> [u8; 1000]  1000 bytes  every byte comes back: t[999] = 7
+   -> str         no size     size_of_val("hi") = 2, size_of_val("hello") = 5
+
+2. By value hands back a copy; by reference hands back the address
+   by value:     the copy is somewhere else: true
+                 copy = [100, 2, 3], original still [1, 2, 3]
+   by reference: it points at the original: true
+
+3. A returned String brings back its header, not its text
+   the text is where build() put it: true
+
+4. Clone returns Self by value, so a str cannot be Clone
+   name.clone()    : a &str, same address and length: true
+   name.to_owned() : a String, 3 words, text copied: true

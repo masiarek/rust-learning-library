@@ -8,7 +8,7 @@
 
 ## A `str` is a run of bytes whose length is not in its type
 
-`"hi"` and `"hello"` are both `str`: one is 2 bytes, the other 5. A type whose values come in different sizes cannot go in a variable, cannot be returned by value and cannot be passed by value, because each of those needs one number of bytes, fixed when the code is compiled. So `let x: str = *s;` and `size_of::<str>()` are both refused with `E0277`, *"the size for values of type `str` cannot be known at compilation time"* (rustc 1.98.0).
+`"hi"` and `"hello"` are both `str`: one is 2 bytes, the other 5. A type whose values come in different sizes cannot go in a variable, [cannot be returned by value](../../../18_Ownership/returned_by_value/README.md) and cannot be passed by value, because each of those needs one number of bytes, fixed when the code is compiled. So `let x: str = *s;` and `size_of::<str>()` are both refused with `E0277`, *"the size for values of type `str` cannot be known at compilation time"* (rustc 1.98.0).
 
 Such a type is **dynamically sized** — a *DST*, or *unsized* type. You cannot hold one. You can hold a pointer to one.
 
@@ -83,6 +83,7 @@ The last line is worth a second look: two `&str` start at the same byte and stil
 - [The third owned form](../../../14_Strings/boxed_str/README.md): `Box<str>`, the owned pointer to an unsized type
 - [Static vs dynamic dispatch](../../static_vs_dynamic_dispatch/README.md), where the second word is a vtable instead of a length
 - [Wide pointers](../../../36_Pointers/wide_pointers/README.md) — both kinds of second word measured, raw pointers included, and why *wide* rather than *fat*
+- [Returned by value: the caller needs a size](../../../18_Ownership/returned_by_value/README.md) — what *returned by value* asks of the caller, measured down to the `sret` in LLVM IR
 
 **Docs:** [`Sized` ↗](https://doc.rust-lang.org/std/marker/trait.Sized.html) · [Dynamically sized types ↗](https://doc.rust-lang.org/reference/dynamically-sized-types.html), in the Reference · [Exotically sized types ↗](https://doc.rust-lang.org/nomicon/exotic-sizes.html), in the Rustonomicon
 

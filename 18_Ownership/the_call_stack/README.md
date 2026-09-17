@@ -331,6 +331,7 @@ Part 3 — four nested frames.
 - [Ownership and moves](../ownership_and_moves/README.md) — what "the value moved in" transfers, which is responsibility
 - [What an address shows](../what_an_address_shows/README.md) — why `&x` changes on a move without a byte relocating
 - [Scope is about names, not values](../scope_is_about_names/README.md) — the three different questions "goes out of scope" is asked
+- [Returned by value](../returned_by_value/README.md) — the return slot from the caller's side: who reserves it, how big, and the `sret` pointer that fills it
 
 ## Po polsku
 

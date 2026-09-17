@@ -18,7 +18,7 @@ pub trait Clone: Sized {
 Two consequences, and this path needs both:
 
 - **The copy is always the same type.** `Clone` cannot turn a `&str` into a `String`, because nothing in the signature names a second type. That is the job `type Owned` does in [step 1](../clone_vs_to_owned/README.md).
-- **`Self` must be `Sized`.** `str` has no size ([step 2](../types_with_no_size/README.md)), so there is no `impl Clone for str` and never can be.
+- **`Self` must be `Sized`.** `str` has no size ([step 2](../types_with_no_size/README.md)), so there is no `impl Clone for str` and never can be. A value returned by value lands in room the caller reserved before the call, and that room needs a size: [Returned by value](../../../18_Ownership/returned_by_value/README.md).
 
 That `Sized` is written into the declaration as a **supertrait** — it is not merely implied by the `-> Self`. So a type with no size is refused at the impl line itself, before any method is looked at: `struct MyStr(str); impl Clone for MyStr { … }` is `E0277`, *"the size for values of type `str` cannot be known at compilation time"* (rustc 1.98.0), pointing at `Clone`. The supertrait is also what makes `Clone` impossible to use as `dyn Clone`.
 
@@ -75,6 +75,7 @@ And Clone on the reference hands back the reference
 - [Stack and heap — what each duplication does to the heap side](../../../18_Ownership/stack_and_heap/README.md#what-each-duplication-does-to-the-heap-side)
 - [Reborrowing](../../../18_Ownership/reborrowing/README.md), what happens to a `&mut` instead of a copy
 - [Reading the `Clone for &T` hover](../../reading_the_clone_hover/README.md), this step's impl as the editor's hover shows it, line by line
+- [Returned by value](../../../18_Ownership/returned_by_value/README.md) — what `-> Self` asks of a caller, and a common explanation of the `&str` clone warning, checked
 
 **Docs:** The Book, [ch. 4.1 — Variables and Data Interacting with Clone ↗](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#variables-and-data-interacting-with-clone) and [Stack-Only Data: Copy ↗](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#stack-only-data-copy) · [`Clone` ↗](https://doc.rust-lang.org/std/clone/trait.Clone.html) · [the reference primitive ↗](https://doc.rust-lang.org/std/primitive.reference.html), whose *Trait implementations* section lists `Copy` and `Clone` for every `&T` and warns that `Clone` there does not defer to `T`'s
 
