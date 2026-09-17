@@ -1,0 +1,19 @@
+1. Five Strings, three numbers each (bytes, 64-bit target)
+                            size_of_val   len capacity
+   String::new()                     24     0        0   no text, no buffer
+   String::from("Hello")             24     5        5   a buffer the size of the text
+   String::from("zażółć")            24    10       10   six letters, ten bytes
+   "ab".repeat(500)                  24  1000     1000   a thousand bytes, same 24
+   with_capacity(64) + "Hi"          24     2       64   room bought ahead of the text
+
+2. One String, two calls, one number each
+                            size_of_val   len capacity
+   before                            24     2       64   two bytes of text in a 64-byte buffer
+   after clear()                     24     0       64   the text is gone, the buffer stays
+   after shrink_to_fit()             24     0        0   now the buffer is gone too
+
+3. What the columns say
+   size_of_val is 24 on every row: it measures the String, never the text.
+   len counts the text in bytes, so "zażółć" is 10, not 6.
+   capacity is the buffer the String asked for: never below len, and
+   the only one of the three that sees room the text is not using.
