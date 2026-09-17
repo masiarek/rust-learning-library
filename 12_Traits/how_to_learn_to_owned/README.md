@@ -2,7 +2,7 @@
 
 **Level:** 101 → 201 · a learning path
 
-**One line:** `ToOwned` itself adds one idea — a separate owned type — and the confusion lives in five ideas underneath it: unsized types, owned/borrowed pairs, `Clone`, method lookup and blanket impls. Re-reading the trait does not help; learning those five in order does, one page per step.
+**One line:** `ToOwned` itself adds one idea — a separate owned type — and the confusion lives in five ideas underneath it: [unsized types](types_with_no_size/README.md), [owned/borrowed pairs](owned_and_borrowed_types/README.md), [`Clone`](clone_returns_self/README.md), [method lookup](the_dot_picks_first/README.md) and [blanket impls](the_blanket_to_owned/README.md). Re-reading the trait does not help; learning those five in order does, one page per step.
 
 Each step is its own page: the idea, a checkpoint to predict, the verified answer from a program CI runs, and links out to the lesson that teaches it in full and to the official documentation. **Predict each checkpoint before you open its answer.** A wrong prediction means stay on that step: the next one assumes it.
 
@@ -138,7 +138,7 @@ Most explanations of `ToOwned` get the trait right and one step underneath it wr
 
 ## Po polsku
 
-Jeśli `ToOwned` wciąż się „nie klei”, to prawie na pewno nie z powodu samej cechy (*trait*). Ona wnosi jedną nową informację — typ powiązany `Owned`, czyli osobny typ dla wersji posiadanej. Zamieszanie siedzi w pięciu pojęciach pod spodem: typy bez znanego rozmiaru (`str`, `[T]`, `Path`), para własność–pożyczka jako **dwa różne typy** (`String` i `str`), `Clone` zwracające `Self`, wyszukiwanie metody po kropce i implementacja zbiorcza (*blanket impl*). Dlatego ponowne czytanie dokumentacji `ToOwned` nie pomaga, a przejście tych kroków po kolei — tak. Każdy krok ma teraz własną stronę.
+Jeśli `ToOwned` wciąż się „nie klei”, to prawie na pewno nie z powodu samej cechy (*trait*). Ona wnosi jedną nową informację — typ powiązany `Owned`, czyli osobny typ dla wersji posiadanej. Zamieszanie siedzi w pięciu pojęciach pod spodem: [typy bez znanego rozmiaru](types_with_no_size/README.md) (`str`, `[T]`, `Path`), [para własność–pożyczka jako **dwa różne typy**](owned_and_borrowed_types/README.md) (`String` i `str`), [`Clone` zwracające `Self`](clone_returns_self/README.md), [wyszukiwanie metody po kropce](the_dot_picks_first/README.md) i [implementacja zbiorcza](the_blanket_to_owned/README.md) (*blanket impl*). Dlatego ponowne czytanie dokumentacji `ToOwned` nie pomaga, a przejście tych kroków po kolei — tak. Każdy krok ma teraz własną stronę.
 
 Krok 1 zaczyna od sedna: implementacja jest na `str`, nie na `&str` — skoro `Self` to `str`, to `&self` to `&str`. Najważniejsze są potem kroki 4–6 razem. Każda referencja współdzielona `&T` jest `Copy`, więc i `Clone`, więc — przez `impl<T: Clone> ToOwned for T` — ma `to_owned()`. Kiedy `Foo` nie jest `Clone`, `(&foo).to_owned()` nie znajduje niczego na `Foo` i spada na implementację dla `&Foo`: dostajesz **kopię wskaźnika**, a z adnotacją typu — `E0308` bez słowa o `Clone`. Na `&String` jest odwrotnie: `String::clone` pasuje pierwsze, więc dostajesz nowy `String`. Te same znaki, dwa wyniki, a rozstrzyga kolejność wyszukiwania — bez żadnej „autodereferencji” w przypadku `&str`.
 
