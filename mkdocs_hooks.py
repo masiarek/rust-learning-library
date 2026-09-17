@@ -692,6 +692,17 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...and what all of that costs the CALLER, which is the reason one
         # lifetime versus two is a design decision. Needs both pages above.
         "lifetimes_at_the_call_site",
+        # ...and the signature that costs the caller everything: one lifetime
+        # name on both sides of a `&mut`, which borrows the value for the rest
+        # of its life. Needs invariance from what_a_reference_claims.
+        "borrowing_forever",
+        # ...and the same lock reached from inside a struct, which is where
+        # most people meet it: a field that borrows another field.
+        "self_referential_structs",
+        # The companions for both, by symptom, by lint, and by source.
+        "borrowing_forever_errors",
+        "borrowing_forever_lints",
+        "borrowing_forever_resources",
         # The borrow rule immediately pays for itself: it is what proves a
         # shadow makes a second place, since it accepts `let y = &x; let x = 6`
         # and rejects the `mut` spelling of the same lines.
@@ -1720,6 +1731,11 @@ LABELS = {
     "reference_errors": "Errors, by symptom",
     "reference_lints": "Lints, bad and good",
     "references_reading_list": "Helpful resources",
+    "borrowing_forever": "Borrowing something forever",
+    "self_referential_structs": "A struct that points into itself",
+    "borrowing_forever_errors": "Borrowing forever: every error",
+    "borrowing_forever_lints": "Borrowing forever: lints",
+    "borrowing_forever_resources": "Borrowing forever: reading",
     "shadowing_does_not_drop": "A shadow does not drop",
     "clone_on_write": "`Cow`, clone on write",
     # 20_Compilers

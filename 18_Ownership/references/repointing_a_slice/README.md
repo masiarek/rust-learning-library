@@ -91,7 +91,7 @@ error[E0502]: cannot borrow `view` as immutable because it is also borrowed as m
   |                mutable borrow later used here
 ```
 
-One `'a` for both layers says the borrow of `view` lasts as long as the slice reference inside it, so `&mut view` stays live for the rest of `view`'s life and nothing can read `view` again. The two lifetimes need to stay different, and `mem::take` is what lets them.
+One `'a` for both layers says the borrow of `view` lasts as long as the slice reference inside it, so `&mut view` stays live for the rest of `view`'s life and nothing can read `view` again. That is [borrowing something forever](../../borrowing_forever/README.md), with a slice reference as the thing borrowed. The two lifetimes need to stay different, and `mem::take` is what lets them.
 
 ## Handing out an element: name the inner lifetime
 
@@ -339,6 +339,7 @@ fn main() {
 ## See also
 
 - [Reborrowing](../../reborrowing/README.md) — what `&mut t[1..]` is, and why it cannot outlive `t`
+- [Borrowing something forever](../../borrowing_forever/README.md) — the one-lifetime signature rustc suggested here, as a pattern: `&'a mut Thing<'a>`, and why no lint flags it
 - [What `&'a T` claims](../../what_a_reference_claims/README.md) — [the direction reverses behind `&mut`](../../what_a_reference_claims/README.md#the-direction-reverses-behind-mut)
 - [Assignment drops the old value](../../assignment_is_a_drop/README.md) — `mem::replace`, `mem::take` and `mem::swap` as the ways to get a value out from behind a `&mut`
 - [`str` is unsized](../../../14_Strings/str_is_unsized/README.md) — the two words in a `&[T]` or `&str`

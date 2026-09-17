@@ -73,7 +73,7 @@ The Book is argued for properly in [**Start here**](../../00_Start_Here/the_book
 
 **[Learning Rust With Entirely Too Many Linked Lists ↗](https://rust-unofficial.github.io/too-many-lists/)** — **Read it.** Builds a linked list six times, each attempt failing in an instructive way. It is funny, it is short, and it is the canonical answer to *"I understand the rules and still cannot write anything."* The single highest-value free book on this page after The Book itself.
 
-**[quinedot — Learning Rust ↗](https://quinedot.github.io/rust-learning/)** — **Read it** the day an error mentions a lifetime you did not write. The best free treatment of lifetimes anywhere, including the parts The Book leaves out — variance, `dyn` and lifetime elision among them.
+**[quinedot — Learning Rust ↗](https://quinedot.github.io/rust-learning/)** — **Read it** the day an error mentions a lifetime you did not write. The best free treatment of lifetimes anywhere, including the parts The Book leaves out — variance, `dyn` and lifetime elision among them. Two of its pages are checked claim by claim in [Borrowing something forever](../../18_Ownership/borrowing_forever/README.md#quinedots-claims-run) and [A struct that points into itself](../../18_Ownership/self_referential_structs/README.md#quinedots-claims-run); one sentence fails.
 
 **[LifetimeKata ↗](https://tfpk.github.io/lifetimekata/)** — **Read it for** the fingers. Exercises rather than explanation; pairs with the page above.
 

@@ -209,6 +209,7 @@ This is also the reason a borrowing iterator over your own type needs a lifetime
 - [`iter`, `iter_mut`, `into_iter`](../iter_iter_mut_into_iter/README.md) — the three doors this page teaches a type of your own to open
 - [Iterators are lazy](../iterators_are_lazy/README.md) — what the seventy-five free methods do with your `next`
 - [How to learn lifetimes](../../18_Ownership/how_to_learn_lifetimes/README.md) — the `'a` on a borrowing iterator, and the one rule this page has to break
+- [Borrowing something forever](../../18_Ownership/borrowing_forever/README.md#practice) — a cursor whose `next_word(&'a mut self)` cannot be called twice, and the lifetime that fixes it
 - [What a trait is](../../12_Traits/what_a_trait_is/README.md) — required versus provided methods, which is the mechanism behind the 76
 - [`impl` blocks](../../16_Structs/impl_blocks/README.md) — where `iter()` and `iter_mut()` live on a type of your own
 - [Returning a trait](../../12_Traits/returning_a_trait/README.md) — `impl Iterator<Item = T>` as a return type, once the concrete iterator gets ugly to name

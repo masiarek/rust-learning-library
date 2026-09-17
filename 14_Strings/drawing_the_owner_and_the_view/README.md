@@ -631,6 +631,7 @@ rustc --edition 2024 14_Strings/drawing_the_owner_and_the_view/examples/drawing_
 - [`str` is unsized](../str_is_unsized/README.md) — why the view's second word is a length, and why there is never a bare `str` on the stack
 - [Stack and heap](../../18_Ownership/stack_and_heap/README.md) — the left and right halves of the drawing, for every type
 - [What an address shows](../../18_Ownership/what_an_address_shows/README.md) — which of the two places `{:p}` prints, and what a move does to each
+- [A struct that points into itself](../../18_Ownership/self_referential_structs/README.md) — the owner and the view put in one struct, which compiles and can then never move
 - [Ownership and moves](../../18_Ownership/ownership_and_moves/README.md) — line 5 of the output, as a rule
 - [Borrowing](../../18_Ownership/borrowing/README.md) — errors 2 and 3, as a rule
 - [How to learn `ToOwned`](../../12_Traits/how_to_learn_to_owned/README.md) — the path that assumes this drawing, and where `to_owned()` on line 4 is explained

@@ -1,0 +1,9 @@
+1. Built by a constructor and returned
+   longest = "ERROR disk full"
+
+2. Moved into a Vec
+   logs[0].longest = "ERROR disk full"
+
+3. Mutated, and the range recomputed
+   longest = "WARNING disk nearly full again"
+   range   = 22..52

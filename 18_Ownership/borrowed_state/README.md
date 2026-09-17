@@ -145,6 +145,7 @@ The borrow is of one field, but the thing being held open is the temporary that 
 - [Borrowing](../borrowing/README.md) — `&T` and `&mut T`, the many-readers-or-one-writer rule, and where a borrow ends
 - [Scope is about names, not values](../scope_is_about_names/README.md) — the three questions "out of scope" is asked, of which the borrow region is one
 - [What a lifetime does at the call site](../lifetimes_at_the_call_site/README.md) — the same lock, propagated through a function call
+- [Borrowing something forever](../borrowing_forever/README.md) — the lock that never lifts, and [A struct that points into itself](../self_referential_structs/README.md), where the borrower is a field of the owner
 - [A name is not a place](../a_name_is_not_a_place/README.md) — `E0506` used as the proof that a shadow is a declaration and `mut` is a write
 - [Interior mutability](../../09_Advanced/interior_mutability/README.md) — the way out, and what moving this check to run time costs
 

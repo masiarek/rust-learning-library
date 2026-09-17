@@ -1,0 +1,18 @@
+1. A range instead of a reference: returned, moved, mutated
+   first word after a return and a move into a Vec: "borrow"
+   the text's heap bytes stayed put through the move: true
+   replaced, and the range was recomputed: "pin"
+
+2. Built in place, with no &'a mut anywhere
+   snek.borrowed = "hiss", snek.owned = "hiss"
+   through & and a &self method, points into itself: true
+   refused from here on: moving snek, &mut snek, snek.owned.push_str,
+   returning it from a function, and a Drop impl on Snek.
+
+3. Built through bite(&'a mut self)
+   through the returned handle: "rattle", points into itself: true
+   `bitten` itself may not be named again, not even to read a field.
+
+4. Built through &'a self and a Cell
+   bitten twice, still readable: owned "coil", borrowed "coil"
+   shared access survives; moving it or taking &mut does not.

@@ -907,6 +907,7 @@ pub fn shout(label: &str) -> Cow<'_, str> {
 - [What `Cow` explanations get wrong, run](../cow_claims_checked/README.md) — the claims behind errors 14 and 15
 - [ERRORS.md](../../../ERRORS.md) — every error code the library explains, by code
 - [How to learn `ToOwned`](../README.md) — the path these errors are stations on
+- [Every borrowed-forever error, and its fix](../../../18_Ownership/borrowing_forever_errors/README.md) — the same kind of page for `&'a mut Thing<'a>` and self-referential structs
 
 ## Po polsku
 

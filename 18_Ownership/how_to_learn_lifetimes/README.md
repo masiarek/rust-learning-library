@@ -254,7 +254,7 @@ fn main() {
 
 </details>
 
-**A log that keeps views, not copies.** Load a thousand-line log and count its errors three ways, counting allocations as you go with a counting global allocator ([The global allocator](../../09_Advanced/the_global_allocator/README.md) shows how): a `Vec<String>` holding a copy of every line; a `struct Log<'a> { lines: Vec<&'a str> }` that borrows a buffer owned outside it; and a struct that owns the buffer and keeps `Range<usize>` offsets instead of references. Before the third, try the design in between — one struct holding both the `String` and `&str` views into it, built inside a `load` function — and read the two errors it earns. That is amendment 1, met in the wild.
+**A log that keeps views, not copies.** Load a thousand-line log and count its errors three ways, counting allocations as you go with a counting global allocator ([The global allocator](../../09_Advanced/the_global_allocator/README.md) shows how): a `Vec<String>` holding a copy of every line; a `struct Log<'a> { lines: Vec<&'a str> }` that borrows a buffer owned outside it; and a struct that owns the buffer and keeps `Range<usize>` offsets instead of references. Before the third, try the design in between — one struct holding both the `String` and `&str` views into it, built inside a `load` function — and read the two errors it earns. That is amendment 1, met in the wild, and [A struct that points into itself](../self_referential_structs/README.md) is the whole page on it.
 
 <details markdown="1">
 <summary><strong>Solution</strong></summary>
@@ -433,6 +433,8 @@ fn main() {
 - [Ownership and moves](../ownership_and_moves/README.md) — the model the scaffold is protecting
 - [`unwrap` is a TODO](../../02_Errors/unwrap_is_a_todo/README.md) — the same "compiles quietly, waits" pattern
 - [Implementing `Iterator`](../../24_Iterators/implementing_iterator/README.md) — the common case where amendment 1 has to be set aside on purpose: a borrowing iterator *is* a struct holding a reference
+- [A struct that points into itself](../self_referential_structs/README.md) — the struct amendment 1 warns about, built three ways, none of which can be returned from a constructor
+- [Borrowing something forever](../borrowing_forever/README.md) — the other lifetime mistake that compiles on the first call: `&'a mut Thing<'a>`
 - [quinedot's ownership, borrowing and lifetimes ↗](https://quinedot.github.io/rust-learning/) — the best free treatment when the scaffold comes down
 
 ## Po polsku

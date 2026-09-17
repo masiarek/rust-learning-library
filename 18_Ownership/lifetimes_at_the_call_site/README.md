@@ -118,6 +118,7 @@ Which is why the regions are usually much shorter than the variables' scopes: `'
 - [Borrowed state](../borrowed_state/README.md) — the lock itself, before any function is involved
 - [How to learn lifetimes](../how_to_learn_lifetimes/README.md) — the "clone everything" scaffold, and when to put it down
 - [Borrowing](../borrowing/README.md) — where a borrow ends, which is what decides all of this
+- [Borrowing something forever](../borrowing_forever/README.md) — the extreme case of one lifetime where two were meant: `&'a mut Node<'a>` locks the argument for the rest of its life
 
 ## Po polsku
 

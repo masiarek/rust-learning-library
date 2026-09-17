@@ -311,6 +311,7 @@ fix 2, value copied out of the block:  n  = 1
 
 - [Borrowing](../../borrowing/README.md) — the rule the model enforces, and [where a borrow ends](../../borrowing/README.md#where-a-borrow-ends-the-part-that-decides-everything), which sets the length of every loan on this page
 - [Reborrowing](../../reborrowing/README.md) — the nested loan behind the paper's third program
+- [Borrowing something forever](../../borrowing_forever/README.md#a-destructor-is-a-use) — a loan that lasts as long as the value, so the closing brace that runs `Drop` is the use that fails
 - [Borrowed state](../../borrowed_state/README.md) — `E0506` and `E0505`: the owner assigned to or moved during a loan
 - [A stack slot is reused](../../a_stack_slot_is_reused/README.md) — `E0515`, and what would be at the address if the loan were allowed to outlive its frame
 - [What `&'a T` claims](../../what_a_reference_claims/README.md) — the three claims a lifetime makes, and which one `E0597` is

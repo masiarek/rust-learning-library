@@ -118,6 +118,11 @@ SCOPE = (
     # pages whose fences are complete programs or items. Surveyed clean before
     # it was added; the one `ignore` is a lint that a metadata build cannot see.
     "26_Collections/arrays",
+    # The same pair for `&'a mut Thing<'a>` and self-referential structs:
+    # fourteen `compile_fail` fences each beside a fix that must compile, and
+    # five bad/good lint pairs plus the program no lint flags.
+    "18_Ownership/borrowing_forever_errors",
+    "18_Ownership/borrowing_forever_lints",
 )
 
 # `.claude` holds this repo checked out again, once per agent worktree, so a scan

@@ -1,0 +1,18 @@
+1. &mut Node<'_>: the borrow ends at the call
+   renamed twice, then printed: Node("branch")
+
+2. &'a mut Node<'a>: the borrow lasts as long as the node
+   everything goes through the handle now: Node("branch")
+   `locked` itself may not be named again: printing it, calling a
+   method, taking & or &mut, or moving it are all refused.
+
+3. &'a Node<'a>: shared, so the same shape costs nothing
+   look = 4, look again = 4
+   and still usable: Node("leaf")
+
+4. A destructor needs the value at the closing brace
+   &mut Loud<'_> compiles, and the drop is allowed to run:
+   drop runs for Loud("touched")
+   &'a mut Loud<'a> compiles only when no drop will run,
+   here inside ManuallyDrop, whose destructor never calls Loud's.
+   `kept` is locked like `locked` above: not even kept.0 may be read.

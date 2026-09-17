@@ -27,6 +27,8 @@ Pages marked **new** live in this folder. The rest are existing lessons elsewher
 | `*t = &mut t[1..]` does not compile, and rustc's suggested `&'a mut &'a mut` breaks the caller | [Re-pointing a slice](repointing_a_slice/README.md#why-not-t-mut-t1) |
 | reading from a `&[u8]` moved the slice forward | [Re-pointing a slice](repointing_a_slice/README.md#std-does-this-read-for-u8-write-for-mut-u8) |
 | `<'a>` did not make anything live longer | [Lifetime annotations](../lifetime_annotations/README.md) |
+| after one call taking `&'a mut Node<'a>`, the node could never be printed, borrowed or moved again | [Borrowing something forever](../borrowing_forever/README.md) |
+| a struct holding a `String` and a `&str` into it compiles in `main` and not in `fn new` | [A struct that points into itself](../self_referential_structs/README.md) |
 | `Box<str>` is two words, and moving out of `*boxed` compiles where `*rc` does not | [Six pointer types, one table](pointer_types_compared/README.md#boxt-is-neither-always-one-pointer-wide-nor-only-a-pointer) |
 | a table said `&T` lives on the stack and has shared ownership | [Six pointer types, one table](pointer_types_compared/README.md#what-the-popular-table-gets-wrong) |
 | `Option<&T>` is the same size as `&T` | [Six pointer types, one table](pointer_types_compared/README.md#a-reference-is-a-pointer-with-rules) |
@@ -114,6 +116,7 @@ Most explanations of references state the rule correctly and get one fact under 
 ## See also
 
 - [How to learn lifetimes](../how_to_learn_lifetimes/README.md) — the same kind of page, for the other wall
+- [Borrowing something forever](../borrowing_forever/README.md) and [A struct that points into itself](../self_referential_structs/README.md) — two lifetime traps checked against quinedot's guide, with their own [errors](../borrowing_forever_errors/README.md), [lints](../borrowing_forever_lints/README.md) and [reading](../borrowing_forever_resources/README.md) pages
 - [Pointers](../../36_Pointers/README.md) and [Smart pointers](../../41_Smart_Pointers/README.md) — the two sections on what a pointer holds and what a smart one manages, checked against *Rust in Action* ch. 6
 - [How to learn `ToOwned`](../../12_Traits/how_to_learn_to_owned/README.md) — where references meet `Clone`, method lookup and unsized types
 - [Ownership](../README.md) — the section this folder sits in

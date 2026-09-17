@@ -1,0 +1,12 @@
+1. The loop that was E0499
+   words("borrow it forever") = ["borrow", "it", "forever"]
+
+2. The cursor is still yours between calls
+   first = Some("spaced"), cursor.pos = 8
+   second = Some("out"), cursor.pos = 14
+   after drop(cursor), both words still print: Some("spaced") Some("out")
+
+3. Three signatures, run
+   fn next_word(&'a mut self) -> Option<&'a str>  E0499 in the loop
+   fn next_word(&mut self) -> Option<&str>        E0499 in the loop
+   fn next_word(&mut self) -> Option<&'a str>     compiles, as above

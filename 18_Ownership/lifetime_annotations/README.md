@@ -198,6 +198,7 @@ With two lifetimes that call compiles and the temporary is dropped on schedule. 
 - [Scope is about names](../scope_is_about_names/README.md) — the three things "out of scope" is asked to mean, one of which is the borrow region `'a` names
 - [Where the bound goes](../../22_Generics/where_the_bound_goes/README.md) — the same infectiousness one concept over: a constraint on the struct that every later `impl` repeats
 - [`Cow`](../clone_on_write/README.md) — the type that refuses to choose between owning and borrowing, and the annotation it needs to do it
+- [Borrowing something forever](../borrowing_forever/README.md) — why reusing one name, as in `&'a mut Node<'a>`, can lock a value for good, and [A struct that points into itself](../self_referential_structs/README.md) — the struct lifetime that no annotation can write
 
 ## Po polsku
 

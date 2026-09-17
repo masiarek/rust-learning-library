@@ -25,6 +25,7 @@
 - [Borrowing](../../18_Ownership/borrowing/README.md) — the compile-time rule this page moves
 - [`Rc`: the clone that copies a pointer](../../18_Ownership/reference_counting/README.md) — the other half of `Rc<RefCell<T>>`
 - [Lock poisoning](../mutex_poisoning/README.md) — the threaded counterpart, and what its `Result` is telling you
+- [A struct that points into itself](../../18_Ownership/self_referential_structs/README.md#through-a-self-and-a-cell) — a `Cell` lets `&'a self` store a reference to its own field, and the struct is still stuck in place
 - [What `unsafe` turns off](../what_unsafe_turns_off/README.md) — the `UnsafeCell` underneath, and why a safe API over a small unsafe core is the pattern
 - [`RefCell` ↗](https://doc.rust-lang.org/std/cell/struct.RefCell.html) · [Comprehensive Rust: Interior Mutability ↗](https://google.github.io/comprehensive-rust/borrowing/interior-mutability.html)
 - [What a smart pointer costs](../../41_Smart_Pointers/what_a_smart_pointer_costs/README.md) — `RefCell<i32>` is 16 bytes where `Cell<i32>` is 4, and the borrow flag checked at run time

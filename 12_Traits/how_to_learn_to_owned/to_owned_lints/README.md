@@ -1058,6 +1058,7 @@ warning: lint `clippy::string_to_string` has been removed: `clippy::implicit_clo
 - [Every `ToOwned` error, and its fix](../to_owned_errors/README.md) — what the compiler refuses, where this page is what it merely warns about
 - [Strict clippy](../../../05_Tooling/strict_lints/README.md) — turning whole lint groups on for a project, and what that costs
 - [Where `Clone` will not do](../where_clone_will_not_do/README.md) — code that does not compile at all, beside code that does
+- [Lints around borrowing forever](../../../18_Ownership/borrowing_forever_lints/README.md) — the same kind of page for lifetimes in structs, and a pattern no lint flags
 
 ## Po polsku
 

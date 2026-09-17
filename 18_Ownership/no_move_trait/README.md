@@ -154,6 +154,7 @@ rustc --edition 2024 18_Ownership/no_move_trait/examples/no_move_trait.rs -o /tm
 - [Ownership and moves](../ownership_and_moves/README.md) — what a move *is*, once you have stopped looking for the trait: a transfer of responsibility, with the bytes staying put
 - [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) — the opt-out in full, and why a struct is never `Copy` by accident
 - [`String` vs `&str`](../../14_Strings/string_vs_str/README.md) — the other half of the same confusion: `let b = a;` duplicates a `&str` because `&T` is `Copy`, not because a literal "lives on the stack"
+- [A struct that points into itself](../self_referential_structs/README.md) — why having no move hook matters: C++ repairs a self-pointer in its move constructor, and Rust, with nowhere to run that code, refuses the move
 - [`Copy` ↗](https://doc.rust-lang.org/std/marker/trait.Copy.html) and [E0382 ↗](https://doc.rust-lang.org/error_codes/E0382.html) — the trait, and the error that names its absence
 
 ## Po polsku
