@@ -301,6 +301,7 @@ rustc --edition 2024 18_Ownership/borrowing/examples/borrowing.rs -o /tmp/br && 
 - [`while let`](../../17_Option_and_Result/while_let/README.md) — a loop that has to look before it consumes, which turns out to be a borrow question
 - [`Option` is a one-item collection](../../17_Option_and_Result/option_as_collection/README.md) — `take()`, the standard way to get a value *out* of something you only borrowed
 - [The Rust Book, ch. 4.2 — References and Borrowing ↗](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html)
+- [Drawing the owner and the view](../../14_Strings/drawing_the_owner_and_the_view/README.md) — `E0597`, `E0505`, `E0502`, `E0599` and `E0515`, each read off a picture of a `String` and a `&str`
 
 ## Po polsku
 

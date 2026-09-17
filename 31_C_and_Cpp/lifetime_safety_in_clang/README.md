@@ -461,6 +461,7 @@ THE RESULT TIED TO `a` ONLY
 - [Lifetime Safety Analysis ↗](https://clang.llvm.org/docs/LifetimeSafety.html) — Clang's docs: every flag, the annotations, the limitations
 - [The talk's demo on Compiler Explorer ↗](https://godbolt.org/z/3j15s78nh) — the same program with a `[[clang::lifetimebound]]` function in the middle of the chain
 - [C and C++](../README.md) — the nine bugs, and the other reply
+- [Drawing the owner and the view](../../14_Strings/drawing_the_owner_and_the_view/README.md) — the Rust pair beside `std::string` and `std::string_view`, with a dangling view that Apple clang 21 compiled silently
 
 ## Po polsku
 

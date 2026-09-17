@@ -311,6 +311,7 @@ rustc --edition 2024 18_Ownership/ownership_and_moves/examples/ownership_and_mov
 - [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md) — the same observable `Drop`, seen from the failure side: destructors still run, in reverse order, while a panic unwinds. Rule 3 holds even when the function does not finish, which is why a lock is released and a file closed — and why the *work* is still half-done
 - [The `move` keyword](../../23_Closures/the_move_keyword/README.md) — the same move, performed by a closure capturing the value, and the two errors that demand it
 - [The Rust Book, ch. 4 — Understanding Ownership ↗](https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html)
+- [Drawing the owner and the view](../../14_Strings/drawing_the_owner_and_the_view/README.md) — a move drawn: three words copied, the buffer left where it was
 
 ## Po polsku
 

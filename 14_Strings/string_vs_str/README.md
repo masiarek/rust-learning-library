@@ -458,6 +458,7 @@ rustc --edition 2024 14_Strings/string_vs_str/examples/string_vs_str.rs -o /tmp/
 - [The Rust Book, ch. 4.1 — The `String` Type ↗](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#the-string-type) · [ch. 8.2 — Storing UTF-8 Encoded Text ↗](https://doc.rust-lang.org/book/ch08-02-strings.html)
 - [Easy Rust, ch. 14 — Strings ↗](https://dhghomon.github.io/easy_rust/Chapter_14.html) — the gentlest second telling
 - [Step 3 of the `ToOwned` path](../../12_Traits/how_to_learn_to_owned/owned_and_borrowed_types/README.md) — the owned/borrowed pair as the thing `type Owned` names
+- [Drawing the owner and the view](../drawing_the_owner_and_the_view/README.md) — the owner and the view on one drawing, with the view's offset into the owner's buffer measured
 
 ## Po polsku
 

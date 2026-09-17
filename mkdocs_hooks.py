@@ -840,6 +840,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...then what the owning half is made of: three words on the stack,
         # bytes on the heap, and a capacity that is not the length.
         "anatomy_of_a_string",
+        # ...then both halves on one drawing: the view's pointer lands inside
+        # the owner's buffer, and five borrow errors read straight off it.
+        "drawing_the_owner_and_the_view",
         # ...how to get one: five spellings, and the trait behind the useful one.
         "making_a_string",
         # ...then the first thing anyone does with two of them, and the E0369

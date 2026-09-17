@@ -227,6 +227,8 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K207 | [Three ways out of a grid of shelves — the first empty slot with a flag, a label and `find_map`, full shelves with `continue 'shelves`, and what an unlabelled `break` reports](25_Control_Flow/loop_labels/README.md#practice) | [Loop labels](25_Control_Flow/loop_labels/README.md) | 101 → 201 |
 | K208 | [Walk a slice with a raw pointer — start to one past the end, a `// SAFETY:` comment on every read, and the empty slice whose start is never read](36_Pointers/raw_pointers/README.md#practice) | [Raw pointers: `*const T` and `*mut T`](36_Pointers/raw_pointers/README.md) | 201 → 301 |
 | K209 | [A pointer that counts its reads — `Deref` through a `Cell`, and five lines predicted one call at a time](41_Smart_Pointers/what_makes_a_pointer_smart/README.md#practice) | [What makes a pointer smart](41_Smart_Pointers/what_makes_a_pointer_smart/README.md) | 201 |
+| K210 | [Three questions, from the drawing — why a `&str` carries a length, which bytes `let t = s;` moves, and why `&s[1..2]` on `"héllo"` panics rather than fails to compile](14_Strings/drawing_the_owner_and_the_view/README.md#practice) | [Drawing the owner and the view](14_Strings/drawing_the_owner_and_the_view/README.md) | 101 → 201 |
+| K211 | [Views into one buffer — the offset and byte length of every word `split` returns from `"zażółć gęślą jaźń"`, and how many heap buffers exist before and after `to_owned`](14_Strings/drawing_the_owner_and_the_view/README.md#practice) | [Drawing the owner and the view](14_Strings/drawing_the_owner_and_the_view/README.md) | 101 → 201 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -348,7 +350,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K191 · [Undo `escape_ascii`](19_Numbers/printing_bytes/README.md#practice)
 - K194 · [Half up, by hand](19_Numbers/rounding_a_float/README.md#practice)
 
-**[Strings](14_Strings/README.md)** — 45 katas
+**[Strings](14_Strings/README.md)** — 47 katas
 
 - K62 · [One `&str` parameter, three callers](14_Strings/string_vs_str/README.md#practice)
 - K63 · [Cut a name in half without panicking](14_Strings/string_slices/README.md#practice)
@@ -395,6 +397,8 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K164 · [Full justification, and the width that is not bytes](14_Strings/the_format_language/README.md#practice)
 - K165 · [Write the safe version of three CVEs](14_Strings/when_the_invariant_broke/README.md#practice)
 - K166 · [The test that would have caught it](14_Strings/wrong_but_not_unsafe/README.md#practice)
+- K210 · [Three questions, from the drawing](14_Strings/drawing_the_owner_and_the_view/README.md#practice)
+- K211 · [Views into one buffer](14_Strings/drawing_the_owner_and_the_view/README.md#practice)
 
 **[Enums](13_Enums/README.md)** — 5 katas
 

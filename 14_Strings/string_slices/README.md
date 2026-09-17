@@ -680,6 +680,7 @@ rustc --edition 2024 14_Strings/string_slices/examples/string_slices.rs -o /tmp/
 - [Meet the `char`](../meet_the_char/README.md) — why the indices are bytes in the first place
 - [Borrowing](../../18_Ownership/borrowing/README.md) — the `E0502` above, as a rule rather than a case
 - [The Rust Book, ch. 4.3 — The Slice Type ↗](https://doc.rust-lang.org/book/ch04-03-slices.html) · [`str::char_indices` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.char_indices) · [`str::get` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.get)
+- [Drawing the owner and the view](../drawing_the_owner_and_the_view/README.md) — this page's two words drawn beside the buffer they point into, and the five errors that follow
 
 ## Po polsku
 

@@ -99,6 +99,7 @@ That is a real claim about memory (`u8` values sit one byte apart), it is checka
 - [Meet the byte](../../19_Numbers/meet_the_byte/README.md) — the unit that distance was measured in
 - [Address, pointer, reference](../../36_Pointers/address_pointer_reference/README.md) — what the number is, and the type and provenance a pointer adds to it
 - [A reference is aligned to its referent](../../36_Pointers/aligned_to_the_referent/README.md) — distances between addresses, used to show a `&u8` may sit at an odd one
+- [Drawing the owner and the view](../../14_Strings/drawing_the_owner_and_the_view/README.md) — addresses printed as offsets into one buffer, which stay the same from run to run
 
 ## Po polsku
 
