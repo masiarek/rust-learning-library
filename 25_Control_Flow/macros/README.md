@@ -12,7 +12,7 @@
 - The handful worth knowing on day one: `println!` / `format!` / `vec!` / `assert!` / `assert_eq!` / `panic!` / `dbg!` / `todo!`
 - Why a macro can do things a function cannot: a variable number of arguments, arguments of different types, and **inspecting the source text** — which is how `dbg!` prints the expression you wrote
 - Why the format string must be a literal, and the error you get when you pass a `String`
-- The two kinds — declarative (`macro_rules!`) and procedural (`#[derive(Debug)]` is one) — named, with writing one deferred
+- The two kinds — declarative (`macro_rules!`, which `vec!` and `println!` are) and procedural (which `#[derive(Serialize)]` is, and `#[derive(Debug)]` only looks like: it is built into the compiler) — named, with writing a procedural one left to [Procedural macros](../../37_Procedural_Macros/README.md)
 - `cargo expand` as the way to stop guessing what a macro became
 
 ## The trap it exists for
@@ -25,6 +25,7 @@ A macro is not a function, so the usual intuitions about evaluation do not hold:
 - [What `dbg!` does](../../15_First_Programs/what_dbg_does/README.md) — the macro that reads its own source text, and the five things it does that `println!` does not
 - [`Debug` and `Display`](../../15_First_Programs/debug_vs_display/README.md) — the traits the printing macros call, and why only one can be derived
 - [`unwrap` is a TODO](../../02_Errors/unwrap_is_a_todo/README.md) — `todo!` and `unimplemented!` as the honest placeholders
+- [Procedural macros](../../37_Procedural_Macros/README.md) — writing derive, function-like and attribute macros, starting from [the three kinds](../../37_Procedural_Macros/three_kinds_of_procedural_macro/README.md)
 - [Printing the HIR](../../20_Compilers/printing_the_hir/README.md) — what a `println!` actually became, printed by rustc itself
 - [Comprehensive Rust: Macros ↗](https://google.github.io/comprehensive-rust/control-flow-basics/macros.html)
 

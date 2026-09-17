@@ -44,6 +44,7 @@ exclude_docs: |
   /Cargo.toml
   /Cargo.lock
   /target/
+  **/demo/target/
   /34_Templates/*/template/target/
   /34_Templates/*/template/Cargo.lock
   .claude/

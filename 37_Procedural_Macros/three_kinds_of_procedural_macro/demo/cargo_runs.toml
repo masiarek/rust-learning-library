@@ -1,0 +1,17 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+
+[[run]]
+stem = "three_kinds"
+cmd = ["cargo", "run", "-q", "-p", "app"]
+
+[[run]]
+stem = "a_derive_cannot_replace"
+cmd = ["cargo", "build", "-q", "-p", "derive_twice"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "an_attribute_can_remove"
+cmd = ["cargo", "build", "-q", "-p", "swallowed"]
+expect = "failure"
+stream = "stderr"

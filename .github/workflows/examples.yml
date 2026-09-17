@@ -30,3 +30,23 @@ jobs:
         run: python3 tools/check_link_style.py
       - name: Check the redirect map still points at pages that exist
         run: python3 tools/check_redirects.py
+
+  # Lessons that need Cargo and crates.io -- procedural macros, above all -- keep a
+  # workspace in demo/ and declare their runs in cargo_runs.toml. A separate job,
+  # because it needs the network and a few minutes of dependency builds that the
+  # single-file gate above should never wait for.
+  cargo-demos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            target/cargo-demos
+          key: cargo-demos-${{ hashFiles('**/demo/Cargo.lock', 'rust-toolchain.toml') }}
+      - name: Show toolchain
+        run: rustc --version && cargo --version
+      - name: Build and run every Cargo demo against its answer key
+        run: python3 tools/run_cargo_demos.py --check

@@ -1,0 +1,8 @@
+error[E0425]: cannot find function `greet` in this scope
+ --> swallowed/src/main.rs:9:20
+  |
+9 |     println!("{}", greet());
+  |                    ^^^^^ not found in this scope
+
+For more information about this error, try `rustc --explain E0425`.
+error: could not compile `swallowed` (bin "swallowed") due to 1 previous error

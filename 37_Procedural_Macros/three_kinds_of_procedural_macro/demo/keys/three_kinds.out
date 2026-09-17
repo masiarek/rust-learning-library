@@ -1,0 +1,16 @@
+1. A derive receives the item, and adds to it
+   received
+      /// A point on a plane.
+      struct Point { x: i32, y: i32, }
+   the struct is still there: Point { x: 1, y: 2 }, x + y = 3
+
+2. A function-like macro receives what is between its delimiters
+   received
+      GET /users/{id} => list_users
+
+3. An attribute receives its arguments and the item, and replaces the item
+   arguments
+      times = 3
+   item
+      fn greet(name: &str) -> String { format!("hello, {name}") }
+   the replacement put greet back: hello, Ada

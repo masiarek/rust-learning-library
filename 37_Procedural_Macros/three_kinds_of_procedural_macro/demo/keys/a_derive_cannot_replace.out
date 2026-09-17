@@ -1,0 +1,13 @@
+error[E0428]: the name `Point` is defined multiple times
+ --> derive_twice/src/main.rs:4:1
+  |
+4 | struct Point {
+  | ^^^^^^^^^^^^
+  | |
+  | `Point` redefined here
+  | previous definition of the type `Point` here
+  |
+  = note: `Point` must be defined only once in the type namespace of this module
+
+For more information about this error, try `rustc --explain E0428`.
+error: could not compile `derive_twice` (bin "derive_twice") due to 1 previous error

@@ -1,0 +1,5 @@
+# One macro crate and the programs that use it. `[workspace]` makes this folder
+# its own workspace, whatever manifest sits above it.
+[workspace]
+members = ["show_tokens", "app", "derive_twice", "swallowed"]
+resolver = "3"
