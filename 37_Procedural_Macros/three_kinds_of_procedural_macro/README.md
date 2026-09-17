@@ -251,7 +251,7 @@ Each row is the macro's declaration in the crate's published source:
 
 The `attributes(…)` list in a derive's declaration names its **helper attributes**. `#[serde(rename = "id")]` does nothing by itself; it is there for `Serialize` to read, and the compiler accepts it only because the derive declared it. [Helper attributes by hand](../helper_attributes_by_hand/README.md) writes one.
 
-Notice the crate names, too. The macros live in `serde_derive` and `thiserror-impl`, but you depend on `serde` and `thiserror`. A proc-macro crate can export nothing except macros, so the trait and the derive ship in two crates and one re-exports the other — [the re-export pattern](../the_reexport_pattern/README.md).
+Notice the crate names, too. The macros live in `serde_derive` and `thiserror-impl`, but you depend on `serde` and `thiserror`. A proc-macro crate can export nothing except macros, so the trait and the derive ship in separate crates, and the one you depend on re-exports the derive — [the re-export pattern](../the_reexport_pattern/README.md).
 
 ## The trap: the macros you have used may not be procedural
 

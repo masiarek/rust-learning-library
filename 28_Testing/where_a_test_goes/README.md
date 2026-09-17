@@ -317,6 +317,7 @@ fn main() {
 - [How `cargo test` runs your tests](../how_cargo_test_runs/README.md) — what the three kinds cost to build and run, and the tests that share a process
 - [Every testing error, and its fix](../testing_errors/README.md): the compiler errors around tests, each with a fix that compiles
 - [Lints around tests](../testing_lints/README.md): rustc and clippy on test code, bad and good
+- [Testing with `trybuild`](../../37_Procedural_Macros/testing_with_trybuild/README.md) — a `tests/` file whose tests compile other programs, for a macro whose errors are part of what it promises
 
 ## Sources
 

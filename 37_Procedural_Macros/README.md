@@ -4,7 +4,7 @@
 
 **One line:** A procedural macro is Rust code the compiler runs on your code — tokens in, tokens out — and this chapter goes from reading the ones you use, through `syn`, `quote` and `darling`, to writing derive, function-like and attribute macros whose errors point at the right token.
 
-The six parts follow a one-day course outline, in its order. Pages marked *outline* are stubs: their questions are set, and nothing on them has been checked yet.
+The six parts follow a one-day course outline, in its order. Every lesson's output, expansion and compiler error comes from a recorded run; where a course or tutorial written for `syn` 2 says something `syn` 3 or rustc 1.98.0 does not, the page says so.
 
 ## 1. Macros you already use
 
@@ -20,11 +20,11 @@ The six parts follow a one-day course outline, in its order. Pages marked *outli
 |---|---|
 | [A proc-macro crate](a_proc_macro_crate/README.md) | Why the macros need a crate of their own, and what that crate may export |
 | [Tokens and token streams](tokens_and_token_streams/README.md) | The four kinds of token tree a macro reads and writes, with their spacing and spans |
-| [`proc-macro2` makes it testable](proc_macro2_makes_it_testable/README.md) *(outline)* | Why `proc_macro` panics outside the compiler, and the wrapper that does not |
-| [Parsing with `syn`](parsing_with_syn/README.md) *(outline)* | Tokens into a syntax tree: `DeriveInput`, `Data`, `Fields` |
-| [Generating with `quote`](generating_with_quote/README.md) *(outline)* | Rust with holes in it: interpolation, repetition, new identifiers |
-| [The re-export pattern](the_reexport_pattern/README.md) *(outline)* | Why `serde` and `thiserror` are two crates each, and how the user sees one |
-| [Testing with `trybuild`](testing_with_trybuild/README.md) *(outline)* | Putting the compiler errors your users see under test |
+| [`proc-macro2` makes it testable](proc_macro2_makes_it_testable/README.md) | Why `proc_macro` panics outside the compiler, and the wrapper that does not |
+| [Parsing with `syn`](parsing_with_syn/README.md) | Tokens into a syntax tree: `DeriveInput`, `Data`, `Fields` |
+| [Generating with `quote`](generating_with_quote/README.md) | Rust with holes in it: interpolation, repetition, new identifiers |
+| [The re-export pattern](the_reexport_pattern/README.md) | Why a trait and its derive ship as separate crates, and how the user sees one |
+| [Testing with `trybuild`](testing_with_trybuild/README.md) | Putting the compiler errors your users see under test |
 
 ## 3. Derive macros
 

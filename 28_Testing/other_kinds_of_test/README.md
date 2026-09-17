@@ -32,6 +32,7 @@ Treating more example tests as more coverage. A hundred hand-picked inputs share
 
 - [What a test asserts](../what_a_test_asserts/README.md) — the example test all of these extend
 - [The example that is a test](../doc_tests/README.md) — `compile_fail` in a doc test
+- [Testing with `trybuild`](../../37_Procedural_Macros/testing_with_trybuild/README.md) — the compile-fail row, run: a passing UI test, and one failing against an out-of-date `.stderr`
 - [How `cargo test` runs your tests](../how_cargo_test_runs/README.md) — where each kind fits in the run
 - [`black_box` is a hint](../../33_Time_and_Benchmarking/black_box_is_a_hint/README.md) — keeping a benchmark honest
 - [Going deeper — Testing](../../10_Resources/going_deeper/README.md#testing) — the advanced testing workshop and the fuzz book
