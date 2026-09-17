@@ -1,0 +1,47 @@
+#![feature(prelude_import)]
+extern crate std;
+#[prelude_import]
+use std::prelude::rust_2024::*;
+use filter_macro::filter;
+
+struct Order {
+    id: u32,
+    status: &'static str,
+    total: u32, // in cents
+}
+
+const ORDERS: [Order; 5] =
+    [Order { id: 1, status: "open", total: 1250 },
+            Order { id: 2, status: "paid", total: 8000 },
+            Order { id: 3, status: "cancelled", total: 9900 },
+            Order { id: 4, status: "open", total: 5000 },
+            Order { id: 5, status: "paid", total: 1999 }];
+
+fn main() {
+    let ids =
+        |matched: Vec<&Order>|
+            matched.iter().map(|order| order.id).collect::<Vec<_>>();
+
+    let open: Vec<&Order> =
+        ORDERS.iter().filter(|row| row.status == "open").collect();
+    let large: Vec<&Order> =
+        ORDERS.iter().filter(|row|
+                    row.status != "cancelled" && row.total >= 5000).collect();
+    let small: Vec<&Order> =
+        ORDERS.iter().filter(|row|
+                    ["open", "paid"].contains(&row.status) &&
+                        row.total < 2000).collect();
+
+    // open                    [1, 4]
+    // not cancelled, >= 5000  [2, 4]
+    // open or paid, < 2000    [1, 5]
+    { ::std::io::_print(format_args!("{0:<24}{1:?}\n", "open", ids(open))); };
+    {
+        ::std::io::_print(format_args!("{0:<24}{1:?}\n",
+                "not cancelled, >= 5000", ids(large)));
+    };
+    {
+        ::std::io::_print(format_args!("{0:<24}{1:?}\n",
+                "open or paid, < 2000", ids(small)));
+    };
+}

@@ -1,0 +1,6 @@
+# A macro crate with a grammar of its own, a program that uses it, programs
+# that misuse it, and a probe of `syn`'s peeking. `[workspace]` makes this
+# folder its own workspace, whatever manifest sits above it.
+[workspace]
+members = ["filter_macro", "filter_app", "filter_mistakes", "peek_table"]
+resolver = "3"

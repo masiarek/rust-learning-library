@@ -1,0 +1,26 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+
+[[run]]
+stem = "filter_orders"
+cmd = ["cargo", "run", "-q", "-p", "filter_app"]
+
+[[run]]
+stem = "filter_expanded"
+cmd = ["cargo", "rustc", "-q", "-p", "filter_app", "--profile=check", "--", "-Zunpretty=expanded"]
+env = { RUSTC_BOOTSTRAP = "1" }
+
+[[run]]
+stem = "filter_bad_syntax"
+cmd = ["cargo", "build", "-q", "-p", "filter_mistakes", "--bin", "bad_syntax"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "filter_bad_field"
+cmd = ["cargo", "build", "-q", "-p", "filter_mistakes", "--bin", "bad_field"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "peek_matches_a_prefix"
+cmd = ["cargo", "run", "-q", "-p", "peek_table"]

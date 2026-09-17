@@ -1,0 +1,13 @@
+error[E0609]: no field `totl` on type `&&Order`
+  --> filter_mistakes/src/bin/bad_field.rs:10:46
+   |
+10 |     let count = orders.iter().filter(filter!(totl >= 5000)).count();
+   |                                              ^^^^ unknown field
+   |
+help: a field with a similar name exists
+   |
+10 |     let count = orders.iter().filter(filter!(total >= 5000)).count();
+   |                                                 +
+
+For more information about this error, try `rustc --explain E0609`.
+error: could not compile `filter_mistakes` (bin "bad_field") due to 1 previous error

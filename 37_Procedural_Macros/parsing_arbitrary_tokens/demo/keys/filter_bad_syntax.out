@@ -1,0 +1,25 @@
+error: expected one of: `in`, `<>`, `<=`, `>=`, `<`, `>`, `=`
+  --> filter_mistakes/src/bin/bad_syntax.rs:10:49
+   |
+10 |     let _ = orders.iter().filter(filter!(status != "cancelled"));
+   |                                                 ^
+
+error: `filter!` compares with `=`, not `==`
+  --> filter_mistakes/src/bin/bad_syntax.rs:11:49
+   |
+11 |     let _ = orders.iter().filter(filter!(status == "open"));
+   |                                                 ^^
+
+error: unexpected token
+  --> filter_mistakes/src/bin/bad_syntax.rs:12:58
+   |
+12 |     let _ = orders.iter().filter(filter!(status = "open" total > 0));
+   |                                                          ^^^^^
+
+error: expected `,`
+  --> filter_mistakes/src/bin/bad_syntax.rs:13:60
+   |
+13 |     let _ = orders.iter().filter(filter!(status in ["open" "paid"]));
+   |                                                            ^^^^^^
+
+error: could not compile `filter_mistakes` (bin "bad_syntax") due to 4 previous errors
