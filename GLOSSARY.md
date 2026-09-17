@@ -202,7 +202,7 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Type alias** — A second name for an existing type (`type Result<T> = std::result::Result<T, Error>;`). It creates no new type and no conversion — the compiler expands it before checking anything — so it cannot carry its own trait impls. → [The `Result` you are reading is probably an alias](17_Option_and_Result/result_aliases/README.md)
 
-**`thiserror`** — A crate that derives the `Display`/`Error`/`From` boilerplate for a custom error enum. The library-side counterpart to `anyhow`. → [`Option` vs `Result`](17_Option_and_Result/option_vs_result/README.md)
+**`thiserror`** — A crate that derives the `Display`/`Error`/`From` boilerplate for a custom error enum. The library-side counterpart to `anyhow`. → [`Option` vs `Result`](17_Option_and_Result/option_vs_result/README.md), and every line its derive writes → [Expanding `thiserror`](37_Procedural_Macros/expanding_thiserror/README.md)
 
 **Sentinel value** — A legal value borrowed to mean "no value" (`0`, `-1`, `""`, `0.0`). What `Option` and `Result` exist to replace, and what a guard silently reintroduces when its branch returns a number instead of an error. → [Zero wins is not zero games](17_Option_and_Result/wrong_guard/README.md)
 
@@ -724,6 +724,14 @@ Short definitions. Every entry links to the page that explains it properly — a
 **BiDi override** — A Unicode control (U+202E and its family) that reverses the displayed order of what follows, so source code can *read* differently from how it *runs*. A dump shows it as `e2 80 ae`. → [Writing a file inspector](03_Command_Line/writing_a_file_inspector/README.md#terms)
 
 **Procedural macro** — A function from `TokenStream` to `TokenStream`, compiled in a crate of its own and run by the compiler on the crate that uses it. Three kinds: a **derive** receives an item and can only add code after it, a **function-like** macro receives what sits between its delimiters, and an **attribute** receives its arguments and the item and returns the item's replacement. `#[derive(Debug)]` and `#[test]` look like procedural macros and are built into the compiler instead. → [Three kinds of procedural macro](37_Procedural_Macros/three_kinds_of_procedural_macro/README.md), and the chapter → [Procedural macros](37_Procedural_Macros/README.md)
+
+**Token tree** — One item in a `TokenStream`, of four kinds: an `Ident`, a `Punct`, a `Literal`, or a `Group`, which is a delimited stream of its own. Each carries its text and a span, and nothing about types or meaning; a procedural macro reads and writes nothing else. → [Tokens and token streams](37_Procedural_Macros/tokens_and_token_streams/README.md)
+
+**Span** — The source location a token carries. It is where a compiler error puts its underline, so a macro that reports a `syn::Error` spanned on the user's own tokens underlines the mistake instead of the macro's name. → [Errors: from `panic!` to `syn::Error`](37_Procedural_Macros/errors_from_panic_to_syn_error/README.md)
+
+**Helper attribute** — An attribute a derive names in its declaration, `#[proc_macro_derive(Error, attributes(error, from, source))]`, so the compiler accepts it on the item. It does nothing by itself: `#[error("…")]` and `#[serde(rename = "id")]` are there for the derive to read. One on the struct is a **container attribute**, one on a field a **field attribute**, and on 1.98.0 a helper written above the `#[derive]` that declares it fails the build (`legacy_derive_helpers` is deny). → [Three kinds of procedural macro](37_Procedural_Macros/three_kinds_of_procedural_macro/README.md#in-the-wild), and parsing them → [Helper attributes by hand](37_Procedural_Macros/helper_attributes_by_hand/README.md)
+
+**Hygiene** — Which names in a macro's output can see, or be captured by, the names around it. `macro_rules!` follows one fixed rule; a procedural macro picks per token through its span, and `Span::mixed_site()` keeps a generated local variable from reading a user's field of the same name, where `call_site()` does not. No span stops a generated method from colliding with the user's. → [Absolute paths and hygiene](37_Procedural_Macros/absolute_paths_and_hygiene/README.md), and the declarative side → [Hygiene](38_Declarative_Macros/hygiene/README.md)
 
 **Loop label** — A name like `'outer:` written before a `for`, `while`, `loop` or block, so that `break 'outer` or `continue 'outer` can leave or restart that one rather than the innermost loop. It looks like a lifetime and is not one. It replaces the flag variable other languages need to leave a nested loop. → [Loop labels](25_Control_Flow/loop_labels/README.md)
 

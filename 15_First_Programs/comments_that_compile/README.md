@@ -495,6 +495,7 @@ score = 3
 - [Running a scratch program](../rustc_without_cargo/README.md) — `rustc` alone, and where `cargo test` would have run the doctests for you
 - [Formatting](../../05_Tooling/formatting/README.md) — `rustfmt` never touches a comment's contents, which is why comment style stays your problem
 - [A shadow does not drop](../../18_Ownership/shadowing_does_not_drop/README.md) — the same trick as Step 2: make an invisible compiler behaviour print something
+- [Tokens and token streams](../../37_Procedural_Macros/tokens_and_token_streams/README.md#4-a-doc-comment-is-an-attribute) — a doc comment as a procedural macro receives it: the tokens of a `#[doc]` attribute
 
 ## Po polsku
 

@@ -223,6 +223,7 @@ first   Ada
 - [Generic enums](../generic_enums/README.md) — `NextNode<T>` in its own right, and the two-parameter case
 - [What a generic is](../what_a_generic_is/README.md) — the `<T>` being made recursive here
 - [Ownership and moves](../../18_Ownership/ownership_and_moves/README.md) — what `push_front(self, …)` is doing to the old head
+- [Generics, lifetimes and `where`](../../37_Procedural_Macros/generics_lifetimes_and_where/README.md) — a derive that bounds field types instead of parameters, and the `E0275` a recursive type gives it
 
 ## Po polsku
 

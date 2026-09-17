@@ -328,6 +328,7 @@ fn main() {
 - [`const` and `static`](../const_and_static/README.md) — the other item-level metadata
 - [Marker traits](../../12_Traits/marker_traits/README.md) — what `derive(Eq)` actually generates, which is nothing
 - [Conditional compilation](../conditional_compilation/README.md) — `#[cfg]`, `cfg!` and `cfg_attr` in full
+- [Helper attributes by hand](../../37_Procedural_Macros/helper_attributes_by_hand/README.md) — an attribute that means nothing to the compiler, declared by a derive so the derive can read it
 
 ## Sources
 

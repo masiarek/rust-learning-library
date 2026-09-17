@@ -249,6 +249,7 @@ final state: Cast
 - [Variants that carry data](../variants_that_carry_data/README.md) — why three variants beat two booleans
 - [A typo becomes a binding](../a_typo_becomes_a_binding/README.md) — the other way a table stops being audited
 - [One arm, many values](../../17_Option_and_Result/one_arm_many_values/README.md) — `|` groups, ranges, and their lints
+- [A `StateMachine` derive](../../37_Procedural_Macros/a_state_machine_derive/README.md) — the transition table written as attributes on the variants, with a transition to a state that does not exist refused while compiling
 
 ## Po polsku
 

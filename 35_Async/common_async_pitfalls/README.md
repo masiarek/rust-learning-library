@@ -30,6 +30,7 @@ Each pitfall with its symptom, and the chapter where the fix is built:
 - [`async fn` and `.await`](../async_fn_and_await/README.md) — the suspension point most of these are about
 - [Blocking the event loop ↗](https://masiarek.github.io/concurrency-learning-library/11_Concepts/async/blocking_the_event_loop/index.html) and [task leak ↗](https://masiarek.github.io/concurrency-learning-library/11_Concepts/hazards/task_leak/index.html) — two of these rows, across languages
 - [Forgotten unlock](../../31_C_and_Cpp/forgotten_unlock/README.md) — the C version of the lock row
+- [A `#[retry]` attribute](../../37_Procedural_Macros/a_retry_attribute/README.md) — a macro that sleeps between attempts, and the error it gives an `async fn` rather than block inside one
 
 ## Po polsku
 

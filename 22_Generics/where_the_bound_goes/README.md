@@ -245,6 +245,7 @@ Shared<Handle> cloned by hand: value 9, 2 owners
 - [Phantom types](../../12_Traits/phantom_types/README.md) — the one case where the parameter is not in the data at all, and the bound question changes shape
 - [Static vs dynamic dispatch](../../12_Traits/static_vs_dynamic_dispatch/README.md) — `<T: Trait>` against `&dyn Trait`, and when a bound is not what you want
 - [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) — the two bounds used most often on this page
+- [Generics, lifetimes and `where`](../../37_Procedural_Macros/generics_lifetimes_and_where/README.md) — where a derive puts the bounds it has to repeat, and which bound it should add
 
 ## Po polsku
 

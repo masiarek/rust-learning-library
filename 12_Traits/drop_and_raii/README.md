@@ -379,6 +379,7 @@ fn main() {
 - [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md) — the unwind that still runs every `drop` on the way out
 - [What makes a pointer smart](../../41_Smart_Pointers/what_makes_a_pointer_smart/README.md) — `Drop` as the half of a smart pointer that does its job
 - [Drop guards](../drop_guards/README.md) — the pattern built on `Drop`: a value that exists only to clean up
+- [Parse, tweak, re-emit](../../37_Procedural_Macros/parse_tweak_reemit/README.md) — an attribute macro that writes a `Drop` guard into a function, so its exit line prints through a `return` or a `?` too
 
 ## Sources
 

@@ -468,6 +468,7 @@ fn main() {
 ## See also
 
 - [Debug and Display](../debug_vs_display/README.md) — what `{}` and `{:?}` actually ask the type for, which is the other half of every format string
+- [Why `println!` is a macro](../../37_Procedural_Macros/why_println_is_a_macro/README.md) — the same refusals from the macro's side: which ones `format_args!` makes while expanding, and which come from name resolution and type checking afterwards
 - [A block is an expression](../a_block_is_an_expression/README.md) — the `let` you write above the line, and why braces have a value at all
 - [When to shadow](../../18_Ownership/when_to_shadow/README.md) — because a capture reads whatever the name means at that point
 - [Scope is about names, not values](../../18_Ownership/scope_is_about_names/README.md) — how far "that point" extends, and why the answer differs for the name, the value and a borrow of it

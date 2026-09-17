@@ -234,6 +234,7 @@ Where they part company is the text. ABAP's message comes from a `T100` message 
 
 - [Not every error is an `io::Error`](../not_every_error_is_io_error/README.md) — the next step: two error types in one function, and the enum that names them
 - [`thiserror` vs `anyhow`](../thiserror_vs_anyhow/README.md) — the two crates that fill the four gaps above
+- [Expanding `thiserror`](../../37_Procedural_Macros/expanding_thiserror/README.md) — the impl of this trait that `#[derive(Error)]` writes, `source()` included, and the `Debug` it leaves to you
 - [Debug and Display](../../15_First_Programs/debug_vs_display/README.md) — the two traits this one requires, in their own right
 - [`main` can return a `Result`](../main_returns_result/README.md) — where the `Debug` form is what your user reads
 - [The `?` operator](../../17_Option_and_Result/the_question_mark_operator/README.md) — what `impl Error` makes possible at a call site

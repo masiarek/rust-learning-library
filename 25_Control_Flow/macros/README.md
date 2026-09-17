@@ -26,6 +26,8 @@ A macro is not a function, so the usual intuitions about evaluation do not hold:
 - [`Debug` and `Display`](../../15_First_Programs/debug_vs_display/README.md) — the traits the printing macros call, and why only one can be derived
 - [`unwrap` is a TODO](../../02_Errors/unwrap_is_a_todo/README.md) — `todo!` and `unimplemented!` as the honest placeholders
 - [Procedural macros](../../37_Procedural_Macros/README.md) — writing derive, function-like and attribute macros, starting from [the three kinds](../../37_Procedural_Macros/three_kinds_of_procedural_macro/README.md)
+- [Why `println!` is a macro](../../37_Procedural_Macros/why_println_is_a_macro/README.md) — what a function version would lose, and the four refusals that stop the build
+- [When `macro_rules!` runs out](../../37_Procedural_Macros/when_macro_rules_runs_out/README.md) — what a declarative macro still does on stable, and the identifier it cannot build
 - [Printing the HIR](../../20_Compilers/printing_the_hir/README.md) — what a `println!` actually became, printed by rustc itself
 - [Comprehensive Rust: Macros ↗](https://google.github.io/comprehensive-rust/control-flow-basics/macros.html)
 - [Listing 2.2, run](../../10_Resources/rust_in_action/first_steps/README.md) — `println!` expands to code, and that code has the value `()`

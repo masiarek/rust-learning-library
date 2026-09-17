@@ -195,6 +195,8 @@ The rule of thumb: reach for a phantom type when mixing the two kinds is a *bug*
 ## See also
 
 - [Marker traits](../marker_traits/README.md) — the other half of `std::marker`: a trait with no methods rather than a parameter with no data
+- [A `StateMachine` derive](../../37_Procedural_Macros/a_state_machine_derive/README.md) — the other trade: one enum, a transition table checked while compiling, and each move checked while running
+- [Generics, lifetimes and `where`](../../37_Procedural_Macros/generics_lifetimes_and_where/README.md) — why `{:?}` on a struct with a `PhantomData<T>` field fails for a `T` with no `Debug`: the `T: Debug` bound a derive adds, std's `#[derive(Debug)]` included
 - [What a type annotation does](../../15_First_Programs/what_an_annotation_does/README.md) — the annotation and the turbofish `E0282` sends you to write
 - [A score is not a number](../../16_Structs/newtype_score/README.md) — the same instinct without generics: one type, one door, no tag
 - [The right to post is a value](../../09_Advanced/one_account_one_review/README.md) — typestate built from distinct types and move semantics, and the hole neither approach closes
