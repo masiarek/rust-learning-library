@@ -16,18 +16,20 @@ Three declarations, one keyword, three different memory layouts. Nothing in the 
 
 | | Stack | Heap |
 |---|---|---|
-| Allocating | move a pointer | ask an allocator for a free region |
-| Freeing | move it back | hand the region back for reuse |
-| Size known | at compile time | at run time |
-| Bounded by | a few MB, per thread, fixed at spawn | available memory |
-| Sharing | each thread has its own, so nothing to synchronise | shared, so crossing threads needs [`Arc`](../sharing_across_threads/README.md) |
-| Cost | a bump of the stack pointer | bookkeeping, and a possible trip to the OS |
+| Allocating | move a pointer — [one region per call](../the_call_stack/README.md) | ask [the global allocator](../../09_Advanced/the_global_allocator/README.md) for a free region |
+| Freeing | move it back — [the bytes are reissued, not cleared](../a_stack_slot_is_reused/README.md) | hand the region back for reuse, when [the owner drops](../../12_Traits/drop_and_raii/README.md) |
+| Size known | at compile time — every local is [`Sized` ↗](https://doc.rust-lang.org/std/marker/trait.Sized.html) | at run time — [a `str`](../../14_Strings/str_is_unsized/README.md), or [a `dyn` value](../../26_Collections/the_box/README.md#reason-two-a-size-known-only-at-run-time) |
+| Bounded by | [a few MB](../recursion_and_the_stack/README.md#the-bound-is-chosen-at-spawn-and-never-grows), per thread, fixed at spawn — [`Builder::stack_size` ↗](https://doc.rust-lang.org/std/thread/struct.Builder.html#method.stack_size) | available memory |
+| Sharing | each thread has its own — another thread reaches it only [by borrowing inside a `scope`](../../09_Advanced/spawning_a_thread/README.md#scope-is-the-other-answer-and-usually-the-better-one) | one for every thread — a value [moves across](../../09_Advanced/channels/README.md) as it is, and only several owners need [`Arc`](../sharing_across_threads/README.md) |
+| Cost | a bump of the stack pointer — [or nothing, once the optimizer inlines the call](../the_call_stack/README.md#the-footnote-everyone-skips) | bookkeeping, and a possible trip to the OS — [`System` ↗](https://doc.rust-lang.org/std/alloc/struct.System.html) is `malloc` underneath |
 
 The stack behaves like a stack of plates: values are pushed as a function is entered and popped when it returns, in strict reverse order. That order is what makes freeing free — there is no list of live regions to consult, only a pointer to move back.
 
 The heap has no such order. A value put there may outlive the function that created it, which is exactly why it is available, and exactly why it costs more: the allocator has to track which regions are free and find one that fits.
 
-**The bounded region is the stack**, and that catches people out. A few megabytes sounds ample until a single array asks for it, and there is no growing out of it — the thread's stack size is fixed when it is spawned, so overflowing is an abort rather than a slowdown.
+**The bounded region is the stack**, and that catches people out. A few megabytes sounds ample until [a single array asks for it](../recursion_and_the_stack/README.md#where-this-bites-in-ordinary-code), and there is no growing out of it — the thread's stack size is fixed when it is spawned, so overflowing is [an abort rather than a slowdown](../recursion_and_the_stack/README.md#overflow-is-an-abort-not-a-panic).
+
+That is a property of operating-system threads rather than of stacks as such. A goroutine starts with a few kilobytes and the Go runtime grows and shrinks it as needed, which is how the Go library's [Goroutines are cheap ↗](https://masiarek.github.io/go-learning-library/01_Goroutines/goroutines_are_cheap/index.html) holds a million of them — 2 KiB each while blocked, against the 2 MiB a spawned Rust thread gets by default.
 
 ## The type decides, not a keyword
 
@@ -116,11 +118,11 @@ That asymmetry is why the table above is worth carrying: the operations that cos
 
 ## If you are coming from another language
 
-**Python.** You have never made this choice, and the reason is that CPython has already made it: every object is on the heap, including the integer `42`, and a name is a reference to it. `sys.getsizeof(x)` is the closest thing to `size_of_val` and it behaves the opposite way — it reports the object's own heap footprint and excludes what it refers to, so `sys.getsizeof([1,2,3])` counts the list and not the integers. What transfers is the *shape* of `String`: a Python `list` is also a small header pointing at a separately allocated buffer that doubles as it grows, which is why `append` is amortised O(1) there for the same reason `push` is here. What changes is that Rust lets you decline the indirection entirely — `[i32; 5]` has no header and no allocation, and there is no Python equivalent to reach for. And a reference-counted heap value is `Rc` here rather than the default, so you pay the count only where you asked for it.
+**Python.** You have never made this choice, and the reason is that CPython has already made it: every object is on the heap, including the integer `42`, and a name is a reference to it. [`sys.getsizeof(x)` ↗](https://docs.python.org/3/library/sys.html#sys.getsizeof) is the closest thing to `size_of_val` and it behaves the opposite way — it reports the object's own heap footprint and excludes what it refers to, so `sys.getsizeof([1,2,3])` counts the list and not the integers. What transfers is the *shape* of `String`: a Python `list` is also a small header pointing at a separately allocated buffer that doubles as it grows, which is why `append` is amortised O(1) there for the same reason `push` is here. What changes is that Rust lets you decline the indirection entirely — `[i32; 5]` has no header and no allocation, and there is no Python equivalent to reach for. And a reference-counted heap value is `Rc` here rather than the default, so you pay the count only where you asked for it.
 
 **ABAP.** The split you already have is `DATA` versus `CREATE DATA`. An elementary field or a structure declared with `DATA` lives in the program's own storage and is freed when the procedure ends — the stack case. An object or a data reference created with `CREATE OBJECT` / `CREATE DATA` lives on the heap and is freed by the garbage collector when the last `REF TO` drops, which is the `Box`/`Rc` case with the counting hidden. The trap coming this way is the internal table: `lt_a = lt_b` copies the whole table (ABAP tables are copy-on-write under the hood, but semantically a copy), so the ABAP instinct that assignment duplicates is right for tables and wrong for `Vec` — in Rust that same line is a **move**, and the buffer is not copied at all. `Vec` is closer to a data reference you cannot alias than to an internal table.
 
-**C.** The mechanism is identical and the *decision point* moves. `int x;` versus `malloc` is a choice you make per allocation; `[i32; 5]` versus `Vec<i32>` is a choice you make once, in the type, and every use site inherits it. The three things that change: there is no `free`, because the owner's scope end is the free and [the compiler knows where that is](../ownership_and_moves/README.md); returning a pointer to a local is a compile error rather than the classic dangling-pointer bug; and `sizeof` on a `String`-equivalent gives you the header here too, so the C intuition that `sizeof` never sees the far end of a pointer transfers exactly.
+**C.** The mechanism is identical and the *decision point* moves. `int x;` versus `malloc` is a choice you make per allocation; `[i32; 5]` versus `Vec<i32>` is a choice you make once, in the type, and every use site inherits it. The three things that change: there is no `free`, because the owner's scope end is the free and [the compiler knows where that is](../ownership_and_moves/README.md); returning a pointer to a local is a compile error rather than the classic dangling-pointer bug; and `sizeof` on a `String`-equivalent gives you the header here too, so the C intuition that `sizeof` never sees the far end of a pointer transfers exactly. The C library's [What the debugger records ↗](https://masiarek.github.io/c-learning-library/04_Debugging/what_the_debugger_records/index.html) hands a stack `int` and a `malloc`'d one to the same function and reads each through its pointer in lldb and gdb, from a file that holds bytes for neither; [Getting a result back ↗](https://masiarek.github.io/concurrency-learning-library/01_Threads/getting_a_result_back/index.html) is the same rule across threads, where a `pthread`'s result may not point into the stack of the thread that just finished, so it is `malloc`'d.
 
 **C++.** `String` is `std::string` (minus the small-string optimisation — Rust's `String` always heaps its bytes, so short strings do not get the free ride they get in libstdc++), `Vec<T>` is `std::vector<T>`, `Box<T>` is `std::unique_ptr<T>`, `Rc`/`Arc` are `std::shared_ptr`. The one that matters is the default: `MyType b = a;` copies in C++ and **moves** in Rust, so the expensive operation is the one you have to ask for here and the one you have to suppress there.
 
@@ -313,14 +315,27 @@ Part 3 — predict which of seven lines allocates, then count.
 
 ## See also
 
+- [The call stack](../the_call_stack/README.md) — the stack column one call at a time: a region reserved on entry and released on return
+- [Recursion and the size of the stack](../recursion_and_the_stack/README.md) — the *Bounded by* row run until it fails, and why failing is an abort
+- [A stack slot is reused](../a_stack_slot_is_reused/README.md) — the *Freeing* row's consequence: a released frame goes to the next call, bytes and all
 - [What an address shows](../what_an_address_shows/README.md) — the demonstration behind the first row of the table: `&x` is the header's address, so a move changes it without relocating a byte
 - [The anatomy of a `String`](../../14_Strings/anatomy_of_a_string/README.md) — the three-word header drawn out, and why growth is amortised
 - [`String` vs `&str`](../../14_Strings/string_vs_str/README.md) — the same owner-and-view split, and which one a function should take
 - [Ownership and moves](../ownership_and_moves/README.md) — what a move transfers, which is responsibility for the heap side
 - [The global allocator](../../09_Advanced/the_global_allocator/README.md) — how to count the heap side rather than assert it
+- [`Box`](../../26_Collections/the_box/README.md) — the one type that says *heap* out loud, and the two things it buys
+- [What a clone costs](../what_a_clone_costs/README.md) — the duplication table applied to a derived `Clone`, field by field
+- [Spawning a thread](../../09_Advanced/spawning_a_thread/README.md) — `thread::scope`, the way another thread borrows your stack without an `Arc`
 - [A generic recursive type](../../22_Generics/a_generic_recursive_type/README.md) — the case where `Box` is not an optimisation but the only way the type compiles
+- [Goroutines are cheap ↗](https://masiarek.github.io/go-learning-library/01_Goroutines/goroutines_are_cheap/index.html) — Go's stacks, which do grow, measured per goroutine
+- [What the debugger records ↗](https://masiarek.github.io/c-learning-library/04_Debugging/what_the_debugger_records/index.html) — the two regions in C, read out of a stopped process
+- [Getting a result back ↗](https://masiarek.github.io/concurrency-learning-library/01_Threads/getting_a_result_back/index.html) — why a thread's result cannot live on that thread's stack, in six languages
 
 Two neighbouring topics a reader arriving from a memory-model chapter will look for, and where they live: **reference cycles and `Weak`** are on [the `Rc` page](../reference_counting/README.md#the-one-leak-safe-rust-still-permits), and **`Send` and `Sync`** are in [marker traits](../../12_Traits/marker_traits/README.md).
+
+## Sources
+
+[The Stack and the Heap ↗](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#the-stack-and-the-heap) in *The Rust Programming Language*; [Box, stack and heap ↗](https://doc.rust-lang.org/rust-by-example/std/box.html) in Rust by Example; the [stack size ↗](https://doc.rust-lang.org/std/thread/index.html#stack-size) section of `std::thread`, and [`std::alloc` ↗](https://doc.rust-lang.org/std/alloc/index.html).
 
 ## Po polsku
 

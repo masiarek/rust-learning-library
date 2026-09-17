@@ -374,6 +374,7 @@ fn main() {
 - [The drop flag](../../18_Ownership/the_drop_flag/README.md) — how the call at that brace is decided when the compiler cannot tell statically, and why `E0509` refuses to split a `Drop` type
 - [Lock poisoning](../../09_Advanced/mutex_poisoning/README.md) — what a guard does when the thread holding it panics
 - [`Box`](../../26_Collections/the_box/README.md) — the recursive drop that can overflow the stack
+- [Stack and heap](../../18_Ownership/stack_and_heap/README.md) — the heap region a dropped `String`, `Vec` or `Box` hands back to the allocator
 - [Marker traits](../marker_traits/README.md) — why a type that implements `Drop` cannot also be `Copy`
 - [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md) — the unwind that still runs every `drop` on the way out
 - [What makes a pointer smart](../../41_Smart_Pointers/what_makes_a_pointer_smart/README.md) — `Drop` as the half of a smart pointer that does its job

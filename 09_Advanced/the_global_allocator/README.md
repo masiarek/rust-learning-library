@@ -315,6 +315,7 @@ rustc --edition 2024 09_Advanced/the_global_allocator/examples/the_global_alloca
 - [`clone_into`](../../12_Traits/clone_into/README.md) — this page's counter put to work: refilling one buffer instead of buying a new one per row
 - [`Cow`: borrow until somebody writes](../../18_Ownership/clone_on_write/README.md) — not allocating at all, which beats allocating cheaply
 - [What an address shows](../../18_Ownership/what_an_address_shows/README.md) — the other way to watch memory, from the value's side
+- [Stack and heap](../../18_Ownership/stack_and_heap/README.md) — which values reach this allocator at all, decided by the type rather than by a keyword
 - [`std::alloc` ↗](https://doc.rust-lang.org/std/alloc/) · [`GlobalAlloc` ↗](https://doc.rust-lang.org/std/alloc/trait.GlobalAlloc.html) — the module and the contract
 - [What a smart pointer costs](../../41_Smart_Pointers/what_a_smart_pointer_costs/README.md) — the same counting allocator on `Box`, `Rc`, `Arc`, `String` and `RefCell`
 

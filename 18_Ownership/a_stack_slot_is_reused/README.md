@@ -325,6 +325,7 @@ Part 4 — the two fixes, both compiling above.
 
 - [The call stack](../the_call_stack/README.md) — the region that is being reissued, and what a call does to reserve it
 - [Recursion and the stack](../recursion_and_the_stack/README.md) — what happens when the reissuing never gets a chance to happen
+- [Stack and heap](../stack_and_heap/README.md) — the two regions side by side; this page is the stack's *Freeing* row, and the heap frees another way
 - [Borrowing](../borrowing/README.md) — the rule this page is the mechanism behind, and where a borrow ends
 - [Lifetime annotations](../lifetime_annotations/README.md) — why `<'a>` cannot rescue any of this
 - [How to learn lifetimes](../how_to_learn_lifetimes/README.md) — the scaffold that sidesteps the whole question while it lands
