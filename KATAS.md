@@ -231,6 +231,9 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K211 | [Views into one buffer — the offset and byte length of every word `split` returns from `"zażółć gęślą jaźń"`, and how many heap buffers exist before and after `to_owned`](14_Strings/drawing_the_owner_and_the_view/README.md#practice) | [Drawing the owner and the view](14_Strings/drawing_the_owner_and_the_view/README.md) | 101 → 201 |
 | K212 | [Reference to a local variable — name the loan and the condition the `}` breaks, then fix `E0597` two ways](18_Ownership/references/a_borrow_is_a_loan/README.md#practice) | [A borrow is a loan](18_Ownership/references/a_borrow_is_a_loan/README.md) | 201 |
 | K213 | [Borrow one field, move the other — one `let` pattern, and why `&upload` cannot do its job](18_Ownership/references/the_ref_keyword/README.md#practice) | [`ref` borrows where a pattern would move](18_Ownership/references/the_ref_keyword/README.md) | 201 |
+| K214 | [Fewest stars — six lines written without a `*` or `&`, fix each with the fewest and name the rule; two need none](18_Ownership/references/when_you_need_the_star/README.md#practice) | [When you need the `*`](18_Ownership/references/when_you_need_the_star/README.md) | 101 → 201 |
+| K215 | [Split off the header — advance a `&mut &[u8]` and a `&mut &mut [u8]`, hold two writable headers, and catch the `?` after `mem::take` that empties the caller's slice on `None`](18_Ownership/references/repointing_a_slice/README.md#practice) | [Re-pointing the caller's slice: `&mut &mut [T]`](18_Ownership/references/repointing_a_slice/README.md) | 201 |
+| K216 | [Pick the pointer — a config reader, a tree's children, a shared cache and C's `memchr`, each shown working](18_Ownership/references/pointer_types_compared/README.md#practice) | [Six pointer types, one table](18_Ownership/references/pointer_types_compared/README.md) | 201 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -284,7 +287,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K56 · [The hour that changed its ad](17_Option_and_Result/one_arm_many_values/README.md#practice)
 - K57 · [Three ways to make `Some(None)` compile](17_Option_and_Result/some_is_a_constructor/README.md#practice)
 
-**[Ownership](18_Ownership/README.md)** — 21 katas
+**[Ownership](18_Ownership/README.md)** — 24 katas
 
 - K12 · [Follow the responsibility](18_Ownership/ownership_and_moves/README.md#practice)
 - K13 · [Many readers, or one writer](18_Ownership/borrowing/README.md#practice)
@@ -307,6 +310,9 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K192 · [Predict, then ask the compiler](18_Ownership/copy_or_move/README.md#practice)
 - K212 · [Reference to a local variable](18_Ownership/references/a_borrow_is_a_loan/README.md#practice)
 - K213 · [Borrow one field, move the other](18_Ownership/references/the_ref_keyword/README.md#practice)
+- K214 · [Fewest stars](18_Ownership/references/when_you_need_the_star/README.md#practice)
+- K215 · [Split off the header](18_Ownership/references/repointing_a_slice/README.md#practice)
+- K216 · [Pick the pointer](18_Ownership/references/pointer_types_compared/README.md#practice)
 
 **[Errors](02_Errors/README.md)** — 1 kata
 

@@ -55,7 +55,26 @@ Pages marked **new** live in this folder. The rest are existing lessons elsewher
 Beside the path:
 
 - **new** [What reference explanations get wrong, run](reference_claims_checked/README.md) — claims from a Stack Overflow thread, The Book, *Programming Rust*, Cliffle's *Learn Rust the Dangerous Way* and a chat answer, each checked on rustc 1.98.0.
-- **new** [Helpful resources](references_reading_list/README.md) — chapters, docs, a paper and articles for each part of the path, with the ones to read with care.
+- **new** [Every reference error, and its fix](reference_errors/README.md) — the compiler errors of this path by symptom: the code, rustc 1.98.0's words, the mistake and the fix, both halves checked on every build.
+- **new** [Lints around references](reference_lints/README.md) — rustc and clippy warnings about borrows, `ref`, `*` and raw pointers, bad and good, and what no lint catches.
+- **new** [Helpful resources](references_reading_list/README.md) — chapters, docs, a paper, articles and videos for each part of the path, with the ones to read with care.
+
+## Katas along the path
+
+The pages say what to understand; these make you write it. Each lives on its page, with a compiled solution folded under it.
+
+| After step | Kata | On |
+|---|---|---|
+| 2 | [Many readers, or one writer](../borrowing/README.md#practice) — two shared borrows, then a mutable one, and the `println!` that moves the end of a borrow | [Borrowing](../borrowing/README.md) |
+| 3 | [Reference to a local variable](a_borrow_is_a_loan/README.md#practice) — name the loan and the condition the `}` breaks, then fix `E0597` two ways | [A borrow is a loan](a_borrow_is_a_loan/README.md) |
+| 6 | [Fewest stars](when_you_need_the_star/README.md#practice) — six lines without a `*` or `&`, each fixed with the fewest and the rule named | [When you need the `*`](when_you_need_the_star/README.md) |
+| 7 | [Borrow one field, move the other](the_ref_keyword/README.md#practice) — one `let` pattern, and why `&upload` cannot do its job | [The `ref` keyword](the_ref_keyword/README.md) |
+| 7 | [One character apart](../../30_Pattern_Matching/match_ergonomics/README.md#practice) — `Some(name)` against `&opt` and against `opt` | [Match ergonomics](../../30_Pattern_Matching/match_ergonomics/README.md) |
+| 8 | [Split off the header](repointing_a_slice/README.md#practice) — advance a `&mut &[u8]` and a `&mut &mut [u8]` | [Re-pointing a slice](repointing_a_slice/README.md) |
+| 10 | [Pick the pointer](pointer_types_compared/README.md#practice) — a config reader, a tree's children, a shared cache and C's `memchr` | [Six pointer types, one table](pointer_types_compared/README.md) |
+| 11 | [Predict the count four times](../reference_counting/README.md#practice) — one roster shared by three tallies, and the edge that leaks | [`Rc`](../reference_counting/README.md) |
+
+The full sequence, with every other kata in the library, is [KATAS.md](../../KATAS.md).
 
 ## Four symbols, four different kinds of thing
 
@@ -85,9 +104,9 @@ Most explanations of references state the rule correctly and get one fact under 
 
 ## If you are coming from another language
 
-- **C** has no references, only pointers — `int &r = x;` does not parse as C ([the clang run](reference_claims_checked/README.md#c-has-no-reference-variables-c-does)). Every C pointer parameter leaves the same four questions to the caller: may it be null, how many elements does it cover, is the memory initialized, and who else is writing through it. A Rust reference answers all four in its type, which is Cliffle's argument in *Learn Rust the Dangerous Way* part 2 and the subject of [Six pointer types, one table](pointer_types_compared/README.md).
+- **C** has no references, only pointers — `int &r = x;` does not parse as C ([the clang run](reference_claims_checked/README.md#c-has-no-reference-variables-c-does)). Every C pointer parameter leaves the same four questions to the caller: may it be null, how many elements does it cover, is the memory initialized, and who else is writing through it. A Rust reference answers all four in its type, which is Cliffle's argument in *Learn Rust the Dangerous Way* part 2 and the subject of [Six pointer types, one table](pointer_types_compared/README.md). The C library runs the length question twice: [A string is bytes up to a NUL ↗](https://masiarek.github.io/c-learning-library/03_Strings/a_string_is_bytes_up_to_a_nul/), where an array forgets its length the moment it is passed to a function, and [The functions that do not check ↗](https://masiarek.github.io/c-learning-library/03_Strings/the_functions_that_do_not_check/), where `strcpy` writes past a destination whose size it was never told.
 - **C++** has `T&`, and it is the closer neighbour — a reference that cannot be null — but the similarity ends at the lifetime. Apple clang 21 builds an `int&` returned to a local with a warning, and an `int&` into a `std::vector` held across `push_back` with none, even under `-Wall -Wextra` ([the run](reference_claims_checked/README.md#c-has-no-reference-variables-c-does)). Rust refuses both, and [A borrow is a loan](a_borrow_is_a_loan/README.md) names the condition each one breaks. The heap version of the same bug is run in [Use-after-free](../../31_C_and_Cpp/use_after_free/README.md).
-- **Python** gives every name a reference and checks nothing: two names can alias one dict, and growing it while a loop walks it raises `RuntimeError` at run time. Rust makes aliasing and mutation mutually exclusive before the program runs — [Borrowing](../borrowing/README.md#the-bug-the-rule-exists-to-prevent) names the Python error for the same bug.
+- **Python** gives every name a reference and checks nothing: two names can alias one dict, and growing it while a loop walks it raises `RuntimeError` at run time. Rust makes aliasing and mutation mutually exclusive before the program runs — [Borrowing](../borrowing/README.md#the-bug-the-rule-exists-to-prevent) names the Python error for the same bug. The Python library's [`bytearray` is the mutable one ↗](https://masiarek.github.io/python-learning-library/01_Text_and_Bytes/bytearray_is_mutable/) makes the matching point from the other side: an immutable `bytes` can be handed to a function with no defensive copy because nobody can change it, which is what a `&T` promises for every type.
 
 ## See also
 
@@ -95,6 +114,7 @@ Most explanations of references state the rule correctly and get one fact under 
 - [How to learn `ToOwned`](../../12_Traits/how_to_learn_to_owned/README.md) — where references meet `Clone`, method lookup and unsized types
 - [Ownership](../README.md) — the section this folder sits in
 - [Glossary](../../GLOSSARY.md) — *shared reference*, *exclusive reference*, *dangling reference*, *fat pointer*, *NLL*
+- [Interior mutability ↗](https://masiarek.github.io/concurrency-learning-library/11_Concepts/safety_in_languages/interior_mutability/) in the Concurrency library's concept map — the same `Cell`/`RefCell` exception, and `Mutex` and atomics as its threaded form
 
 ## Po polsku
 
