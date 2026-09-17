@@ -1,0 +1,41 @@
+1. std's own example: `Some(ref n)` borrows, so `maybe_name` outlives the match
+   Hello, Alice
+   Hello again, Alice
+
+2. `ref` changes the binding's type, never which values match
+   value      Some(x)           Some(ref x)
+   Some(3)    x: i32 = 3        x: &i32 = 3
+   None       no match          no match
+
+3. `&` is the opposite: part of what matches, and it removes a reference
+   value      Some(x)           Some(&x)
+   Some(&3)   x: &i32 = 3       x: i32 = 3
+   None       no match          no match
+
+4. `let ref z = x;` is `let z = &x;`
+   let ref z = x;   z:  &u32 = 12
+   let z2 = &x;     z2: &u32 = 12
+   same address: true
+
+5. `_` binds nothing, so it moves nothing
+   Some(_) matched
+   maybe_name afterwards: Some("Alice")
+
+6. One pattern, two modes: move `id`, borrow `note`
+   id:   alloc::string::String = A-17
+   note: &alloc::string::String = fragile
+   order.note is still there: fragile
+
+7. `ref mut` writes through the binding, into the place it matched
+   Some(ref mut n) = tally       -> tally = Some(43)
+   Some(n) = &mut tally          -> tally = Some(44)
+
+8. `ref` on both sides of `@`: the whole and a part, neither moved
+   whole: &core::option::Option<alloc::string::String> = Some("Alice")
+   inner: &alloc::string::String = Alice
+   maybe_name afterwards: Some("Alice")
+
+Checkpoint. After `let (count, ref label) = pair;` is `pair` still usable?
+   count: i32 = 5
+   label: &alloc::string::String = hi
+   pair afterwards: (5, "hi")

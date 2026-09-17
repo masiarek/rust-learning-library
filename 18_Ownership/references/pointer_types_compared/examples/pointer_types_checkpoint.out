@@ -1,0 +1,8 @@
+1. Box<[u8; 64]>, in words
+   1   (Box<[u8]> is 2: the length 64 is in the type, not in the pointer)
+
+2. Option<Rc<str>>, in words
+   2   (Rc<str> alone is 2: None costs nothing, since an Rc is never null)
+
+3. let mut a = Rc::new(1); let b = Rc::clone(&a); drop(b); Rc::get_mut(&mut a)?
+   Some(1)   (the count is back to 1, so a is unique again)

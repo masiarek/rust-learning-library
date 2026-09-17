@@ -1,0 +1,2 @@
+fix 1, `x` declared outside the block: *r = 1
+fix 2, value copied out of the block:  n  = 1

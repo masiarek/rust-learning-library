@@ -1,0 +1,29 @@
+1. "Data location" is where the pointer sits, not where it points
+   let r: &i32 = &*boxed;          ptr::eq(r, &*boxed) = true
+   let names: Vec<&str> = ...;     ptr::eq(&names[0], names.as_ptr()) = true, capacity 2
+   let on_heap: Box<&i32> = Box::new(&local);   **on_heap = 9
+
+2. Rc<T> is writable while it is the only Rc
+   Rc::get_mut, unique:            a = 2
+   Rc::make_mut, shared:           a = 12, b = 2, Rc::ptr_eq = false, counts 1 and 1
+
+3. *const T and *mut T cast into each other with no unsafe
+   q.cast_const() as *mut i32, write 2:   n = 2, ptr::eq(p, back) = true
+
+4. Moving out through a Box
+   let whole: String = *boxed_string;             "moved out"
+   let left = pair.left; let right = pair.right;  "left" "right"
+   let y: &u32 = &*x;                             12
+
+5. == on references compares pointees; ptr::eq compares addresses
+   &five == &also_five             true
+   ptr::eq(&five, &also_five)      false
+   ptr::eq(&five, &five)           true
+   Box::new(5) == Box::new(5)      true
+   Rc::new(5) == Rc::new(5)        true
+
+6. A reference is a pointer with rules
+   unsafe { *raw.add(1) }          20   (the pointer moved)
+   first.add(1), ops::Add in scope 11   (the pointee was added to)
+   &[i32; 3] 1 word, &[i32] 2 words
+   Option<&i32> 1 word, Option<*const i32> 2 words

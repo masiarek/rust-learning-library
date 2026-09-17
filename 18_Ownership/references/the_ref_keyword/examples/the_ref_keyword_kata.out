@@ -1,0 +1,3 @@
+stored 3 bytes for notes.txt
+upload.name afterwards: notes.txt
+one pattern, two binding modes: `ref` switches one name, `&upload` switches them all

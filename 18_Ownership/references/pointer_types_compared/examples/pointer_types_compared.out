@@ -1,0 +1,24 @@
+                       &T         &mut T     *const T   *mut T     Box<T>     Rc<T>
+owns (drops) pointee   no         no         no         no         yes        last one
+write through it       no         yes        no         in unsafe  if mut     if unique
+Copy                   yes        no         yes        yes        no         no
+deref needs unsafe     no         no         yes        yes        no         no
+can be null            no         no         yes        yes        no         no
+pointee may live       anywhere   anywhere   anywhere   anywhere   heap       heap
+P<u8>, words           1          1          1          1          1          1
+P<[u8]>, words         2          2          2          2          2          2
+P<str>, words          2          2          2          2          2          2
+P<dyn Display>, words  2          2          2          2          2          2
+Option<P<u8>>, words   1          1          2          2          1          1
+
+How each row was filled
+  owns       destructor runs when the pointer's scope ends:
+             &T 0, &mut T 0, *const T 0, *mut T 0, Box<T> 1;
+             Rc<T> 0 after dropping one of two clones, 1 after the last
+  write      *m = 2 -> n = 2   unsafe { *q = 3 } -> n = 3   let mut b ...; *b = 4 -> *b = 4
+             Rc::get_mut wrote 5 while unique; None after one clone: true
+  Copy       controls for the probe: i32 true, String false
+  deref      *at_local + *boxed + *counted = 13, outside any unsafe block
+  null       yes where None needs a word of its own; std::ptr::null::<u8>().is_null() = true
+  lives      one type, &i32, at a local 1, at a static 7, inside a Box 4
+  words      size_of::<P>() / size_of::<usize>(), P being the pointer in that column

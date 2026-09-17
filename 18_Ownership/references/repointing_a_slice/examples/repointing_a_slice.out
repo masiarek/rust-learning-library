@@ -1,0 +1,31 @@
+1. &mut &mut [i32]: the function moves the caller's view
+   skip_first(&mut view)          -> view = [2, 3]
+
+2. &mut [i32]: elements yes, the caller's view no
+   rebind_local(view)             -> view = [99, 42, 3]
+   `t = &mut t[1..]` re-pointed the function's copy; view is still 3 long
+
+3. &mut Vec<i32>: the one that can grow
+   grow(&mut v)                   -> v = [1, 2, 3, 4]
+
+4. Handing out elements that outlive the call
+   a, b popped, both still live   -> view = [3]
+   after *a += 10 and *b += 20    -> data = [11, 22, 3]
+
+5. The shared version: &mut &[i32], and &mut &str as a parser cursor
+   skip_first_shared(&mut view)   -> view = [2, 3]
+   two next_word calls            -> Some("GET"), Some("/index.html")
+   cursor                         -> " HTTP/1.1"
+   two more                       -> Some("HTTP/1.1"), None, cursor = ""
+
+6. std: `impl Read for &[u8]` receives &mut &[u8]
+   src.read(&mut buf)             -> read 2: "he"
+   src afterwards                 -> "llo", len 3
+
+7. std: `impl Write for &mut [u8]` receives &mut &mut [u8]
+   dst.write(b"hi")               -> wrote 2, dst len now 3
+   out                            -> "hi..."
+
+Checkpoint. skip_first twice on [1, 2, 3]: what do view and data print?
+   view = [3]
+   data = [1, 2, 3]  (the view moved; nothing was removed from data)

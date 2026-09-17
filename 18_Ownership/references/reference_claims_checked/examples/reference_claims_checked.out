@@ -1,0 +1,32 @@
+1. Stack Overflow, accepted answer: the pointer snippet, once `x` is `mut`
+   *ref1 = 12
+   after *ref2 += 1 and *raw2 += 1: x = 14
+
+2. Stack Overflow, 2015 answer: a raw pointer from an integer is safe to make
+   123 as *const String compiled with no unsafe; null? false
+   &raw const x, read in unsafe: 14
+
+3. Programming Rust: at run time a reference is an address
+   &u32: 1 word   &str: 2 words   &[u8]: 2 words
+
+4. The Book, ch. 15.4, Listing 15-19: the counts
+   count after creating a = 1
+   count after creating b = 2
+   count after creating c = 3
+   sum(c) = 19
+   count after c goes out of scope = 2
+   sum(b) = 18
+
+5. The Book, ch. 15.4: "Rc<T> allows you to share data ... for reading only"
+   count 1, Rc::get_mut wrote in place: "roster v2"
+   count 2, Rc::get_mut is None: true
+   count 2, Rc::make_mut cloned first: roster "roster v2!", other "roster v2"
+
+6. "References have explicit lifetimes": this borrow names none
+   let reference: &i32 = &*boxed;  -> 42
+
+7. Learn Rust the Dangerous Way, part 2, without the static mut
+   offset_momentum(&mut bodies): bodies[0].velocity = 0.5
+
+8. std::cell: a Cell is written through shared references
+   two & to one Cell, r1.set(r2.get() + 1) -> 2

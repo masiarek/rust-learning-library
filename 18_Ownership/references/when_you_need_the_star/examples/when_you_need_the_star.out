@@ -1,0 +1,49 @@
+1. The dot dereferences the receiver for you
+   n.abs()                        -> 7
+   n.pow(2)                       -> 49
+
+2. An operator with an impl for &T needs no `*`
+   !flag                          -> false
+   flag & other                   -> false
+   flag | other                   -> true
+   n + 1                          -> -6
+   -n                             -> 7
+
+3. Formatting reads through the reference
+   println!("{n}")                -> -7
+
+4. A literal pattern matched against a reference
+   match flag { true => .. }      -> on
+
+5. Deref coercion: a `&bool` parameter accepts `&&bool` and `&Box<bool>`
+   show(&r)                       -> true
+   show(&boxed)                   -> false
+
+6. A condition wants exactly `bool`: write the `*`
+   if *flag                       -> taken
+   *flag && !other                -> true
+
+7. `==` and `>` want both sides at the same depth
+   *flag == true                  -> true
+   flag == &true                  -> true
+   *n > 1                         -> false
+   n > &1                         -> false
+
+8. The dot stops at the first receiver that fits
+   n.max(&3)                      -> 3, a &i32
+   (*n).max(3)                    -> 3, an i32
+
+9. A closure gets one `&` per adapter
+   bits.iter().any(|b| *b)        -> true
+   bits.iter().filter(|b| **b)    -> 2 kept
+   bits.iter().filter(|&&b| b)    -> 2 kept
+   bits.contains(&true)           -> true
+
+10. Writing through `&mut bool` names the place with `*`
+   *slot = true                   -> *slot = true
+   *slot = !*slot                 -> *slot = false
+   *slot |= true                  -> lamp = true
+
+Checkpoint. `if flag` is refused. Does `assert!(flag)` compile?
+   yes: assert!(flag) expands to `if !flag { panic!(..) }`,
+   and `!` has an impl for &bool
