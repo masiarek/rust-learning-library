@@ -185,14 +185,37 @@ Nothing below is required. The free shelf above covers first book, ownership, li
 |---|---|---|
 | [The Rust Programming Language, 3rd ed ↗](https://nostarch.com/rust-programming-language-3rd-edition) | Klabnik, Nichols & Krycho · No Starch · Mar 2026 · 624 pp · $59.99 | **Read it for** paper — the text is [free online ↗](https://doc.rust-lang.org/book/) |
 | [Learn Rust in a Month of Lunches ↗](https://www.manning.com/books/learn-rust-in-a-month-of-lunches) | David MacLeod · Manning · Feb 2024 · 568 pp | **Read it for** the gentlest paid start |
-| [Rust in Action ↗](https://www.manning.com/books/rust-in-action) | Tim McNamara · Manning · Jun 2021 · 456 pp | **Read it for** systems programming *through* Rust |
+| [Rust in Action ↗](https://www.manning.com/books/rust-in-action) — [official code ↗](https://github.com/rust-in-action/code) | Tim McNamara · Manning · Jun 2021 · 456 pp | **Read it for** systems programming *through* Rust |
 | Command-Line Rust — [official code ↗](https://github.com/kyclark/command-line-rust) | Ken Youens-Clark · O'Reilly · 2022 · ~396 pp · ISBN 9781098109431 | **Read it for** practice with tests |
 
 The **3rd edition** of The Book is a genuine revision rather than a reprint: built on the Rust 2024 edition, with a complete async chapter and a section on Miri for analysing unsafe code, and Chris Krycho joins as a third author. The online text tracks the same content and remains free, so this is a purchase about paper and about supporting the project.
 
 **Learn Rust in a Month of Lunches** is the descendant of [Easy Rust](#the-other-first-books) and inherits its virtue: it explains as if to a person, in short sittings, without assuming a C background. If The Book's pace has defeated you twice, this is the fix. At 568 pages the "month of lunches" framing is optimistic.
 
-**Rust in Action** is the odd and enjoyable one — you build a CPU emulator, a key-value store, a network stack, a filesystem. It teaches *systems programming* using Rust as the vehicle, so someone who wants only to be productive in Rust will find it a detour, and someone curious about how computers work will find it the best book on the page. It is from 2021; some crate code has aged, and the concepts have not.
+**Rust in Action** is the odd and enjoyable one — you build a CPU emulator, a key-value store, an HTTP client that speaks through a userspace TCP/IP stack on a TAP device, an NTP client, and a bootable toy kernel. It teaches *systems programming* using Rust as the vehicle, so someone who wants only to be productive in Rust will find it a detour, and someone curious about how computers work will find it the best book on the page. It is from 2021, and the concepts have not aged; the table below says exactly how much of the code has.
+
+**Its code, compiled 2026-09-16.** The [official repository ↗](https://github.com/rust-in-action/code) holds one folder per chapter — 62 Cargo projects plus loose single-file listings — on its default branch `1st-edition`, last committed in January 2023. It carries no licence file and its README turns pull requests away on copyright grounds, so it is there to read and run rather than to copy into a project. Every one of the 62 went through `cargo check` on this library's pinned Rust 1.98.0, on Linux in the `rust:1.98-slim` image:
+
+| Projects | On Rust 1.98.0 |
+|---|---|
+| 39 | compile — five of them only once Cargo rewrites a stale `Cargo.lock`, which a plain `cargo run` does without being asked |
+| 4 | compile after `cargo update`; each failed inside a locked dependency — `num-bigint` 0.3.0, `rustc-serialize` 0.3.24, `socket2` 0.3.9, `openssl-sys` 0.9.47 |
+| 5 | refuse **by design** — chapter 1's use-after-move, push-while-iterating and data-race listings, and chapter 10's two `-broken` projects |
+| 6 | need nightly — the five `ch11-fledgeos` kernels and `ch12-sjlj`; not run here |
+| 1 | Windows only — `ch6-meminfo-win`; not run here |
+| 7 | are broken in the repository itself — `ch5-cpu3`, `ch7-partitybit`, `ch7-fview-str`, `ch7-actionkv2` and `ch9-clock3` still carry the book's `<1>` callout markers outside a comment, and `ch7-actionkv` and `ch10-render-hex-threadpool` use crates their `Cargo.toml` never declares |
+
+Two of the four dependency failures are worth the minute they take, because they are two different ways code that compiled in 2021 stops compiling. `num-bigint` 0.3.0 calls `.div_ceil(&u64::from(bits))` on a `u64`, meaning `num-integer`'s `Integer::div_ceil(&self, other: &Self)`; std gained an inherent `u64::div_ceil` in 1.73.0, method resolution finds the inherent method first, and std's takes its argument by value — so a new std method breaks an old crate that never changed a line. `socket2` 0.3.9 `transmute`s std's `SocketAddrV4` into C's `sockaddr_in`, betting on a layout std never promised: on 1.98.0 the one is 48 bits and the other 128, and the compiler refuses the transmute outright. `transmute` checks sizes at compile time, so the two matched when the crate was written; std has since shrunk its type, which it was always free to do.
+
+The chapter 1 refusals are the Rust half of three C programs this library compiles and lets misbehave — [Use-after-free](../../31_C_and_Cpp/use_after_free/README.md), [Iterator invalidation](../../31_C_and_Cpp/iterator_invalidation/README.md) and [Data races](../../31_C_and_Cpp/data_races/README.md). Five more chapters meet a lesson here:
+
+| Book folder | Read alongside |
+|---|---|
+| `ch5` — an `f32` taken apart into sign, exponent and mantissa | [What a float actually stores](../../19_Numbers/what_a_float_stores/README.md) |
+| `ch7-fview` — a hex viewer, sixteen bytes to a line | [A file is bytes](../../04_Files/a_file_is_bytes/README.md) · [Byte tools](../../11_Unix/byte_tools/README.md) |
+| `ch9` — clocks, from `chrono::Local::now` to an NTP client | [Two clocks](../../33_Time_and_Benchmarking/two_clocks/README.md) |
+| `ch10` — threads, and channels from `crossbeam` | [Spawning a thread](../../09_Advanced/spawning_a_thread/README.md) · [Channels](../../09_Advanced/channels/README.md) |
+| `ch12` — signal handlers through the `libc` crate | [Catching a signal](../../09_Advanced/catching_a_signal/README.md) |
 
 **Command-Line Rust** rebuilds a dozen coreutils — `head`, `cut`, `wc`, `find` — each with a test suite written first. As a bridge from "I have read The Book" to "I have shipped something", it is the most practical exercise book in print. The `clap` API moved after publication, so expect to translate the argument-parsing code; the author's code repository tracks a 2024 printing.
 
