@@ -273,6 +273,7 @@ THE RULE TO CARRY
 - [Reborrowing](../../18_Ownership/reborrowing/README.md) — the `Option<&mut T>` move, the same trap one type up
 - [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) — why the move only bites on non-`Copy` payloads
 - [Coercion](../../29_Conversion/coercion/README.md) — the other silent insertion, on the expression side
+- [The `ref` keyword](../../18_Ownership/references/the_ref_keyword/README.md) — `ref` on its own: what it changes and what it never matches, and where edition 2024 refuses it under a default binding mode
 
 ## Sources
 

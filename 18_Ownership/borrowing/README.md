@@ -300,6 +300,8 @@ rustc --edition 2024 18_Ownership/borrowing/examples/borrowing.rs -o /tmp/br && 
 - [A shadow does not drop](../shadowing_does_not_drop/README.md) — a borrow that outlives the *name* it borrowed from, and the `E0505` you get for freeing underneath it
 - [`while let`](../../17_Option_and_Result/while_let/README.md) — a loop that has to look before it consumes, which turns out to be a borrow question
 - [`Option` is a one-item collection](../../17_Option_and_Result/option_as_collection/README.md) — `take()`, the standard way to get a value *out* of something you only borrowed
+- [A borrow is a loan](../references/a_borrow_is_a_loan/README.md) — how the compiler decides: each reference records a loan, two conditions are checked, and each labelled line of a borrow error is one of them
+- [References: the map](../references/README.md) — every page on `&`, `&mut`, `ref`, `*` and raw pointers, in reading order
 - [The Rust Book, ch. 4.2 — References and Borrowing ↗](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html)
 - [Drawing the owner and the view](../../14_Strings/drawing_the_owner_and_the_view/README.md) — `E0597`, `E0505`, `E0502`, `E0599` and `E0515`, each read off a picture of a `String` and a `&str`
 

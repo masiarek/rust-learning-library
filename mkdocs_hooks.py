@@ -657,6 +657,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # are written in, before any rule about them can land: `&` and
         # `*` mean different things in a type, an expression and a
         # pattern, and no diagnostic ever explains that.
+        # The references folder first: the map of every page on `&`, `&mut`,
+        # `ref` and `*` in this section and beyond, and the pages it adds.
+        "references",
         "where_the_sigil_sits",
         "borrowing",
         # ...and the same rule read from the owner's side: what `&b` does to
@@ -810,6 +813,20 @@ NAV_ORDER: dict[str, list[str]] = {
         "big_integers",
         "decimal_numbers",
         "number_types_claims_checked",
+    ],
+    # The references path: the new pages in the order the map reads them —
+    # the loan model after Borrowing, the `*` and `ref` after Reborrowing,
+    # re-pointing after those, the pointer table after the lifetime pages —
+    # then the claims page and the reading list beside them.
+    "18_Ownership/references": [
+        "README.md",
+        "a_borrow_is_a_loan",
+        "when_you_need_the_star",
+        "the_ref_keyword",
+        "repointing_a_slice",
+        "pointer_types_compared",
+        "reference_claims_checked",
+        "references_reading_list",
     ],
     # The ToOwned learning path: one page per step, in the order they unlock,
     # then the comparison that closes it and the reading list beside it.
@@ -1640,6 +1657,14 @@ LABELS = {
     "one_arm_many_values": "One arm, many values",
     # 18_Ownership
     "no_move_trait": "There is no `Move` trait",
+    "references": "References: the map",
+    "a_borrow_is_a_loan": "A borrow is a loan",
+    "when_you_need_the_star": "When you need the `*`",
+    "the_ref_keyword": "The `ref` keyword",
+    "repointing_a_slice": "`&mut &mut [T]`: re-pointing a slice",
+    "pointer_types_compared": "Six pointer types, one table",
+    "reference_claims_checked": "Reference claims, run",
+    "references_reading_list": "Helpful resources",
     "shadowing_does_not_drop": "A shadow does not drop",
     "clone_on_write": "`Cow`, clone on write",
     # 20_Compilers

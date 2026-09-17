@@ -152,6 +152,8 @@ This is the direction [coercion](../../29_Conversion/coercion/README.md) also tr
 - [Match ergonomics](../../30_Pattern_Matching/match_ergonomics/README.md) — `Some(ref x)` and the default binding mode, the pattern-side spelling of the same idea
 - [Coercion](../../29_Conversion/coercion/README.md) — the other thing a call site inserts silently
 - [Lifetime annotations](../lifetime_annotations/README.md) — a reborrow is shorter-lived than what it borrows from, which is what `'a` is naming
+- [A borrow is a loan](../references/a_borrow_is_a_loan/README.md) — the reborrow as a nested loan, and the `E0499` on `*v2` when the inner one is used too late
+- [References: the map](../references/README.md) — where this page sits among the others on references
 
 ## Sources
 

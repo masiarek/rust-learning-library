@@ -229,6 +229,8 @@ The happy side effect is that a kata arrives with its explanation already writte
 | K209 | [A pointer that counts its reads — `Deref` through a `Cell`, and five lines predicted one call at a time](41_Smart_Pointers/what_makes_a_pointer_smart/README.md#practice) | [What makes a pointer smart](41_Smart_Pointers/what_makes_a_pointer_smart/README.md) | 201 |
 | K210 | [Three questions, from the drawing — why a `&str` carries a length, which bytes `let t = s;` moves, and why `&s[1..2]` on `"héllo"` panics rather than fails to compile](14_Strings/drawing_the_owner_and_the_view/README.md#practice) | [Drawing the owner and the view](14_Strings/drawing_the_owner_and_the_view/README.md) | 101 → 201 |
 | K211 | [Views into one buffer — the offset and byte length of every word `split` returns from `"zażółć gęślą jaźń"`, and how many heap buffers exist before and after `to_owned`](14_Strings/drawing_the_owner_and_the_view/README.md#practice) | [Drawing the owner and the view](14_Strings/drawing_the_owner_and_the_view/README.md) | 101 → 201 |
+| K212 | [Reference to a local variable — name the loan and the condition the `}` breaks, then fix `E0597` two ways](18_Ownership/references/a_borrow_is_a_loan/README.md#practice) | [A borrow is a loan](18_Ownership/references/a_borrow_is_a_loan/README.md) | 201 |
+| K213 | [Borrow one field, move the other — one `let` pattern, and why `&upload` cannot do its job](18_Ownership/references/the_ref_keyword/README.md#practice) | [`ref` borrows where a pattern would move](18_Ownership/references/the_ref_keyword/README.md) | 201 |
 The numbers are labels, and they live **only in this table** — a kata's own page does not print its number, so moving one costs a single line here and nothing else. Reorder freely; the order is the order to attempt them in, not the order they were written.
 
 Both columns are links, and they go to different places: the kata title opens the exercise itself, the lesson name opens the page it lives on. Every lesson in [`01_Foundations/`](01_Foundations/README.md), [`05_Tooling/`](05_Tooling/README.md) and [`09_Advanced/`](09_Advanced/README.md) now has one.
@@ -282,7 +284,7 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K56 · [The hour that changed its ad](17_Option_and_Result/one_arm_many_values/README.md#practice)
 - K57 · [Three ways to make `Some(None)` compile](17_Option_and_Result/some_is_a_constructor/README.md#practice)
 
-**[Ownership](18_Ownership/README.md)** — 19 katas
+**[Ownership](18_Ownership/README.md)** — 21 katas
 
 - K12 · [Follow the responsibility](18_Ownership/ownership_and_moves/README.md#practice)
 - K13 · [Many readers, or one writer](18_Ownership/borrowing/README.md#practice)
@@ -303,6 +305,8 @@ The table above is the order to attempt them in. This is the same katas grouped 
 - K189 · [Return a palindrome you did not copy](18_Ownership/how_to_learn_lifetimes/README.md#practice)
 - K190 · [A log that keeps views, not copies](18_Ownership/how_to_learn_lifetimes/README.md#practice)
 - K192 · [Predict, then ask the compiler](18_Ownership/copy_or_move/README.md#practice)
+- K212 · [Reference to a local variable](18_Ownership/references/a_borrow_is_a_loan/README.md#practice)
+- K213 · [Borrow one field, move the other](18_Ownership/references/the_ref_keyword/README.md#practice)
 
 **[Errors](02_Errors/README.md)** — 1 kata
 

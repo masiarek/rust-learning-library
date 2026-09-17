@@ -177,6 +177,9 @@ rustc --edition 2024 18_Ownership/where_the_sigil_sits/examples/where_the_sigil_
 - [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) — the trait that decides whether `let x = *w;` is a copy or `E0507`
 - [What `unsafe` turns off](../../09_Advanced/what_unsafe_turns_off/README.md) — raw pointers in full: five powers, and `E0133`
 - [Interior mutability](../../09_Advanced/interior_mutability/README.md) — the one way to write through a `&T`, once the table above has told you that you cannot
+- [When you need the `*`](../references/when_you_need_the_star/README.md) — the places Rust supplies the `*` for you and the places it does not, from `if flag` on a `&bool` onwards
+- [The `ref` keyword](../references/the_ref_keyword/README.md) — the pattern-side spelling that makes a reference, beside the `&` pattern that removes one
+- [References: the map](../references/README.md) — every page on `&`, `&mut`, `ref`, `*` and raw pointers, in reading order
 - [E0507 ↗](https://doc.rust-lang.org/error_codes/E0507.html) and [`std::mem::replace` ↗](https://doc.rust-lang.org/std/mem/fn.replace.html) — the refusal, and the way round it
 
 ## Po polsku

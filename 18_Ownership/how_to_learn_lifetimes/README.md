@@ -428,6 +428,7 @@ fn main() {
 ## See also
 
 - [Borrowing](../borrowing/README.md) — the rule itself, and where a borrow actually ends
+- [References: the map](../references/README.md) — the same kind of page for references, with the loan model lifetimes are part of
 - [How to learn `ToOwned`](../../12_Traits/how_to_learn_to_owned/README.md) — the same kind of page for the other thing "clone everything" leaves you confused about: `clone` against `to_owned`
 - [Ownership and moves](../ownership_and_moves/README.md) — the model the scaffold is protecting
 - [`unwrap` is a TODO](../../02_Errors/unwrap_is_a_todo/README.md) — the same "compiles quietly, waits" pattern
