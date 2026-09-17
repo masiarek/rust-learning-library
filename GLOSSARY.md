@@ -458,7 +458,7 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Phantom type** — A type parameter that appears in a struct's declaration and in none of its data, so two taggings of identical bytes become unrelated types. The tag is checked by the compiler and gone by run time, which is what makes mixing metres with feet, or an Approval ballot with a STAR count, unwriteable rather than merely wrong. → [Phantom types](12_Traits/phantom_types/README.md)
 
-**`PhantomData<T>`** — The zero-sized field that carries a phantom parameter. Not a way to silence the compiler but a claim to it: `PhantomData<T>` says the struct owns a `T`, `PhantomData<fn() -> T>` that it merely produces one, `PhantomData<*const T>` that it only points at one — same size, different variance and drop behaviour. → [Phantom types](12_Traits/phantom_types/README.md)
+**`PhantomData<T>`** — The zero-sized field that carries a phantom parameter. Not a way to silence the compiler but a claim to it: `PhantomData<T>` says the struct owns a `T`, `PhantomData<fn() -> T>` that it merely produces one, `PhantomData<*const T>` that it only points at one — same size and all three covariant in `T`, but different drop-check and `Send`/`Sync`. → [Phantom types](12_Traits/phantom_types/README.md)
 
 **`E0392`** — "type parameter is never used": a generic parameter declared and then referred to by nothing. Its three suggested fixes are the whole decision — delete it, store something of that type, or keep it deliberately with a `PhantomData` field. → [Phantom types](12_Traits/phantom_types/README.md)
 

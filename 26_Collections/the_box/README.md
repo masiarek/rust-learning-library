@@ -2,7 +2,7 @@
 
 **Level:** 201 · working knowledge
 
-**One line:** `Box<T>` puts one value on the heap and leaves an 8-byte pointer behind — which buys two things the stack cannot give you: a type that contains itself, and a size known only at run time.
+**One line:** `Box<T>` puts one value on the heap and leaves a pointer behind — 8 bytes on a 64-bit target when `T` is sized — which buys two things the stack cannot give you: a type that contains itself, and a size known only at run time.
 
 ```rust
 fn main() {
