@@ -263,6 +263,7 @@ fn main() {
 - [What a float actually stores](../what_a_float_stores/README.md) — why `9.1.fract()` is not 0.1, and why 0.35 and 0.45 were never ties
 - [Letting the compiler reorder a float sum](../letting_the_compiler_reorder/README.md) — the next page: the order of a float sum is part of its answer
 - [Casting with `as`](../../29_Conversion/casting_with_as/README.md) — the cast at the end of every row above, and what it does out of range
+- [Rationals](../other_number_types/rational_numbers/README.md#a-tie-rounds-away-from-zero) and [Decimals](../other_number_types/decimal_numbers/README.md) — the same split outside std: `num`'s `Ratio::round` sends a tie away from zero, `rust_decimal`'s `round` sends it to even
 - [`f64` in std ↗](https://doc.rust-lang.org/std/primitive.f64.html#method.round) — `round` documents *away from 0.0*; `round_ties_even` sits directly under it
 - *Learn Rust in a Month of Lunches* (MacLeod, 2024), §20.4 — the four methods on one page; its rule for `round` is the positive-side one
 

@@ -410,6 +410,7 @@ Four spellings of 'make me one'. Three refuse, and they refuse differently.
 - [What a struct is](../what_a_struct_is/README.md) — the three flavors in full, and the privacy that makes a tuple struct's constructor private
 - [When a struct refuses](../when_a_struct_refuses/README.md) — the eight errors of *defining* one
 - [`impl` blocks](../impl_blocks/README.md) — where `new` lives, and why it is an associated function
+- [Rationals: no literal](../../19_Numbers/other_number_types/rational_numbers/README.md#no-literal-new-has-to-reduce) — a crate type whose fields are private, so `new` is the only way in, and the invariant that is why
 - [Initial values](../../17_Option_and_Result/initial_values/README.md) — deferred initialization as the deliberate tool
 - [STRUCTS.md](../../STRUCTS.md) — the map
 

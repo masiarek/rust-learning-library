@@ -334,6 +334,7 @@ fn main() {
 
 - [What a trait is](../what_a_trait_is/README.md) — the declaration these are all instances of
 - [A score is not a number](../../16_Structs/newtype_score/README.md) — the newtype that earns these impls
+- [Complex numbers](../../19_Numbers/other_number_types/complex_numbers/README.md) — `num`'s `Complex` gets `a + b` from one `impl Add`, written out there with std only
 - [`From` and `Into`](../../29_Conversion/from_and_into/README.md) — the orphan rule, stated in full
 - [`HashMap`](../../26_Collections/the_hashmap/README.md) — where `Index` returning a reference becomes visible
 - [Debug and Display](../../15_First_Programs/debug_vs_display/README.md) — `{}` is a trait call too

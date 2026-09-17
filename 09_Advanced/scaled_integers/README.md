@@ -75,7 +75,7 @@ That is the argument for exactness, and it is worth being precise about what it 
 
 ## What exactness costs
 
-So the implementations use rationals. Python's `fractions.Fraction`, Rust's `num_rational::Ratio`, and the forty-line `Ratio` in this page's example are all the same idea: carry a numerator and a denominator, and reduce after every operation so the pair does not grow without bound. Reducing means `gcd`, and the run above called `gcd` **36 times for 6 reviewers and 2 projects** — three per reviewer-and-project, to build the weight, scale it by the rating, and add it into the running total.
+So the implementations use rationals. Python's `fractions.Fraction`, Rust's [`num_rational::Ratio`](../../19_Numbers/other_number_types/rational_numbers/README.md), and the forty-line `Ratio` in this page's example are all the same idea: carry a numerator and a denominator, and reduce after every operation so the pair does not grow without bound. Reducing means `gcd`, and the run above called `gcd` **36 times for 6 reviewers and 2 projects** — three per reviewer-and-project, to build the weight, scale it by the rating, and add it into the running total.
 
 That is the shape of the cost, and it scales with the problem: rows × columns × rounds, each with a `gcd` over numbers that get longer as the denominators accumulate. A Python program doing this kind of reweighted arithmetic spends most of its time in `Fraction`, and real ones notice: [`starvote` ↗](https://github.com/larryhastings/starvote), which runs exactly this reweighting, carries a helper called `_fraction_or_int` whose entire job is to hand back a plain `int` whenever a `Fraction` happens to have denominator 1, because a `Fraction` is expensive enough to be worth escaping from when you can.
 

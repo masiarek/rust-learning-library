@@ -296,7 +296,11 @@ Short definitions. Every entry links to the page that explains it properly — a
 
 **Arbitrary precision** — A number that grows to fit its value rather than overflowing, as Python's `int` does. Not the same property as exactness: `i128` is exact and bounded, Python's `int` is exact and unbounded, and the cost of the second is that operations get slower as the value gets wider. → [What `i128` is exact about](09_Advanced/i128_exactness/README.md)
 
-**`num_rational::Ratio`** — Rust's rational type, a numerator and denominator reduced by `gcd` after each operation. `Ratio<i128>` is the closest thing to Python's `fractions.Fraction`, with the difference that matters: it has a ceiling, and the `gcd` is what buys the range rather than overhead on top of it. → [What `i128` is exact about](09_Advanced/i128_exactness/README.md)
+**`num_rational::Ratio`** — Rust's rational type, a numerator and denominator reduced by `gcd` after each operation. `Ratio<i128>` is the closest thing to Python's `fractions.Fraction`, with the difference that matters: it has a ceiling, and the `gcd` is what buys the range rather than overhead on top of it. → [What `i128` is exact about](09_Advanced/i128_exactness/README.md) · [Rationals](19_Numbers/other_number_types/rational_numbers/README.md)
+
+**`num`** — A crate made of re-exports: `num-bigint`, `num-complex` and `num-rational`, plus the `Integer`, iterator and numeric traits. It gives you big integers, complex numbers and rationals, and has no decimal type and no arbitrary-precision float, which are separate crates (`rust_decimal`, `bigdecimal`, `dashu-float`, `rug`). → [Other number types](19_Numbers/other_number_types/README.md)
+
+**Floor division** — Division whose quotient rounds toward −∞, so `-7 // 2` is `-4`. It is Python's `//`. Rust's `/` truncates toward zero instead (`-7 / 2` is `-3`), `i32::div_floor` is unstable on 1.98.0, and `div_euclid` agrees with floor only for a positive divisor. → [Big integers](19_Numbers/other_number_types/big_integers/README.md)
 
 **Arbitrary precision** — Integers that grow to fit their value instead of wrapping or failing at a fixed width. Python's `int` is one and its `Fraction` inherits it for free; Rust's standard library has none, so exactness beyond `i128` means a crate (`num-bigint`, `num-rational`) and an allocation per value. → [When the denominators compound](09_Advanced/compounding_weights/README.md)
 

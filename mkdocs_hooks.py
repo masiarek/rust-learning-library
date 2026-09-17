@@ -733,6 +733,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "comparing_two_number_types",
         # ...and the Rust in Action section that prompted it, claim by claim.
         "comparing_numbers_claims_checked",
+        # ...and the next section of the same book, 2.3.4: the number types std
+        # leaves out, which a crate supplies and Python ships.
+        "other_number_types",
     ],
     # Control flow is taught in the order a program is built out of it: the map
     # first, then the two branching forms (two cases, then many), then the three
@@ -780,6 +783,16 @@ NAV_ORDER: dict[str, list[str]] = {
         "match_guards",
         "let_else",
         "binding_at",
+    ],
+    # Other number types: one page per type, the three `num` covers first,
+    # then the one it does not, then the book section that sent readers here.
+    "19_Numbers/other_number_types": [
+        "README.md",
+        "complex_numbers",
+        "rational_numbers",
+        "big_integers",
+        "decimal_numbers",
+        "number_types_claims_checked",
     ],
     # The ToOwned learning path: one page per step, in the order they unlock,
     # then the comparison that closes it and the reading list beside it.
@@ -1171,6 +1184,10 @@ LABELS = {
     "03_Command_Line": "Command line",
     "15_First_Programs": "First programs",
     "19_Numbers": "Numbers and bytes",
+    # 19_Numbers/other_number_types -- the short names its own pages use.
+    "rational_numbers": "Rationals",
+    "decimal_numbers": "Decimals",
+    "number_types_claims_checked": "Rust in Action §2.3.4, run",
     "25_Control_Flow": "Control flow",
     "30_Pattern_Matching": "Pattern matching",
     # 30_Pattern_Matching / 12_Traits / 09_Advanced -- keywords and trait names.

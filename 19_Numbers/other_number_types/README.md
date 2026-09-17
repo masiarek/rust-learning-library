@@ -99,6 +99,7 @@ The Python library's [crosswalk ↗](https://masiarek.github.io/python-learning-
 - [What a float actually stores](../what_a_float_stores/README.md) — the one type std does give you, and why `0.1` is not 0.1
 - [Making a float whole](../rounding_a_float/README.md) — the tie rules that come back in `Ratio::round` and `Decimal::round`
 - [Writing a number down](../writing_a_number_down/README.md) — the range each built-in width promises
+- [Comparing two numbers of different types](../comparing_two_number_types/README.md) — *Rust in Action* §2.3.3, the section before this one: the conversion Rust makes you write before `==`, where Python compares exact values ([Comparing an `int` with a `float` ↗](https://masiarek.github.io/python-learning-library/03_Numbers/comparing_int_and_float/index.html))
 - [The Advanced exactness cluster](../../09_Advanced/README.md) — [scaled integers](../../09_Advanced/scaled_integers/README.md), [what `i128` is exact about](../../09_Advanced/i128_exactness/README.md) and [when the denominators compound](../../09_Advanced/compounding_weights/README.md): when a crate is more than the problem needs
 - [Machine numbers ↗](https://masiarek.github.io/math-learning-library/01_Precision/machine_numbers/index.html) — the math library on what radix and precision decide, which is the difference between a binary float and a decimal one
 
