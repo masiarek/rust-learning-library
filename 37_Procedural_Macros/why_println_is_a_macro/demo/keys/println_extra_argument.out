@@ -1,0 +1,9 @@
+error: argument never used
+ --> println_refusals/src/bin/extra_argument.rs:3:48
+  |
+3 |     println!("{} has items in the cart", name, items);
+  |              --------------------------        ^^^^^ argument never used
+  |              |
+  |              formatting specifier missing
+
+error: could not compile `println_refusals` (bin "extra_argument") due to 1 previous error

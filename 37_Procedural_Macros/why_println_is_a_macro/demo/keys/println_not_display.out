@@ -1,0 +1,15 @@
+error[E0277]: `Cart` doesn't implement `std::fmt::Display`
+ --> println_refusals/src/bin/not_display.rs:7:15
+  |
+7 |     println!("{cart} has {} items", cart.items);
+  |               ^^^^^^ `Cart` cannot be formatted with the default formatter
+  |
+help: the trait `std::fmt::Display` is not implemented for `Cart`
+ --> println_refusals/src/bin/not_display.rs:1:1
+  |
+1 | struct Cart {
+  | ^^^^^^^^^^^
+  = note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `println_refusals` (bin "not_display") due to 1 previous error

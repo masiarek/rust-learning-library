@@ -1,0 +1,38 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+
+[[run]]
+stem = "println_two_calls"
+cmd = ["cargo", "run", "-q", "-p", "println_app"]
+
+[[run]]
+stem = "println_expanded"
+cmd = ["cargo", "rustc", "-q", "-p", "println_app", "--profile=check", "--", "-Zunpretty=expanded"]
+env = { RUSTC_BOOTSTRAP = "1" }
+
+[[run]]
+stem = "println_as_a_function"
+cmd = ["cargo", "run", "-q", "-p", "as_a_function"]
+
+[[run]]
+stem = "println_missing_argument"
+cmd = ["cargo", "build", "-q", "-p", "println_refusals", "--bin", "missing_argument"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "println_extra_argument"
+cmd = ["cargo", "build", "-q", "-p", "println_refusals", "--bin", "extra_argument"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "println_unknown_name"
+cmd = ["cargo", "build", "-q", "-p", "println_refusals", "--bin", "unknown_name"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "println_not_display"
+cmd = ["cargo", "build", "-q", "-p", "println_refusals", "--bin", "not_display"]
+expect = "failure"
+stream = "stderr"

@@ -1,0 +1,6 @@
+# Two programs and four that do not compile. No macro crate: everything on
+# this page is built into rustc and std. `[workspace]` makes this folder its
+# own workspace, whatever manifest sits above it.
+[workspace]
+members = ["println_app", "as_a_function", "println_refusals"]
+resolver = "3"

@@ -1,0 +1,14 @@
+error[E0425]: cannot find value `nmae` in this scope
+ --> println_refusals/src/bin/unknown_name.rs:3:16
+  |
+3 |     println!("{nmae} has {items} items in the cart");
+  |                ^^^^
+  |
+help: a local variable with a similar name exists
+  |
+3 -     println!("{nmae} has {items} items in the cart");
+3 +     println!("{name} has {items} items in the cart");
+  |
+
+For more information about this error, try `rustc --explain E0425`.
+error: could not compile `println_refusals` (bin "unknown_name") due to 1 previous error
