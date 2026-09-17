@@ -81,6 +81,7 @@ Almost every example online writes `fn f(input: &str) -> Cow<str>`. On rustc 1.9
 ## Where this leaves you
 
 - The `Cow` page itself: [`Cow`: borrow until somebody writes](../../../18_Ownership/clone_on_write/README.md) — [you do not have to match on it](../../../18_Ownership/clone_on_write/README.md#you-do-not-have-to-match-on-it), [`to_mut()` is the write](../../../18_Ownership/clone_on_write/README.md#to_mut-is-the-write), [when not to reach for it](../../../18_Ownership/clone_on_write/README.md#when-not-to-reach-for-it).
+- The compiler errors around `Cow` — a missing lifetime, a borrowed local, a `'static` cache, `to_mut` without `mut`: [Every `ToOwned` error, and its fix](../to_owned_errors/README.md#cow).
 - The traps with `.to_owned()` on a `Cow`: [step 8](../to_owned_traps/README.md).
 - A std function that hands you a `Cow`: [`String::from_utf8_lossy`](../../../14_Strings/string_methods/string_from_utf8_lossy/README.md).
 - Why `"élan"` broke claim 7: [Walking a string](../../../14_Strings/walking_a_string/README.md) and [Four lengths](../../../14_Strings/four_lengths/README.md).

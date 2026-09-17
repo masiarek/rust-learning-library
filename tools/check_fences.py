@@ -86,6 +86,9 @@ SCOPE = (
     # for `.clone()` and a fence that must compile with `ToOwned`. The page
     # makes no claim in prose that the fences do not make themselves.
     "12_Traits/how_to_learn_to_owned/where_clone_will_not_do",
+    # Its companion by symptom: twenty errors, each a `compile_fail` fence
+    # beside a fix that must compile, with the transcript recorded between.
+    "12_Traits/how_to_learn_to_owned/to_owned_errors",
 )
 
 # `.claude` holds this repo checked out again, once per agent worktree, so a scan

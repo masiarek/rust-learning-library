@@ -54,6 +54,7 @@ Each surprise below is one missing idea, not a mystery about `ToOwned`. Start at
 
 Beside the steps:
 
+- [Every `ToOwned` error, and its fix](to_owned_errors/README.md) — twenty compiler errors around `ToOwned`, `Clone`, `Borrow` and `Cow`, findable by code or by message: the code, rustc's words, the mistake, and a fix that compiles.
 - [Where `Clone` will not do: code only](where_clone_will_not_do/README.md) — ten pairs of fences, `.clone()` that fails to compile beside `ToOwned` that works, each checked by the compiler on every build.
 - [What `Cow` explanations get wrong, run](cow_claims_checked/README.md) — ten claims about `Cow` from articles, books and chat answers, each checked against the compiler; read it after step 7.
 - [Helpful resources for the path](to_owned_reading_list/README.md) — book chapters, the Reference, the Rustonomicon, articles and talks for every step, with the ones to read with care.

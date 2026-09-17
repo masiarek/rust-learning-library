@@ -23,6 +23,8 @@ The **on** column is how many lesson pages in this library have to mention the c
 | [E0282 ↗](https://doc.rust-lang.org/error_codes/E0282.html) | type annotations needed | 14 | it is asking *which type*, and for `collect` it is asking [which collection](24_Iterators/collect_and_fromiterator/README.md). [Type inference](15_First_Programs/type_inference/README.md) is the general case |
 | [E0599 ↗](https://doc.rust-lang.org/error_codes/E0599.html) | no method named … | 12 | [one code over three unrelated mistakes](12_Traits/no_method_named/README.md) — never written, not imported, not implemented — and the `help:` line tells them apart |
 
+**Errors around `ToOwned`, `Clone`, `Borrow` and `Cow` have a page of their own**, findable by code or by message: [Every `ToOwned` error, and its fix](12_Traits/how_to_learn_to_owned/to_owned_errors/README.md) — twenty of them, each with the code that causes it and a fix that compiles.
+
 Notice what four of those six have in common: **one code, several causes.** That is the reason this page is a map to lessons rather than a glossary of codes — the code narrows the search, and the lesson finishes it.
 
 ## Every code the library teaches
@@ -49,6 +51,7 @@ Notice what four of those six have in common: **one code, several causes.** That
 | [E0204 ↗](https://doc.rust-lang.org/error_codes/E0204.html) | [`Copy` vs `Clone`](16_Structs/copy_vs_clone/README.md) | — |
 | [E0214 ↗](https://doc.rust-lang.org/error_codes/E0214.html) | [A type is not a constructor](16_Structs/a_type_is_not_a_constructor/README.md) | — |
 | [E0252 ↗](https://doc.rust-lang.org/error_codes/E0252.html) | [Bringing names in with `use`](27_Modules/the_use_declaration/README.md) | — |
+| [E0271 ↗](https://doc.rust-lang.org/error_codes/E0271.html) | [Every `ToOwned` error, and its fix](12_Traits/how_to_learn_to_owned/to_owned_errors/README.md#8-toownedowned-vecu8-called-with-a-str) | — |
 | [E0276 ↗](https://doc.rust-lang.org/error_codes/E0276.html) | [When the `impl` does not match the trait](12_Traits/matching_the_trait/README.md) | — |
 | [E0277 ↗](https://doc.rust-lang.org/error_codes/E0277.html) | [When a struct refuses](16_Structs/when_a_struct_refuses/README.md) | **37** other pages |
 | [E0282 ↗](https://doc.rust-lang.org/error_codes/E0282.html) | [Type inference](15_First_Programs/type_inference/README.md) | **13** other pages |
@@ -80,6 +83,7 @@ Notice what four of those six have in common: **one code, several causes.** That
 | [E0507 ↗](https://doc.rust-lang.org/error_codes/E0507.html) | [Transforms instead of `match`](17_Option_and_Result/transforms_instead_of_match/README.md) | **5** other pages |
 | [E0509 ↗](https://doc.rust-lang.org/error_codes/E0509.html) | [The drop flag](18_Ownership/the_drop_flag/README.md) | — |
 | [E0515 ↗](https://doc.rust-lang.org/error_codes/E0515.html) | [Collect the iterator into a `Vec`](24_Iterators/collect_into_a_vec/README.md) | **6** other pages |
+| [E0521 ↗](https://doc.rust-lang.org/error_codes/E0521.html) | [Every `ToOwned` error, and its fix](12_Traits/how_to_learn_to_owned/to_owned_errors/README.md#18-keeping-a-short-lived-cow-in-a-static-cache) | — |
 | [E0585 ↗](https://doc.rust-lang.org/error_codes/E0585.html) | [Comments that compile](15_First_Programs/comments_that_compile/README.md) | — |
 | [E0593 ↗](https://doc.rust-lang.org/error_codes/E0593.html) | [`unwrap_or_else`: the fallback that is built only if it is needed](17_Option_and_Result/unwrap_or_else/README.md) | — |
 | [E0594 ↗](https://doc.rust-lang.org/error_codes/E0594.html) | [When a struct refuses](16_Structs/when_a_struct_refuses/README.md) | — |
