@@ -1,0 +1,12 @@
+1. take_header on &mut &[u8]
+   take 2, take 2                 -> Some([CA, FE]), Some([00, 02])
+   rest                           -> [68, 69]
+   take 9                         -> None, rest still [68, 69]
+
+2. take_header_mut on &mut &mut [u8]
+   take 2, take 2, write both     -> view left 2 long
+   take 9                         -> None, view still 2 long
+   buf                            -> [CA, FE, 00, 02, 68, 69]
+
+3. The early `?` after mem::take
+   take 9                         -> None, view now 0 long

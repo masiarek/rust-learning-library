@@ -1,0 +1,14 @@
+(a) if *first                      -> taken
+    rule: a condition wants `bool`
+(b) peak > limit                   -> true
+    rule: same depth, &i32 > &i32
+(c) filter(|n| *n > limit).count() -> 1
+    rule: filter adds a `&`; then same depth
+(d) any(|n| n.is_negative())       -> true
+    rule: the dot
+(e) *lamp = first | dips           -> *lamp = true
+    rule: `*lamp` is the place; `|` has an impl for &bool
+(f) report(&flags, &readings, &limit, &mut lamp)
+    rule: deref coercion, &Vec<bool> -> &[bool] and &Vec<i32> -> &[i32]
+
+stars in report: 3 (a, c, e); lamp is now true

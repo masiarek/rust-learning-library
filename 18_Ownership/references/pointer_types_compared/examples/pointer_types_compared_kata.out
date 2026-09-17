@@ -1,0 +1,25 @@
+1. &Config: one signature for any owner
+   describe(&config)              -> localhost x3
+   describe(&boxed)               -> boxed x1
+   describe(&counted)             -> counted x2
+   config.host after the call     -> localhost
+
+2. Option<Box<Node>>: the parent owns its children
+   sum(&root)                     -> 6
+   Option<Box<Node>>, words       -> 1
+   drop(root)                     -> three destructors, parent first
+   drop node 1
+   drop node 2
+   drop node 3
+
+3. Rc<Cache>: whoever holds it last frees it
+   holders                        -> 3
+   builder dropped, home reads    -> 200
+   home dropped, old reads        -> 301
+   holders now                    -> 1
+   drop(old)                      -> the last holder frees it
+   drop cache
+
+4. *const c_void into C, *mut c_void back
+   find ':'                       -> Some((14, ':'))
+   find '#'                       -> None   (memchr returned null)

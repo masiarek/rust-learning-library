@@ -58,6 +58,14 @@ Every link was checked on 2026-09-16. A print book is cited only by the chapter 
 - [`std::cell` ↗](https://doc.rust-lang.org/std/cell/index.html) — "Shareable mutable containers": why `Cell` and `RefCell` can be written through a `&`
 - [TRPL ch. 15.5 — `RefCell<T>` and the Interior Mutability Pattern ↗](https://doc.rust-lang.org/book/ch15-05-interior-mutability.html)
 
+## Videos
+
+Titles and channels checked through YouTube's oEmbed endpoint on 2026-09-16; the timestamps are the authors' own chapter marks from each video's description, not a transcript read here.
+
+- **[Jon Gjengset, *Crust of Rust: Lifetime Annotations* ↗](https://www.youtube.com/watch?v=rAl-9HwD858)** (April 2020, 93 min) — a string splitter that holds a `&'a str` and moves it forward, which is [Re-pointing a slice](../repointing_a_slice/README.md) built live. Chapters: [17:10 — missing lifetime specifier ↗](https://www.youtube.com/watch?v=rAl-9HwD858&t=1030s) · [48:07 — what is the `ref` keyword and why not `&` ↗](https://www.youtube.com/watch?v=rAl-9HwD858&t=2887s) · [51:36 — the `*` on the left of `remainder` ↗](https://www.youtube.com/watch?v=rAl-9HwD858&t=3096s) · [54:48 — mutable references are one level deep ↗](https://www.youtube.com/watch?v=rAl-9HwD858&t=3288s). Recorded on a 2020 toolchain; the edition-2024 rule about `ref` under a borrowing default mode is on [The `ref` keyword](../the_ref_keyword/README.md#edition-2024-ref-where-the-borrow-is-already-implied).
+- **[Jon Gjengset, *Crust of Rust: Smart Pointers and Interior Mutability* ↗](https://www.youtube.com/watch?v=8O0Nt9qY_vo)** (June 2020, 123 min) — `Cell`, `RefCell` and `Rc` re-implemented from scratch. Chapters: [3:50 — interior mutability ↗](https://www.youtube.com/watch?v=8O0Nt9qY_vo&t=230s) · [41:21 — `RefCell` ↗](https://www.youtube.com/watch?v=8O0Nt9qY_vo&t=2481s) · [1:06:27 — `Rc` ↗](https://www.youtube.com/watch?v=8O0Nt9qY_vo&t=3987s) · [1:54:20 — `Cow` ↗](https://www.youtube.com/watch?v=8O0Nt9qY_vo&t=6860s). Beside [Six pointer types, one table](../pointer_types_compared/README.md) and [Interior mutability](../../../09_Advanced/interior_mutability/README.md).
+- **[Ralf Jung, *Stacked Borrows: An Aliasing Model for Rust* ↗](https://www.youtube.com/watch?v=h9Fh4jRDGLo)** (ACM SIGPLAN, POPL 2020, 21 min, no chapters) — the conference talk for the paper [A borrow is a loan](../a_borrow_is_a_loan/README.md) takes its programs from.
+
 ## Read with care
 
 Good sources, each with something that does not compile or no longer holds on rustc 1.98.0. The evidence for each is on [What reference explanations get wrong, run](../reference_claims_checked/README.md).
