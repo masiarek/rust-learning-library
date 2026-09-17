@@ -14,6 +14,8 @@
 - **Enums:** a `#[repr(C)]` or `#[repr(u32)]` enum with explicit discriminants — and why turning an integer from C straight into a Rust enum is undefined behaviour when the value has no variant; take the integer and convert with `TryFrom`
 - `bool` across FFI, and the values other than 0 and 1 a C caller can send
 - Designing for invalid states: types that cannot hold a value the C side has no business sending
+- The compiler's own list: `improper_ctypes` (warn) checks `extern` blocks and `improper_ctypes_definitions` (warn) checks `extern "C"` function definitions — a `String` parameter draws *"`extern` block uses type `String`, which is not FFI-safe"* — and why a `Box<T>` passes the second without a warning but not the first
+- Widths that differ by target: `c_long` is 64 bits on 64-bit Linux and macOS and 32 bits on 64-bit Windows, which is why `core::ffi` has it at all
 
 ## The trap it exists for
 

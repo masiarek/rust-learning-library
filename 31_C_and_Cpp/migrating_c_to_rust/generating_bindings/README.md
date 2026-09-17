@@ -13,6 +13,8 @@
 - **Rust to C:** a header generated from `extern "C"` items. `cheadergen` reads the compiler's own view through rustdoc JSON (and so needs a pinned nightly); `cbindgen` parses the source. What each sees that the other does not, such as items produced by macros
 - Configuring the header for non-trivial types: opaque structs, `#[repr(C)]` enums, and one header per crate in a workspace
 - Keeping generated files honest: a CI check that regenerates and fails on any difference
+- The layout tests `bindgen` can generate: what each asserts about a struct's size, alignment and field offsets, and when one fails — see [type layout](../../../09_Advanced/type_layout/README.md)
+- Edition 2024 output: does `bindgen`'s `rust_edition` setting produce `unsafe extern "C"` blocks, and what does `wrap_unsafe_ops` change inside the generated functions?
 
 ## The trap it exists for
 

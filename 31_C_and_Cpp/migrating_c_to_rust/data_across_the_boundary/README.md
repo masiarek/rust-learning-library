@@ -14,6 +14,8 @@
 - **Collections:** a slice as a pointer and a length, and why a `Vec` cannot be handed over as it stands
 - **Ownership:** `Box::into_raw` to give a value to C and `Box::from_raw` in a matching `_free` function to take it back — and why C's `free` on Rust's allocation is undefined behaviour even when it seems to work
 - Borrowed data: a pointer C may keep only for the duration of a call, and how to say that in the header
+- The other direction: a `char *` from C's `strdup` is freed with C's `free`, never `CString::from_raw`, whose docs warn that taking ownership of a string allocated by foreign code is likely undefined behaviour; and `from_raw` twice on one pointer is a double free
+- API shapes that settle ownership before any code is written: the caller passes a buffer and its length, every function that returns memory has a matching `_free`, or the value lives behind a handle only the library creates and destroys — and [callbacks across FFI](../../../09_Advanced/callbacks_across_ffi/README.md) for the user-data pointer C keeps
 
 ## The trap it exists for
 
