@@ -40,6 +40,16 @@ Two escape hatches, borrowed from rustdoc so they need no explaining:
 error a method gives is asserting something, and this turns that assertion into
 a check: the day the compiler starts accepting it, the page is wrong and says so.
 
+One more attribute, for pages about tests:
+
+    ```rust,test           compiled with `--test` as well, so `#[test]` functions
+                           and `#[cfg(test)]` modules are type-checked too
+
+Without it a fence is built as an ordinary library, where every `#[test]` item is
+configured out: a test that calls a function that does not exist compiles, and an
+error that only a test build reports (`#[should_panic]` on a function returning
+`Result`) never fires. Combine it with `compile_fail` for exactly that case.
+
 Stdlib only, and no network: same rule as run_examples.py.
 
     python3 tools/check_fences.py                       # gate the scoped trees
@@ -98,6 +108,11 @@ SCOPE = (
     # The same pair for the references path: errors by symptom, and lints.
     "18_Ownership/references/reference_errors",
     "18_Ownership/references/reference_lints",
+    # Testing's errors and lints pages: every broken fence must fail, every fix and
+    # every silent version must compile, and the ones marked `test` are built with
+    # `--test`, which is the only build where an error about a test exists.
+    "28_Testing/testing_errors",
+    "28_Testing/testing_lints",
 )
 
 # `.claude` holds this repo checked out again, once per agent worktree, so a scan
@@ -190,8 +205,8 @@ def rust_fences(text: str) -> list[tuple[int, set[str], str]]:
     return out
 
 
-def compiles(code: str, workdir: str) -> tuple[bool, str]:
-    """Build one fence as a LIBRARY crate.
+def compiles(code: str, workdir: str, test: bool = False) -> tuple[bool, str]:
+    """Build one fence as a LIBRARY crate, with `--test` when `test` is set.
 
     A library accepts an item-level fragment — a lone `fn`, `impl` or `struct` —
     which is most of what a page legitimately shows, and rejects a bare statement,
@@ -202,7 +217,7 @@ def compiles(code: str, workdir: str) -> tuple[bool, str]:
     with open(src, "w") as fh:
         fh.write(code)
     proc = subprocess.run(
-        ["rustc", "--edition", EDITION, "--crate-type", "lib",
+        ["rustc", "--edition", EDITION, "--crate-type", "lib", *(["--test"] if test else []),
          "--emit=metadata", "-o", os.path.join(workdir, "fence.rmeta"), src],
         capture_output=True,
         text=True,
@@ -237,7 +252,7 @@ def check(roots, workdir: str):
                 if "ignore" in attrs:
                     ignored += 1
                     continue
-                ok, err = compiles(code, workdir)
+                ok, err = compiles(code, workdir, test="test" in attrs)
                 if "compile_fail" in attrs:
                     if ok:
                         problems.append(
