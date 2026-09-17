@@ -1,0 +1,32 @@
+1. cargo test --test prices
+   [setup] once, before any test (start a container, seed a database)
+   running 3 tests
+   test parses_a_price ... ok
+   test accepts_one_decimal ... FAILED
+   test rejects_a_word ... ok
+   ---- accepts_one_decimal ---- assertion `left == right` failed; left: None; right: Some(250)
+   test result: FAILED. 2 passed; 1 failed; 0 filtered out
+   [teardown] once, after the last test
+   exit status 101
+
+2. cargo test --test prices -- parses
+   [setup] once, before any test (start a container, seed a database)
+   running 1 test
+   test parses_a_price ... ok
+   test result: ok. 1 passed; 0 failed; 2 filtered out
+   [teardown] once, after the last test
+   exit status 0
+
+3. cargo test --test prices -- --list
+   parses_a_price: test
+   accepts_one_decimal: test
+   rejects_a_word: test
+   exit status 0
+
+4. Setup ran 2 times for 2 runs that executed tests
+   Once per run of the binary, not once per test, and never for --list.
+
+5. The same tests, with no catch_unwind around each one
+   test parses_a_price ... ok
+   test accepts_one_decimal ...
+   exit status Some(101); rejects_a_word never ran, and no summary line says so

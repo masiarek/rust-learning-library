@@ -1,0 +1,23 @@
+1. The fake records what the code did
+   send("acme", "invoice 101 is 12 days overdue")
+   send("acme", "invoice 103 is 40 days overdue")
+   send("initech", "invoice 104 is 3 days overdue")
+   failed = []
+
+2. A fake can fail on demand
+   Unreachable("initech"): failed = ["initech"]
+
+3. The same tests against version 1 and the batched version 2
+   v1, one email per invoice
+     every_overdue_invoice_was_mentioned  pass
+     an_unreachable_customer_is_reported  pass
+     send_was_called_three_times          pass
+     scripted_second_send_fails           pass
+   v2, one email per customer
+     every_overdue_invoice_was_mentioned  pass
+     an_unreachable_customer_is_reported  pass
+     send_was_called_three_times          FAIL  assertion `left == right` failed; left: ["acme", "initech"]; right: ["acme", "acme", "initech"]
+     scripted_second_send_fails           FAIL  assertion `left == right` failed; left: ["initech"]; right: ["acme"]
+   Both versions tell every customer about every overdue invoice.
+   The outcome tests say so. The two tests that pinned the calls
+   themselves fail on a refactor that broke nothing a customer sees.

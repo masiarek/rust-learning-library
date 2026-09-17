@@ -1,0 +1,37 @@
+1. Two tests, one fixed path
+   test A wrote vim and read Some("hx")
+   test B wrote hx  and read Some("hx")
+   The second write replaced the first before A read it back.
+
+2. A directory per test
+   test A wrote vim and read Some("vim")
+   test B wrote hx  and read Some("hx")
+   Same threads, same interleaving. Nothing is shared, so nothing races.
+
+3. The directory lives exactly as long as its owner
+   while `dir` is alive, the directory exists
+   after drop(dir), it is gone (and the file in it with it)
+
+4. The trap: the handle was a temporary
+   let path = TempDir::new()?.path().to_owned();
+   the directory is gone before the next line runs
+   writing a file into it: Err(NotFound)
+   let _ = TempDir::new()?;     directories alive now: 0
+   let _dir = TempDir::new()?;  directories alive now: 1
+
+5. A failing test still removes its directory
+   the test panicked: true; its directory is gone
+   Unwinding runs Drop. panic = "abort" and process::exit do not.
+
+6. Several files: paths relative to a root, never to the working directory
+   workspace_members(root) = ["shop-api", "shop-cli"]
+   The layout is built inside the root, so relative paths between the
+   files still hold, and set_current_dir is never called.
+
+7. Or no file at all
+   default_editor_from(bytes)       = Some("hx")
+   default_editor_from(empty bytes) = None
+   Opening the file, and the error when it is missing, still need one
+   test that uses a real path.
+
+   directories still alive at the end: 0

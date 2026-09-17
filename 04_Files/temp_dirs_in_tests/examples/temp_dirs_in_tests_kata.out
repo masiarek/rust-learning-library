@@ -1,0 +1,17 @@
+1. The broken helper
+   log_fixture_broken(..) returned a path; the file exists: false
+   count_errors = Err(NotFound)
+   NotFound, from code that wrote the file one line earlier. It is not
+   a permissions problem: the directory was dropped with the helper's
+   stack frame, before the test got its path.
+
+2. The fixed helper returns the owner along with the path
+   the file exists: true
+   count_errors = Ok(2)
+   after the fixture is dropped, the file exists: false
+
+3. Why the compiler did not stop the broken one
+   A borrow would have been caught: returning dir.path() is a &Path
+   into a local, and that is error E0515. to_owned() or join() makes
+   an independent PathBuf, which is only a name. Nothing ties a name
+   to the value whose Drop deletes the thing it names.

@@ -1,0 +1,19 @@
+1. One #[test] with a loop over the table
+   FAILED  assertion `left == right` failed: row "2.5"; left: None; right: Some(250)
+   One failure reported. The comma row is broken too, and nothing says so
+   until the first one is fixed.
+
+2. A trial per row
+   test price_in_cents::2.50 ... ok
+   test price_in_cents::0.05 ... ok
+   test price_in_cents::2.5 ... FAILED  assertion `left == right` failed; left: None; right: Some(250)
+   test price_in_cents::two ... ok
+   test price_in_cents::1,000.00 ... FAILED  assertion `left == right` failed; left: None; right: Some(100000)
+   3 passed; 2 failed; 0 filtered out
+   exit status 101; both broken rows named, every row run
+
+3. The filter now selects rows: -- 2.5
+   test price_in_cents::2.50 ... ok
+   test price_in_cents::2.5 ... FAILED  assertion `left == right` failed; left: None; right: Some(250)
+   1 passed; 1 failed; 3 filtered out
+   exit status 101; "2.5" is a substring of "2.50" too, so two rows ran

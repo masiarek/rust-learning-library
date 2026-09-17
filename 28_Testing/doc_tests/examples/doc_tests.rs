@@ -63,8 +63,8 @@ fn main() {
 
     println!();
     println!("2. Each block is a whole program");
-    println!("   A doc test is wrapped in `fn main()` for you and compiled as its");
-    println!("   own crate, which is why it must `use` your crate by name rather");
+    println!("   A doc test is wrapped in `fn main()` for you and compiled outside");
+    println!("   your crate, which is why it must `use` your crate by name rather");
     println!("   than by `crate::`. It sees your PUBLIC API only — so a doc test");
     println!("   is an integration test that happens to be printed in the docs.");
 
@@ -91,9 +91,9 @@ fn main() {
     println!("   Good: the two-line example a reader needs, kept honest. A doc");
     println!("   test that fails is a documentation bug, which is exactly the");
     println!("   right thing to be told.");
-    println!("   Not: exhaustive coverage. They are slower than unit tests (one");
-    println!("   compilation each), they only reach the public API, and a doc");
-    println!("   comment full of edge cases is a bad doc comment. Put the third");
-    println!("   through twentieth case in #[cfg(test)] and leave the first one");
-    println!("   on the page.");
+    println!("   Not: exhaustive coverage. They are slower than unit tests (a");
+    println!("   separate compilation, and a process each), they only reach the");
+    println!("   public API, and a doc comment full of edge cases is a bad doc");
+    println!("   comment. Put the third through twentieth case in #[cfg(test)]");
+    println!("   and leave the first one on the page.");
 }

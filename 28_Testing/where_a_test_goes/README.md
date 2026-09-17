@@ -60,7 +60,7 @@ test result: ok. 3 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; fini
 
 ## The `tests/` directory has one rule people trip on
 
-Every `.rs` file **directly in** `tests/` is compiled as its own crate. A subdirectory is not — which is exactly why shared helpers go in `tests/common/mod.rs` rather than `tests/common.rs`, since the second would be compiled and run as a test crate of its own and report zero tests.
+Every `.rs` file **directly in** `tests/` is compiled as its own crate. A subdirectory is not, unless it holds a `main.rs` — which is exactly why shared helpers go in `tests/common/mod.rs` rather than `tests/common.rs`, since the second would be compiled and run as a test crate of its own and report zero tests. [How `cargo test` runs your tests](../how_cargo_test_runs/README.md) has the whole table, checked against a real package.
 
 ## Which to write
 

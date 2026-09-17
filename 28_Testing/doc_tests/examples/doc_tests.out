@@ -7,8 +7,8 @@
    ago and nobody noticed.
 
 2. Each block is a whole program
-   A doc test is wrapped in `fn main()` for you and compiled as its
-   own crate, which is why it must `use` your crate by name rather
+   A doc test is wrapped in `fn main()` for you and compiled outside
+   your crate, which is why it must `use` your crate by name rather
    than by `crate::`. It sees your PUBLIC API only — so a doc test
    is an integration test that happens to be printed in the docs.
 
@@ -32,8 +32,8 @@
    Good: the two-line example a reader needs, kept honest. A doc
    test that fails is a documentation bug, which is exactly the
    right thing to be told.
-   Not: exhaustive coverage. They are slower than unit tests (one
-   compilation each), they only reach the public API, and a doc
-   comment full of edge cases is a bad doc comment. Put the third
-   through twentieth case in #[cfg(test)] and leave the first one
-   on the page.
+   Not: exhaustive coverage. They are slower than unit tests (a
+   separate compilation, and a process each), they only reach the
+   public API, and a doc comment full of edge cases is a bad doc
+   comment. Put the third through twentieth case in #[cfg(test)]
+   and leave the first one on the page.

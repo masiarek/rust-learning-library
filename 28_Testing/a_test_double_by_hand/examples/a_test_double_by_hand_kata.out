@@ -1,0 +1,18 @@
+1. The boundary, tested without waiting a week
+   issued + 7 days - 1s  is_valid = true
+   issued + 7 days       is_valid = true
+   issued + 7 days + 1s  is_valid = false
+
+2. A clock that runs behind the issue time
+   issued - 60s          is_valid = true
+   now - issued would underflow a u64; saturating_sub makes it 0.
+   Only a fixed clock can put now before the issue time on purpose.
+
+3. The real clock still works in production code
+   issued September 2001, checked on SystemClock: is_valid = false
+   SystemClock and FixedClock are both `impl Clock`; is_valid never knows which.
+
+4. Why the test is where the boundary is decided
+   "Valid for 7 days" does not say whether the 7-day second counts.
+   The code picks one with <= or <. valid_on_the_last_second is the
+   line that says which, and it fails if someone changes their mind silently.

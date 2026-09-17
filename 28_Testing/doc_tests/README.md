@@ -19,7 +19,7 @@ Rename the function, change the return type, break the arithmetic — the docume
 
 ## Each block is a whole program
 
-A doc test is wrapped in `fn main()` for you and compiled as **its own crate**, linked against yours. Two things follow, and both surprise people once:
+A doc test is wrapped in `fn main()` for you and compiled **outside your crate**, linked against it. On edition 2024, rustdoc compiles all of a crate's doc tests together into one merged binary and still runs each in a process of its own; before 2024, each was a separate crate and a separate compilation ([How `cargo test` runs your tests](../how_cargo_test_runs/README.md) checks both). Either way, two things follow, and both surprise people once:
 
 - It must `use` your crate **by name** (`use my_crate::tally;`), never `use crate::…`.
 - It sees the **public API only**. A doc test is an integration test that happens to be printed in the docs — which makes it the cheapest way to discover that something you meant to export is still private.
@@ -55,20 +55,24 @@ What `#` must **not** hide is the part that makes the example work. An example w
 
 **Good:** the two-line example a reader needs, kept honest. A failing doc test is a documentation bug, which is exactly the right thing to be told about.
 
-**Not:** coverage. They are slower than unit tests — one compilation each — they only reach the public API, and a doc comment full of edge cases is a bad doc comment. Put the first case on the page and the third through twentieth in `#[cfg(test)]`.
+**Not:** coverage. They are slower than unit tests — a separate compilation, and a process per doc test — they only reach the public API, and a doc comment full of edge cases is a bad doc comment. Put the first case on the page and the third through twentieth in `#[cfg(test)]`.
 
 Run against the example on this page, `rustdoc --test` prints:
 
-```text title="rustdoc --edition 2024 --test doc_tests.rs -L . --extern doc_tests=libdoc_tests.rlib — one run; the order varies"
+```text title="rustdoc --edition 2024 --test doc_tests.rs -L . --extern doc_tests=libdoc_tests.rlib — one run; the order and the timings vary"
 running 5 tests
-test doc_tests.rs - read_cell (line 42) - should panic ... ok
-test doc_tests.rs - read_cell (line 35) ... ok
-test doc_tests.rs - tally (line 14) ... ok
 test doc_tests.rs - read_cell (line 26) ... ok
+test doc_tests.rs - tally (line 14) ... ok
 test doc_tests.rs - tally (line 8) ... ok
+test doc_tests.rs - read_cell (line 35) ... ok
+test doc_tests.rs - read_cell (line 42) - should panic ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+all doctests ran in 3.89s; merged doctests compilation took 0.59s
 ```
+
+The last line is rustdoc's, and it appears only on edition 2024: all five blocks, the `should_panic` one included, were compiled together as one merged program.
 
 Note what the harness names each test: the **line** the fence starts on. That is the whole naming scheme, and it is why a doc test failure tells you where to look but not what the case was called.
 
@@ -96,8 +100,8 @@ Note what the harness names each test: the **line** the fence starts on. That is
    ago and nobody noticed.
 
 2. Each block is a whole program
-   A doc test is wrapped in `fn main()` for you and compiled as its
-   own crate, which is why it must `use` your crate by name rather
+   A doc test is wrapped in `fn main()` for you and compiled outside
+   your crate, which is why it must `use` your crate by name rather
    than by `crate::`. It sees your PUBLIC API only — so a doc test
    is an integration test that happens to be printed in the docs.
 
@@ -121,11 +125,11 @@ Note what the harness names each test: the **line** the fence starts on. That is
    Good: the two-line example a reader needs, kept honest. A doc
    test that fails is a documentation bug, which is exactly the
    right thing to be told.
-   Not: exhaustive coverage. They are slower than unit tests (one
-   compilation each), they only reach the public API, and a doc
-   comment full of edge cases is a bad doc comment. Put the third
-   through twentieth case in #[cfg(test)] and leave the first one
-   on the page.
+   Not: exhaustive coverage. They are slower than unit tests (a
+   separate compilation, and a process each), they only reach the
+   public API, and a doc comment full of edge cases is a bad doc
+   comment. Put the third through twentieth case in #[cfg(test)]
+   and leave the first one on the page.
 ```
 <!-- /output -->
 

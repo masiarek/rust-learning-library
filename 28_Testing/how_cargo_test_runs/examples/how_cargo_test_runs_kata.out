@@ -1,0 +1,17 @@
+1. Each test passes on its own
+   test A alone, before the fix: apple = Some(3)
+
+2. Together, the second set_current_dir wins for both threads
+   test A expected Some(3) and read Some(5)
+   test B expected Some(5) and read Some(5)
+   Under cargo test this interleaving happens only sometimes, which is
+   why the failure looks like a flake rather than a bug.
+
+3. With the directory passed in, the same interleaving is harmless
+   test A expected Some(3) and read Some(3)
+   test B expected Some(5) and read Some(5)
+   The threads still call set_current_dir. Nothing reads it any more.
+
+4. The rule the fix follows
+   Only main() decides where the files are. It resolves the path
+   once and hands it down, so a test can hand down a different one.
