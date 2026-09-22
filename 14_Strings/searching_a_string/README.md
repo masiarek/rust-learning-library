@@ -569,6 +569,8 @@ fn main() {
 - [String slices](../string_slices/README.md) — why a byte offset is the number a slice wants
 - [`str` methods](../str_methods/README.md) — the reference: every search method, its signature and its edges
 - [Four ways to find it ↗](https://masiarek.github.io/python-learning-library/01_Text_and_Bytes/finding_a_substring/index.html) — the same four questions from Python, sorted by how they fail rather than what they find: `find` returns `-1` (truthy, and a valid index), `index` raises, `partition` returns a three-tuple that never raises, and the offset counts **characters** — `"żółw".find("w")` is `3` there and `6` here
+- [What a backreference is ↗](https://masiarek.github.io/regex-learning-library/01_Backreferences/what_a_backreference_is/index.html) — where the four questions on this page run out: `\1` matches the *text* a group captured, which `str::find` and the `regex` crate both decline to do. The crate refuses it at compile time; `fancy-regex` is the one that does not
+- [What a backreference costs ↗](https://masiarek.github.io/regex-learning-library/01_Backreferences/what_a_backreference_costs/index.html) — why that refusal is a feature: `regex` answers `^(a+)+$` over 30 characters in one pass, and `fancy-regex` hits its backtrack limit on the same pattern once a `\1` is added
 - [The Book, ch. 8.2 ↗](https://doc.rust-lang.org/book/ch08-02-strings.html) — the paragraph that sends you to `contains` and `replace` in the first place
 
 ## Po polsku
