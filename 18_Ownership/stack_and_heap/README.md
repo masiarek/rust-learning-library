@@ -334,6 +334,7 @@ Part 3 — predict which of seven lines allocates, then count.
 - [Getting a result back ↗](https://masiarek.github.io/concurrency-learning-library/01_Threads/getting_a_result_back/index.html) — why a thread's result cannot live on that thread's stack, in six languages
 - [Drawing the owner and the view](../../14_Strings/drawing_the_owner_and_the_view/README.md) — the stack and heap halves for one `String` and one `&str`, byte by byte
 - [Returned by value](../returned_by_value/README.md) — a returned `String` is three words whatever it holds, and `-> str` has no size to return
+- [What *Rust: The Practical Guide* says about ownership in functions, run](../ownership_in_functions_claims_checked/README.md) — a book's "moving the entire vector's data" priced with the counting allocator: move 0, borrow 0, clone 1
 
 Two neighbouring topics a reader arriving from a memory-model chapter will look for, and where they live: **reference cycles and `Weak`** are on [the `Rc` page](../reference_counting/README.md#the-one-leak-safe-rust-still-permits), and **`Send` and `Sync`** are in [marker traits](../../12_Traits/marker_traits/README.md).
 

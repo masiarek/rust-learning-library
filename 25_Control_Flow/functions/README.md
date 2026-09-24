@@ -213,6 +213,8 @@ A `fn` inside an `impl` block whose first parameter is `self`, `&self` or `&mut 
 - [Comprehensive Rust: Functions ↗](https://google.github.io/comprehensive-rust/control-flow-basics/functions.html)
 - [Listing 2.2, run](../../10_Resources/rust_in_action/first_steps/README.md) — parameter types required, the return type optional, and the semicolon that breaks `-> i32`, each shown by rustc
 - [Returned by value](../../18_Ownership/returned_by_value/README.md) — what the type after `->` needs: a size the caller can reserve, and what to return instead of `str`
+- [What *Rust: The Practical Guide* says about functions and code blocks, run](../functions_claims_checked/README.md) — a second book's functions section checked: Listing 2.7's three warnings, `println!` as an expression of type `()`, and the tuple that is one return value
+- [*Rust: The Practical Guide*, chapter 2 exercises, run](../../10_Resources/rust_the_practical_guide/ch2_katas/README.md) — exercises 2.9 to 2.12: three functions written to fit a call site, nested calls in place of variables, a tuple parameter as one argument, and `double(double(x))`
 
 ## Po polsku
 

@@ -512,6 +512,7 @@ fn main() {
 - [SHADOWING.md](../../SHADOWING.md) — the map, if the nested-`n` snippet is what brought you here
 - [Flow control](../../25_Control_Flow/flow_control/README.md) — the rule met again in every construct: [`if`](../../25_Control_Flow/if_expressions/README.md), [`match`](../../25_Control_Flow/match_expressions/README.md) and [`loop`](../../25_Control_Flow/the_loop_keyword/README.md) have values, `for` and `while` evaluate to `()`
 - [Listing 2.2, run](../../10_Resources/rust_in_action/first_steps/README.md) — *Rust in Action* says a semicolon after `i + j` makes `add` return `()`; rustc says `E0308`
+- [What *Rust: The Practical Guide* says about functions and code blocks, run](../../25_Control_Flow/functions_claims_checked/README.md) — a book's §2.4 "Code Blocks" run: the `;` after a `let` block is required, a `return` inside a block leaves the function, and a block in a loop runs on every pass
 
 ## Po polsku
 

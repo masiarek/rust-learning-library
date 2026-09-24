@@ -286,6 +286,7 @@ rustc --edition 2024 16_Structs/newtype_score/examples/newtype_score.rs -o /tmp/
 - [`Option` fields](../../17_Option_and_Result/option_fields/README.md) — the same "required by default" instinct applied to structs
 - [The long way round](../../ROADMAP.md) — where this rung sits, and what comes next
 - [A type alias is not a new type](../type_aliases/README.md) — the `type Score = u8;` that looks like this page and enforces nothing
+- [What *Rust: The Practical Guide* says about packages, crates and modules, run](../../27_Modules/modules_claims_checked/README.md) — a book arriving at the same door: `pub struct` with private fields, `E0451` on the literal, and a constructor
 
 ## Po polsku
 

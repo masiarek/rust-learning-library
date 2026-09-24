@@ -346,6 +346,7 @@ fn main() {
 - [`slice` methods](../../../26_Collections/slice_methods/README.md) — the slice API the cursor functions are built from
 - [`Read` and `Write`](../../../12_Traits/read_and_write/README.md) — the traits whose byte-slice impls advance a `&mut &[u8]`
 - [`split_first_mut` ↗](https://doc.rust-lang.org/std/primitive.slice.html#method.split_first_mut) · [`impl Read for &[u8]` ↗](https://doc.rust-lang.org/std/io/trait.Read.html#impl-Read-for-%26%5Bu8%5D) · [`std::mem::take` ↗](https://doc.rust-lang.org/std/mem/fn.take.html)
+- [Mutable binding, mutable reference](../mutable_binding_vs_mutable_reference/README.md) — `&mut &mut T` as the bottom row of a 2 × 2 grid taken twice, beside `&mut &T`, `& &mut T` and `&&T`
 
 ## Po polsku
 

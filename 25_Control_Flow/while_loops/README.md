@@ -321,6 +321,7 @@ fn main() {
 - [When a `for` loop beats a chain](../../24_Iterators/when_a_loop_beats_a_chain/README.md) — the loops that stay loops, including a work list that grows while it drains
 - [Time and benchmarking](../../33_Time_and_Benchmarking/README.md) — what Listing 2.7's count would need to become a measurement
 - [Comprehensive Rust: `while` ↗](https://google.github.io/comprehensive-rust/control-flow-basics/loops/while.html)
+- [*Rust: The Practical Guide*, chapter 3 exercises, run](../../10_Resources/rust_the_practical_guide/ch3_katas/README.md) — exercise 3.4: the book's two-index `while` over `as_bytes()`, and why it says `false` for `"été"`
 
 ## Sources
 

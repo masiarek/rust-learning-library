@@ -289,6 +289,7 @@ fn main() {
 - [What a struct is](../../16_Structs/what_a_struct_is/README.md) — where the fields came from
 - [`const` and `static`](../const_and_static/README.md) — the two item kinds that most often want a `pub`
 - [Packages and crates](../packages_and_crates/README.md) — the two levels above the module tree
+- [What *Rust: The Practical Guide* says about packages, crates and modules, run](../modules_claims_checked/README.md) — a book chapter's store built one `E0603` at a time, every refusal keyed, and the two sentences about reach that read too narrowly
 
 ## Sources
 

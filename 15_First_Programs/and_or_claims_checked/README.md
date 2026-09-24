@@ -137,6 +137,7 @@ Two more statements hold as written, and rustc enforces both. Function and varia
 - [What `Cow` explanations get wrong, run](../../12_Traits/how_to_learn_to_owned/cow_claims_checked/README.md) — the same kind of check, on a harder topic
 - [A first test, step by step](../../28_Testing/a_first_test_step_by_step/README.md) — the same chapter's next section: loading the truth table, test first
 - [Books](../../10_Resources/books/README.md) — where *Rust for Machine Learning* sits on the shelf
+- [What *Rust: The Practical Guide* says about functions and code blocks, run](../../25_Control_Flow/functions_claims_checked/README.md) — the same check on another book's functions section, with its code blocks
 
 ## Po polsku
 

@@ -27,6 +27,7 @@ A lowercase name in an arm is not a constant being compared against — it is a 
 - [Six kinds of zero](../../17_Option_and_Result/six_kinds_of_zero/README.md) — exhaustiveness used as a domain model
 - [`match` expressions](../../25_Control_Flow/match_expressions/README.md) — the keyword and its arm-order rules
 - [Comprehensive Rust: Destructuring Enums ↗](https://google.github.io/comprehensive-rust/pattern-matching/destructuring-enums.html)
+- [*Rust: The Practical Guide*, chapter 5 exercises, run](../../10_Resources/rust_the_practical_guide/ch5_katas/README.md) — `Some(character)` and `Ok(res)`: the arms the book's chapter 5 katas leave for you to write, and what rustc says when the parentheses are missing
 
 ## Po polsku
 

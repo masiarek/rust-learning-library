@@ -202,6 +202,8 @@ rustc --edition 2024 15_First_Programs/variables/examples/variables.rs -o /tmp/v
 - [`and`, `or` and a first program's explanation, run](../and_or_claims_checked/README.md) — a book's `let` snippets checked: assign-once without `mut`, and the old value a shadow leaves alive
 - [Variables and mutability ↗](https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html) · [`E0384` ↗](https://doc.rust-lang.org/error_codes/E0384.html) · [Comprehensive Rust: Variables ↗](https://google.github.io/comprehensive-rust/types-and-values/variables.html)
 - [Listing 2.2, run](../../10_Resources/rust_in_action/first_steps/README.md) — *Rust in Action*'s "immutable by default", checked: `let size;` assigned once, later, with no `mut`
+- [Mutable binding, mutable reference](../../18_Ownership/references/mutable_binding_vs_mutable_reference/README.md) — the `mut` on a `let` crossed with the `mut` after a `&`: `E0384` for one choice missing, `E0594` for the other
+- [*Rust: The Practical Guide*, chapter 2 exercises, run](../../10_Resources/rust_the_practical_guide/ch2_katas/README.md) — the book's twelve exercises on `let`, `mut`, assign-once and the second `let`, each solved by a compiled program, and the book's own fixes checked
 
 ## Po polsku
 

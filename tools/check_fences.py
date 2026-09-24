@@ -108,6 +108,23 @@ SCOPE = (
     # The same pair for the references path: errors by symptom, and lints.
     "18_Ownership/references/reference_errors",
     "18_Ownership/references/reference_lints",
+    # A book's functions and code-blocks sections checked claim by claim, and
+    # the lesson it graduated: every fence is a whole demonstration or
+    # `compile_fail` beside its transcript (2026-09-23).
+    "25_Control_Flow/functions_claims_checked",
+    "27_Modules/items_inside_a_function",
+    # The same book's ownership chapter: a claims page, the binding-vs-reference
+    # lesson it produced, and the chapter's exercises, every given program a
+    # `compile_fail` fence beside a fix that compiles.
+    "18_Ownership/ownership_in_functions_claims_checked",
+    "18_Ownership/references/mutable_binding_vs_mutable_reference",
+    "10_Resources/rust_the_practical_guide",
+    # The hash collections' companions: errors by symptom beside fixes that
+    # compile, and lint pairs where every bad and good program compiles.
+    "26_Collections/a_first_hashmap",
+    "26_Collections/a_first_hashset",
+    "26_Collections/hashmap_errors",
+    "26_Collections/hashmap_lints",
     # Testing's errors and lints pages: every broken fence must fail, every fix and
     # every silent version must compile, and the ones marked `test` are built with
     # `--test`, which is the only build where an error about a test exists.

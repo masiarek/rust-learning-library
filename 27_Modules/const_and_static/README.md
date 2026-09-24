@@ -409,6 +409,7 @@ fn main() {
 - [What a type annotation does](../../15_First_Programs/what_an_annotation_does/README.md) — why both of these need their type written out, where a `let` does not
 - [A block is an expression](../../15_First_Programs/a_block_is_an_expression/README.md) — the block a function-body `const` is scoped to, and `E0425` outside it
 - [Items inside a function](../items_inside_a_function/README.md) — the other items you can nest: `fn`, `struct`, `use`, and the `E0434` an inner `fn` gives
+- [What *Rust: The Practical Guide* says about functions and code blocks, run](../../25_Control_Flow/functions_claims_checked/README.md) — the `const` and `static` a nested `fn` can read, checked against a book's claim that a function sees only parameters and locals
 
 ## Sources
 

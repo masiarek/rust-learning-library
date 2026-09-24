@@ -30,6 +30,7 @@ Glob-importing two preludes that both export a name — two different `Result`s,
 - [Extension traits](../../12_Traits/extension_traits/README.md) — the traits a prelude most often re-exports
 - [Modules and visibility](../../27_Modules/modules_and_visibility/README.md) — `pub use` as re-export
 - [Resources and plugins](../../43_Games/resources_and_plugins/README.md) — Bevy's prelude in use
+- [What *Rust: The Practical Guide* says about packages, crates and modules, run](../modules_claims_checked/README.md) — a library whose whole public surface is four `pub use` lines, and the private path that `E0603`s
 
 ## If you are coming from another language
 

@@ -136,6 +136,7 @@ warning: unused `Result` that must be used
 - [Parsing a string](../../14_Strings/parsing_a_string/README.md) — `parse`, the `Result` most people meet first
 - [`main` can return a `Result`](../../02_Errors/main_returns_result/README.md) — using `?` inside `main`
 - [`std::result` ↗](https://doc.rust-lang.org/std/result/index.html)
+- [*Rust: The Practical Guide*, chapter 5 exercises, run](../../10_Resources/rust_the_practical_guide/ch5_katas/README.md) — `Ok(res)` and `Err(e)` written into the book's empty match arms, on a `calculate(self)` that consumes its shape
 
 ## Po polsku
 

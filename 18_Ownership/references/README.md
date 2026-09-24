@@ -36,6 +36,7 @@ Pages marked **new** live in this folder. The rest are existing lessons elsewher
 | a pointer made from `p.addr()` compared equal to `p` and reading through it was still undefined | [Address, pointer, reference](../../36_Pointers/address_pointer_reference/README.md) |
 | a reference has to be aligned to the type it points at, not to `usize` | [A reference is aligned to its referent](../../36_Pointers/aligned_to_the_referent/README.md) |
 | a snippet from Stack Overflow, The Book or a course did not compile as printed | [Reference claims, run](reference_claims_checked/README.md) |
+| `let mut r = &a` re-points `r`, `let r = &mut a` writes through it, and a book called `&mut &T` a fifth kind of reference | [Mutable binding, mutable reference](mutable_binding_vs_mutable_reference/README.md) |
 
 ## The path
 
@@ -48,18 +49,20 @@ Pages marked **new** live in this folder. The rest are existing lessons elsewher
 | 3 | **new** [A borrow is a loan](a_borrow_is_a_loan/README.md) | how the compiler decides: each reference records a loan, two conditions are checked, and every labelled line of a borrow error is one of them |
 | 4 | [Borrowed state](../borrowed_state/README.md) | the same loan from the owner's side: `E0505` and `E0506` |
 | 5 | [Reborrowing](../reborrowing/README.md) | a call site passes `&mut *r`, so a `&mut` is not moved into the call |
-| 6 | **new** [When you need the `*`](when_you_need_the_star/README.md) | the five places Rust writes the `*` for you, and why `if flag` is not one of them |
-| 7 | **new** [The `ref` keyword](the_ref_keyword/README.md), then [Match ergonomics](../../30_Pattern_Matching/match_ergonomics/README.md) | a binding that borrows instead of moving — and the default binding mode that means you rarely write it |
-| 8 | **new** [Re-pointing a slice](repointing_a_slice/README.md) | `&mut &mut [T]`: a `&mut` to the caller's reference, `mem::take`, and `Read for &[u8]` |
-| 9 | [How to learn lifetimes](../how_to_learn_lifetimes/README.md) → [Lifetime annotations](../lifetime_annotations/README.md) → [What `&'a T` claims](../what_a_reference_claims/README.md) → [Lifetimes at the call site](../lifetimes_at_the_call_site/README.md) → [Temporary lifetime extension](../temporary_lifetimes/README.md) | the loan's length written into a signature, and what it costs the caller |
-| 10 | **new** [Six pointer types, one table](pointer_types_compared/README.md) | `&T`, `&mut T`, `*const T`, `*mut T`, `Box<T>` and `Rc<T>` on seven questions, each cell run |
-| 11 | The [Pointers](../../36_Pointers/README.md) section: [Address, pointer, reference](../../36_Pointers/address_pointer_reference/README.md) → [Wide pointers](../../36_Pointers/wide_pointers/README.md) → [Aligned to the referent](../../36_Pointers/aligned_to_the_referent/README.md) → [Raw pointers](../../36_Pointers/raw_pointers/README.md) | what a pointer's value holds — a type, provenance, a second word, an alignment — and what goes when the promises do |
-| 12 | [`Rc`](../reference_counting/README.md) · [`Arc`](../sharing_across_threads/README.md) · [Interior mutability](../../09_Advanced/interior_mutability/README.md) · [`Cow`](../clone_on_write/README.md) | several owners, writing through a `&`, and borrowing until somebody writes — and the [Smart pointers](../../41_Smart_Pointers/README.md) section: `Deref`, `Drop`, and what each one allocates |
-| 13 | [What `unsafe` turns off](../../09_Advanced/what_unsafe_turns_off/README.md) · [Use-after-free](../../31_C_and_Cpp/use_after_free/README.md) · [Null dereference](../../31_C_and_Cpp/null_dereference/README.md) · [Iterator invalidation](../../31_C_and_Cpp/iterator_invalidation/README.md) · [Lifetime safety in Clang](../../31_C_and_Cpp/lifetime_safety_in_clang/README.md) | raw pointers, and the C and C++ bugs the rules above make unwritable |
+| 6 | **new** [Mutable binding, mutable reference](mutable_binding_vs_mutable_reference/README.md) | `let mut` against `&mut`: two choices, four combinations, nested forms such as `&mut &T`, and the shared reborrow `&*z` |
+| 7 | **new** [When you need the `*`](when_you_need_the_star/README.md) | the five places Rust writes the `*` for you, and why `if flag` is not one of them |
+| 8 | **new** [The `ref` keyword](the_ref_keyword/README.md), then [Match ergonomics](../../30_Pattern_Matching/match_ergonomics/README.md) | a binding that borrows instead of moving — and the default binding mode that means you rarely write it |
+| 9 | **new** [Re-pointing a slice](repointing_a_slice/README.md) | `&mut &mut [T]`: a `&mut` to the caller's reference, `mem::take`, and `Read for &[u8]` |
+| 10 | [How to learn lifetimes](../how_to_learn_lifetimes/README.md) → [Lifetime annotations](../lifetime_annotations/README.md) → [What `&'a T` claims](../what_a_reference_claims/README.md) → [Lifetimes at the call site](../lifetimes_at_the_call_site/README.md) → [Temporary lifetime extension](../temporary_lifetimes/README.md) | the loan's length written into a signature, and what it costs the caller |
+| 11 | **new** [Six pointer types, one table](pointer_types_compared/README.md) | `&T`, `&mut T`, `*const T`, `*mut T`, `Box<T>` and `Rc<T>` on seven questions, each cell run |
+| 12 | The [Pointers](../../36_Pointers/README.md) section: [Address, pointer, reference](../../36_Pointers/address_pointer_reference/README.md) → [Wide pointers](../../36_Pointers/wide_pointers/README.md) → [Aligned to the referent](../../36_Pointers/aligned_to_the_referent/README.md) → [Raw pointers](../../36_Pointers/raw_pointers/README.md) | what a pointer's value holds — a type, provenance, a second word, an alignment — and what goes when the promises do |
+| 13 | [`Rc`](../reference_counting/README.md) · [`Arc`](../sharing_across_threads/README.md) · [Interior mutability](../../09_Advanced/interior_mutability/README.md) · [`Cow`](../clone_on_write/README.md) | several owners, writing through a `&`, and borrowing until somebody writes — and the [Smart pointers](../../41_Smart_Pointers/README.md) section: `Deref`, `Drop`, and what each one allocates |
+| 14 | [What `unsafe` turns off](../../09_Advanced/what_unsafe_turns_off/README.md) · [Use-after-free](../../31_C_and_Cpp/use_after_free/README.md) · [Null dereference](../../31_C_and_Cpp/null_dereference/README.md) · [Iterator invalidation](../../31_C_and_Cpp/iterator_invalidation/README.md) · [Lifetime safety in Clang](../../31_C_and_Cpp/lifetime_safety_in_clang/README.md) | raw pointers, and the C and C++ bugs the rules above make unwritable |
 
 Beside the path:
 
 - **new** [What reference explanations get wrong, run](reference_claims_checked/README.md) — claims from a Stack Overflow thread, The Book, *Programming Rust*, Cliffle's *Learn Rust the Dangerous Way* and a chat answer, each checked on rustc 1.98.0.
+- [What *Rust: The Practical Guide* says about ownership in functions, run](../ownership_in_functions_claims_checked/README.md) — a fourth book's chapter on ownership in functions, listing by listing: the move that copies no heap bytes, the `Copy` rule behind "stack-only", and the `E0106` that is not a borrow error.
 - **new** [Every reference error, and its fix](reference_errors/README.md) — the compiler errors of this path by symptom: the code, rustc 1.98.0's words, the mistake and the fix, both halves checked on every build.
 - **new** [Lints around references](reference_lints/README.md) — rustc and clippy warnings about borrows, `ref`, `*` and raw pointers, bad and good, and what no lint catches.
 - **new** [Helpful resources](references_reading_list/README.md) — chapters, docs, a paper, articles and videos for each part of the path, with the ones to read with care.
@@ -72,12 +75,13 @@ The pages say what to understand; these make you write it. Each lives on its pag
 |---|---|---|
 | 2 | [Many readers, or one writer](../borrowing/README.md#practice) — two shared borrows, then a mutable one, and the `println!` that moves the end of a borrow | [Borrowing](../borrowing/README.md) |
 | 3 | [Reference to a local variable](a_borrow_is_a_loan/README.md#practice) — name the loan and the condition the `}` breaks, then fix `E0597` two ways | [A borrow is a loan](a_borrow_is_a_loan/README.md) |
-| 6 | [Fewest stars](when_you_need_the_star/README.md#practice) — six lines without a `*` or `&`, each fixed with the fewest and the rule named | [When you need the `*`](when_you_need_the_star/README.md) |
-| 7 | [Borrow one field, move the other](the_ref_keyword/README.md#practice) — one `let` pattern, and why `&upload` cannot do its job | [The `ref` keyword](the_ref_keyword/README.md) |
-| 7 | [One character apart](../../30_Pattern_Matching/match_ergonomics/README.md#practice) — `Some(name)` against `&opt` and against `opt` | [Match ergonomics](../../30_Pattern_Matching/match_ergonomics/README.md) |
-| 8 | [Split off the header](repointing_a_slice/README.md#practice) — advance a `&mut &[u8]` and a `&mut &mut [u8]` | [Re-pointing a slice](repointing_a_slice/README.md) |
-| 10 | [Pick the pointer](pointer_types_compared/README.md#practice) — a config reader, a tree's children, a shared cache and C's `memchr` | [Six pointer types, one table](pointer_types_compared/README.md) |
-| 12 | [Predict the count four times](../reference_counting/README.md#practice) — one roster shared by three tallies, and the edge that leaks | [`Rc`](../reference_counting/README.md) |
+| 6 | [Eight one-line edits](mutable_binding_vs_mutable_reference/README.md#practice) — `let` or `let mut`, `&` or `&mut`: predict `E0384`, `E0594`, `E0506` or a clean compile for each | [Mutable binding, mutable reference](mutable_binding_vs_mutable_reference/README.md) |
+| 7 | [Fewest stars](when_you_need_the_star/README.md#practice) — six lines without a `*` or `&`, each fixed with the fewest and the rule named | [When you need the `*`](when_you_need_the_star/README.md) |
+| 8 | [Borrow one field, move the other](the_ref_keyword/README.md#practice) — one `let` pattern, and why `&upload` cannot do its job | [The `ref` keyword](the_ref_keyword/README.md) |
+| 8 | [One character apart](../../30_Pattern_Matching/match_ergonomics/README.md#practice) — `Some(name)` against `&opt` and against `opt` | [Match ergonomics](../../30_Pattern_Matching/match_ergonomics/README.md) |
+| 9 | [Split off the header](repointing_a_slice/README.md#practice) — advance a `&mut &[u8]` and a `&mut &mut [u8]` | [Re-pointing a slice](repointing_a_slice/README.md) |
+| 11 | [Pick the pointer](pointer_types_compared/README.md#practice) — a config reader, a tree's children, a shared cache and C's `memchr` | [Six pointer types, one table](pointer_types_compared/README.md) |
+| 13 | [Predict the count four times](../reference_counting/README.md#practice) — one roster shared by three tallies, and the edge that leaks | [`Rc`](../reference_counting/README.md) |
 
 The full sequence, with every other kata in the library, is [KATAS.md](../../KATAS.md).
 

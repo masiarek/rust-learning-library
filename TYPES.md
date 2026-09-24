@@ -92,7 +92,7 @@ These look like language features and are ordinary library types, written with `
 | `Result<T, E>` | [`Option` vs `Result`](17_Option_and_Result/option_vs_result/README.md) | [Errors](02_Errors/README.md) |
 | `Vec<T>` | [`Vec`](26_Collections/the_vec/README.md) · [`Vec` methods](26_Collections/vec_methods/README.md) | [Collections](26_Collections/README.md) |
 | `VecDeque<T>` | [`VecDeque`](26_Collections/the_vecdeque/README.md) | |
-| `HashMap<K, V>`, `HashSet<T>` | [`HashMap`](26_Collections/the_hashmap/README.md) · [`HashSet`](26_Collections/the_hashset/README.md) | |
+| `HashMap<K, V>`, `HashSet<T>` | [A first `HashMap`](26_Collections/a_first_hashmap/README.md) · [`HashMap`](26_Collections/the_hashmap/README.md) · [A first `HashSet`](26_Collections/a_first_hashset/README.md) · [`HashSet`](26_Collections/the_hashset/README.md) | |
 | `BTreeMap`, `BTreeSet` | [`BTreeMap` and `BTreeSet`](26_Collections/sorted_collections/README.md) | |
 | `String` | [`String` vs `&str`](14_Strings/string_vs_str/README.md) · [The anatomy of a `String`](14_Strings/anatomy_of_a_string/README.md) | [STRINGS.md](STRINGS.md) |
 | `OsString`, `CString` | [Six kinds of string](14_Strings/six_kinds_of_string/README.md) | |
@@ -103,7 +103,7 @@ These look like language features and are ordinary library types, written with `
 
 | Type | Lesson | What it adds |
 |---|---|---|
-| `&T`, `&mut T` | [Address, pointer, reference](36_Pointers/address_pointer_reference/README.md) · [Borrowing](18_Ownership/borrowing/README.md) · [What `&'a T` claims](18_Ownership/what_a_reference_claims/README.md) | a checked loan: many readers or one writer |
+| `&T`, `&mut T` | [Address, pointer, reference](36_Pointers/address_pointer_reference/README.md) · [Borrowing](18_Ownership/borrowing/README.md) · [What `&'a T` claims](18_Ownership/what_a_reference_claims/README.md) · [Mutable binding, mutable reference](18_Ownership/references/mutable_binding_vs_mutable_reference/README.md) | a checked loan: many readers or one writer |
 | `*const T`, `*mut T` | [Raw pointers](36_Pointers/raw_pointers/README.md) · [What `unsafe` turns off](09_Advanced/what_unsafe_turns_off/README.md) | an address and nothing else — dereferencing needs `unsafe` |
 | `&[T]`, `&str`, `&dyn Trait` | [Wide pointers](36_Pointers/wide_pointers/README.md) | an address plus a length or a vtable — two words |
 | `Box<T>` | [`Box`](26_Collections/the_box/README.md) | one owner, on the heap |

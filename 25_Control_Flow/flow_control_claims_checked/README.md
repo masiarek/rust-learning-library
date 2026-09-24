@@ -332,6 +332,7 @@ Every loop is a `loop` underneath. The `for` loop is built from `match`, and so 
 - [What `Cow` explanations get wrong, run](../../12_Traits/how_to_learn_to_owned/cow_claims_checked/README.md) — the same treatment for another topic
 - [The never type `!`](../../15_First_Programs/the_never_type/README.md) — why a `loop` with no `break` fits any return type
 - [Drop and RAII](../../12_Traits/drop_and_raii/README.md) — the cleanup that claim 14 is really about
+- [What *Rust: The Practical Guide* says about functions and code blocks, run](../functions_claims_checked/README.md) — the same treatment for a second book's §2.3 "Functions" and §2.4 "Code Blocks"
 
 ## Sources
 

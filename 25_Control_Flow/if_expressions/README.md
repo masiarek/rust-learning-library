@@ -436,6 +436,7 @@ fn main() {
 - [Meet the `bool`](../../15_First_Programs/meet_the_bool/README.md) — the only type a condition can have, and `then_some` for a value without an `if`
 - [The never type `!`](../../15_First_Programs/the_never_type/README.md) — why a `continue` branch fits beside an `i32` one
 - [`if` expressions ↗](https://doc.rust-lang.org/reference/expressions/if-expr.html) · [Comprehensive Rust: `if` ↗](https://google.github.io/comprehensive-rust/control-flow-basics/if.html)
+- [*Rust: The Practical Guide*, chapter 3 exercises, run](../../10_Resources/rust_the_practical_guide/ch3_katas/README.md) — exercises 3.3 and 3.6: an `if` chain over speed bands, and a condition that already is the `bool` to return
 
 ## Sources
 

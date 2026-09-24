@@ -363,6 +363,7 @@ fn main() {
 - [Printing the HIR](../../20_Compilers/printing_the_hir/README.md) — the `loop` and `match` a `for` becomes
 - [What `dbg!` does](../../15_First_Programs/what_dbg_does/README.md) — the macro to reach for when you want to see each turn
 - [Comprehensive Rust: `for` ↗](https://google.github.io/comprehensive-rust/control-flow-basics/loops/for.html)
+- [*Rust: The Practical Guide*, chapter 3 exercises, run](../../10_Resources/rust_the_practical_guide/ch3_katas/README.md) — exercises 3.1 and 3.2: `1..=n` and `1..n` over a fixed table of inputs, and where the `i32` accumulator runs out
 
 ## Sources
 

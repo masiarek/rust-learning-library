@@ -396,6 +396,7 @@ Part 2 — convert once, then clone for free
 - [How to learn lifetimes](../how_to_learn_lifetimes/README.md) — "clone everything", and when a borrow was the answer
 - [The global allocator](../../09_Advanced/the_global_allocator/README.md) — the counter behind every number above
 - [`Clone` ↗](https://doc.rust-lang.org/std/clone/trait.Clone.html) · [`Arc::make_mut` ↗](https://doc.rust-lang.org/std/sync/struct.Arc.html#method.make_mut)
+- [What *Rust: The Practical Guide* says about ownership in functions, run](../ownership_in_functions_claims_checked/README.md) — the clone a book prefers to a move, counted: one allocation where the move makes none
 
 ## Po polsku
 

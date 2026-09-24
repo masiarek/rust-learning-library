@@ -15,7 +15,7 @@ A folder has one name, and it is rarely the word you typed: a *vector* lives in 
 | an error code such as `E0502` | [ERRORS.md](ERRORS.md) |
 | a term to define in one line | [GLOSSARY.md](GLOSSARY.md) |
 | something to type | [KATAS.md](KATAS.md) |
-| a book or course, chapter by chapter | [Rust by Example](RUST_BY_EXAMPLE.md) · [*Rust for Rustaceans*](10_Resources/rust_for_rustaceans/README.md) · [the Ultimate Rust courses](10_Resources/ultimate_rust_courses/README.md) · [*Rust in Action*, run](10_Resources/rust_in_action/README.md) |
+| a book or course, chapter by chapter | [Rust by Example](RUST_BY_EXAMPLE.md) · [*Rust for Rustaceans*](10_Resources/rust_for_rustaceans/README.md) · [the Ultimate Rust courses](10_Resources/ultimate_rust_courses/README.md) · [*Rust in Action*, run](10_Resources/rust_in_action/README.md) · [*Rust: The Practical Guide*, run](10_Resources/rust_the_practical_guide/README.md) |
 | what to read next, section by section | [the course table on the homepage](index.md#the-course-in-order) |
 | Polish terminology | [POLSKI.md](POLSKI.md) |
 
@@ -49,7 +49,7 @@ A folder has one name, and it is rarely the word you typed: a *vector* lives in 
 | **Blanket impl**, `impl<T: X> Y for T` | [Blanket impls](22_Generics/blanket_impls/README.md) *stub* | [Step 6: one blanket impl](12_Traits/how_to_learn_to_owned/the_blanket_to_owned/README.md) |
 | **Block**, scope, `{ }` | [A block is an expression](15_First_Programs/a_block_is_an_expression/README.md) | [Scope is about names](18_Ownership/scope_is_about_names/README.md) |
 | **`bool`**, boolean | [Meet the `bool`](15_First_Programs/meet_the_bool/README.md) | [An enum instead of a bool](13_Enums/an_enum_instead_of_a_bool/README.md) |
-| **Borrowing**, references, `&`, `&mut`, borrow checker | [Borrowing](18_Ownership/borrowing/README.md) | [Borrowed state](18_Ownership/borrowed_state/README.md) · [Reborrowing](18_Ownership/reborrowing/README.md) · [Where the `&` sits](18_Ownership/where_the_sigil_sits/README.md) |
+| **Borrowing**, references, `&`, `&mut`, borrow checker | [Borrowing](18_Ownership/borrowing/README.md) | [Borrowed state](18_Ownership/borrowed_state/README.md) · [Reborrowing](18_Ownership/reborrowing/README.md) · [Where the `&` sits](18_Ownership/where_the_sigil_sits/README.md) · [Mutable binding, mutable reference](18_Ownership/references/mutable_binding_vs_mutable_reference/README.md) |
 | **`Box`**, heap allocation | [`Box`](26_Collections/the_box/README.md) | [Stack and heap](18_Ownership/stack_and_heap/README.md) · [The third owned form: `Box<str>`](14_Strings/boxed_str/README.md) |
 | **`break`**, `continue`, loop labels | [`break`](25_Control_Flow/break_expressions/README.md) | [`continue`](25_Control_Flow/continue_expressions/README.md) · [Loop labels](25_Control_Flow/loop_labels/README.md) · [Flow control](25_Control_Flow/flow_control/README.md) |
 | **`BTreeMap`**, `BTreeSet`, sorted map | [`BTreeMap` and `BTreeSet`](26_Collections/sorted_collections/README.md) | |
@@ -65,13 +65,14 @@ A folder has one name, and it is rarely the word you typed: a *vector* lives in 
 | **Capacity**, `capacity`, `with_capacity`, `reserve`, `shrink_to_fit`, pre-allocating | [The anatomy of a `String`](14_Strings/anatomy_of_a_string/README.md) | [The global allocator](09_Advanced/the_global_allocator/README.md) · [Every `size_of`, `len` and `capacity` error](14_Strings/size_len_capacity_errors/README.md) · [Lints around `size_of`, `len` and `capacity`](14_Strings/size_len_capacity_lints/README.md) |
 | **Cargo**, package manager, dependencies | [Adding a dependency](05_Tooling/cargo_dependencies/README.md) | [From one `.rs` file to a Cargo project](05_Tooling/from_rustc_to_cargo/README.md) · [TOOLCHAIN.md](TOOLCHAIN.md) · [`Cargo.lock`](05_Tooling/cargo_lock/README.md) · [Cargo subcommands](05_Tooling/cargo_subcommands/README.md) *stub* |
 | **Cargo features**, `[features]`, optional dependencies | [Cargo features](05_Tooling/cargo_features/README.md) *stub* | [Conditional compilation](27_Modules/conditional_compilation/README.md) *stub* |
+| **cargo-modules**, module tree, `pub(self)`, `pub(crate)`, visibility reach | [*Rust: The Practical Guide* chapter 6, run](27_Modules/modules_claims_checked/README.md) | [Modules and visibility](27_Modules/modules_and_visibility/README.md) |
 | **`Cell`**, `RefCell`, shareable mutable containers | [Interior mutability](09_Advanced/interior_mutability/README.md) *stub* | [TYPES.md: pointers](TYPES.md#pointers) |
 | **`cfg`**, `#[cfg]`, `cfg!`, conditional compilation | [Conditional compilation](27_Modules/conditional_compilation/README.md) *stub* | [What an attribute is](27_Modules/what_an_attribute_is/README.md) |
 | **Channels**, `mpsc`, crossbeam | [Channels](09_Advanced/channels/README.md) | [Crossbeam channels](09_Advanced/crossbeam_channels/README.md) *stub* · [Go library: channels ↗](https://masiarek.github.io/go-learning-library/02_Channels/) |
 | **`char`**, character, Unicode scalar value | [Meet the `char`](14_Strings/meet_the_char/README.md) | [Why a `char` is 32 bits](14_Strings/why_char_is_32_bits/README.md) |
 | **Clippy**, lints | [Clippy: the groups, the settings, the commands](34_Templates/clippy/README.md) | [Strict clippy lints](05_Tooling/strict_lints/README.md) · [Lints around tests](28_Testing/testing_lints/README.md) · [What a warning is asking](15_First_Programs/what_a_warning_is_asking/README.md) |
 | **`Clone`**, cloning, `.clone()` | [`Copy` vs `Clone`](16_Structs/copy_vs_clone/README.md) | [What a clone costs](18_Ownership/what_a_clone_costs/README.md) · [`ToOwned`](12_Traits/to_owned/README.md) · [Reading the `Clone for &T` hover](12_Traits/reading_the_clone_hover/README.md) |
-| **Closures**, lambdas, anonymous functions, nested functions | [What a closure is](23_Closures/what_a_closure_is/README.md) | [The three closure traits](23_Closures/three_closure_traits/README.md) · [The `move` keyword](23_Closures/the_move_keyword/README.md) · [Items inside a function](27_Modules/items_inside_a_function/README.md) *stub* |
+| **Closures**, lambdas, anonymous functions, nested functions | [What a closure is](23_Closures/what_a_closure_is/README.md) | [The three closure traits](23_Closures/three_closure_traits/README.md) · [The `move` keyword](23_Closures/the_move_keyword/README.md) · [Items inside a function](27_Modules/items_inside_a_function/README.md) |
 | **Coercion**, deref coercion, unsizing | [Coercion](29_Conversion/coercion/README.md) | [Method resolution](12_Traits/method_resolution/README.md) |
 | **Collections** | [Collections](26_Collections/README.md) | [TYPES.md: built by std](TYPES.md#built-by-std) |
 | **`collect`**, `FromIterator` | [`collect` and `FromIterator`](24_Iterators/collect_and_fromiterator/README.md) | [Collect the iterator into a `Vec`](24_Iterators/collect_into_a_vec/README.md) |
@@ -83,11 +84,12 @@ A folder has one name, and it is rarely the word you typed: a *vector* lives in 
 | **Concurrency**, threads, parallelism | [Spawning a thread](09_Advanced/spawning_a_thread/README.md) | [Concurrency or parallelism](09_Advanced/concurrency_or_parallelism/README.md) *stub* · [Concurrency library ↗](https://masiarek.github.io/concurrency-learning-library/) |
 | **`const`**, `static`, constants vs statics, static const | [`const` and `static`](27_Modules/const_and_static/README.md) | [`&'static str`](14_Strings/static_str/README.md) |
 | **Const generics**, `const N: usize` | [Const generics](22_Generics/const_generics/README.md) *stub* | [Arrays and slices](26_Collections/arrays_and_slices/README.md) · [Arrays in and out of functions](26_Collections/arrays/arrays_in_signatures/README.md#const-generics-every-length-and-the-same-length-back) |
+| **`contains_key`**, `contains`, membership test | [A first `HashMap`: `contains_key`](26_Collections/a_first_hashmap/README.md#4-contains_key-answers-yes-or-no) | [A first `HashSet`: `contains`](26_Collections/a_first_hashset/README.md#3-contains-yes-or-no) · [`unnecessary_get_then_check`](26_Collections/hashmap_lints/README.md#unnecessary_get_then_check) |
 | **Contributing to Rust**, rustc development | [A first contribution](20_Compilers/a_first_contribution/README.md) *stub* | [The Rust project](20_Compilers/the_rust_project/README.md) *stub* · [Building the compiler](20_Compilers/building_the_compiler/README.md) *stub* |
 | **Control flow**, `if`, `match`, loops | [Control flow](25_Control_Flow/README.md) | [Pattern matching](30_Pattern_Matching/README.md) |
 | **`Copy`**, copying vs moving | [Copy or move?](18_Ownership/copy_or_move/README.md) | [`Copy` vs `Clone`](16_Structs/copy_vs_clone/README.md) · [There is no `Move` trait](18_Ownership/no_move_trait/README.md) |
 | **`Cow`**, clone on write | [`Cow`: borrow until somebody writes](18_Ownership/clone_on_write/README.md) | [What `Cow` explanations get wrong](12_Traits/how_to_learn_to_owned/cow_claims_checked/README.md) |
-| **Crates**, packages, `crate::` | [Packages and crates](27_Modules/packages_and_crates/README.md) *stub* | [Modules and visibility](27_Modules/modules_and_visibility/README.md) · [Publishing a crate](05_Tooling/publishing_a_crate/README.md) *stub* |
+| **Crates**, packages, `crate::`, `src/bin`, `default-run`, `cargo metadata`, crate name `-` vs `_` | [Packages and crates](27_Modules/packages_and_crates/README.md) | [Modules and visibility](27_Modules/modules_and_visibility/README.md) · [*Rust: The Practical Guide* chapter 6, run](27_Modules/modules_claims_checked/README.md) · [Publishing a crate](05_Tooling/publishing_a_crate/README.md) *stub* |
 | **Cross-compiling**, targets | [Cross-compiling](40_Without_std/cross_compiling/README.md) *stub* | [Targets and triples](20_Compilers/targets_and_triples/README.md) *stub* |
 
 ## D – F
@@ -99,6 +101,7 @@ A folder has one name, and it is rarely the word you typed: a *vector* lives in 
 | **Debug and Display**, `{:?}`, `{}` | [Debug and Display](15_First_Programs/debug_vs_display/README.md) | [The format mini-language](14_Strings/the_format_language/README.md) |
 | **Debugging** | [Debugging Rust](32_Debugging/README.md) | |
 | **`Default`** | [The `Default` trait](03_Command_Line/the_default_trait/README.md) *stub* | [`unwrap_or_default`](17_Option_and_Result/unwrap_or_default/README.md) |
+| **Deferred initialisation**, `let x;` then `x = …`, assign once without `mut` | [Variables](15_First_Programs/variables/README.md) | [*Rust: The Practical Guide*, chapter 2 exercises, run](10_Resources/rust_the_practical_guide/ch2_katas/README.md) · [`and`, `or` claims, run](15_First_Programs/and_or_claims_checked/README.md) |
 | **Destructuring** | [Destructuring structs](30_Pattern_Matching/destructuring_structs/README.md) *stub* | [Destructuring enums](30_Pattern_Matching/destructuring_enums/README.md) *stub* |
 | **Divergent functions**, `-> !`, never type | [The never type `!`](15_First_Programs/the_never_type/README.md) | |
 | **`Drop`**, destructors, RAII, drop guard | [`Drop`, and what RAII buys](12_Traits/drop_and_raii/README.md) | [Drop guards](12_Traits/drop_guards/README.md) *stub* · [The drop flag](18_Ownership/the_drop_flag/README.md) |
@@ -106,11 +109,13 @@ A folder has one name, and it is rarely the word you typed: a *vector* lives in 
 | **Editions**, 2021, 2024 | [What Rust is](00_Start_Here/what_rust_is/README.md) *stub* | [`iter`, `iter_mut`, `into_iter`](24_Iterators/iter_iter_mut_into_iter/README.md) (the 2021 array change) |
 | **Editors**, IDE, RustRover, Zed, Neovim | [Choosing an editor](05_Tooling/editors/README.md) | [RustRover setup](05_Tooling/rustrover_setup/README.md) · [Zed setup](05_Tooling/zed_setup/README.md) |
 | **Embedded**, `no_std`, bare metal | [Without std](40_Without_std/README.md) | [`core`, `alloc` and `std`](40_Without_std/core_alloc_and_std/README.md) *stub* |
+| **`entry`**, `or_insert`, `or_default`, entry API, counting loop | [A first `HashMap`: `entry`](26_Collections/a_first_hashmap/README.md#6-entry-the-slot-for-a-key-filled-or-empty) | [`HashMap`](26_Collections/the_hashmap/README.md) · [`map_entry`](26_Collections/hashmap_lints/README.md#map_entry) |
 | **Enum**, variants, sum type | [What an enum is](13_Enums/what_an_enum_is/README.md) | [Variants that carry data](13_Enums/variants_that_carry_data/README.md) · [An enum as a state machine](13_Enums/an_enum_as_a_state_machine/README.md) |
 | **Error codes**, `E0308`, `E0502` | [ERRORS.md](ERRORS.md) | |
 | **Error handling**, `Result`, `?`, `Error` trait | [Errors](02_Errors/README.md) | [`Option` vs `Result`](17_Option_and_Result/option_vs_result/README.md) · [The `?` operator](17_Option_and_Result/the_question_mark_operator/README.md) · [What makes a type an error](02_Errors/the_error_trait/README.md) |
 | **Exit status**, stderr | [Standard error, and exit status](02_Errors/stderr_and_exit_status/README.md) | |
 | **`expect`**, `unwrap` | [`expect`: writing down the proof](17_Option_and_Result/expect/README.md) | [`unwrap` is a TODO](02_Errors/unwrap_is_a_todo/README.md) |
+| **Expressions vs statements**, tail expression, block value, expression statement | [A block is an expression](15_First_Programs/a_block_is_an_expression/README.md) | [*Rust: The Practical Guide* §2.3–2.4, run](25_Control_Flow/functions_claims_checked/README.md) · [The unit type `()`](15_First_Programs/the_unit_type/README.md) |
 | **Extension traits** | [Extension traits](12_Traits/extension_traits/README.md) | [A crate prelude](27_Modules/a_crate_prelude/README.md) *stub* |
 | **Files**, `File::open`, reading lines | [Files](04_Files/README.md) | [Opening a file](04_Files/opening_a_file/README.md) |
 | **Floats**, `f64`, rounding | [What a float actually stores](19_Numbers/what_a_float_stores/README.md) | [Making a float whole](19_Numbers/rounding_a_float/README.md) |
@@ -119,7 +124,7 @@ A folder has one name, and it is rarely the word you typed: a *vector* lives in 
 | **Formatting**, `format!`, `{:>8}`, rustfmt | [The format mini-language](14_Strings/the_format_language/README.md) | [Formatting: `rustfmt`](05_Tooling/formatting/README.md) |
 | **`From` and `Into`**, orphan rule | [`From` and `Into`](29_Conversion/from_and_into/README.md) | [`TryFrom` and `TryInto`](29_Conversion/tryfrom_and_tryinto/README.md) |
 | **Function pointers**, `fn(u32) -> u32` | [Function pointers](23_Closures/function_pointers/README.md) | |
-| **Functions**, parameters, return values | [Functions](25_Control_Flow/functions/README.md) | [The call stack](18_Ownership/the_call_stack/README.md) · [Returned by value](18_Ownership/returned_by_value/README.md) · [Items inside a function](27_Modules/items_inside_a_function/README.md) *stub* |
+| **Functions**, parameters, return values | [Functions](25_Control_Flow/functions/README.md) | [The call stack](18_Ownership/the_call_stack/README.md) · [Returned by value](18_Ownership/returned_by_value/README.md) · [Items inside a function](27_Modules/items_inside_a_function/README.md) · [*Rust: The Practical Guide* §2.3–2.4, run](25_Control_Flow/functions_claims_checked/README.md) |
 
 ## G – L
 
@@ -129,8 +134,9 @@ A folder has one name, and it is rarely the word you typed: a *vector* lives in 
 | **Generics**, `<T>`, type parameters, monomorphization | [What a generic is](22_Generics/what_a_generic_is/README.md) | [Where the bound goes](22_Generics/where_the_bound_goes/README.md) · [Generics](22_Generics/README.md) |
 | **Global allocator**, heap allocation counting | [The global allocator](09_Advanced/the_global_allocator/README.md) | [Allocating without std](40_Without_std/allocating_without_std/README.md) *stub* |
 | **Glossary**, vocabulary | [GLOSSARY.md](GLOSSARY.md) | |
-| **`HashMap`**, hash map, dictionary, dict | [`HashMap`](26_Collections/the_hashmap/README.md) | [`Borrow`](12_Traits/borrow_trait/README.md) |
-| **`HashSet`**, set | [`HashSet`](26_Collections/the_hashset/README.md) | |
+| **Hash map iteration order**, HashDoS, `RandomState`, unsorted printout | [A first `HashMap`: iterating](26_Collections/a_first_hashmap/README.md#8-iterating-and-why-the-order-is-not-the-insertion-order) | [`HashMap`](26_Collections/the_hashmap/README.md) · [`iter_over_hash_type`](26_Collections/hashmap_lints/README.md#iter_over_hash_type) |
+| **`HashMap`**, hash map, dictionary, dict, `entry`, `contains_key`, `get` | [A first `HashMap`](26_Collections/a_first_hashmap/README.md) | [`HashMap`](26_Collections/the_hashmap/README.md) · [every error](26_Collections/hashmap_errors/README.md) · [lints](26_Collections/hashmap_lints/README.md) · [resources](26_Collections/hashmap_resources/README.md) · [`Borrow`](12_Traits/borrow_trait/README.md) |
+| **`HashSet`**, set, `insert` returns `bool`, `take` | [A first `HashSet`](26_Collections/a_first_hashset/README.md) | [`HashSet`](26_Collections/the_hashset/README.md) · [every error](26_Collections/hashmap_errors/README.md) · [lints](26_Collections/hashmap_lints/README.md) |
 | **Hexadecimal**, hex | [Why hexadecimal](19_Numbers/why_hexadecimal/README.md) | |
 | **`if`**, `if let` | [`if` expressions](25_Control_Flow/if_expressions/README.md) | [`if let`](17_Option_and_Result/if_let/README.md) |
 | **`impl` blocks**, methods vs functions, struct methods | [`impl` blocks](16_Structs/impl_blocks/README.md) | [Method resolution](12_Traits/method_resolution/README.md) |
@@ -156,9 +162,12 @@ A folder has one name, and it is rarely the word you typed: a *vector* lives in 
 | **Memory layout**, `repr(C)`, padding, alignment | [Type layout](09_Advanced/type_layout/README.md) *stub* | [What is a record, in memory?](16_Structs/representing_a_record/README.md) |
 | **Migrating C to Rust**, the C ABI, rewriting a module | [Migrating C to Rust](31_C_and_Cpp/migrating_c_to_rust/README.md) | [The C ABI](31_C_and_Cpp/migrating_c_to_rust/the_c_abi/README.md) *stub* · [Safe wrappers](31_C_and_Cpp/migrating_c_to_rust/safe_wrappers/README.md) *stub* |
 | **Method resolution**, auto-deref | [Method resolution](12_Traits/method_resolution/README.md) | ["No method named …"](12_Traits/no_method_named/README.md) |
-| **Modules**, `mod`, `use`, `pub` | [Modules and visibility](27_Modules/modules_and_visibility/README.md) | [Bringing names in with `use`](27_Modules/the_use_declaration/README.md) · [One module per file](27_Modules/one_module_per_file/README.md) |
+| **`mod.rs`**, module file layout, file not found for module, `E0583`, `E0761` | [One module per file](27_Modules/one_module_per_file/README.md) | [*Rust: The Practical Guide* chapter 6, run](27_Modules/modules_claims_checked/README.md) |
+| **Modules**, `mod`, `use`, `pub` | [Modules and visibility](27_Modules/modules_and_visibility/README.md) | [Bringing names in with `use`](27_Modules/the_use_declaration/README.md) · [One module per file](27_Modules/one_module_per_file/README.md) · [*Rust: The Practical Guide* chapter 6, run](27_Modules/modules_claims_checked/README.md) · [chapter 6 exercises, run](10_Resources/rust_the_practical_guide/ch6_katas/README.md) |
 | **Monad**, `and_then` | [What a monad is](17_Option_and_Result/what_a_monad_is/README.md) | |
 | **MSRV**, `rust-version`, versioning | [MSRV](05_Tooling/msrv/README.md) *stub* | [Semver hazards](39_API_Design/semver_hazards/README.md) *stub* |
+| **Mutable binding**, mutable reference, `let mut` vs `&mut`, immutable binding of a mutable reference | [Mutable binding, mutable reference](18_Ownership/references/mutable_binding_vs_mutable_reference/README.md) | [Variables](15_First_Programs/variables/README.md) · [Where the `&` sits](18_Ownership/where_the_sigil_sits/README.md) · [Reborrowing](18_Ownership/reborrowing/README.md) |
+| **Nested references**, `&mut &T`, `& &mut T`, `&&T`, `&mut &mut T` | [Mutable binding, mutable reference](18_Ownership/references/mutable_binding_vs_mutable_reference/README.md) | [Re-pointing a slice](18_Ownership/references/repointing_a_slice/README.md) |
 | **Newtype**, tuple struct wrapper | [A score is not a number: the newtype](16_Structs/newtype_score/README.md) | [A type alias is not a new type](16_Structs/type_aliases/README.md) *stub* · [Wrapper types](39_API_Design/wrapper_types/README.md) *stub* |
 | **Null**, nullable pointer | [Nullable pointers](17_Option_and_Result/nullable_pointers/README.md) | [Null dereference](31_C_and_Cpp/null_dereference/README.md) |
 | **Numbers** | [Numbers and bytes](19_Numbers/README.md) | [TYPES.md: primitive types](TYPES.md#primitive-types) |
@@ -166,12 +175,14 @@ A folder has one name, and it is rarely the word you typed: a *vector* lives in 
 | **Operators**, `+`, `Add`, operator overloading | [Operators are traits](12_Traits/operators_are_traits/README.md) | |
 | **`Option`**, `Some`, `None` | [`Some` and `None`](17_Option_and_Result/some_and_none/README.md) | [OPTION.md](OPTION.md) |
 | **`OsString`**, `CString`, kinds of string | [Six kinds of string](14_Strings/six_kinds_of_string/README.md) | [`Path` and `PathBuf`](04_Files/path_and_pathbuf/README.md) *stub* |
-| **Ownership**, moves | [Ownership and moves](18_Ownership/ownership_and_moves/README.md) | [Ownership](18_Ownership/README.md) |
+| **Ownership**, moves | [Ownership and moves](18_Ownership/ownership_and_moves/README.md) | [Ownership](18_Ownership/README.md) · [*Rust: The Practical Guide* §4.2 and §4.4, run](18_Ownership/ownership_in_functions_claims_checked/README.md) |
 
 ## P – R
 
 | Topic, and other names for it | Home | Then |
 |---|---|---|
+| **Ownership in functions**, taking, giving and returning ownership, pass by value or by reference | [*Rust: The Practical Guide* §4.2 and §4.4, run](18_Ownership/ownership_in_functions_claims_checked/README.md) | [Ownership and moves](18_Ownership/ownership_and_moves/README.md) · [Borrowing](18_Ownership/borrowing/README.md) · [What an address shows](18_Ownership/what_an_address_shows/README.md) |
+| **Palindrome**, reverse a string, bytes vs chars | [*Rust: The Practical Guide*, chapter 3 exercises, run](10_Resources/rust_the_practical_guide/ch3_katas/README.md) | [Walking a `String`](14_Strings/walking_a_string/README.md) · [Meet the byte](19_Numbers/meet_the_byte/README.md) |
 | **Panic**, `panic!`, unwinding | [What a panic costs](17_Option_and_Result/what_a_panic_costs/README.md) | [The panic handler](40_Without_std/the_panic_handler/README.md) *stub* · [Panics in unsafe code](09_Advanced/panics_in_unsafe_code/README.md) *stub* |
 | **Pointers**, address, raw pointer, `*const T` | [Pointers](36_Pointers/README.md) | [Address, pointer, reference](36_Pointers/address_pointer_reference/README.md) · [Raw pointers](36_Pointers/raw_pointers/README.md) · [Wide pointers](36_Pointers/wide_pointers/README.md) |
 | **Parallelism**, rayon, `par_iter` | [Rayon](09_Advanced/rayon/README.md) *stub* | [Worker pools](09_Advanced/worker_pools/README.md) *stub* · [Concurrency or parallelism](09_Advanced/concurrency_or_parallelism/README.md) *stub* |
@@ -183,10 +194,12 @@ A folder has one name, and it is rarely the word you typed: a *vector* lives in 
 | **Procedural macros**, derive macros, attribute macros, `syn`, `quote` | [Procedural macros](37_Procedural_Macros/README.md) | [A function, `macro_rules!`, or a procedural macro](37_Procedural_Macros/function_macro_rules_or_proc_macro/README.md) *stub* · [Declarative macros](38_Declarative_Macros/README.md) |
 | **Publishing**, crates.io, `cargo publish` | [Publishing a crate](05_Tooling/publishing_a_crate/README.md) *stub* | [Private registries](05_Tooling/private_registries/README.md) *stub* |
 | **`?` operator**, question mark | [The `?` operator](17_Option_and_Result/the_question_mark_operator/README.md) | [`main` can return a `Result`](02_Errors/main_returns_result/README.md) *stub* |
+| **Pythagorean triple**, nested loops with a flag, Project Euler | [*Rust: The Practical Guide*, chapter 3 exercises, run](10_Resources/rust_the_practical_guide/ch3_katas/README.md) | [Loop labels](25_Control_Flow/loop_labels/README.md) |
 | **Randomness**, `rand` | [Randomness: `std` has none](15_First_Programs/randomness/README.md) | |
 | **Ranges**, `0..5`, `..=` | [Ranges](24_Iterators/ranges/README.md) *stub* | [One arm, many values](17_Option_and_Result/one_arm_many_values/README.md) |
 | **Raw strings**, escapes, `r"…"`, `b"…"` | [Raw strings, escapes and the literal prefixes](14_Strings/raw_strings_and_escapes/README.md) | |
 | **`Rc`**, reference counting | [`Rc`: the clone that copies a pointer](18_Ownership/reference_counting/README.md) | [`Arc`](18_Ownership/sharing_across_threads/README.md) |
+| **Re-export**, `pub use`, re-exporting, a path through a private module, `E0603` | [*Rust: The Practical Guide* chapter 6, run](27_Modules/modules_claims_checked/README.md) | [Bringing names in with `use`](27_Modules/the_use_declaration/README.md) · [A crate prelude](27_Modules/a_crate_prelude/README.md) |
 | **`Read` and `Write`**, I/O traits | [`Read` and `Write`](12_Traits/read_and_write/README.md) *stub* | [Reading a line from standard input](03_Command_Line/reading_stdin/README.md) |
 | **Recursion**, stack overflow | [Recursion and the size of the stack](18_Ownership/recursion_and_the_stack/README.md) | [A generic recursive type](22_Generics/a_generic_recursive_type/README.md) |
 | **Registries**, private registry, Shipyard, SSH key | [Private registries](05_Tooling/private_registries/README.md) *stub* | [Registry authentication](05_Tooling/registry_authentication/README.md) *stub* |
@@ -195,6 +208,7 @@ A folder has one name, and it is rarely the word you typed: a *vector* lives in 
 | **Resources**, books, courses, videos | [Resources](10_Resources/README.md) | [Books](10_Resources/books/README.md) · [Start here](00_Start_Here/README.md) |
 | **Returned by value**, return values, return slot, `sret`, `-> str`, unsized return type | [Returned by value](18_Ownership/returned_by_value/README.md) | [Drawing `sret`](18_Ownership/drawing_the_return_slot/README.md) · [The call stack](18_Ownership/the_call_stack/README.md) · [`str` is unsized](14_Strings/str_is_unsized/README.md) · [Every returned-by-value error](18_Ownership/returned_by_value_errors/README.md) · [Returning a trait](12_Traits/returning_a_trait/README.md) |
 | **Rust itself**, what is Rust | [What Rust is](00_Start_Here/what_rust_is/README.md) *stub* | [Benefits of Rust](00_Start_Here/benefits_of_rust/README.md) |
+| **Rust: The Practical Guide** (Nouman Azam, Rheinwerk 2025), book exercises with solutions | [*Rust: The Practical Guide*, run](10_Resources/rust_the_practical_guide/README.md) | [chapter 2](10_Resources/rust_the_practical_guide/ch2_katas/README.md) · [chapter 3](10_Resources/rust_the_practical_guide/ch3_katas/README.md) · [chapter 4](10_Resources/rust_the_practical_guide/ch4_katas/README.md) · [chapter 5](10_Resources/rust_the_practical_guide/ch5_katas/README.md) · [chapter 6 exercises, run](10_Resources/rust_the_practical_guide/ch6_katas/README.md) |
 | **rustup**, toolchains, nightly | [rustup](05_Tooling/rustup/README.md) | [Pinning the toolchain](05_Tooling/pinning_the_toolchain/README.md) · [Nightly by default](05_Tooling/nightly/README.md) |
 
 ## S
@@ -208,6 +222,7 @@ A folder has one name, and it is rarely the word you typed: a *vector* lives in 
 | **Size of a type**, `size_of`, `size_of_val`, `sizeof`, how big is a `String` | [Stack and heap](18_Ownership/stack_and_heap/README.md) | [The anatomy of a `String`](14_Strings/anatomy_of_a_string/README.md) · [`str` is unsized](14_Strings/str_is_unsized/README.md) · [Every `size_of`, `len` and `capacity` error](14_Strings/size_len_capacity_errors/README.md) · [Lints around `size_of`, `len` and `capacity`](14_Strings/size_len_capacity_lints/README.md) |
 | **Slices**, `&[T]`, fat pointer, wide pointer | [Arrays and slices](26_Collections/arrays_and_slices/README.md) | [Wide pointers](36_Pointers/wide_pointers/README.md) · [Slices of slices](26_Collections/slice_of_slices/README.md) · [`slice` methods](26_Collections/slice_methods/README.md) |
 | **Smart pointers**, `Deref`, `Box`, `Rc`, `Arc` | [Smart pointers](41_Smart_Pointers/README.md) | [What a smart pointer is](18_Ownership/what_a_smart_pointer_is/README.md) · [What a smart pointer costs](41_Smart_Pointers/what_a_smart_pointer_costs/README.md) · [TYPES.md: pointers](TYPES.md#pointers) |
+| **Square of sum**, sum of squares, sum of multiples, overflow at large N | [*Rust: The Practical Guide*, chapter 3 exercises, run](10_Resources/rust_the_practical_guide/ch3_katas/README.md) | [`for` loops](25_Control_Flow/for_loops/README.md) · [The integer types](19_Numbers/the_integer_types/README.md) |
 | **`sret`**, hidden return pointer, out-parameter, return slot, `rdi`/`rax` on return | [Drawing `sret`](18_Ownership/drawing_the_return_slot/README.md) | [Returned by value](18_Ownership/returned_by_value/README.md) · [LLVM and its IR](20_Compilers/llvm_and_its_ir/README.md) |
 | **Stack and heap** | [Stack and heap](18_Ownership/stack_and_heap/README.md) | [The call stack](18_Ownership/the_call_stack/README.md) · [A stack slot is reused](18_Ownership/a_stack_slot_is_reused/README.md) |
 | **`static`**, `&'static str` | [`const` and `static`](27_Modules/const_and_static/README.md) | [`&'static str`](14_Strings/static_str/README.md) |

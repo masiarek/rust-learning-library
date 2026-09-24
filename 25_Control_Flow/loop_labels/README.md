@@ -625,6 +625,8 @@ fn main() {
 - [`Drop`, and what RAII buys](../../12_Traits/drop_and_raii/README.md) — the drop order the guards above print, and the `let _ =` trap
 - [Raw identifiers](../../15_First_Programs/raw_identifiers/README.md) — `r#do`, and why the reserved list depends on the edition
 - [*Rust in Action*, claims checked](../flow_control_claims_checked/README.md) — the book's §2.4 run claim by claim
+- [What *Rust: The Practical Guide* says about functions and code blocks, run](../functions_claims_checked/README.md) — a book says a block has one tail and runs once; `break 'check "long"` as the block-level early exit, checked beside the rest of its §2.4
+- [*Rust: The Practical Guide*, chapter 3 exercises, run](../../10_Resources/rust_the_practical_guide/ch3_katas/README.md) — exercise 3.5: the book's three loops and a flag look at 80,778,750 candidates; computing `c` and `break 'search` looks at 69,676
 
 ## Sources
 

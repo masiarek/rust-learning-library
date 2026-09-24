@@ -291,6 +291,7 @@ fn main() {
 - [`str::as_str`](../../14_Strings/str_as_str/README.md) — `AsRef`, the looser trait, and why it is not reflexive
 - [Implementing `ToOwned` for your own type](../implementing_to_owned/README.md) — an unsized borrowed type whose `Borrow` impl keeps the promise
 - [Method resolution](../method_resolution/README.md) — why the trait method beats `RefCell::borrow` in the second trap
+- [A first `HashMap`](../../26_Collections/a_first_hashmap/README.md) — where `get("the")` on `String` keys is first met, and [entry 9 of the errors page](../../26_Collections/hashmap_errors/README.md#9-str-keys-looked-up-with-a-string) for the way round that fails
 
 ## Sources
 

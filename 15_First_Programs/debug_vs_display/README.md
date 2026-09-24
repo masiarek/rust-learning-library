@@ -605,6 +605,7 @@ The sentence written for the human:
 - [What a panic costs](../../17_Option_and_Result/what_a_panic_costs/README.md) — the delivery path Trap 2 is about, priced
 - [What a float actually stores](../../19_Numbers/what_a_float_stores/README.md) — why `{}` prints `1` and `{:?}` prints `1.0` for the same `f64`: `Debug` keeps the decimal point so you can see it is not an integer
 - [The `std::fmt` module docs ↗](https://doc.rust-lang.org/std/fmt/) — the full grammar of a format string: width, precision, fill, sign, and the other traits (`LowerHex`, `Binary`, `Pointer`) the same syntax reaches
+- [*Rust: The Practical Guide*, chapter 5 exercises, run](../../10_Resources/rust_the_practical_guide/ch5_katas/README.md) — the book prints a title with `{:?}` and gets quotes around it; the same record with `{}`, and an enum field that has no `Display`
 
 ## Po polsku
 

@@ -301,6 +301,8 @@ both are HouseLocation: 2
 - [`if let`](../../17_Option_and_Result/if_let/README.md) — a `match` with one arm, and the exhaustiveness you trade for it
 - [One arm, many values](../../17_Option_and_Result/one_arm_many_values/README.md) — `A | B` and ranges, for when several variants share an answer
 - [Six kinds of zero](../../17_Option_and_Result/six_kinds_of_zero/README.md) — writing your own enum when `Option` runs out of shapes
+- [*Rust: The Practical Guide*, chapter 5 exercises, run](../../10_Resources/rust_the_practical_guide/ch5_katas/README.md) — seven katas from the book that lean on this page: an enum that lets one `Vec` hold two kinds of number, and `match` arms that name the payload
+- [What *Rust: The Practical Guide* says about packages, crates and modules, run](../../27_Modules/modules_claims_checked/README.md) — `pub enum` publishes every variant, and `pub` on one variant is `E0449`
 
 ## Po polsku
 

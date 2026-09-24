@@ -251,6 +251,7 @@ The command line itself, flag by flag, is on the next page: [What `cargo run -v`
 - [RustRover setup](../rustrover_setup/README.md) — a `Fresh` build, and the warnings Cargo replays without compiling
 - [Books](../../10_Resources/books/README.md#the-friendly-paid-on-ramps) — where *Rust in Action* sits among the others
 - [The Cargo Book — `cargo init` ↗](https://doc.rust-lang.org/cargo/commands/cargo-init.html) · [target auto-discovery ↗](https://doc.rust-lang.org/cargo/reference/cargo-targets.html#target-auto-discovery)
+- [Packages and crates](../../27_Modules/packages_and_crates/README.md) — what `cargo new` made, asked of `cargo metadata`: the targets, the crate names, and the `bin/` folder Cargo does not look in
 
 ## Po polsku
 

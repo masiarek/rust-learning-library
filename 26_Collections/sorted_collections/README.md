@@ -347,6 +347,7 @@ fn main() {
 - [Comparison traits](../../12_Traits/comparison_traits/README.md) — what `Ord` demands over `PartialOrd`, and why `f64` has only the second
 - [`collect` and `FromIterator`](../../24_Iterators/collect_and_fromiterator/README.md) — the call that turns any iterator into one of these
 - [Collect the iterator into a `Vec`](../../24_Iterators/collect_into_a_vec/README.md) — the prior question: whether to materialize at all
+- [A first `HashMap`](../a_first_hashmap/README.md) and [A first `HashSet`](../a_first_hashset/README.md) — the unordered pair from the very beginning, where sorting before printing is first explained
 
 ## Sources
 

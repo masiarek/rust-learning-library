@@ -329,6 +329,7 @@ fn main() {
 - [Marker traits](../../12_Traits/marker_traits/README.md) — what `derive(Eq)` actually generates, which is nothing
 - [Conditional compilation](../conditional_compilation/README.md) — `#[cfg]`, `cfg!` and `cfg_attr` in full
 - [Helper attributes by hand](../../37_Procedural_Macros/helper_attributes_by_hand/README.md) — an attribute that means nothing to the compiler, declared by a derive so the derive can read it
+- [What *Rust: The Practical Guide* says about packages, crates and modules, run](../modules_claims_checked/README.md) — `dead_code` and `non_snake_case` as a book's listings draw them, keyed with `--message-format short`
 
 ## Sources
 

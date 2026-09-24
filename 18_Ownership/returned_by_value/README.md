@@ -366,6 +366,7 @@ The `&str` is the only one that points into the input, so it is the only one the
 
 - [Functions](../../25_Control_Flow/functions/README.md): the tail expression that is the value handed back
 - [LLVM and its IR](../../20_Compilers/llvm_and_its_ir/README.md): reading the `define` lines above
+- [What *Rust: The Practical Guide* says about ownership in functions, run](../ownership_in_functions_claims_checked/README.md): a book's `-> &Vec<i32>` returning a local, `E0106` and then `E0515`, and the heap bytes coming back untouched when the `Vec` is returned by value
 
 **Companions:** [every error](../returned_by_value_errors/README.md) · [lints](../returned_by_value_lints/README.md) · [reading](../returned_by_value_resources/README.md)
 

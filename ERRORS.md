@@ -92,6 +92,8 @@ Notice what four of those six have in common: **one code, several causes.** That
 | [E0509 ↗](https://doc.rust-lang.org/error_codes/E0509.html) | [The drop flag](18_Ownership/the_drop_flag/README.md) | — |
 | [E0515 ↗](https://doc.rust-lang.org/error_codes/E0515.html) | [Collect the iterator into a `Vec`](24_Iterators/collect_into_a_vec/README.md) | **6** other pages |
 | [E0521 ↗](https://doc.rust-lang.org/error_codes/E0521.html) | [Every `ToOwned` error, and its fix](12_Traits/how_to_learn_to_owned/to_owned_errors/README.md#18-keeping-a-short-lived-cow-in-a-static-cache) | — |
+| [E0530 ↗](https://doc.rust-lang.org/error_codes/E0530.html) | [*Rust: The Practical Guide*, chapter 5 exercises, run](10_Resources/rust_the_practical_guide/ch5_katas/README.md) | **2** other pages |
+| [E0583 ↗](https://doc.rust-lang.org/error_codes/E0583.html) | [*Rust: The Practical Guide* chapter 6, run](27_Modules/modules_claims_checked/README.md) | 1 other page |
 | [E0585 ↗](https://doc.rust-lang.org/error_codes/E0585.html) | [Comments that compile](15_First_Programs/comments_that_compile/README.md) | — |
 | [E0593 ↗](https://doc.rust-lang.org/error_codes/E0593.html) | [`unwrap_or_else`: the fallback that is built only if it is needed](17_Option_and_Result/unwrap_or_else/README.md) | — |
 | [E0594 ↗](https://doc.rust-lang.org/error_codes/E0594.html) | [When a struct refuses](16_Structs/when_a_struct_refuses/README.md) | — |
@@ -99,6 +101,7 @@ Notice what four of those six have in common: **one code, several causes.** That
 | [E0597 ↗](https://doc.rust-lang.org/error_codes/E0597.html) | [`&'static str`](14_Strings/static_str/README.md) | **2** other pages |
 | [E0599 ↗](https://doc.rust-lang.org/error_codes/E0599.html) | ["No method named …"](12_Traits/no_method_named/README.md) | **11** other pages |
 | [E0600 ↗](https://doc.rust-lang.org/error_codes/E0600.html) | [Every `size_of`, `len` and `capacity` error, and its fix](14_Strings/size_len_capacity_errors/README.md#14-comparing-a-length-with-1) | — |
+| [E0601 ↗](https://doc.rust-lang.org/error_codes/E0601.html) | [*Rust: The Practical Guide* chapter 6, run](27_Modules/modules_claims_checked/README.md) | **3** other pages |
 | [E0603 ↗](https://doc.rust-lang.org/error_codes/E0603.html) | [Modules and visibility](27_Modules/modules_and_visibility/README.md) | **2** other pages |
 | [E0605 ↗](https://doc.rust-lang.org/error_codes/E0605.html) | [What an enum is](13_Enums/what_an_enum_is/README.md) | — |
 | [E0614 ↗](https://doc.rust-lang.org/error_codes/E0614.html) | [Every array error, and its fix](26_Collections/arrays/array_errors/README.md#22-x-in-a-filter-over-into_iter) | — |
@@ -113,6 +116,7 @@ Notice what four of those six have in common: **one code, several causes.** That
 | [E0716 ↗](https://doc.rust-lang.org/error_codes/E0716.html) | [`Vec::into_iter` — and the three `IntoIterator` impls](26_Collections/vec_methods/vec_into_iter/README.md) | 1 other page |
 | [E0740 ↗](https://doc.rust-lang.org/error_codes/E0740.html) | [What a union is](09_Advanced/what_a_union_is/README.md) | — |
 | [E0753 ↗](https://doc.rust-lang.org/error_codes/E0753.html) | [Comments that compile](15_First_Programs/comments_that_compile/README.md) | — |
+| [E0761 ↗](https://doc.rust-lang.org/error_codes/E0761.html) | [*Rust: The Practical Guide* chapter 6, run](27_Modules/modules_claims_checked/README.md) | — |
 
 ## Mentioned, but not taught
 

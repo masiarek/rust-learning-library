@@ -32,6 +32,7 @@ Choosing `u32` for a length "because it cannot be negative", then subtracting tw
 - [Tables 2.1 and 2.2, run](../../10_Resources/rust_in_action/scalar_number_types/README.md) — ten of the types printed with their ranges, and the targets where `usize` is not the CPU's width
 - [Casting with `as`](../../29_Conversion/casting_with_as/README.md) — converting between these types without a check
 - [The Reference: numeric types ↗](https://doc.rust-lang.org/reference/types/numeric.html)
+- [*Rust: The Practical Guide*, chapter 2 exercises, run](../../10_Resources/rust_the_practical_guide/ch2_katas/README.md) and [chapter 3 exercises, run](../../10_Resources/rust_the_practical_guide/ch3_katas/README.md) — `-1` into a `u8` is `E0600`, `i16` is the smallest type for `-15`, `170` and their product, and a square of a sum outgrows an `i32` at N = 304
 
 ## Po polsku
 

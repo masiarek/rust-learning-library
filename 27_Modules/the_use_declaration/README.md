@@ -270,6 +270,7 @@ fn main() {
 - [*Rust in Action* §2.3.4, run](../../19_Numbers/other_number_types/number_types_claims_checked/README.md#5-what-use-does-binds-a-name) — a book that says `use` pulls a crate into scope, checked by deleting the `use`
 - [What an enum is](../../13_Enums/what_an_enum_is/README.md) — the variants imported above
 - [A crate prelude](../a_crate_prelude/README.md) — the glob import a crate author designs for you
+- [What *Rust: The Practical Guide* says about packages, crates and modules, run](../modules_claims_checked/README.md) — a chapter careful not to call `use` an import, its `pub use` re-exports checked on rustc 1.79 and 1.98
 
 ## Sources
 

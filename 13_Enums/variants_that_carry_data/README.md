@@ -307,6 +307,7 @@ different variant:               false
 - [What a union is](../../09_Advanced/what_a_union_is/README.md) — the untagged version, and the desync only it can have
 - [Six kinds of zero](../../17_Option_and_Result/six_kinds_of_zero/README.md) — when two variants are not enough
 - [`Vec`](../../26_Collections/the_vec/README.md) — the other half of that cache: what the third number costs when nothing will grow again
+- [*Rust: The Practical Guide*, chapter 5 exercises, run](../../10_Resources/rust_the_practical_guide/ch5_katas/README.md) — `Integer(i32)` and `Float(f64)` in one `Vec`, and why the book's `f32` payload loses digits past the seventh
 
 ## Po polsku
 

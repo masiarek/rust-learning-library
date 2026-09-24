@@ -319,6 +319,7 @@ fix 2, value copied out of the block:  n  = 1
 - [Interior mutability](../../../09_Advanced/interior_mutability/README.md) — `Cell` and `RefCell`, the exception to the exclusion principle the paper takes up in §5
 - [Lifetime safety in Clang](../../../31_C_and_Cpp/lifetime_safety_in_clang/README.md) — loans, origins and liveness, as Polonius and Clang 23 state them
 - Error index: [E0499 ↗](https://doc.rust-lang.org/error_codes/E0499.html) · [E0502 ↗](https://doc.rust-lang.org/error_codes/E0502.html) · [E0597 ↗](https://doc.rust-lang.org/error_codes/E0597.html)
+- [Mutable binding, mutable reference](../mutable_binding_vs_mutable_reference/README.md) — the loan a reborrow `&*z` places on `*z`, and [ownership in functions, run](../../ownership_in_functions_claims_checked/README.md), where Listing 4.25's `E0106` never reaches the loan check
 
 ## Sources
 

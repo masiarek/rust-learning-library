@@ -223,11 +223,19 @@ NAV_ORDER: dict[str, list[str]] = {
         # it is `Vec` plus one number, and the page is about what that number
         # buys at the front and what it costs everywhere a slice was expected.
         "the_vecdeque",
+        # ...then the two hash collections, each with its first-contact page
+        # directly before the lesson it hands off to.
+        "a_first_hashmap",
         "the_hashmap",
+        "a_first_hashset",
         "the_hashset",
         # ...then the sorted pair, read after the hash ones because the page is
         # largely about what ordering buys over them and what it costs.
         "sorted_collections",
+        # The hash collections' companions, by symptom, by lint, and by source.
+        "hashmap_errors",
+        "hashmap_lints",
+        "hashmap_resources",
         # ...and last the one that is a pointer rather than a container.
         "the_box",
     ],
@@ -241,6 +249,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "the_use_declaration",
         "a_crate_prelude",
         "one_module_per_file",
+        # ...and a book's chapter on packages, crates, modules and re-exports,
+        # checked once the four pages above are read.
+        "modules_claims_checked",
         "const_and_static",
         "items_inside_a_function",
         "what_an_attribute_is",
@@ -687,6 +698,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "references",
         "where_the_sigil_sits",
         "borrowing",
+        # ...and a book's chapter on moves and borrows in functions, checked
+        # once the end of a borrow is in hand: a move copies no heap bytes.
+        "ownership_in_functions_claims_checked",
         # ...and the same rule read from the owner's side: what `&b` does to
         # `b`. Directly after `borrowing`, because it is the half that
         # produces E0505/E0506, where the owner is refused its own binding.
@@ -817,6 +831,9 @@ NAV_ORDER: dict[str, list[str]] = {
         # A book's section on all of the above, checked once they are all read.
         "flow_control_claims_checked",
         "functions",
+        # ...and a second book's section on functions and blocks, checked once
+        # the lesson is read.
+        "functions_claims_checked",
         "macros",
     ],
     # Patterns, in the order each one stops being optional: every `let` is
@@ -857,6 +874,7 @@ NAV_ORDER: dict[str, list[str]] = {
     "18_Ownership/references": [
         "README.md",
         "a_borrow_is_a_loan",
+        "mutable_binding_vs_mutable_reference",
         "when_you_need_the_star",
         "the_ref_keyword",
         "repointing_a_slice",
@@ -873,6 +891,16 @@ NAV_ORDER: dict[str, list[str]] = {
         "intro_to_numbers",
         "non_base2",
         "scalar_number_types",
+    ],
+    # Rust: The Practical Guide — the shelf page, then one exercise page per
+    # chapter in the book's order.
+    "10_Resources/rust_the_practical_guide": [
+        "README.md",
+        "ch2_katas",
+        "ch3_katas",
+        "ch4_katas",
+        "ch5_katas",
+        "ch6_katas",
     ],
     # The ToOwned learning path: one page per step, in the order they unlock,
     # then the comparison that closes it and the reading list beside it.
@@ -1194,6 +1222,9 @@ NAV_ORDER: dict[str, list[str]] = {
         "ultimate_rust_courses",
         # One book, run listing by listing, beside the other book maps.
         "rust_in_action",
+        # ...and a second, course-shaped one: its sections checked in the topic
+        # sections, its chapter exercises kept here as katas.
+        "rust_the_practical_guide",
         # Books argue; these define. Second, because the question "what does
         # Rust actually do here" arrives the moment the first book is closed.
         "official_docs",
@@ -1773,6 +1804,22 @@ LABELS = {
     # 21_Observability
     "spans_not_lines": "A span is not a log line",
     "what_to_instrument": "What to instrument first",
+    # Rust: The Practical Guide (Nouman Azam, Rheinwerk 2025), 2026-09-23.
+    "rust_the_practical_guide": "Rust: The Practical Guide, run",
+    "ch2_katas": "Chapter 2 exercises",
+    "ch3_katas": "Chapter 3 exercises",
+    "ch4_katas": "Chapter 4 exercises",
+    "ch5_katas": "Chapter 5 exercises",
+    "ch6_katas": "Chapter 6 exercises",
+    "functions_claims_checked": "Practical Guide §2.3–2.4, run",
+    "ownership_in_functions_claims_checked": "Practical Guide §4.2 and §4.4, run",
+    "mutable_binding_vs_mutable_reference": "Mutable binding, mutable reference",
+    "modules_claims_checked": "Practical Guide chapter 6, run",
+    "a_first_hashmap": "A first `HashMap`",
+    "a_first_hashset": "A first `HashSet`",
+    "hashmap_errors": "`HashMap`/`HashSet`: every error",
+    "hashmap_lints": "`HashMap`/`HashSet`: lints",
+    "hashmap_resources": "`HashMap`/`HashSet`: reading",
 }
 
 # ---------------------------------------------------------------------------

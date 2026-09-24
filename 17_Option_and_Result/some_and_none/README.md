@@ -301,6 +301,8 @@ rustc --edition 2024 17_Option_and_Result/some_and_none/examples/some_and_none.r
 - [`Option` is a one-item collection](../option_as_collection/README.md) — `match` is not the only way to look inside
 - [`std::option` ↗](https://doc.rust-lang.org/std/option/) — the full method list; one slow read is worth more than any tutorial
 - [The Rust Book, ch. 6 — Enums and Pattern Matching ↗](https://doc.rust-lang.org/book/ch06-00-enums.html)
+- [*Rust: The Practical Guide*, chapter 5 exercises, run](../../10_Resources/rust_the_practical_guide/ch5_katas/README.md) — `Some =>` without its argument is `E0530`, and a `for` loop with no `None` after it is `E0308`: two katas from the book, transcripts included
+- [A first `HashMap`](../../26_Collections/a_first_hashmap/README.md) — `get` hands back an `Option<&V>`, and the first error a newcomer meets is using it as the value
 
 ## Po polsku
 

@@ -267,6 +267,7 @@ fn main() {
 - [`f64` in std ↗](https://doc.rust-lang.org/std/primitive.f64.html#method.round) — `round` documents *away from 0.0*; `round_ties_even` sits directly under it
 - *Learn Rust in a Month of Lunches* (MacLeod, 2024), §20.4 — the four methods on one page; its rule for `round` is the positive-side one
 - [Listing 2.3, run](../../10_Resources/rust_in_action/intro_to_numbers/README.md) — why `24.5.round()` does not compile and `f32::round(24.5)` does
+- [*Rust: The Practical Guide*, chapter 3 exercises, run](../../10_Resources/rust_the_practical_guide/ch3_katas/README.md) — exercise 3.3 prints a rate `as i32` "to round" it: 16.575 comes out as 16, and `round()` gives 17
 
 ## Po polsku
 

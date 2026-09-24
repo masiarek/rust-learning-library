@@ -476,6 +476,8 @@ rustc --edition 2024 18_Ownership/when_to_shadow/examples/when_to_shadow.rs -o /
 - [Initial values](../../17_Option_and_Result/initial_values/README.md) — the other way to avoid `mut`: declare without initializing and let the compiler prove you assigned
 - [`if let`](../../17_Option_and_Result/if_let/README.md) — `let … else`, the guard clause the unwrap-and-narrow idiom opens with
 - [The Rust Book, ch. 3.1 — Shadowing ↗](https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html#shadowing)
+- [What *Rust: The Practical Guide* says about ownership in functions, run](../ownership_in_functions_claims_checked/README.md) — `let vec_1 = takes_and_gives_ownership(vec_1)`, the shadow a book uses to take a value back, against the `&mut` that makes it unnecessary
+- [*Rust: The Practical Guide*, chapter 2 exercises, run](../../10_Resources/rust_the_practical_guide/ch2_katas/README.md) — exercise 2.4: `a = 10` on a `&str` is `E0308`, a second `let` is the book's fix, and the first `a` goes unused
 
 ## Po polsku
 

@@ -416,6 +416,7 @@ Round 4 -- what a per-character table cannot say at all
 - [Strings: links, books and videos](../resources/README.md)
 - [`sort` is not alphabetical ↗](https://masiarek.github.io/perl-learning-library/04_Records_and_Fields/sort_is_not_alphabetical/index.html) — Perl's code-point `sort` beside the collation its core modules ship, tailored per language
 - [Internationalization](../internationalization/README.md) — locale-aware collation, which byte order is not
+- [*Rust: The Practical Guide*, chapter 3 exercises, run](../../10_Resources/rust_the_practical_guide/ch3_katas/README.md) — exercise 3.4: a sentence palindrome that lowercases before comparing, and the case-folding caveat it inherits
 
 ## Po polsku
 

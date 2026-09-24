@@ -31,6 +31,7 @@ Reaching for `type UserId = u64;` to stop IDs being mixed up. It documents the i
 - [What a struct is](../../16_Structs/what_a_struct_is/README.md) — the tuple struct a newtype is made of
 - [Wrapper types](../../39_API_Design/wrapper_types/README.md) — when a newtype should implement `Deref`
 - [TYPES.md](../../TYPES.md) — where aliases sit among the ways to name a type
+- [*Rust: The Practical Guide*, chapter 2 exercises, run](../../10_Resources/rust_the_practical_guide/ch2_katas/README.md) — exercise 2.8: `type Book = (String, String, u32);` declared inside `main`, and `type_name` printing the tuple the alias stands for
 
 ## If you are coming from another language
 

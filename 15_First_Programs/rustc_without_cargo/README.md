@@ -295,6 +295,7 @@ And `-O` changes one line of the output above — `debug_assertions` reports `fa
 - [The long way round to a column summary](../../ROADMAP.md) — rung 10 is where the single-file rule finally retires and this repo grows a `Cargo.toml`
 - [The Cargo Book — Cargo targets ↗](https://doc.rust-lang.org/cargo/reference/cargo-targets.html) — `autobins`, `src/bin/`, and the manifest keys behind all of the above
 - [Packages and crates](../../27_Modules/packages_and_crates/README.md) — why each file in `src/bin/` is its own crate
+- [What *Rust: The Practical Guide* says about packages, crates and modules, run](../../27_Modules/modules_claims_checked/README.md) — a book's `src/bin/` binary without a `main`, the two-binary `cargo run` refusal, and `default-run`
 
 ## Po polsku
 

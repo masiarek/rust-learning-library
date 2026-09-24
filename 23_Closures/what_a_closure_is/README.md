@@ -302,6 +302,7 @@ SO WHAT DOES IT DO?
 - [What a struct is](../../16_Structs/what_a_struct_is/README.md) — the thing the compiler is writing for you here
 - [Iterators are lazy](../../24_Iterators/iterators_are_lazy/README.md) — where most of the closures you write actually go, and what the adapter is allowed to do with yours
 - [Items inside a function](../../27_Modules/items_inside_a_function/README.md) — the nested `fn` that looks like a closure and captures nothing
+- [What *Rust: The Practical Guide* says about functions and code blocks, run](../../25_Control_Flow/functions_claims_checked/README.md) — a book's "a function sees only its parameters and locals", run beside the closure that sees more
 
 ## Sources
 

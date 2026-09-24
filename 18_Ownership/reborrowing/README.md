@@ -155,6 +155,7 @@ This is the direction [coercion](../../29_Conversion/coercion/README.md) also tr
 - [A borrow is a loan](../references/a_borrow_is_a_loan/README.md) — the reborrow as a nested loan, and the `E0499` on `*v2` when the inner one is used too late
 - [References: the map](../references/README.md) — where this page sits among the others on references
 - [Borrowing something forever](../borrowing_forever/README.md) — after `&'a mut Node<'a>`, the reborrow a function hands back is the only way left to the node
+- [Mutable binding, mutable reference](../references/mutable_binding_vs_mutable_reference/README.md) — `&*z` as the shared reborrow of a `&mut`, and what it freezes until its last use
 
 ## Sources
 

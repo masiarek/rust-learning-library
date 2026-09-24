@@ -252,6 +252,7 @@ OTHER_PAGES_TABLE
 - The rule, from the compiler's side: [A borrow is a loan](../a_borrow_is_a_loan/README.md), after [Borrowing](../../borrowing/README.md).
 - The pointer table the Stack Overflow thread got half right: [Six pointer types, one table](../pointer_types_compared/README.md).
 - The sources themselves, with what each is good for: [Helpful resources](../references_reading_list/README.md).
+- The same check on a fourth book, *Rust: The Practical Guide*: [ownership in functions, run](../../ownership_in_functions_claims_checked/README.md), and its §4.6 as a lesson, [Mutable binding, mutable reference](../mutable_binding_vs_mutable_reference/README.md).
 
 **Docs:** [`reference` ↗](https://doc.rust-lang.org/std/primitive.reference.html) · [`pointer` ↗](https://doc.rust-lang.org/std/primitive.pointer.html) · [`Rc::get_mut` ↗](https://doc.rust-lang.org/std/rc/struct.Rc.html#method.get_mut) · [`std::cell` ↗](https://doc.rust-lang.org/std/cell/index.html) · [Edition guide — `static mut` references ↗](https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html)
 

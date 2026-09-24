@@ -305,6 +305,7 @@ rustc --edition 2024 16_Structs/representing_a_record/examples/representing_a_re
 - [A score is not a number](../newtype_score/README.md) — the `Stars` type this page stores six ways
 - [`Option` fields](../../17_Option_and_Result/option_fields/README.md) — the "required by default" instinct, and when `Option` in a struct is right
 - [The long way round](../../ROADMAP.md) — the ladder these rungs climb
+- [*Rust: The Practical Guide*, chapter 5 exercises, run](../../10_Resources/rust_the_practical_guide/ch5_katas/README.md) — an `Item` record with an enum field, printed with `{}` and with `{:?}`, from the book's chapter 5 katas
 
 ## Po polsku
 

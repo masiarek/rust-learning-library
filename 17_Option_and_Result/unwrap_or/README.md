@@ -294,6 +294,7 @@ rustc --edition 2024 17_Option_and_Result/unwrap_or/examples/unwrap_or.rs -o /tm
 - [Initial values](../initial_values/README.md) — `unwrap_or(8080)` in its natural habitat, and the case where you want no `Option` at all
 - [Partial functions](../partial_functions/README.md) — where the `None` you are defaulting away came from
 - [`Option::unwrap_or` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.unwrap_or) · [`unwrap_or_else` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.unwrap_or_else) · [`unwrap_or_default` ↗](https://doc.rust-lang.org/std/option/enum.Option.html#method.unwrap_or_default)
+- [A first `HashMap`](../../26_Collections/a_first_hashmap/README.md) — `get(k).copied().unwrap_or(0)`, the zero for a word that was never counted
 
 ## Po polsku
 

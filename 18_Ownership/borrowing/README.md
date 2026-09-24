@@ -304,6 +304,7 @@ rustc --edition 2024 18_Ownership/borrowing/examples/borrowing.rs -o /tmp/br && 
 - [References: the map](../references/README.md) — every page on `&`, `&mut`, `ref`, `*` and raw pointers, in reading order
 - [The Rust Book, ch. 4.2 — References and Borrowing ↗](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html)
 - [Drawing the owner and the view](../../14_Strings/drawing_the_owner_and_the_view/README.md) — `E0597`, `E0505`, `E0502`, `E0599` and `E0515`, each read off a picture of a `String` and a `&str`
+- [What *Rust: The Practical Guide* says about ownership in functions, run](../ownership_in_functions_claims_checked/README.md) — a book's borrowing-in-functions listings run: `ref1` and `ref2` in one scope compile because a borrow ends at its last use, and Listing 4.25's `E0106` is not a borrow error
 
 ## Po polsku
 

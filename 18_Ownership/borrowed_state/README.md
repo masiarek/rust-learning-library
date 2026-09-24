@@ -148,6 +148,7 @@ The borrow is of one field, but the thing being held open is the temporary that 
 - [Borrowing something forever](../borrowing_forever/README.md) — the lock that never lifts, and [A struct that points into itself](../self_referential_structs/README.md), where the borrower is a field of the owner
 - [A name is not a place](../a_name_is_not_a_place/README.md) — `E0506` used as the proof that a shadow is a declaration and `mut` is a write
 - [Interior mutability](../../09_Advanced/interior_mutability/README.md) — the way out, and what moving this check to run time costs
+- [Mutable binding, mutable reference](../references/mutable_binding_vs_mutable_reference/README.md) — `E0506` on `*z += 1` while the reborrow `&*z` is still used
 
 ## Po polsku
 

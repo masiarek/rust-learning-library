@@ -4,6 +4,8 @@
 
 **One line:** A key finds a value in roughly constant time, `entry` is the method the counting loop wants, and the iteration order is deliberately different on every run.
 
+Before this page: [A first `HashMap`](../a_first_hashmap/README.md) — `use`, `new`, `insert`, `get`, `contains_key`, `[]`, `entry` and `remove`, one printed step at a time, if a map is still new. Beside both: [every error](../hashmap_errors/README.md) · [lints](../hashmap_lints/README.md) · [resources](../hashmap_resources/README.md).
+
 ```rust
 use std::collections::HashMap;
 
@@ -279,6 +281,8 @@ fn main() {
 - [`Option` vs `Result`](../../17_Option_and_Result/option_vs_result/README.md) — what `get` hands back, and how to open it
 - [Marker traits](../../12_Traits/marker_traits/README.md) — `Eq` is one, and this page is where its contract starts to matter
 - [Comparing and sorting text](../../14_Strings/comparing_strings/README.md) — what `sort()` on `&str` keys actually compares
+- [A first `HashMap`](../a_first_hashmap/README.md) — the on-ramp this page assumes, with [every error](../hashmap_errors/README.md), [lints](../hashmap_lints/README.md) and [resources](../hashmap_resources/README.md) beside it
+- [*Rust: The Practical Guide*, chapter 5 exercises, run](../../10_Resources/rust_the_practical_guide/ch5_katas/README.md) — exercise 7 of the book: `contains_key` then `insert` drawing `map_entry`, the `entry` version, and `try_insert` refused on stable
 
 ## Sources
 

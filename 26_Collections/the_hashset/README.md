@@ -4,6 +4,8 @@
 
 **One line:** A `HashSet<T>` is a `HashMap<T, ()>` — membership, uniqueness, and four set operations — and `insert` returns the `bool` that answers the question you were about to ask separately.
 
+Before this page: [A first `HashSet`](../a_first_hashset/README.md) — `insert`'s `bool`, `contains`, `remove`, `take` and a set from a `Vec`, one printed step at a time, if a set is still new. Beside both: [every error](../hashmap_errors/README.md) · [lints](../hashmap_lints/README.md) · [resources](../hashmap_resources/README.md).
+
 ```rust
 use std::collections::HashSet;
 
@@ -427,6 +429,7 @@ fn main() {
 - [`Vec`](../the_vec/README.md) — where the order goes when you need it back
 - [Iterators are lazy](../../24_Iterators/iterators_are_lazy/README.md) — why `union` costs nothing until you `collect`
 - [Marker traits](../../12_Traits/marker_traits/README.md) — `Eq` and the contract it signs with `Hash`
+- [A first `HashSet`](../a_first_hashset/README.md) — the on-ramp this page assumes, with [every error](../hashmap_errors/README.md), [lints](../hashmap_lints/README.md) and [resources](../hashmap_resources/README.md) beside it
 
 ## Sources
 

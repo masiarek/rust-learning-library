@@ -277,6 +277,9 @@ fn main() {
 - [A block is an expression](../../15_First_Programs/a_block_is_an_expression/README.md) — where `()` comes from, and the semicolon that produces it
 - [The unit type `()`](../../15_First_Programs/the_unit_type/README.md) — the empty tuple on its own page
 - [Arrays: the map](../arrays/README.md) — the other compound type, across every page that covers it
+- [What *Rust: The Practical Guide* says about functions and code blocks, run](../../25_Control_Flow/functions_claims_checked/README.md) — a book's "functions can return multiple values", run: Listing 2.8's `(i32, i32, i32)` is one value, taken apart by a `let` pattern
+- [*Rust: The Practical Guide*, chapter 2 exercises, run](../../10_Resources/rust_the_practical_guide/ch2_katas/README.md) — exercises 2.8 and 2.11: an alias for a `(String, String, u32)`, and `print_distance((5.0, 4.0))`, one argument
+- [A first `HashMap`](../a_first_hashmap/README.md) — the `Vec<(&str, u32)>` of word–count pairs that a map replaces, and where the pairs come back as tuples to be sorted
 
 ## Sources
 

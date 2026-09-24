@@ -663,6 +663,7 @@ rustc --edition 2024 14_Strings/walking_a_string/examples/walking_a_string.rs -o
 - [`Option` as a collection](../../17_Option_and_Result/option_as_collection/README.md) — the `Option<u8>` the kata builds, iterated
 - [`iter`, `iter_mut`, `into_iter`](../../24_Iterators/iter_iter_mut_into_iter/README.md) — the three-door question for a collection, where the answer is different from a string's
 - [`str::split` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split) · [`Pattern` ↗](https://doc.rust-lang.org/std/str/pattern/trait.Pattern.html) · [`str::split_once` ↗](https://doc.rust-lang.org/std/primitive.str.html#method.split_once)
+- [*Rust: The Practical Guide*, chapter 3 exercises, run](../../10_Resources/rust_the_practical_guide/ch3_katas/README.md) — exercise 3.4: `bytes().rev()` against `chars().rev()` on `"été"`, with the bytes printed
 
 ## Po polsku
 

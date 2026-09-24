@@ -292,6 +292,7 @@ At `deny` that same line is a build failure on code with no defect. `nursery` me
 - [RustRover setup](../rustrover_setup/README.md) — the settings that are not project files, including the one `doctor` reminds you about
 - [bacon](../bacon/README.md) — what `bacon.toml` is for
 - [A throwaway that needs a crate](../scratch_with_a_crate/README.md) — the opposite end: when one `cargo new` is the whole answer and none of this applies
+- [Packages and crates](../../27_Modules/packages_and_crates/README.md) — the unit each `cargo new` under the workspace root creates, and its library and binary crates
 
 ## Po polsku
 

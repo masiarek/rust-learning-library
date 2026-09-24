@@ -405,6 +405,7 @@ Same row = same idea on both types.
 - [Rust by Example — Error handling ↗](https://doc.rust-lang.org/rust-by-example/error.html)
 - [Bitfield Consulting — Rust errors: Option and Result ↗](https://bitfieldconsulting.com/posts/rust-errors-option-result) — the source of the useful line *"good programs don't panic, and neither do good programmers"*; strong on when `unwrap` is and is not defensible
 - [`Option` fields](../option_fields/README.md) and [`Option` is a one-item collection](../option_as_collection/README.md) — the two follow-on pages
+- [*Rust: The Practical Guide*, chapter 5 exercises, run](../../10_Resources/rust_the_practical_guide/ch5_katas/README.md) — `Result<i32, String>` written into a signature the book left blank, and the `Err` its `main` never prints
 
 ## Po polsku
 

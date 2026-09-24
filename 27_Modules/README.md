@@ -6,13 +6,14 @@ A module does two jobs at once, and confusing them is where most of the difficul
 
 | Lesson | Level | What it covers |
 |---|---|---|
-| [Packages and crates](packages_and_crates/README.md) | 101 | The two levels above a module — a package is a `Cargo.toml`, a crate is one compiled unit, and why `src/bin/` cannot see `main.rs`. Stub |
+| [Packages and crates](packages_and_crates/README.md) | 101 | A package is a `Cargo.toml`, a crate is one compiled unit — the targets measured with `cargo metadata`, why `src/bin/` cannot see `main.rs`, and the `bin/` folder Cargo does not look in |
 | [Modules and visibility](modules_and_visibility/README.md) | 201 | Private by default, the four `pub` forms, and the door a helper in the same module leaves open |
 | [Bringing names in with `use`](the_use_declaration/README.md) | 101 → 201 | A shortcut, not an import — plus the rename that fixes a collision and the glob that causes one |
 | [A crate prelude](a_crate_prelude/README.md) | 201 | `use x::prelude::*` is an ordinary module of `pub use` lines — mostly traits, and the glob collision it invites. Stub |
 | [One module per file](one_module_per_file/README.md) | 201 | `mod name;` is a declaration; the tree is the same either way; and the file nobody declared |
+| [*Rust: The Practical Guide* chapter 6, run](modules_claims_checked/README.md) | 101 → 201 | A book chapter's online store rebuilt as a Cargo demo, every error it stops at keyed (`E0425`, `E0603`, `E0624`, `E0451`, `E0583`, `E0761`, `E0601`), and six statements that do not hold — the `bin/` beside `src/`, "you must use absolute paths", and a box that blames Rust 1.80 for a path that never compiled |
 | [`const` and `static`](const_and_static/README.md) | 201 | Substituted at every use, versus one address for the program — and `const fn` |
-| [Items inside a function](items_inside_a_function/README.md) | 201 | A nested `fn` is an item, not a closure — it sees no locals (`E0434`), and its position in the block does not matter. Stub |
+| [Items inside a function](items_inside_a_function/README.md) | 201 | A nested `fn` is an item, not a closure — it sees every item in scope and no local (`E0434`), its position in the block does not matter, and a type declared inside cannot be named outside although its value can leave |
 | [What an attribute is](what_an_attribute_is/README.md) | 201 | `derive`, the four lint levels, `cfg`, and the field order a derived `Ord` reads |
 | [Conditional compilation](conditional_compilation/README.md) | 201 | `#[cfg]` deletes code before type checking, `cfg!` is a `bool` in code that always compiles — and the misspelled condition that compiles nothing. Stub |
 

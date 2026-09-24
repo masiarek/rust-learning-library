@@ -18,6 +18,7 @@ That difference is the reason this section is not just a syntax reference. `let 
 | [Loop labels](loop_labels/README.md) | 101 → 201 | `break 'outer` and `continue 'outer` for nested loops, labelled blocks, and why there is no `goto` |
 | [*Rust in Action* §2.4, run](flow_control_claims_checked/README.md) | 101 | Twenty-one claims from one book's flow-control section, checked against rustc |
 | [Functions](functions/README.md) | 101 | Signatures are never inferred; the last expression is the return value; arguments are evaluated left to right, so a function cannot short-circuit |
+| [*Rust: The Practical Guide* §2.3–2.4, run](functions_claims_checked/README.md) | 101 | A second book's functions and code-blocks sections checked: four sentences do not hold, six are narrower than they read, and Listing 2.7 carries three warnings the book does not mention |
 | [Macros](macros/README.md) | 101 → 201 | What the `!` means, and the three things a macro can do that a function cannot |
 
 **Macros is still a stub** — an outline with its boundaries and its trap written down, and no runnable example behind it yet. [CONTRIBUTING.md](../CONTRIBUTING.md) says what it takes for it to graduate. Every other page in the table runs.

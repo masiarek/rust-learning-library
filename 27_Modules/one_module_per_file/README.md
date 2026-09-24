@@ -273,6 +273,7 @@ fn main() {
 - [Bringing names in with `use`](../the_use_declaration/README.md) — shortening the paths above
 - [Running a scratch program](../../15_First_Programs/rustc_without_cargo/README.md) — `rustc` alone, `cargo new`, and where `src/main.rs` comes from
 - [Scaffolding a practice tree](../../05_Tooling/scaffolding/README.md) — several crates in one workspace
+- [What *Rust: The Practical Guide* says about packages, crates and modules, run](../modules_claims_checked/README.md) — the chapter's file layout keyed: `E0583` with both accepted paths, and `E0761` when both layouts exist
 
 ## Sources
 

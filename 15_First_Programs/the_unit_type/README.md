@@ -394,6 +394,7 @@ fn main() {
 - [`Option` vs `Result`](../../17_Option_and_Result/option_vs_result/README.md) — where `Result<(), E>` sits
 - [The `HashSet`](../../26_Collections/the_hashset/README.md) — the standard library's `HashMap<T, ()>`, with a better `insert`
 - [Listing 2.2, run](../../10_Resources/rust_in_action/first_steps/README.md) — where a semicolon does and does not turn a function's result into `()`, checked against *Rust in Action*
+- [What *Rust: The Practical Guide* says about functions and code blocks, run](../../25_Control_Flow/functions_claims_checked/README.md) — `println!` is an expression of type `()`, which is why a `-> ()` function can end in one with no semicolon
 
 ## Po polsku
 

@@ -307,6 +307,7 @@ rustc --edition 2024 18_Ownership/copy_or_move/examples/copy_or_move.rs -o /tmp/
 - [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) — opting your own struct in, and the three refusals that stop you
 - [`Rc`: the clone that copies a pointer](../reference_counting/README.md) — the kata's `Rc` row: the cheapest clone there is, and still not `Copy`
 - [E0382 ↗](https://doc.rust-lang.org/error_codes/E0382.html) — the error the moving rows produce
+- [What *Rust: The Practical Guide* says about ownership in functions, run](../ownership_in_functions_claims_checked/README.md) — "stack-only types are copied" checked: a four-byte struct without the derive moves, and a `&String` copies
 
 ## Po polsku
 

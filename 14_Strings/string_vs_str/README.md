@@ -460,6 +460,8 @@ rustc --edition 2024 14_Strings/string_vs_str/examples/string_vs_str.rs -o /tmp/
 - [Step 3 of the `ToOwned` path](../../12_Traits/how_to_learn_to_owned/owned_and_borrowed_types/README.md) — the owned/borrowed pair as the thing `type Owned` names
 - [Drawing the owner and the view](../drawing_the_owner_and_the_view/README.md) — the owner and the view on one drawing, with the view's offset into the owner's buffer measured
 - [Returned by value](../../18_Ownership/returned_by_value/README.md) — which of the two a function can return, and what each hands back
+- [Chapter 4 exercises of *Rust: The Practical Guide*, run](../../10_Resources/rust_the_practical_guide/ch4_katas/README.md) — a book's `a1: &String` fix, and when clippy's `ptr_arg` asks for `&str` instead
+- [A first `HashMap`](../../26_Collections/a_first_hashmap/README.md) — the same choice for a map's keys: `&str` keys borrow the text, `String` keys own a copy of it
 
 ## Po polsku
 

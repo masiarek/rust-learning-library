@@ -164,6 +164,7 @@ Same letter, unrelated feature. [A raw string](../../14_Strings/raw_strings_and_
 - [Modules and visibility](../../27_Modules/modules_and_visibility/README.md) — `crate`, `self` and `super`, the four names that refuse the prefix
 - [Pinning the toolchain](../../05_Tooling/pinning_the_toolchain/README.md) — where this library's edition and compiler are set
 - [Raw identifiers ↗](https://doc.rust-lang.org/reference/identifiers.html#raw-identifiers) · [Keywords ↗](https://doc.rust-lang.org/reference/keywords.html) · [Editions ↗](https://doc.rust-lang.org/edition-guide/)
+- [*Rust: The Practical Guide*, chapter 5 exercises, run](../../10_Resources/rust_the_practical_guide/ch5_katas/README.md) — a struct field the book names `type_` because `type` is a keyword; `r#type` is the other way out, and `item_type` the plain one
 
 ## Po polsku
 

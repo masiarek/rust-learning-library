@@ -260,6 +260,7 @@ fn main() {
 ## See also
 
 - [STRUCTS.md](../../STRUCTS.md) · [`impl` blocks](../impl_blocks/README.md) · [the newtype](../newtype_score/README.md) · [`Option` fields](../../17_Option_and_Result/option_fields/README.md) · [Debug and Display](../../15_First_Programs/debug_vs_display/README.md)
+- [*Rust: The Practical Guide*, chapter 5 exercises, run](../../10_Resources/rust_the_practical_guide/ch5_katas/README.md) — a library `Item` and a student register from the book, and the keyword `type` refused as a field name
 
 ## Po polsku
 

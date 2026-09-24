@@ -181,6 +181,7 @@ rustc --edition 2024 18_Ownership/where_the_sigil_sits/examples/where_the_sigil_
 - [The `ref` keyword](../references/the_ref_keyword/README.md) — the pattern-side spelling that makes a reference, beside the `&` pattern that removes one
 - [References: the map](../references/README.md) — every page on `&`, `&mut`, `ref`, `*` and raw pointers, in reading order
 - [E0507 ↗](https://doc.rust-lang.org/error_codes/E0507.html) and [`std::mem::replace` ↗](https://doc.rust-lang.org/std/mem/fn.replace.html) — the refusal, and the way round it
+- [Mutable binding, mutable reference](../references/mutable_binding_vs_mutable_reference/README.md) — the `mut` after `let` against the `mut` after `&`: two choices, four combinations, and the nested forms
 
 ## Po polsku
 
