@@ -1,0 +1,7 @@
+The sum of the multiples of 3 or 5 below 10 is 23
+The sum of the multiples of 3 or 5 below 20 is 78
+The sum of the multiples of 3 or 5 below 1000 is 233168
+below 20: multiples of 3 sum to 63, of 5 to 30, together 93
+the || version says 78: 15 was counted once
+"-5" as i32: Ok(-5); the loop 1..-5 then runs 0 times
+"-5" as u32: Err(ParseIntError { kind: InvalidDigit })

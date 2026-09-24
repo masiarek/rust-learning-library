@@ -1,0 +1,4 @@
+The square of 7 is: 49
+Error: Negative number provided
+46340 squared is 2147395600
+Error: 46341 squared does not fit in an i32

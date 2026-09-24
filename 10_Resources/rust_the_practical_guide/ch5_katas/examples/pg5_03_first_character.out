@@ -1,0 +1,3 @@
+First character: a
+Empty array
+first().copied(): Some('a') and None

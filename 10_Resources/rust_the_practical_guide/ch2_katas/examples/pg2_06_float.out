@@ -1,0 +1,4 @@
+pi is: 3.14159
+as f64: 3.14159
+what an i32 can keep of it: 3
+with no annotation the literal is f64

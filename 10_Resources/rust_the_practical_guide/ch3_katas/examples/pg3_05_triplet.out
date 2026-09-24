@@ -1,0 +1,6 @@
+trying every c: Some((200, 375, 425)) after 80778750 candidates
+computing c:    Some((200, 375, 425)) after 69676 candidates
+a < b < c: true
+a² + b² = 180625 and c² = 180625
+a + b + c = 1000
+a · b · c = 31875000

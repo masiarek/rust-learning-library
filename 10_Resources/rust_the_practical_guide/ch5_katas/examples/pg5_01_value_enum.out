@@ -1,0 +1,5 @@
+[Integer(12), Float(15.5)]
+Integer: 12
+Float: 15.5
+Float(16777217.0) as f32 -> 16777216
+Float(0.30000000000000004) as f32 -> 0.3

@@ -1,0 +1,2 @@
+vec ptr is pointing to vec_1: [1, 2, 3]
+vec ptr is updated and now pointing to vec_2: [4, 5, 6]

@@ -28,6 +28,7 @@ The two that get confused are the first two. A book *argues*; a reference *defin
 | [*Rust for Rustaceans*, chapter by chapter](rust_for_rustaceans/README.md) | the second book — every section of Gjengset's thirteen chapters beside the page here that covers it, or the gap |
 | [The Ultimate Rust courses, mapped](ultimate_rust_courses/README.md) | video courses — Nathan Stocks' two released courses and nine outlined ones, every heading beside its page here |
 | [*Rust in Action*, run](rust_in_action/README.md) | one book, checked — its listings run on rustc 1.98.0, the claims around them tested, and each idea linked to its lesson |
+| [*Rust: The Practical Guide*, run](rust_the_practical_guide/README.md) | a second book, checked — chapters 2–6 of Nouman Azam's course-shaped guide: its listings and solutions run on rustc 1.98.0, its exercises kept as katas, and the sentences that do not hold listed |
 | [Official docs](official_docs/README.md) | the definitive answer — `std`, the Reference, the Nomicon, the error index, the RFCs |
 | [Cheat sheets](cheat_sheets/README.md) | looking something up — which sheets are maintained, which are frozen, and what the frozen ones stopped knowing |
 | [Exercises](exercises/README.md) | typing — the practice tracks, and which one suits which stage |

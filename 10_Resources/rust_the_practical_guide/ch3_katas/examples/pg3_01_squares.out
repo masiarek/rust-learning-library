@@ -1,0 +1,7 @@
+The difference of the square of the sum and the sum of squares for N = 5 is 170
+The difference of the square of the sum and the sum of squares for N = 10 is 2640
+The difference of the square of the sum and the sum of squares for N = 100 is 25164150
+the square of the sum outgrows an i32 at N = 304, an i64 at N = 77936
+at N = 304: the square 2149249600 > i32::MAX 2147483647
+but the difference 2139838520 would still fit
+N = 303: an i32 keeps the answer 2111836472

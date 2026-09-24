@@ -1,0 +1,13 @@
+ID: 1
+Title: The Rust Programming Language Book
+Year: 2021
+This item is a book
+ID: 2
+Title: Rust Magazine
+Year: 2022
+This item is a magazine
+
+{} on the title:   The Rust Programming Language Book
+{:?} on the title: "The Rust Programming Language Book"
+{:?} on the type:  Book
+the whole record:  Item { id: 2, title: "Rust Magazine", year: 2022, item_type: Magazine }

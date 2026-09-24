@@ -1,0 +1,4 @@
+name is: Michael, and the multiplication result is -2550
+i16 holds -32768..=32767
+the same with i32: -2550
+i8 fits -15 but not 170; even -15 * 100 overflows it: None

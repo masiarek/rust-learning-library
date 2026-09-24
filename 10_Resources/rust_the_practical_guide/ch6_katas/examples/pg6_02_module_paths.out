@@ -1,0 +1,3 @@
+m1::A { d: B }
+m3::C { e: C }
+m3 reaches D only because m2 is pub AND D is pub: two doors, both open

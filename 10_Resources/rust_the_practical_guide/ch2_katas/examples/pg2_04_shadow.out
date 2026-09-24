@@ -1,0 +1,3 @@
+before the second let, a is "three", a &str
+a is: 10
+after it, a is an i32

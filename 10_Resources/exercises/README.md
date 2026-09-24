@@ -52,6 +52,7 @@ And [the long way round to a column summary](../../ROADMAP.md) is this library's
 - [Katas](../../KATAS.md) — this library's own practice track, in order
 - [Books](../books/README.md) — when you would rather read than type
 - [A tree of practice projects](../../05_Tooling/practice_workspace/README.md) — where to put all of this on disk
+- [*Rust: The Practical Guide*, chapter 2](../rust_the_practical_guide/ch2_katas/README.md) and [chapter 3 exercises, run](../rust_the_practical_guide/ch3_katas/README.md) — a book's practice exercises solved here, with the book's own solutions checked against rustc 1.98.0
 
 ## Po polsku
 

@@ -1,0 +1,7 @@
+total_production(6, 5) = 5967
+cars_produced_per_minute(6, 5) = 16.575
+the book prints them `as i32`: 5967 and 16
+rounded, as the comment says: 5967 and 17
+the hours cancel out of the per-minute rate: 16.575 16.575 16.575
+speed 0 is off: 0
+nothing rejects speed 11: 1871.87

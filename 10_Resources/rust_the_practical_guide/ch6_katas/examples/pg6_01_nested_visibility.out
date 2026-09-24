@@ -1,0 +1,2 @@
+A holding D::B and A holding D::C
+D is pub, so m1 can name m2::D; m2 itself stays private to m1

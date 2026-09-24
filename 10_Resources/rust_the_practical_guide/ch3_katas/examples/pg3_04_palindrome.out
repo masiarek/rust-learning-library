@@ -1,0 +1,12 @@
+input                        bytes chars  letters
+"1211"                       false false    false
+"1881"                        true  true     true
+"12321"                       true  true     true
+"Able was I ere I saw Elba"  false false     true
+"été"                        false  true     true
+"éé"                         false  true     true
+""                            true  true     true
+"a"                           true  true     true
+"été" is the bytes [c3, a9, 74, c3, a9]
+read backwards      [a9, c3, 74, a9, c3]
+chars: "été" reversed "été"

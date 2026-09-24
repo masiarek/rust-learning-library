@@ -1,0 +1,18 @@
+temp = &my_vec, a loan that ends before pop:
+Elements in temporary vector are: [1, 2, 3, 4, 5]
+Popped element: 5
+Elements in temporary vector are: [1, 2, 3, 4]
+Popped element: 4
+Elements in temporary vector are: [1, 2, 3]
+Popped element: 3
+Elements in temporary vector are: [1, 2]
+Popped element: 2
+Elements in temporary vector are: [1]
+Popped element: 1
+
+no temp at all:
+Popped element: 5, leaving [1, 2, 3, 4]
+Popped element: 4, leaving [1, 2, 3]
+Popped element: 3, leaving [1, 2]
+Popped element: 2, leaving [1]
+Popped element: 1, leaving []

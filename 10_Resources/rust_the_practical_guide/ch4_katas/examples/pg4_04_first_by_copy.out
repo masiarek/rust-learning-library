@@ -1,0 +1,3 @@
+The first number is: 1
+some_vec is now [1, 2, 3, 4]
+of an empty slice: None
