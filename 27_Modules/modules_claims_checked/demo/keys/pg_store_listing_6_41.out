@@ -1,0 +1,13 @@
+error[E0624]: associated function `new` is private
+ --> listing_6_41/src/main.rs:8:30
+  |
+8 |     let customer = Customer::new(1, String::from("Alice"), String::from("alice@example.com"));
+  |                              ^^^ private associated function
+  |
+ ::: listing_6_41/src/customer.rs:8:5
+  |
+8 |     fn new(id: u64, name: String, email: String) -> Self {
+  |     ---------------------------------------------------- private associated function defined here
+
+For more information about this error, try `rustc --explain E0624`.
+error: could not compile `pg_store_listing_6_41` (bin "pg_store_listing_6_41") due to 1 previous error

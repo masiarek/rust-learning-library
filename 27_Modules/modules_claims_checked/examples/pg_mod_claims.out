@@ -1,0 +1,35 @@
+1. `crate` is the root module: an absolute path and a relative one name one item
+   crate::product::Product::new(..).label() = Laptop (Electronics), product #1
+   product::Product::new(..).label()        = Laptop (Electronics), product #1
+
+2. Listing 6.9, run
+   Multiplication result: 12
+   Result using `self`: 30
+
+3. "you must specify their absolute paths": `order` above uses super:: and builds
+   order #1: 6 x 879.99 for Alice <alice@example.com>, customer #1, 10% off -> 4751.94
+   the same numbers as `cargo run` on the file layout in demo/
+
+4. Private means this module and its descendants
+   product::category reads product's private TAX_RATE through super:: -> 0.1
+   the root reaching a child's pub item, Category::Books -> Books
+   "parent modules cannot access the items within their child modules" is
+   true of the child's private items, and not of its pub ones
+
+5. Four narrower forms of pub, each measured from where it is written
+   pub(self)           the same reach as no keyword: this module and its descendants
+   pub(super)          reachable from product; E0603 from the crate root
+   pub(in crate::product) the same reach, by the ancestor's name
+   pub(crate)          every module of this crate, nothing outside it
+   product::private_by_two_spellings() from here -> E0603: function is private
+
+6. `use` binds a name; the item was already reachable
+   Product::new(..).product_price()          = 22.00   <- through `use product::Product`
+   product::Product::new(..).product_price() = 22.00   <- the full path, no `use` needed
+
+7. `pub enum` publishes every variant; `pub` on one variant is E0449
+   Category::Clothing named from the root -> Clothing
+
+8. `pub struct` publishes the type, not the fields
+   Product::new(..).label() = Novel (Books), product #2   <- the constructor and a method are the doors
+   Product { id: 1, .. } written here -> E0451: field `id` of struct `Product` is private

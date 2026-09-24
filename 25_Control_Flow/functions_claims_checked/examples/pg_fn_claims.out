@@ -1,0 +1,40 @@
+1. Listing 2.5 prints its message, then the product
+   Computing multiplication
+   answer = 150
+
+2. A println! call is an expression of type (), so it can be a tail
+   this line is the value of a println! call
+   the call evaluated to ()
+   hello!
+   shout("hello") is declared -> () and returned ()
+
+3. An expression is not a line: if, match and a block have values
+   if -> negative, match -> one digit, block -> -14
+   and one let statement spread over three lines: total = -4
+
+4. A tail can be an if or a match: either arm is the value
+   sign(-3) = negative, sign(3) = not negative
+
+5. return leaves the function, even from inside a block
+   early(true) = 5, early(false) = 101
+
+6. Listing 2.8 returns one value, a tuple, and a let pattern takes it apart
+   basic_math(10, 15) = (150, 25, -5), type (i32, i32, i32)
+   destructured: 150 25 -5
+
+7. The argument's type may be decided by the parameter, or coerced to it
+   let ten = 10; takes_i64(ten): ten is i64
+   Function call with a variable
+   my_fn(&owned) accepted a &String for a &str parameter
+
+8. Listing 2.9: the block's value is its tail; the names inside are gone after it
+   full_name = John Archer
+
+9. A block inside a loop runs on every pass, and sees the loop variable
+   pass 1: the block produced 1
+   pass 2: the block produced 4
+   pass 3: the block produced 9
+   the block ran 3 times: [1, 4, 9]
+
+10. A labelled block can leave early with a value
+   'check on "John Archer" -> long

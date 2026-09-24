@@ -1,0 +1,10 @@
+[package]
+name = "pg_store_shop"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# The package has two binaries, src/main.rs and src/bin/my_binary.rs, so a plain
+# `cargo run` needs to be told which one. This is the third way, which the book
+# does not mention; `--bin` is the one it shows.
+default-run = "pg_store_shop"

@@ -1,0 +1,5 @@
+[package]
+name = "pg_store_listing_6_14"
+version = "0.1.0"
+edition = "2024"
+publish = false

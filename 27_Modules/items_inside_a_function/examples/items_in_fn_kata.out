@@ -1,0 +1,16 @@
+=== part 1: the captured factor becomes a parameter ===
+  closure:                    [3, 6, 9]
+  nested fn, factor passed in: [3, 6, 9]
+  fn scale(x: i32) -> i32 { x * factor } is E0434: a fn item captures nothing
+
+=== part 1b: an item is in scope for the whole block, a let from its line down ===
+  first_word("John Archer") = "John", called above its fn
+  a closure is bound by a let, so using it above that line is E0425
+
+=== part 2: the value leaves, the name does not ===
+  celsius_report(21.5) = 21.5 C
+  naming Celsius in main does not compile: the name is scoped to the block
+
+=== part 3: what a nested fn sees ===
+  bump(20) = 25 -- reads BASE (declared below it) and CAP
+  a let is the one thing it cannot read; a block or a closure can

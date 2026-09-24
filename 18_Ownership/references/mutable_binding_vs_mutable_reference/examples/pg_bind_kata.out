@@ -1,0 +1,9 @@
+edit  the line(s) after let a / let b                 verdict
+1     let r = &a; r = &b;                             E0384: cannot assign twice to immutable variable r
+2     let mut r = &a; r = &b;                         compiles: *r was 1, now 2
+3     let r = &a; *r = 5;                             E0594: cannot assign to *r, which is behind a & reference
+4     let r = &mut a; *r = 5;                         compiles: a = 5
+5     let r = &mut a; *r = 5; r = &mut b;             E0384: the binding is immutable, whatever it points at
+6     let mut r = &mut a; *r = 5; r = &mut b; *r = 7; compiles: a = 5, b = 7
+7     let r = &mut a; let y = &*r; *r += 1; use y;    E0506: *r is borrowed by y until y's last use
+8     let r = &mut &a; *r = &b;                       compiles: **r reads 2

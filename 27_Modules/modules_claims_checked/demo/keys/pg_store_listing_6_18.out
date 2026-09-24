@@ -1,0 +1,14 @@
+error[E0603]: module `category` is private
+  --> listing_6_18/src/lib.rs:4:21
+   |
+ 4 | use crate::product::category;
+   |                     ^^^^^^^^ private module
+   |
+note: the module `category` is defined here
+  --> listing_6_18/src/lib.rs:16:5
+   |
+16 |     mod category {
+   |     ^^^^^^^^^^^^
+
+For more information about this error, try `rustc --explain E0603`.
+error: could not compile `pg_store_listing_6_18` (lib) due to 1 previous error

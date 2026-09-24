@@ -1,0 +1,7 @@
+listing_6_17/src/lib.rs:7:16: warning: struct `Product` is never constructed
+listing_6_17/src/lib.rs:23:12: warning: methods `calculate_tax` and `product_price` are never used
+listing_6_17/src/lib.rs:15:18: warning: enum `Category` is never used
+listing_6_17/src/lib.rs:34:16: warning: struct `Customer` is never constructed
+listing_6_17/src/lib.rs:45:12: warning: struct `Order` is never constructed
+listing_6_17/src/lib.rs:53:12: warning: methods `calculate_discount` and `total_bill` are never used
+listing_6_17/src/lib.rs:41:5: warning: module `Order` should have a snake case name: help: convert the identifier to snake case (notice the capitalization): `order`

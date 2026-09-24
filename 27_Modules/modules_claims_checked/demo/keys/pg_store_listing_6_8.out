@@ -1,0 +1,36 @@
+error[E0603]: struct `Product` is private
+  --> listing_6_8/src/lib.rs:39:34
+   |
+39 |         product: crate::product::Product,
+   |                                  ^^^^^^^ private struct
+   |
+note: the struct `Product` is defined here
+  --> listing_6_8/src/lib.rs:4:5
+   |
+ 4 |     struct Product {
+   |     ^^^^^^^^^^^^^^
+
+error[E0603]: struct `Customer` is private
+  --> listing_6_8/src/lib.rs:40:36
+   |
+40 |         customer: crate::customer::Customer,
+   |                                    ^^^^^^^^ private struct
+   |
+note: the struct `Customer` is defined here
+  --> listing_6_8/src/lib.rs:29:5
+   |
+29 |     struct Customer {
+   |     ^^^^^^^^^^^^^^^
+
+error[E0624]: method `product_price` is private
+  --> listing_6_8/src/lib.rs:51:54
+   |
+22 |         fn product_price(&self) -> f64 {
+   |         ------------------------------ private method defined here
+...
+51 |             let total_before_discount = self.product.product_price() * self.quantity as f64;
+   |                                                      ^^^^^^^^^^^^^ private method
+
+Some errors have detailed explanations: E0603, E0624.
+For more information about an error, try `rustc --explain E0603`.
+error: could not compile `pg_store_listing_6_8` (lib) due to 3 previous errors

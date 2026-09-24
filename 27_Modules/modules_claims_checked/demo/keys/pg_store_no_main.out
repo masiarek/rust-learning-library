@@ -1,0 +1,8 @@
+error[E0601]: `main` function not found in crate `my_binary`
+ --> no_main/src/bin/my_binary.rs:1:67
+  |
+1 | // The file Listing 6.2 adds, before Listing 6.3 gives it a main.
+  |                                                                  ^ consider adding a `main` function to `no_main/src/bin/my_binary.rs`
+
+For more information about this error, try `rustc --explain E0601`.
+error: could not compile `pg_store_no_main` (bin "my_binary") due to 1 previous error

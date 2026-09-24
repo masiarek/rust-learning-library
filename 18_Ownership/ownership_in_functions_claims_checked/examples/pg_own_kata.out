@@ -1,0 +1,7 @@
+Zero moves, one allocation
+   made: [1, 2, 3]
+   after append_ten: [1, 2, 3, 10]
+   as a slice of the middle: [2, 3]
+   allocations in total: 1
+   heap pointer unchanged: true
+   vec_1 still owned by main, never shadowed, never cloned: [1, 2, 3, 10]

@@ -1,0 +1,20 @@
+1. The committed package pg-pkg-two-crates: kind, target name, file
+   lib  pg_pkg_two_crates    src/lib.rs
+   bin  pg-pkg-two-crates    src/main.rs
+   bin  report               src/bin/report.rs
+
+2. cargo new my_package, on this toolchain
+edition = "2024"
+   bin  my_package           src/main.rs
+
+3. Listing 6.2: bin/my_binary.rs at the package root, beside src/
+   bin  my_package           src/main.rs
+Hello, world!
+
+4. The same file moved to src/bin/
+   bin  my_binary            src/bin/my_binary.rs
+   bin  my_package           src/main.rs
+
+5. rustc alone: one file, one crate, named after the file
+main
+my_binary

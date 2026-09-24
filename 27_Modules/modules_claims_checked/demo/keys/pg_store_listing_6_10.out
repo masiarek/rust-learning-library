@@ -1,0 +1,11 @@
+error[E0624]: method `product_price` is private
+  --> listing_6_10/src/lib.rs:51:54
+   |
+22 |         fn product_price(&self) -> f64 {
+   |         ------------------------------ private method defined here
+...
+51 |             let total_before_discount = self.product.product_price() * self.quantity as f64;
+   |                                                      ^^^^^^^^^^^^^ private method
+
+For more information about this error, try `rustc --explain E0624`.
+error: could not compile `pg_store_listing_6_10` (lib) due to 1 previous error

@@ -1,0 +1,8 @@
+error[E0433]: cannot find `shared` in `crate`
+ --> bin_sees_no_main/src/bin/other.rs:4:27
+  |
+4 |     println!("{}", crate::shared::greeting());
+  |                           ^^^^^^ could not find `shared` in the crate root
+
+For more information about this error, try `rustc --explain E0433`.
+error: could not compile `pg_pkg_bin_sees_no_main` (bin "other") due to 1 previous error

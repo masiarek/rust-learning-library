@@ -1,0 +1,96 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+
+[[run]]
+stem = "pg_store_bill"
+cmd = ["cargo", "run", "-q", "-p", "pg_store_shop"]
+
+[[run]]
+stem = "pg_store_my_binary"
+cmd = ["cargo", "run", "-q", "-p", "pg_store_shop", "--bin", "my_binary"]
+
+[[run]]
+stem = "pg_store_no_main"
+cmd = ["cargo", "build", "-q", "-p", "pg_store_no_main"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "pg_store_two_binaries"
+cmd = ["sh", "two_binaries.sh"]
+
+[[run]]
+stem = "pg_store_listing_6_5"
+cmd = ["cargo", "build", "-q", "-p", "pg_store_listing_6_5"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "pg_store_listing_6_8"
+cmd = ["cargo", "build", "-q", "-p", "pg_store_listing_6_8"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "pg_store_listing_6_10"
+cmd = ["cargo", "build", "-q", "-p", "pg_store_listing_6_10"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "pg_store_listing_6_13"
+cmd = ["cargo", "build", "-q", "-p", "pg_store_listing_6_13"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "pg_store_listing_6_14"
+cmd = ["cargo", "build", "-q", "-p", "pg_store_listing_6_14"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "pg_store_listing_6_17"
+cmd = ["cargo", "build", "-q", "-p", "pg_store_listing_6_17", "--message-format", "short"]
+stream = "stderr"
+
+[[run]]
+stem = "pg_store_listing_6_18"
+cmd = ["cargo", "build", "-q", "-p", "pg_store_listing_6_18"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "pg_store_listing_6_28"
+cmd = ["cargo", "build", "-q", "-p", "pg_store_listing_6_28"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "pg_store_both_layouts"
+cmd = ["cargo", "build", "-q", "-p", "pg_store_both_layouts"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "pg_store_listing_6_33"
+cmd = ["cargo", "build", "-q", "-p", "pg_store_listing_6_33"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "pg_store_listing_6_34"
+cmd = ["cargo", "build", "-q", "-p", "pg_store_listing_6_34"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "pg_store_listing_6_36"
+cmd = ["cargo", "build", "-q", "-p", "pg_store_listing_6_36"]
+expect = "failure"
+stream = "stderr"
+
+[[run]]
+stem = "pg_store_listing_6_41"
+cmd = ["cargo", "build", "-q", "-p", "pg_store_listing_6_41"]
+expect = "failure"
+stream = "stderr"

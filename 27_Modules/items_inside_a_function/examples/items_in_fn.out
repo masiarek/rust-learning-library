@@ -1,0 +1,23 @@
+1. A nested fn is callable above its own line; a let is not
+   helper(2) = 20
+
+2. What a nested fn sees: const, static and other items, never a let
+   next(2) = 3 (reads STEP and LIMIT)
+   a block sees the let: 101
+   a closure captures it: 101
+
+3. A nested struct: the value leaves through impl Display, the name stays inside
+   origin_report() = (3, 4)
+
+4. A use inside a function shortens names for that block only
+   count_distinct("a b a c") = 3
+
+5. Nested fn versus closure: type, size, and coercion to a fn pointer
+   double:     items_in_fn::main::double (0 bytes)
+   triple:     items_in_fn::main::{{closure}} (0 bytes)
+   add_offset: items_in_fn::main::{{closure}} (4 bytes)
+   apply(double, 1) = 2, apply(triple, 1) = 3
+   both coerce to fn(i32) -> i32; add_offset captured offset and cannot (E0308)
+
+6. A nested fn cannot use the outer fn's type parameter; it declares its own
+   width::<u32>() = 4, width::<u8>() = 1

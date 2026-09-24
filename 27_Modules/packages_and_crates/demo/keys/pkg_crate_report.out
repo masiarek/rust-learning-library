@@ -1,0 +1,2 @@
+hello from src/bin/report.rs, through the library crate pg_pkg_two_crates
+this crate is called report

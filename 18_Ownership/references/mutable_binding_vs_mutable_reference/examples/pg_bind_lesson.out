@@ -1,0 +1,23 @@
+1. Two choices, four combinations
+   let r = &a;                              read *r = 1
+   let mut r = &a; r = &b;                  re-pointed: *r was 1, now 2
+   let r = &mut a; *r += 10;                wrote through: a = 11
+   let mut r = &mut a; ...; r = &mut b;     both: a = 111, b = 102
+
+2. Nesting: the same two choices, taken again at each level
+   &mut &T:     let r = &mut inner; *r = &vec_2;      inner now [4, 5, 6], r itself never re-pointed
+   & &mut T:    let rr = &m;                          read **rr = 1; **rr = 5 is E0594
+   &&T:         let s2 = &s1;                         read **s2 = 7
+   &mut &mut T: **rm += 10; *rm = &mut q; **rm += 10;  p = 11, q = 12
+
+3. Listing 4.33: *reference = &mut &vec_2 is a coercion, and *reference = &vec_2 is its plain spelling
+   after *reference = &mut &vec_2:  inner = [4, 5, 6]
+   let plain: &Vec<i32> = &mut &vec_1; -> [1, 2, 3]  (the same coercion, on its own)
+   after *reference = &vec_2:       inner = [4, 5, 6]
+
+4. "Not possible with other types of references": an immutable binding of a &mut writes too
+   let r = &mut vec_3; r.push(10); *r = vec![9];  -> vec_3 = [9]
+
+5. Listing 4.35: &*z is a reborrow, and let y: &i32 = z; is the same one
+   y = 45, y2 = 45: two shared reborrows of *z, and z is frozen while they are used
+   after their last use, *z += 1 compiles: x = 46

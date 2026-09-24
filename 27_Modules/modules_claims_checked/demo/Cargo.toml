@@ -1,0 +1,23 @@
+# The chapter's online store, finished, in `shop`, and fifteen small packages
+# that stop where the book says a listing stops, or does not. `[workspace]`
+# makes this folder its own workspace, whatever manifest sits above it.
+[workspace]
+members = [
+    "shop",
+    "no_main",
+    "two_binaries",
+    "listing_6_5",
+    "listing_6_8",
+    "listing_6_10",
+    "listing_6_13",
+    "listing_6_14",
+    "listing_6_17",
+    "listing_6_18",
+    "listing_6_28",
+    "both_layouts",
+    "listing_6_33",
+    "listing_6_34",
+    "listing_6_36",
+    "listing_6_41",
+]
+resolver = "3"

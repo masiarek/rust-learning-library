@@ -1,0 +1,14 @@
+error[E0425]: cannot find type `Category` in this scope
+  --> listing_6_13/src/lib.rs:9:19
+   |
+ 9 |         category: Category,
+   |                   ^^^^^^^^ not found in this scope
+   |
+note: enum `crate::product::category::Category` exists but is inaccessible
+  --> listing_6_13/src/lib.rs:13:9
+   |
+13 |         enum Category {
+   |         ^^^^^^^^^^^^^ not accessible
+
+For more information about this error, try `rustc --explain E0425`.
+error: could not compile `pg_store_listing_6_13` (lib) due to 1 previous error

@@ -1,0 +1,12 @@
+1. fn a() -> i32 { 5; }
+   does not compile: E0308, expected `i32`, found `()` -- the ; made the tail a statement
+2. fn b(x: i32) -> i32 { if x > 0 { return x; } 0 }
+   compiles: b(4) = 4, b(-4) = 0
+3. fn c(x: i32) -> &'static str { if x % 2 == 0 { "even" } else { "odd" } }
+   compiles: c(7) = odd, c(8) = even
+4. fn d() { 5 }
+   does not compile: E0308, expected `()`, found integer -- no -> means ()
+5. fn e() -> (i32, i32) { (1, 2) }
+   compiles: e() = (1, 2), one value; p + q = 3
+6. let v = { let x = 2; triple(x) }; and let w = { let x = 2; triple(x); };
+   both compile: v = 6, w = ()

@@ -1,0 +1,23 @@
+1. The store, used only through what `shop` re-exports
+   6 x Novel (Books), product #7 for Alice, customer #3 -> 118.80
+
+2. The five decisions, and what rustc says when each is missing
+   1. `pub use` at shop for Product, Category, Customer, Order; the modules stay private
+      missing: `use shop::Product` -> E0432 unresolved import, or through
+      `shop::product::Product` -> E0603: module `product` is private
+   2. `pub struct Product` (and Customer, Order); the fields stay private
+      missing: E0603: struct `Product` is private
+      fields written from main as a literal: E0451: field `id` of struct `Product` is private
+   3. `pub fn new` on each type: the only way in, since the fields are private
+      missing: E0624: associated function `new` is private
+   4. `pub fn product_price`, `pub fn total_bill`, `pub fn label`; calculate_tax and
+      calculate_discount stay private, since only their own module calls them
+      missing: E0624: method `product_price` is private
+   5. `pub use category::Category` inside product, so `Category` is reachable without
+      `pub mod category`; `pub enum` already published all three variants
+      missing, with `pub use product::{category::Category, Product}` at shop:
+      E0603: module `category` is private
+
+3. What stayed private
+   the three modules, every field, calculate_tax, calculate_discount, and the
+   category module: 15 pub keywords in the tree, none on a mod

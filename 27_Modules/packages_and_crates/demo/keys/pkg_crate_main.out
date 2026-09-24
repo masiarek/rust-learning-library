@@ -1,0 +1,2 @@
+hello from src/main.rs, through the library crate pg_pkg_two_crates
+this crate is called pg_pkg_two_crates

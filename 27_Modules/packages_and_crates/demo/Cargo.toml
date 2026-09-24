@@ -1,0 +1,6 @@
+# One package with a library crate and two binary crates, and one package whose
+# second binary reaches for the first binary's module. `[workspace]` makes this
+# folder its own workspace, whatever manifest sits above it.
+[workspace]
+members = ["two-crates", "bin_sees_no_main"]
+resolver = "3"

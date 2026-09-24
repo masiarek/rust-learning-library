@@ -1,0 +1,8 @@
+1. cargo run -p pg_store_two_binaries
+error: `cargo run` could not determine which binary to run. Use the `--bin` option to specify a binary, or the `default-run` manifest key.
+available binaries: my_binary, pg_store_two_binaries
+exit status 101
+
+2. cargo run -p pg_store_two_binaries --bin pg_store_two_binaries
+Hello from main.rs
+exit status 0

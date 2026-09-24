@@ -1,0 +1,19 @@
+# Declared runs for tools/run_cargo_demos.py; each answer key is keys/<stem>.out.
+
+[[run]]
+stem = "pkg_crate_targets"
+cmd = ["sh", "targets.sh"]
+
+[[run]]
+stem = "pkg_crate_main"
+cmd = ["cargo", "run", "-q", "-p", "pg-pkg-two-crates", "--bin", "pg-pkg-two-crates"]
+
+[[run]]
+stem = "pkg_crate_report"
+cmd = ["cargo", "run", "-q", "-p", "pg-pkg-two-crates", "--bin", "report"]
+
+[[run]]
+stem = "pkg_crate_bin_sees_no_main"
+cmd = ["cargo", "build", "-q", "-p", "pg_pkg_bin_sees_no_main"]
+expect = "failure"
+stream = "stderr"

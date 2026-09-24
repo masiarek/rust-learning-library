@@ -1,0 +1,42 @@
+1. The three groups, run (Listings 4.5, 4.6 and 4.17)
+   gives_ownership()                    -> [4, 5, 6]
+   takes_and_gives_ownership(vec_1)     -> [1, 2, 3, 10]
+   borrows_vec: vec is [1, 2, 3, 10]
+   after borrows_vec(&vec_1), vec_1 is still [1, 2, 3, 10]
+   takes_ownership: vec is [1, 2, 3, 10]
+   after takes_ownership(vec_1), any use of vec_1 is E0382 (Listing 4.3)
+
+2. "At the end of the function, the variable will be dropped" — when, exactly
+   takes_loud holds A
+   drop(A)
+   back in main
+
+3. Listing 4.22: "moving the entire vector's data" — measured
+   a Vec<i32> is 3 words on the stack: pointer, length, capacity
+   heap pointer before == inside == after the move: true true
+   allocations during the move there and back: 0 (0 bytes)
+   allocations during vec_1.clone() (Listing 4.4): 1 (16 bytes); clone shares the heap: false
+   allocations during a borrow, &vec_1 (Listing 4.17): 0 (len read: 4)
+
+4. "Stack-only data types are copied": the criterion is Copy, not the stack
+   Flat { x: 1 }, 4 bytes, derive(Clone, Copy): a used after let b = a: a.x = 1, b.x = 1
+   Plain { x: 1 }, 4 bytes, no derive: p.x = 1 — let q = p; then p.x is E0382 (transcript on the page)
+   [u8; 3] is Copy: arr [1, 2, 3] still usable beside arr2 [1, 2, 3]
+   &String is Copy: r "hi" and r2 "hi" both read
+   Vec<i32> is 3 words on the stack and moves: the type, not the region, decides
+
+5. Listing 4.7: the sidebar's stack_function
+   In func, var arrived as 10
+   In func, var is: 56
+   In main, x is: 10
+
+6. Listing 4.20: ref1 and ref2 in the same block; a borrow ends at its last use
+   borrows_vec: vec is [1, 2, 3]
+   let ref1 = &vec_1; borrows_vec(ref1); let ref2 = &mut vec_1; ref2.push(4); -> [1, 2, 3, 4]
+
+7. Listings 4.22 and 4.23: shadowing the returned vector, or a &mut — both move nothing on the heap
+   let vec_1 = takes_and_gives_ownership(vec_1): [1, 2, 3, 10], allocations 0, heap pointer kept: true
+   mutably_borrows_vec(&mut vec_1):              [1, 2, 3, 10], allocations 0, heap pointer kept: true
+
+8. Listing 4.25: return the Vec, not a &Vec — the heap bytes built inside come back untouched
+   gives_ownership() -> [4, 5, 6]; heap pointer inside == outside: true
