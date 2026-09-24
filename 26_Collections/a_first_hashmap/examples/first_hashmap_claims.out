@@ -1,0 +1,46 @@
+§5.5 HashMaps, with the book's map: HashMap<&str, u8>
+
+1. "keys are unique": insert("Programming", 15) on a key already there
+   returned Some(5)   len 4   sorted [("Hello", 5), ("Programming", 15), ("Rust", 15), ("world", 2)]
+   HOLDS: the value is 15 and "Programming" is there once. The book prints
+   the map itself, whose order is not fixed, so this program sorts first.
+
+2. "contains_key returns an Option wrapping the value in Some"
+   contains_key("Programming") = true   type: bool
+   FAILS: it is a bool. The method that returns the value in an Option is get:
+   get("Programming") = Some(15)   type: core::option::Option<&u8>
+
+3. "entry returns an instance of the Entry enum, with two variants, Occupied and Vacant"
+   entry("Hello") = Entry(OccupiedEntry { key: "Hello", value: 5, .. })
+   entry("Zig")   = Entry(VacantEntry("Zig"))
+   HOLDS.
+
+4. "or_insert inserts a value if the key does not exist; Hello exists, so nothing is inserted"
+   entry("Hello").or_insert(0): the &mut holds 5   len 4 -> 4
+   HOLDS, and the book stops there: or_insert also returns a &mut to the value,
+   which is what the counting loop needs.
+
+5. The book's earlier loop compared lowercased words; the map does not
+   get("programming") = None   get("Programming") = Some(15)
+   Not a claim the book makes, but a change it does not mention: keys are
+   case-sensitive, so "programming" is a different key from "Programming".
+
+6. The book's value type is u8
+   250u8.checked_add(10) = None: a u8 count cannot pass 255, and += 1 past it
+   panics in a debug build. A count is usually a u32 or a usize.
+
+§5.6 HashSets, with the book's set: HashSet<&str>
+
+7. "insert a duplicate entry: Hello appears only once"
+   insert("Hello") = false   len 4   sorted ["Hello", "Programming", "Rust", "world"]
+   HOLDS, and the book does not say that insert returns a bool: false here,
+   true for the four that went in.
+
+8. "contains returns a bool"
+   contains("world") = true   type: bool
+   HOLDS.
+
+9. "take removes the item and returns it if it exists"
+   Removed: world
+   take("world") again = None   len 3
+   HOLDS: Some("world") the first time, None once it is gone.

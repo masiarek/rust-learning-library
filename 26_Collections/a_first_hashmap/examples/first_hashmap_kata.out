@@ -1,0 +1,14 @@
+1. Count every word
+   11 words, 9 distinct
+   by word:  [("brown", 1), ("dog", 1), ("end", 1), ("fox", 1), ("jumps", 1), ("lazy", 1), ("over", 1), ("quick", 1), ("the", 3)]
+   by count: [("the", 3), ("brown", 1), ("dog", 1), ("end", 1), ("fox", 1), ("jumps", 1), ("lazy", 1), ("over", 1), ("quick", 1)]
+
+2. Look three words up
+   the: contains_key = true   get = Some(3)   count = 3
+   fox: contains_key = true   get = Some(1)   count = 1
+   cat: contains_key = false  get = None      count = 0
+
+3. What the three lookups say
+   contains_key answers yes or no; get hands back the count in a Some, or a
+   None for a word that was never counted. The 0 for "cat" is not in the
+   map: unwrap_or(0) supplied it.

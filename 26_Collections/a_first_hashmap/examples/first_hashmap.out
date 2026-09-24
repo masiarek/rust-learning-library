@@ -1,0 +1,64 @@
+0. The problem: four words, four counts, two Vecs
+   words[2] = "Rust", so counts[2] = 15
+   The two Vecs are tied only by position: reorder one and every count is wrong.
+
+   One Vec of pairs, searched with the book's loop:
+   looking for "hello" with to_lowercase on both sides: found = true
+   position of "Rust" = Some(2), count = 15
+   Nothing stops a second ("Rust", 3) pair from being pushed after it.
+
+1. A HashMap: HashMap::new(), then insert
+   insert("Hello", 5) returned None   (nothing was there before)
+   len = 4   sorted: [("Hello", 5), ("Programming", 5), ("Rust", 15), ("world", 2)]
+
+2. Keys are unique: a second insert of the same key replaces the value
+   insert("Programming", 15) returned Some(5)   (the value that was replaced)
+   len is still 4   sorted: [("Hello", 5), ("Programming", 15), ("Rust", 15), ("world", 2)]
+
+3. get asks: Option<&u32>
+   get("Rust") = Some(15)   get("Zig") = None
+   the type of what get returns: core::option::Option<&u32>
+   Rust appears 15 times
+   get("Zig").copied().unwrap_or(0) = 0
+
+4. contains_key answers yes or no: bool
+   contains_key("Programming") = true   type: bool
+   contains_key("programming") = false   (keys are case-sensitive)
+
+5. Indexing asserts: map[key] is the value, or a panic
+   word_counts["Rust"] = 15
+   word_counts["Zig"]  -> panicked
+
+6. entry: the slot for a key, whether or not it is filled
+   entry("Hello") = Entry(OccupiedEntry { key: "Hello", value: 5, .. })
+   entry("Zig")   = Entry(VacantEntry("Zig"))
+   "Hello" is Occupied, holding 5
+   entry("Hello").or_insert(0) -> &mut holding 5   (already there: the 0 was not used)
+   entry("Zig").or_insert(0)   -> &mut holding 0   (was absent: the 0 went in)
+   after *absent += 1: get("Zig") = Some(1)   len = 5
+
+   The counting loop, on a sentence:
+   "the cat and the dog and the bird"
+   -> [("and", 2), ("bird", 1), ("cat", 1), ("dog", 1), ("the", 3)]
+   "the" is met three times. The first time the slot is Vacant, so
+   or_insert(0) puts a 0 there and hands back a &mut to it; += 1 makes it 1.
+   The next two times the slot is Occupied, the 0 is ignored, and += 1
+   makes it 2, then 3.
+
+7. remove: Option of what was there
+   remove("cat") = Some(1)   remove("cat") again = None   len = 4
+
+8. Iterating: every pair, in no particular order
+   sorted after the loop: [("and", 2), ("bird", 1), ("dog", 1), ("the", 3)]
+   the same in a BTreeMap: {"and": 2, "bird": 1, "dog": 1, "the": 3}
+   The loop's own order is not the insertion order and changes from run
+   to run, which is why this program never prints a HashMap directly.
+
+9. Case matters: "Hello" and "hello" are two keys
+   get("Hello") = Some(5)   get("hello") = None
+   lowercased at insert time: [("hello", 3), ("world", 1)]
+
+10. &str keys borrow the text; String keys own a copy of it
+   HashMap<&str, u32>: 4 keys pointing into text that must outlive the map
+   HashMap<String, u32> after the line is dropped: get("the") = Some(3)
+   A String key is looked up with a plain &str, so get("the") reads the same on both.

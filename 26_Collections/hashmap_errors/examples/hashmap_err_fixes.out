@@ -1,0 +1,40 @@
+1. use std::collections::HashMap; sits at the top of this file
+2. The type comes from an annotation, or from the first insert
+   annotated.len() = 0, inferred.len() = 1
+3. get is an Option: keep it as one, or open it with a default
+   found = Some(5), count = 5
+4. Compare the Option with an Option, or open it first
+   get("Hello") == Some(&5): true
+   get("Hello").copied() == Some(5): true
+5. Arithmetic on the number inside, not on the Option
+   more = 6
+6. In a loop over &map the value is a &u32: dereference it, or destructure the &
+   keys holding 5, counted both ways: 2
+7. Indexing names a place: borrow it or clone it, never move it
+   first = Hello, owned = Hello
+8. A key that might be missing is asked for with get, not []
+   get("hello") = None
+9. &str keys, a String in hand: look up with as_str()
+   get(wanted.as_str()) = Some(5)
+10. String keys, a String in hand: pass a reference
+   get(&wanted) = Some(5), get("Hello") = Some(5)
+11. Change a value through get_mut
+   Hello -> Some(6)
+12. entry through a &mut parameter
+   Hello -> Some(7)
+13. insert needs let mut
+   fresh.len() = 1
+14. The * in front: += works on the u32, not on the &mut u32
+   the -> Some(2)
+15. Loop over &map to keep the map
+   9 over 2 words
+16. Decide during the loop, insert after it
+   frequent -> Some(7)
+17. A struct key with the traits derived
+   Point { x: 0, y: 0 } -> Some("origin")
+18. No f64 keys: keep the price in cents, as an integer
+   999 cents -> Some("book")
+19. Keys that must outlive the text are Strings
+   the -> Some(2)
+20. HashSet::insert's bool is yours to use or to drop; nothing here is #[must_use]
+   "Hello" was already there

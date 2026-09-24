@@ -1,0 +1,13 @@
+1. One set per day
+   Monday:  5 sign-ins, 3 people: ["Ada", "Ben", "Cara"]
+   Tuesday: 4 sign-ins, 3 people: ["Ben", "Cara", "Dan"]
+
+2. Three questions, answered with contains and intersection
+   was Ada there on Tuesday? contains("Ada") = false
+   was Dan there on Monday?  contains("Dan") = false
+   came both days: ["Ben", "Cara"]
+
+3. Monday's sign-ins in first-seen order, repeats dropped by insert's bool
+   ["Ada", "Ben", "Cara"]
+   insert returned false for the second "Ada" and the second "Ben", so
+   neither was pushed; the set remembers, the Vec keeps the order.

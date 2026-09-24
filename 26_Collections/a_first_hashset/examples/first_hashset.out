@@ -1,0 +1,33 @@
+1. HashSet::new(), then insert: true means it went in
+   insert("Hello") = true
+   insert("world") = true
+   insert("Rust") = true
+   insert("Programming") = true
+   len = 4   sorted: ["Hello", "Programming", "Rust", "world"]
+
+2. A second insert of the same value: false, and nothing changes
+   insert("Hello") = false   type: bool   len = 4
+
+3. contains: bool
+   contains("world") = true   contains("World") = false   type: bool
+
+4. remove: bool, true only the first time
+   remove("Rust") = true   remove("Rust") again = false   len = 3
+
+5. take: the value itself, wrapped in an Option
+   take("world") = Some("world")   take("world") again = None   len = 2
+   Removed: world
+
+6. Iterating: every value once, in no particular order
+   sorted after the loop: ["Hello", "Programming"]
+   the same in a BTreeSet: {"Hello", "Programming"}
+   The loop's own order changes from run to run, which is why this
+   program never prints a HashSet directly.
+
+7. A set from a Vec: collect drops the duplicates
+   ["Ada", "Ben", "Ada", "Cara", "Ben", "Ada"]
+   6 visits, 3 people: ["Ada", "Ben", "Cara"]
+   first-seen order, kept in a Vec beside the set: ["Ada", "Ben", "Cara"]
+
+8. One set operation, as a preview: intersection
+   monday & tuesday = ["Ben", "Cara"]
