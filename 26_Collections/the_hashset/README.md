@@ -37,7 +37,7 @@ fn main() {
 
 | method | operator | round1 vs round2 |
 |---|---|---|
-| [`union` ↗](https://doc.rust-lang.org/std/collections/hash_set/struct.HashSet.html#method.union) | `\|` | `["Ada", "Ben", "Cara", "Dan"]` |
+| [`union` ↗](https://doc.rust-lang.org/std/collections/hash_set/struct.HashSet.html#method.union) | <code>&#124;</code> | `["Ada", "Ben", "Cara", "Dan"]` |
 | [`intersection` ↗](https://doc.rust-lang.org/std/collections/hash_set/struct.HashSet.html#method.intersection) | `&` | `["Ben", "Cara"]` |
 | [`difference` ↗](https://doc.rust-lang.org/std/collections/hash_set/struct.HashSet.html#method.difference) | `-` | `["Ada"]` |
 | [`symmetric_difference` ↗](https://doc.rust-lang.org/std/collections/hash_set/struct.HashSet.html#method.symmetric_difference) | `^` | `["Ada", "Dan"]` |
