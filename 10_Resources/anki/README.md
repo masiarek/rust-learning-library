@@ -2,7 +2,7 @@
 
 **Level:** reference · for working programmers
 
-**One line:** Five spaced-repetition decks — 164 cards over the primitive types, `String`, `Vec`, iterators and ownership — whose every code block was compiled and run by `verify.py` before the deck was written, so a card cannot claim output the compiler did not produce.
+**One line:** Six spaced-repetition decks — 172 cards over the primitive types, `String`, `Vec`, sets, iterators and ownership — whose every code block was compiled and run by `verify.py` before the deck was written, so a card cannot claim output the compiler did not produce.
 
 ## Import
 
@@ -15,6 +15,7 @@ Anki → **File → Import** → pick the file → Import. Nothing to configure:
 | `Rust_Iterators.txt` | `Rust::Iterators` | 32 |
 | `Rust_Ownership.txt` | `Rust::Ownership` | 31 |
 | `Rust_Primitives.txt` | `Rust::Primitives` | 34 |
+| `Rust_Sets.txt` | `Rust::Sets` | 8 |
 
 Re-importing is safe and idempotent: Anki matches on the first field, so an edited card updates in place and your review history survives.
 
@@ -44,10 +45,14 @@ The four original decks are for things you meet after a few weeks of Rust. `Rust
 
 Four of the thirty-four are *does this compile?* cards, over `E0308`, `E0435`, `E0610` and the deny-by-default `overflowing_literals` lint — which has no `E` number at all, and is the one card `verify.py` cannot check for you, so it is prose with a hand-verified transcript.
 
+## The Sets deck
+
+`Rust::Sets` is eight cards from [Set operations](../../26_Collections/set_operations/README.md): the lazy method against the operator that builds a set, owned `a | b` refused with `E0369`, `HashSet<f64>` refused with `E0599`, `insert`'s `bool`, `is_subset` as ⊆ rather than ⊂, a chain of `^` keeping what is in an odd number of sets, why a `HashSet` is printed through a `BTreeSet`, and deduplicating a `Vec` two ways. Two of the eight are *does this compile?* cards, checked like the rest.
+
 ## Regenerating
 
 ```bash
-python3 verify.py cards_strings cards_vec cards_iterators cards_ownership cards_primitives
+python3 verify.py cards_strings cards_vec cards_iterators cards_ownership cards_primitives cards_sets
 python3 build.py
 ```
 
@@ -59,11 +64,11 @@ That gate is not ceremony. Building these four decks it caught a wrong claim abo
 
 ## What is not here
 
-Cards are deliberately not written for every method — the [`String`](../../14_Strings/string_methods/README.md) and [`Vec`](../../26_Collections/the_vec/README.md) references already do that job, and a deck that mirrors a reference is a deck you stop reviewing. These 164 are the facts that a working programmer forgets and is then bitten by.
+Cards are deliberately not written for every method — the [`String`](../../14_Strings/string_methods/README.md) and [`Vec`](../../26_Collections/the_vec/README.md) references already do that job, and a deck that mirrors a reference is a deck you stop reviewing. These 172 are the facts that a working programmer forgets and is then bitten by.
 
 ## Po polsku
 
-Anki to darmowy program do powtórek rozłożonych w czasie (*spaced repetition*), po polsku najczęściej nazywanych po prostu „systemem powtórek" albo SRS. Te talie mają 164 karty o typach prostych, `String`, `Vec`, iteratorach i własności, a ich wyróżnikiem jest to, że **każdy blok kodu został skompilowany i uruchomiony**, zanim karta powstała — więc karta nie może twierdzić czegoś, czego kompilator nie wypisał.
+Anki to darmowy program do powtórek rozłożonych w czasie (*spaced repetition*), po polsku najczęściej nazywanych po prostu „systemem powtórek" albo SRS. Te talie mają 172 karty o typach prostych, `String`, `Vec`, zbiorach, iteratorach i własności, a ich wyróżnikiem jest to, że **każdy blok kodu został skompilowany i uruchomiony**, zanim karta powstała — więc karta nie może twierdzić czegoś, czego kompilator nie wypisał.
 
 Karty są po angielsku i tak zostaje, z tego samego powodu, dla którego cała ta biblioteka trzyma angielskie terminy w widoku: powtarzasz nazwy metod, komunikaty błędów i słowa kluczowe, czyli dokładnie te ciągi znaków, które zobaczysz w terminalu. Karta ucząca `pożyczanie` zamiast `borrow of moved value` nie przygotowałaby do niczego. Jeśli robisz sobie własne karty po polsku, warto trzymać tę samą zasadę: polskie zdanie, angielski termin w środku.
 

@@ -154,6 +154,10 @@ SCOPE = (
     # And its warnings: twenty-six bad and silent pairs, plus six programs
     # no lint flags.
     "14_Strings/size_len_capacity_lints",
+    # A lesson page whose every fence is a whole program: two `compile_fail`
+    # fences prove the refusals it teaches (owned `a | b`, `E0369`; an `f64`
+    # element, `E0599`), and the rest must compile as shown.
+    "26_Collections/set_operations",
 )
 
 # `.claude` holds this repo checked out again, once per agent worktree, so a scan

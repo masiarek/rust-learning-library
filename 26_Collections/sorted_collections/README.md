@@ -343,6 +343,7 @@ fn main() {
 
 - [`HashMap`](../the_hashmap/README.md) — the same API without the order, and `entry`, which both share
 - [`HashSet`](../the_hashset/README.md) — the unordered half of the set story, and the `Vec`-beside-the-set trick for insertion order
+- [Set operations](../set_operations/README.md) — read next: union, intersection, difference and `^` on a `BTreeSet`, as iterators and as operators, and why the set to print through is this one
 - [`Vec`](../the_vec/README.md) — where a leaderboard ends up, and `sort_by` against `sort_unstable_by`
 - [Comparison traits](../../12_Traits/comparison_traits/README.md) — what `Ord` demands over `PartialOrd`, and why `f64` has only the second
 - [`collect` and `FromIterator`](../../24_Iterators/collect_and_fromiterator/README.md) — the call that turns any iterator into one of these

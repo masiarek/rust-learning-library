@@ -232,6 +232,8 @@ NAV_ORDER: dict[str, list[str]] = {
         # ...then the sorted pair, read after the hash ones because the page is
         # largely about what ordering buys over them and what it costs.
         "sorted_collections",
+        # ...then the set algebra both kinds of set share, once both are known.
+        "set_operations",
         # The hash collections' companions, by symptom, by lint, and by source.
         "hashmap_errors",
         "hashmap_lints",
