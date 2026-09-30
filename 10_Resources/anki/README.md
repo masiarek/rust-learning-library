@@ -15,7 +15,7 @@ Anki → **File → Import** → pick the file → Import. Nothing to configure:
 | `Rust_Iterators.txt` | `Rust::Iterators` | 32 |
 | `Rust_Ownership.txt` | `Rust::Ownership` | 31 |
 | `Rust_Primitives.txt` | `Rust::Primitives` | 34 |
-| `Rust_Sets.txt` | `Rust::Sets` | 8 |
+| `Rust_Sets.txt` | `Rust::Sets` | 12 |
 
 Re-importing is safe and idempotent: Anki matches on the first field, so an edited card updates in place and your review history survives.
 
@@ -47,7 +47,7 @@ Four of the thirty-four are *does this compile?* cards, over `E0308`, `E0435`, `
 
 ## The Sets deck
 
-`Rust::Sets` is eight cards from [Set operations](../../26_Collections/set_operations/README.md): the lazy method against the operator that builds a set, owned `a | b` refused with `E0369`, `HashSet<f64>` refused with `E0599`, `insert`'s `bool`, `is_subset` as ⊆ rather than ⊂, a chain of `^` keeping what is in an odd number of sets, why a `HashSet` is printed through a `BTreeSet`, and deduplicating a `Vec` two ways. Two of the eight are *does this compile?* cards, checked like the rest.
+`Rust::Sets` is twelve cards. Eight are from [Set operations](../../26_Collections/set_operations/README.md): the lazy method against the operator that builds a set, owned `a | b` refused with `E0369`, `HashSet<f64>` refused with `E0599`, `insert`'s `bool`, `is_subset` as ⊆ rather than ⊂, a chain of `^` keeping what is in an odd number of sets, why a `HashSet` is printed through a `BTreeSet`, and deduplicating a `Vec` two ways. Four are from [Sets of sets](../../26_Collections/sets_of_sets/README.md): `HashSet<HashSet<i32>>` refused with `E0599`, why Rust needs no `frozenset`, changing a member by taking it out, and two `BTreeSet`s built in different orders that are equal and hash the same. Three of the twelve are *does this compile?* cards, checked like the rest.
 
 ## Regenerating
 

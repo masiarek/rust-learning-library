@@ -426,6 +426,7 @@ fn main() {
 ## See also
 
 - [Set operations](../set_operations/README.md) — read next: methods that borrow against operators that build, why owned `a | b` does not compile, subset and disjoint, and a chain of `^`
+- [Sets of sets](../sets_of_sets/README.md) — why a `HashSet` cannot be a member of a set (it is not `Hash`), and why no `frozenset` is needed
 - [`HashMap`](../the_hashmap/README.md) — the same table with a value on the right, and where `Eq + Hash` is explained
 - [`Vec`](../the_vec/README.md) — where the order goes when you need it back
 - [Iterators are lazy](../../24_Iterators/iterators_are_lazy/README.md) — why `union` costs nothing until you `collect`

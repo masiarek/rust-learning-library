@@ -4,6 +4,7 @@
 SITE = "https://masiarek.github.io/rust-learning-library/"
 DECK = "Rust::Sets"
 LESSON = ("set_operations", SITE + "26_Collections/set_operations/index.html")
+SETS_OF_SETS = ("sets_of_sets", SITE + "26_Collections/sets_of_sets/index.html")
 
 CARDS = [
 
@@ -170,4 +171,101 @@ fn main() {
  bridge="<b>ABAP:</b> <code>DELETE ADJACENT DUPLICATES</code> has the same trap, and the same fix: <code>SORT</code> first.",
  link=LESSON,
  tags="rust sets vec"),
+
+dict(id="set_of_hashsets",
+ front="Does this compile?",
+ code='''use std::collections::HashSet;
+
+fn main() {
+    let mut family: HashSet<HashSet<i32>> = HashSet::new();
+    family.insert(HashSet::from([1, 2]));
+    println!("{}", family.len());
+}''',
+ code_on="front",
+ fails="E0599",
+ back="<b>No: E0599 on <code>insert</code> &mdash; <code>HashSet&lt;i32&gt;: Hash</code> not satisfied.</b>"
+      "<br><br><code>HashSet</code> does not implement <code>Hash</code>: equal sets can iterate in different orders, "
+      "and <code>Hash</code> feeds values in order. <code>BTreeSet</code> implements <code>Hash</code> and "
+      "<code>Ord</code>, so <code>HashSet&lt;BTreeSet&lt;i32&gt;&gt;</code> and "
+      "<code>BTreeSet&lt;BTreeSet&lt;i32&gt;&gt;</code> both work.",
+ bridge="<b>Python:</b> <code>{{1, 2}}</code> is <code>TypeError: unhashable type: 'set'</code>; the fix there is "
+        "<code>frozenset</code>, here it is <code>BTreeSet</code>.",
+ link=SETS_OF_SETS,
+ tags="rust sets traits compile-error"),
+
+dict(id="set_no_frozenset",
+ front="Python needs <code>frozenset</code> to put a set inside a set. Why does Rust not need one?",
+ back="<b>Mutability belongs to the binding, not the type; and no API lends out a <code>&amp;mut</code> to a member "
+      "while it is stored.</b>"
+      "<br><br><code>let s</code> cannot <code>insert</code> (E0596), <code>let mut t = s;</code> can &mdash; the same "
+      "value. <code>iter</code> yields <code>&amp;T</code>, <code>get</code> returns <code>Option&lt;&amp;T&gt;</code>, "
+      "there is no <code>iter_mut</code>. The one gap: <code>Cell</code> is <code>Ord</code>, so "
+      "<code>BTreeSet&lt;Cell&lt;i32&gt;&gt;</code> compiles; clippy's <code>mutable_key_type</code> warns.",
+ code='''use std::collections::BTreeSet;
+
+fn main() {
+    let frozen = BTreeSet::from([2, 3]);
+    let mut thawed = frozen;
+    thawed.insert(4);
+    let refrozen = thawed;
+    println!("{refrozen:?}");
+}''',
+ expect="{2, 3, 4}",
+ code_on="back",
+ bridge="<b>Python:</b> a <code>frozenset</code> is frozen for life, whoever holds it. A Rust set is frozen exactly "
+        "while its owning name has no <code>mut</code>.",
+ link=SETS_OF_SETS,
+ tags="rust sets ownership"),
+
+dict(id="set_change_a_member",
+ front="What does this print?",
+ code='''use std::collections::BTreeSet;
+
+fn main() {
+    let mut groups = BTreeSet::from([BTreeSet::from([1, 2]), BTreeSet::from([5])]);
+    let mut g = groups.take(&BTreeSet::from([1, 2])).unwrap();
+    g.insert(3);
+    groups.insert(g);
+    println!("{groups:?}");
+}''',
+ expect="{{1, 2, 3}, {5}}",
+ code_on="front",
+ back="<b><code>{{1, 2, 3}, {5}}</code></b>"
+      "<br><br>A member cannot be changed in place &mdash; <code>for g in groups.iter() { g.insert(3); }</code> is "
+      "E0596, <code>g</code> is a <code>&amp;</code> reference. Take it out, change it, put it back, and the set "
+      "files it again under its new value.",
+ bridge="<b>Python:</b> a <code>frozenset</code> member cannot change either; you build a new one and swap it in "
+        "&mdash; the same move, forced by the type instead of the borrow checker.",
+ link=SETS_OF_SETS,
+ tags="rust sets borrowing"),
+
+dict(id="set_btreeset_hash_order",
+ front="Two <code>BTreeSet</code>s, one from <code>[3, 1, 2]</code>, one built by inserting 2, 3, 1. Equal? Same hash?",
+ back="<b>Both yes.</b> A <code>BTreeSet</code> is always sorted, and its <code>Hash</code> feeds the length and "
+      "then the members in that order &mdash; so equal sets feed identical sequences."
+      "<br><br>Collecting into one is the \"freeze\" step for a <code>HashSet</code>: "
+      "<code>h.into_iter().collect::&lt;BTreeSet&lt;_&gt;&gt;()</code>.",
+ code='''use std::collections::BTreeSet;
+use std::hash::{DefaultHasher, Hash, Hasher};
+
+fn hash_of<T: Hash>(v: &T) -> u64 {
+    let mut h = DefaultHasher::new();
+    v.hash(&mut h);
+    h.finish()
+}
+
+fn main() {
+    let x = BTreeSet::from([3, 1, 2]);
+    let mut y = BTreeSet::new();
+    for n in [2, 3, 1] {
+        y.insert(n);
+    }
+    println!("{} {}", x == y, hash_of(&x) == hash_of(&y));
+}''',
+ expect="true true",
+ code_on="back",
+ bridge="<b>Python:</b> <code>hash(frozenset({3, 1, 2})) == hash(frozenset({2, 3, 1}))</code> is True too, by an "
+        "order-independent hash rather than by sorting.",
+ link=SETS_OF_SETS,
+ tags="rust sets hashing"),
 ]
