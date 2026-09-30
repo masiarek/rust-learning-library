@@ -1047,6 +1047,7 @@ Seven statements throw their result away and one warning comes back, for the `Ma
 - [Lints around arrays](../arrays/array_lints/README.md) — the same kind of page for arrays
 - [Strict clippy](../../05_Tooling/strict_lints/README.md) — turning whole groups on for a project, and what that costs
 - [Clippy's lint list ↗](https://rust-lang.github.io/rust-clippy/master/index.html) — every lint, with its group and the version it arrived in
+- [Sets of sets](../sets_of_sets/README.md) — where `mutable_key_type` is the only guard: `Cell` is `Ord`, so `BTreeSet<Cell<i32>>` compiles
 
 ## Po polsku
 

@@ -1047,6 +1047,7 @@ Every fix above is a numbered block of one program, so that none of them can qui
 - [Every reference error, and its fix](../../18_Ownership/references/reference_errors/README.md) — the same kind of page for `&` and `&mut`
 - [Every returned-by-value error, and its fix](../../18_Ownership/returned_by_value_errors/README.md) — the same kind of page for return values
 - [rustc's error index ↗](https://doc.rust-lang.org/error_codes/error-index.html) — the long explanation behind each code, also printed by `rustc --explain E0599`
+- [Sets of sets](../sets_of_sets/README.md) — the `Hash` bound again, when the element is itself a `HashSet`
 
 ## Po polsku
 

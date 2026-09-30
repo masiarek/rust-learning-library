@@ -158,6 +158,10 @@ SCOPE = (
     # fences prove the refusals it teaches (owned `a | b`, `E0369`; an `f64`
     # element, `E0599`), and the rest must compile as shown.
     "26_Collections/set_operations",
+    # Its sequel, the same promise: four `compile_fail` fences (a HashSet as a
+    # member, `E0599`; `insert` without `mut` and through `iter`, both `E0596`;
+    # a `Cell` member, `E0599`), and four whole programs that must compile.
+    "26_Collections/sets_of_sets",
 )
 
 # `.claude` holds this repo checked out again, once per agent worktree, so a scan

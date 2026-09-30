@@ -467,6 +467,7 @@ Edit 8 compiles with `let r`, because `*r = &b` re-points the inner reference, n
 - [What *Rust: The Practical Guide* says about ownership in functions, run](../../ownership_in_functions_claims_checked/README.md) — §4.2 and §4.4 of the same chapter, checked
 - [*Rust: The Practical Guide*, run](../../../10_Resources/rust_the_practical_guide/README.md) — the book's home in this library
 - [E0384 ↗](https://doc.rust-lang.org/error_codes/E0384.html) · [E0594 ↗](https://doc.rust-lang.org/error_codes/E0594.html) · [E0596 ↗](https://doc.rust-lang.org/error_codes/E0596.html) · [E0506 ↗](https://doc.rust-lang.org/error_codes/E0506.html) · [Type coercions ↗](https://doc.rust-lang.org/reference/type-coercions.html)
+- [Sets of sets](../../../26_Collections/sets_of_sets/README.md) — the binding rule as the reason Rust needs no `frozenset`
 
 ## Po polsku
 

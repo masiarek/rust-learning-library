@@ -158,6 +158,7 @@ The rule of thumb worth carrying: **a `.clone()` added to make a borrow compile 
 - [`Copy` vs `Clone`](../../16_Structs/copy_vs_clone/README.md) — why the array survives `into_iter()` and a `Vec<String>` does not
 - [`clone_into`](../../12_Traits/clone_into/README.md) — when the clone is unavoidable, the cheaper way to spell it
 - [Walking a string](../../14_Strings/walking_a_string/README.md) — the same three-door question for text, where the answer is different
+- [Sets of sets](../../26_Collections/sets_of_sets/README.md) — why `HashSet` and `BTreeSet` have no `iter_mut`: a member must not change while stored
 
 ## Sources
 

@@ -234,6 +234,8 @@ NAV_ORDER: dict[str, list[str]] = {
         "sorted_collections",
         # ...then the set algebra both kinds of set share, once both are known.
         "set_operations",
+        # ...and what a set can hold when the members are sets themselves.
+        "sets_of_sets",
         # The hash collections' companions, by symptom, by lint, and by source.
         "hashmap_errors",
         "hashmap_lints",
