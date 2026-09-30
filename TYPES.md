@@ -92,8 +92,8 @@ These look like language features and are ordinary library types, written with `
 | `Result<T, E>` | [`Option` vs `Result`](17_Option_and_Result/option_vs_result/README.md) | [Errors](02_Errors/README.md) |
 | `Vec<T>` | [`Vec`](26_Collections/the_vec/README.md) · [`Vec` methods](26_Collections/vec_methods/README.md) | [Collections](26_Collections/README.md) |
 | `VecDeque<T>` | [`VecDeque`](26_Collections/the_vecdeque/README.md) | |
-| `HashMap<K, V>`, `HashSet<T>` | [A first `HashMap`](26_Collections/a_first_hashmap/README.md) · [`HashMap`](26_Collections/the_hashmap/README.md) · [A first `HashSet`](26_Collections/a_first_hashset/README.md) · [`HashSet`](26_Collections/the_hashset/README.md) | |
-| `BTreeMap`, `BTreeSet` | [`BTreeMap` and `BTreeSet`](26_Collections/sorted_collections/README.md) | |
+| `HashMap<K, V>`, `HashSet<T>` | [A first `HashMap`](26_Collections/a_first_hashmap/README.md) · [`HashMap`](26_Collections/the_hashmap/README.md) · [A first `HashSet`](26_Collections/a_first_hashset/README.md) · [`HashSet`](26_Collections/the_hashset/README.md) | [Set operations](26_Collections/set_operations/README.md) |
+| `BTreeMap`, `BTreeSet` | [`BTreeMap` and `BTreeSet`](26_Collections/sorted_collections/README.md) | [Set operations](26_Collections/set_operations/README.md) |
 | `String` | [`String` vs `&str`](14_Strings/string_vs_str/README.md) · [The anatomy of a `String`](14_Strings/anatomy_of_a_string/README.md) | [STRINGS.md](STRINGS.md) |
 | `OsString`, `CString` | [Six kinds of string](14_Strings/six_kinds_of_string/README.md) | |
 | `PathBuf`, `Path` | [`Path` and `PathBuf`](04_Files/path_and_pathbuf/README.md) | |

@@ -75,3 +75,4 @@ if __name__ == "__main__":
     build("cards_iterators", "Rust_Iterators.txt")
     build("cards_ownership", "Rust_Ownership.txt")
     build("cards_primitives", "Rust_Primitives.txt")
+    build("cards_sets",       "Rust_Sets.txt")

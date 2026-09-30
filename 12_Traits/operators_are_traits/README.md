@@ -337,6 +337,7 @@ fn main() {
 - [Complex numbers](../../19_Numbers/other_number_types/complex_numbers/README.md) — `num`'s `Complex` gets `a + b` from one `impl Add`, written out there with std only
 - [`From` and `Into`](../../29_Conversion/from_and_into/README.md) — the orphan rule, stated in full
 - [`HashMap`](../../26_Collections/the_hashmap/README.md) — where `Index` returning a reference becomes visible
+- [Set operations](../../26_Collections/set_operations/README.md) — `BitOr`, `BitAnd`, `Sub` and `BitXor` implemented on `&HashSet` only, so owned `a | b` is `E0369`
 - [Debug and Display](../../15_First_Programs/debug_vs_display/README.md) — `{}` is a trait call too
 - [`and`, `or` and a first program's explanation, run](../../15_First_Programs/and_or_claims_checked/README.md) — a book's "operators are trait calls", checked against `&&`, `&`, `||`, `|` and `!` on `bool`
 - [Where the bound goes](../../22_Generics/where_the_bound_goes/README.md) — writing a function generic over `T: Add<Output = T>`

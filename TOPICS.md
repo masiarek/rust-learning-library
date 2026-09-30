@@ -217,6 +217,7 @@ A folder has one name, and it is rarely the word you typed: a *vector* lives in 
 |---|---|---|
 | **`Send` and `Sync`** | [`Send` and `Sync`](09_Advanced/send_and_sync/README.md) *stub* | [Unsafe traits](09_Advanced/unsafe_traits/README.md) *stub* |
 | **Serialization**, serde, zero-copy deserialization | [Data](06_Data/README.md) | [Zero-copy deserialization](06_Data/zero_copy_deserialization/README.md) *stub* |
+| **Set operations**, union, intersection, difference, symmetric difference, XOR of sets, subset, superset, disjoint, <code>&amp;a &#124; &amp;b</code> | [Set operations: methods borrow, operators build](26_Collections/set_operations/README.md) | [`HashSet`](26_Collections/the_hashset/README.md) · [`BTreeMap` and `BTreeSet`](26_Collections/sorted_collections/README.md) |
 | **Shadowing**, `let x = x` | [SHADOWING.md](SHADOWING.md) | [When to shadow](18_Ownership/when_to_shadow/README.md) |
 | **Signals**, Ctrl-C, SIGPIPE | [Catching a signal](09_Advanced/catching_a_signal/README.md) | [Broken pipe](02_Errors/broken_pipe/README.md) *stub* |
 | **Size of a type**, `size_of`, `size_of_val`, `sizeof`, how big is a `String` | [Stack and heap](18_Ownership/stack_and_heap/README.md) | [The anatomy of a `String`](14_Strings/anatomy_of_a_string/README.md) · [`str` is unsized](14_Strings/str_is_unsized/README.md) · [Every `size_of`, `len` and `capacity` error](14_Strings/size_len_capacity_errors/README.md) · [Lints around `size_of`, `len` and `capacity`](14_Strings/size_len_capacity_lints/README.md) |
@@ -255,7 +256,7 @@ A folder has one name, and it is rarely the word you typed: a *vector* lives in 
 | Topic, and other names for it | Home | Then |
 |---|---|---|
 | **Undefined behaviour**, validity | [Validity invariants](09_Advanced/validity_invariants/README.md) *stub* | [What an invariant is](09_Advanced/what_an_invariant_is/README.md) · [Miri](09_Advanced/miri/README.md) *stub* |
-| **Union** | [What a union is](09_Advanced/what_a_union_is/README.md) | |
+| **Union** | [What a union is](09_Advanced/what_a_union_is/README.md) | for the set operation, [set operations](26_Collections/set_operations/README.md) |
 | **Unit type**, `()` | [The unit type `()`](15_First_Programs/the_unit_type/README.md) | |
 | **`unsafe`** | [What `unsafe` turns off](09_Advanced/what_unsafe_turns_off/README.md) | [Raw pointers](36_Pointers/raw_pointers/README.md) · [Unsafe traits](09_Advanced/unsafe_traits/README.md) *stub* · [The drop check](09_Advanced/the_drop_check/README.md) *stub* |
 | **`unwrap`**, `unwrap_or`, `unwrap_or_else` | [What `unwrap` does](17_Option_and_Result/what_unwrap_does/README.md) | [`unwrap` is a TODO](02_Errors/unwrap_is_a_todo/README.md) · [`unwrap_or`](17_Option_and_Result/unwrap_or/README.md) · [`unwrap_or_else`](17_Option_and_Result/unwrap_or_else/README.md) |

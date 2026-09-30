@@ -307,6 +307,7 @@ fn main() {
 - [Lints around `HashMap` and `HashSet`](../hashmap_lints/README.md) — `get(x).is_none()` for `!contains(x)`, and a key with interior mutability
 - [`HashMap` and `HashSet`: resources](../hashmap_resources/README.md) — the reading list
 - [`BTreeMap` and `BTreeSet`](../sorted_collections/README.md) — the set that prints in order
+- [Set operations](../set_operations/README.md) — all four operations as iterators and as operators, and the questions that build nothing
 - [`Vec`](../the_vec/README.md) — where the order goes when you need it back
 - [*Rust: The Practical Guide*, run](../../10_Resources/rust_the_practical_guide/README.md) — the book's home here
 - [`std::collections::HashSet` ↗](https://doc.rust-lang.org/std/collections/struct.HashSet.html) — every method, and the `HashMap<T, ()>` description this page leans on
