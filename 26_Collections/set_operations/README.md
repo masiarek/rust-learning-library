@@ -254,6 +254,7 @@ fn main() {
 - [`BTreeMap` and `BTreeSet`](../sorted_collections/README.md) — the set that prints in order, and `Ord` instead of `Hash`
 - [Every `HashMap` and `HashSet` error](../hashmap_errors/README.md) — the `f64` element and seventeen other refusals
 - [Iterators are lazy](../../24_Iterators/iterators_are_lazy/README.md) — why `union` costs nothing until you `collect`
+- [Which duplicate survives ↗](https://masiarek.github.io/python-learning-library/04_Names_and_Objects/which_duplicate_survives/index.html) — the Python library: every de-duplication idiom by which copy it keeps and what order it returns, with this section's two answers as the Rust bridge
 - [Operators are traits](../../12_Traits/operators_are_traits/README.md) — `BitOr`, `BitAnd`, `Sub`, `BitXor`, and why an impl on `&T` is a different impl
 - [`std::collections::HashSet` ↗](https://doc.rust-lang.org/std/collections/struct.HashSet.html) · [`std::collections::BTreeSet` ↗](https://doc.rust-lang.org/std/collections/struct.BTreeSet.html)
 
